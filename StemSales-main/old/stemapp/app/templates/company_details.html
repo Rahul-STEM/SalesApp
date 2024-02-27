@@ -1,0 +1,205 @@
+{% include 'header.html' %}
+{% load static %}
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
+
+
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+    <div class="app-chat-container">
+                        <div class="row m-0 h-100">
+                            <div class="col d-flex flex-column p-0 h-100" data-perfect-scrollbar>
+
+
+
+
+
+                                <div class="container page__container">
+                                    <div class="card card-shadow">
+                                        <div class="card-header bg-white d-flex align-items-center">
+                                            <div class="flex d-flex align-items-center">
+
+                                                <div class="flex">
+                                                    <h4 class="card-title">
+                                                        {% autoescape off  %}
+                                                        {{company.cmpid.compname}} &nbsp;&nbsp;&nbsp;<span class="" style="background:{{current_status.status.color}};color:white;padding:5px;border-radius:20px;margin-top:5px;">{{current_status.status}}</span>
+                                                        
+                                                        {% endautoescape  %}
+                                                    </h4>
+
+                                                </div>
+                                            </div>
+                                           <button type="button" onclick="add_log()" class="btn btn-light"><i class="fa fa-plus"></i> Activity Update</button>
+                                            
+                                        </div>
+                                        <div class="card-body">
+
+                                            <p>Total Logs: <strong>{{logs}}</strong></p>
+                                            <p>Assigned to: <strong>{{current_status.assignedto.first_name}} {{current_status.assignedto.last_name}}</strong></p>
+                                            <p>Status Details:
+                                                <span class="badge badge-primary">Open &nbsp;<span class="badge badge-success">{{open}}</span></span>
+                                                <span class="badge badge-primary">Open[RPEM] &nbsp;<span class="badge badge-success">{{open_rpem}}</span></span>
+                                                <span class="badge badge-primary">Reachout &nbsp;<span class="badge badge-success">{{reachout}}</span></span>
+                                                <span class="badge badge-primary">Tentative &nbsp;<span class="badge badge-success">{{tentative}}</span></span>
+                                                <span class="badge badge-success">Positive &nbsp;<span class="badge badge-primary">{{positive}}</span></span>
+                                                <span class="badge badge-success">Very Positive &nbsp;<span class="badge badge-primary">{{very_positive}}</span></span>
+                                                <span class="badge badge-success">Closure &nbsp;<span class="badge badge-primary">{{closure}}</span></span>
+                                                <span class="badge badge-warning">Will do later &nbsp;<span class="badge badge-success">{{will_do}}</span></span>
+                                                <span class="badge badge-danger">Not Interested &nbsp;<span class="badge badge-success">{{ni}}</span></span>
+
+                                            </p>
+                                            <p>Conversion Details:
+                                                {% for con in conversions %}
+                                                <span class="badge badge-primary">{{con.last_status}} &nbsp;to {{con.next_status}} &nbsp;<span class="badge badge-warning">{{con.count}}</span>&nbsp;<span class="badge badge-success">{{con.next_date|timeuntil:con.last_date}}   </span></span>
+                                                {% endfor %}
+
+
+                                            </p>
+                                            <p>Email: {% for cc1 in company_contact %}
+                                            <span class="company_contact contact{{cc1.id}}">
+                                            {{cc1.emailid}} &nbsp; {% if events_id.actiontype_id is 2  %}<a class=" btn-primary" style="padding:5px;border-radius:20px;" title="Click to send mail"  href="javascript:;" onclick="window.open('mailto:{{cc1.emailid}}','_blank')"><i class="fa fa-envelope-open">&nbsp;Send Mail</i></a> {% endif %},
+                                            </span>
+                                            {% endfor %}</p>
+                                            <p>Phone: {% for cc2 in company_contact %}
+                                            <span class="company_contact contact{{cc2.id}}">
+                                            {{cc2.phoneno}} &nbsp;{% if events_id.actiontype_id is 1 %} <a class=" btn-success" style="padding:5px;border-radius:20px;" title="Click to call" target="_blank" href="tel:{{cc2.phoneno}}"><i class="fa fa-phone-volume">&nbsp;Call Now</i></a>  <a href="whatsapp://send?phone={{cc2.phoneno}}" target="_blank" style="padding:7px;border-radius:20px;"><img src="{% static 'whatsapp.png' %}" style="height:30px;"></a> {% endif %},
+                                            </span>
+                                            {% endfor %}</p>
+                                            <p class="mb-0">Website: <a href="#">{{company.cmpid.website}}</a></p>
+                                             <p class="mb-0">State: <span href="#">{{company.cmpid.state}}</span></p>
+                                              <p class="mb-0">City: <span href="#">{{company.cmpid.city}}</span></p>
+                                              <p class="mb-0">Draft: <span href="#">{{company.cmpid.draft}}</span></p>
+                                        </div>
+                                        <div class="card-footer card-header-tabs-basic nav" role="tablist">
+                                            <a href="#overview" class="active" data-toggle="tab" role="tab" aria-selected="true">Logs</a>
+                                            <a href="/edit-company/{{company.cmpid_id}}" >Edit Company</a>
+                                            <a href="/edit-company-contact/{{company.cmpid_id}}"  >Edit Contact</a>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row card-group-row">
+
+                                    </div>
+
+                                    
+                                </div>
+
+
+
+                            </div>
+                            <div class="col bg-white border-left d-none d-lg-flex flex-column p-0 h-100 filters-sidebar">
+
+
+                                <div style="padding: 1.125rem 1.25rem;" class="border-bottom"><strong>Contacts</strong><button type="button" onclick="window.location.href='/add-contact/{{company.cmpid_id}}'" class="btn btn-light" style="float:right;"><i class="fa fa-plus"></i> Add Contact </button></div>
+                                <div class="" data-perfect-scrollbar>
+                                    <div class="list-group list-group-flush">
+                                        {% for cc in company_contact %}
+                                        <div class="list-group-item d-flex align-items-center" style="padding: 0.5rem 1.25rem; ">
+                                            <span class="avatar mr-3">
+                                                <span class="avatar-title rounded-circle" style="background-color: #CF4B91">{{cc.contactperson|slice:":1"}}</span>
+                                            </span>
+                                            <div class="flex" onclick="$('.company_contact').hide(); $('.contact{{cc.id}}').show();">
+                                                <div class="card-title">{{cc.contactperson}}</div>
+                                                <div class="card-subtitle">{{cc.designation}}</div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="card">
+                                        <div class="card-header bg-white d-flex align-items-center">
+                                            <h4 class="card-header__title flex m-0">Logs</h4>
+<!--                                            <div data-toggle="flatpickr" data-flatpickr-wrap="true" data-flatpickr-static="true" data-flatpickr-mode="range" data-flatpickr-alt-format="d/m/Y" data-flatpickr-date-format="d/m/Y">-->
+<!--                                                <a href="javascript:void(0)" class="link-date" data-toggle>13/03/2018 <span class="text-muted mx-1">to</span> 20/03/2018</a>-->
+<!--                                                <input class="flatpickr-hidden-input" type="hidden" value="13/03/2018 to 20/03/2018" data-input>-->
+<!--                                            </div>-->
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table id="logtable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sr Number</th>
+                                                        <th>Remarks</th>
+                                                        <th>Current Action</th>
+                                                        <th>Next Action</th>
+                                                        <th>Next Action Date</th>
+                                                        <th>Action Taken</th>
+                                                        <th>Updated Date</th><th> Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+    
+                                            {% for lg in events %}
+                                                <tr onkeyup="openeventdetails('{{lg.id}}');" onclick="openeventdetails('{{lg.id}}');" style="cursor:pointer;">
+    
+    
+                                                    <td> {{ forloop.counter }}</td>
+                                                        <td>{{lg.remarks}}</td>
+                                                        <td>{{lg.actiontype}}</td>
+                                                        <td>{{lg.nextaction}}</td>
+    
+                                                    <td>
+                                                                    {{lg.appointmentdatetime|date:"Y-m-d"}}
+    
+    
+    
+    
+    
+    
+    
+                                                    </td>
+                                                    <td>{{lg.actontaken}}</td>
+                                                    <td class="text-muted">{{lg.fwd_date|date:"Y-m-d"}}</td>
+                                                    <td class="card-title" ><b style="background:{{lg.status.color}};color:white;padding:5px;border-radius:20px;">{{lg.status}}</b></td>
+    
+    
+    
+    
+    
+    
+    
+    
+                                                    </td>
+                                                </tr>
+    
+                                            {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                    </div>
+
+<script>
+     $(document).ready(function() {
+                                            $('#logtable').DataTable( {
+                                                dom: 'Bfrtip',
+                                                order: [[ 6, "desc" ]],
+                                                buttons: [
+                                                    {
+                                                        extend: 'pdfHtml5',
+                                                        text: 'Download PDF',
+                                                        title:'{{company.cmpid.compname}} ',
+                                                        message:'Assigned to :- {{current_status.assignedto.first_name}} \n ------------------------------------------\n Logs :- [ {{logs}} ] \n OPEN :- {{open}} \n REACHOUT :- {{reachout}} \n TENTATIVE {{tentative}} \n POSITIVE {{positive}} \n WILL DO LATER :- {{will_do}} \n NEGATIVE :- {{ni}} \n ------------------------------------------\n\nConversion Details :- \n  ------------------------------------------ \n\n    {% for con in conversions %}{{con.last_status}} to {{con.next_status}} Count :- {{con.count}}  Time taken :- {{con.next_date|timeuntil:con.last_date}} \n          {% endfor %}',
+
+                                                    }
+                                                ]
+                                            } );
+                                            $("#logtable_filter").hide();
+                                    });
+
+</script>
+
+
+{% include 'footer.html' %}

@@ -1,0 +1,28 @@
+{% include 'header.html' %} {% load static %}
+<div class="container-fluid page__heading-container">
+    <div class="page__heading"></div>
+    <div class="row">
+   
+        {% for em in notifications %}
+        <div class="list-group-item list-group-item-action d-flex align-items-center " style="cursor:pointer;" onclick="update_not('{{em.id}}','{{em.company_id}}')"><div class="avatar avatar-xs mr-3"> <span class="avatar-title rounded-circle bg-purple"> <i class="material-icons fa fa-handshake"></i> </span></div><div class="flex"><div class="d-flex align-items-middle"><strong class="text-15pt mr-1" style="color:{% if em.status is pending %} black {% else %} gray  {% endif %};">{{em.msg}}</strong></div> <small class="text-muted">Date:- {{em.date}}</small></div><div style="background:{{em.status.color}};">OPEN</div> <i class="material-icons icon-muted ml-3">arrow_forward</i></div>
+             <script>
+function update_not(id,company_id){
+    var xml=new XMLHttpRequest();
+        xml.onreadystatechange=function(){
+            if(this.readyState==4 && this.status){
+                
+               window.open('/company/'+company_id, '_blank');
+               location.reload();
+            }
+        };
+        xml.open('get','/update_notification/'+id);
+        xml.send();
+    
+    
+}    
+</script>
+        {% endfor %}
+    </div>
+</div>
+
+{% include 'footer.html' %}

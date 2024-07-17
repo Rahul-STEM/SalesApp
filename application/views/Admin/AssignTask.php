@@ -84,12 +84,16 @@
                                     if($r->id <= $user['type_id']){
                                       continue;
                                     }
-                                    ?>
+                                  ?>
                                   <option value="<?=$r->id?>"> <?=$r->name?></option>
                                   <?php } ?>
                               </select>
                             </div>
                             <div class="form-group">
+                            <?php $udetail = $this->Menu_model->get_userbyid($uid);
+                                $admid = $udetail[0]->admin_id;
+                                ?>
+                                <input type="hidden" id="adid" value="<?=$uid?>">
                               <label>Select User</label>
                               <select id="user" class="form-control" name="user">
                               </select>
@@ -280,7 +284,7 @@
                                 </select>
                             </div> -->
                             <div class="row showoncompanySelection">
-                              <div class="col-3">
+                              <div class="col-4">
                                 <div class="form-group">
                                     <label>Assign Task</label>
                                     <select id="atask" class="form-control" name="atask">
@@ -293,19 +297,19 @@
                                     </select>
                                 </div>
                               </div>
-                              <div class="col-3">
+                              <div class="col-4">
                                 <div class="form-group">
                                     <label>Date</label>
                                     <input type="date" class="form-control" id="plandate" name="plandate"  value="" min="" required="">
                                 </div>
                               </div>
-                              <div class="col-3">
+                              <div class="col-4">
                                 <div class="form-group">
                                     <label>Time</label>
                                     <input type="time" name="tasktimeplan" min="10:00" max="19:00" class="form-control" id="tasktimeplan">
                                 </div>
                               </div>
-                              <div class="col-3">
+                              <div class="col-6">
                                 <div class="form-group">
                                   <label>Target Status</label>
                                   <select id="targetstatus" class="form-control" name="targetstatus">
@@ -315,6 +319,12 @@
                                     <?php } ?>
                                     </select>
                                 </div>
+                                <div class="col-6">
+                                <div class="form-group">
+                                  <label>Target Date</label>
+                                  <input type="date" class="form-control" id="targetDate" name="targetDate"  value="" min="" required="">
+                                </div>
+                              </div>
                               <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Submit</button>
                               </div>
@@ -426,6 +436,7 @@
         //select user according to role
         $("#role").change(function(){
           var selectedValue = $(this).val();
+          var adminid = document.getElementById("adid").value;
           $("#workbyothers").val("");
           if(selectedValue == "4"){
             $('#op1').val('bd').text('BD');
@@ -436,7 +447,10 @@
           $.ajax({
             url: '<?=base_url();?>Menu/getRoleUser',
             type: 'POST', 
-            data: {selectedOption: selectedValue},
+            data: {
+              selectedOption: selectedValue,
+              adminid: adminid
+            },
             success: function(response) {
               $("#user").html(response);
             },

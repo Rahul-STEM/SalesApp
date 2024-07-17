@@ -74,7 +74,7 @@
                  <div class="card p-5">
                      <?php foreach($mdata as $md){?>
                      <div class="alert alert-light" role="alert" id="<?=$md->aprid?>">
-                        <b><?=$md->compname?> | <?=$md->name?> | 
+                        <b><?=$md->compname?> | <?=$md->name?> |  <?=$md->currentstatus?>|
                         <a href="<?=base_url();?><?=$md->proattach?>" target='_blank' class="text-primary">View</a> | 
                         <span onclick="Apr('<?=$md->aprid?>');" id="<?=$md->aprid?>">Approve</span> | 
                         <span onclick="Rej('<?=$md->aprid?>');" id="<?=$md->aprid?>">Reject</span>

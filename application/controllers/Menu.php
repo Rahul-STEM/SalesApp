@@ -3,6 +3,21 @@ date_default_timezone_set("Asia/Calcutta");
 defined('BASEPATH') OR exit('No direct script access allowed'); 
 class Menu extends CI_Controller {
     
+    public function __construct() {
+        parent::__construct();
+        $this->access_control->block_urls();
+    }
+    public function blocked_page(){
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        $this->load->view($dep_name.'/blocked_page');
+    }
+    
     public function main(){
         $msg = '';
         $this->load->model('Menu_model');
@@ -3871,6 +3886,7 @@ class Menu extends CI_Controller {
     
     
     public function submittask(){
+        
         $status=1;$filname="";$tid="";$uid="";$action_id="";$ystatus="";$remark="";$remark_msg="";$noremark="";$purpose="";$nremark_msg="";$rpmmom='null';$mom='null';$flink='null';$flink1='null';$flink2='null';
         $tid = $_POST['tid'];
         $uid = $_POST['uid'];
@@ -4600,7 +4616,7 @@ class Menu extends CI_Controller {
             $revenue +=  (int)$tost[0]->fbudget;
         }
         $pstc=$this->Menu_model->get_pstc($uid);
-        
+        // var_dump($dep_name);die;
         if(!empty($user)){
             $this->load->view($dep_name.'/index',['myid'=>$myid,'ttdone'=>$ttdone,'upt'=>$upt,'user'=>$user,'fr'=>$fr,'callr'=>$callr,'emailr'=>$emailr,'meetingr'=>$meetingr,'pendingt'=>$pendingt,'totalt'=>$totalt,'patc'=>$patc,'tatc'=>$tatc,'pate'=>$pate,'tate'=>$tate,'patm'=>$patm,'tatm'=>$tatm,'sc'=>$sc,'tptask'=>$tptask,'ttd'=>$ttd,'barg'=>$barg,'uid'=>$uid,'pstc'=>$pstc,'poc'=>$poc,'vpoc'=>$vpoc,'tnos'=>$tnos,'revenue'=>$revenue,'tsww'=>$tsww,'bdc'=>$bdc,'tdate'=>$tdate,'mbdc'=>$mbdc]);
         }else{
@@ -5230,16 +5246,22 @@ class Menu extends CI_Controller {
         $mdata = $this->Menu_model->REQ_APR($id,$uname);
     }
     
-    public function EditWR(){
+    public function editremark(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uname = $user['name'];
-        $edid = $_POST['edid'];
+        $edid = $_POST['editid'];
         $editrem = $_POST['editrem'];
         $this->load->model('Menu_model');
-        $mdata = $this->Menu_model->Edit_WR($edid,$uname,$editrem);
-    }
+        $data1 = [
+            'remark' =>$editrem,
+        ];
+        $db3 = $this->load->database('db3', TRUE);
+        $db3->where('id',$edid);
+        $db3->update('bdrequest',$data1);
+        redirect('Menu/Dashboard');
+     }
     
     
     public function readnotify(){
@@ -7297,12 +7319,14 @@ class Menu extends CI_Controller {
     
     public function workdoneCompanyBDPST(){
         $user = $this->session->userdata('user');
+        // print_r($user);die;
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
+        // print_r($dep_name);die;
         if(!empty($user)){
             $this->load->view($dep_name.'/workdoneCompanyBDPST',['uid'=>$uid,'user'=>$user]);
         }else{
@@ -9687,6 +9711,7 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
+        // var_dump($dep_name);die;
         if($uid=='100103'){$uid=45;}
         if($uid=='100149'){$uid=45;}
         if($uid=='100142'){$uid=2;}
@@ -12635,6 +12660,7 @@ class Menu extends CI_Controller {
     
     
     public function bdrequest(){
+        
         $uid = $_POST['uid'];
         $ctype = $_POST['ctype'];
         $targetd = $_POST['targetd'];
@@ -12642,7 +12668,7 @@ class Menu extends CI_Controller {
         $remark = $_POST['remark'];
         $tyschool = $_POST['tyschool'];
         $noschool = $_POST['noschool'];
-        $location = $_POST['location']; 
+        $location = $_POST['location_n']; 
         $idetype = $_POST['idetype'];
         $sletter = $_POST['sletter'];
         $dmletter = $_POST['dmletter'];
@@ -12657,6 +12683,30 @@ class Menu extends CI_Controller {
         
         $this->load->model('Menu_model');
         $id = $this->Menu_model->submit_bdrequest($ctype,$uid,$targetd,$request_type,$remark,$cname,$tyschool,$noschool,$location,$idetype,$ngoletter,$sletter,$dmletter,$svalidation);
+        redirect('Menu/Dashboard');
+    }
+
+    // Edit Bd request
+    public function updatebdrequest(){
+        $data = [
+            'remark' => $_POST['remark'],
+            'idetype' => $_POST['idetype'],
+            'schooltype' => $_POST['tyschool'],
+            'sletter' => $_POST['sletter'],
+            'dmletter' => $_POST['dmletter'],
+            'svalidation' => $_POST['svalidation'],
+            'is_rejected'   => 0,
+            'reject_remark' => ""
+        ];
+        $db3 = $this->load->database('db3', TRUE);
+        $db3->where('id',$_POST['bdid']);
+        $db3->update('bdrequest',$data);
+        // echo $db3->last_query(); exit;
+        $tid = $_POST['bdid'];
+        
+        $msg = $request_type." Task Updated";
+        $remark =$_POST['remark'];
+        $query=$db3->query("INSERT INTO bdrequestlog(tid,tby,remark,detail) VALUES ('$tid','','$remark','$msg')");
         redirect('Menu/Dashboard');
     }
 
@@ -12678,8 +12728,11 @@ class Menu extends CI_Controller {
     //Select user according to role
     public function getRoleUser(){
         $selectedOption= $this->input->post('selectedOption');
+        $adminid = $this->input->post('adminid');
         
-        $user = $this->db->select('*')->from('user_details')->where(['type_id'=> $selectedOption, 'status'=>'active'])->get()->result();
+        $user = $this->db->select('*')->from('user_details')
+                        ->where(['type_id'=> $selectedOption, 'status'=>'active','admin_id' => $adminid])
+                        ->get()->result();
         echo  $data = '<option value="">Select User</option>';
         foreach($user as $d){
             echo  $data = '<option value='.$d->user_id.'>'.$d->name.'</option>';
@@ -12752,13 +12805,7 @@ class Menu extends CI_Controller {
                             ->where(['user_id'=> $user])
                             ->where_in('company_master.city', $cities)
                             ->where_in('company_master.partnerType_id', $partner);
-                            
-            // if($option1 != ""){
-            //     // $company->where(['tblcallevents.actontaken'=>'yes','tblcallevents.purpose_achieved'=>'yes']);
-            // }
-            // if($option2 != ""){
-            //     // $company->where(['tblcallevents.actontaken'=>'yes','tblcallevents.purpose_achieved'=>'no']);
-            // }               
+                     
             if($days == "8"){
                 $company->where("DATEDIFF(CURDATE(), updateddate) < 8");
             }if($days == "15"){
@@ -12808,7 +12855,7 @@ class Menu extends CI_Controller {
             $company->group_by('company_master.compname');
             $company->group_by('company_master.city');
         $company = $this->db->get()->result();
-                    // echo $this->db->last_query(); exit;
+        //             echo $this->db->last_query(); exit;
 
         // echo  $data = '<option value="">Select company</option>';
         // foreach($company as $d){
@@ -12835,6 +12882,8 @@ class Menu extends CI_Controller {
         $task = $this->input->post('atask');
         $status = $this->input->post('current_status');
         $targetstatus = $this->input->post('targetstatus');
+        $targetdate = $this->input->post('targetDate');
+        $purpose = $this->input->post('ntppose');
         
         $i = 0;
         $action = $this->db->select('*')->from('action')->where('id',$task)->get()->row();
@@ -12851,7 +12900,7 @@ class Menu extends CI_Controller {
                 'pstassign'             => "",
                 'assignedto_id'         => $user,
                 'actiontype_id'         => $task,
-                'updateddate'          =>  $date,
+                'updateddate'           =>  $date,
                 'date'                  => $date,
                 'fwd_date'              => $date,
                 'appointmentdatetime'   => $date,
@@ -12860,7 +12909,10 @@ class Menu extends CI_Controller {
                 'status_id'             =>  $status,
                 'lastCFID'              => 0,
                 'nextCFID'              => 0,
-                'targetstatus'          => $targetstatus
+                'targetstatus'          => $targetstatus,
+                'targetdate'            => $targetdate,
+                'purpose_id'            => $purpose,
+                'remarks'               => ""
             ];
             $i = $i + $action->yest;
             $this->db->insert('tblcallevents',$data);
@@ -12882,5 +12934,49 @@ class Menu extends CI_Controller {
     }
 
 
+    public function bd_rreject(){
+        $db3 = $this->load->database('db3', TRUE);
+        $id = 0;
+        if($_POST['isdeleted'] == 1){
+            $id = $_POST['rrid'];
+            $data = [
+                'is_deleted'   => 1,
+                'delete_remark' => $_POST['ccomment']
+            ];
+        }
+        if($_POST['isrejected']){
+            $id = $_POST['rejectid'];
+            $data = [
+                'is_rejected'   => 1,
+                'reject_remark' => $_POST['ccomment']
+            ];
+        }
+        $db3->where(['id' => $id]);
+		$db3->update('bdrequest', $data);
+        redirect('Menu/Dashboard');
+    }
+
+    public function editBdrequest($id){
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        $client=$this->Menu_model->get_client();
+        $fannal=$this->Menu_model->get_fannal($uid);
+        $db3 = $this->load->database('db3', TRUE);
+        $bddetails = $db3->select("*")->from("bdrequest")
+                            ->where('id',$id)->get()->row();
+        $company = $this->db->select('*')->from('company_master')->where('id',$bddetails->cid)->get()->row();
+        // echo $this->db->last_query(); exit;
+        // echo $db3->last_query(); exit;
+        if(!empty($user)){
+            $this->load->view($dep_name.'/updaterequest',['user'=>$user,'uid'=>$uid,'bddetails'=>$bddetails,'client'=>$client,'fannal'=>$fannal,'company'=>$company]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
     
 }

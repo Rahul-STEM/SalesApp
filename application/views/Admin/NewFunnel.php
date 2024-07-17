@@ -81,7 +81,7 @@
                 <form class="p-3" method="POST" action="<?=base_url();?>/Menu/NewFunnel">
                     <input type="date" name="sdate" class="mr-2" value="<?=$sd?>">
                     <input type="date" name="edate" class="mr-2" value="<?=$ed?>">
-                    <button type="submit" class="bg-primary text-light">Filter</button>
+                    <button type="submit" class="btn btn-primary text-light">Filter</button>
                 </form>
                 
                   <div class="container body-content">

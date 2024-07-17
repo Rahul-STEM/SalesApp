@@ -80,12 +80,36 @@ $bd = $this->Menu_model->get_userbyaid($uid);
                      <?php foreach($bd as $bd){ 
                          $urid = $bd->user_id;
                          $mdata = $this->Menu_model->request_admin_apr($urid);?>
-                     <?php foreach($mdata as $md){?>
+                     <?php foreach($mdata as $md){
+                        // if($md){}
+                      ?>
                         <div class="alert alert-light" role="alert" id="<?=$md->id?>"> 
-                            <b><b><?=$md->bd_name?> | <?=$md->request_type?> | <?=$md->cname?> | <?=$md->remark?> | </b>
-                            <div class="btn btn-outline-danger" onclick="Approve('<?=$md->id?>');">Approve</div>
-                            <div class="btn btn-outline-danger" onclick="Edit('<?=$md->id?>');">Edit</div>
-                            <div class="btn btn-outline-danger" onclick="add_close('<?=$md->id?>');">Delete</div>
+                            <b>BD Name: </b><?=$md->bd_name?> | <b>Request Type: </b><?=$md->request_type?> | <b>Client Name: </b><?=$md->cname?> | <b>Created Date: </b><?=$md->sdatet?> | <b>Target Date: </b><?=$md->targetd?> | <b>Remark: </b><?=$md->remark?> | <?php if($md->updatedremark != ''){
+                              ?>
+                              <b>Updated Remark: </b><?=$md->updatedremark?> |
+                              <?php
+                            }
+                            if($md->ngoletter != 'uploads/day/' && $md->ngoletter != ''){
+                              ?>
+                              <b>NGO Letter: </b><a style='color:black' href="<?php echo base_url().$md->ngoletter;?>" target="_blank">Attachment</a> |
+                              <?php
+                            }
+                            if($md->sletterfile != 'uploads/day/' && $md->sletterfile != ''){
+                              ?>
+                              <b>School Letter Format: </b><a style='color:black' href="<?php echo base_url().$md->sletterfile;?>" target="_blank">Attachment</a> |
+                              <?php
+                            }
+                            if($md->dmletterfile != 'uploads/day/' && $md->dmletterfile != ''){
+                              ?>
+                              <b>DM Letter Format: </b><a style='color:black' href="<?php echo base_url().$md->dmletterfile;?>" target="_blank">Attachment</a> |
+                              <?php
+                            }
+                            ?>
+                            <div class="btn btn-success" onclick="Approve('<?=$md->id?>');">Approve</div>
+                            <div class="btn btn-warning" onclick="Reject('<?=$md->id?>');">Reject</div>
+                            <div class="btn btn-outline-danger" onclick="Edit('<?=$md->id?>');">Edit Remark</div>
+                            <div class="btn btn-danger" onclick="add_close('<?=$md->id?>');">Delete</div>
+                            
                         </div>
                      <?php } }?>
                  </div>
@@ -114,31 +138,61 @@ $bd = $this->Menu_model->get_userbyaid($uid);
 </div>
 <!-- ./wrapper -->
 
+<!-- <div id="editremark" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-standard-title" aria-hidden="true">
+  <form action="<?=base_url();?>Menu/Editremark" method="post" enctype="multipart/form-data">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-standard-title1"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+        </div> 
+        <div class="modal-body">
+          <div class="card card-form col-md-12">
+            <div class="card-header bg-info">Edit Remark</div>
+            <div class="col-lg-12 card-body">
+              <input type="hidden" id="editid">
+              <textarea rows="10" id="editrem" class="form-control"></textarea><hr>
+              <button type="submit" class="btn btn-primary mt-3">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
+  </form>
+</div>
+</div></div> -->
 <div id="editremark" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-standard-title" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modal-standard-title1"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div> <!-- // END .modal-header -->
-                <div class="modal-body">
-                    <div class="card card-form col-md-12">
-                       <div class="card-header bg-info">Edit Remark</div>
-                        <div class="col-lg-12 card-body">
-                           <input type="hidden" id="editid">
-                           <textarea rows="10" id="editrem" class="form-control"></textarea><hr>
-                           <button type="submit" class="btn btn-primary mt-3" onclick="editwr();">Submit</button>
-                        </div>
-                        </div>
-                            </div>
-                        </div>
-                </div> <!-- // END .modal-body -->
-</div></div></div>
-
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-standard-title1"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div> <!-- // END .modal-header -->
+          <div class="modal-body">
+            <div class="card card-form col-md-12">
+              <div class="card-header bg-info">Remark</div>
+                <div class="col-lg-12 card-body">
+                  <form action="<?=base_url();?>Menu/editremark" method="post" enctype="multipart/form-data">
+                    <input type="text" id="editid">
+                    <textarea rows="10" id="editrem" class="form-control"></textarea><hr>
+                    <button type="submit" class="btn btn-primary mt-3" >Submit</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- // END .modal-body -->
+      </div>
+    </div>
+  </div>
+</div>
 
 <div id="bdrclose" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-standard-title" aria-hidden="true">
+  <form action="<?=base_url();?>Menu/bd_rreject" method="post" enctype="multipart/form-data">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -151,8 +205,9 @@ $bd = $this->Menu_model->get_userbyaid($uid);
                     <div class="card card-form col-md-12">
                        <div class="card-header bg-info">Delete Comment</div>
                         <div class="col-lg-12 card-body">
-                           <?=form_open('Menu/bdrclose')?>
+                           <?=form_open('Menu/bdrdelete')?>
                            <input type="hidden" id="rrid" name="rrid">
+                           <input type="hidden" id="" name="isdeleted" value=1>
                            <textarea rows="10" name="ccomment" class="form-control"></textarea><hr>
                            <button type="submit" class="btn btn-primary mt-3" onclick="this.form.submit(); this.disabled = true;">Delete</button>
                            </form>
@@ -162,6 +217,35 @@ $bd = $this->Menu_model->get_userbyaid($uid);
                         </div>
                 </div> <!-- // END .modal-body -->
 </div></div></div>
+
+<div id="bdrreject" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-standard-title" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-standard-title1"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div> <!-- // END .modal-header -->
+          <div class="modal-body">
+            <div class="card card-form col-md-12">
+              <div class="card-header bg-info">Reject Comment</div>
+                <div class="col-lg-12 card-body">
+                  <form action="<?=base_url();?>Menu/bd_rreject" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="rejectid" name="rejectid">
+                    <input type="hidden" id="" name="isrejected" value=1>
+                    <textarea rows="10" name="ccomment" class="form-control"></textarea><hr>
+                    <button type="submit" class="btn btn-primary mt-3" >Reject</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- // END .modal-body -->
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -173,6 +257,11 @@ $bd = $this->Menu_model->get_userbyaid($uid);
 function add_close(id) {
 document.getElementById('rrid').value=id;
 $('#bdrclose').modal('show');
+}
+
+function Reject(id){
+  document.getElementById('rejectid').value=id;
+$('#bdrreject').modal('show');
 }
 
 function Approve(id) {
@@ -196,24 +285,24 @@ $('#editremark').modal('show');
 }
 
 
-function editwr() {
-    edid = document.getElementById('editid').value;
-    editrem = document.getElementById('editrem').value;
-$.ajax({
-url:'<?=base_url();?>Menu/EditWR',
-type: "POST",
-data: {
-edid: edid,
-editrem : editrem
-},
-cache: false,
-success: function b(result){
-$("#cinfo").html(result);
-}
-});
-$('#editremark').modal('hide');
-document.getElementById(id).style.display = "none";
-}
+// function editwr() {
+//     edid = document.getElementById('editid').value;
+//     editrem = document.getElementById('editrem').value;
+// $.ajax({
+// url:'<?=base_url();?>Menu/EditWR',
+// type: "POST",
+// data: {
+// edid: edid,
+// editrem : editrem
+// },
+// cache: false,
+// success: function b(result){
+// $("#cinfo").html(result);
+// }
+// });
+// $('#editremark').modal('hide');
+// document.getElementById(id).style.display = "none";
+// }
 
 
 

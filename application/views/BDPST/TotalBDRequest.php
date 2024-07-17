@@ -29,6 +29,7 @@
   <link rel="stylesheet" href="<?=base_url();?>assets/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="<?=base_url();?>assets/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="<?=base_url();?>assets/css/buttons.bootstrap4.min.css">
+  <link href="https://cdn.lineicons.com/2.0/LineIcons.css" rel="stylesheet">
   <style>
       .scrollme {
     overflow-x: auto;
@@ -109,6 +110,8 @@
                                         
                                         $mdata=$this->Menu_model->get_bdrequest($uid,$code);
                                         foreach($mdata as $dt){
+                                          $class = "";
+                                          if($dt->is_rejected == 1 || $dt->is_deleted){$class = "text-danger";}
                                             $tid = $dt->id;
                                             $logs=$this->Menu_model->get_bdrequestlog($tid);
                                             $attech=$this->Menu_model->get_bdrequestattech($tid);
@@ -119,7 +122,7 @@
                                             elseif($dt->assignstatus=='1'){$txt="Waiting for Request Close by Concerned Person";}
                                             elseif($dt->assignstatus=='2'){$txt="Waiting for Request Close by Request Creator";}
                                             else{$txt="All Done";}?>
-                                      <tr>
+                                      <tr class="<?=$class?>">
                                          <td><?=$i?></th>
                                          <td><?=date('Ymd')?></th>
                                          <td><?=$dt->sdatet?></td>
@@ -153,7 +156,14 @@
                                          <td><?php $st = $dt->status; if($st==0){?>
                                              <button id="add_comment<?=$i?>" value="<?=$tid?>">Comment</button><br><br>
                                              <button id="add_close<?=$i?>" value="<?=$tid?>">Close</button>
-                                             <?php } else{echo 'Request Cloesd';}?></td>
+                                             <?php } else{echo 'Request Cloesd';}?>
+                                             <?php if($dt->is_rejected == 1){?>
+                                                <a class="btn btn-warning btn-sm btn-block rounded-0 mb-1 text-white mt-3"
+                                                  href="<?=base_url();?>Menu/editBdrequest/<?=$tid?>">
+                                                  <i class="lni lni-pencil-alt"></i> EDIT
+                                                </a>
+                                              <?php } ?>
+                                            </td>
                                      </tr>
                                      <?php $i++;} ?>
                                   </tbody>

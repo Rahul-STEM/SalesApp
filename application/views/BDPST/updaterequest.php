@@ -47,7 +47,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Create Request</h1>
+            <h1 class="m-0">Update Request</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -65,53 +65,40 @@
 <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
-      <form action="<?=base_url();?>Menu/bdrequest" method="post" enctype="multipart/form-data">
+      <form action="<?=base_url();?>Menu/updatebdrequest" method="post" enctype="multipart/form-data">
         <div class="row p-3">
           <div class="col-sm col-md-6 col-lg-6">
             <div class="card card-primary card-outline">
 				      <div class="card-body box-profile">
                 <input type="hidden" name="uid" value="<?=$uid?>">
                 <input type="hidden" name="stage_type" value="bd-request">
+                <input type="hidden" name="bdid" value="<?=$bddetails->id?>">
                 <div class="form-group">
                   <label for="task_type">Client Type</label><br>
-                  <!-- <select class="custom-select rounded-0" name="ctype" id="ctype">
-                      <option>Select Request</option>
-                      <option>On Board Client</option>
-                      <option>New Client</option>
-                  </select> -->
                   <input type="radio"name="ctype"class="ctype"value="New Client"required=""id="ctypenew"/>&nbsp;&nbsp;New Client &nbsp;&nbsp;
                   <input type="radio"name="ctype"class="ctype"value="On Board Client"required=""id="ctypeonboard"/>&nbsp;&nbsp;On Board Client &nbsp;&nbsp;
                 </div>
                 <div class="form-group">
                   <label for="cname">Client</label>
-                  <select class="custom-select rounded-0" name="cid" id="cid" required>
-                    <option value="">Select Company</option>
-                    <?php foreach($fannal as $d){
-                      if($d->cstatus == '3' || $d->cstatus == '6' || $d->cstatus == '9' || $d->cstatus == '12' || $d->cstatus == '13'){
-                    ?>
-                    <option class='newclientstatus' value='<?=$d->id?>'><?=$d->compname?></option>
-                    <?php }else if($d->cstatus =='7'){?>
-                    <option value='<?=$d->id?>' class='onboardclientstatus'><?=$d->compname?></option>
-                    <?php
-                    }} ?>
-                  </select>
-                  <input type="hidden" name="cname" id="cname" />
+                  <input type="text" class="form-control" name="cid" value="<?=$company->compname?>" readonly>
+                  
+                  <!-- <input type="hidden" name="cname" id="cname" /> -->
                   <div style="display:block" id="clientdetail">
 
                   </div>
                 </div>
+                <?php //var_dump($bddetails);?>
                 <div class="form-group">
                   <label for="task_type">Request Type</label>
-                  <select required class="custom-select rounded-0" name="request_type" id="task_type">
-                </select>
+                  <input type="text" class="form-control" name="request_type" value="<?=$bddetails->request_type?>" readonly>
                 </div>
                 <div class="form-group">
                   <label for="task_date">Target Date</label>
-                  <input type="date" required class="form-control" name="targetd" id="task_date" >
+                  <input type="date" required class="form-control" name="targetd" id="task_date" value='<?=$bddetails->targetd?>'>
                 </div>
                 <div class="form-group">
                   <label for="remark">Request Detail (Be specific)</label>
-                  <textarea type="text" class="form-control" name="remark" id="remark" placeholder="Request Detail" required></textarea>
+                  <textarea type="text" class="form-control" name="remark" id="remark" placeholder="Request Detail" value="" required><?=$bddetails->remark?></textarea>
                 </div>
               </div>
             </div>
@@ -119,7 +106,7 @@
           <div class="col-sm col-md-6 col-lg-6">
             <div class="card card-primary card-outline">
               <div class="card-body box-profile">
-                <div id="test1" style="display: none;">
+                <!-- <div id="test1" style="display: none;">
                   <div class="form-group">
                     <label>Project Code</label>
                     <select class="custom-select rounded-0" id="pcode" name="pcode">
@@ -144,13 +131,13 @@
                       <label for="visitdt">Date Time</label>
                       <input type="datetime-local" class="form-control" name="visitdt" id="visitdt" >
                   </div>
-                  <!-- <div class="form-group">
+                  <div class="form-group">
                       <label for="">Select No of location</label>
                       <select class="custom-select rounded-0" name="m_id" id="m_id">
                         <option value="1">One</option>
                         <option value="2">Multiple</option>
                       </select>
-                  </div> -->
+                  </div>
                   <div class="form-group">
                     <label for="caddress">Location</label>
                     <textarea type="text" class="form-control" name="caddress" id="caddress" placeholder="Client Address"></textarea>
@@ -200,69 +187,77 @@
                 <div id="test5" style="display: none;">
                           
                     
-                </div>
-                <div id="test6" style="display: none;">
+                </div> -->
+                <?php if($bddetails->request_type="School Identification"){?>
+                <div id="test6">
                   <div class="form-group">
                       <label>Identification Type</label>
                       <select class="custom-select rounded-0" name="idetype">
-                          <option>Physical</option>
-                          <option>virtual</option>
-                          <option>Mix</option>
+                          <option value="Physical"<?php if("Physical" == $bddetails->idetype) echo "selected";?>>Physical</option>
+                          <option <?php if("virtual" == $bddetails->idetype) echo "selected";?>>virtual</option>
+                          <option <?php if("Mix" == $bddetails->idetype) echo "selected";?>>Mix</option>
                       </select>
                   </div>
                   <div class="form-group">
                       <label>Type of School</label>
                       <select class="custom-select rounded-0" name="tyschool">
-                          <option>Govt.</option>
-                          <option>Private</option>
-                          <option>Mix</option>
+                          <option <?php if("Govt." == $bddetails->schooltype) echo "selected";?>>Govt.</option>
+                          <option <?php if("Private" == $bddetails->schooltype) echo "selected";?>>Private</option>
+                          <option <?php if("Mix" == $bddetails->schooltype) echo "selected";?>>Mix</option>
                       </select>
                   </div>
                   <div class="form-group">
                       <label for="noschool">NO of School</label>
-                      <input type="text" class="form-control" name="noschool" id="noschool" placeholder="NO of School">
+                      <input type="text" class="form-control" name="noschool" id="noschool" placeholder="NO of School" value="<?=$bddetails->noofschool?>">
                   </div>
-                  <div class="form-group" id="hidelocation">
-                      <label for="">Select No of locations</label>
-                      <select class="custom-select rounded-0" name="nooflocation" id="nooflocation">
-                        <option value="1">One</option>
-                        <option value="2">Multiple</option>
-                      </select>
+                  <div class="form-group">
+                    <label for="">Select No of location</label>
+                    <select class="custom-select rounded-0" name="nooflocation" id="nooflocation">
+                      <option value="1" <?php if("1" == $bddetails->nooflocation) echo "selected";?>>One</option>
+                      <option value="2"<?php if("2" == $bddetails->nooflocation) echo "selected";?>>Multiple</option>
+                    </select>
                   </div>
                   <!-- <div class="form-group">
                       <label for="location">Location</label>
                       <textarea class="form-control" name="location" id="location" placeholder="Location"></textarea>
                   </div> -->
-                  
+                  <?php if($bddetails->nooflocation == "1"){?>
                   <div class="form-group hideon">
                     <label for="location">Location</label>
                     <div class="input-group">
-                        <textarea class="form-control" name="location_n[]" id="location" placeholder="Location"></textarea>
+                        <textarea class="form-control" name="location" id="location" placeholder="Location"></textarea>
                         
                             
                             <!-- <span class="input-group-text delete-input"><i class="fas fa-minus"></i></span> -->
                         
                     </div>
                   </div>
+                  <?php }?>
+                  <?php if($bddetails->nooflocation != "1"){
+                    $loc = explode(",", $bddetails->vlocation);
+                    $loc = array_values(array_filter($loc));
+                    $sch = explode(",", $bddetails->schoolatlocation);
+                    $sch = array_values(array_filter($sch));
+                    $i = 0;
+                    foreach($loc as $l){
+                    ?>
                   <div class="row multilocation">
                     <div class="col-6">
                       <div class="form-group">
                         <label for="noschool">NO of School</label>
-                        <input type="number" class="form-control" name="noschoolbylocation[]" id="noschoolbylocation" placeholder="NO of School">
+                        <input type="number" class="form-control" name="noschoolbylocation[]" id="noschoolbylocation" placeholder="NO of School"readonly value="<?=$sch[$i]?>">
                       </div>
                     </div>
                     <div class="col-6">
                       <div class="form-group">
                         <label for="location">Location</label>
                         <div class="input-group">
-                          <textarea class="form-control" name="location_n[]" id="location_n" placeholder="Location"></textarea>
-                          <div class="input-group-append">
-                            <span class="input-group-text plus-icon"><i class="fas fa-plus"></i></span>
-                          </div>
+                          <textarea class="form-control" name="location_n[]" id="location_n" placeholder="Location" readonly><?=$l?></textarea>
                         </div>
                       </div>
                     </div>
                   </div>
+                  <?php $i++;}}?>
                   <div class="more"></div>
                   <div class="form-group">
                     <label>Attach NGO Letter (only pdf)</label>
@@ -299,6 +294,7 @@
                     </select>
                   </div>
                 </div>
+                <?php }?>
               </div>
             </div>
             <button type="submit" class="btn btn-primary sbtn">Submit</button>
@@ -401,7 +397,6 @@ $('#task_type').on('change', function() {
     $("#test4").hide();
     $("#test5").hide();
     $("#test6").hide();
-    $("#hidelocation").hide();
    }
    if(ab=="New Client Report"){
     $("#test1").hide();
@@ -410,7 +405,6 @@ $('#task_type').on('change', function() {
     $("#test4").hide();
     $("#test5").hide();
     $("#test6").hide();
-    $("#hidelocation").hide();
    }
    if(ab=="New client school visit"){
     $("#test1").hide();
@@ -419,7 +413,6 @@ $('#task_type').on('change', function() {
     $("#test4").hide();
     $("#test5").hide();
     $("#test6").hide();
-    $("#hidelocation").hide();
    }
    if(ab=="OnBoardVisit"){
     $("#test1").hide();
@@ -428,7 +421,6 @@ $('#task_type').on('change', function() {
     $("#test4").hide();
     $("#test5").hide();
     $("#test6").hide();
-    $("#hidelocation").hide();
    }
    if(ab=="Demo"){
     $("#test1").hide();
@@ -437,7 +429,6 @@ $('#task_type').on('change', function() {
     $("#test4").hide();
     $("#test5").hide();
     $("#test6").hide();
-    $("#hidelocation").hide();
    }
    if(ab=="Inauguration"){
     $("#test1").hide();
@@ -446,7 +437,6 @@ $('#task_type').on('change', function() {
     $("#test4").hide();
     $("#test5").show();
     $("#test6").hide();
-    $("#hidelocation").hide();
    }
    if(ab=="School Identification"){
     $("#test1").hide();
@@ -455,7 +445,6 @@ $('#task_type').on('change', function() {
     $("#test4").hide();
     $("#test5").hide();
     $("#test6").show();
-    $("#hidelocation").show();
     $('#noschool').attr('required','required');
     
     //$('#filname').attr('required','required');

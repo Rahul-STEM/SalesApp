@@ -1187,8 +1187,7 @@ WHERE cid = '$cid'");
     
      
       
-     public function add_bdHandover($sname,$saddress,$scity,$sstate,$scontact,$sdegignation,$snumber,$bdid, $client_name, $mediator, $noofschool, $location, $city, $state, $spd_identify_by, $infrastructure, $filname,$count, $contact_person, $cp_mno, $acontact_person, $acp_mno, $language, $expected_installation_date, $project_tenure,$project_type, $comments,$sid,$remark,$fttptype){
-        
+    public function add_bdHandover($sname,$saddress,$scity,$sstate,$scontact,$sdegignation,$snumber,$bdid, $client_name, $mediator, $noofschool, $location, $city, $state, $spd_identify_by, $infrastructure, $filname,$count, $contact_person, $cp_mno, $acontact_person, $acp_mno, $language, $expected_installation_date, $project_tenure,$project_type, $comments,$sid,$remark,$fttptype){
                 if($count>0){
                     $flink="";
                 for($i = 0; $i < $count; $i++){
@@ -1592,7 +1591,9 @@ WHERE cid = '$cid'");
     }
     
     public function get_scon($uid,$tdate){
+        
         $query=$this->db->query("SELECT tblcallevents.* FROM `tblcallevents` WHERE cast(updateddate as DATE)='$tdate' and nextCFID!=0 and updation_data_type='updated' and lastCFID!=0 and user_id='$uid'");
+        // echo $this->db->last_query(); exit;
         return $query->result();
     }
     
@@ -2155,6 +2156,7 @@ WHERE cid = '$cid'");
     
     public function get_purposebya($aid,$sid){
         $query=$this->db->query("SELECT * FROM purpose where action_id='$aid' and status_id='$sid'");
+        // echo $this->db->last_query(); exit;
         return $query->result();
     }
     
@@ -3701,6 +3703,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         $ab=1;
         if($uid=='100103' || $uid=='100149'){$uid=$uid;}
         $utype = $this->Menu_model->get_userbyid($uid);
+        // var_dump($utype);die;
         $utype = $utype[0]->type_id;
         if($utype==2){$text = "user_details.admin_id='$uid' and user_details.type_id='3' and user_details.status='active'";}
         if($utype==3){$text = "user_details.user_id='$uid'";}
@@ -5088,7 +5091,9 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type) VALUES ('$tblid', '0', '$draft', '', '$date', '1', '1', 'NA','NA','yes','$date','1','100101','$inid','1','test','3','100101','$date','$date','updated')");
         $nextid = $this->db->insert_id();
        
-        $this->db->query("update tblcallevents set mom='$mom' where id='$tblid'");
+        // $this->db->query("update tblcallevents set mom='$mom' where id='$tblid'");
+        $this->db->query("UPDATE tblcallevents SET mom = ? WHERE id = ?", array($mom, $tblid));
+        
         $tblid = $this->db->insert_id();
        
     }
@@ -5231,7 +5236,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
     
     
     public function proposal_apr($uid){
-        $query=$this->db->query("SELECT *,proposal.id aprid FROM proposal LEFT JOIN tblcallevents ON tblcallevents.id=proposal.tid LEFT JOIN init_call ON init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id WHERE proposal.apr=0 and user_details.admin_id='$uid'");
+        $query=$this->db->query("SELECT proposal.*,tblcallevents.*,init_call.*,company_master.*,user_details.*,proposal.id aprid,status.name as currentstatus FROM proposal LEFT JOIN tblcallevents ON tblcallevents.id=proposal.tid LEFT JOIN init_call ON init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id  LEFT JOIN status ON init_call.cstatus=status.id WHERE proposal.apr=0 and user_details.admin_id='$uid'");
         return $query->result();
     }
     
@@ -5264,7 +5269,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
     
     public function request_admin_apr($urid){
         $db3 = $this->load->database('db3', TRUE);
-        $query=$db3->query("SELECT * FROM bdrequest where assignto=0 and bd_id='$urid'");
+        $query=$db3->query("SELECT * FROM bdrequest where assignto=0 and bd_id='$urid' and is_rejected=0");
         return $query->result();
     }
     
@@ -5342,10 +5347,12 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
     
     
     public function get_bdrequest($uid,$code){
+        
         $db3 = $this->load->database('db3', TRUE);
         if($code=='1'){
             $query=$db3->query("select * from bdrequest where bd_id='$uid'");
         }
+        
         if($code=='2'){
             $query=$db3->query("select * from bdrequest where bd_id='$uid' and assignto='0'");
         }
@@ -5381,7 +5388,6 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
     
     public function submit_bdrequest($ctype,$uid,$targetd,$request_type,$remark,$cname,$tyschool,$noschool,$location,$idetype,$ngoletter,$sletter,$dmletter,$svalidation){
         
-        
         if($request_type=='School Identification'){$rysn='SSCHOOLID';}
         if($request_type=='Report'){$rysn='Report';} 
         if($request_type=='New client school visit'){$rysn='NCSV';}
@@ -5394,13 +5400,114 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         if($request_type=='DIY'){$rysn='DIY';}
         if($request_type=='Employee Engagement'){$rysn='EmployeeEngagement';}
         if($request_type=='RTTP'){$rysn='RTTP';}
-        
+ 
         $data = $this->Menu_model->get_userbyid($uid);
         $bdname = $data[0]->name;
+
+        $cmp_name = $this->db->select('*')->from('company_master')
+                                ->where('id',$_POST['cid'])->get()->row();
+
+        //Entry for new client and on board client
+        $table="";
+        $sales_co =0;
+        $pro_id=0;
+        $user_det = $this->db->select('*')->from('user_details')
+                                ->where('user_id',$uid)->get()->row();
+        if($ctype != 1){
+            $table="new_client_bd_request";
+            $sales_co = $user_det->sales_co;
+        }else{
+            $table="on_board_client_bd_request";
+            $pro_id = $user_det->pro_id;
+        }
+        $stage = $this->input->post('stage_type');
+        $stage_id = $this->db->select('*')->from('stages')
+                            ->where('stage_name',$stage)->get()->row();
+        $task = $this->db->select('*')->from('task')
+                        ->where('stage',$stage_id->id)->get()->result();
+        $st_id =0;
+        $st_name="";
+        $noofschool         = $_POST['noschoolbylocation'];
+        $location           = array_values(array_filter($_POST['location_n']));
+        $location_string    = implode(",", $location);
+
+        $schoolatlocation   = array_values(array_filter($noofschool));
+        $schoolloc = implode(",", $schoolatlocation);
         
+        // var_dump($location); exit;
+        for($k=1; $k <= $noschool; $k++){
+            $i=1;
+            foreach($task as $t){
+                $subtask = $this->db->select('*')->from('sub_task')
+                                    ->where('task_id',$t->id)->get()->result();
+                $code = substr($bdname,0,3).'-'.$request_type.'-'.$t->task_name.'-'.$i;
+                $data = ['task_id'  => $code,
+                        'targetdate'=> $targetd,
+                        'bd_id'     => $uid,
+                        'cname'     => $cmp_name->compname,
+                        'adminid'   => $user_det->admin_id,
+                        'pro_id'    => $pro_id,
+                        'sales_co'  => $sales_co,
+                        'cid'       => $_POST['cid'],
+                        ];
+                $this->db->insert($table,$data);
+                $j=1;
+                foreach($subtask as $st){
+
+                    if($st->id !="4"){
+                        $code = substr($bdname,0,3).'-'.$request_type.'-'.$t->task_name.'-'.$st->sub_task_name.'-'.$i.'-'.$j;
+                        $data = [
+                            'task_id'       =>$code,
+                            'targetdate'    =>$targetd,
+                            'bd_id'         => $uid,
+                            'cname'         => $cmp_name->compname,
+                            'adminid'       => $user_det->admin_id,
+                            'pro_id'        => $pro_id,
+                            'sales_co'      => $sales_co,
+                            'cid'           => $_POST['cid'],
+                        ];
+                        $this->db->insert($table,$data);
+                        $j++;
+                    }else{
+                        $st_id = 4;
+                        $st_name = $st->sub_task_name;
+                    }
+                }
+                
+                $i++;
+            }
+        }
+        if (!isset($_POST['noschoolbylocation'])) {
+            $_POST['noschoolbylocation'] = 1;
+        }
+        
+        
+        $nooflocation = sizeof($location);
+        for ($t = 0; $t < count($noofschool); $t++) {
+            // Insert one record for all schools if $st->id is 4
+            if ($st->id == 4) {
+                $code = substr($bdname, 0, 3) . '-' . $request_type .'-'.$st_name.'-'. $t;
+                $data = [
+                    'task_id'    => $code,
+                    'targetdate' => $targetd,
+                    'bd_id'      => $uid,
+                    'cname'      => $cmp_name->compname,
+                    'adminid'    => $user_det->admin_id,
+                    'pro_id'     => $user_det->pro_id,
+                    'sales_co'   => $user_det->sales_co,
+                    'cid'        => $_POST['cid'],
+                    'location'   =>  $location[$t],
+                    'noofschool' => $noofschool[$t]
+                ];
+                $this->db->insert($table, $data);
+            }
+            
+        }
+        $locationosschool = $_POST['location'];
+        //BD request
         $db3 = $this->load->database('db3', TRUE);
-        $query=$db3->query("INSERT INTO bdrequest(targetd, bd_id, bd_name, request_type, remark, cname, vlocation, schooltype, noofschool, assignto, rysn, onnew, idetype, ngoletter, sletter, dmletter, svalidation) VALUES 
-        ('$targetd','$uid','$bdname','$request_type','$remark','$cname','$location','$tyschool','$noschool','0','$rysn','$ctype','$idetype','$ngoletter','$sletter','$dmletter','$svalidation')");
+        $query=$db3->query("INSERT INTO bdrequest(targetd, bd_id, bd_name, request_type, remark, cname, vlocation, schooltype, noofschool, assignto, rysn, onnew, idetype, ngoletter, sletter, dmletter, svalidation,cid,schoolatlocation,nooflocation) VALUES 
+        ('$targetd','$uid','$bdname','$request_type','$remark','$cname','$location_string','$tyschool','$noschool','0','$rysn','$ctype','$idetype','$ngoletter','$sletter','$dmletter','$svalidation', '" . $_POST['cid'] . "','$schoolloc','$nooflocation')");
         $tid = $db3->insert_id();
         
         $msg = $request_type." Task Created By ".$bdname;

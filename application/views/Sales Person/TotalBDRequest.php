@@ -125,7 +125,7 @@
                                          <td><?=$dt->remark?></td>
                                          <td><?=$dt->cname?></td>
                                          <td><?php if($logs){echo $logs[$j]->sdatet;}?></td>
-                                         <td><?php if($logs){echo $logs[$j]->detail;}?></td>
+                                         <td><?php if($logs){echo $logs[$j]->remark;}?></td>
                                          <td><?=$txt?></td>
                                          <td><?php if($attech[0]->att==''){echo 'Not Available';}
                                          else{
@@ -142,7 +142,7 @@
                                          $newddate = $log->sdatet;
                                          $timed = $this->Menu_model->timediff($newddate, $olddate);
                                          ?>
-                                             <b><?=is_numeric($log->tby)?$log->fullname:$log->tby?></b><br><?=$log->sdatet?><br>
+                                             <b><?=$log->tby?></b><br><?=$log->sdatet?><br>
                                              <b><?=$timed?></b><br><b>Detail:</b> <?=$log->detail?><hr>
                                          <?php $olddate=$newddate;} ?></td>
                                          <td><?php $st = $dt->status; if($st==0){?>

@@ -90,6 +90,10 @@
                               </select>
                             </div>
                             <div class="form-group">
+                            <?php $udetail = $this->Menu_model->get_userbyid($uid);
+                                $admid = $udetail[0]->admin_id;
+                                ?>
+                                <input type="hidden" id="adid" value="<?=$uid?>">
                               <label>Select User</label>
                               <select id="user" class="form-control" name="user">
                               </select>
@@ -280,7 +284,7 @@
                                 </select>
                             </div> -->
                             <div class="row showoncompanySelection">
-                              <div class="col-3">
+                              <div class="col-4">
                                 <div class="form-group">
                                     <label>Assign Task</label>
                                     <select id="atask" class="form-control" name="atask">
@@ -293,19 +297,26 @@
                                     </select>
                                 </div>
                               </div>
-                              <div class="col-3">
+                              <div class="col-4">
+                                <div class="form-group">
+                                    <label>Target Purpose</label>
+                                    <select id="ntppose" class="form-control" name="ntppose" required="">
+                                    </select>
+                                </div>
+                              </div>
+                              <div class="col-4">
                                 <div class="form-group">
                                     <label>Date</label>
                                     <input type="date" class="form-control" id="plandate" name="plandate"  value="" min="" required="">
                                 </div>
                               </div>
-                              <div class="col-3">
+                              <div class="col-4">
                                 <div class="form-group">
                                     <label>Time</label>
                                     <input type="time" name="tasktimeplan" min="10:00" max="19:00" class="form-control" id="tasktimeplan">
                                 </div>
                               </div>
-                              <div class="col-3">
+                              <div class="col-4">
                                 <div class="form-group">
                                   <label>Target Status</label>
                                   <select id="targetstatus" class="form-control" name="targetstatus">
@@ -313,8 +324,15 @@
                                     <?php $mstatus = $this->Menu_model->get_status();foreach($mstatus as $status){?>
                                     <option value="<?=$status->id?>"><?=$status->name?></option>
                                     <?php } ?>
-                                    </select>
+                                  </select>
                                 </div>
+                              </div>
+                              <div class="col-4">
+                                <div class="form-group">
+                                  <label>Target Date</label>
+                                  <input type="date" class="form-control" id="targetDate" name="targetDate"  value="" min="" required="">
+                                </div>
+                              </div>
                               <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Submit</button>
                               </div>
@@ -426,6 +444,7 @@
         //select user according to role
         $("#role").change(function(){
           var selectedValue = $(this).val();
+          var adminid = document.getElementById("adid").value;
           $("#workbyothers").val("");
           if(selectedValue == "4"){
             $('#op1').val('bd').text('BD');
@@ -436,7 +455,10 @@
           $.ajax({
             url: '<?=base_url();?>Menu/getRoleUser',
             type: 'POST', 
-            data: {selectedOption: selectedValue},
+            data: {
+              selectedOption: selectedValue,
+              adminid: adminid
+            },
             success: function(response) {
               $("#user").html(response);
             },
@@ -717,6 +739,23 @@
     $("#user,#company").change(function(){
       var selectedCount = $("#company").val() ? $("#company").val().length : 0;
         $('.ccount').text("Total Company - "+companyCount+' Selected Company - '+selectedCount);
+    });
+
+    $('#atask').on('change', function f() {
+      var sid = document.getElementById("current_status").value;
+      var aid = document.getElementById("atask").value;
+      $.ajax({
+          url:'<?=base_url();?>Menu/getpurpose',
+          type: "POST",
+          data: {
+          sid: sid,
+          aid: aid
+          },
+          cache: false,
+          success: function a(result){
+          $("#ntppose").html(result);
+          }
+      });
     });
 });
 </script>

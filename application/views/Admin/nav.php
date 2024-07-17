@@ -323,7 +323,7 @@
 
 
 $(document).ready(function() {
-    trackLocation();
+    //trackLocation();
 });
 
 function handleGeolocationError() {
@@ -345,7 +345,7 @@ function getLocation() {
         errorMessage.style.display = "block";
     }
 }
-window.onload = getLocation;
+// window.onload = getLocation;
 
 
 
@@ -359,7 +359,7 @@ function startCamera() {
              alert('Error: Camera access permission denied.');
         });
 }
-startCamera();
+// startCamera();
 
 
 

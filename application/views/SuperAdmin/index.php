@@ -75,17 +75,7 @@
             <!-- Default box -->
     <!-- Main content -->
     
-            <div class="row">
-              <!-- ./col -->
-              <div class="col-lg-3 col-md-6 col-sm-12">
-                <!-- small box -->
-                <div class="small-box bg-light text-secondary">
-                  <!-- <div class="inner">
-                   
-                  </div> -->
-                </div>
-              </div>
-            </div>
+  
     
     <!-- /.content -->
   </div></div></div></div>

@@ -176,6 +176,18 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="<?=base_url();?>Menu/AnnualReviewReport" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Annual Review Report</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?=base_url();?>Menu/HumHongeTaiyarReport" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Hum Honge Taiyar Report</p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="<?=base_url();?>Menu/logout" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
               <p>Logout</p>

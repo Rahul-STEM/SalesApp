@@ -30,7 +30,29 @@
   <link rel="stylesheet" href="<?=base_url();?>assets/css/buttons.bootstrap4.min.css">
   <style>
     .scrollme {overflow-x: auto;}
-  </style>
+
+  .preview-image {
+    max-width: 100%;
+    max-height: 200px;
+    margin-bottom: 10px;
+}
+.preview-pdf {
+    width: 100%;
+    height: 400px; /* Adjust height as needed */
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+div#previewContainer img {
+  height: 100px;
+    padding: 5px;
+    margin: 4px;
+    border: 1px solid black;
+}
+
+div#previewContainer embed{
+  margin-top: 10px;
+}
+</style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -141,7 +163,7 @@
                         <div class="col-lg-6 p-3">
                               <div class="form-group">
                                 <label for="wono">Work Order No</label>
-                                <input type="text" class="form-control" name="wono" id="wono" placeholder="Work Order No" required>
+                                <input type="text" required class="form-control" name="wono" id="wono" placeholder="Work Order No" required>
                               </div>
                               <div class="form-group">
                                 <label for="porno">Purchase Order No</label>
@@ -176,12 +198,15 @@
                                 <textarea class="form-control" name="srfinovice" id="srfinovice" placeholder="Special Requirement for Invoice"></textarea>
                               </div>
                               <div class="form-group">
+                           
                                 <label for="mou">Attach MoU/Budget (multiple file)</label>
-                                <input type="file" class="form-control-file" name="filname[]" required multiple>
+                                <input type="file" class="form-control-file" id="fileInput" data-max_length="20" multiple accept=".jpg, .jpeg, .png, .pdf" name="filname[]" required multiple>                            
+                              
+                                <div id="previewContainer"></div>        
                               </div>
                         </div>
                     </div>
-                    
+
                     <h5>MSC COSTINING AS PER PROPOSAL</h5>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"><b>BUDGET</b></label>
@@ -542,7 +567,7 @@ document.getElementById("fithpay").value=tbudget*(fithper/100);
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary" onclick="this.form.submit(); this.disabled = true;">Submit</button>
+                  <button type="submit" class="btn btn-primary" value="submit" onclick="this.form.submit(); this.disabled = true;">Submit</button>
                 </div>
               </form>
             </div>
@@ -576,6 +601,7 @@ document.getElementById("fithpay").value=tbudget*(fithper/100);
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type='text/javascript'>
 function schoolFun() {
   var x = document.getElementById("noofschool").value;
@@ -600,6 +626,70 @@ function prot(){
     }
 }
       
+
+$('#fileInput').on('change', function(e) {
+        var files = e.target.files; // Get the selected files
+        
+        $('#previewContainer').empty(); // Clear the preview container
+        
+        // Loop through each selected file
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var reader = new FileReader();
+            
+            // Closure to capture the file information
+            reader.onload = (function(file) {
+                return function(e) {
+                    // Determine the file type
+                    var fileType = file.type;
+                    
+                    // Check if the file is an image
+                    if (fileType.startsWith('image/')) {
+                        $('#previewContainer').append('<img src="' + e.target.result + '" alt="' + file.name + '">');
+                    }
+                    // Check if the file is a PDF
+                    else if (fileType == 'application/pdf') {
+                        $('#previewContainer').append('<embed src="' + e.target.result + '" type="application/pdf" width="200" height="200" />');
+                    }
+                };
+            })(file);
+            
+            // Read the file as a data URL
+            reader.readAsDataURL(file);
+        }
+    });
+    
+
+    function removeImage(name) {
+        selectedfiles = document.getElementById("files").files;
+        var final = [];
+        $.each(selectedfiles, function (index, value) {
+            if (value.name !== name) {
+                console.log(value);
+                final.push(value);
+            }
+        });
+        console.log('List', final);
+        // document.getElementById("files").files = new FileListItem(final);
+    }
+
+    function FileListItem(a) {
+        a = [].slice.call(Array.isArray(a) ? a : arguments)
+        for (var c, b = c = a.length, d = !0; b-- && d;) d = a[b] instanceof File
+        if (!d) throw new TypeError("expected argument to FileList is File or array of File objects")
+        for (b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(a[c])
+        return b.files
+    }
+
+
+
+
+
+
+
+
+
+
 </script>
 
 <!-- jQuery -->

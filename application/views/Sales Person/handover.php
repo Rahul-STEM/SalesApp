@@ -293,6 +293,24 @@
                         <input type="text" name="sdegignation[]" class="form-control col-3" placeholder="Designation">
                         <input type="number" name="snumber[]" class="form-control col-3" placeholder="Contact No">
                     </div>
+                    <div class="row">
+                        <input type="text" name="sname[]" class="form-control col-3" placeholder="School Name">
+                        <input type="text" name="saddress[]" class="form-control col-3" placeholder="Address">
+                        <input type="text" name="scity[]" class="form-control col-3" placeholder="City">
+                        <input type="text" name="sstate[]" class="form-control col-3" placeholder="State">
+                        <input type="text" name="scontact[]" class="form-control col-3" placeholder="Contact No">
+                        <input type="text" name="sdegignation[]" class="form-control col-3" placeholder="Designation">
+                        <input type="number" name="snumber[]" class="form-control col-3" placeholder="Contact No">
+                    </div>
+                    <div class="row">
+                        <input type="text" name="sname[]" class="form-control col-3" placeholder="School Name">
+                        <input type="text" name="saddress[]" class="form-control col-3" placeholder="Address">
+                        <input type="text" name="scity[]" class="form-control col-3" placeholder="City">
+                        <input type="text" name="sstate[]" class="form-control col-3" placeholder="State">
+                        <input type="text" name="scontact[]" class="form-control col-3" placeholder="Contact No">
+                        <input type="text" name="sdegignation[]" class="form-control col-3" placeholder="Designation">
+                        <input type="number" name="snumber[]" class="form-control col-3" placeholder="Contact No">
+                    </div>
                     <div class="card p-3 col-12"><b><input id="allcheck" class="form-check-input" type="checkbox" onchange="toggleButton()"> Thank you for completing the form. Before you submit, please take a moment to review your responses for accuracy and completeness. Once you click the 'Submit' button, your form will be processed, and we will consider the information provided as final.</b></div>
                 </div>
                 
@@ -372,8 +390,6 @@ $('#spd_identify_by').on('change', function b() {
 var ideby = document.getElementById("spd_identify_by").value;
 if(ideby=='Client'){
     document.getElementById("sdetail").style.display = "block";
-} else {
-  document.getElementById("sdetail").style.display = "none";
 }
 });
 

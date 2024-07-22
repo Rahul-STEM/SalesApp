@@ -103,8 +103,7 @@
                                         foreach($bd as $bd){
                                         $bdname = $bd->name;
                                         $bdid = $bd->user_id;
-                                        $date = date("Y-m-d H:i:s");
-                                            $sc=$this->Menu_model->get_scon($bdid,$datet);
+                                            $sc=$this->Menu_model->get_scon($bdid,$date);
                                             $or=0;$ort=0;$rr=0;$rt=0;$tp=0;$pvp=0;$vph=0;$other=0;
                                             if($sc){
                                             foreach($sc as $m){

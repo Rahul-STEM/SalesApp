@@ -54,7 +54,7 @@
                                   <div class="col-12 col-md-12">
                                     <div class="card-header bg-info"></div>
                                     <div class="card-body">
-                                        <form action="<?=base_url();?>Menu/submittask" method="post" enctype="multipart/form-data">
+                                        <form action="<?=base_url();?>Menu/submittask1" method="post" enctype="multipart/form-data">
                                         <input type="hidden" name="ccstatus" id="cstatus">
                                         <input type="hidden" name="action_id" id="action_id">
                                          <input type="hidden" name="uid" value="<?=$uid?>">
@@ -803,6 +803,25 @@ $('[id^="add_act"]').on('click', function() {
              var tidd = response[0].id;
              var bdname = response[0].bdname;
              var mmom = response[0].mmom;
+
+
+             var cpurpose_name = '';
+            if(cpurpose !==''){
+                $.ajax({
+                  url: '<?=base_url();?>Menu/cctd_prupose',
+                  type: 'POST',
+                  data: { purposeId: cpurpose},
+                  success: function(response) {
+                    cpurpose_name = response;
+                    document.getElementById("cpurpose").innerHTML = cpurpose_name;
+                  }
+              });
+            }else{
+              document.getElementById("cpurpose").innerHTML = cpurpose;
+            }
+
+
+
              document.getElementById("cstatus").value = cstatus;
              document.getElementById("cname").innerHTML = cname;
              document.getElementById("ctname").innerHTML = ctname;
@@ -812,7 +831,7 @@ $('[id^="add_act"]').on('click', function() {
              document.getElementById("emailid").innerHTML = emailid;
              document.getElementById("phoneno").innerHTML = phoneno;
              document.getElementById("designation").innerHTML = designation;
-             document.getElementById("cpurpose").innerHTML = cpurpose;
+            //  document.getElementById("cpurpose").innerHTML = cpurpose;
              document.getElementById("action_id").value = action_id;
              document.getElementById("yaction_id").value = action_id;
              document.getElementById("cmpid").value = cmpid;

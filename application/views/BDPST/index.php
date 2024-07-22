@@ -29,10 +29,39 @@
   <link rel="stylesheet" href="<?=base_url();?>assets/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="<?=base_url();?>assets/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="<?=base_url();?>assets/css/buttons.bootstrap4.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
   <style>
-      .scrollme {
-    overflow-x: auto;
+  .scrollme {
+overflow-x: auto;
 }
+.content-wrapper>.content {
+    background: azure;
+}
+.inner h5{
+    background: blanchedalmond;
+    line-height: 35px;
+    font-size: 17px;
+    border-radius: 26px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+    font-weight: 700;
+}
+.bg-light, .bg-light>a {
+    color: #1f2d3d !important;
+    background: #ebf5cb !important;
+    border-radius: 40px;
+    position: relative;
+    overflow: hidden;
+    font-size: 19px;
+    text-align: left;
+}
+.small-box>.small-box-footer {
+    background: #c5eb4d !important;
+    font-weight: 500;
+}
+.select2 {
+            width: 100%; /* Set the desired width */
+        }
+
   </style>
   
 </head>

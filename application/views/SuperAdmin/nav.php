@@ -126,7 +126,6 @@
               <i class="far fa-circle nav-icon"></i>
               <p>To Do List</p>
             </a>
-            
           </li>
           <li class="nav-item">
             <a href="<?=base_url();?>Menu/AssignTask" class="nav-link">
@@ -134,12 +133,6 @@
               <p>Assign Task</p>
             </a>
           </li>
-          <!-- <li class="nav-item">
-            <a href="<?=base_url();?>Menu/AnnualReviewComp" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Annual Review</p>
-            </a>
-          </li> -->
           <li class="nav-item">
             <a href="<?=base_url();?>Menu/logout" class="nav-link">
               <i class="far fa-circle nav-icon"></i>

@@ -74,14 +74,7 @@
           <div class="col-12">
     <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Total Request&nbsp;&nbsp;</h3>
-                <label style="display: inline-block;float:left;" for="dropdownColumn1">&nbsp;&nbsp; BD Name: &nbsp;&nbsp; </label>
-<div style="display: inline-block;float:left;" id="dropdownColumn1"></div>
-
-<label style="display: inline-block;float:left;" for="dropdownColumn2">&nbsp;&nbsp;  Request Type:&nbsp;&nbsp;  </label>
-<div style="display: inline-block;float:left;" id="dropdownColumn2"></div>
-<label style="display: inline-block;float:left;" for="checkbox1">&nbsp;&nbsp;Updated More than 15 days ago: &nbsp;&nbsp;</label>
-<div style="display: inline-block;float:left;" ><input type="checkbox" name="checkbox1" id="checkbox1"> </div>
+                <h3 class="card-title">Total Request</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -288,6 +281,13 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
 $('[id^="add_Rremark"]').on('click', function() {
+        var cmpid = this.value;
+    $('#doaction').modal('show');
+    document.getElementById("cmpid").value = cmpid;
+});
+
+
+$('[id^="DeleteC"]').on('click', function() {
         var cmpid = this.value;
     $('#dcompany').modal('show');
     document.getElementById("cmpida").value = cmpid;

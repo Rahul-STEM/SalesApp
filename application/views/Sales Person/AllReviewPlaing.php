@@ -638,20 +638,20 @@ if(rtype=='Roaster'){
       document.getElementById("exdate").required = true;
 }  
     
-    var inid = document.getElementById("inid").value;
-    var fdate = document.getElementById("fdate").value;
-    $.ajax({
-        url:'<?=base_url();?>Menu/getcmplogs',
-        type: "POST",
-        data: {
-            inid: inid,
-            fdate: fdate
-        },
-        cache: false,
-        success: function a(result){
-            $("#cmplogs").html(result);
-        }
-    });
+var inid = document.getElementById("inid").value;
+var fdate = document.getElementById("fdate").value;
+$.ajax({
+url:'<?=base_url();?>Menu/getcmplogs',
+type: "POST",
+data: {
+inid: inid,
+fdate: fdate
+},
+cache: false,
+success: function a(result){
+$("#cmplogs").html(result);
+}
+});
 });
 
 

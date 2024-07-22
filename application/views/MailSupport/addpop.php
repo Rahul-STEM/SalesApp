@@ -738,6 +738,10 @@ $('[id^="add_act"]').on('click', function() {
              var tidd = response[0].id;
              var bdname = response[0].bdname;
              var mmom = response[0].mmom;
+
+        
+
+
              document.getElementById("cname").innerHTML = cname;
              document.getElementById("ctname").innerHTML = ctname;
              document.getElementById("clsname").innerHTML = clsname;

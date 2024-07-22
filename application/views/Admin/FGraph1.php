@@ -57,7 +57,7 @@
     <section class="content">
       <div class="container-fluid">
           <div class="card col-12  p-3 text-center">
-              <center><h5>Status Wise Team Funnel Graph</h5></center><hr>
+              <center><h5>Status Wise Funnel Graph</h5></center><hr>
 
           
 <div class="row">
@@ -68,73 +68,43 @@
 
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript">
-    google.charts.load("current", { packages: ['corechart'] });
-    google.charts.setOnLoadCallback(drawChart12);
-
-    function drawChart12() {
-      var data = new google.visualization.DataTable();
-      data.addColumn('string', 'Status');
-      data.addColumn('number', 'No of Company');
-      data.addColumn('string', 'id');
-      data.addColumn('string', 'uid');
-
-      <?php
-      $status = $this->Menu_model->get_fannalstwise($uid);
-      foreach ($status as $st) {
-        $statusName = $st->stname . " (" . $st->cont . ")";
-        echo "data.addRow(['$statusName', $st->cont, '$st->stid', '$uid']);";
-      }
-      ?>
-
-      var options = {
-        is3D: true,
-      };
-
-      var chart = new google.visualization.PieChart(document.getElementById('piechart3d3'));
-      
-      google.visualization.events.addListener(chart, 'select', chartClickHandler);
-
-      chart.draw(data, options);
-      
-      function chartClickHandler() {
-        var selection = chart.getSelection()[0];
-        if (selection) {
-          var stid = data.getValue(selection.row, 2);
-          var uuid = data.getValue(selection.row, 3);
-          var code = 1;
-               
-            $.ajax({
-            url:'<?=base_url();?>Menu/gdata',
-            type: "POST",
-            data: {
-                stid: stid,
-                uuid: uuid,
-                code: code
-            },
-            cache: false,
-            success: function a(result){
-            $("#grid-view").html(result);
+        google.charts.load("current", { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart12);
+        
+        function drawChart12() {
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', 'Status');
+          data.addColumn('number', 'No of Company');
+          data.addColumn('string', 'id');
+          data.addColumn('string', 'uid');
+        
+          <?php
+          $status = $this->Menu_model->get_fannalstwise($uid);
+          foreach ($status as $st) {
+            $statusName = $st->stname . " (" . $st->cont . ")";
+            echo "data.addRow(['$statusName', $st->cont, '$st->stid', '$uid']);";
+          }
+          ?>
+        
+          var options = {
+            is3D: true,
+          };
+        
+          var chart = new google.visualization.PieChart(document.getElementById('piechart3d3'));
+        
+          google.visualization.events.addListener(chart, 'select', function() {
+            var selection = chart.getSelection()[0];
+            if (selection) {
+              var stid = data.getValue(selection.row, 2);
+              var uuid = data.getValue(selection.row, 3);
+              var code = 1;
+              // Redirect to another URL with stid and uuid as parameters
+              window.location.href = '<?=base_url();?>Menu/FGraph1/' + stid + '/' + code;
             }
-            });
-            
-            
-            $.ajax({
-            url:'<?=base_url();?>Menu/tbdata',
-            type: "POST",
-            data: {
-                stid: stid,
-                uuid: uuid,
-                code: code
-            },
-            cache: false,
-            success: function a(result){
-            $("#tbdata").html(result);
-            }
-            });
-          
+          });
+        
+          chart.draw(data, options);
         }
-      }
-    }
     
     
   </script>
@@ -161,31 +131,10 @@
               <div class="container-fluid card p-5" id="data-container">
                 <div class="row text-center" id="grid-view">
                     
-                    <?php 
-                    $sttid = $this->Menu_model->get_status();
-                    $uniquePY = [];
-                    foreach ($sttid as $sttid) {
-                        $uniqueST[] =  $sttid->id; 
-                    }
-                    $uniqueST = array_unique($uniqueST);
-                    $funnal = $this->Menu_model->get_fannal($uid);
-                ?>
-                    <div class="filters">
-                        <button type="button" class="btn btn-primary" class="filter-button" data-filter="all">All (<?=sizeof($funnal)?>)</button>
-                        <?php foreach ($uniqueST as $index => $ST) {
-                        $STname=$this->Menu_model->get_statusbyid($ST);
-                        $sfunnal = $this->Menu_model->get_bdcombystatus($uid,$ST);
-                        ?>
-                          <button type="button" class="btn <?=$STname[0]->color?> m-1" class="filter-button" data-filter="<?=$ST?>"><?=$STname[0]->name?> (<?=sizeof($sfunnal)?>)</button>
-                        <?php } ?>
-                    </div><hr><hr><hr>
-                    
-                    
-                    
                     
                     
                     <?php 
-                         $mdata = $this->Menu_model->get_fannal($uid);
+                         $mdata = $this->Menu_model->get_fannalbycode($uid,$stid,$code);
                          foreach($mdata as $dt){
                          $cid = $dt->cmpid_id;
                          $init=$this->Menu_model->get_initcallbyid($cid);
@@ -215,7 +164,8 @@
                                  City<br><b><?=$dt->city?></b><hr>
                                  State<br><b><?=$dt->state?></b><hr>
                                  Partner Type<br><b style="color:<?=$pclr?>"><?=$patid?></b><hr>
-                                 Category<br><b><?php if($dt->focus_funnel=='yes'){echo 'Focus Funnel, ';} if($dt->upsell_client=='yes'){echo 'Upsell Client, ';} if($dt->keycompany=='yes'){echo 'Key Company';}?></b> <hr>
+                                 Category<br><b><?php if($dt->focus_funnel=='yes'){echo 'Focus Funnel, ';} 
+                                 if($dt->upsell_client=='yes'){echo 'Upsell Client, ';} if($dt->keycompany=='yes'){echo 'Key Company';}?></b> <hr>
                                  Current Remark<br><b><?=$remarks?></b></a><hr>
                                  Total Logs on Same Status<br><b><?=$stlogs?></b></a><hr>
                                  Current Status of from whitch date<br><b><?=$ldscd[0]->updatedt?></b></a><hr>
@@ -252,7 +202,7 @@
                 				    
                 				    <?php 
                 				    $i=1;
-                                     $mdata = $this->Menu_model->get_fannal($uid);
+                                     $mdata = $this->Menu_model->get_fannalbycode($uid,$stid,$code);
                                      foreach($mdata as $dt){
                                      $cid = $dt->cmpid_id;
                                      $init=$this->Menu_model->get_initcallbyid($cid);
@@ -299,10 +249,12 @@
                 <div id="tabular-view" style="display: none;">
                     <div class="card p-3 col-lg-4 col-sm m-auto bg-light">
                     <?php
+                      $code=1;
                       $status = $this->Menu_model->get_fannalstwise($uid);
                       foreach ($status as $st) {?>
-                      <b><?=$st->stname?> - <?=$st->cont?></b><hr>
+                      <b><a href="<?=base_url();?>Menu/FGraph1/<?=$st->stid?>/<?=$code?>"><?=$st->stname?> - <?=$st->cont?></a></b><hr>
                       <?php } ?>
+                      <b><a href="<?=base_url();?>Menu/FGraph1/0/<?=$code?>">View All</a></b>
                       </div>
                 </div>  
               
@@ -346,11 +298,6 @@
           </div>
       </div>
     </section>    
-    
-    
-    
-    
-    
     
     
     

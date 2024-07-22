@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>STEM APP | WebAPP</title>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> 
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
   <!-- Font Awesome -->
@@ -29,17 +29,77 @@
   <link rel="stylesheet" href="<?=base_url();?>assets/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="<?=base_url();?>assets/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="<?=base_url();?>assets/css/buttons.bootstrap4.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
   <style>
-      .scrollme {
-    overflow-x: auto;
+.select2 {
+    width: 100%; /* Set the desired width */
+        }
+.modal-content {
+    background: #edf0f3 !important;
+    font-size: 14px;
+    }
+.modal-content .card-header.bg-info {
+    margin-top: 4px !important;
+    height: 20px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    background: #df338a !important;
 }
-  </style>
+.modal-content .card-body {
+    background: beige !important;
+    margin-bottom: 4px;
+}
+.momhbox{
+  background: antiquewhite;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+}
+.identify_school_box {
+    background: aliceblue;
+    padding: 10px;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+}
+
+  .select2 {
+      width: 100%; 
+  }
+  .content-wrapper>.content {
+    background: azure;
+}
+.inner h5{
+    background: blanchedalmond;
+    line-height: 35px;
+    font-size: 17px;
+    border-radius: 26px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+    font-weight: 700;
+}
+.bg-light, .bg-light>a {
+    color: #1f2d3d !important;
+    background: #ebf5cb !important;
+    border-radius: 40px;
+    position: relative;
+    overflow: hidden;
+    /* box-shadow: rgba(0, 0, 0, .1) 0 1px 2px 0; */
+    /* cursor: pointer; */
+    font-size: 19px;
+    text-align: left;
+}
+.small-box>.small-box-footer {
+    background: #c5eb4d !important;
+    font-weight: 500;
+}
+    </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
   <!-- Preloader -->
-  
+
 
   <!-- Navbar -->
   <?php require('nav.php');?>
@@ -49,7 +109,7 @@
 
 
 <?php
- 
+
 $dataPoints1 = array(
 	array("label"=> "2010", "y"=> 36.12),
 	array("label"=> "2011", "y"=> 34.87),
@@ -68,7 +128,7 @@ $dataPoints2 = array(
 	array("label"=> "2015", "y"=> 69.38),
 	array("label"=> "2016", "y"=> 98.70)
 );
-	
+
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -81,13 +141,32 @@ $dataPoints2 = array(
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                  <h4></h4> 
+                  <h4></h4>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
+    <?php if ($this->session->flashdata('pending_message')): ?>
+    <div class="alert alert-success alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <?= $this->session->flashdata('pending_message'); ?>
+</div>
+<?php endif; ?>
+
+<?php
+              if ($this->session->flashdata('error_message')): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong> <?php echo $this->session->flashdata('error_message'); ?></strong>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <?php endif; ?>
+
+
+
 <button class="btn btn-link" data-toggle="collapse" data-target="#maindata" aria-expanded="true" aria-controls="maindata">
       <i class="fas fa-bars"></i> Dashboard Data Analysis
     </button>
@@ -149,9 +228,9 @@ $dataPoints2 = array(
                     </div>
                   </div>
                 </section>
-              
-          
-          
+
+
+
         <div class="row">
           <!-- ./col -->
           <div class="col-lg-3 col-md-6 col-sm-12">
@@ -161,7 +240,7 @@ $dataPoints2 = array(
                   $sca = $this->Menu_model->final_scon1($uid,$tdate,$tdate,0);
                   ?>
               <div class="inner">
-                  <center><h5>Today's Team Status Conversion</h5></center><hr>
+                  <center><h5>Today's Status Conversion</h5></center><hr>
                   <?php  foreach($sca as $scid){
                         $string = $scid->scname;
                         $parts = explode(" -to- ", $string);
@@ -177,7 +256,7 @@ $dataPoints2 = array(
                     <?php } ?>
                 </div>
               <div class="icon">
-                <i class="ion ion-person-add"></i>
+              <i class="ion ion-stats-bars"></i>
               </div>
               <a href="SConversion" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
@@ -185,7 +264,7 @@ $dataPoints2 = array(
           <!-- ./col -->
           <div class="col-lg-3 col-md-6 col-sm-12">
             <!-- small box -->
-            <div class="small-box bg-light text-secondary"> 
+            <div class="small-box bg-light text-secondary">
               <div class="inner">
                 <center><h5>Today's Task Detail</h5></center><hr>
                 <?php foreach($ttd as $tttd){?>
@@ -218,7 +297,7 @@ $dataPoints2 = array(
             <!-- small box -->
             <div class="small-box bg-light text-secondary">
               <div class="inner">
-                  <?php 
+                  <?php
                   foreach($mbdc as $mc){
                   ?>
                 <center><h5>Total Funnel</h5></center><hr>
@@ -245,7 +324,7 @@ $dataPoints2 = array(
                         <?php } ?>
                     </div></div>
               <div class="icon">
-                <i class="ion ion-bag"></i>
+                <i class="ion ion-stats-bars"></i>
               </div>
               <a href="companies/0" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
@@ -274,14 +353,14 @@ $dataPoints2 = array(
                 <?php } ?>
               </div></div>
               <div class="icon">
-                <i class="ion ion-bag"></i>
+                <i class="ion ion-stats-bars"></i>
               </div>
               <a href="TaskAStatus" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-          
+
           <div class="col-lg-3 col-md-6 col-sm-12">
-            
+
                 <div class="small-box bg-light text-secondary">
                   <div class="inner">
                       <?php $ttswwork = $this->Menu_model->new_ttswplan($uid,$tdate,1);
@@ -304,27 +383,24 @@ $dataPoints2 = array(
                     <?php } ?>
                   </div></div>
                   <div class="icon">
-                    <i class="ion ion-bag"></i>
+                    <i class="ion ion-stats-bars"></i>
                   </div>
                   <a href="PlanTaskAStatus" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
               </div>
-          </div>
-          
-          
-          
-          
-        <div class="row">
-            
+        
+
             <div class="col-lg-3 col-md-6 col-sm-12">
-            <!-- small box -->
             <div class="small-box bg-light text-secondary">
               <div class="inner">
                 <center><h5>Team Bargin Meeting Detail</h5></center><hr>
-                <?php 
+                <?php
                 $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                 foreach($tbmeetd as $tmd){ ?>
                 <a href="#"><span id="cbim">Create Barge-in Meeting</span></a><hr>
+                <a href="<?=base_url();?>Management/MoMApprovedStatus"><span id="cbim">MOM Status</span></a><hr>
+                <a href="https://stemapp.in/Menu/ClusterWorkWithBDFunnel"><span id="cbim">Cluster Work on My Funnel</span></a><hr>
+                <a href="https://stemapp.in/Menu/PSTWorkWithBDFunnel"><span id="cbim">PST Work on My Funnel</span></a><hr>
                 <p><a href="momdetail">MOM Detail</b></a><a style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse15" role="button" aria-expanded="false" aria-controls="collapse15">Read More</a></p><hr>
                 <div class="collapse" id="collapse15">
                     <p><a href="TBMDF">Total RP Meeting</b></a></p><hr>
@@ -343,7 +419,7 @@ $dataPoints2 = array(
                     <p><a href="TBMD/7/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Total RP Priority - <b><?=$tmd->f?></b></a></p><hr>
                     <p><a href="TBMD/8/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Total RP Not Priority - <b><?=$tmd->g?></b></a></p><hr>
                     <p><a href="TBMD/9/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Total Only Got Detail - <b><?=$tmd->k?></b></a></p><hr>
-                
+
                 <?php } ?>
               </div>
               </div>
@@ -353,37 +429,13 @@ $dataPoints2 = array(
               <a href="TBMDetail" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-            
-          
-          
-          
-          
-          <!-- ./col -->
-          <div class="col-lg-3 col-md-6 col-sm-12">
-            <!-- small box -->
-            <div class="small-box bg-light text-secondary">
-              <div class="inner">
-                <center><h5>Today's Traction by PST</h5></center><hr>
-                
-                
-              </div>
-              <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-              </div>
-              <a href="pstwork" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
 
-          </div>
-          <!-- ./col -->
-          
-          
-          
            <div class="col-lg-3 col-md-6 col-sm-12">
             <!-- small box -->
             <div class="small-box bg-light text-secondary">
               <div class="inner">
                 <center><h5>New Client Request</h5></center><hr>
-                <?php 
+                <?php
                 $cont=0;$pass=0;$tass=0;$ini=0;$pend=0;$close=0;
                     $bdallrequest=$this->Menu_model->bdrequest($uid);
                     foreach($bdallrequest as $bdar){
@@ -400,7 +452,7 @@ $dataPoints2 = array(
                 <p><a href="TotalBDRequest/5">Total Request Pending - <b><?=$pend;?></b></a><br><a style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse6" role="button" aria-expanded="false" aria-controls="collapse6">Read More</a></p><hr>
                 <div class="collapse" id="collapse6">
                 <p><a href="TotalBDRequest/6">Total Request Completed - <b><?=$close;?></b></a></p>
-                
+
                 <p><a href="CreateRequest">Create Request</a></p>
                </div></div>
               <div class="icon">
@@ -414,7 +466,7 @@ $dataPoints2 = array(
             <!-- small box -->
             <div class="small-box bg-light text-secondary">
               <div class="inner">
-                  <?php 
+                  <?php
                   foreach($mbdc as $mc){
                   ?>
                 <center><h5>Preparation for review</h5></center><hr>
@@ -423,22 +475,36 @@ $dataPoints2 = array(
                 <p><a href="companies/14">Focus Funnel - <b><?=$mc->m?></b></p></a><hr>
                 <p><a href="companies/15">Upsell Client - <b><?=$mc->n?></b><a style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse13" role="button" aria-expanded="false" aria-controls="collapse13">Read More</a></p><hr>
                 <div class="collapse" id="collapse13">
-                    
+
                         <p><a href="companies/16">Key Client - <b><?=$mc->q?></b></p></a><hr>
                         <p><a href="companies/17">Positive Key Client - <b><?=$mc->r?></b></p></a><hr>
                         <p><a href="companies/18">Priority Calling - <b><?=$mc->s?></b></p></a><hr>
                         <?php } ?>
                     </div></div>
               <div class="icon">
-                <i class="ion ion-bag"></i>
+                <i class="ion ion-stats-bars"></i>
               </div>
               <a href="companies/0" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-          
-          <!-- ./col -->
+
+          <div class="col-lg-3 col-md-6 col-sm-12">
+            <!-- small box -->
+            <div class="small-box bg-light text-secondary">
+              <div class="inner">
+                
+                <center><h5>Proposal Detail</h5></center><hr>
+                <p><a href="AllProposalDetail"><b>Proposal Detail</b></a></p> <hr>
+                <p><a href="ProposalDetailbydate"><b>Proposal by Date</b></a></p>
+                
+                  </div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+              <a href="companies/0" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
           </div>
-          <div class="row">
+
           <div class="col-lg-3 col-md-6 col-sm-12">
             <!-- small box -->
             <div class="small-box bg-light text-secondary">
@@ -450,7 +516,7 @@ $dataPoints2 = array(
                 <a href="HandoverDetail"><p>Boarded Client Detail</a></p><hr>
                 </div>
                 <div class="icon">
-                <i class="ion ion-bag"></i>
+                <i class="ion ion-stats-bars"></i>
               </div>
               <a href="HandoverDetail" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
@@ -478,21 +544,21 @@ $dataPoints2 = array(
               </div>
               </div>
               <div class="icon">
-                <i class="ion ion-bag"></i>
+                <i class="ion ion-stats-bars"></i>
               </div>
               <a href="totalcdetail/1" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
-          
-          
-          
+
+
+
           </div>
         <!-- /.row (main row) -->
             </div>
   </div></div>
   </div>
-            
+
         <div class="row p-3">
           <div class="col-lg-8 col-sm">
               <div class="row">
@@ -502,8 +568,12 @@ $dataPoints2 = array(
               <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                   <li class="nav-item">
-                      <?php $ttbyd = $this->Menu_model->get_ttbyd($uid,$tdate);
-                      
+                      <?php $ttbyd = $this->Menu_model->get_ttbydtest($uid,$tdate);
+                    
+                    // echo "<pre>";
+                    // print_r($ttbyd);
+                    // die;
+
                       ?>
                     <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">
                         All <span class="badge badge-success"><?=$ttbyd[0]->ab?></span>
@@ -557,8 +627,8 @@ $dataPoints2 = array(
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-barg-tab" data-toggle="pill" href="#custom-tabs-four-barg" role="tab" aria-controls="custom-tabs-four-barg" aria-selected="false">
                         Visit Meeting <span class="badge badge-success">
-                            
-                          <?php 
+
+                          <?php
                             $bm=0;
                             foreach($barg as $bgs){
                                 $bs = $bgs->status;
@@ -569,9 +639,8 @@ $dataPoints2 = array(
                             </span>
                     </a>
                   </li>
-                  
-                </ul>
-                
+                   </ul>
+
               </div>
               <div class="card-body">
                 <div class="tab-content" id="custom-tabs-four-tabContent">
@@ -587,7 +656,7 @@ $dataPoints2 = array(
                                 </div>
                                 <div id="collapse0911" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                                   <div class="card-body">
-                                      <?php 
+                                      <?php
                                       foreach($ttbytime as $tt){
                                       $taid = $tt->actiontype_id;
                                       $taid=$this->Menu_model->get_action($taid);
@@ -598,7 +667,7 @@ $dataPoints2 = array(
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
+                                       <span class="flex"><?=$taid[0]->name?> |
                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
@@ -609,7 +678,7 @@ $dataPoints2 = array(
                                         </span>
                                     </div>
                                   <?php } ?>
-                                  
+
                                   </div>
                                 </div>
                               </div>
@@ -623,7 +692,7 @@ $dataPoints2 = array(
                                 </div>
                                 <div id="collapse1113" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                                   <div class="card-body">
-                                   <?php 
+                                   <?php
                                       foreach($ttbytime as $tt){
                                       $taid = $tt->actiontype_id;
                                       $taid=$this->Menu_model->get_action($taid);
@@ -634,7 +703,7 @@ $dataPoints2 = array(
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
+                                       <span class="flex"><?=$taid[0]->name?> |
                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
@@ -658,7 +727,7 @@ $dataPoints2 = array(
                                 </div>
                                 <div id="collapse1315" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                                   <div class="card-body">
-                                    <?php 
+                                    <?php
                                       foreach($ttbytime as $tt){
                                       $taid = $tt->actiontype_id;
                                       $taid=$this->Menu_model->get_action($taid);
@@ -670,7 +739,7 @@ $dataPoints2 = array(
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
+                                       <span class="flex"><?=$taid[0]->name?> |
                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
@@ -695,7 +764,7 @@ $dataPoints2 = array(
                                 </div>
                                 <div id="collapse1517" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                                   <div class="card-body">
-                                    <?php 
+                                    <?php
                                       foreach($ttbytime as $tt){
                                       $taid = $tt->actiontype_id;
                                       $taid=$this->Menu_model->get_action($taid);
@@ -707,7 +776,7 @@ $dataPoints2 = array(
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
+                                       <span class="flex"><?=$taid[0]->name?> |
                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
@@ -721,7 +790,7 @@ $dataPoints2 = array(
                                   </div>
                                 </div>
                               </div>
-                              
+
                               <div class="card">
                                 <div class="card-header bg-info" id="headingThree" data-toggle="collapse" data-target="#collapse1719" aria-expanded="false" aria-controls="collapse1719">
                                       <?php $ttbytime = $this->Menu_model->get_ttbytime($uid,$tdate,'17:00:00','19:00:00');
@@ -731,7 +800,7 @@ $dataPoints2 = array(
                                 </div>
                                 <div id="collapse1719" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                                   <div class="card-body">
-                                    <?php 
+                                    <?php
                                       foreach($ttbytime as $tt){
                                       $taid = $tt->actiontype_id;
                                       $taid=$this->Menu_model->get_action($taid);
@@ -743,7 +812,7 @@ $dataPoints2 = array(
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
+                                       <span class="flex"><?=$taid[0]->name?> |
                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
@@ -758,10 +827,67 @@ $dataPoints2 = array(
                                   </div>
                                 </div>
                               </div>
-                              
+
+                              <?php
+                              // print_r(sizeof($autotasktimenew));
+                              // die;
+                              $pentask = sizeof($autotasktimenew);
+                              if($pentask > 0){
+                               $ast1=$autotasktimenew[0]->stime;
+                               $aet2=$autotasktimenew[0]->etime;
+                              ?>
+                              <div class="card">
+                                <div class="card-header bg-primary" id="headingThree33" data-toggle="collapse" data-target="#collapse91912" aria-expanded="false" aria-controls="collapse9121">
+
+                                    <?php $ttbytimedata = $this->Menu_model->get_ttbytimeAutotask($uid,$tdate,$ast1,$aet2);
+                                    $curentDatwv = date("Y-m-d");
+                                    $ted = $this->Menu_model->get_ttbytimedAutotask($uid, $curentDatwv,$ast1,$aet2);
+                                      ?>
+                                      <b>Auto Task - <?= $ast1 ?> to <?= $aet2 ?></b><br>
+                                      Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) | MOM(<?=$ted[0]->f?>) | Proposal(<?=$ted[0]->g?>)
+                                </div>
+
+
+
+
+                                <div id="collapse91912" class="collapse" aria-labelledby="headingThree33" data-parent="#accordion">
+                                  <div class="card-body">
+                                    <?php
+                                      foreach($ttbytimedata as $ttdata){
+                                      $taid = $ttdata->actiontype_id;
+                                      $taid=$this->Menu_model->get_actionbyid($taid);
+                                      $time = $ttdata->appointmentdatetime;
+                                      $reminder = $ttdata->reminder;
+                                      $time = date('h:i a', strtotime($time));
+                                  ?>
+                                    <div class="list-group-item list-group-item-action">
+                                       <span class="mr-3 align-items-center">
+                                          <i class="fa-solid fa-circle"></i>
+                                       </span>
+                                       <span class="flex"><?=$taid[0]->name?> |
+                                           <strong class="text-secondary mr-1"><?=$ttdata->compname?></strong><br>
+                                           <small class="text-muted">Task Time:- <?=$time?></small>
+                                        </span>
+                                        <span class="p-3" style="color:<?=$ttdata->color?>;"><?=$ttdata->name?>
+                                        </span>
+                                        <span class="text-right">
+                                            <i class="fa-solid fa-forward"></i>
+                                        </span>
+                                        <b><?php if($reminder>0){echo 'Reminder for This Task';}?></b>
+                                    </div>
+                                  <?php } ?>
+                                  </div>
+                                </div>
+
+
+                              </div>
+<?php } ?>
+
+
+
                               <div class="card">
                                 <div class="card-header bg-light" id="headingThree" data-toggle="collapse" data-target="#collapse9121" aria-expanded="false" aria-controls="collapse9121">
-                                      <?php $ttbytime = $this->Menu_model->get_ttbytime($uid,$tdate,'19:00:00','21:00:00'); 
+                                      <?php $ttbytime = $this->Menu_model->get_ttbytime($uid,$tdate,'19:00:00','21:00:00');
                                       $ted = $this->Menu_model->get_ttbytimed($uid,$tdate,'19:00:00','21:00:00');
                                       ?>
                                       <b>19:00 PM to 21:00 PM</b><br>
@@ -769,7 +895,7 @@ $dataPoints2 = array(
                                 </div>
                                 <div id="collapse9121" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                                   <div class="card-body">
-                                   <?php 
+                                   <?php
                                       foreach($ttbytime as $tt){
                                       $taid = $tt->actiontype_id;
                                       $taid=$this->Menu_model->get_action($taid);
@@ -780,7 +906,7 @@ $dataPoints2 = array(
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
+                                       <span class="flex"><?=$taid[0]->name?> |
                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
@@ -805,10 +931,9 @@ $dataPoints2 = array(
                           $rimby = $tt->reminderby;
                           $rimat = $tt->reminderat;
                           $rimbyname = $this->Menu_model->get_userbyid($rimby);
-                          
+
                           $time = date('h:i a', strtotime($time));
                       ?>
-                        
                         <div class="list-group-item list-group-item-action">
                           <span class="text-danger"><b><?php if($reminder>0){echo 'Reminder for This Task by '.$rimbyname[0]->name." at ".$rimat;}?></b></span><br>
                           <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
@@ -816,7 +941,7 @@ $dataPoints2 = array(
                            <span class="mr-3 align-items-center">
                               <i class="fa-solid fa-circle"></i>
                            </span>
-                           <span class="flex"><?=$taid[0]->name?> | 
+                           <span class="flex"><?=$taid[0]->name?> |
                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                <small class="text-muted">Task Time:- <?=$time?></small>
                             </span>
@@ -828,9 +953,9 @@ $dataPoints2 = array(
                         </button></div>
                       <?php $aai++;}}} ?>
                   </div></button>
-                  
-                  
-                  
+
+
+
                   <div class="tab-pane fade" id="custom-tabs-four-research" role="tabpanel" aria-labelledby="custom-tabs-four-research-tab">
                       <?php $aai=0;foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='10'){
                           $taid = $tt->actiontype_id;
@@ -838,14 +963,14 @@ $dataPoints2 = array(
                           $time = $tt->appointmentdatetime;
                           $time = date('h:i a', strtotime($time));
                       ?>
-                        
+
                         <div class="list-group-item list-group-item-action">
                             <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
                           <input type="hidden" value="<?=$tt->id?>" id="tid">
                            <span class="mr-3 align-items-center">
                               <i class="fa-solid fa-circle"></i>
                            </span>
-                           <span class="flex"><?=$taid[0]->name?> | 
+                           <span class="flex"><?=$taid[0]->name?> |
                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                <small class="text-muted">Task Time:- <?=$time?></small>
                             </span>
@@ -857,9 +982,9 @@ $dataPoints2 = array(
                         </button></div>
                       <?php $aai++;}}} ?>
                   </div>
-                  
-                  
-                  
+
+
+
                   <div class="tab-pane fade" id="custom-tabs-four-socialn" role="tabpanel" aria-labelledby="custom-tabs-four-socialn-tab">
                       <?php $aai=0;foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='13'){
                           $taid = $tt->actiontype_id;
@@ -867,14 +992,14 @@ $dataPoints2 = array(
                           $time = $tt->appointmentdatetime;
                           $time = date('h:i a', strtotime($time));
                       ?>
-                        
+
                         <div class="list-group-item list-group-item-action">
                             <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
                           <input type="hidden" value="<?=$tt->id?>" id="tid">
                            <span class="mr-3 align-items-center">
                               <i class="fa-solid fa-circle"></i>
                            </span>
-                           <span class="flex"><?=$taid[0]->name?> | 
+                           <span class="flex"><?=$taid[0]->name?> |
                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                <small class="text-muted">Task Time:- <?=$time?></small>
                             </span>
@@ -886,8 +1011,8 @@ $dataPoints2 = array(
                         </button></div>
                       <?php $aai++;}}} ?>
                   </div></button>
-                  
-                  
+
+
                   <div class="tab-pane fade" id="custom-tabs-four-sociala" role="tabpanel" aria-labelledby="custom-tabs-four-sociala-tab">
                       <?php $aai=0;foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='14'){
                           $taid = $tt->actiontype_id;
@@ -895,14 +1020,14 @@ $dataPoints2 = array(
                           $time = $tt->appointmentdatetime;
                           $time = date('h:i a', strtotime($time));
                       ?>
-                        
+
                         <div class="list-group-item list-group-item-action">
                             <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
                           <input type="hidden" value="<?=$tt->id?>" id="tid">
                            <span class="mr-3 align-items-center">
                               <i class="fa-solid fa-circle"></i>
                            </span>
-                           <span class="flex"><?=$taid[0]->name?> | 
+                           <span class="flex"><?=$taid[0]->name?> |
                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                <small class="text-muted">Task Time:- <?=$time?></small>
                             </span>
@@ -914,15 +1039,16 @@ $dataPoints2 = array(
                         </button></div>
                       <?php $aai++;}}} ?>
                   </div></button>
-                  
-                  
-                  
+
+
+
                   <div class="tab-pane fade" id="custom-tabs-four-email" role="tabpanel" aria-labelledby="custom-tabs-four-email-tab">
                       <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='2'){
+                        if($tt->autotask == 1){$style = 'background: antiquewhite;'; $titletask = 'Auto Task';}else{$style =''; $titletask='';}
                       ?>
-                        <div class="list-group-item list-group-item-action">
+                        <div class="list-group-item list-group-item-action" title="<?=$titletask ?>" style="<?= $style ?>" >
                         <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
-                        
+
                            <span class="mr-3 align-items-center">
                               <i class="fa-solid fa-circle"></i>
                            </span>
@@ -943,7 +1069,7 @@ $dataPoints2 = array(
                       ?>
                         <div class="list-group-item list-group-item-action">
                         <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
-                        
+
                            <span class="mr-3 align-items-center">
                               <i class="fa-solid fa-circle"></i>
                            </span>
@@ -979,7 +1105,7 @@ $dataPoints2 = array(
                         </div>
                       <?php $aai++;}}} ?>
                   </div>
-                  
+
                   <div class="tab-pane fade" id="custom-tabs-four-mom" role="tabpanel" aria-labelledby="custom-tabs-four-mom-tab">
                       <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='6'){
                       ?>
@@ -1000,9 +1126,13 @@ $dataPoints2 = array(
                         </div>
                       <?php $aai++;}}} ?>
                   </div>
-                  
+
                   <div class="tab-pane fade" id="custom-tabs-four-proposal" role="tabpanel" aria-labelledby="custom-tabs-four-proposal-tab">
-                      <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='7'){
+                      <?php foreach($totalt as $tt){
+                      
+                        
+                        if($tt->plan==1){if($tt->actiontype_id=='7'){
+                       
                       ?>
                         <div class="list-group-item list-group-item-action">
                         <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
@@ -1021,10 +1151,10 @@ $dataPoints2 = array(
                         </div>
                       <?php $aai++;}}} ?>
                   </div>
-                  
+
                   <div class="tab-pane fade" id="custom-tabs-four-barg" role="tabpanel" aria-labelledby="custom-tabs-four-barg-tab">
-                      
-                             <?php 
+
+                             <?php
                             $bl=0;
                             foreach($barg as $brg){
                                 $bs = $brg->status;
@@ -1034,31 +1164,34 @@ $dataPoints2 = array(
                                 <?php if($bs=='Pending'){?>
                                     <button style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;" value="<?=$brg->id?>" id="startm<?=$bl?>">
                                         <div class="list-group-item list-group-item-action">
-                                        <?=$cd[0]->compname?> | 
-                                        <?=$cd[0]->city?> | 
-                                        <?=$cd[0]->state?> | 
-                                        <?=$brg->storedt?> | 
+                                        <?=$cd[0]->compname?> |
+                                        <?=$cd[0]->city?> |
+                                        <?=$cd[0]->state?> |
+                                        <?=$brg->storedt?> |
                                         <b class="text-success">Start Meeting</b>
                                     </div></button>
                                 <?php }if($bs=='Start'){?>
                                     <button style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;" id="closem<?=$bl?>" value="<?=$brg->id?>">
                                         <div class="list-group-item list-group-item-action">
-                                        <?=$cd[0]->compname?> | 
-                                        <?=$cd[0]->city?> | 
-                                        <?=$cd[0]->state?> | 
+                                        <?=$cd[0]->compname?> |
+                                        <?=$cd[0]->city?> |
+                                        <?=$cd[0]->state?> |
                                         <?=$brg->storedt?> |
                                         <b class="text-danger">Close Meeting</b>
                                     </div>
                             <?php $bl++;}} ?>
                         </div>
                             <?php foreach($barg as $br){if($br->status=='RPClose'){
+                              
+                                // echo "<pre>";
+                                // print_r($br);
                                 $cid = $br->cid;
                                 $cd = $this->Menu_model->get_cdbyid($cid);?>
                             <a href="BMNewLead/<?=$br->id?>"><div class="list-group-item list-group-item-action">
-                                        <?=$cd[0]->compname?> | 
-                                        <?=$cd[0]->city?> | 
-                                        <?=$cd[0]->state?> | 
-                                        <?=$brg->storedt?> |
+                                        <?=$cd[0]->compname?> |
+                                        <?=$cd[0]->city?> |
+                                        <?=$cd[0]->state?> |
+                                        <?=$br->storedt?> |
                                         <b>Update Lead</b>
                                     </div></a>
                             <?php }} ?>
@@ -1075,6 +1208,7 @@ $dataPoints2 = array(
                 <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                   <li class="nav-item">
                       <?php $ttbydc = $this->Menu_model->get_ttbydc($uid,$tdate);
+                    
                       ?>
                     <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">
                         All <span class="badge badge-success"><?=$ttbydc[0]->ab?></span>
@@ -1122,6 +1256,7 @@ $dataPoints2 = array(
                   <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
                       <div id="accordion">
                             <div class="card">
+                                
                                 <div class="card-header bg-info" id="headingOne" data-toggle="collapse" data-target="#collapse0911" aria-expanded="true" aria-controls="collapse0911">
                                       <?php $ttbytime = $this->Menu_model->get_ttbytimec($uid,$tdate,'09:00:00','11:00:00');
                                         $ted = $this->Menu_model->get_ttbytimedc($uid,$tdate,'09:00:00','11:00:00');
@@ -1131,7 +1266,7 @@ $dataPoints2 = array(
                                 </div>
                                 <div id="collapse0911" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                                   <div class="card-body">
-                                      <?php 
+                                      <?php
                                       foreach($ttbytime as $tt){
                                       $taid = $tt->actiontype_id;
                                       $taid=$this->Menu_model->get_action($taid);
@@ -1142,7 +1277,7 @@ $dataPoints2 = array(
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
+                                       <span class="flex"><?=$taid[0]->name?> |
                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
@@ -1153,7 +1288,7 @@ $dataPoints2 = array(
                                         </span>
                                     </div>
                                   <?php } ?>
-                                  
+
                                   </div>
                                 </div>
                               </div>
@@ -1167,7 +1302,7 @@ $dataPoints2 = array(
                                 </div>
                                 <div id="collapse1113" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                                   <div class="card-body">
-                                   <?php 
+                                   <?php
                                       foreach($ttbytime as $tt){
                                       $taid = $tt->actiontype_id;
                                       $taid=$this->Menu_model->get_action($taid);
@@ -1178,7 +1313,7 @@ $dataPoints2 = array(
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
+                                       <span class="flex"><?=$taid[0]->name?> |
                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
@@ -1202,7 +1337,7 @@ $dataPoints2 = array(
                                 </div>
                                 <div id="collapse1315" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                                   <div class="card-body">
-                                    <?php 
+                                    <?php
                                       foreach($ttbytime as $tt){
                                       $taid = $tt->actiontype_id;
                                       $taid=$this->Menu_model->get_action($taid);
@@ -1213,7 +1348,7 @@ $dataPoints2 = array(
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
+                                       <span class="flex"><?=$taid[0]->name?> |
                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
@@ -1237,7 +1372,7 @@ $dataPoints2 = array(
                                 </div>
                                 <div id="collapse1517" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                                   <div class="card-body">
-                                    <?php 
+                                    <?php
                                       foreach($ttbytime as $tt){
                                       $taid = $tt->actiontype_id;
                                       $taid=$this->Menu_model->get_action($taid);
@@ -1248,7 +1383,7 @@ $dataPoints2 = array(
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
+                                       <span class="flex"><?=$taid[0]->name?> |
                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
@@ -1262,7 +1397,7 @@ $dataPoints2 = array(
                                   </div>
                                 </div>
                               </div>
-                              
+
                               <div class="card">
                                 <div class="card-header bg-info" id="headingThree" data-toggle="collapse" data-target="#collapse1719" aria-expanded="false" aria-controls="collapse1719">
                                       <?php $ttbytime = $this->Menu_model->get_ttbytimec($uid,$tdate,'17:00:00','19:00:00');
@@ -1272,7 +1407,7 @@ $dataPoints2 = array(
                                 </div>
                                 <div id="collapse1719" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                                   <div class="card-body">
-                                    <?php 
+                                    <?php
                                       foreach($ttbytime as $tt){
                                       $taid = $tt->actiontype_id;
                                       $taid=$this->Menu_model->get_action($taid);
@@ -1283,7 +1418,7 @@ $dataPoints2 = array(
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
+                                       <span class="flex"><?=$taid[0]->name?> |
                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
@@ -1297,10 +1432,11 @@ $dataPoints2 = array(
                                   </div>
                                 </div>
                               </div>
-                              
+
+
                               <div class="card">
                                 <div class="card-header bg-light" id="headingThree" data-toggle="collapse" data-target="#collapse9121" aria-expanded="false" aria-controls="collapse9121">
-                                      <?php $ttbytime = $this->Menu_model->get_ttbytimec($uid,$tdate,'19:00:00','21:00:00'); 
+                                      <?php $ttbytime = $this->Menu_model->get_ttbytimec($uid,$tdate,'19:00:00','21:00:00');
                                       $ted = $this->Menu_model->get_ttbytimedc($uid,$tdate,'19:00:00','21:00:00');
                                       ?>
                                       <b>19:00 PM to 21:00 PM</b><br>
@@ -1308,7 +1444,7 @@ $dataPoints2 = array(
                                 </div>
                                 <div id="collapse9121" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                                   <div class="card-body">
-                                   <?php 
+                                   <?php
                                       foreach($ttbytime as $tt){
                                       $taid = $tt->actiontype_id;
                                       $taid=$this->Menu_model->get_action($taid);
@@ -1319,7 +1455,7 @@ $dataPoints2 = array(
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
+                                       <span class="flex"><?=$taid[0]->name?> |
                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
@@ -1333,6 +1469,59 @@ $dataPoints2 = array(
                                   </div>
                                 </div>
                               </div>
+
+
+                              <?php
+                              // print_r(sizeof($autotasktimenew));
+                              // die;
+                              $pentask = sizeof($autotasktimenew);
+                              if($pentask > 0){
+                               $ast1=$autotasktimenew[0]->stime;
+                               $aet2=$autotasktimenew[0]->etime;
+                              ?>
+                              <div class="card">
+                                <div class="card-header bg-primary" id="headingThree31" data-toggle="collapse" data-target="#collapse9191" aria-expanded="false" aria-controls="collapse9121">
+
+                                    <?php 
+                                    $curddate = date("Y-m-d");
+                                    $ttbytime = $this->Menu_model->get_ttbytimecAutotask1($uid,$tdate,$ast1,$aet2);
+                                    $ted = $this->Menu_model->get_ttbytimedcAutotask($uid,$curddate,$ast1,$aet2);
+                                      ?>
+                                      <b>Auto Task - <?= $ast1 ?> to <?= $aet2 ?></b><br>
+                                      Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) | MOM(<?=$ted[0]->f?>) | Proposal(<?=$ted[0]->g?>)
+                                </div>
+
+                                <div id="collapse9191" class="collapse" aria-labelledby="headingThree31" data-parent="#accordion">
+                                  <div class="card-body">
+                                   <?php
+                                      foreach($ttbytime as $tt){
+                                      $taid = $tt->actiontype_id;
+                                      $taid=$this->Menu_model->get_actionbyid($taid);
+                                      $time = $tt->appointmentdatetime;
+                                      $time = date('h:i a', strtotime($time));
+                                   ?>
+                                    <div class="list-group-item list-group-item-action">
+                                       <span class="mr-3 align-items-center">
+                                          <i class="fa-solid fa-circle"></i>
+                                       </span>
+                                       <span class="flex"><?=$taid[0]->name?> |
+                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                           <small class="text-muted">Task Time:- <?=$time?></small>
+                                        </span>
+                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                        </span>
+                                        <span class="text-right">
+                                            <i class="fa-solid fa-forward"></i>
+                                        </span>
+                                    </div>
+                                  <?php } ?>
+                                  </div>
+                                </div>
+                              </div>
+<?php } ?>
+
+
+
                             </div>
                   </div>
                   <div class="tab-pane fade" id="custom-tabs-four-call" role="tabpanel" aria-labelledby="custom-tabs-four-call-tab">
@@ -1342,14 +1531,14 @@ $dataPoints2 = array(
                           $time = $tt->appointmentdatetime;
                           $time = date('h:i a', strtotime($time));
                       ?>
-                        
+
                         <div class="list-group-item list-group-item-action">
                             <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
                             <input type="text" value="<?=$tt->id?>" id="tid">
                            <span class="mr-3 align-items-center">
                               <i class="fa-solid fa-circle"></i>
                            </span>
-                           <span class="flex"><?=$taid[0]->name?> | 
+                           <span class="flex"><?=$taid[0]->name?> |
                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                <small class="text-muted">Task Time:- <?=$time?></small>
                             </span>
@@ -1432,67 +1621,21 @@ $dataPoints2 = array(
               <div class="card-header text-center bg-light"><b>
               Open(<?=$ptsd[0]->a?>) | Open RPEM(<?=$ptsd[0]->b?>) | Rechaout(<?=$ptsd[0]->c?>) | Tentative(<?=$ptsd[0]->d?>) | WDL(<?=$ptsd[0]->e?>) | NI(<?=$ptsd[0]->f?>) | TTD(<?=$ptsd[0]->g?>) | WNO(<?=$ptsd[0]->h?>) | Positive(<?=$ptsd[0]->i?>) | Very Positive(<?=$ptsd[0]->j?>) | Closure(<?=$ptsd[0]->k?>)
               </b></div>
-              <div class="card-body">
-                    <table id="" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <td></td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php $ai=0;foreach($totalt as $tt){if($tt->plan==0){if($tt->autotask==1){?>
-                            <tr>
-                                <td>
-                                    <button id="add_plan<?=$ai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
-                                        <?=$tt->aname?> | 
-                                        <strong class="text-secondary"><?=$tt->compname?> | <b style="color:<?=$tt->color?>"><?=$tt->name?></b></strong>
-                                    </button>
-                                </td>
-                            </tr>
-                            <?php $ai++;}}} ?>
-                        </tbody>
-                    </table>
-                  </div>
+         
                 </div>
-                
-                
-                <div class="card card-primary card-outline card-outline-tabs">
-                <?php $patd = $this->Menu_model->get_atptd($uid,$tdate);
-                      $patsd = $this->Menu_model->get_atptsd($uid,$tdate);?>
-              <div class="card-header text-center bg-info"><b>Auto Pending Task to be Schedule</b></div>
-              <div class="card-header text-center bg-light"><b>
-              Total Task <?=$patd[0]->ab?> | Call(<?=$patd[0]->a?>) | Email(<?=$patd[0]->b?>) | Whatsapp(<?=$patd[0]->e?>) | Meeting(<?=$patd[0]->c+$patd[0]->d?>) | MOM(<?=$patd[0]->f?>) | Proposal(<?=$patd[0]->g?>)
-              </b></div>
-              <div class="card-header text-center bg-light"><b>
-              Open(<?=$patsd[0]->a?>) | Open RPEM(<?=$patsd[0]->b?>) | Rechaout(<?=$patsd[0]->c?>) | Tentative(<?=$patsd[0]->d?>) | WDL(<?=$patsd[0]->e?>) | NI(<?=$patsd[0]->f?>) | TTD(<?=$patsd[0]->g?>) | WNO(<?=$patsd[0]->h?>) | Positive(<?=$patsd[0]->i?>) | Very Positive(<?=$patsd[0]->j?>) | Closure(<?=$patsd[0]->k?>)
-              </b></div>
-              <div class="card-body">
-                    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
-                        <ul id="myUL">
-                            <?php $ai=0;
-                            
-                            $totalpt = $this->Menu_model->get_totalpt($uid,$tdate);
-                            foreach($totalpt as $tt){?>
-                          <li><a>
-                           <?=$tt->aname?> | 
-                           <strong class="text-secondary"><?=$tt->compname?> | <b style="color:<?=$tt->color?>"><?=$tt->csname?></b></strong>
-                           <button id="add_plan<?=$ai?>" value="<?=$tt->id?>">Plan</button>
-                          </a>
-                          
-                          </li><?php $ai++;} ?>
-                        </ul>
-                  </div>
-                </div>
-              
+
+
+         
+
           </div>
         </div>
 </div>
  </div>
         </div>
 </div>
-            
-            
-            
+
+
+
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
     </section>
@@ -1516,7 +1659,7 @@ $dataPoints2 = array(
 <!-- ./wrapper -->
 <script>
 window.onload = function () {
- 
+
 var chart = new CanvasJS.Chart("chartContainer", {
 	animationEnabled: true,
 	theme: "light1",
@@ -1549,7 +1692,7 @@ var chart = new CanvasJS.Chart("chartContainer", {
 	}]
 });
 chart.render();
- 
+
 function toggleDataSeries(e){
 	if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
 		e.dataSeries.visible = false;
@@ -1559,7 +1702,7 @@ function toggleDataSeries(e){
 	}
 	chart.render();
 }
- 
+
 }
 </script>
 
@@ -1686,7 +1829,7 @@ function myFunction() {
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    
+
     $("#example2").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');

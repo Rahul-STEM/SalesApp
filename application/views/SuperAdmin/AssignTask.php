@@ -90,10 +90,6 @@
                               </select>
                             </div>
                             <div class="form-group">
-                            <?php $udetail = $this->Menu_model->get_userbyid($uid);
-                                $admid = $udetail[0]->admin_id;
-                                ?>
-                                <input type="hidden" id="adid" value="<?=$uid?>">
                               <label>Select User</label>
                               <select id="user" class="form-control" name="user">
                               </select>
@@ -444,7 +440,6 @@
         //select user according to role
         $("#role").change(function(){
           var selectedValue = $(this).val();
-          var adminid = document.getElementById("adid").value;
           $("#workbyothers").val("");
           if(selectedValue == "4"){
             $('#op1').val('bd').text('BD');
@@ -455,10 +450,7 @@
           $.ajax({
             url: '<?=base_url();?>Menu/getRoleUser',
             type: 'POST', 
-            data: {
-              selectedOption: selectedValue,
-              adminid: adminid
-            },
+            data: {selectedOption: selectedValue},
             success: function(response) {
               $("#user").html(response);
             },
@@ -740,7 +732,8 @@
       var selectedCount = $("#company").val() ? $("#company").val().length : 0;
         $('.ccount').text("Total Company - "+companyCount+' Selected Company - '+selectedCount);
     });
-
+    
+    //select target status according to target task
     $('#atask').on('change', function f() {
       var sid = document.getElementById("current_status").value;
       var aid = document.getElementById("atask").value;

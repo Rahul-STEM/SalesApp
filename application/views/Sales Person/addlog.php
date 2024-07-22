@@ -37,7 +37,7 @@
                             <img src="https://stemlearning.in/opp/assets/image/icon/whatsapp.png" style="height:30px;"></a>
                         </span>
                     </div>
-                    <?php }?>
+                    <? }?>
                                 </div>
                                 <input type="hidden" name="action_id" id="action_id" value="<?=$ttbl[0]->actiontype_id?>">
                                 <div class="col-lg-12 card-form__body card-body">

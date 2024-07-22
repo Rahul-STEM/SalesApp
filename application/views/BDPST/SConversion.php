@@ -106,7 +106,6 @@ $bd = $this->Menu_model->get_userbyaid($uid);
                                     </thead>
                                     <tbody>
                                         <?php 
-                                        
                                     for($i = $sdate; $i <= $edate; $i->modify('+1 day')){
                                             $date = $i->format("Y-m-d");
                                             $or=0;$ort=0;$rr=0;$rt=0;$tp=0;$pvp=0;$vph=0;$other=0;
@@ -130,8 +129,7 @@ $bd = $this->Menu_model->get_userbyaid($uid);
                                             ?>
                                     <tr>
                                         <td><a href="BDSConversion/<?=$date?>"><?=$date?></a></td>
-                                        <td><!-- tanvi -->
-                                          <a href="Conversion/<?=$uid?>/<?=$date?>/1/0/<?=$or?>"><?=$or?></a></td> 
+                                        <td><a href="Conversion/<?=$uid?>/<?=$date?>/1/0"><?=$or?></a></td>
                                         <td><a href="Conversion/<?=$uid?>/<?=$date?>/8/0"><?=$ort?></a></td>
                                         <td><a href="Conversion/<?=$uid?>/<?=$date?>/2/0"><?=$rr?></a></td>
                                         <td><a href="Conversion/<?=$uid?>/<?=$date?>/3/0"><?=$rt?></a></td>

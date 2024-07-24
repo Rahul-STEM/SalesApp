@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="<?=base_url();?>assets/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="<?=base_url();?>assets/css/buttons.bootstrap4.min.css">
     <style>
-     .scrollme {overflow-x: auto;}.card.bg-graywe {background: #175456;height: 100px;align-items: center;justify-content: center;display: flex;}.card.bg-graywe {transition: background 0.3s ease-in-out;}.card.bg-graywe:hover {background: #172556;}.card-body {min-height:650px;background: #e0f0f1;}.card a {color: white;}.uimage {background: #47758b;margin: 4px;padding: 4px;box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;}.dot {height: 18px;width: 18px;background-color: blue;border-radius: 50%;display: inline-block;position: relative;border: 3px solid #fff;top: -48px;left: 186px;z-index: 1000;}.name{margin-top: -21px;font-size: 18px;}.fw-500{font-weight: 500 !important;}.start{color: green;}.stop{color: red;}.rate{border-bottom-right-radius: 12px;border-bottom-left-radius: 12px;}.rating {display: flex;flex-direction: row-reverse;justify-content: center }.rating>input {display: none }.rating>label {position: relative;width: 1em;font-size: 30px;font-weight: 300;color: black;cursor: pointer }.rating>label::before {content: "\2605";position: absolute;opacity: 0 }.rating>label:hover:before, .rating>label:hover~label:before {opacity: 1 !important }.rating>input:checked~label:before {opacity: 1 }.rating:hover>input:checked~label:before {opacity: 0.4 }.buttons{top: 36px;position: relative;}.rating-submit{border-radius: 15px;color: #fff;height: 49px;}.rating-submit:hover{color: #fff;}div#exampleModalCenter {background: rgba(0, 0, 0, 0.9);}.modal-content {background: azure;}.modal-content {border: none;}.modal-open .modal { background: rgba(0, 0, 0, .2)!important;}
+     .scrollme {overflow-x: auto;}.card.bg-graywe {background: #175456;height: 100px;align-items: center;justify-content: center;display: flex;}.card.bg-graywe {transition: background 0.3s ease-in-out;}.card.bg-graywe:hover {background: #172556;}.card-body {min-height:650px;background: #e0f0f1;}.card a {color: white;}.uimage {background: #47758b;margin: 4px;padding: 4px;box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;}.dot {height: 18px;width: 18px;background-color: blue;border-radius: 50%;display: inline-block;position: relative;border: 3px solid #fff;top: -48px;left: 186px;z-index: 1000;}.name{margin-top: -21px;font-size: 18px;}.fw-500{font-weight: 500 !important;}.start{color: green;}.stop{color: red;}.rate{border-bottom-right-radius: 12px;border-bottom-left-radius: 12px;}.rating {display: flex;flex-direction: row-reverse;justify-content: center }.rating>input {display: none }.rating>label {position: relative;width: 1em;font-size: 30px;font-weight: 300;color: #FFD600;cursor: pointer }.rating>label::before {content: "\2605";position: absolute;opacity: 0 }.rating>label:hover:before, .rating>label:hover~label:before {opacity: 1 !important }.rating>input:checked~label:before {opacity: 1 }.rating:hover>input:checked~label:before {opacity: 0.4 }.buttons{top: 36px;position: relative;}.rating-submit{border-radius: 15px;color: #fff;height: 49px;}.rating-submit:hover{color: #fff;}div#exampleModalCenter {background: rgba(0, 0, 0, 0.9);}.modal-content {background: azure;}.modal-content {border: none;}.modal-open .modal { background: rgba(0, 0, 0, .2)!important;}
     </style>
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -133,31 +133,39 @@
                                     </thead>
                                     <tbody>
                                         <?php 
-                                        $i=1; foreach($dayData as $data):
-                                       $teamuid = $data->user_id;
+                                            $i=1; foreach($dayData as $data):
+                                            $teamuid = $data->user_id;
                                         ?>
                                         <tr>
                                             <td><?= $i; ?></td>        
                                             <td><?= $data->name; ?></td>        
-                                            <td data-question="Started at Good Time" data-userid="<?= $data->user_id; ?>"><?= $data->ustart; ?>
-                                                <br>
-                                                <br>
-                                                <hr>
+                                            <td data-question="Started at Good Time" data-userid="<?= $data->user_id; ?>">
+                                                <?= $data->ustart; ?>
+                                                <br><br><hr>
                                                 <p>Started at Good Time</p> 
                                                 <div class="rating">
-                                                    <input type="radio" name="rat2" value="5" id="10"><label for="10">☆</label>
-                                                    <input type="radio" name="rat2" value="4" id="9"><label for="9">☆</label>
-                                                    <input type="radio" name="rat2" value="3" id="8"><label for="8">☆</label>
-                                                    <input type="radio" name="rat2" value="2" id="7"><label for="7">☆</label>
-                                                    <input type="radio" name="rat2" value="1" id="6"><label for="6">☆</label>
+                                                    <input type="radio" name="rat1_<?= $data->user_id; ?>" value="5" id="5_<?= $data->user_id; ?>"><label for="5_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat1_<?= $data->user_id; ?>" value="4" id="4_<?= $data->user_id; ?>"><label for="4_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat1_<?= $data->user_id; ?>" value="3" id="3_<?= $data->user_id; ?>"><label for="3_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat1_<?= $data->user_id; ?>" value="2" id="2_<?= $data->user_id; ?>"><label for="2_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat1_<?= $data->user_id; ?>" value="1" id="1_<?= $data->user_id; ?>"><label for="1_<?= $data->user_id; ?>">☆</label>
                                                 </div>
-                                            </td>    
-                                            <td>
+                                            </td>     
+                                            <td data-question="Day Start Image is Good" data-userid="<?= $data->user_id; ?>">
                                                 <a href="<?=base_url().'/'.$data->usimg;?>">
                                                     <img class="uimage" height="100px" alt="image not found" src="<?=base_url().'/'.$data->usimg;?>">
                                                 </a>
+                                                <br><br><hr>
+                                                <p>Day Start Image is Good</p> 
+                                                <div class="rating">
+                                                    <input type="radio" name="rat2_<?= $data->user_id; ?>" value="5" id="10_<?= $data->user_id; ?>"><label for="10_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat2_<?= $data->user_id; ?>" value="4" id="9_<?= $data->user_id; ?>"><label for="9_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat2_<?= $data->user_id; ?>" value="3" id="8_<?= $data->user_id; ?>"><label for="8_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat2_<?= $data->user_id; ?>" value="2" id="7_<?= $data->user_id; ?>"><label for="7_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat2_<?= $data->user_id; ?>" value="1" id="6_<?= $data->user_id; ?>"><label for="6_<?= $data->user_id; ?>">☆</label>
+                                                </div>
                                             </td>
-                                            <td>
+                                            <td data-question="Day Start Location as per Plan" data-userid="<?= $data->user_id; ?>">
                                             <?php
                                             $latitude = $data->slatitude;;
                                             $longitude = $data->slongitude;;
@@ -169,15 +177,25 @@
                                             echo "<a style='color:green' href='{$googleMapsUrl}' target='_blank'>Open in Google Maps</a>";
                                             ?>
                                             </div>
-                                           </td> 
+
+                                            <br><br><hr>
+                                                <p>Day Start Location as per Plan</p>
+                                                <div class="rating">
+                                                    <input type="radio" name="rat3_<?= $data->user_id; ?>" value="5" id="15_<?= $data->user_id; ?>"><label for="15_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat3_<?= $data->user_id; ?>" value="4" id="14_<?= $data->user_id; ?>"><label for="14_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat3_<?= $data->user_id; ?>" value="3" id="13_<?= $data->user_id; ?>"><label for="13_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat3_<?= $data->user_id; ?>" value="2" id="12_<?= $data->user_id; ?>"><label for="12_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat3_<?= $data->user_id; ?>" value="1" id="11_<?= $data->user_id; ?>"><label for="11_<?= $data->user_id; ?>">☆</label>
+                                                </div> 
+                                            </td> 
                                             <td>
-                                            <?php if(isset($data->uclose)){ ?>
-                                                <?= $data->uclose; ?>
+                                                <?php if(isset($data->uclose)){ ?>
+                                                    <?= $data->uclose; ?>
                                                 <?php }else{ ?>
                                                     <span class="bg-warning p-1"> Pending</span>
                                                 <?php }?>
-                                        </td>    
-                                          <td>
+                                            </td>    
+                                            <td>
                                                 <?php if(isset($data->ucimg)){ ?>
                                                 <a href="<?=base_url().'/'.$data->ucimg;?>">
                                                     <img class="uimage" height="100px" alt="image not found" src="<?=base_url().'/'.$data->ucimg;?>">
@@ -187,29 +205,41 @@
                                                 <?php }?>
                                             </td>  
                                             <td>
-                                           <?php 
-                                           $clatitude = $data->clatitude;;
-                                           $clongitude = $data->clongitude;;
-                                           if(isset($clatitude)){ ?>
-                                           <div class="img-thumbnail" style="height: 300px"><iframe width="300px"  height="100%" src="https://maps.google.com/?q=<?=$clatitude?>,<?=$clongitude?>&t=k&z=13&ie=UTF8&iwloc=&output=embed"></iframe></div>
-                                            <div class="text-center">
-                                            <?php 
-                                            $googleMapsUrl = "https://www.google.com/maps/search/?api=1&query={$clatitude},{$clongitude}";
-                                            echo "<a style='color:green' href='{$googleMapsUrl}' target='_blank'>Open in Google Maps</a>";
-                                            ?>
-                                            </div>
-                                            <?php }else{ ?>
-                                                <span class="bg-warning p-1"> Pending</span>
-                                           <?php } ?>
+                                                <?php 
+                                                $clatitude = $data->clatitude;;
+                                                $clongitude = $data->clongitude;;
+                                                if(isset($clatitude)){ ?>
+                                                <div class="img-thumbnail" style="height: 300px"><iframe width="300px"  height="100%" src="https://maps.google.com/?q=<?=$clatitude?>,<?=$clongitude?>&t=k&z=13&ie=UTF8&iwloc=&output=embed"></iframe></div>
+                                                    <div class="text-center">
+                                                    <?php 
+                                                    $googleMapsUrl = "https://www.google.com/maps/search/?api=1&query={$clatitude},{$clongitude}";
+                                                    echo "<a style='color:green' href='{$googleMapsUrl}' target='_blank'>Open in Google Maps</a>";
+                                                    ?>
+                                                    </div>
+                                                    <?php }else{ ?>
+                                                        <span class="bg-warning p-1"> Pending</span>
+                                                <?php } ?>
                                            </td>   
-                                            <td><?php 
-                                            if($data->wffo ==1){ ?>
-                                                <span class="bg-warning1 p-1"> Work&nbsp;From&nbsp;Office</span>
-                                          <?php  }elseif($data->wffo ==2){ ?>
-                                            <span class="bg-warning1 p-1"> Work&nbsp;From&nbsp;Field</span>
-                                          <?php }elseif($data->wffo ==3){ ?>
-                                            <span class="bg-warning1 p-1"> Work&nbsp;From&nbsp;Field+Office </span>
-                                          <?php  } ?></td>    
+                                            <td data-question="Today Working as per Plan" data-userid="<?= $data->user_id; ?>">
+                                                <?php 
+                                                    if($data->wffo ==1){ ?>
+                                                        <span class="bg-warning1 p-1"> Work&nbsp;From&nbsp;Office</span>
+                                                <?php  }elseif($data->wffo ==2){ ?>
+                                                    <span class="bg-warning1 p-1"> Work&nbsp;From&nbsp;Field</span>
+                                                <?php }elseif($data->wffo ==3){ ?>
+                                                    <span class="bg-warning1 p-1"> Work&nbsp;From&nbsp;Field+Office </span>
+                                                <?php  } ?>
+
+                                                <br><br><hr>
+                                                <p>Today Working as per Plan</p>
+                                                <div class="rating">
+                                                    <input type="radio" name="rat4_<?= $data->user_id; ?>" value="5" id="20_<?= $data->user_id; ?>"><label for="20_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat4_<?= $data->user_id; ?>" value="4" id="19_<?= $data->user_id; ?>"><label for="19_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat4_<?= $data->user_id; ?>" value="3" id="18_<?= $data->user_id; ?>"><label for="18_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat4_<?= $data->user_id; ?>" value="2" id="17_<?= $data->user_id; ?>"><label for="17_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat4_<?= $data->user_id; ?>" value="1" id="16_<?= $data->user_id; ?>"><label for="16_<?= $data->user_id; ?>">☆</label>
+                                                </div> 
+                                            </td>    
                                             <td>
                                                 <?php if(isset($data->scomment)){ ?>
                                                     <?= $data->scomment ?>
@@ -224,7 +254,7 @@
                                                     <span class="bg-danger p-1"> Not Set</span>
                                                 <?php }?>
                                             </td> 
-                                            <td>
+                                            <td data-question="Auto task time entered correctly" data-userid="<?= $data->user_id; ?>">
                                                 <?php 
                                                 $checkaTime = $this->Management_model->CheckAutoTaskTime($teamuid,$cdate);
                                                 if(sizeof($checkaTime) > 0){
@@ -239,8 +269,17 @@
                                                     echo "Time Difference: $minutes minutes</b>";
                                                 }
                                                 ?>
+                                                <br><br><hr>
+                                                <p>Auto task time entered correctly </p>
+                                                <div class="rating">
+                                                    <input type="radio" name="rat5_<?= $data->user_id; ?>" value="5" id="25_<?= $data->user_id; ?>"><label for="25_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat5_<?= $data->user_id; ?>" value="4" id="24_<?= $data->user_id; ?>"><label for="24_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat5_<?= $data->user_id; ?>" value="3" id="23_<?= $data->user_id; ?>"><label for="23_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat5_<?= $data->user_id; ?>" value="2" id="22_<?= $data->user_id; ?>"><label for="22_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat5_<?= $data->user_id; ?>" value="1" id="21_<?= $data->user_id; ?>"><label for="21_<?= $data->user_id; ?>">☆</label>
+                                                </div>
                                             </td> 
-                                            <td>
+                                            <td data-question="Auto task time entered correctly" data-userid="<?= $data->user_id; ?>">
                                                 <?php 
                                                 $checkReqTime = $this->Management_model->CheckTaskPlanRequest($teamuid,$cdate);
                                                 if(sizeof($checkReqTime) > 0){ ?>
@@ -262,6 +301,15 @@
                                                     echo "No Request";
                                                 }
                                                 ?>
+                                                <br><br><hr>
+                                                <p>Did you request today's work plan?</p>
+                                                <div class="rating">
+                                                    <input type="radio" name="rat6_<?= $data->user_id; ?>" value="5" id="30_<?= $data->user_id; ?>"><label for="30_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat6_<?= $data->user_id; ?>" value="4" id="29_<?= $data->user_id; ?>"><label for="29_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat6_<?= $data->user_id; ?>" value="3" id="28_<?= $data->user_id; ?>"><label for="28_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat6_<?= $data->user_id; ?>" value="2" id="27_<?= $data->user_id; ?>"><label for="27_<?= $data->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat6_<?= $data->user_id; ?>" value="1" id="26_<?= $data->user_id; ?>"><label for="26_<?= $data->user_id; ?>">☆</label>
+                                                </div>
                                             </td> 
                                             <td>
                                         <?php 
@@ -530,7 +578,7 @@
                                     
                                     
                                     
-                                    </td>
+                                        </td>
                                         </tr>      
                                         <?php $i++; endforeach; ?>
                                   </tbody>
@@ -878,9 +926,11 @@ function feedBackButton(mid,id,val){
         $(document).ready(function(){
             $(".rating input").on("change", function(){
                 var $td = $(this).closest('td');
+                // console.log($td);
                 var rating = $(this).val();
                 var question = $td.data('question');
                 var userId = $td.data('userid');
+                // data-userid
                 console.log(userId);
                 console.log(question);
                 console.log(rating);

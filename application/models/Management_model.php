@@ -80,6 +80,13 @@ class Management_model  extends Menu_model {
 
     public function CheckStarRatingsExistorNot($uid,$date) {
         $query=$this->db->query("SELECT * FROM `star_rating` WHERE user_id = $uid AND date ='$date'");
+        // echo $this->db->last_query();die;
+        return $query->result();
+    }
+
+    public function CheckStarRatingsExistorNot_New($uid,$date,$question,$period) {
+        $query=$this->db->query("SELECT `star` FROM `star_rating` WHERE user_id = $uid AND date ='$date' AND question ='$question' AND periods ='$period'");
+        // echo $this->db->last_query();die;
         return $query->result();
     }
 
@@ -111,7 +118,24 @@ class Management_model  extends Menu_model {
             'remarks'=>$remarks,
             'feedback_by'=>$feedback_by,
         ];
+
+        // var_dump($data);die;
         $this->db->insert('star_rating',$data);
+    }
+
+    public function AddStarRatingNew($data){
+       
+
+        // var_dump($data);die;
+        $this->db->insert('star_rating',$data);
+        
+        $insert_id = $this->db->insert_id();
+
+        $query=$this->db->query("SELECT * FROM `star_rating` WHERE id = $insert_id");
+
+        // echo $this->db->last_query();die;
+        return $query->result();
+
     }
 
 

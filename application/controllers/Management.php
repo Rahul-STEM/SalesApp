@@ -75,6 +75,22 @@ class Management extends Menu {
         }
     }
 
+    public function CheckingDayManagement_New(){
+
+        $cdate = date("Y-m-d");
+        $sdate = new DateTime($cdate);
+        $sdate->modify('-1 day');
+        $previousDate = $sdate->format('Y-m-d');
+
+        $dayData = $this->Management_model->CheckingDayManage($this->uid,$cdate);
+        // var_dump($dayData);die;
+        if(!empty($this->user)){
+            $this->load->view($this->dep_name.'/CheckingDayManagement_New',['uid'=>$this->uid,'user'=>$this->user,'dayData'=>$dayData,'cdate'=>$cdate,'previousDate'=>$previousDate]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+
     public function CheckingYesterDayTask($type,$userid,$sdate){
         
         $sdate = new DateTime($sdate);
@@ -131,7 +147,46 @@ class Management extends Menu {
         redirect('Management/CheckingDayManagement');
     }
 
+    public function checkdayswithStarNew(){
+        
 
+        $cdate = $_POST['cdate'];
+        $sdate = new DateTime($cdate);
+        $sdate->modify('-1 day');
+        $previousDate = $sdate->format('Y-m-d');
+
+        $periods = $_POST['period'];
+        $userId = $_POST['userId'];
+        $rating = $_POST['rating'];
+        $question = $_POST['question'];
+
+        if($periods == 'Yesterday Evening' || $periods == 'Yesterday Task'){
+
+            $date = $previousDate;
+            
+        }else{
+            $date = $cdate;
+        }
+        $data = [
+            'date' => $date,
+            'user_id' => $userId,
+            'periods' => $periods,
+            'question' => $question,
+            'star'=>$rating,
+            // 'previousDate'=>$previousDate,
+            'feedback_by'=>$this->uid,
+        ];
+
+        // var_dump($data);die;
+
+        $result = $this->Management_model->AddStarRatingNew($data);
+        // var_dump($result);die;
+        echo json_encode($result);
+
+
+        // $this->session->set_flashdata('success_message', 'Star Rating Added Successfully');
+        // redirect('Management/CheckingDayManagement');
+    }
 
 
     

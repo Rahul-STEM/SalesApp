@@ -1,0 +1,172 @@
+{% include 'header.html' %}
+<link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" type="text/css" >
+ <div class="app-chat-container">
+                        <div class="row m-0 h-100">
+                            <div class="col d-flex flex-column p-0 h-100" data-perfect-scrollbar>
+
+
+
+
+
+
+                                <div class="container page__heading-container">
+                                    <div class="page__heading d-flex align-items-center">
+                                        <div class="flex">
+                                            <nav aria-label="breadcrumb">
+                                                <ol class="breadcrumb mb-0">
+                                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                                    <li class="breadcrumb-item active" aria-current="page">Meeting & Proposal Dashboard</li>
+                                                </ol>
+                                            </nav>
+                                            <span style="float:right;" class="h3 hidden-xs hidden-sm">Total {{total}} </span>
+                                            <!--<h1 class="m-0">Planned Data</h1>-->
+                                            <form target="_blank" method="post" style="float:left;">{% csrf_token %} <select name="user"><option value="">All</option>{% for us in users %}<option value="{{us.user_id}}">{{us.name}}</option>{% endfor %}</select> <input type="date" name="from" value="{{from}}"> <input type="date" name="to" value="{{to}}"> <input type="submit" value="Filter" class=" btn-primary" ></form>
+                                        </div>
+                                        <div class="ml-auto">
+
+                                </div>
+                                
+
+                                    </div>
+
+
+
+                                </div>
+                                
+                                
+
+
+
+                                <div class="container page__container">
+
+                                    <div class="card">
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+
+                                        <div class="table-responsive" >
+
+
+                                            <table class="table" id="myTable111">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="10" class="btn-primary text-center">Meeting Dashboard</th>
+                                                    </tr>
+                                                   
+                                                    <tr>
+
+
+                                                        <th>Date</th>
+                                                        <th>Account Holder</th>
+                                                        <th>Company Name</th>
+                                                        <th>Company Type</th>
+                                                        <th>Concerned Person Name</th>
+                                                        <th>Designation</th>
+                                                        <th>Meeting Type</th>
+                                                        <th>Current Status</th>
+                                                        <th>Live Location</th>
+                                                        <th>MOM Received</th>
+                                                        
+                                                        <!--<th>Proposal Sent</th>-->
+                                                        <!--<th>Proposal Amount</th>-->
+                                                        <!--<th>Total Schools</th>-->
+                                                        <!--<th>Proposal Type</th>-->
+                                                        <th>Location</th>
+                                                        <th>Current Remarks</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="list" id="companies">
+
+                                                {% for dt in data %}
+                                                    <tr>
+
+                                                        <th id="current_task_id"> {{dt.fwd_date}}</th>
+                                                        <th> {{dt.name}} </th>
+                                                        <th> {{dt.compname}}</th>
+                                                        <!--<th> {{dt.budget}}</th>-->
+                                                        <!--<th> {{dt.topspender}}</th>-->
+                                                        <th> {{dt.partner_type}}</th>
+                                                        <!--<th> {{dt.address}}</th>-->
+                                                        <th id="contactperson">{{dt.contactperson}}</th>
+                                                        <th>{{dt.designation}}</th>
+                                                        <th>{{dt.meeting_type}}</th>
+                                                        <th>{{dt.current_status}}</th>
+                                                        <th>{{dt.live_loaction}}</th>
+                                                        <th>{{dt.mom_received}}</th>
+                                                        <th>{{dt.city}} - {{dt.state}}</th>
+                                                        <!--<th id="contactphone"> {{dt.phoneno}}</th>-->
+                                                        <!--<th id="contactemail"> {{dt.emailid}}</th>-->
+                                                        <!--<th id="last_task_id"> {{dt.last_task_date}}</th>-->
+                                                        
+                                                        <!--<th id="next_task_id">{{dt.next_task_date}}</th>-->
+                                                        
+                                                        <!--<th> After {{ dt.appointmentdatetime|timeuntil:dt.last_task_date }}</th>-->
+                                                        <!--<th> After {{ dt.next_task_date|timeuntil:dt.appointmentdatetime }}</th>-->
+                                                        <!--<th > {{dt.fwd_date}}</th>-->
+                                                        <!--<th> {{dt.last_task_activity}}</th>-->
+                                                        <!--<th> {{dt.current_action_type}}</th>-->
+                                                        <!--<th> {{dt.next_task_activity}}</th>-->
+                                                        <th>{{dt.current_remark}}</th>
+                                                        <!--<th> {{dt.next_remarks}}</th>-->
+                                                        <!--<th>{{dt.nextaction}}</th>-->
+                                                        <!--<th> {{dt.last_purpose}}</th>-->
+                                                        <!--<th> {{dt.next_purpose}}</th>-->
+                                                        <!--<th> {{dt.last_status}}</th>-->
+                                                        <!--<th> {{dt.current_status}}</th>-->
+                                                        <!--<th> {{dt.last_action_taken}}</th>-->
+                                                        <!--<th> {{dt.actontaken}}</th>-->
+                                                        <!--<th> {{dt.proposal}}</th>-->
+                                                        <!--<th> {{dt.noofschools}}</th>-->
+                                                        <!--<th> {{dt.proposaldate}}</th>-->
+                                                        <!--<th> {{dt.fwd_date}}</th>-->
+                                                    </tr>
+                                                {% endfor %}
+
+
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="card-body text-right">
+<!--                                            15 <span class="text-muted">of 1,430</span> <a href="#" class="text-muted-light"><i class="material-icons ml-1">arrow_forward</i></a>-->
+                                        </div>
+                                        <script>
+                                             $(document).ready(function() {
+                                            $('#myTable111').DataTable( {
+                                                dom: 'Bfrtip',
+                                                order: [[ 0, "desc" ]],
+                                                buttons: [
+                                                    {
+                                                    extend:'excelHtml5',
+                                                    title:'Meeting Dashboard between {{from}} and {{to}}',
+                                                    text: 'Download Excel',
+                                                 }
+
+                                                ]
+                                            } );
+                                    });
+                                        </script>
+
+
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+{% include 'footer.html' %}

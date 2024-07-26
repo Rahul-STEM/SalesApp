@@ -1,0 +1,362 @@
+{% include 'header.html' %} {% load static %}
+<div class="row">
+  <div class="card card-form col-md-12">
+    <div class="row no-gutters">
+      <div class="col-lg-4 card-body">
+        <p><strong class="headings-color">ADD NEW LEAD</strong></p>
+      </div>
+      <div class="col-lg-12 card-form__body card-body">
+        <form method="post" action="/add-new-lead">
+          {% csrf_token %}
+          <div class="was-validated">
+            <div class="form-row">
+              <div class="col-12 col-md-12">
+                <label for="validationSample01">Company name</label>
+                <div class="row">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="company_dt"
+                    placeholder="Company Name"
+                    required=""
+                    readonly
+                    style="width: 90%"
+                  />
+                  <input type="hidden" name="compname" id="compname_id" />
+                  <button
+                    type="button"
+                    data-toggle="modal"
+                    data-target="#add_company"
+                  >
+                    <i class="fas fa fa-plus"></i>
+                  </button>
+                </div>
+                <div class="invalid-feedback">Please provide a first name.</div>
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+              <div class="col-12 col-md-12">
+                <label for="validationSample01">Contact Person</label>
+                <div class="row">
+                  <select
+                    type="text"
+                    class="form-control"
+                    name="company_contact"
+                    id="company_contact_dt"
+                    placeholder="Contact Person Name"
+                    value=""
+                    required=""
+                    style="width: 90%"
+                  ></select
+                  ><button
+                    type="button"
+                    data-toggle="modal"
+                    data-target="#add_company_contact"
+                  >
+                    <i class="fa fas fa-plus"></i>
+                  </button>
+                </div>
+                <div class="invalid-feedback">Please provide a first name.</div>
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-12 col-md-12" style="margin-top: 10px">
+                <label for="validationSample01">Top Spender</label> &nbsp;&nbsp;
+                &nbsp;&nbsp;
+
+                <input
+                  type="radio"
+                  name="top_spender"
+                  id="top_spender"
+                  value="yes"
+                  required=""
+                />
+                &nbsp;&nbsp;YES &nbsp;&nbsp;
+                <input
+                  type="radio"
+                  name="top_spender"
+                  id="top_spender"
+                  value="no"
+                  required=""
+                  checked
+                />
+                &nbsp;&nbsp;NO &nbsp;&nbsp;
+
+                <div class="invalid-feedback">
+                  Please provide a Company's budget.
+                </div>
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+              <div class="col-12 col-md-12 mb-12">
+                <label for="validationSample03">Assign to</label>
+                <select
+                  type="text"
+                  class="form-control"
+                  name="assign_to"
+                  id="id_creator"
+                  required=""
+                >
+                  {% for au in all_users %}
+                  <option value="{{au.user.id}}">{{au.name}}</option>
+                  {% endfor %}
+                </select>
+                <div class="invalid-feedback">Please provide a valid city.</div>
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+              <div class="col-12 col-md-6 mb-3">
+                <label for="validationSample04">Action Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  name="action_date"
+                  value="{{date|date:'Y-m-d'}}"
+                  placeholder="State"
+                  required=""
+                />
+                <div class="invalid-feedback">
+                  Please provide a valid state.
+                </div>
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+              <div class="col-6 col-md-3 mb-3">
+                <label for="validationSample04">HOURS</label>
+                <select
+                  class="form-control"
+                  name="action_hour"
+                  value=""
+                  placeholder="State"
+                  required=""
+                >
+                  <option>00</option>
+                  <option>01</option>
+                  <option>02</option>
+                  <option>03</option>
+                  <option>04</option>
+                  <option>05</option>
+                  <option>06</option>
+                  <option>07</option>
+                  <option>08</option>
+                  <option selected>09</option>
+                  <option>10</option>
+                  <option>11</option>
+                  <option>12</option>
+                  <option>13</option>
+                  <option>14</option>
+                  <option>15</option>
+                  <option>16</option>
+                  <option>17</option>
+                  <option>18</option>
+                  <option>19</option>
+                  <option>20</option>
+                  <option>21</option>
+                  <option>22</option>
+                  <option>23</option>
+                </select>
+                <div class="invalid-feedback">
+                  Please provide a valid state.
+                </div>
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+              <div class="col-6 col-md-3 mb-3">
+                <label for="validationSample04">MINUTS</label
+                ><select
+                  class="form-control"
+                  name="action_min"
+                  value=""
+                  placeholder="State"
+                  required=""
+                >
+                  <option>00</option>
+                  <option>01</option>
+                  <option>02</option>
+                  <option>03</option>
+                  <option>04</option>
+                  <option>05</option>
+                  <option>06</option>
+                  <option>07</option>
+                  <option>08</option>
+                  <option>09</option>
+                  <option>10</option>
+                  <option>11</option>
+                  <option>12</option>
+                  <option>13</option>
+                  <option>14</option>
+                  <option>15</option>
+                  <option>16</option>
+                  <option>17</option>
+                  <option>18</option>
+                  <option>19</option>
+                  <option>20</option>
+                  <option>21</option>
+                  <option>22</option>
+                  <option>23</option>
+                  <option>24</option>
+                  <option>25</option>
+                  <option>26</option>
+                  <option>27</option>
+                  <option>28</option>
+                  <option>29</option>
+                  <option>30</option>
+                  <option>31</option>
+                  <option>32</option>
+                  <option>33</option>
+                  <option>34</option>
+                  <option>35</option>
+                  <option>36</option>
+                  <option>37</option>
+                  <option>38</option>
+                  <option>39</option>
+                  <option>40</option>
+                  <option>41</option>
+                  <option>42</option>
+                  <option>43</option>
+                  <option>44</option>
+                  <option>45</option>
+                  <option>46</option>
+                  <option>47</option>
+                  <option>48</option>
+                  <option>49</option>
+                  <option>50</option>
+                  <option>51</option>
+                  <option>52</option>
+                  <option>53</option>
+                  <option>54</option>
+                  <option>55</option>
+                  <option>56</option>
+                  <option>57</option>
+                  <option>58</option>
+                  <option>59</option>
+                </select>
+                <div class="invalid-feedback">
+                  Please provide a valid state.
+                </div>
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+              <div class="col-12 col-md-6 mb-3">
+                <label for="validationSample04">Status</label>
+                <select
+                  type="text"
+                  onchange="getRemark();"
+                  class="form-control"
+                  id="currentStatus"
+                  name="status"
+                  placeholder="State"
+                  required=""
+                >
+                  {% for ac in status %}
+                  <option value="{{ac.id}}">{{ac}}</option>
+                  {% endfor %}
+                </select>
+                <div class="invalid-feedback">
+                  Please provide a valid state.
+                </div>
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+              <div class="col-12 col-md-6 mb-3">
+                <label for="remarks">Remark</label>
+                <select
+                  type="text"
+                  class="form-control"
+                  name="remark"
+                  id="remarks"
+                  onchange="check_remark();"
+                  required=""
+                ></select>
+                <div class="invalid-feedback">
+                  Please provide a valid state.
+                </div>
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+              <div class="col-12 col-md-12 mb-12">
+                <label for="remark_msg"></label
+                ><textarea
+                  type="text"
+                  class="form-control"
+                  readonly="readonly"
+                  name="remark_msg"
+                  id="remark_msg"
+                  required=""
+                >
+                </textarea>
+                <div class="invalid-feedback">.</div>
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+              <script></script>
+              <div class="col-12 col-md-6 mb-3">
+                <label for="validationSample04">Action Type</label>
+                <select
+                  type="text"
+                  class="form-control"
+                  id="action_type"
+                  onchange="get_purpose();"
+                  name="action"
+                  placeholder="State"
+                  required=""
+                >
+                  {% for ac in action %}
+                  <option value="{{ac.id}}">{{ac}}</option>
+                  {% endfor %}
+                </select>
+                <div class="invalid-feedback">
+                  Please provide a valid action type.
+                </div>
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+              <div class="col-12 col-md-6 mb-3">
+                <label for="purpose">Purpose</label>
+                <select
+                  type="text"
+                  class="form-control"
+                  id="purpose"
+                  onchange="get_next_action();"
+                  name="purpose"
+                  placeholder="State"
+                  required=""
+                ></select>
+                <div class="invalid-feedback">
+                  Please provide a valid purpose.
+                </div>
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+              <div class="col-12 col-md-12 mb-12">
+                <label for="next_action"></label>
+                <select
+                  type="text"
+                  class="form-control"
+                  name="next_action_id"
+                  onchange="next_action_msg.value=$('#next_action option:selected').text();"
+                  id="next_action"
+                  placeholder="State"
+                  required=""
+                ></select>
+                <div class="invalid-feedback">
+                  Please provide a valid action.
+                </div>
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+
+              <div class="col-12 col-md-12 mb-12">
+                <label for="next_action">Next Action</label
+                ><textarea
+                  type="text"
+                  class="form-control"
+                  name="next_action"
+                  id="next_action_msg"
+                  placeholder="State"
+                  required=""
+                >
+                </textarea>
+                <div class="invalid-feedback">
+                  Please provide a valid action.
+                </div>
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% include 'footer.html' %}

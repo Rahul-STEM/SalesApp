@@ -1,0 +1,185 @@
+{% include 'header.html' %}
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+ <div class="app-chat-container">
+                        <div class="row m-0 h-100">
+                            <div class="col d-flex flex-column p-0 h-100" data-perfect-scrollbar>
+
+
+
+
+
+
+
+                                <div class="container page__container">
+                                    <div class="card">
+
+
+                                        <div class="card-header">
+                                             <form method="post" style="float:left;">{% csrf_token %}<input type="date" name="from"  value="{{from}}"> <input type="date" value="{{to}}" name="to" > <input type="submit" value="Filter" class=" btn-primary" ></form>
+                                            <h3 class="text-right card-title">Total Task [ {{total}} ] </h3>
+                                        </div>
+
+                                        <div class="card-body text-right">
+                                            <div class="row card-group-row">
+                                                <div class="col-md card-group-row__col" onclick="window.open('/action_wise_activity?from={{from}}&to={{to}}&action=1&type=Calls','_blank')">
+                                                    <div class="card card-sm bg-primary border-0 card-group-row__card">
+                                                        <div class="card-body d-flex align-items-center">
+                                                            <div class="flex">
+                                                                <div class="card-title text-white">Calls</div>
+                                                                <h4 class="text-white mb-0">{{calls}}</h4>
+                                                            </div>
+                                                            <i class="material-icons text-white-50 icon-40pt ml-3 fa fa-phone"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md card-group-row__col" onclick="window.open('/action_wise_activity?from={{from}}&to={{to}}&action=2&type=Emails','_blank')">
+                                                    <div class="card card-sm bg-success border-0 card-group-row__card">
+                                                        <div class="card-body d-flex align-items-center">
+                                                            <div class="flex">
+                                                                <div class="card-title text-white">Emails</div>
+                                                                <h4 class="text-white mb-0">{{emails}}</h4>
+                                                            </div>
+                                                            <i class="material-icons text-white-50 icon-40pt ml-3 fa fa-envelope" ></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md card-group-row__col" onclick="window.open('/action_wise_activity?from={{from}}&to={{to}}&action=3&type=Meetings','_blank')">
+                                                    <div class="card card-sm bg-primary-dark border-0 card-group-row__card">
+                                                        <div class="card-body d-flex align-items-center">
+                                                            <div class="flex">
+                                                                <div class="card-title text-white">Meetings</div>
+                                                                <h4 class="text-white mb-0">{{meets}}</h4>
+                                                            </div>
+                                                            <i class="material-icons text-white-50 icon-40pt ml-3 fa fa-handshake"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="card-header row">
+                                                <div class="col-md-3 col-6 btn btn-info" >Open &nbsp;<span class="badge badge-success">{{open}}</span></div>
+                                                <div class="col-md-3 col-6 btn btn-info" >Open [RPEM] &nbsp;<span class="badge badge-success">{{open_rpem}}</span></div>
+                                                <div class="col-md-3 col-6 btn btn-primary" >Reachout &nbsp;<span class="badge badge-success">{{reachout}}</span></div>
+                                                <div class="col-md-3 col-6 btn btn-primary" >Tentative &nbsp;<span class="badge badge-success">{{tentative}}</span></div>
+                                                <div class="col-md-3 col-6 btn btn-success" >Positive &nbsp;<span class="badge badge-primary">{{positive}}</span></div>
+                                                <div class="col-md-3 col-6 btn btn-success" >Very Positive &nbsp;<span class="badge badge-primary">{{very_positive}}</span></div>
+                                                <div class="col-md-3 col-6 btn btn-success" >Closure &nbsp;<span class="badge badge-primary">{{closure}}</span></div>
+                                                <div class="col-md-3 col-6 btn btn-warning" >Will do later &nbsp;<span class="badge badge-success">{{wiil_do_later}}</span></div>
+                                                <div class="col-md-3 col-6 btn btn-danger" >Not Interested &nbsp;<span class="badge badge-success">{{ni}}</span></div>
+
+                                            </div>
+
+                        <div class="table-responsive">
+
+                                    <table id="example" class="display" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Employee Name</th>
+
+                                                            <th>Total task</th>
+                                                            <th>Completed With Yes</th>
+                                                            <th>Completed With No</th>
+                                                            <th>Pending</th>
+                                                            <th>Open tasks</th>
+                                                            <th>Open [RPEM] tasks</th>
+                                                            <th>Reachout tasks</th>
+                                                            <th>Tentative tasks</th>
+                                                            <th>Will-Do-Later tasks</th>
+                                                            <th>Not-Interest tasks</th>
+                                                            <th>Positive tasks</th>
+                                                            <th>Very Positive tasks</th>
+                                                            <th>Closure tasks</th>
+
+
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for d in users %}
+                                                        <tr style="cursor:pointer;" onclick="window.open('/employee-data/{{d.user_id}}?from={{from}}&to={{to}}','_blank')">
+                                                            <td>{{d.name}}</td>
+                                                            <td >{{d.totaltaks}}</td>
+                                                            <td >{{d.completed}}</td>
+                                                            <td >{{d.completed_with_no}}</td>
+                                                            <td >{{d.pending}}</td>
+                                                            <td >{{d.open}}</td>
+                                                            <td >{{d.open_rpem}}</td>
+                                                            <td >{{d.reachout}}</td>
+                                                            <td >{{d.tantative}}</td>
+                                                            <td >{{d.will_do_later}}</td>
+                                                            <td >{{d.not_interested}}</td>
+                                                            <td >{{d.positive}}</td>
+                                                            <td >{{d.very_positive}}</td>
+                                                            <td >{{d.closure}}</td>
+
+
+
+                                                        </tr>
+
+                                                    {% endfor %}
+
+
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                             <th>Employee Name</th>
+
+                                                            <th>Total task</th>
+                                                            <th>Completed With Yes</th>
+                                                            <th>Completed With No</th>
+                                                            <th>Pending</th>
+                                                            <th>Open tasks</th>
+                                                            <th>Open[RPEM] tasks</th>
+                                                            <th>Reachout tasks</th>
+                                                            <th>Tentative tasks</th>
+                                                            <th>Will-Do-Later tasks</th>
+                                                            <th>Not-Interest tasks</th>
+                                                            <th> Positive tasks</th>
+                                                            <th>Very Positive tasks</th>
+                                                            <th>Closure tasks</th>
+
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                                </div>
+                                        </div>
+                                        <script>
+
+                                            $(document).ready(function() {
+                                                var table = $('#example').DataTable({
+                                                    dom: 'Bfrtip',
+                                                buttons: [
+                                                    {
+                                                    extend:'excelHtml5',
+                                                    title:'synopsis reports between {{from}} and {{to}}',
+                                                    text: 'Download Excel',
+                                                 }
+
+                                                ]
+                                                });
+
+                                            } );
+                                        </script>
+
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+{% include 'footer.html' %}

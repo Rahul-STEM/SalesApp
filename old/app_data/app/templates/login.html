@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="tr">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="shortcut icon" href="{% static 'logo.png' %}">
+	<title>Stem Employee Login</title>
+	<!--[if lt IE 9]>
+
+    <![endif]-->
+	<link rel="stylesheet" href="{% static 'assets/css/ciuis-app.css' %}" type="text/css"/>
+</head>
+<body class="ciuis-body-splash-screen">
+	<div class="ciuis-body-wrapper ciuis-body-login">
+		<div class="ciuis-body-content">
+
+			<div  class="main-content container-fluid col-md-8 col-md-offset-2">
+				<div class="" style="width:100%;">
+					<div class="panel panel-primary" style="margin-top:20px;width:100%;border:1px solid #02417c;box-shadow:8px 8px 10px 15px lightgray;">
+						<div class="panel-heading" >
+							<img src="{% static '32.png' %}" style="margin-left:20px;" alt="logo" class="logo-img"><b style="color:white;">STEM CRM</b>
+						</div>
+						<div class="panel-body">
+							<h3><center><b>EMPLOYEE LOGIN</b></center></h3>
+							 <span class="splash-description">Please login with your user information.</span>
+							<br>
+							<form method="post" action="/login/validation">
+								{% csrf_token %}
+							<div class="form-group">
+								<input id="email" type="Text" placeholder="Username" name="username" autocomplete="off" class="form-control">
+							</div>
+							<div class="form-group">
+								<input id="password" type="password" name="password" placeholder="********" class="form-control">
+							</div>
+							<div class="form-group row login-tools">
+								<div class="col-xs-6 login-remember">
+									<div class="ciuis-body-checkbox">
+										<input type="checkbox" id="remember">
+										<label for="remember">Remember me</label>
+									</div>
+								</div>
+								<div class="col-xs-6 login-forgot-password"><a href="login/forgot">Forgot Password ?       </a>
+								</div>
+							</div>
+							<div class="form-group login-submit">
+								<button type="submit" class="btn btn-ciuis btn-xl">Login</button>
+							</div>
+							<label class="text-danger">{{msg}}</label>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<script src="{% static 'assets/lib/jquery/jquery.min.css' %}" type="text/javascript"></script>
+<script src="{% static 'assets/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.min.css' %}" type="text/javascript"></script>
+<script src="{% static 'assets/js/Ciuis.css' %}" type="text/javascript"></script>
+<script src="{% static 'assets/lib/bootstrap/dist/js/bootstrap.min.css' %}" type="text/javascript"></script>
+<script src="{% static 'assets/lib/jquery.gritter/js/jquery.gritter.css' %}" type="text/javascript"></script>
+
+</body>
+</html>

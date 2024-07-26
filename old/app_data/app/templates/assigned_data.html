@@ -1,0 +1,151 @@
+{% include 'header.html' %}
+{% load static %}
+
+<form method="post" id="assign_form">
+    {% csrf_token %}
+    <div class="app-chat-container">
+                        <div class="row m-0 h-100">
+                            <div class="col d-flex flex-column p-0 h-100" data-perfect-scrollbar>
+
+
+
+
+
+                                <div class="container page__container">
+
+
+                                    <div class="row card-group-row">
+
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-header bg-white d-flex align-items-center">
+                                            <h4 class="card-header__title flex m-0">Forwarded Company [{{count}}]</h4>
+                                            <button type="button" class="btn btn-primary" onclick="return assign_person();">Assigned TO</button>
+<!--                                            <div data-toggle="flatpickr" data-flatpickr-wrap="true" data-flatpickr-static="true" data-flatpickr-mode="range" data-flatpickr-alt-format="d/m/Y" data-flatpickr-date-format="d/m/Y">-->
+<!--                                                <a href="javascript:void(0)" class="link-date" data-toggle>13/03/2018 <span class="text-muted mx-1">to</span> 20/03/2018</a>-->
+<!--                                                <input class="flatpickr-hidden-input" type="hidden" value="13/03/2018 to 20/03/2018" data-input>-->
+<!--                                            </div>-->
+                                        </div>
+                                        <table id="logtable">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                        {% for lg in data %}
+                                            <tr style="cursor:pointer;" >
+                                                <td><input type="checkbox" name="init_id" value="{{lg.id}}"></td>
+                                                <td onclick="window.open('/company/{{lg.cmpid_id}}','_blank')">
+                                                <div class="card-header row" >
+                                                <div class="col-xs-6 col-md-6">
+                                                    <span class="text-muted">{{lg.remarks}}</span>
+                                                    <h4><b>{{lg.compname}}</b></h4>
+                                                    <span class="text-muted">updated</span>
+                                                    <span class="text-muted">{{lg.date}}</span>
+
+                                                </div>
+                                                <div class="col-xs-6 col-md-6 text-right">
+                                                    <span class="" style="background:{{lg.status.color}};color:white;padding:5px;border-radius:20px;">{{lg.status}}</span>
+                                                    <br>
+                                                    <span class="text-muted">Assigned from :- {{lg.name}} </span>
+                                                    <br>
+                                                    <span class="text-muted">Assigned to :- {{lg.assignedto}} </span>
+                                                </div>
+                                            </div>
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+<!-- The Modal -->
+<div class="modal" id="assignModal" style="display:none;position:fixed;overflow:scroll">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+
+
+        <button type="button" class="close" onclick="return hide_assign_person();">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+          <input type="hidden" name="assigned_to" id="assigned_to">
+
+          <ul style="list-style:none;">
+              {% for us in users %}
+                <li><input type="radio" onchange="return submit_form(this.value);" name="assign_to" value="{{us.user_id}}">&nbsp;<b>{{us.name}}</b><hr style="height:1px;"></li>
+              {% endfor %}
+          </ul>
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+
+      </div>
+
+    </div>
+  </div>
+</div>
+</form>
+
+<script>
+     $(document).ready(function() {
+                                            $('#logtable').DataTable( {
+                                                dom: 'Bfrtip',
+                                                buttons: [
+                                                    'pdfHtml5',
+
+
+                                                ]
+                                            } );
+                                            $("#logtable_filter").hide();
+                                    });
+
+                                    function assign_person(){
+                                    var count=parseInt($('input[name="init_id"]:checked').length);
+                                    if (count>0){
+
+                                        $('#assignModal').show();
+                                        }else{
+                                    alert('Select Company first..');
+                                    }
+                                    }
+                                    function hide_assign_person(){
+
+                                        $('#assignModal').hide();
+                                    }
+
+                                    function submit_form(str){
+
+                                    var conn=confirm('Do you really want to assign?');
+                                    if(conn==true){
+                                    $('#assigned_to').val(str);
+                                    $('#assign_form').submit();
+                                    }else{
+                                    return false;
+                                    }
+
+                                    }
+
+</script>
+
+
+{% include 'footer.html' %}

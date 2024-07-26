@@ -1,0 +1,130 @@
+{% include 'header.html' %}
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+ <div class="app-chat-container">
+                        <div class="row m-0 h-100">
+                            <div class="col d-flex flex-column p-0 h-100" data-perfect-scrollbar>
+
+
+
+
+
+
+
+                                <div class="container page__container">
+                                    <div class="card">
+
+
+                                        <div class="card-header">
+                                            
+                                             <form method="post" style="float:left;">{% csrf_token %}
+                                             <label>Time Duration :-  </label><select name="dateType"><option value="selected">Selected</option><option value="all_date">All Date</option></select>
+                                             <input type="date" name="from"  value="{{from}}"> <input type="date" value="{{to}}" name="to" > <input type="submit" value="Filter" class=" btn-primary" ></form>
+
+                                        </div>
+
+                                        <div class="card-body text-right">
+
+
+                        <div class="table-responsive">
+
+                                    <table id="example" class="display" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Employee Name</th>
+
+                                                            <th>Open to Open [RPEM]</th>
+                                                            <th>Open[RPEM] to Reachout</th>
+                                                            <th>Reachout to Tentative</th>
+                                                            <th>Tentative to Positive</th>
+                                                            <th>Positive to Very Positive</th>
+                                                            <th>Very Positive to Closure</th>
+                                                            <th>Open to Willdolater</th>
+                                                            <th>Open to Not interested</th>
+                                                            <th>Reachout to Will do later</th>
+                                                            <th>Rechout to Not interested</th>
+                                                            <th>Tentative to Will do later</th>
+                                                            <th>Tentative to Not interested</th>
+                                                            <th>Not interested  to Reachout</th>
+                                                            <th>Will do later to Reachout</th>
+                                                            <th>Positive to Not interested</th>
+                                                            <th>Positive to Will do later</th>
+
+
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for d in users %}
+<!--                                                        <tr style="cursor:pointer;" onclick="window.open('/employee-data/{{d.user_id}}?from={{from}}&to={{to}}','_blank')">-->
+                                                    <tr>
+                                                            <td>{{d.name}}</td>
+
+                                                            <td >{% if d.open_to_open_rpem is not NULL %}{{d.open_to_open_rpem|floatformat }} % {% else %}0 %{% endif %}</td>
+                                                            <td >{% if d.open_rpem_to_reachout is not NULL %}{{d.open_rpem_to_reachout|floatformat }} % {% else %}0 %{% endif %}</td>
+                                                            <td >{% if d.reachout_to_tentative is not NULL %}{{d.reachout_to_tentative|floatformat }} % {% else %}0 %{% endif %}</td>
+                                                            <td >{% if d.tentative_to_verypositive is not NULL %}{{d.tentative_to_verypositive|floatformat }} % {% else %}0 %{% endif %}</td>
+                                                        <td >{% if d.positive_to_verypositive is not NULL %}{{d.positive_to_verypositive|floatformat }} % {% else %}0 %{% endif %}</td>
+                                                        <td >{% if d.verypositive_to_closure is not NULL %}{{d.verypositive_to_closure|floatformat }} % {% else %}0 %{% endif %}</td>
+                                                            <td>{% if d.open_to_willdolater is not NULL %}{{d.open_to_willdolater|floatformat }} % {% else %}0 %{% endif %}</td>
+                                                            <td>{% if d.open_to_negative is not NULL %}{{d.open_to_negative|floatformat }} % {% else %}0 %{% endif %}</td>
+                                                            <td>{% if d.reachout_to_willdolater is not NULL %}{{d.reachout_to_willdolater|floatformat }} % {% else %}0 %{% endif %}</td>
+                                                            <td>{% if d.rechout_negative is not NULL %}{{d.rechout_negative|floatformat }} % {% else %}0 %{% endif %}</td>
+                                                            <td>{% if d.tentative_willdolater is not NULL %}{{d.tentative_willdolater|floatformat }} % {% else %}0 %{% endif %}</td>
+                                                            <td>{% if d.tentative_negative is not NULL %}{{d.tentative_negative|floatformat }} % {% else %}0 %{% endif %}</td>
+                                                            <td>{% if d.negativereachout is not NULL %}{{d.negativereachout|floatformat }} % {% else %}0 %{% endif %}</td>
+                                                            <td>{% if d.willdolater_reachout is not NULL %}{{d.willdolater_reachout|floatformat }} % {% else %}0 %{% endif %}</td>
+                                                            <td>{% if d.positive_negative is not NULL %}{{d.positive_negative|floatformat }} % {% else %}0 %{% endif %}</td>
+                                                            <td>{% if d.positive_willdolater is not NULL %}{{d.positive_willdolater|floatformat }} % {% else %}0 %{% endif %}</td>
+
+
+
+                                                        </tr>
+
+                                                    {% endfor %}
+
+
+                                                    </tbody>
+                                                   
+                                                </table>
+                                                </div>
+                                        </div>
+                                        <script>
+
+                                            $(document).ready(function() {
+                                                $('#example').DataTable( {
+                                                dom: 'Bfrtip',
+                                                buttons: [
+                                                    {
+                                                    extend:'excelHtml5',
+                                                    title:'conversion reports between {{from}} and {{to}}',
+                                                    text: 'Download Excel',
+                                                 }
+
+                                                ]
+                                            } );
+
+                                            } );
+                                        </script>
+
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+{% include 'footer.html' %}

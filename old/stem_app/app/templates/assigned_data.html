@@ -1,0 +1,256 @@
+{% include 'header.html' %}
+{% load static %}
+
+<form method="get" target="_blank">
+    
+    <select name="selected_user">
+        <option value="">Select User</option>
+        {% for us in searching_users %}
+        <option value="{{us.user_id}}">{{us.name}}</option>
+        
+        {% endfor %}
+    </select>
+    <select name="type" required>
+        <option value="">Type</option>
+        <option value="from">From</option>
+        <option value="to">To</option>
+    </select>
+    <select name="status">
+        <option value="">Select Status</option>
+        {% for sf in status_field  %}
+            <option value="{{sf.id}}">{{sf}}</option>
+        {% endfor %}
+    </select>
+    <input type="date" name="from">
+        <input type="date" name="to">
+    <button type="submit">Search</button>
+</form>
+
+<form method="post" id="assign_form">
+    {% csrf_token %}
+    <input type="hidden" value="{{selected_user}}" name="selected_user">
+    <input type="hidden" value="{{filter_from}}" name="filter_from">
+    <input type="hidden" value="{{filter_to}}" name="filter_to">
+    <input type="hidden" value="{{filter_status}}" name="filter_status">
+    <input type="hidden" value="{{filter_type}}" name="filter_type">
+    
+    
+
+
+
+
+    <div class="app-chat-container">
+                        <div class="row m-0 h-100">
+                            <div class="col d-flex flex-column p-0 h-100" data-perfect-scrollbar>
+
+                                <div class="container page__container">
+
+
+                                    <div class="row card-group-row">
+
+                                    </div>
+                                    
+                                    
+
+                                    <div class="card">
+                                        
+                                        
+                                        
+                                        <div class="card-header bg-white d-flex align-items-center">
+                                            <h4 class="card-header__title flex m-0">Forwarded Company [{{count}}]</h4>
+                                            <button type="button" class="btn btn-primary" onclick="return submit_notes_form();">Assigned TO</button>
+                                            <button type="button" class="btn btn-primary" onclick="window.location.href='/export-assigned-data'">Export</button>
+<!--                                            <div data-toggle="flatpickr" data-flatpickr-wrap="true" data-flatpickr-static="true" data-flatpickr-mode="range" data-flatpickr-alt-format="d/m/Y" data-flatpickr-date-format="d/m/Y">-->
+<!--                                                <a href="javascript:void(0)" class="link-date" data-toggle>13/03/2018 <span class="text-muted mx-1">to</span> 20/03/2018</a>-->
+<!--                                                <input class="flatpickr-hidden-input" type="hidden" value="13/03/2018 to 20/03/2018" data-input>-->
+<!--                                            </div>-->
+                                        </div>
+                                        <table id="logtable">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                        {% for lg in data %}
+                                            <tr style="cursor:pointer;" >
+                                                <td><input type="checkbox" name="init_id" value="{{lg.id}}"></td>
+                                                <td onclick="window.open('/company/{{lg.cmpid_id}}','_blank')">
+                                                <div class="card-header row" >
+                                                <div class="col-xs-6 col-md-6">
+                                                    <span class="text-muted">{{lg.remarks}}</span>
+                                                    <h4><b>{{lg.compname}}</b></h4>
+                                                    <span class="text-muted">Updated :- </span>
+                                                    <span class="text-muted">{{lg.fwd_date}}</span>
+
+                                                </div>
+                                                <div class="col-xs-6 col-md-6 text-right">
+                                                    <span class="" style="background:{{lg.status.color}};color:white;padding:5px;border-radius:20px;">{{lg.status}}</span>
+                                                    <br>
+                                                    <span class="text-muted">Assigned from :- {{lg.name}} </span>
+                                                    <br>
+                                                    <span class="text-muted">Assigned to :- {{lg.assignedto}} </span>
+                                                </div>
+                                            </div>
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+<!-- The Modal -->
+<div class="modal" id="assignModal" style="display:none;position:fixed;overflow:scroll">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+
+
+        <button type="button" class="close" onclick="return hide_assign_person();">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+          <input type="hidden" name="assigned_to" id="assigned_to">
+
+          <ul style="list-style:none;">
+              {% for us in users %}
+                <li><input type="radio" onchange="return submit_form(this.value);" name="assign_to" value="{{us.user_id}}">&nbsp;<b>{{us.name}}</b><hr style="height:1px;"></li>
+              {% endfor %}
+              {% if request.user.is_staff %}
+              <li><input type="radio" onchange="return submit_form(this.value);" name="assign_to" value="54">&nbsp;<b>Unnikrishnan Nair</b><hr style="height:1px;"></li>
+              {% endif %}
+          </ul>
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal" id="notesModal" style="display:none;position:fixed;overflow:scroll">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+
+
+        <button type="button" class="close" onclick="$('#notesModal').hide();">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+          <legend>Remarks</legend>
+          <textarea  name="assigned_notes" id="assigned_notes" rows="5" placeholder="Remarks" class="form-control" ></textarea>
+          
+          <br>
+          <button class="btn btn-primary" type="button" onclick="return assign_person();">
+              Continue >>>
+          </button>
+
+          
+
+      </div>
+      
+      
+      
+      
+      
+      
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+
+      </div>
+
+    </div>
+  </div>
+</div>
+</form>
+
+<script>
+     $(document).ready(function() {
+                                            $('#logtable').DataTable( {
+                                                dom: 'Bfrtip',
+                                                buttons: [
+                                                    'pdfHtml5',
+
+
+                                                ]
+                                            } );
+                                            $("#logtable_filter").hide();
+                                    });
+
+                                    function assign_person(){
+                                        $('#notesModal').hide();
+                                    var count=parseInt($('input[name="init_id"]:checked').length);
+                                    if (count>0){
+
+                                        $('#assignModal').show();
+                                        }else{
+                                    alert('Select Company first..');
+                                    }
+                                    }
+                                    function hide_assign_person(){
+
+                                        $('#assignModal').hide();
+                                    }
+
+                                    function submit_form(str){
+                                        
+                                    var notes=$("#assigned_notes").val();
+                                    if(notes!=""){
+                                        $('#notesModal').hide();
+                                    var conn=confirm('Do you really want to assign?');
+                                    if(conn==true){
+                                    $('#assigned_to').val(str);
+                                    $('#assign_form').submit();
+                                    }else{
+                                    return false;
+                                    }
+
+                                    }else{
+                                        $('#notesModal').show();
+                                        
+                                    }
+                                    }
+                                    
+                                    function submit_notes_form(str){
+                                        
+                                        var count=parseInt($('input[name="init_id"]:checked').length);
+                                    if (count>0){
+
+                                        
+                                    
+                                        $('#notesModal').show();
+                                        
+                                   
+                                        }else{
+                                    alert('Select Company first..');
+                                    }
+                                        
+                                    
+                                    }
+
+</script>
+
+
+{% include 'footer.html' %}

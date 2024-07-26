@@ -147,7 +147,7 @@
       }
       ?>
     <style>
-.scrollme{overflow-x:auto;h1{font-size:36px;color:#333}p{font-size:24px;color:#666;margin:10px}.container{background-color:#fff;padding:20px;border-radius:10px;box-shadow:0 0 10px rgb(0 0 0 / .2)}}.custom-card{padding:20px;border:1px solid #e0e0e0;border-radius:5px}.custom-card-header{background-color:#007bff;color:#fff;padding:10px 20px;border-radius:5px 5px 0 0}.custom-radio-label{font-weight:700}.card.container-fluid{background-color:honeydew}p#totalcompany{font-size:12px;padding:10px;color:green;font-weight:700;font-family:sans-serif}label{font-size:12px!important}div#maintaskcard{background:antiquewhite}div#selectCategory{background:#fff6dd}div#actionnotplaned{background:#434630;color:#fff}.card.p-4.taskselectionarea,#companyLocationdatacard,#selectCategory{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}div#selectCategory{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}.modal-footer{justify-content:center!important}div#pstAssignCard,div#taskActionCard,div#partnertype,div#actionPlanned,div#companyLocationdatacard,div#clusterLocactionFiltercard,div#sameStatusLastLimitDays,div#planbutnotinitiatedcard,div#planbutnotinitiatedcardold,div#create_barg_in_meeting,div#auto_assign,div#pendingAutotaskCard,div#firstQuarter1,div#reviewTargetDate{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}div#maintaskcard{background:#bfbfbf}.card-header.custom-card-header{border-radius:43px;text-align:center;padding:2px}.custom-card{background:#efb2b2}span.alertmessagecmp{font-size:14px;padding:2px;color:red}div#plantimerBox{background:linear-gradient(to right,#a80077,#66ff00);border-radius: 56px;box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;}span#timer{font-size:38px;color:#fff}.stopbtntimer{align-items:center;justify-content:center;display:flex}button#stop{padding: 7px 12px;} table.dataTable>thead>tr>th:not(.sorting_disabled), table.dataTable>thead>tr>td:not(.sorting_disabled) {padding-right: 30px; background: #851241;color: white;}
+.scrollme{overflow-x:auto;h1{font-size:36px;color:#333}p{font-size:24px;color:#666;margin:10px}.container{background-color:#fff;padding:20px;border-radius:10px;box-shadow:0 0 10px rgb(0 0 0 / .2)}}.custom-card{padding:20px;border:1px solid #e0e0e0;border-radius:5px}.custom-card-header{background-color:#007bff;color:#fff;padding:10px 20px;border-radius:5px 5px 0 0}.custom-radio-label{font-weight:700}.card.container-fluid{background-color:honeydew}p#totalcompany{font-size:12px;padding:10px;color:green;font-weight:700;font-family:sans-serif}label{font-size:12px!important}div#maintaskcard{background:antiquewhite}div#selectCategory{background:#fff6dd}div#actionnotplaned{background:#434630;color:#fff}.card.p-4.taskselectionarea,#companyLocationdatacard,#selectCategory{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}div#selectCategory{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}.modal-footer{justify-content:center!important}div#pstAssignCard,div#taskActionCard,div#partnertype,div#actionPlanned,div#companyLocationdatacard,div#clusterLocactionFiltercard,div#sameStatusLastLimitDays,div#planbutnotinitiatedcard,div#planbutnotinitiatedcardold,div#auto_assign,div#pendingAutotaskCard,div#firstQuarter1,div#reviewTargetDate{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}div#maintaskcard{background:#bfbfbf}.card-header.custom-card-header{border-radius:43px;text-align:center;padding:2px}.custom-card{background:#efb2b2}span.alertmessagecmp{font-size:14px;padding:2px;color:red}div#plantimerBox{background:linear-gradient(to right,#a80077,#66ff00);border-radius: 56px;box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;}span#timer{font-size:38px;color:#fff}.stopbtntimer{align-items:center;justify-content:center;display:flex}button#stop{padding: 7px 12px;} table.dataTable>thead>tr>th:not(.sorting_disabled), table.dataTable>thead>tr>td:not(.sorting_disabled) {padding-right: 30px; background: #851241;color: white;}
     </style>
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -232,6 +232,7 @@
             $reqCount = sizeof($getreqData);
             $getAutoTaskTime = sizeof($getAutoTaskTime);
             $approvel_status = $getreqData[0]->approvel_status;
+            $oldPendTaskcnt = sizeof($oldPendTask);
                 // if($pendingtask !== 0){
                 // echo "<pre>";
                 //   print_r($reqCount);
@@ -271,14 +272,43 @@
             </div>
             <?php }}else if($adate == date("Y-m-d") || $approvel_status == '' || $approvel_status =='Reject'){
              
-              if($reqCount !== 1 && $adate == date("Y-m-d")){
-                
-              ?>
+            if($reqCount !== 1 && $adate == date("Y-m-d")){
+
+                $getPendingTaskreq = $this->Menu_model->GetUserRequestForPendingTask($uid,$adate);
+                $getPendingTaskreqcnt = sizeof($getPendingTaskreq);
+
+                if($getPendingTaskreqcnt > 0){
+                    $getPendingTaskreqappr = $getPendingTaskreq[0]->approvel_status;
+                  }
+                  ?>
+
             <div class="card p-2 bg-dark text-center">
               <h5><i>If you want to plan task for todays you need to first approvel.</i></h5>
             </div>
             <form class="was-validated" action="<?=base_url();?>Menu/RequestForTodaysTaskPlan/<?=$adate ?>" method="post">
               <input type="hidden" value="<?= $adate?>" name="setdatebyuser">
+              <input type="hidden" value="<?= $oldPendTaskcnt?>" name="taskcnt">
+              <div class="row">
+              <div class="col-md-12">
+                  <label for="validationServer04" class="form-label">
+                  Why would you want to set up a todays planner?
+                  </label>
+                  <select class="form-select is-invalid" id="validationServer04" aria-describedby="validationServer04Feedback" name="would_you_want" required>
+                    <option selected disabled value="">Choose...</option>
+                    <option value="Planning urgent tasks for today">Planning urgent tasks for today</option>
+                    <option value="Planning yesterday pending tasks">Planning yesterday's pending tasks</option>
+                    <option value="Not planned yesterday due to network issues">Not planned yesterday due to network issues</option>
+                    <option value="Not planned yesterday due to health issues">Not planned yesterday due to health issues</option>
+                    <option value="Not planned yesterday due to an urgent meeting">Not planned yesterday due to an urgent meeting</option>
+                    <option value="Forgot to set up the planner yesterday">Forgot to set up the planner yesterday</option>
+                  </select>
+                  <div id="validationServer04Feedback" class="invalid-feedback">
+                   * Please select a valid state.
+                  </div>
+                </div>
+                
+          
+              </div>
               <div class="mb-3">
                 <label for="requestForTodaysTaskPlan" class="form-label">Type Reason : </label>
                 <textarea class="form-control" name="requestForTodaysTaskPlan" id="requestForTodaysTaskPlan" required rows="3"></textarea>
@@ -288,112 +318,14 @@
                 <input type="submit" class="btn btn-warning" value="Send Request">
               </div>
             </form>
-            <?php } 
-            }
 
-              if($reqCount == 1 && $approvel_status == '' || $approvel_status =='Reject' ){
-              ?>
-            <table class="table table-striped table-dark">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Date</th>
-                  <th scope="col">Request Message</th>
-                  <th scope="col">Approvel Status</th>
-                  <th scope="col">Remarks</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php foreach($getreqData as $data){ ?>
-                <tr>
-                  <th>1</th>
-                  <td><?= $this->Menu_model->get_userbyid($data->user_id)[0]->name ?></td>
-                  <td><?= $data->date ?></td>
-                  <td><?= $data->request_remarks ?></td>
-                  <td>
-                    <?php
-                      if($data->approvel_status == ''){ ?>
-                    <span class="p-1 bg-warning mr-2">Pending</span>
-                    <?php }else if($data->approvel_status == 'Approved'){ ?>
-                    <span class="p-1 bg-success mr-2">Approved</span>
-                    <?php }else{ ?>
-                    <span class="p-1 bg-danger mr-2">Reject</span>
-                    <?php }?>
-                  </td>
-                  <td><?=$data->remarks ?></td>
-                </tr>
-                <?php } ?>
-              </tbody>
-            </table>
-            <?php }else if($getAutoTaskTime ==1 && $reqCount == 1 && $approvel_status == 'Approved' || $adate !== date("Y-m-d")){   
-               if($getAutoTaskTime == 1){
 
-                $oldPendTaskcnt = sizeof($oldPendTask);
-                $getPendingTaskreq = $this->Menu_model->GetUserRequestForPendingTask($uid,$adate);
-                $getPendingTaskreqcnt = sizeof($getPendingTaskreq);
-
-                $getPendingTaskreq = $this->Menu_model->GetUserRequestForPendingTask($uid,$adate);
-
-                $getPendingTaskreqcnt = sizeof($getPendingTaskreq); 
-                if($getPendingTaskreqcnt > 0){
-                  $getPendingTaskreqappr = $getPendingTaskreq[0]->approvel_status;
-                }
-                if($oldPendTaskcnt > 0 && ($getPendingTaskreqappr !== '1')){ ?>
-                    <div class="card p-2 text-center bg-gray">
-                      <h3> Request for old pending Task </h3>
-                    </div>
-                    <?php if($getPendingTaskreqcnt == 0){?>
-                    <form class="was-validated" action="<?=base_url();?>Menu/RequestForYestTaskPlan/<?=$adate ?>" method="post">
-                    <input type="hidden" value="<?= $adate?>" name="setdatebyuser">
-                    <input type="hidden" value="<?= $oldPendTaskcnt?>" name="oldPendTaskcnt">
-                    <div class="mb-3">
-                      <label for="requestForTodaysTaskPlan" class="form-label">Type Reason why you are not work : </label>
-                      <textarea class="form-control" name="todaysPendingTaskPlanrem" id="todaysPendingTaskPlan" required rows="3"></textarea>
-                      <div class="invalid-feedback">* Invalid Message</div>
-                    </div>
-                    <div class="mb-3 text-center">
-                      <input type="submit" class="btn btn-warning" value="Send Request For Work With Pending Task">
-                    </div>
-                  </form>
-                  <?php } else if($getPendingTaskreqcnt == 1 && ($getPendingTaskreqappr == '' || $getPendingTaskreqappr == '0')) { ?>
-            <table class="table table-striped table-dark">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Date</th>
-                  <th scope="col">Task Count</th>
-                  <th scope="col">Request Message</th>
-                  <th scope="col">Approvel Status</th>
-                  <th scope="col">Remarks</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php foreach( $getPendingTaskreq as $data){ ?>
-                <tr>
-                  <th>1</th>
-                  <td><?= $this->Menu_model->get_userbyid($data->user_id)[0]->name ?></td>
-                  <td><?= $data->req_date ?></td>
-                  <td><?= $data->taskcnt ?></td>
-                  <td><?= $data->request_remarks ?></td>
-                  <td>
-                    <?php
-                      if($data->approvel_status == ''){ ?>
-                    <span class="p-1 bg-warning mr-2">Pending</span>
-                    <?php }else if($data->approvel_status == 1){ ?>
-                    <span class="p-1 bg-success mr-2">Approved</span>
-                    <?php }elseif($data->approvel_status == 0){ ?>
-                    <span class="p-1 bg-danger mr-2">Reject</span>
-                    <?php }?>
-                  </td>
-                  <td><?=$data->approvel_reamrks ?></td>
-                </tr>
-                <?php } ?>
-              </tbody>
-            </table>
-               <?php } ?> 
-               <hr>
+           <?php if($oldPendTaskcnt > 0 && ($getPendingTaskreqappr !== '1')){ ?>
+            <hr>
+            <div class="card p-2 text-center bg-danger">
+                <h3>Yesterday Pending Task </h3>
+            </div>
+     <hr>
        <div class="table-responsive">
             <table id="example10" class="table table-striped table-bordered" cellspacing="0" width="100%">
               <thead>
@@ -426,10 +358,54 @@
               </tbody>
             </table>
             </div>
-              <?php }else{ ?>
-               <br>
-               <br>
-               <br>
+              <?php } ?>
+
+
+
+
+            <?php } 
+            }
+
+              if($reqCount == 1 && $approvel_status == '' || $approvel_status =='Reject' ){
+              ?>
+            <table class="table table-striped table-dark">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Request Type</th>
+                  <th scope="col">Request Message</th>
+                  <th scope="col">Approvel Status</th>
+                  <th scope="col">Remarks</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach($getreqData as $data){ ?>
+                <tr>
+                  <th>1</th>
+                  <td><?= $this->Menu_model->get_userbyid($data->user_id)[0]->name ?></td>
+                  <td><?= $data->created_at ?></td>
+                  <td><?= $data->would_you_want ?></td>
+                  <td><?= $data->request_remarks ?></td>
+                  <td>
+                    <?php
+                      if($data->approvel_status == ''){ ?>
+                    <span class="p-1 bg-warning mr-2">Pending</span>
+                    <?php }else if($data->approvel_status == 'Approved'){ ?>
+                    <span class="p-1 bg-success mr-2">Approved</span>
+                    <?php }else{ ?>
+                    <span class="p-1 bg-danger mr-2">Reject</span>
+                    <?php }?>
+                  </td>
+                  <td><?=$data->remarks ?></td>
+                </tr>
+                <?php } ?>
+              </tbody>
+            </table>
+            <?php }else if($getAutoTaskTime ==1 && $reqCount == 1 && $approvel_status == 'Approved' || $adate !== date("Y-m-d")){   
+               if($getAutoTaskTime == 1){ ?>
+
             </div>
             <section class="content">
               <div class="card p-3 container-fluid">
@@ -547,7 +523,7 @@
                           <span style="color:red;">Old Pending Task (<?= $getoldPendingTaskcnt; ?>)</span>
                         </label>
                         </div>
-                        <?php } ?>
+                        <?php }else{ ?>
                         <div class="form-check">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Compnay Name" >Company Name
@@ -619,13 +595,14 @@
                           <input type="radio" class="form-check-input" name="optradio" value="Review Target Date" > Review Target Date
                           </label>
                         </div>
+                        <!-- <div class="form-check">
+                        <label>
+                        <input type="radio" class="form-check-input" name="optradio" value="actionNotPlanned" > Action Not Planned
+                        </label>
+                        </div> -->
 
-                        <div class="form-check">
-                          <label class="form-check-label custom-radio-label">
-                          <input type="radio" class="form-check-input" name="optradio" value="Create Barge-in Meeting" > Create Meeting
-                          </label>
-                        </div>
-                        <?php  }?>
+                       
+                        <?php  } }?>
                         <hr>
                         <div class="card-header">
                           <b>Let's Start Creating Task for <span id="tasktype"></span></b> <hr>
@@ -1074,7 +1051,7 @@
                         <p class="p-2 text-white" id="plancomp"></p>
                       </div>
 
-                      <div id="planbutnotinitiatedcard" class="card p-4" >
+                      <div id="planbutnotinitiatedcardold" class="card p-4" >
                         <div class="form-group">
                           <label>Task/Action (Old Pending Task)</label>
                           <select id="planbutnoinit_TaskDataold" class="form-control" name="task_action">
@@ -1169,32 +1146,7 @@
                     </div>
 
 
-                    <div id="create_barg_in_meeting" class="card p-4" >
-                        <div class="form-group">
-                          <label>Create Barge in Meeting</label>
-                          <select class="form-control" id="slct_barg_in_meeting">
-                            <option selected disabled>Select Bargin Company Type</option>
-                            <option value="From Funnel">From Funnel</option>
-                            <option value="Other">Other</option>
-                          </select>
-                        </div>
-                     
-
-                      <div id="selectcompanyname_barg" class="form-group">
-                          <lable>Enter Company Name Or CID</lable>  <hr>   
-                          <?php $allCmpData = $this->Menu_model->GetAllCompanyByUserID($uid); ?>
-                          
-                          <input type="search" class="form-control" class="search" id="search_company_data" placeholder="Search" list="data">
-                            <datalist id="data">
-                            <?php foreach($allCmpData as $cmp){ ?>
-                                <option value="<?=$cmp->com_id?> - <?= $cmp->compname?>"/>
-                                <?php } ?>
-                            </datalist>
-                          </div>
-
-
-                          </div>
-
+                   
 
                           <div id="auto_assign" class="card p-4" >
                             <div class="form-group">
@@ -1231,8 +1183,7 @@
                             <select id="ntactionnew" name="ntaction" class="form-control" required="">
                               <option value="">Select Action</option>
                               <?php $action = $this->Menu_model->get_action();
-                                foreach($action as $a){if($a->id!=4 && $a->id!=6 && $a->id!=8 && $a->id!=9 && $a->id!=11){
-                                  // if ($a->id == 3){$atname = 'Barg in Meeting';}else{$atname =$a->name;}
+                                foreach($action as $a){if($a->id!=3 && $a->id!=4 && $a->id!=6 && $a->id!=8 && $a->id!=9 && $a->id!=11){
                                 ?>
                               <option value="<?=$a->id;?>"><?=$a->name;?></option>
                               <?php }} ?>
@@ -1308,7 +1259,7 @@
                   <div class="card col-lg-4 col-sm-4" id="content">
                     <p id="demo" class="bg-primary text-center card p-2 m-2">Time Spent in Task Planning: 00:00:00</p>
                     <center>
-                      <b><i>Total Time Spent in Task Planning : <?=$tptime?></i></b>
+                      <b><i>Total Time Spent in Task Planning : <?=$planSessionmin; ?></i></b>
                       <p class="m-auto" id="chart_div"></p>
                       <hr>
                     </center>
@@ -1508,7 +1459,7 @@
                 </div>
               </div>
             </section>
-            <?php } }
+            <?php  }
               }
               ?>
           </div>
@@ -1907,6 +1858,7 @@
                     $("#selectcompanybyuser").html('');
                     $("#totalcompany").text('');
                     var uid = $("#curuserid").val();
+               
                         $.ajax({
                         url:'<?=base_url();?>Menu/getstatuscmpnotplaned',
                         type: "POST",
@@ -3695,102 +3647,7 @@
                     }
 
                     
-                    if(val == 'Create Barge-in Meeting'){
-                    
-                    $('#create_barg_in_meeting').show();
-                    $(".taskselectionarea").hide();
-                    $('#partnertype').hide();
-                    $('#maintaskcard').hide();
-                    $('#status_taskaction_card').hide();
-                    $('#taskaction_card_area').hide();
-                    $('#taskActionbyuserCard').hide();
-                    $('#taskPurposebyuserCard').hide();
-                    var uid = $("#curuserid").val();
-                    
-                    $('#slct_barg_in_meeting').on('change', function() {
-                      var slct_bargin = $(this).val();
-                          
-                          if(slct_bargin == 'From Funnel'){
-                            $('#selectcompanyname_barg').show();
-
-                            $('#search_company_data').on('input', function() {
-                          var inputVal = $(this).val();
-                          var options = $('#data').find('option').map(function() {
-                              return $(this).val();
-                          }).get();
-                          var selectedId_barg = null;
-                          options.forEach(function(option) {
-                              if (option.startsWith(inputVal)) {
-                                selectedId_barg = option.split(' ')[0];
-                              }
-                          });
-                          if (selectedId_barg) {
-                          
-                            $.ajax({
-                              url:'<?=base_url();?>Menu/getUserCompBy_cmp_id',
-                              type: "POST",
-                              data: {
-                              company_val: selectedId_barg,
-                              uid: uid
-                              },
-                              cache: false,
-                              success: function a(result){
-                              // alert(result);
-                              $("#maintaskcard").show();    
-                              $("#selectcompanybyuser").html(result);
-                              $("#selectcompanybyuser").show();
-                              $("#tasktaction").show();
-                              $("#tptime").val('');
-                              $("#tptime").show();
-                              $('#ntactionnew').show();
-                              $('#ntppose').show();
-                              $('#meeting-time').show();
-                              $('#planbtn1').show();
-                              var selectedValue = "3";
-                              $('#ntactionnew option').each(function() {
-                                    if ($(this).val() != '3' && $(this).val() != '') {
-                                        $(this).attr('disabled', 'disabled');
-                                    }
-                                    // if ($(this).val() == '3') {
-                                    //     $(this).attr('selected', 'selected');
-                                    // }
-                                });
-                                var inidids = $("#selectcompanybyuser").val();
-                                $.ajax({
-                                  url:'<?=base_url();?>Menu/getpurposebyinidnew',
-                                  type: "POST",
-                                  data: {
-                                  inid: inidids,
-                                  aid: 3
-                                  },
-                                  cache: false,
-                                  success: function a(result){
-                                      console.log(result);
-                                  $("#ntppose").html(result);
-                                  }
-                                  });
-                              }
-                              });
-                          }
-                      });
-
-
-
-                          }else{
-                            $('#selectcompanyname_barg').hide();
-                          }
-                    });
-                      
-                    }else{
-                      $('#create_barg_in_meeting').hide();
-                      $('#selectcompanyname_barg').hide();
-                      $('#ntactionnew option').each(function() {
-                        if ($(this).val() != '') {
-                              $(this).removeAttr('disabled');
-                            }
-                        });
-                    }
-
+            
 
                     if(val == 'Auto Assign'){
                     

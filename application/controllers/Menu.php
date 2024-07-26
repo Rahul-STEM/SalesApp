@@ -4591,11 +4591,10 @@ class Menu extends CI_Controller {
         $oldplanbutnotinited = $this->Menu_model->get_all_old_cmp_planbutnotinited($uid);
         $oldplanbutnotinitedcnt = sizeof($oldplanbutnotinited);
         if($oldplanbutnotinitedcnt > 0){
-            $this->session->set_flashdata('error_message','Total '. $oldplanbutnotinitedcnt . ' Pending Old Task.');
+            $this->session->set_flashdata('error_message','Total '. $oldplanbutnotinitedcnt . ' Yesterday Pending Task.');
             // redirect("Menu/TaskPlanner2/".$adate);
         }   
        
-
         $planbutnotinitedcnt = sizeof($planbutnotinited);
         $getreqData  =  $this->db->query("SELECT * FROM `task_plan_for_today` WHERE user_id =$uid and date='$adate'");
         $getreqData =  $getreqData->result();
@@ -4628,12 +4627,10 @@ class Menu extends CI_Controller {
         $minutes = $timecount % 60;
         $mesaage = $hours ." Hours ".$minutes." Minutes Pending For Task Work";
    
-
     // if($planbutnotinitedcnt > 0){
     //     $this->session->set_flashdata('error_message', $planbutnotinitedcnt . ' Pending tasks - First, Plan You Old Pending Task with Plan But Not Initiated');
     // }
    
-
     $getplandateindata  =  $this->db->query("SELECT * FROM `autotask_time` where user_id='$uid' AND date ='$adate'");
     $getplandateindata =  $getplandateindata->result();
 
@@ -4652,14 +4649,10 @@ class Menu extends CI_Controller {
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
-
-
+        
         $userData  =  $this->db->query("SELECT * FROM `user_details` WHERE user_id = $uid");
         $userData =  $userData->result();
 
-        // echo "<pre>";
-        // print_r($userData[0]->type_id);
-        // die;
         $type_id =  $userData[0]->type_id;
         $inside =  $userData[0]->inside;
 
@@ -4678,8 +4671,6 @@ class Menu extends CI_Controller {
             $auid = 100024;
         }
 
-// echo $auid; 
-// die;
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
@@ -4689,10 +4680,11 @@ class Menu extends CI_Controller {
 
         $setdatebyuser              = $_POST['setdatebyuser'];
         $requestForTodaysTaskPlan   = $_POST['requestForTodaysTaskPlan'];
+        
+        $taskcnt   = $_POST['taskcnt'];
+        $would_you_want   = $_POST['would_you_want'];
 
-
-        $this->db->query("INSERT INTO `task_plan_for_today`(`user_id`,`admin_id`, `date`, `request_remarks`) VALUES ('$uid','$auid','$setdatebyuser','$requestForTodaysTaskPlan')");
-
+        $this->db->query("INSERT INTO `task_plan_for_today`(`user_id`,`admin_id`, `date`, `request_remarks`,`taskcnt`,`would_you_want`) VALUES ('$uid','$auid','$setdatebyuser','$requestForTodaysTaskPlan','$taskcnt','$would_you_want')");
 
         $this->load->library('session');
         $this->session->set_flashdata('success_message', 'Your request has been successfully sent to the administrator. Please wait for approval.');
@@ -12129,10 +12121,17 @@ class Menu extends CI_Controller {
         $uid= $this->input->post('uid');
         $task_action= $this->input->post('tasktaction');
         $this->load->model('Menu_model');
-        // $cmp = $this->Menu_model->get_statuscmpnotplan($sid,$uid);
-        $cmp = $this->Menu_model->taskactionnotplan_filter1($sid,$task_action,$uid);;
+        $cmp = $this->Menu_model->get_statuscmpnotplan($sid,$uid);
+        // $cmp = $this->Menu_model->taskactionnotplan_filter1($sid,$task_action,$uid);
+        $uniqueCompanies = [];
+        foreach ($cmp as $company) {
+            $uniqueCompanies[$company->compname] = $company;
+        }
+        
+        $uniqueCompanies = array_values($uniqueCompanies); // Optional: reindex the array
+      
         echo '<option value="">Select Company</option>';
-        foreach($cmp as $cmp){ ?>
+        foreach($uniqueCompanies as $cmp){ ?>
         <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
@@ -17718,9 +17717,12 @@ public function addplantask12(){
     $uid = $user['user_id'];
     $uyid =  $user['type_id'];
 
-    $pendingTask = $this->Menu_model->get_allcmp_planbutnotinited($uid);
-    $pendingTaskcnt = sizeof($pendingTask);
+    $todayspendingTask = $this->Menu_model->get_allcmp_planbutnotinited($uid);
+    $pendingOldTask = $this->Menu_model->get_all_old_cmp_planbutnotinited($uid);
 
+    $pendingTodaysTaskcnt = sizeof($todayspendingTask);
+    $pendingOldTask = sizeof($pendingOldTask);
+    
      $bdid = $this->input->post('bdid');
      $tptime = $this->input->post('tptime');
      $ptime = $this->input->post('ptime');
@@ -17950,17 +17952,32 @@ public function addplantask12(){
           
         }else if($selectby == 'Review Target Date'){
 
-        if($pendingTaskcnt > 0){
-            $this->session->set_flashdata('success_message_plan',' First Plan Your Old Pending Task]');
-            redirect('Menu/TaskPlanne2/'.$pdate);
+       if(date("Y-m-d") !== $pdate){
+            if($pendingTodaysTaskcnt > 0){
+                $this->session->set_flashdata('success_message_plan',' First Plan Your Todays Pending Task]');
+                redirect('Menu/TaskPlanner2/'.$pdate);
+            }
+       }elseif(date("Y-m-d") == $pdate){
+        if($pendingOldTaskcnt > 0){
+            $this->session->set_flashdata('success_message_plan',' First Plan Your Yesterday Pending Task]');
+            redirect('Menu/TaskPlanner2/'.$pdate);
         }
-           $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
+    }    
+        
+        $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
         }else{
 
-        if($pendingTaskcnt > 0){
-            $this->session->set_flashdata('success_message',' First Plan Your Old Pending Task.');
-            redirect('Menu/TaskPlanne2/'.$pdate);
+    if(date("Y-m-d") !== $pdate){     
+        if($pendingTodaysTaskcnt > 0){
+            $this->session->set_flashdata('success_message',' First Plan Your Yesterday Pending Task.');
+            redirect('Menu/TaskPlanner2/'.$pdate);
         }
+    }elseif(date("Y-m-d") == $pdate){
+        if($pendingOldTaskcnt > 0){
+            $this->session->set_flashdata('success_message_plan',' First Plan Your Todays Pending Task]');
+            redirect('Menu/TaskPlanner2/'.$pdate);
+        }
+    }
 
             $ttype = $ntaction;
 
@@ -17975,7 +17992,7 @@ public function addplantask12(){
 
     $this->session->set_flashdata('success_message_plan',' Task Plan Successfully !! and Total Remaining Time For Task Plan '.$rrtime. ' Minutes');
 
-    redirect('Menu/TaskPlanner/'.$pdate);
+    redirect('Menu/TaskPlanner2/'.$pdate);
 }
 
 

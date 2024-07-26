@@ -9374,19 +9374,20 @@ WHERE plan = '1'  and nextCFID='0' and actiontype_id='$aid' and status_id='$stid
         return $query->result();
     }
 
+  
 
+
+    
     public function taskactionnotplan_filter1($sid,$task_action,$uid){
         $utype = $this->Menu_model->get_userbyid($uid);
         $utype = $utype[0]->type_id;
         if($utype == 4){
-            $query=$this->db->query("SELECT init_call.id inid,company_master.compname compname,partner_master.name pname FROM init_call LEFT JOIN company_master ON company_master.id=init_call.cmpid_id LEFT join partner_master ON partner_master.id=company_master.partnerType_id LEFT join tblcallevents on tblcallevents.cid_id = init_call.id WHERE init_call.apst='$uid' and (init_call.cstatus ='$sid' and tblcallevents.assignedto_id = init_call.apst and tblcallevents.cid_id = init_call.id and tblcallevents.actiontype_id =$task_action)");
+            $query=$this->db->query("SELECT init_call.id inid,company_master.compname compname,partner_master.name pname FROM init_call LEFT JOIN company_master ON company_master.id=init_call.cmpid_id LEFT join partner_master ON partner_master.id=company_master.partnerType_id LEFT join tblcallevents on tblcallevents.cid_id = init_call.id WHERE init_call.apst='$uid' and (init_call.cstatus ='$sid' and tblcallevents.assignedto_id = init_call.apst and tblcallevents.cid_id != init_call.id and tblcallevents.actiontype_id =$task_action)");
 
             if($sid =='all'){
                 $query=$this->db->query("SELECT init_call.id inid,company_master.compname compname,partner_master.name pname FROM init_call LEFT JOIN company_master ON company_master.id=init_call.cmpid_id LEFT join partner_master ON partner_master.id=company_master.partnerType_id LEFT join tblcallevents on tblcallevents.cid_id = init_call.id WHERE init_call.apst='$uid' and (init_call.cstatus !='' and tblcallevents.assignedto_id = init_call.apst and tblcallevents.cid_id = init_call.id and tblcallevents.actiontype_id =$task_action)");
             }
-            if($task_action =='all'){
-                $query=$this->db->query("SELECT init_call.id inid,company_master.compname compname,partner_master.name pname FROM init_call LEFT JOIN company_master ON company_master.id=init_call.cmpid_id LEFT join partner_master ON partner_master.id=company_master.partnerType_id LEFT join tblcallevents on tblcallevents.cid_id = init_call.id WHERE init_call.apst='$uid' and (init_call.cstatus !='' and tblcallevents.assignedto_id = init_call.apst and tblcallevents.cid_id = init_call.id and tblcallevents.actiontype_id !='')");
-            }
+           
         }else{
             $query=$this->db->query("SELECT init_call.id inid,company_master.compname compname,partner_master.name pname FROM init_call LEFT JOIN company_master ON company_master.id=init_call.cmpid_id LEFT join partner_master ON partner_master.id=company_master.partnerType_id LEFT join tblcallevents on tblcallevents.cid_id = init_call.id WHERE init_call.mainbd='$uid' and (init_call.cstatus ='$sid' and tblcallevents.assignedto_id = init_call.mainbd and tblcallevents.cid_id = init_call.id and tblcallevents.actiontype_id =$task_action)");
 

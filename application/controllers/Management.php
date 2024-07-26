@@ -286,8 +286,9 @@ class Management extends Menu {
   
         redirect('Management/MomData/'.$suid.'/'.$tardate);
 
-
         
+
+
     }
 
 

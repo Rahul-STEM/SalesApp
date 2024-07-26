@@ -285,6 +285,9 @@ class Management extends Menu {
         $this->Management_model->MomApprovedByUserAdminInsert($approved_status,$id,$approvedreamrk,$approvedtDate,$this->uid,$finalRemarks);
   
         redirect('Management/MomData/'.$suid.'/'.$tardate);
+
+
+        
     }
 
 

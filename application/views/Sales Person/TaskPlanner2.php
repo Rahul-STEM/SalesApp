@@ -236,7 +236,7 @@
                 // if($pendingtask !== 0){
                 // echo "<pre>";
                 //   print_r($reqCount);
-                //   die;
+                //   die; 
             // $approvel_status = 'Approved';
             if($adate == date("Y-m-d") && $getAutoTaskTime == 0 || $adate !== date("Y-m-d")){ 
                 if($getAutoTaskTime !==1){
@@ -1183,7 +1183,7 @@
                             <select id="ntactionnew" name="ntaction" class="form-control" required="">
                               <option value="">Select Action</option>
                               <?php $action = $this->Menu_model->get_action();
-                                foreach($action as $a){if($a->id!=3 && $a->id!=4 && $a->id!=6 && $a->id!=8 && $a->id!=9 && $a->id!=11){
+                                foreach($action as $a){if($a->id!=3 && $a->id!=4 && $a->id!=6 && $a->id!=8 && $a->id!=9 && $a->id!=11 && $a->id!=17){
                                 ?>
                               <option value="<?=$a->id;?>"><?=$a->name;?></option>
                               <?php }} ?>
@@ -3905,7 +3905,59 @@
     </script>
 
 
-
+<script>
+$(document).ready(function(){
+  
+        $("#selectstatusbyuser").change(function(){
+          var sid = $(this).val();
+          if (sid == 1) {
+            $('#ntactionnew option[value="10"]').prop('disabled', false);
+            } else {
+                $('#ntactionnew option[value="10"]').prop('disabled', true);
+            }
+        });
+        $("#status_taskaction").change(function(){
+          var sid = $(this).val();
+          if (sid == 1) {
+            $('#ntactionnew option[value="10"]').prop('disabled', false);
+            } else {
+                $('#ntactionnew option[value="10"]').prop('disabled', true);
+            }
+        });
+        $("#statusfilterCluster").change(function(){
+          var sid = $(this).val();
+          if (sid == 1) {
+            $('#ntactionnew option[value="10"]').prop('disabled', false);
+            } else {
+                $('#ntactionnew option[value="10"]').prop('disabled', true);
+            }
+        });
+        $("#statusfiltercardCat").change(function(){
+          var sid = $(this).val();
+          if (sid == 1) {
+            $('#ntactionnew option[value="10"]').prop('disabled', false);
+            } else {
+                $('#ntactionnew option[value="10"]').prop('disabled', true);
+            }
+        });
+        $("#partnertype_cstatusData").change(function(){
+          var sid = $(this).val();
+          if (sid == 1) {
+            $('#ntactionnew option[value="10"]').prop('disabled', false);
+            } else {
+                $('#ntactionnew option[value="10"]').prop('disabled', true);
+            }
+        });
+        $("#samestatuslast15daysData").change(function(){
+          var sid = $(this).val();
+          if (sid == 1) {
+            $('#ntactionnew option[value="10"]').prop('disabled', false);
+            } else {
+                $('#ntactionnew option[value="10"]').prop('disabled', true);
+            }
+        });
+});
+</script>
 
 
 

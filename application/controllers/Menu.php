@@ -4107,20 +4107,20 @@ class Menu extends CI_Controller {
     }
 
     public function daysc(){
-        $autotask=0;
+      
         $wffo=0;
         $do = $_POST['do'];
         if(isset($_POST['wffo'])){$wffo = $_POST['wffo'];}
         $user_id = $_POST['user_id'];
         $lat = $_POST['lat'];
         $lng = $_POST['lng'];
-        $autotask = $_POST['autotask'];
+      
         $filname = $_FILES['filname']['name'];
         $uploadPath = 'uploads/day/';
         $this->load->model('Menu_model');
         $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
 
-        $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do,$autotask);
+        $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
         redirect('Menu/Dashboard');
     }
 
@@ -4577,7 +4577,12 @@ class Menu extends CI_Controller {
         $planbutnotinited = $this->Menu_model->get_allcmp_planbutnotinited($uid);
 
         
-        // dd($oldplanbutnotinited);
+        $user_day = $this->Menu_model->get_daydetail($uid,date("Y-m-d"));
+
+        if(sizeof($user_day) == 0){
+            $this->session->set_flashdata('error_message','* Please Start Your Day');
+            redirect('Menu/DayManagement');
+        }   
 
         $pendingautotaskcmp = $this->Menu_model->get_PendingAutoTask($uid);
         $pendingautotaskcmpcnt = sizeof($pendingautotaskcmp);
@@ -12955,7 +12960,6 @@ class Menu extends CI_Controller {
         $tid= $this->input->post('tid');
         $this->load->model('Menu_model');
         $remark=$this->Menu_model->change_norp($tid);
-
     }
 
 

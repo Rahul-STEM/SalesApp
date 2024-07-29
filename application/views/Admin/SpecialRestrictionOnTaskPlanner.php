@@ -63,7 +63,10 @@ overflow-x: auto;
     background: darkcyan;
     color: white;
 }
-
+.modal-header {
+    background: cadetblue;
+    color: white;
+}
 </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -105,7 +108,7 @@ overflow-x: auto;
 <div class="row">
 <div class="col-12">
 <div class="card">
-<div class="card-header bg-danger">
+<div class="card-header" style="background: #002a1f;">
 <h2 class="text-center m-3 text-white">Special Restriction on Task Planner</h2>
 </div>
 <!-- /.card-header -->
@@ -222,7 +225,7 @@ overflow-x: auto;
   <div class="form-row">
   <div class="col-sm-12">
     <center>
-    <button type="submit" class="btn bg-warning mb-2">Add Restriction </button>
+    <button type="submit" class="btn mb-2" style="background: #002a1f;color:white;" >Add Restriction </button>
     </center>
     </div>
   </div>
@@ -240,15 +243,16 @@ overflow-x: auto;
                             <thead>
                                 <tr>
                                     <th>S.No</th>
-                                    <th>Restrication</th>
                                     <th>User Type</th>
                                     <th>User Name</th>
                                     <th>Company Status</th>
                                     <th>Partner Type</th>
                                     <th>Company Category</th>
+                                    <th>Restrication</th>
                                     <th>Start&nbsp;Date</th>
                                     <th>End&nbsp;Date</th>
                                     <th>Status</th>
+                                    
                                     <th>Manage</th>
                                     <th>Delete</th>
                                 </tr>
@@ -262,20 +266,6 @@ overflow-x: auto;
                                 ?>
                                     <tr>
                                         <td><?= $i ?></td>
-                                        <td>
-                                        <?php
-                                        if($data->action_id !=='all'){
-                                            $actiondata = $this->Menu_model->get_actionbyids($data->action_id);
-                                            foreach($actiondata as $actiondatasp){
-                                             $actiondataname = $actiondatasp->name;
-                                             $actiondataname = str_replace(' ', '&nbsp;', $actiondataname);
-                                            echo "<span class='p-2 bg-danger m-1' style='line-height: 50px;' >$actiondataname</span>";
-                                            }
-                                        }else{
-                                            echo "<span class='p-2 bg-danger m-1' style='line-height: 50px;' >All</span>";
-                                        }
-                                         ?>
-                                         </td>
                                          <td>
                                             <?php 
                                             if($data->user_types !=='all'){
@@ -283,10 +273,10 @@ overflow-x: auto;
                                                 foreach($auser_types as $types){
                                                     $utypes = $types->name;
                                                     $utypes = str_replace(' ', '&nbsp;', $utypes);
-                                                    echo "<span class='p-2 bg-danger m-1' style='line-height: 50px;' >$utypes</span>";
+                                                    echo "<span class='p-2 bg-success m-1' style='line-height: 50px;' >$utypes</span>";
                                                 }
                                             }else{
-                                                echo "<span class='p-2 bg-danger m-1' style='line-height: 50px;' >All</span>";
+                                                echo "<span class='p-2 bg-success m-1' style='line-height: 50px;' >All</span>";
                                             }
                                             ?>
                                         </td>
@@ -302,7 +292,7 @@ overflow-x: auto;
                                                     }
                                                     $ruser_name = $ruser->name;
                                                     $ruser_name = str_replace(' ', '&nbsp;', $ruser_name);
-                                                    echo "<span class='p-2 bg-danger m-1 text-capitalize' style='line-height: 50px;' >$ruser_name</span>";
+                                                    echo "<span class='p-2 bg-success m-1 text-capitalize' style='line-height: 50px;' >$ruser_name</span>";
                                                     $k++;
                                                  }
                                             }else{
@@ -317,7 +307,7 @@ overflow-x: auto;
                                                 foreach($acompany_status as $c_statuss){
                                                     $com_status = $c_statuss->name;
                                                     $com_status = str_replace(' ', '&nbsp;', $com_status);
-                                                    echo "<span class='p-2 bg-danger m-1' style='line-height: 50px;' >$com_status</span>";
+                                                    echo "<span class='p-2 bg-success m-1' style='line-height: 50px;' >$com_status</span>";
                                                 }
                                             }else{
                                                 if($data->company_status ==''){
@@ -333,7 +323,7 @@ overflow-x: auto;
                                                 foreach($apartner_types as $cprt_statuss){
                                                     $comp_partnername = $cprt_statuss->name;
                                                     $comp_partnername = str_replace(' ', '&nbsp;', $comp_partnername);
-                                                    echo "<span class='p-2 bg-danger m-1' style='line-height: 50px;' >$comp_partnername</span>";
+                                                    echo "<span class='p-2 bg-success m-1' style='line-height: 50px;' >$comp_partnername</span>";
                                                 }
                                             }else{
                                                 if($data->partner_types ==''){
@@ -349,15 +339,29 @@ overflow-x: auto;
                                         }else{
                                             $arrays = explode(',', $data->categorys);
                                             foreach($arrays as $arr){
-                                                if($arr == 'topspender'){echo "<span class='p-2 bg-danger m-1' style='line-height: 50px;' >Top&nbsp;Spender</span>";}
-                                                if($arr == 'upsell_client'){echo "<span class='p-2 bg-danger m-1' style='line-height: 50px;' >Upsell&nbsp;Client</span>";}
-                                                if($arr == 'focus_funnel'){echo "<span class='p-2 bg-danger m-1' style='line-height: 50px;' >Focus&nbsp;Funnel</span>";}
-                                                if($arr == 'keycompany'){echo "<span class='p-2 bg-danger m-1' style='line-height: 50px;' >Key&nbsp;Company</span>";}
-                                                if($arr == 'pkclient'){echo "<span class='p-2 bg-danger m-1' style='line-height: 50px;' >Positive&nbsp;Key&nbsp;Client</span>";}
-                                                if($arr == 'all'){echo "<span class='p-2 bg-danger m-1' style='line-height: 50px;' >All</span>";}
+                                                if($arr == 'topspender'){echo "<span class='p-2 bg-success m-1' style='line-height: 50px;' >Top&nbsp;Spender</span>";}
+                                                if($arr == 'upsell_client'){echo "<span class='p-2 bg-success m-1' style='line-height: 50px;' >Upsell&nbsp;Client</span>";}
+                                                if($arr == 'focus_funnel'){echo "<span class='p-2 bg-success m-1' style='line-height: 50px;' >Focus&nbsp;Funnel</span>";}
+                                                if($arr == 'keycompany'){echo "<span class='p-2 bg-success m-1' style='line-height: 50px;' >Key&nbsp;Company</span>";}
+                                                if($arr == 'pkclient'){echo "<span class='p-2 bg-success m-1' style='line-height: 50px;' >Positive&nbsp;Key&nbsp;Client</span>";}
+                                                if($arr == 'all'){echo "<span class='p-2 bg-success m-1' style='line-height: 50px;' >All</span>";}
                                             }
                                         }
                                       ?></td>
+                                       <td>
+                                        <?php
+                                        if($data->action_id !=='all'){
+                                            $actiondata = $this->Menu_model->get_actionbyids($data->action_id);
+                                            foreach($actiondata as $actiondatasp){
+                                             $actiondataname = $actiondatasp->name;
+                                             $actiondataname = str_replace(' ', '&nbsp;', $actiondataname);
+                                            echo "<span class='p-2 bg-success m-1' style='line-height: 50px;' >$actiondataname</span>";
+                                            }
+                                        }else{
+                                            echo "<span class='p-2 bg-success m-1' style='line-height: 50px;' >All</span>";
+                                        }
+                                         ?>
+                                         </td>
                                          <td>
                                             <?= $data->sdate ?> 
                                         </td>
@@ -395,7 +399,7 @@ overflow-x: auto;
                                         ?>
                                         </td>
                                         <td>
-                                        <p><button type="button" class="btn btn-success"  onclick="MomApprove(<?= $i ?>,<?= $data->id?>,'Reject')"><i class="fa fa-cog" aria-hidden="true"></i></button></p>
+                                        <p><button type="button" class="btn btn-success"  onclick="RestrictionUpdate(<?= $data->id?>,'<?= $data->sdate ?>','<?= $data->edate ?>')"><i class="fa fa-cog" aria-hidden="true"></i></button></p>
                                         </td>
                                         <td>
                                         <p><a href="https://stemapp.in/Management/SpecialRestricationonDelete/<?= $data->id?>"><span class='p-2 bg-danger'>Delete</span></a></p>
@@ -426,8 +430,9 @@ overflow-x: auto;
 <div class="modal fade" id="exampleModalCenterdatamom" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                       <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLongTitle">Change Restrication</h5>
+                        <div class="modal-header text-center">
+                       
+                          <h4 class="modal-title" id="exampleModalLongTitle">Update Restrication</h4>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                           </button>
@@ -435,14 +440,26 @@ overflow-x: auto;
                         <div class="modal-body">
                           <form action="<?=base_url();?>Management/ChangeStatusofRestrication" method="post" >
                             <input type="hidden" id="res_id" value="" name="res_id">
-                            <div class="col-sm-12 mb-3 mt-3">
-                            <select class="form-control" style="width:100%!important;" name="active_diactive" >
+                            <div class="row">
+                            <div class="col-md-6">
+                            <lable>Start Date</lable>
+                            <input type="date" class="form-control" id="start_date"  value="" name="start_date">
+                            </div>
+                            <div class="col-md-6">
+                            <lable>End Date</lable>
+                            <input type="date" class="form-control" id="end_date"  value="" name="end_date">
+                            </div>
+                            </div>
+                            <hr>
+                            <div class="col-md-12 mb-3">
+                            <lable>Restriction Status</lable>
+                            <select class="form-control" style="width:98%!important;" name="active_diactive" >
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>
                               </select>
                             </div>
                             <div class="form-group text-center">
-                              <button type="submit" class="btn btn-success mt-2">Submit</button>
+                              <button type="submit" class="btn btn-success mt-2">Update</button>
                             </div>
                           </form>
                         </div>
@@ -521,9 +538,11 @@ $("#example1").DataTable({
 </script>
 
 <script type='text/javascript'>  
-function MomApprove(mid,id,val){
+function RestrictionUpdate(id,sdate,edate){
 $('#exampleModalCenterdatamom').modal('show');
 $('#res_id').val(id);
+$('#start_date').val(sdate);
+$('#end_date').val(edate);
 }
 
 $(document).ready(function(){

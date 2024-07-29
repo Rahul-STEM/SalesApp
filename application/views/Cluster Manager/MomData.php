@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="wi$dth=device-wi$dth, initial-scale=1">
-    <title>STEM APP | WebAPP</title>
+    <title>Mom Data | STEM APP | WebAPP</title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
     <!-- Font Awesome -->
@@ -152,8 +152,11 @@
                                       if($dt->approved_by == ''){ ?>
                                         <div>
                                             <!-- <p><a href="<?=base_url();?>Management/MomApprovedByUserAdmin/<?= $dt->id?>/Approve/<?=$suid?>/<?=$tardate?>" class="btn btn-success mr-2" onclick="return confirm('Are you sure you want to Approved it?');" >Approve</a></p> -->
-                                            <p><button type="button" class="btn btn-success"  onclick="MomApprove(<?= $i ?>,<?= $dt->id?>,'Reject')">Approve</button></p>
-                                            <p><button type="button" class="btn btn-primary"  onclick="Reject(<?= $i ?>,<?= $dt->id?>,'Reject')">Reject</button></p>
+                                           
+                                            <p><button type="button" class="btn btn-success" onclick="MomApprove(<?= $i ?>,<?= $dt->id?>,'Approve')">Approve</button></p>
+                                            <p><button type="button" class="btn btn-primary" onclick="Reject(<?= $i ?>,<?= $dt->id?>,'Reject')">Reject</button></p>
+                                          
+                                            <p><button type="button" class="btn btn-primary" id="rPtoNoRPConvert<?= $dt->tid?>" onclick="RPtoNoRPConvert(<?= $i ?>,<?= $dt->tid?>,'RPtoNoRPConvert')">RP to No RP Convert</button></p>
                                         </div>
                                         <?php }else{ 
                                           if($approved_status =='Reject'){ ?>
@@ -214,6 +217,8 @@
                       </div>
                     </div>
                   </div>
+
+
 
 
                   <div class="modal fade" id="exampleModalCenterdataApprove" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -313,6 +318,7 @@
     <script src="<?=base_url();?>assets/js/adminlte.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="<?=base_url();?>assets/js/dashboard.js"></script>
+  
     <script>
       $("#example1").DataTable({
         "responsive": false, "lengthChange": false, "autoWidth": false,
@@ -320,43 +326,43 @@
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     </script>
 
-<script>
-    function statusupdate(val,blogid){
-      var statusupdate = "#statusupdate"+blogid;
-        var statusdata = $('#statusup'+blogid).val();
-        $.ajax({
-			url:'vendor/lengthstausupdate',
-			type:'post',
-			data:"id="+blogid+"&status="+statusdata,
-			success:function(result){
-                if(result == 0){
-                    $(statusupdate).text('Pending');
-                    $(statusupdate).css({"background-color": "red", "color": "white","padding": "5px"});
-                }else{
-                    $(statusupdate).text('Done');
-                    $(statusupdate).css({"background-color": "Green", "color": "white","padding": "5px"});
-                }
-                // alert(result);
-            }
-        });
-    }
-</script>
 
 <script type='text/javascript'>
-              function RejectButton(mid,id,val){
-              $('#exampleModalCenter'+mid).modal('show');
-              $('#exampleModalCenter'+mid+' #rejectid').val(id);
-              }
+
+
               
-              function Reject(mid,id,val){
+ function Reject(mid,id,val){
               $('#exampleModalCenterdata').modal('show');
               $('#rejectid').val(id);
               }
-              function MomApprove(mid,id,val){
+
+ function MomApprove(mid,id,val){
               $('#exampleModalCenterdataApprove').modal('show');
               $('#mom_id').val(id);
               }
-              </script>
-
+ 
+function RPtoNoRPConvert(mid,id,val){
+              let text = "Do You Want to Change RP to No RP Meeting.";
+                if (confirm(text) == true) {
+                  text = "You pressed OK!";
+      
+                  var hideval = "#rPtoNoRPConvert"+id;
+                  $.ajax({
+                    url:'<?=base_url();?>Menu/changenorp',
+                    type: "POST",
+                    data: {
+                    tid: id
+                    },
+                    cache: false,
+                    success: function a(result){
+                      $(hideval).hide();
+                    }
+                    });
+                } else {
+                  text = "You canceled!";
+                  alert(text);
+                }
+              }
+            </script>
   </body>
 </html>

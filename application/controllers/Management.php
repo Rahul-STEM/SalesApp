@@ -279,7 +279,7 @@ class Management extends Menu {
         $this->Management_model->AssignPSTAfterMomApproved($init_cmpid,$get_pst_co);
         $this->Management_model->AssignCLMAfterMomApproved($init_cmpid,$clm_aadmin);
 
-        $insert_id = $this->Management_model->CreateTask($new_date,$actiontype_id,$init_id,$nextaction,$get_pst_co,$purpose_id,$autotask,$auto_plan,$ccstatus);
+        $insert_id = $this->Management_model->CreateTask($fwd_date,$actiontype_id,$init_id,$nextaction,$get_pst_co,$purpose_id,$autotask,$auto_plan,$ccstatus);
         $this->Management_model->CreateTaskForAutoAssign($ass_user_id,$get_pst_co,$ccstatus,$init_id,$insert_id,$actiontype_id);
 
         $this->Management_model->MomApprovedByUserAdminInsert($approved_status,$id,$approvedreamrk,$approvedtDate,$this->uid,$finalRemarks);
@@ -502,11 +502,14 @@ public function AddTaskPlannerRestrication(){
     redirect('Management/SpecialRestrictionOnTaskPlanner');
 }
 public function ChangeStatusofRestrication(){
+    
     $res_id             = $_POST['res_id'];
     $active_diactive    = $_POST['active_diactive'];
+    $start_date         = $_POST['start_date'];
+    $end_date           = $_POST['end_date'];
 
-    $this->Management_model->ChangeTaskPlannerRestricationStatus($res_id,$active_diactive);
-    $this->session->set_flashdata('success_message', 'Restrication Status Change Successfully !');
+    $this->Management_model->ChangeTaskPlannerRestricationStatus($res_id,$active_diactive,$start_date,$end_date);
+    $this->session->set_flashdata('success_message', 'Restrication Update Successfully !');
 
     redirect('Management/SpecialRestrictionOnTaskPlanner');
 }
@@ -524,8 +527,6 @@ public function SpecialRestricationonDelete($id){
 
 
 public function getAllActiveUserInDepartment(){
-
-    $this->load->model('Menu_model');
 
     $user_type_id = $_POST['user_type_id'];
 

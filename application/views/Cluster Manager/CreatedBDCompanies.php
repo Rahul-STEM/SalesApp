@@ -48,7 +48,7 @@ overflow-x: auto;
 <div class="container-fluid">
 <div class="row mb-2">
 <div class="col-sm-6">
-<h1 class="m-0">Created Companies</h1>
+<h1 class="m-0"><?php if($code == 35){echo "Common";}else{echo "Created";} ?> Companies</h1>
 </div><!-- /.col -->
 <div class="col-sm-6">
 <ol class="breadcrumb float-sm-right">
@@ -68,7 +68,7 @@ overflow-x: auto;
 <div class="col-12">
 <div class="card">
 <div class="card-header">
-    <h3 class="card-title">Created Companies</h3>
+    <h3 class="card-title"> <?php if($code == 35){echo "Common";}else{echo "Created";} ?>  Companies</h3>
 </div>
 
 <div class="card-body">
@@ -84,6 +84,7 @@ overflow-x: auto;
                                         <tr>
                                             <th>S.No.</th>
                                             <th>BD Name</th>
+                                            <th>Cluster Manager</th>
                                             <th>PST</th>
                                             <th>Company ID</th>
                                             <th>Company Name</th>
@@ -127,22 +128,24 @@ overflow-x: auto;
                                         $ciid = $init[0]->id;
                                         $pid = $init[0]->apst;
                                         $mbdid = $init[0]->mainbd;
-                                        
-                                        
+                                        $clm_id = $init[0]->clm_id;
+                                       
+                                            
+                                            
                                         $tblc=$this->Menu_model->get_tblbyidwithremark($ciid);
                                         $logs = sizeof($tblc);
-                                        
-                                        
-                                        
+                                    
                                         $patid = $cd[0]->partnerType_id;
                                         if($patid){$patid = $this->Menu_model->get_partnerbyid($patid);$patid = $patid[0]->name;} else{$patid='';}
-                                        
                                         
                                         if($init){$sid = $init[0]->cstatus;$sid=$this->Menu_model->get_statusbyid($sid);$sid=$sid[0]->name;}
                                         else{$sid='';}
                                         
                                         if($pid){$pstname=$this->Menu_model->get_userbyid($pid);$pstname=$pstname[0]->name;}
                                         else{$pstname='';}
+
+                                        if($clm_id){$clm_name=$this->Menu_model->get_userbyid($clm_id);$clm_name=$clm_name[0]->name;}
+                                        else{$clm_name='';}
                                         
                                         if($mbdid){$bdname=$this->Menu_model->get_userbyid($mbdid);$bdname=$bdname[0]->name;}
                                         else{$bdname='';}
@@ -157,6 +160,7 @@ overflow-x: auto;
                                         <tr>
                                             <td><?=$i?></td>
                                             <td><?=$bdname?></td>
+                                            <td><?=$clm_name?></td>
                                             <td><?=$pstname?></td>
                                             <td><?=$cd[0]->id?></td>
                                             <td><a href="<?=base_url();?>Menu/CompanyDetails/<?=$cid?>"><?=$cd[0]->compname?></a></td>

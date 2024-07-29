@@ -302,8 +302,8 @@ public function GetTaskPlannerRestricationInTable() {
     $query=$this->db->query("SELECT * FROM `spcl_rest_task_planner` order by id DESC");
     return $query->result();
 }
-public function ChangeTaskPlannerRestricationStatus($res_id,$active_diactive) {
-   $this->db->query("UPDATE `spcl_rest_task_planner` SET `status`='$active_diactive' WHERE id ='$res_id'");
+public function ChangeTaskPlannerRestricationStatus($res_id,$active_diactive,$start_date,$end_date) {
+   $this->db->query("UPDATE `spcl_rest_task_planner` SET `status`='$active_diactive',`sdate`='$start_date',`edate`='$end_date' WHERE id ='$res_id'");
 }
 
 public function GetActiveTaskPlannerRestrication12(){
@@ -363,96 +363,134 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
 
             if (array_key_exists('user_types', $difference) && array_key_exists('action_id', $difference) && array_key_exists('company_status', $difference) && array_key_exists('partner_types', $difference) && array_key_exists('categorys', $difference) && sizeof($difference) == 5 ) {
 
-                    foreach ($difference as $key => $value) {
-                        if ($key == 'user_types' && in_array($uyid, $value)) {
+                foreach ($difference as $key => $value) {
+                    if ($key == 'company_status'){
+                        foreach($selectcompanybyuser as $tid){
+                            $cmp_Data = $this->getResCompanyStatus($tid);
+                            $cmp_Data_cstatus = $cmp_Data[0]->cstatus;
+                            $rst_cmpid_id = $cmp_Data[0]->cmpid_id;
+                         
+                            if (in_array($cmp_Data_cstatus, $value)){
+                          
+                                $cur_cmp_status = $this->Menu_model->get_statusbyid($cmp_Data_cstatus); 
+                                $cur_cmp_status_name = $cur_cmp_status[0]->name;
 
-                            $get_utypename = $this->Menu_model->get_utype($uyid);
-                            $get_utypename = $get_utypename[0]->name;
+                                foreach ($difference as $key => $value) {
+                                    if ($key == 'partner_types') {
 
-                            foreach ($difference as $key => $value) {
+                                        foreach($value as $partnertype){
+                                            $cmp_part = $this->Menu_model->get_cmp_partnertype($partnertype,$bdid);
+                                            foreach ($cmp_part as $obj) {
+                                                if ($obj->inid == $tid) {
+                                                    $exists = true;
+                                                    break;
+                                                }
+                                            }
+                                            
+                                            if ($exists) {
+                                                $cmp_prtData = $this->Menu_model->get_partnerById($partnertype); 
+                                                $cmp_prt_name = $cmp_prtData[0]->name;
+                                                
+                                                foreach ($difference as $key => $value) {
 
-                                if ($key == 'action_id' && in_array($ntaction, $value)) {
+                                                    if ($key == 'categorys') {
 
-                                    $ntactionname = $this->Menu_model->get_actionbyid($ntaction);
-                                    $ntactionname = $ntactionname[0]->name;
+                                                        foreach($value as $rst_cate){
 
-                                    foreach ($difference as $key => $value) {
-
-                                         if ($key == 'company_status'){
-                                            foreach($selectcompanybyuser as $tid){
-
-                                                $cmp_Data = $this->Menu_model->getCompanyStatus($tid);
-                                                $cmp_Data_cstatus = $cmp_Data[0]->cstatus;
-                                                $rst_cmpid_id = $cmp_Data[0]->cmpid_id;
-
-                                                if (in_array($cmp_Data_cstatus, $value)){
-
-                                                    $cur_cmp_status = $this->Menu_model->get_statusbyid($cmp_Data_cstatus); 
-                                                    $cur_cmp_status_name = $cur_cmp_status[0]->name;
-
-                                                    $get_prtnr = $this->Menu_model->get_comPartnerID($rst_cmpid_id); 
-                                                    $get_prtnr_id = $get_prtnr[0]->partnerType_id;
-
-                                                    foreach ($difference as $key => $value) {
-                                                        if ($key == 'partner_types') {
-
-                                                            foreach($value as $partnertype){
-                                                                $cmp_part = $this->Menu_model->get_cmp_partnertype($partnertype,$bdid);
-                                                                foreach ($cmp_part as $obj) {
-                                                                    if ($obj->inid == $tid) {
-                                                                        $exists = true;
-                                                                        break;
-                                                                    }
-                                                                }
-                                                                
-                                                                if ($exists) {
-                                                                    $cmp_prtData = $this->Menu_model->get_partnerById($partnertype); 
-                                                                    $cmp_prt_name = $cmp_prtData[0]->name;
-                                                                 }
-                                                            } 
-
-                                                            foreach ($difference as $key => $value) {
-
-                                                                if ($key == 'categorys') {
-
-                                                                    foreach($value as $rst_cate){
-                                        
-                                                                        $get_db_cat = $this->Menu_model->get_comCategorys($rst_cate,$tid);
-                                                                        if(sizeof($get_db_cat) == 0){
-                                                                            if($rst_cate == 'topspender'){$catename = 'Top Spender';}
-                                                                            if($rst_cate == 'upsell_client'){$catename = 'Upsell Client';}
-                                                                            if($rst_cate == 'focus_funnel'){$catename = 'Focus Funnel';}
-                                                                            if($rst_cate == 'keycompany'){$catename = 'Key Company';}
-                                                                            if($rst_cate == 'pkclient'){$catename = 'Positive Key Client';}
+                                                            if($rst_cate == 'topspender'){$catename = 'Top Spender';}
+                                                            if($rst_cate == 'upsell_client'){$catename = 'Upsell Client';}
+                                                            if($rst_cate == 'focus_funnel'){$catename = 'Focus Funnel';}
+                                                            if($rst_cate == 'keycompany'){$catename = 'Key Company';}
+                                                            if($rst_cate == 'pkclient'){$catename = 'Positive Key Client';}
+                            
+                                                            $get_db_cat = $this->Menu_model->get_comCategorys($rst_cate,$tid);
+                                                            
+                                                            if(sizeof($get_db_cat) !== 0){
+                                                               
+                                                                foreach ($difference as $key => $value) {
+                                                                    if ($key == 'action_id' && !in_array($ntaction, $value)) {
+                                    
+                                                                        $ntactionname = $this->Menu_model->get_actionbyid($ntaction);
+                                                                        $ntactionname = $ntactionname[0]->name;
+                    
+                                                                        $flash_message = $get_utypename.' | '.$cur_cmp_status_name.' | '.$cmp_prt_name.' | '.$catename.' | '.$ntactionname;
                                                                         
-                                                                            $flash_message = $get_utypename.' | '.$ntactionname.' |  '.$cur_cmp_status_name.' | '.$cmp_prt_name.' | '.$catename;
-
-                                                                            if($rsuser_ids !== ''){
-                                                                                if (in_array($bdid, $user_ids_arr)) {
-                                                                                    $this->session->set_flashdata('success_message','Admin have Added Special Restrication of '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
-                                                                                redirect('Menu/TaskPlanner/'.$pdate);
-                                                                                }
-                                                                            }else{
-                                                                                $this->session->set_flashdata('success_message','Admin have Added Special Restrication of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
-                                                                                redirect('Menu/TaskPlanner/'.$pdate);
+                                                                        if($rsuser_ids !== ''){
+                                                                            if (in_array($bdid, $user_ids_arr)) {
+                                                                               
+                                                                                $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                                redirect('Menu/TaskPlanner2/'.$pdate);
                                                                             }
+                                                                        }else{
+                                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                            redirect('Menu/TaskPlanner2/'.$pdate);
                                                                         }
                                                                     }
+                                                                 }
+                                                            }else{
+
+                                                                $flash_message = $get_utypename.' | '.$cur_cmp_status_name.' | '.$catename;
+                                                                        
+                                                                if($rsuser_ids !== ''){
+                                                                    if (in_array($bdid, $user_ids_arr)) {
+                                            
+                                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                        redirect('Menu/TaskPlanner2/'.$pdate);
+                                                                    }
+                                                                }else{
+                                                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                    redirect('Menu/TaskPlanner2/'.$pdate);
                                                                 }
                                                             }
                                                         }
                                                     }
                                                 }
+
+                                            }else{
+                                                $cmp_prtData = $this->Menu_model->get_partnerById($partnertype); 
+                                                $cmp_prt_name = $cmp_prtData[0]->name;
+                                                $flash_message = $get_utypename.' | '.$cur_cmp_status_name.' | '.$cmp_prt_name;
+
+                                                if($rsuser_ids !== ''){
+                                                    if (in_array($bdid, $user_ids_arr)) {
+                                                        
+                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                        redirect('Menu/TaskPlanner2/'.$pdate);
+                                                    }
+                                                }else{
+                                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                    redirect('Menu/TaskPlanner2/'.$pdate);
+                                                }
+
                                             }
-                                        }
+                                        } 
                                     }
+                                }  
+                            }else{
+                                $cur_cmp_status = $this->Menu_model->get_statusbyid($cmp_Data_cstatus); 
+                                $cur_cmp_status_name = $cur_cmp_status[0]->name;
+                                $flash_message = $get_utypename.' |  '.$cur_cmp_status_name;
+                                if($rsuser_ids !== ''){
+                                    if (in_array($bdid, $user_ids_arr)) {
+                                        $flash_message = 'Company Status - '.$cur_cmp_status_name;
+                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                        redirect('Menu/TaskPlanner2/'.$pdate);
+                                    }
+                                }else{
+                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                    redirect('Menu/TaskPlanner2/'.$pdate);
                                 }
                             }
                         }
                     }
                 }
-              
 
+
+                }
+              
+// Start Check Restrction when admin add - user_types, action_id, company_status, partner_types, categorys
+
+// Start Check Restrction when admin add - user_types, action_id, company_status, partner_types
 
                 if (array_key_exists('user_types', $difference) && array_key_exists('action_id', $difference) && array_key_exists('company_status', $difference) && array_key_exists('partner_types', $difference) && sizeof($difference) == 4) {
                 
@@ -463,139 +501,22 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
                             $get_utypename = $get_utypename[0]->name;
 
                             foreach ($difference as $key => $value) {
-
-                                if ($key == 'action_id' && in_array($ntaction, $value)) {
-
-                                    $ntactionname = $this->Menu_model->get_actionbyid($ntaction);
-                                    $ntactionname = $ntactionname[0]->name;
-
-                                    foreach ($difference as $key => $value) {
-
-                                        if ($key == 'company_status'){
-                                            foreach($selectcompanybyuser as $tid){
-                                                $cmp_Data = $this->Menu_model->getCompanyStatus($tid);
-                                                $cmp_Data_cstatus = $cmp_Data[0]->cstatus;
-                                                $rst_cmpid_id = $cmp_Data[0]->cmpid_id;
-                                                if (in_array($cmp_Data_cstatus, $value)){
-
-                                                    $cur_cmp_status = $this->Menu_model->get_statusbyid($cmp_Data_cstatus); 
-                                                    $cur_cmp_status_name = $cur_cmp_status[0]->name;
-
-                                                    foreach ($difference as $key => $value) {
-                                                        if ($key == 'partner_types') {
-
-                                                            foreach($value as $partnertype){
-                                                                $cmp_part = $this->Menu_model->get_cmp_partnertype($partnertype,$bdid);
-                                                                foreach ($cmp_part as $obj) {
-                                                                    if ($obj->inid == $tid) {
-                                                                        $exists = true;
-                                                                        break;
-                                                                    }
-                                                                }
-                                                                
-                                                                if ($exists) {
-                                                                    $cmp_prtData = $this->Menu_model->get_partnerById($partnertype); 
-                                                                    $cmp_prt_name = $cmp_prtData[0]->name;
+                                if ($key == 'user_types' && in_array($uyid, $value)) {
         
-                                                                    $flash_message = $get_utypename.' | '.$ntactionname.' |  '.$cur_cmp_status_name.' | '.$cmp_prt_name;
-
-                                                                    if($rsuser_ids !== ''){
-                                                                        if (in_array($bdid, $user_ids_arr)) {
-                                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restrication of '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
-                                                                            redirect('Menu/TaskPlanner/'.$pdate);
-                                                                        }
-                                                                    }else{
-                                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restrication of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
-                                                                        redirect('Menu/TaskPlanner/'.$pdate);
-                                                                    }
-                                                                }
-                                                            } 
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-           
-
-                if (array_key_exists('user_types', $difference) && array_key_exists('action_id', $difference) && array_key_exists('company_status', $difference) && sizeof($difference) == 3 ) {
-                
-                    foreach ($difference as $key => $value) {
-                        if ($key == 'user_types' && in_array($uyid, $value)) {
-
-                            $get_utypename = $this->Menu_model->get_utype($uyid);
-                            $get_utypename = $get_utypename[0]->name;
-                            
-                            foreach ($difference as $key => $value) {
-                                if ($key == 'action_id' && in_array($ntaction, $value)) {
-
-                                    $ntactionname = $this->Menu_model->get_actionbyid($ntaction);
-                                    $ntactionname = $ntactionname[0]->name;
-
+                                    $get_utypename = $this->Menu_model->get_utype($uyid);
+                                    $get_utypename = $get_utypename[0]->name;
+                                    
                                     foreach ($difference as $key => $value) {
                                         if ($key == 'company_status'){
                                             foreach($selectcompanybyuser as $tid){
-                                                $cmp_Data = $this->Menu_model->getCompanyStatus($tid);
+                                                $cmp_Data = $this->getResCompanyStatus($tid);
                                                 $cmp_Data_cstatus = $cmp_Data[0]->cstatus;
                                                 $rst_cmpid_id = $cmp_Data[0]->cmpid_id;
                                              
                                                 if (in_array($cmp_Data_cstatus, $value)){
-                                                   
+                                              
                                                     $cur_cmp_status = $this->Menu_model->get_statusbyid($cmp_Data_cstatus); 
                                                     $cur_cmp_status_name = $cur_cmp_status[0]->name;
-
-                                                    $flash_message = $get_utypename.' | '.$ntactionname.' |  '.$cur_cmp_status_name;
-                                                   
-                                                    if($rsuser_ids !== ''){
-                                                        if (in_array($bdid, $user_ids_arr)) {
-                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restrication of '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
-                                                            redirect('Menu/TaskPlanner/'.$pdate);
-                                                        }
-                                                    }else{
-                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restrication of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
-                                                        redirect('Menu/TaskPlanner/'.$pdate);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-
-                if (array_key_exists('user_types', $difference) && array_key_exists('action_id', $difference) && array_key_exists('partner_types', $difference) && sizeof($difference) == 3) {
-                
-                    foreach ($difference as $key => $value) {
-                        if ($key == 'user_types' && in_array($uyid, $value)) {
-
-                            $get_utypename = $this->Menu_model->get_utype($uyid);
-                            $get_utypename = $get_utypename[0]->name;
-
-                            foreach ($difference as $key => $value) {
-                               
-                                if ($key == 'action_id' && in_array($ntaction, $value)) {
-
-                                    $ntactionname = $this->Menu_model->get_actionbyid($ntaction);
-                                    $ntactionname = $ntactionname[0]->name;
-                                  
-                                    foreach ($difference as $key => $value) {
-                                     
-                                            foreach($selectcompanybyuser as $tid){
-
-                                                $cmp_Data = $this->Menu_model->getCompanyStatus($tid);
-                                                $cmp_Data_cstatus = $cmp_Data[0]->cstatus;
-                                                $rst_cmpid_id = $cmp_Data[0]->cmpid_id;
-
-                                                    $get_prtnr = $this->Menu_model->get_comPartnerID($rst_cmpid_id); 
-                                                    $get_prtnr_id = $get_prtnr[0]->partnerType_id;
 
                                                     foreach ($difference as $key => $value) {
                                                         if ($key == 'partner_types') {
@@ -612,18 +533,285 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
                                                                 if ($exists) {
                                                                     $cmp_prtData = $this->Menu_model->get_partnerById($partnertype); 
                                                                     $cmp_prt_name = $cmp_prtData[0]->name;
-        
-                                                                    $flash_message = $get_utypename.' | '.$ntactionname.' | '.$cmp_prt_name;
-        
+                                                                    
+                                                                    foreach ($difference as $key => $value) {
+                                                                        if ($key == 'action_id' && !in_array($ntaction, $value)) {
+                                        
+                                                                            $ntactionname = $this->Menu_model->get_actionbyid($ntaction);
+                                                                            $ntactionname = $ntactionname[0]->name;
+                        
+                                                                            $flash_message = $get_utypename.' | '.$cur_cmp_status_name.' | '.$cmp_prt_name.' | '.$ntactionname;
+                                                                            
+                                                                            if($rsuser_ids !== ''){
+                                                                                if (in_array($bdid, $user_ids_arr)) {
+                                                                                    $flash_message = 'Company Status - '.$cur_cmp_status_name.' & Task Action - '.$ntactionname;
+                                                                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                                    redirect('Menu/TaskPlanner2/'.$pdate);
+                                                                                }
+                                                                            }else{
+                                                                                $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                                redirect('Menu/TaskPlanner2/'.$pdate);
+                                                                            }
+                                                                        }
+                                                                     }
+                                                                }else{
+                                                                    $cmp_prtData = $this->Menu_model->get_partnerById($partnertype); 
+                                                                    $cmp_prt_name = $cmp_prtData[0]->name;
+                                                                    $flash_message = $get_utypename.' | '.$cur_cmp_status_name.' | '.$cmp_prt_name;
+
                                                                     if($rsuser_ids !== ''){
                                                                         if (in_array($bdid, $user_ids_arr)) {
-                                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restrication of '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
-                                                                        redirect('Menu/TaskPlanner/'.$pdate);
+                                                                            
+                                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                            redirect('Menu/TaskPlanner2/'.$pdate);
                                                                         }
                                                                     }else{
-                                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restrication of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
-                                                                        redirect('Menu/TaskPlanner/'.$pdate);
+                                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                        redirect('Menu/TaskPlanner2/'.$pdate);
                                                                     }
+
+                                                                }
+                                                            } 
+                                                        }
+                                                    }  
+                                                }else{
+                                                    $cur_cmp_status = $this->Menu_model->get_statusbyid($cmp_Data_cstatus); 
+                                                    $cur_cmp_status_name = $cur_cmp_status[0]->name;
+                                                    $flash_message = $get_utypename.' |  '.$cur_cmp_status_name;
+                                                    if($rsuser_ids !== ''){
+                                                        if (in_array($bdid, $user_ids_arr)) {
+                                                            $flash_message = 'Company Status - '.$cur_cmp_status_name;
+                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                            redirect('Menu/TaskPlanner2/'.$pdate);
+                                                        }
+                                                    }else{
+                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                        redirect('Menu/TaskPlanner2/'.$pdate);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+// End Check Restrction when admin add - user_types, action_id, company_status, partner_types
+
+
+// Start Check Restrction when admin add - user_types, action_id, company_status, categorys
+
+                if (array_key_exists('user_types', $difference) && array_key_exists('action_id', $difference) && array_key_exists('company_status', $difference) && array_key_exists('categorys', $difference) && sizeof($difference) == 4) {
+                
+                    foreach ($difference as $key => $value) {
+                        if ($key == 'user_types' && in_array($uyid, $value)) {
+
+                            $get_utypename = $this->Menu_model->get_utype($uyid);
+                            $get_utypename = $get_utypename[0]->name;
+
+                            foreach ($difference as $key => $value) {
+                                if ($key == 'user_types' && in_array($uyid, $value)) {
+        
+                                    $get_utypename = $this->Menu_model->get_utype($uyid);
+                                    $get_utypename = $get_utypename[0]->name;
+                                    
+                                    foreach ($difference as $key => $value) {
+                                        if ($key == 'company_status'){
+                                            foreach($selectcompanybyuser as $tid){
+                                                $cmp_Data = $this->getResCompanyStatus($tid);
+                                                $cmp_Data_cstatus = $cmp_Data[0]->cstatus;
+                                                $rst_cmpid_id = $cmp_Data[0]->cmpid_id;
+                                             
+                                                if (in_array($cmp_Data_cstatus, $value)){
+                                              
+                                                    $cur_cmp_status = $this->Menu_model->get_statusbyid($cmp_Data_cstatus); 
+                                                    $cur_cmp_status_name = $cur_cmp_status[0]->name;
+
+
+                                                    foreach ($difference as $key => $value) {
+
+                                                        if ($key == 'categorys') {
+
+                                                            foreach($value as $rst_cate){
+
+                                                                if($rst_cate == 'topspender'){$catename = 'Top Spender';}
+                                                                if($rst_cate == 'upsell_client'){$catename = 'Upsell Client';}
+                                                                if($rst_cate == 'focus_funnel'){$catename = 'Focus Funnel';}
+                                                                if($rst_cate == 'keycompany'){$catename = 'Key Company';}
+                                                                if($rst_cate == 'pkclient'){$catename = 'Positive Key Client';}
+                                
+                                                                $get_db_cat = $this->Menu_model->get_comCategorys($rst_cate,$tid);
+                                                                
+                                                                if(sizeof($get_db_cat) !== 0){
+                                                                   
+                                                                    foreach ($difference as $key => $value) {
+                                                                        if ($key == 'action_id' && !in_array($ntaction, $value)) {
+                                        
+                                                                            $ntactionname = $this->Menu_model->get_actionbyid($ntaction);
+                                                                            $ntactionname = $ntactionname[0]->name;
+                        
+                                                                            $flash_message = $get_utypename.' | '.$cur_cmp_status_name.' | '.$catename.' | '.$ntactionname;
+                                                                            
+                                                                            if($rsuser_ids !== ''){
+                                                                                if (in_array($bdid, $user_ids_arr)) {
+                                                                                   
+                                                                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                                    redirect('Menu/TaskPlanner2/'.$pdate);
+                                                                                }
+                                                                            }else{
+                                                                                $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                                redirect('Menu/TaskPlanner2/'.$pdate);
+                                                                            }
+                                                                        }
+                                                                     }
+                                                                }else{
+
+                                                                    $flash_message = $get_utypename.' | '.$cur_cmp_status_name.' | '.$catename;
+                                                                            
+                                                                    if($rsuser_ids !== ''){
+                                                                        if (in_array($bdid, $user_ids_arr)) {
+                                                
+                                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                            redirect('Menu/TaskPlanner2/'.$pdate);
+                                                                        }
+                                                                    }else{
+                                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                        redirect('Menu/TaskPlanner2/'.$pdate);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }else{
+                                                    $cur_cmp_status = $this->Menu_model->get_statusbyid($cmp_Data_cstatus); 
+                                                    $cur_cmp_status_name = $cur_cmp_status[0]->name;
+                                                    $flash_message = $get_utypename.' |  '.$cur_cmp_status_name;
+                                                    if($rsuser_ids !== ''){
+                                                        if (in_array($bdid, $user_ids_arr)) {
+                                                            $flash_message = 'Company Status - '.$cur_cmp_status_name;
+                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                            redirect('Menu/TaskPlanner2/'.$pdate);
+                                                        }
+                                                    }else{
+                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                        redirect('Menu/TaskPlanner2/'.$pdate);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+ // End Check Restrction when admin add - user_types, action_id, company_status, categorys
+
+// Start Check Restrction when admin add - user_types, action_id, partner_types,categorys
+
+                if (array_key_exists('user_types', $difference) && array_key_exists('action_id', $difference) && array_key_exists('partner_types', $difference) && array_key_exists('categorys', $difference) && sizeof($difference) == 4) {
+                
+                    foreach ($difference as $key => $value) {
+                        if ($key == 'user_types' && in_array($uyid, $value)) {
+
+                            $get_utypename = $this->Menu_model->get_utype($uyid);
+                            $get_utypename = $get_utypename[0]->name;
+
+                            foreach ($difference as $key => $value) {
+                                if ($key == 'user_types' && in_array($uyid, $value)) {
+        
+                                    $get_utypename = $this->Menu_model->get_utype($uyid);
+                                    $get_utypename = $get_utypename[0]->name;
+                                    
+                                                    foreach ($difference as $key => $value) {
+                                                        if ($key == 'partner_types') {
+
+                                                            foreach($value as $partnertype){
+                                                                $cmp_part = $this->Menu_model->get_cmp_partnertype($partnertype,$bdid);
+                                                                foreach ($cmp_part as $obj) {
+                                                                    if ($obj->inid == $tid) {
+                                                                        $exists = true;
+                                                                        break;
+                                                                    }
+                                                                }
+                                                                
+                                                                if ($exists) {
+                                                                    $cmp_prtData = $this->Menu_model->get_partnerById($partnertype); 
+                                                                    $cmp_prt_name = $cmp_prtData[0]->name;
+                                                                
+                                                                    foreach ($difference as $key => $value) {
+
+                                                                        if ($key == 'categorys') {
+                
+                                                                            foreach($value as $rst_cate){
+                
+                                                                                if($rst_cate == 'topspender'){$catename = 'Top Spender';}
+                                                                                if($rst_cate == 'upsell_client'){$catename = 'Upsell Client';}
+                                                                                if($rst_cate == 'focus_funnel'){$catename = 'Focus Funnel';}
+                                                                                if($rst_cate == 'keycompany'){$catename = 'Key Company';}
+                                                                                if($rst_cate == 'pkclient'){$catename = 'Positive Key Client';}
+                                                
+                                                                                $get_db_cat = $this->Menu_model->get_comCategorys($rst_cate,$tid);
+                                                                                
+                                                                                if(sizeof($get_db_cat) !== 0){
+                                                                                   
+                                                                                    foreach ($difference as $key => $value) {
+                                                                                        if ($key == 'action_id' && !in_array($ntaction, $value)) {
+                                                        
+                                                                                            $ntactionname = $this->Menu_model->get_actionbyid($ntaction);
+                                                                                            $ntactionname = $ntactionname[0]->name;
+                                        
+                                                                                            $flash_message = $get_utypename.' | '.$cmp_prt_name.' | '.$catename.' | '.$ntactionname;
+                                                                                            
+                                                                                            if($rsuser_ids !== ''){
+                                                                                                if (in_array($bdid, $user_ids_arr)) {
+                                                                                                   
+                                                                                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                                                    redirect('Menu/TaskPlanner2/'.$pdate);
+                                                                                                }
+                                                                                            }else{
+                                                                                                $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                                                redirect('Menu/TaskPlanner2/'.$pdate);
+                                                                                            }
+                                                                                        }
+                                                                                     }
+                                                                                }else{
+                
+                                                                                    $flash_message = $get_utypename.' | '.$cur_cmp_status_name.' | '.$catename;
+                                                                                            
+                                                                                    if($rsuser_ids !== ''){
+                                                                                        if (in_array($bdid, $user_ids_arr)) {
+                                                                
+                                                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                                            redirect('Menu/TaskPlanner2/'.$pdate);
+                                                                                        }
+                                                                                    }else{
+                                                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                                        redirect('Menu/TaskPlanner2/'.$pdate);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }else{
+                                                                    $cmp_prtData = $this->Menu_model->get_partnerById($partnertype); 
+                                                                    $cmp_prt_name = $cmp_prtData[0]->name;
+                                                                    $flash_message = $get_utypename.' | '.$cur_cmp_status_name.' | '.$cmp_prt_name;
+
+                                                                    if($rsuser_ids !== ''){
+                                                                        if (in_array($bdid, $user_ids_arr)) {
+                                                                            
+                                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                            redirect('Menu/TaskPlanner2/'.$pdate);
+                                                                        }
+                                                                    }else{
+                                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                        redirect('Menu/TaskPlanner2/'.$pdate);
+                                                                    }
+
                                                                 }
                                                             } 
                                                         }
@@ -632,228 +820,278 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
                                             }
                                         }
                                     }
-                                }
-                            }
-                        }
+                                }           
+// End Check Restrction when admin add - user_types, action_id, partner_types,categorys
 
+// Start Check Restrction when admin add - user_types, action_id, partner_types
 
-
-                        if (array_key_exists('user_types', $difference) && array_key_exists('action_id', $difference) && array_key_exists('categorys', $difference) && sizeof($difference) == 3) {
+if (array_key_exists('user_types', $difference) && array_key_exists('action_id', $difference) && array_key_exists('partner_types', $difference) && sizeof($difference) == 3) {
                 
-                            foreach ($difference as $key => $value) {
-                                if ($key == 'user_types' && in_array($uyid, $value)) {
-        
-                                    $get_utypename = $this->Menu_model->get_utype($uyid);
-                                    $get_utypename = $get_utypename[0]->name;
-        
-                                    foreach ($difference as $key => $value) {
-                                       
-                                        if ($key == 'action_id' && in_array($ntaction, $value)) {
-        
-                                            $ntactionname = $this->Menu_model->get_actionbyid($ntaction);
-                                            $ntactionname = $ntactionname[0]->name;
-                                          
-                                            foreach ($difference as $key => $value) {
-                                             
-                                                    foreach($selectcompanybyuser as $tid){
-        
-                                                        $cmp_Data = $this->Menu_model->getCompanyStatus($tid);
-                                                        $cmp_Data_cstatus = $cmp_Data[0]->cstatus;
-                                                        $rst_cmpid_id = $cmp_Data[0]->cmpid_id;
-        
-                                                            $get_prtnr = $this->Menu_model->get_comPartnerID($rst_cmpid_id); 
-                                                            $get_prtnr_id = $get_prtnr[0]->partnerType_id;
-        
-                                                            foreach ($difference as $key => $value) {
-                                                            
-                                                                foreach($value as $rst_cate){
+    foreach ($difference as $key => $value) {
+        if ($key == 'user_types' && in_array($uyid, $value)) {
 
-                                                                    $get_db_cat = $this->Menu_model->get_comCategorys($rst_cate,$tid);
-                                                                    if(sizeof($get_db_cat) == 0){
-                                                                        if($rst_cate == 'topspender'){$catename = 'Top Spender';}
-                                                                        if($rst_cate == 'upsell_client'){$catename = 'Upsell Client';}
-                                                                        if($rst_cate == 'focus_funnel'){$catename = 'Focus Funnel';}
-                                                                        if($rst_cate == 'keycompany'){$catename = 'Key Company';}
-                                                                        if($rst_cate == 'pkclient'){$catename = 'Positive Key Client';}
-                                                                    
-                                                                        $flash_message = $get_utypename.' | '.$ntactionname.' | '.$catename;
-                                    
-                                                                        if($rsuser_ids !== ''){
-                                                                            if (in_array($bdid, $user_ids_arr)) {
-                                                                                $this->session->set_flashdata('success_message','Admin have Added Special Restrication of '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
-                                                                            redirect('Menu/TaskPlanner/'.$pdate);
-                                                                            }
-                                                                        }else{
-                                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restrication of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
-                                                                        redirect('Menu/TaskPlanner/'.$pdate);
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }  
+            $get_utypename = $this->Menu_model->get_utype($uyid);
+            $get_utypename = $get_utypename[0]->name;
+
+            foreach ($difference as $key => $value) {
+                if ($key == 'user_types' && in_array($uyid, $value)) {
+
+                    $get_utypename = $this->Menu_model->get_utype($uyid);
+                    $get_utypename = $get_utypename[0]->name;
+                    foreach ($difference as $key => $value) {
+                        if ($key == 'partner_types') {
+
+                                        foreach($value as $partnertype){
+                                            $cmp_part = $this->Menu_model->get_cmp_partnertype($partnertype,$bdid);
+                                            foreach ($cmp_part as $obj) {
+                                                if ($obj->inid == $tid) {
+                                                    $exists = true;
+                                                    break;
+                                                }
+                                            }
+                                            
+                                            if ($exists) {
+                                                $cmp_prtData = $this->Menu_model->get_partnerById($partnertype); 
+                                                $cmp_prt_name = $cmp_prtData[0]->name;
+                                                
+                                                foreach ($difference as $key => $value) {
+                                                    if ($key == 'action_id' && !in_array($ntaction, $value)) {
+                    
+                                                        $ntactionname = $this->Menu_model->get_actionbyid($ntaction);
+                                                        $ntactionname = $ntactionname[0]->name;
+
+                                                        $flash_message = $get_utypename.' | '.$cmp_prt_name.' | '.$ntactionname;
+                                                        
+                                                        if($rsuser_ids !== ''){
+                                                            if (in_array($bdid, $user_ids_arr)) {
+                                                                $flash_message = 'Company Status - '.$cur_cmp_status_name.' & Task Action - '.$ntactionname;
+                                                                $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                redirect('Menu/TaskPlanner2/'.$pdate);
+                                                            }
+                                                        }else{
+                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                            redirect('Menu/TaskPlanner2/'.$pdate);
                                                         }
                                                     }
+                                                }
+                                            }else{
+                                                $cmp_prtData = $this->Menu_model->get_partnerById($partnertype); 
+                                                $cmp_prt_name = $cmp_prtData[0]->name;
+                                                $flash_message = $get_utypename.' | '.$cmp_prt_name;
+
+                                                if($rsuser_ids !== ''){
+                                                    if (in_array($bdid, $user_ids_arr)) {
+                                                        
+                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                        redirect('Menu/TaskPlanner2/'.$pdate);
+                                                    }
+                                                }else{
+                                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                    redirect('Menu/TaskPlanner2/'.$pdate);
+                                                }
+                                            }
+                                        } 
+                                    }
+                                }        
+                            }
+                        }
+                    }
+                }
+            }
+                    
+// End Check Restrction when admin add - user_types, action_id, partner_types
+
+// Start Check Restrction when admin add - user_types, action_id, categorys
+
+if (array_key_exists('user_types', $difference) && array_key_exists('action_id', $difference) && array_key_exists('categorys', $difference) && sizeof($difference) == 3) {
+                
+    foreach ($difference as $key => $value) {
+        if ($key == 'user_types' && in_array($uyid, $value)) {
+
+            $get_utypename = $this->Menu_model->get_utype($uyid);
+            $get_utypename = $get_utypename[0]->name;
+
+            foreach ($difference as $key => $value) {
+                if ($key == 'user_types' && in_array($uyid, $value)) {
+
+                    $get_utypename = $this->Menu_model->get_utype($uyid);
+                    $get_utypename = $get_utypename[0]->name;
+                    
+                                foreach ($difference as $key => $value) {
+
+                                    if ($key == 'categorys') {
+
+                                        foreach($value as $rst_cate){
+
+                                            if($rst_cate == 'topspender'){$catename = 'Top Spender';}
+                                            if($rst_cate == 'upsell_client'){$catename = 'Upsell Client';}
+                                            if($rst_cate == 'focus_funnel'){$catename = 'Focus Funnel';}
+                                            if($rst_cate == 'keycompany'){$catename = 'Key Company';}
+                                            if($rst_cate == 'pkclient'){$catename = 'Positive Key Client';}
+
+                                            $get_db_cat = $this->Menu_model->get_comCategorys($rst_cate,$tid);
+                                            
+                                            if(sizeof($get_db_cat) !== 0){
+                                            
+                                                foreach ($difference as $key => $value) {
+                                                    if ($key == 'action_id' && !in_array($ntaction, $value)) {
+                    
+                                                        $ntactionname = $this->Menu_model->get_actionbyid($ntaction);
+                                                        $ntactionname = $ntactionname[0]->name;
+
+                                                        $flash_message = $get_utypename.' | '.$catename.' | '.$ntactionname;
+                                                        
+                                                        if($rsuser_ids !== ''){
+                                                            if (in_array($bdid, $user_ids_arr)) {
+                                                            
+                                                                $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                redirect('Menu/TaskPlanner2/'.$pdate);
+                                                            }
+                                                        }else{
+                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                            redirect('Menu/TaskPlanner2/'.$pdate);
+                                                        }
+                                                    }
+                                                }
+                                            }else{
+
+                                                $flash_message = $get_utypename.' | '.$catename;
+                                                        
+                                                if($rsuser_ids !== ''){
+                                                    if (in_array($bdid, $user_ids_arr)) {
+                            
+                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                        redirect('Menu/TaskPlanner2/'.$pdate);
+                                                    }
+                                                }else{
+                                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                    redirect('Menu/TaskPlanner2/'.$pdate);
                                                 }
                                             }
                                         }
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+                    
+// End Check Restrction when admin add - user_types, action_id, categorys
 
+// Start Check Restrction when admin add - user_types, action_id, company_status
+
+if (array_key_exists('user_types', $difference) && array_key_exists('action_id', $difference) && array_key_exists('company_status', $difference) && sizeof($difference) == 3 ) {
                 
-                if (array_key_exists('user_types', $difference) && array_key_exists('action_id', $difference) && sizeof($difference) == 2) {
-                
+    foreach ($difference as $key => $value) {
+        if ($key == 'user_types' && in_array($uyid, $value)) {
 
-                  
-
-                    foreach ($difference as $key => $value) {
-                        if ($key == 'user_types' && in_array($uyid, $value)) {
-
-                            $get_utypename = $this->Menu_model->get_utype($uyid);
-                            $get_utypename = $get_utypename[0]->name;
-
+            $get_utypename = $this->Menu_model->get_utype($uyid);
+            $get_utypename = $get_utypename[0]->name;
+            
+            foreach ($difference as $key => $value) {
+                if ($key == 'company_status'){
+                    foreach($selectcompanybyuser as $tid){
+                        $cmp_Data = $this->getResCompanyStatus($tid);
+                        $cmp_Data_cstatus = $cmp_Data[0]->cstatus;
+                        $rst_cmpid_id = $cmp_Data[0]->cmpid_id;
+                     
+                        if (in_array($cmp_Data_cstatus, $value)){
+                      
+                            $cur_cmp_status = $this->Menu_model->get_statusbyid($cmp_Data_cstatus); 
+                            $cur_cmp_status_name = $cur_cmp_status[0]->name;
                             foreach ($difference as $key => $value) {
-                                if ($key == 'action_id' && in_array($ntaction, $value)) {
+                                if ($key == 'action_id' && !in_array($ntaction, $value)) {
+
+                                    $ntactionname = $this->Menu_model->get_actionbyid($ntaction);
+                                    $ntactionname = $ntactionname[0]->name;
+
+                                    $flash_message = $get_utypename.' | '.$cur_cmp_status_name.' | '.$ntactionname;
                                     
-                                        $ntactionname = $this->Menu_model->get_actionbyid($ntaction);
-                                        $ntactionname = $ntactionname[0]->name;
-
-                                        $flash_message = $get_utypename.' | '.$ntactionname;
-
-                                        if($rsuser_ids !== ''){
-                                            if (in_array($bdid, $user_ids_arr)) {
-                                                $this->session->set_flashdata('success_message','Admin have Added Special Restrication of '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
-                                            redirect('Menu/TaskPlanner/'.$pdate);
-                                            }
-                                        }else{
-                                            $this->session->set_flashdata('success_message','Admin have Added Special Restrication of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
-                                            redirect('Menu/TaskPlanner/'.$pdate);
+                                    if($rsuser_ids !== ''){
+                                        if (in_array($bdid, $user_ids_arr)) {
+                                            $flash_message = 'Company Status - '.$cur_cmp_status_name.' & Task Action - '.$ntactionname;
+                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                            redirect('Menu/TaskPlanner2/'.$pdate);
                                         }
+                                    }else{
+                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                        redirect('Menu/TaskPlanner2/'.$pdate);
+                                    }
                                 }
+                             }
+                        }else{
+                            $cur_cmp_status = $this->Menu_model->get_statusbyid($cmp_Data_cstatus); 
+                            $cur_cmp_status_name = $cur_cmp_status[0]->name;
+                            $flash_message = $get_utypename.' |  '.$cur_cmp_status_name;
+                            if($rsuser_ids !== ''){
+                                if (in_array($bdid, $user_ids_arr)) {
+                                    $flash_message = 'Company Status - '.$cur_cmp_status_name;
+                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                    redirect('Menu/TaskPlanner2/'.$pdate);
+                                }
+                            }else{
+                                $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                redirect('Menu/TaskPlanner2/'.$pdate);
                             }
                         }
                     }
                 }
+            }
+        }
+    }
+}
 
+// End Check Restrction when admin add - user_types, action_id, company_status
 
-                if (array_key_exists('user_types', $difference) && sizeof($difference) == 1) {
+// Start Check Restrction when admin add - user_types, action_id
+
+if (array_key_exists('user_types', $difference) && array_key_exists('action_id', $difference) && sizeof($difference) == 2) {
                 
+    foreach ($difference as $key => $value) {
+        if ($key == 'user_types' && in_array($uyid, $value)) {
+
+            $get_utypename = $this->Menu_model->get_utype($uyid);
+            $get_utypename = $get_utypename[0]->name;
+
+            foreach ($difference as $key => $value) {
+                if ($key == 'user_types' && in_array($uyid, $value)) {
+
+                    $get_utypename = $this->Menu_model->get_utype($uyid);
+                    $get_utypename = $get_utypename[0]->name;
                     foreach ($difference as $key => $value) {
-                        if ($key == 'user_types' && in_array($uyid, $value)) {
-                           
-                                $get_utypename = $this->Menu_model->get_utype($uyid);
-                                $get_utypename = $get_utypename[0]->name;
-
-                                $flash_message = $get_utypename;
-
-                                $this->session->set_flashdata('success_message','Admin have Added Special Restrication of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
-                                redirect('Menu/TaskPlanner/'.$pdate);
-                        }
-                    }
-                }
-
-
-                if (array_key_exists('company_status', $difference) && sizeof($difference) == 1) {
-                
-                    foreach ($difference as $key => $value) {
-                        foreach($selectcompanybyuser as $tid){
-
-                            $cmp_Data = $this->Menu_model->getCompanyStatus($tid);
-                            $cmp_Data_cstatus = $cmp_Data[0]->cstatus;
-                            $rst_cmpid_id = $cmp_Data[0]->cmpid_id;
-                            if (in_array($cmp_Data_cstatus, $value)){
-
-                                $cur_cmp_status = $this->Menu_model->get_statusbyid($cmp_Data_cstatus); 
-                                $cur_cmp_status_name = $cur_cmp_status[0]->name;
-
-                                $flash_message = $cur_cmp_status_name;
-
-                                $this->session->set_flashdata('success_message','Admin have Added Special Restrication of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
-                                redirect('Menu/TaskPlanner/'.$pdate);
-                               
-                            }
-                        }
-                    }
-                }
-
-
-                if (array_key_exists('action_id', $difference) && sizeof($difference) == 1) {
-                
-                    foreach ($difference as $key => $value) {
-                        if ($key == 'action_id' && in_array($ntaction, $value)) {
+                        if ($key == 'action_id' && !in_array($ntaction, $value)) {
 
                             $ntactionname = $this->Menu_model->get_actionbyid($ntaction);
                             $ntactionname = $ntactionname[0]->name;
 
-                            $this->session->set_flashdata('success_message','Admin have Added Special Restrication of '.$ntactionname.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
-                                redirect('Menu/TaskPlanner/'.$pdate);
-                        }
-                    }
-                }
-
-
-
-                if (array_key_exists('partner_types', $difference) && sizeof($difference) == 1) {
-                
-                    foreach($selectcompanybyuser as $tid){
-
-                        foreach ($difference as $key => $value) {
-                            if ($key == 'partner_types') {
-                                foreach($value as $partnertype){
-                                    $cmp_part = $this->Menu_model->get_cmp_partnertype($partnertype,$bdid);
-                                    foreach ($cmp_part as $obj) {
-                                        if ($obj->inid == $tid) {
-                                            $exists = true;
-                                            break;
-                                        }
-                                    }
-                                    
-                                    if ($exists) {
-                                        $cmp_prtData = $this->Menu_model->get_partnerById($partnertype); 
-                                        $cmp_prt_name = $cmp_prtData[0]->name;
-
-                                        $flash_message = $cmp_prt_name;
-
-                                        $this->session->set_flashdata('success_message','Admin have Added Special Restrication of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
-                                        redirect('Menu/TaskPlanner/'.$pdate);
-                                    }
-                                } 
-                            }
-                        }  
-                    }
-                }
-
-
-
-                if (array_key_exists('categorys', $difference) && sizeof($difference) == 1) {
-                
-                    foreach ($difference as $key => $value) {
-
-                            foreach($value as $rst_cate){
-
-                                $get_db_cat = $this->Menu_model->get_comCategorys($rst_cate,$tid);
-                                if(sizeof($get_db_cat) == 0){
-                                    if($rst_cate == 'topspender'){$catename = 'Top Spender';}
-                                    if($rst_cate == 'upsell_client'){$catename = 'Upsell Client';}
-                                    if($rst_cate == 'focus_funnel'){$catename = 'Focus Funnel';}
-                                    if($rst_cate == 'keycompany'){$catename = 'Key Company';}
-                                    if($rst_cate == 'pkclient'){$catename = 'Positive Key Client';}
-                                
-                                    $flash_message = $catename;
-
-                                    $this->session->set_flashdata('success_message','Admin have Added Special Restrication of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
-                                    redirect('Menu/TaskPlanner/'.$pdate);
+                            $flash_message = $get_utypename.' | '.$ntactionname;
+                            
+                            if($rsuser_ids !== ''){
+                                if (in_array($bdid, $user_ids_arr)) {
+                                    $flash_message = 'Company Status - '.$cur_cmp_status_name.' & Task Action - '.$ntactionname;
+                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                    redirect('Menu/TaskPlanner2/'.$pdate);
                                 }
+                            }else{
+                                $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                redirect('Menu/TaskPlanner2/'.$pdate);
                             }
-                    }
+                        }
+                     }           
                 }
-
-                // Handle other conditions as needed
             }
         }
-        
-    
-        }
-
     }
+}
+                    
+// End Check Restrction when admin add - user_types, action_id
+
+// Handle other conditions as needed
+            }
+        }
+    }
+}
 // Special Restrication on Task Planner 
 // ---------- Close ------------------
 
@@ -861,6 +1099,10 @@ public function DeleteSpecialRestrication($id){
     $query=$this->db->query("DELETE FROM `spcl_rest_task_planner` WHERE id=$id");
 }
 
+public function getResCompanyStatus($cmpid){
+    $query=$this->db->query("SELECT * FROM `init_call` WHERE id ='$cmpid'");
+    return $query->result();
+}
 
 
 

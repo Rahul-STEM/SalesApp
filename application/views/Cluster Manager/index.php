@@ -343,6 +343,7 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                   ?>
                 <center><h5>Total My Funnel </h5></center><hr>
                         <p><a href="pcompanies/0/<?=$uid?>">Total Companies - <b><?=$mc->a?></b></a><hr>
+                        <p><a href="bdcompanies/35/<?=$uid?>">Common Companies - <b><?=$mc->s?></b></a><hr>
                         <p><a href="bdcompanies/1/<?=$uid?>">Open - <b><?=$mc->b?></b></p></a><hr>
                         <p><a href="bdcompanies/8/<?=$uid?>">Open [RPEM] - <b><?=$mc->i?></b></p></a><hr>
                         <p><a href="bdcompanies/2/<?=$uid?>">Reachout - <b><?=$mc->c?></b></p></a><a style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse7" role="button" aria-expanded="false" aria-controls="collapse7">Read More</a></p><hr>

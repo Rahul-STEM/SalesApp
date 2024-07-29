@@ -57,6 +57,18 @@
 <?php if($do==0){?>
     <section class="content">
       <div class="container-fluid">
+
+      <?php
+              if ($this->session->flashdata('error_message')): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong> <?php echo $this->session->flashdata('error_message'); ?></strong>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <?php endif; ?>
+
+
        <div class="row p-3">
            <div class="col-sm col-md-6 col-lg-6 m-auto">
               <div class="card card-primary card-outline">
@@ -71,31 +83,15 @@
                         <input type="hidden" name="ustart" value="<?=date('Y-d-m H:i:s')?>">
                         <p>You Are Starting Day at <b><?=date('H:i:s');?></b><br><br>
                         <div class="mb-4">
-                            <select class="form-control" name="wffo">
+                            <select class="form-control" name="wffo" style="width:400px" >
                                 <option value="1">Work From Office</option>
                                 <option value="2">Work From Field</option>
                                 <option value="3">Work From Field+Office</option>
                             </select>
                         </div>
-                        
-                        <lable>Select Auto Task Time</lable>
-                        <select class="form-control" name="autotask">
-                                <option value="09:00:00">9am - 10am</option>
-                                <option value="10:00:00">10am - 11am</option>
-                                <option value="11:00:00">11am - 12pm</option>
-                                <option value="12:00:00">12pm - 01pm</option>
-                                <option value="13:00:00">01pm - 02pm</option>
-                                <option value="14:00:00">02pm - 03pm</option>
-                                <option value="15:00:00">03pm - 04pm</option>
-                                <option value="16:00:00">04pm - 05pm</option>
-                                <option value="17:00:00">05pm - 06pm</option>
-                                <option value="18:00:00">06pm - 07pm</option>
-                                <option value="19:00:00">07pm - 08pm</option>
-                                <option value="20:00:00">08pm - 09pm</option>
-                        </select>
-                        
+
                         <div class="mb-4 d-flex justify-content-center">
-                            <img class="border" id="blah" src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg" alt="your image" style="width:150px;height:250px"/>
+                            <img class="border" id="blah" src="https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/user-profile-icon.png" alt="your image" style="width:250px;height:250px"/>
                         </div>
                         <div class="d-flex justify-content-center">
                             <div class="btn btn-info btn-rounded">
@@ -114,7 +110,7 @@
                         </div>
                     </div>
                     <div class="form-group text-center">
-                        <button type="submit" class="btn btn-success" onclick="this.form.submit(); this.disabled = true;">Start Your Day</button>
+                        <button type="submit" class="btn btn-success" id="submitButton" >Start Your Day</button>
                     </div>
                   </form>
             </div>
@@ -346,6 +342,20 @@ $("#spd_id1").html(result);
 });
 
 </script>
+
+<script>
+    $(document).ready(function() {
+        $('#submitButton').click(function(event) {
+            var fileInput = $('#imgInp');
+            if (fileInput.val() === '') {
+                alert('Please Select Your Picture.');
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+</script>
+
 
           
         <!-- /.row (main row) -->

@@ -2520,7 +2520,9 @@ WHERE cid = '$cid'");
         $data = $this->Menu_model->get_tbldata($tid);
         $cid = $data[0]->cid_id;
         $query=$this->db->query("update init_call set apst=null,bpst=null where id='$cid'");
-        return $query->result();
+        if ($query) {
+           return 1;
+        }
     }
 
     public function set_keycompny($cmpid){
@@ -2677,7 +2679,7 @@ WHERE cid = '$cid'");
         if($utype ==4){
             $query=$this->db->query("SELECT COUNT(*) a,COUNT(CASE WHEN cstatus=1 THEN cstatus END) b,COUNT(CASE WHEN cstatus=2 THEN cstatus END) c,COUNT(CASE WHEN cstatus=3 THEN cstatus END) d,COUNT(CASE WHEN cstatus=4 THEN cstatus END) e,COUNT(CASE WHEN cstatus=5 THEN cstatus END) f,COUNT(CASE WHEN cstatus=6 THEN cstatus END) g,COUNT(CASE WHEN cstatus=7 THEN cstatus END) h,COUNT(CASE WHEN cstatus=8 THEN cstatus END) i,COUNT(CASE WHEN cstatus=9 THEN cstatus END) j,COUNT(CASE WHEN cstatus=10 THEN cstatus END) k,COUNT(CASE WHEN cstatus=11 THEN cstatus END) l,COUNT(CASE WHEN focus_funnel='yes' THEN focus_funnel END) m,COUNT(CASE WHEN upsell_client='yes' THEN upsell_client END) n,COUNT(CASE WHEN cstatus=12 THEN cstatus END) o,COUNT(CASE WHEN cstatus=13 THEN cstatus END) p, COUNT(CASE WHEN keycompany='yes' THEN keycompany END) q, COUNT(CASE WHEN priorityc='yes' THEN priorityc END) s, COUNT(CASE WHEN priorityc='yes' and cstatus='3' THEN priorityc END) t, COUNT(CASE WHEN pkclient='yes' THEN pkclient END) r FROM init_call WHERE apst='$uid'");
         }elseif($utype ==13){
-            $query=$this->db->query("SELECT COUNT(*) a,COUNT(CASE WHEN cstatus=1 THEN cstatus END) b,COUNT(CASE WHEN cstatus=2 THEN cstatus END) c,COUNT(CASE WHEN cstatus=3 THEN cstatus END) d,COUNT(CASE WHEN cstatus=4 THEN cstatus END) e,COUNT(CASE WHEN cstatus=5 THEN cstatus END) f,COUNT(CASE WHEN cstatus=6 THEN cstatus END) g,COUNT(CASE WHEN cstatus=7 THEN cstatus END) h,COUNT(CASE WHEN cstatus=8 THEN cstatus END) i,COUNT(CASE WHEN cstatus=9 THEN cstatus END) j,COUNT(CASE WHEN cstatus=10 THEN cstatus END) k,COUNT(CASE WHEN cstatus=11 THEN cstatus END) l,COUNT(CASE WHEN focus_funnel='yes' THEN focus_funnel END) m,COUNT(CASE WHEN upsell_client='yes' THEN upsell_client END) n,COUNT(CASE WHEN cstatus=12 THEN cstatus END) o,COUNT(CASE WHEN cstatus=13 THEN cstatus END) p, COUNT(CASE WHEN keycompany='yes' THEN keycompany END) q, COUNT(CASE WHEN priorityc='yes' THEN priorityc END) s, COUNT(CASE WHEN priorityc='yes' and cstatus='3' THEN priorityc END) t, COUNT(CASE WHEN pkclient='yes' THEN pkclient END) r FROM init_call WHERE mainbd='$uid' or clm_id= '$uid'");
+            $query=$this->db->query("SELECT COUNT(*) a,COUNT(CASE WHEN cstatus=1 THEN cstatus END) b,COUNT(CASE WHEN cstatus=2 THEN cstatus END) c,COUNT(CASE WHEN cstatus=3 THEN cstatus END) d,COUNT(CASE WHEN cstatus=4 THEN cstatus END) e,COUNT(CASE WHEN cstatus=5 THEN cstatus END) f,COUNT(CASE WHEN cstatus=6 THEN cstatus END) g,COUNT(CASE WHEN cstatus=7 THEN cstatus END) h,COUNT(CASE WHEN cstatus=8 THEN cstatus END) i,COUNT(CASE WHEN cstatus=9 THEN cstatus END) j,COUNT(CASE WHEN cstatus=10 THEN cstatus END) k,COUNT(CASE WHEN cstatus=11 THEN cstatus END) l,COUNT(CASE WHEN focus_funnel='yes' THEN focus_funnel END) m,COUNT(CASE WHEN upsell_client='yes' THEN upsell_client END) n,COUNT(CASE WHEN cstatus=12 THEN cstatus END) o,COUNT(CASE WHEN cstatus=13 THEN cstatus END) p, COUNT(CASE WHEN keycompany='yes' THEN keycompany END) q, COUNT(CASE WHEN priorityc='yes' THEN priorityc END) s, COUNT(CASE WHEN priorityc='yes' and cstatus='3' THEN priorityc END) t, COUNT(CASE WHEN pkclient='yes' THEN pkclient END) r,COUNT(CASE WHEN clm_id='$uid' THEN clm_id END) s FROM init_call WHERE mainbd='$uid' or clm_id= '$uid'");
         }else{
             $query=$this->db->query("SELECT COUNT(*) a,COUNT(CASE WHEN cstatus=1 THEN cstatus END) b,COUNT(CASE WHEN cstatus=2 THEN cstatus END) c,COUNT(CASE WHEN cstatus=3 THEN cstatus END) d,COUNT(CASE WHEN cstatus=4 THEN cstatus END) e,COUNT(CASE WHEN cstatus=5 THEN cstatus END) f,COUNT(CASE WHEN cstatus=6 THEN cstatus END) g,COUNT(CASE WHEN cstatus=7 THEN cstatus END) h,COUNT(CASE WHEN cstatus=8 THEN cstatus END) i,COUNT(CASE WHEN cstatus=9 THEN cstatus END) j,COUNT(CASE WHEN cstatus=10 THEN cstatus END) k,COUNT(CASE WHEN cstatus=11 THEN cstatus END) l,COUNT(CASE WHEN focus_funnel='yes' THEN focus_funnel END) m,COUNT(CASE WHEN upsell_client='yes' THEN upsell_client END) n,COUNT(CASE WHEN cstatus=12 THEN cstatus END) o,COUNT(CASE WHEN cstatus=13 THEN cstatus END) p, COUNT(CASE WHEN keycompany='yes' THEN keycompany END) q, COUNT(CASE WHEN priorityc='yes' THEN priorityc END) s, COUNT(CASE WHEN priorityc='yes' and cstatus='3' THEN priorityc END) t, COUNT(CASE WHEN pkclient='yes' THEN pkclient END) r FROM init_call WHERE mainbd='$uid'");
         }
@@ -3883,21 +3885,21 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
             return $query->result();
 
         }else if($utid==13){
-
+          
             if($sid==14){
-                $query=$this->db->query("SELECT DISTINCT cmpid_id FROM init_call where (mainbd= '$uid' or apst='$uid' or insidebd='$uid') and focus_funnel='yes'");
+                $query=$this->db->query("SELECT DISTINCT cmpid_id FROM init_call where (mainbd= '$uid' or clm_id='$uid') and focus_funnel='yes'");
                 }elseif($sid==15){
-                    $query=$this->db->query("SELECT DISTINCT cmpid_id FROM init_call where (mainbd= '$uid' or apst='$uid' or insidebd='$uid') and upsell_client='yes'");
+                    $query=$this->db->query("SELECT DISTINCT cmpid_id FROM init_call where (mainbd= '$uid' or clm_id='$uid') and upsell_client='yes'");
                 }elseif($sid==16){
-                    $query=$this->db->query("SELECT DISTINCT cmpid_id FROM init_call where (mainbd= '$uid' or apst='$uid' or insidebd='$uid') and keycompany='yes'");
+                    $query=$this->db->query("SELECT DISTINCT cmpid_id FROM init_call where (mainbd= '$uid' or clm_id='$uid') and keycompany='yes'");
                 }elseif($sid==17){
-                    $query=$this->db->query("SELECT DISTINCT cmpid_id FROM init_call where (mainbd= '$uid' or apst='$uid') and pkclient='yes'");
+                    $query=$this->db->query("SELECT DISTINCT cmpid_id FROM init_call where (mainbd= '$uid' or clm_id='$uid') and pkclient='yes'");
                 }elseif($sid==18){
-                    $query=$this->db->query("SELECT DISTINCT cmpid_id FROM init_call where (mainbd= '$uid' or apst='$uid') and priorityc='yes'");
+                    $query=$this->db->query("SELECT DISTINCT cmpid_id FROM init_call where (mainbd= '$uid' or clm_id='$uid') and priorityc='yes'");
                 }elseif($sid==20){
                     $query=$this->db->query("SELECT cmpid_id FROM `init_call` LEFT JOIN user_details on user_details.user_id=init_call.mainbd LEFT JOIN company_master on company_master.id=init_call.cmpid_id WHERE user_details.admin_id='$uid' and user_details.status='active'  and mainbd!='' and mainbd is not null and company_master.partnerType_id='17'");
                 }elseif($sid==21){
-                    $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where user_details.user_id='$uid' and user_details.status='active'  and mainbd!='' and mainbd is not null and potentialp='yes' and apst is Null");
+                    $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where user_details.user_id='$uid' and user_details.status='active'  and mainbd!='' and mainbd is not null and potentialp='yes' and clm=''");
                 }elseif($sid==22){
                     $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where user_details.user_id='$uid' and user_details.status='active'  and mainbd!='' and mainbd is not null and potentialppst='yes'");
                 }elseif($sid==23){
@@ -3905,28 +3907,29 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                 }elseif($sid==24){
                     $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where user_details.user_id='$uid' and user_details.status='active'  and mainbd!='' and mainbd is not null and fffyqtr='FY'");
                 }elseif($sid==25){
-                    $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where user_details.user_id='$uid' and user_details.status='active'  and mainbd!='' and mainbd is not null and potentialp='no'and apst is Null");
+                    $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where user_details.user_id='$uid' and user_details.status='active'  and mainbd!='' and mainbd is not null and potentialp='no'and clm_id =''");
                 }elseif($sid==26){
                     $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where user_details.user_id='$uid' and user_details.status='active'  and mainbd!='' and mainbd is not null and potentialp=''");
                 }elseif($sid==27){
-                    $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where user_details.user_id='$uid' and user_details.status='active'  and mainbd!='' and mainbd is not null and mainbd ='$uid' and apst is null");
+                    $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where user_details.user_id='$uid' and user_details.status='active'  and mainbd!='' and mainbd is not null and mainbd ='$uid' and clm_id =''");
                 }elseif($sid==28){
                     $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where user_details.user_id='$uid' and user_details.status='active'  and mainbd!='' and mainbd is not null and mainbd ='$uid' and potentialppst ='yes'");
                 }elseif($sid==29){
                     $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where user_details.user_id='$uid' and user_details.status='active'  and mainbd!='' and mainbd is not null and mainbd ='$uid' and potentialppst ='no'");
                 }elseif($sid==32){
-                    $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where user_details.user_id='$uid' and user_details.status='active'  and mainbd!='' and mainbd is not null and mainbd ='$uid' and apst is not Null and potentialppst is null");
+                    $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where user_details.user_id='$uid' and user_details.status='active'  and mainbd!='' and mainbd is not null and mainbd ='$uid' and clm_id !='' and potentialppst is null");
                 }elseif($sid==31){
-                    $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where user_details.user_id='$uid' and user_details.status='active'  and mainbd!='' and mainbd is not null and potentialp is Null and apst is null ");
+                    $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where user_details.user_id='$uid' and user_details.status='active'  and mainbd!='' and mainbd is not null and potentialp is Null and clm_id = ''");
                 }elseif($sid==30){
-                    $query=$this->db->query("SELECT DISTINCT cmpid_id FROM init_call where mainbd='$uid' and apst is null");
+                    $query=$this->db->query("SELECT DISTINCT cmpid_id FROM init_call where mainbd='$uid' and clm_id=''");
                 }elseif($sid==33){
-                    $query=$this->db->query("SELECT DISTINCT cmpid_id FROM init_call where mainbd ='$uid' and apst is not Null");
+                    $query=$this->db->query("SELECT DISTINCT cmpid_id FROM init_call where mainbd ='$uid' and clm_id !=''");
+                }elseif($sid == 35){
+                    $query=$this->db->query("SELECT DISTINCT cmpid_id FROM init_call where clm_id ='$uid'");
                 }else{
-    
-                $query=$this->db->query("SELECT DISTINCT cmpid_id FROM init_call where (mainbd= '$uid' or apst='$uid' or insidebd='$uid') and cstatus='$sid'");
-    
+                $query=$this->db->query("SELECT DISTINCT cmpid_id FROM init_call where (mainbd= '$uid' or clm_id='$uid') and cstatus='$sid'");
                 }
+            //    echo $str = $this->db->last_query();
             return $query->result();
 
         }else{
@@ -4224,6 +4227,8 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         }
         return $query->result();
     }
+
+
 
     public function get_freport($uid){
         $query=$this->db->query("SELECT  a.*, (SELECT Count(DISTINCT init_call.cmpid_id) FROM tblcallevents t1 JOIN init_call on init_call.id=t1.cid_id join company_contact_master on company_contact_master.company_id=init_call.cmpid_id  WHERE  t1.assignedto_id = a.user_id  and t1.id=(select MAX(tt2.id) from tblcallevents tt2 where tt2.cid_id=t1.cid_id)) as totaltaks, (SELECT Count(DISTINCT init_call.cmpid_id) FROM tblcallevents I1 JOIN init_call on init_call.id=I1.cid_id join company_contact_master on company_contact_master.company_id=init_call.cmpid_id  WHERE I1.assignedto_id = a.user_id and I1.status_id=1 and I1.status_id=1 and I1.id=(select MAX(tt2.id) from tblcallevents tt2 where tt2.cid_id=I1.cid_id) ) as open      ,(SELECT Count(DISTINCT init_call.cmpid_id) FROM tblcallevents I1 JOIN init_call on init_call.id=I1.cid_id join company_contact_master on company_contact_master.company_id=init_call.cmpid_id  WHERE I1.assignedto_id = a.user_id and I1.status_id=8 and I1.status_id=8 and I1.id=(select MAX(tt2.id) from tblcallevents tt2 where tt2.cid_id=I1.cid_id)) as open_rpem, (SELECT Count(DISTINCT init_call.cmpid_id) FROM tblcallevents I2 JOIN init_call on init_call.id=I2.cid_id join company_contact_master on company_contact_master.company_id=init_call.cmpid_id  WHERE I2.assignedto_id = a.user_id and I2.status_id=2 and I2.status_id=2 and I2.id=(select MAX(tt2.id) from tblcallevents tt2 where tt2.cid_id=I2.cid_id) ) as reachout, (SELECT Count(DISTINCT init_call.cmpid_id) FROM tblcallevents I3 JOIN init_call on init_call.id=I3.cid_id join company_contact_master on company_contact_master.company_id=init_call.cmpid_id  WHERE I3.assignedto_id = a.user_id and I3.status_id=3  and I3.id=(select MAX(tt2.id) from tblcallevents tt2 where tt2.cid_id=I3.cid_id) ) as tantative, (SELECT Count(DISTINCT init_call.cmpid_id) FROM tblcallevents I4 JOIN init_call on init_call.id=I4.cid_id join company_contact_master on company_contact_master.company_id=init_call.cmpid_id  WHERE I4.assignedto_id = a.user_id and I4.status_id=4  and I4.id=(select MAX(tt2.id) from tblcallevents tt2 where tt2.cid_id=I4.cid_id)  ) as will_do_later, (SELECT Count(DISTINCT init_call.cmpid_id) FROM tblcallevents I5 JOIN init_call on init_call.id=I5.cid_id join company_contact_master on company_contact_master.company_id=init_call.cmpid_id  WHERE I5.assignedto_id = a.user_id and I5.status_id=5 and I5.id=(select MAX(tt2.id) from tblcallevents tt2 where tt2.cid_id=I5.cid_id)  ) as not_interested, (SELECT Count(DISTINCT init_call.cmpid_id) FROM tblcallevents I6 JOIN init_call on init_call.id=I6.cid_id join company_contact_master on company_contact_master.company_id=init_call.cmpid_id  WHERE I6.assignedto_id = a.user_id and I6.status_id=6 and I6.id=(select MAX(tt2.id) from tblcallevents tt2 where tt2.cid_id=I6.cid_id) ) as positive , (SELECT Count(DISTINCT init_call.cmpid_id) FROM tblcallevents I6 JOIN init_call on init_call.id=I6.cid_id join company_contact_master on company_contact_master.company_id=init_call.cmpid_id  WHERE I6.assignedto_id = a.user_id and I6.status_id=9 and I6.id=(select MAX(tt2.id) from tblcallevents tt2 where tt2.cid_id=I6.cid_id) ) as very_positive, (SELECT Count(DISTINCT init_call.cmpid_id) FROM tblcallevents I7 JOIN init_call on init_call.id=I7.cid_id join company_contact_master on company_contact_master.company_id=init_call.cmpid_id  WHERE I7.assignedto_id = a.user_id and I7.status_id=7 and I7.id=(select MAX(tt2.id) from tblcallevents tt2 where tt2.cid_id=I7.cid_id)) as closure FROM user_details a where a.status='active' and a.user_id='$uid'");
@@ -6940,20 +6945,16 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
 
 
 
-    public function submit_day($wffo,$flink,$user_id,$lat,$lng,$do,$autotask){
+    public function submit_day($wffo,$flink,$user_id,$lat,$lng,$do){
         date_default_timezone_set("Asia/Kolkata");
         $date = date('Y-m-d H:i:s');
         $da = date('Y-m-d');
 
         if($do==0){
-            $this->db->query("INSERT INTO user_day(user_id, ustart, usimg, slatitude, slongitude,wffo,autotask) VALUES ('$user_id','$date','$flink','$lat','$lng','$wffo','$autotask')");
+            $this->db->query("INSERT INTO user_day(user_id, ustart, usimg, slatitude, slongitude,wffo) VALUES ('$user_id','$date','$flink','$lat','$lng','$wffo')");
             $id =  $this->db->insert_id();
 
-
             $this->db->query("UPDATE tblcallevents SET hmtplan=hmtplan + 1 initiateddt=null WHERE nextCFID=0 and cast(appointmentdatetime as DATE)<'$da' and remarks!='Company Created' and user_id='$user_id'");
-
-            // $this->db->query("UPDATE tblcallevents SET hmtplan=hmtplan + 1, appointmentdatetime='$date', plan=0,initiateddt=null WHERE nextCFID=0 and cast(appointmentdatetime as DATE)<'$da' and remarks!='Company Created' and user_id='$user_id'");
-
 
             $this->db->query("INSERT INTO notify(uid,type,sms) VALUES ('$user_id','1','You Are Started Your Day at $date')");
 
@@ -6971,8 +6972,6 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                 $this->db->query("DELETE FROM company_master WHERE id='$cid'");
                 $this->db->query("DELETE FROM barginmeeting WHERE id='$did'");
             }
-
-
             return $id;
         }
 

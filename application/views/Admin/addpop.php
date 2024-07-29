@@ -514,7 +514,7 @@ $("#noremark").hide();
 let result = document.querySelector('#result');
 document.body.addEventListener('change', function (e) {
     let target = e.target;
-    let message;
+    let message = '';
     switch (target.id) {
         case 'pending':
             var ab = document.getElementById("action_id").value;

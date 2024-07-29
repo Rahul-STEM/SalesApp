@@ -84,11 +84,7 @@ class Management_model  extends Menu_model {
         return $query->result();
     }
 
-    public function CheckStarRatingsExistorNot_New($uid,$date,$question,$period) {
-        $query=$this->db->query("SELECT `star` FROM `star_rating` WHERE user_id = $uid AND date ='$date' AND question ='$question' AND periods ='$period'");
-        // echo $this->db->last_query();die;
-        return $query->result();
-    }
+
 
 
     public function CheckEveningStarRatingsExistorNot($uid,$date) {
@@ -123,21 +119,35 @@ class Management_model  extends Menu_model {
         $this->db->insert('star_rating',$data);
     }
 
-    public function AddStarRatingNew($data){
-       
 
+    // New Daymanagement changes <======== START =======>
+    public function AddStarRatingNew($data){
         // var_dump($data);die;
         $this->db->insert('star_rating',$data);
         
         $insert_id = $this->db->insert_id();
 
-        $query=$this->db->query("SELECT * FROM `star_rating` WHERE id = $insert_id");
-
         // echo $this->db->last_query();die;
-        return $query->result();
+        // $query=$this->db->query("SELECT * FROM `star_rating` WHERE id = $insert_id");
+
+        return $insert_id;
 
     }
 
+    public function updateStarRemark($remark,$id) {
+        $query =  $this->db->query("UPDATE `star_rating` SET `remarks` = '$remark' WHERE `id` = $id;");
+
+        return 'Success..!!';
+    }
+
+    public function CheckStarRatingsExistorNot_New($uid,$date,$question,$period) {
+
+        $query=$this->db->query("SELECT `star`,`remarks` FROM `star_rating` WHERE user_id = $uid AND date ='$date' AND question ='$question' AND periods ='$period'");
+        // echo $this->db->last_query();
+        return $query->result();
+    }
+
+    // New Daymanagement changes <======== END =======>
 
 
     // mom Start here

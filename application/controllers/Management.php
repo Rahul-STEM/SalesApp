@@ -147,9 +147,11 @@ class Management extends Menu {
         redirect('Management/CheckingDayManagement');
     }
 
+
+    // New Daymanagement changes <======== START =======>
     public function checkdayswithStarNew(){
         
-
+        // var_dump($_POST);die;
         $cdate = $_POST['cdate'];
         $sdate = new DateTime($cdate);
         $sdate->modify('-1 day');
@@ -163,7 +165,7 @@ class Management extends Menu {
         if($periods == 'Yesterday Evening' || $periods == 'Yesterday Task'){
 
             $date = $previousDate;
-            
+
         }else{
             $date = $cdate;
         }
@@ -177,7 +179,7 @@ class Management extends Menu {
             'feedback_by'=>$this->uid,
         ];
 
-        // var_dump($data);die;
+        // var_dump($_POST);die;
 
         $result = $this->Management_model->AddStarRatingNew($data);
         // var_dump($result);die;
@@ -188,8 +190,18 @@ class Management extends Menu {
         // redirect('Management/CheckingDayManagement');
     }
 
+    public function updateStarRemark() {
+        // var_dump($_POST);die;
+        $remark = $_POST['remark'];
+        $starID = $_POST['starID'];
 
+        $result = $this->Management_model->updateStarRemark($remark,$starID);
+    }
     
+
+    // New Daymanagement changes <======== END =======>
+
+
     // MOM Start Here
 
     public function MoMApprovedStatus(){

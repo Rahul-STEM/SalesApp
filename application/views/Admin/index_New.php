@@ -28,6 +28,9 @@
 <link rel="stylesheet" href="<?=base_url();?>assets/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="<?=base_url();?>assets/css/responsive.bootstrap4.min.css">
 <link rel="stylesheet" href="<?=base_url();?>assets/css/buttons.bootstrap4.min.css">
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script> -->
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
 <style>
 .scrollme {
 overflow-x: auto;
@@ -56,8 +59,17 @@ overflow-x: auto;
     background: #c5eb4d !important;
     font-weight: 500;
 }
-</style>
+.dropdown-menu {
+            /* max-height: 200px; */
+            /* overflow-y: auto; */
+        }
 
+</style>
+<!-- <style>
+        .bootstrap-select {
+            width: 100%;
+        }
+    </style> -->
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -73,7 +85,42 @@ $tttd = $this->Menu_model->get_tteamtd($uid,$tdate);
 $psttttd = $this->Menu_model->get_psttteamtd($uid,$tdate);
 $mytaskd = $this->Menu_model->get_admintteamtd($uid,$tdate);
 $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
-$teamfu = $this->Menu_model->get_mbdcbyaid($uid);
+// $teamfu = $this->Menu_model->get_mbdcbyaid($uid);
+
+//////////////////////////////// New Function To Fetch Counts on Dashboard ////////////////////////////////
+
+$TeamFunnelDetails = $this->Menu_model->getFunnelDetails($uid);
+$TeamDayDetails = $this->Menu_model->getTeamDeatilsByDate($uid,$tdate);
+$TeamDayTasks = $this->Menu_model->getTeamTasks($uid,$tdate);
+
+
+
+// var_dump($TeamDayTasks);die;
+
+// $teamDayTasks = [
+//     // 'TotalTasks' => '317',
+//     // 'TotalPending' => '165',
+//     // 'TotalCompleted' => '152',
+//     'd' => '166',
+//     'e' => '66',
+//     'f' => '122',
+//     'g' => '77',
+//     'h' => '0',
+//     'i' => '0',
+//     'j' => '22',
+//     'k' => '18',
+//     'l' => '0',
+//     'm' => '0',
+//     'n' => '1',
+//     'o' => '0',
+//     'p' => '3',
+//     'q' => '1',
+//     'r' => '83',
+//     's' => '69',
+//     't' => '83',
+//     'u' => '69'
+// ];
+
 $mdata = $this->Menu_model->get_alluserbyaid($uid);
 ?>
 <!-- Content Wrapper. Contains page content -->
@@ -102,568 +149,436 @@ $mdata = $this->Menu_model->get_alluserbyaid($uid);
 <div class="col-12">
 <!-- Default box -->
 <!-- Main content -->
-
-
-<button class="btn btn-link" data-toggle="collapse" data-target="#maindata" aria-expanded="true" aria-controls="maindata">
-<i class="fas fa-bars"></i> Dashboard Data Analysis
-</button>
-<div id="maindata" class="collapse" aria-labelledby="maindata" data-parent="#accordion">
-
-
-<section class="content">
-<div class="container-fluid">
-<!-- Small boxes (Stat box) -->
-<div class="row">
-<div class="col-lg-3 col-md-6 col-sm-12">
-<!-- small box -->
-<div class="small-box bg-light text-secondary">
-<div class="inner">
-    <center><h5>Team Detail</h5></center><hr>
-    <p><a href="BDDetail/<?=$uid?>">Total Team Members - <b><?= sizeof($mdata)?></b></p></a><hr>
-    <p><a href="BDDayDetail/<?=$tdate?>/1">Total Team Members Present - <b><?=$day[0]->b?></b></p></a><hr>
-    <p><a href="<?=base_url();?>Management/CheckingDayManagement">Checking Day Management System - <b><?=$day[0]->b?></b></p></a><hr>
-    <p><a href="<?=base_url();?>Management/SpecialRestrictionOnTaskPlanner">Special Restrication on Task Planner </p></a><hr>
-    <p><a href="BDDayDetail/<?=$tdate?>/2">Total Work in Office - <b><?=$day[0]->c?></b></a><span style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" data-target="#collapsethree" aria-expanded="true" aria-controls="collapsethree">Read More</span></p><hr>
-    <div id="accordion">
-        <div class="icon">
-            <div id="collapsethree" class="collapse hide" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body">
-                    <p><a href="BDDayDetail/<?=$tdate?>/3">Total Work in Field - <b><?=$day[0]->d?></b></a></p><hr>
-                    <p><a href="BDDayDetail/<?=$tdate?>/4">Total Work From Field+Office - <b><?=$day[0]->e?></b></a></p>
+    <div class="container-fluid">
+        <button class="btn btn-warning font-weight-bold" type="button" data-toggle="collapse" data-target="#DashboardAnalysis" aria-expanded="false" aria-controls="DashboardAnalysis">
+            Dashboard Analysis
+            <i class="fa fa-bar-chart"></i>
+        </button>
+        <br>
+            <div class="collapse" id="DashboardAnalysis" >
+                <div class="card card-body dashboard">
+                    <!-- <form action="<?=base_url();?>Menu/DashboardFilter_New" method="POST" >
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Select Role</label>
+                                    <select class="custom-select rounded-0" name="userType[]" id="userType" multiple>
+                                        <option value="select_all">Select All</option>
+                                        <?php foreach($roles as $r) {
+                                            if ($r->id <= $user['type_id']) {
+                                                continue;
+                                            }
+                                        ?>
+                                        <option value="<?= $r->id ?>"><?= $r->name ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Select User</label>
+                                    <select id="user" class="custom-select rounded-0" name="user[]" data-live-search="true" multiple>
+                                        
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Select Zones</label>
+                                    <select class="custom-select rounded-0" name="zone[]" id="zone" multiple>
+                                        <option>Select Zone</option>
+                                        <option value="select_all">Select All</option>
+                                        <?php 
+                                            foreach($zones as $zone){ ?>
+                                                <option value="<?=$zone->id?>"> <?=$zone->name?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-primary">Filter</button>
+                            </div>
+                        </div> 
+                    </form> -->
+                    <hr>
+                    <div class="row DataCards">
+                        <div class="col-lg-12 col-md-3 col-sm-12">
+                            <div class="card card-primary collapsed-card">
+                                <div class="card-header text-center">
+                                    <b>Team and Funnel Details</b>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                                </div>
+                                <div class="card-body" id="funnelBody">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="card card-secondary">
+                                                <div class="card-header text-center">
+                                                    <b>Team Detail</b>
+                                                    <p>
+                                                        <strong><a href="BDDetail/<?=$uid?>">Total Team Members - <?= sizeof($mdata)?></a></strong>
+                                                    </p>
+                                                </div>
+                                                <div class="card-body">
+                                                    <ul class="nav flex-column">
+                                                        <li class="nav-item">
+                                                            <a href="BDDayDetail/<?=$tdate?>/1" class="nav-link">
+                                                            Total Team Members Present - <span class="badge bg-success">
+                                                            <?=$TeamDayDetails[0]->TotalTeamMembers?></span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a href="BDDayDetail/<?=$tdate?>/2" class="nav-link">
+                                                            Total Work in Office - <span class="badge bg-success">
+                                                            <?=$TeamDayDetails[0]->WorkFromOffice?></span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a href="BDDayDetail/<?=$tdate?>/3" class="nav-link">
+                                                            Total Work From Field - <span class="badge bg-success">
+                                                            <?=$TeamDayDetails[0]->WorkFromField?></span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a href="BDDayDetail/<?=$tdate?>/4" class="nav-link">
+                                                            Total Work From Field + Office - <span class="badge bg-success">
+                                                            <?=$TeamDayDetails[0]->WorkFromOfficeandField?></span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a href="<?=base_url();?>Management/CheckingDayManagement" class="nav-link">
+                                                                Check Day Management System 
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a href="<?=base_url();?>Management/SpecialRestrictionOnTaskPlanner" class="nav-link">
+                                                                Special Restrication on Task Planner
+                                                            </a>
+                                                        </li>
+                                                    </ul> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card card-secondary">
+                                                <div class="card-header text-center">
+                                                    <b>Active + Inactive BD Companies</b>
+                                                </div>
+                                                <div class="card-body">
+                                                    <?php
+                                                        foreach($TeamFunnelDetails as $TeamFunnelDetail){?>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <ul class="nav flex-column">
+                                                                <li class="nav-item">
+                                                                    <a href="companies/0" class="nav-link">
+                                                                    Total Companies - <span class="badge bg-success">
+                                                                        <?= $TeamFunnelDetail->total ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="companies/1" class="nav-link">
+                                                                    Open - <span class=" badge bg-success">
+                                                                        <?= $TeamFunnelDetail->open ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="companies/8" class="nav-link">
+                                                                    Open [RPEM] - <span class=" badge bg-success">
+                                                                        <?= $TeamFunnelDetail->OpenRPEM ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="companies/2" class="nav-link">
+                                                                    Reachout - <span class=" badge bg-success">
+                                                                        <?= $TeamFunnelDetail->reachout ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="companies/3" class="nav-link">
+                                                                    Tentative - <span class=" badge bg-warning">
+                                                                        <?= $TeamFunnelDetail->tentative ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="companies/4" class="nav-link">
+                                                                    Will-Do-Later - <span class=" badge bg-danger">
+                                                                        <?= $TeamFunnelDetail->willDoLate ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="companies/5" class="nav-link">
+                                                                    Not-Interest - <span class=" badge bg-danger">
+                                                                        <?= $TeamFunnelDetail->NotIntrested ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="companies/10" class="nav-link">
+                                                                    TTD-Reachout - <span class=" badge bg-success">
+                                                                        <?= $TeamFunnelDetail->TTDReachout ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <!-- <li class="nav-item">
+                                                                    <a href="companies/24" class="nav-link">
+                                                                    Potential Partner This FY - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->PotentialPartnerFY ?></span>
+                                                                    </a>
+                                                                </li> -->
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <ul class="nav flex-column">
+                                                                <li class="nav-item">
+                                                                    <a href="companies/11" class="nav-link">
+                                                                    WNO-Reachout - <span class=" badge bg-success">
+                                                                        <?= $TeamFunnelDetail->WNOReachout ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="companies/6" class="nav-link">
+                                                                    Positive - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->Positive ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="companies/9" class="nav-link">
+                                                                    Very Positive - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->VeryPositive ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="companies/7" class="nav-link">
+                                                                    Closure - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->Closure ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="#" class="nav-link">
+                                                                    Focus Funnel - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->FocusFunnelYes ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="#" class="nav-link">
+                                                                    Upsell Client - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->FocusFunnelYes ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="#" class="nav-link">
+                                                                    EX-BD Transfer - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->ExBD ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="companies/10" class="nav-link">
+                                                                    TTD-Reachout - <span class=" badge bg-success">
+                                                                        <?= $TeamFunnelDetail->TTDReachout ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="companies/20" class="nav-link">
+                                                                    MP's/MLA - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->MP_MLA ?></span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <ul class="nav flex-column">
+                                                                <li class="nav-item">
+                                                                    <a href="companies/20" class="nav-link">
+                                                                    Potential Partner BD - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->PotentialPartnerBD ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="companies/21" class="nav-link">
+                                                                    Non Potential Partner BD - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->NonPotentialPartner ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="companies/26" class="nav-link">
+                                                                    Pending Potential Marking - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->PotentialPartnerMarkingPending ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="companies/22" class="nav-link">
+                                                                    Potential Partner PST - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->PotentialPartnerPST ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <!-- <li class="nav-item">
+                                                                    <a href="companies/23" class="nav-link">
+                                                                    Potential Partner This QTR - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->PotentialPartnerQR ?></span>
+                                                                    </a>
+                                                                </li> -->
+                                                                <li class="nav-item">
+                                                                    <a href="companies/20" class="nav-link">
+                                                                    Potential Partner BD - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->PotentialPartnerBD ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="companies/21" class="nav-link">
+                                                                    Non Potential Partner BD - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->NonPotentialPartner ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="companies/26" class="nav-link">
+                                                                    Pending Potential Marking - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->PotentialPartnerMarkingPending ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <!-- <li class="nav-item">
+                                                                    <a href="companies/22" class="nav-link">
+                                                                    Potential Partner PST - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->PotentialPartnerPST ?></span>
+                                                                    </a>
+                                                                </li> -->
+                                                                <!-- <li class="nav-item">
+                                                                    <a href="companies/23" class="nav-link">
+                                                                    Potential Partner This QTR - <span class="float-right badge bg-primary">
+                                                                        <?= $TeamFunnelDetail->PotentialPartnerQR ?></span>
+                                                                    </a>
+                                                                </li> -->
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card card-secondary">
+                                                <div class="card-header text-center">
+                                                <?php
+                                                    foreach($TeamDayTasks as $TeamDayTask){ ?>
+                                                    
+                                                    <b>Today's Team Task Details</b>
+                                                    <p>
+                                                        <strong><a href="ATaskDetail/4/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0">Total Task Assigned/Planned -  <span class="badge bg-success"><?= $TeamDayTask->TotalTasks ?></span></a></strong>
+                                                    </p>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <ul class="nav flex-column">
+                                                            <?php
+                                                                //foreach($TeamDayTasks as $TeamDayTask){
+                                                                ?>
+                                                                <li class="nav-item">
+                                                                    <a href="ATaskDetail/5/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Total Task Pending - <span class="badge bg-danger">
+                                                                    <?= $TeamDayTask->TotalPending ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="Menu/ATaskDetail/3/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Calls Done - <span class="badge bg-primary">
+                                                                    <?= $TeamDayTask->CallsDone ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="Menu/ATaskDetail/3/<?=$uid?>/2/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Emails Done - <span class="badge bg-primary">
+                                                                    <?= $TeamDayTask->EmailDone ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="Menu/ATaskDetail/3/<?=$uid?>/3/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Meeting Done - <span class="badge bg-primary">
+                                                                    <?= $TeamDayTask->MeetingDone ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="Menu/ATaskDetail/3/<?=$uid?>/4/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Barg in Meeting Done - <span class="badge bg-primary">
+                                                                    <?= $TeamDayTask->BargeMeetingDone ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="Menu/ATaskDetail/3/<?=$uid?>/5/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    WhatsApp Done - <span class="badge bg-primary">
+                                                                    <?= $TeamDayTask->WhatsAppDone ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="Menu/ATaskDetail/3/<?=$uid?>/6/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    MOM Done - <span class="badge bg-primary">
+                                                                    <?= $TeamDayTask->MoMDone ?></span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <ul class="nav flex-column">
+                                                                <li class="nav-item">
+                                                                    <a href="ATaskDetail/6/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Total Task Completed - <span class=" badge bg-success">
+                                                                        <?= $TeamDayTask->TotalCompleted ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="Menu/ATaskDetail/3/<?=$uid?>/7/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Proposal Done - <span class="badge bg-primary">
+                                                                    <?= $TeamDayTask->ProposalDone ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="Menu/ATaskDetail/7/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Action taken Yes - <span class="badge bg-primary">
+                                                                    <?= $TeamDayTask->ActionTakenYes ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="Menu/ATaskDetail/8/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Action taken No - <span class="badge bg-danger">
+                                                                    <?= $TeamDayTask->ActionTakenNo ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="Menu/ATaskDetail/9/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Purpose Achieved Yes - <span class="badge bg-sucess">
+                                                                    <?= $TeamDayTask->PurposeAchievedYes ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="Menu/ATaskDetail/10/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Purpose Achieved No - <span class="badge bg-danger">
+                                                                    <?= $TeamDayTask->PurposeAchievedNo ?></span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <?php } ?>
+                                                    <!-- <div class="row">
+                                                        <canvas id="donutChart" ></canvas>
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </p>
+
     </div>
-</div>
-<div class="icon">
-    <i class="ion ion-stats-bars"></i>
-</div>
-<a href="TeamDetail" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-</div>
-</div>
-<!-- ./col -->
-<div class="col-lg-3 col-md-6 col-sm-12">
-<!-- small box -->
-<div class="small-box bg-light text-secondary">
-<div class="inner">
-    <center><h5>Today's Team Task Detail</h5></center><hr>
-    
-    <?php
-    foreach($tttd as $tttd){?>
-    <p><a href="<?=base_url();?>Menu/ATaskDetail/4/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0">Total Task Assign/Planned - <b><?=$tttd->a?></b></p></a><hr>
-    <p><a href="<?=base_url();?>Menu/ATaskDetail/5/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0">Total Task Pending - <b><?=$tttd->b?></b></p></a><hr>
-    <p><a href="<?=base_url();?>Menu/ATaskDetail/6/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0">Total Task Completed - <b><?=$tttd->c?></b></a><span style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse2" role="button" aria-expanded="false" aria-controls="collapse2">Read More</p><hr>
-    <div class="collapse" id="collapse2">
-        <a href="<?=base_url();?>Menu/ATaskDetail/3/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Call Done- <b><?=$tttd->d-$tttd->e?></b></p></a><hr>
-        <a href="<?=base_url();?>Menu/ATaskDetail/3/<?=$uid?>/2/<?=$tdate?>/<?=$tdate?>/0"><p>Email Done- <b><?=$tttd->f-$tttd->g?></b></p></a><hr>
-        <a href="<?=base_url();?>Menu/ATaskDetail/3/<?=$uid?>/3/<?=$tdate?>/<?=$tdate?>/0"><p>Meeting Done- <b><?=$tttd->h-$tttd->i?></b></p></a><hr>
-        <a href="<?=base_url();?>Menu/ATaskDetail/3/<?=$uid?>/4/<?=$tdate?>/<?=$tdate?>/0"><p>Barg in Done- <b><?=$tttd->j-$tttd->k?></b></p></a><hr>
-        <a href="<?=base_url();?>Menu/ATaskDetail/3/<?=$uid?>/5/<?=$tdate?>/<?=$tdate?>/0"><p>Whatsapp Done- <b><?=$tttd->l-$tttd->m?></b></p></a><hr>
-        <a href="<?=base_url();?>Menu/ATaskDetail/3/<?=$uid?>/6/<?=$tdate?>/<?=$tdate?>/0"><p>MOM Done- <b><?=$tttd->n-$tttd->o?></b></p></a><hr>
-        <a href="<?=base_url();?>Menu/ATaskDetail/3/<?=$uid?>/7/<?=$tdate?>/<?=$tdate?>/0"><p>Proposal Done- <b><?=$tttd->p-$tttd->q?></b></p></a><hr>
-        <a href="<?=base_url();?>Menu/ATaskDetail/7/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Action Taken Yes- <b><?=$tttd->r?></b></p></a><hr>
-        <a href="<?=base_url();?>Menu/ATaskDetail/8/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Action Taken No- <b><?=$tttd->s?></b></p></a><hr>
-        <a href="<?=base_url();?>Menu/ATaskDetail/9/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Purpose Achieved Yes- <b><?=$tttd->t?></b></p></a><hr>
-        <a href="<?=base_url();?>Menu/ATaskDetail/10/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Purpose Achieved No- <b><?=$tttd->u?></b></p></a>
-        <?php }?>
-    </div>
-</div>
-<div class="icon">
-    <i class="ion ion-stats-bars"></i>
-</div>
-<a href="TeamWork" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-</div>
-</div>
-<!-- ./col -->
+        
 
-<div class="col-lg-3 col-md-6 col-sm-12">
-<!-- small box -->
-<div class="small-box bg-light text-secondary">
-<div class="inner">
-    <?php $ttswwork = $this->Menu_model->new_ttsw($uid,$tdate,0);
-    foreach($ttswwork as $tw){?>
-    <center><h5>Today's Team Completed Task Against Status</h5></center><hr>
-    <p><a href="StatusTask/<?=$uid?>/<?=$tdate?>/1/0">Open - <b><?=$tw->a?></b></p></a><hr>
-    <p><a href="StatusTask/<?=$uid?>/<?=$tdate?>/8/0">Open [RPEM] - <b><?=$tw->b?></b></a><br><span style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse11" role="button" aria-expanded="false" aria-controls="collapse11">Read More</p><hr>
-    <div class="collapse" id="collapse11">
-        <p><a href="StatusTask/<?=$uid?>/<?=$tdate?>/2/0">Reachout - <b><?=$tw->c?></b></p></a><hr>
-        <p><a href="StatusTask/<?=$uid?>/<?=$tdate?>/3/0">Tentative - <b><?=$tw->d?></b></a></p><hr>
-        <p><a href="StatusTask/<?=$uid?>/<?=$tdate?>/4/0">Will-Do-Later - <b><?=$tw->e?></b></p></a><hr>
-        <p><a href="StatusTask/<?=$uid?>/<?=$tdate?>/5/0">Not-Interest - <b><?=$tw->f?></b></p></a><hr>
-        <p><a href="StatusTask/<?=$uid?>/<?=$tdate?>/10/0">TTD-Reachout - <b><?=$tw->j?></b></p></a><hr>
-        <p><a href="StatusTask/<?=$uid?>/<?=$tdate?>/11/0">WNO-Reachout - <b><?=$tw->k?></b></p></a><hr>
-        <p><a href="StatusTask/<?=$uid?>/<?=$tdate?>/6/0">Positive - <b><?=$tw->g?></b></p></a><hr>
-        <p><a href="StatusTask/<?=$uid?>/<?=$tdate?>/12/0">Positive NAP - <b><?=$tw->l?></b></p></a><hr>
-        <p><a href="StatusTask/<?=$uid?>/<?=$tdate?>/9/0">Very Positive - <b><?=$tw->i?></b></p></a><hr>
-        <p><a href="StatusTask/<?=$uid?>/<?=$tdate?>/13/0">Very Positive NAP - <b><?=$tw->m?></b></p></a><hr>
-        <p><a href="StatusTask/<?=$uid?>/<?=$tdate?>/7/0">Closure - <b><?=$tw->h?></b></p></a><hr>
-        <?php } ?>
-    </div>
-</div>
-<div class="icon">
-    <i class="ion ion-stats-bars"></i>
-</div>
-<a href="StatusTaskDGroup" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-</div>
-</div>
-
-
-<!-- ./col -->
-
-<div class="col-lg-3 col-md-6 col-sm-12">
-<!-- small box -->
-<div class="small-box bg-light text-secondary">
-<?php
-$sca = $this->Menu_model->final_scon1($uid,$tdate,$tdate,0);
-?>
-<div class="inner">
-    <center><h5>Today's Team Status Conversion</h5></center><hr>
-    <?php  foreach($sca as $scid){
-    $string = $scid->scname;
-    $parts = explode(" -to- ", $string);
-    $firstS = $parts[0];
-    $secondS = $parts[1];
-    $firstS = $this->Menu_model->get_statusbyname($firstS);
-    $fsid = $firstS[0]->id;
-    $secondS = $this->Menu_model->get_statusbyname($secondS);
-    $ssid = $secondS[0]->id; ?>
-    <a href="FinalSConversion/<?=$uid?>/<?=$tdate?>/<?=$tdate?>/<?=$fsid?>/<?=$ssid?>">
-        <?=$string?> - <b><?=$this->Menu_model->final_scon2($uid,$tdate,$tdate,0,$fsid,$ssid);?></b><hr>
-    </a>
-    <?php } ?>
-</div>
-<div class="icon">
-    <i class="ion ion-person-add"></i>
-</div>
-<a href="SConversion" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-</div>
-</div>
-<!-- ./col -->
-
-
-
-
-</div>
-
-<div class="row">
-<!-- ./col -->
-<div class="col-lg-3 col-md-6 col-sm-12">
-<!-- small box -->
-<div class="small-box bg-light text-secondary">
-<div class="inner">
-    <center><h5>Today's PST Task Detail</h5></center><hr>
-    
-    <?php
-    foreach($psttttd as $psttd){?>
-    <p><a href="<?=base_url();?>Menu/APSTTaskDetail/4/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0">Total Task Assign/Planned - <b><?=$psttd->a?></b></p></a><hr>
-    <p><a href="<?=base_url();?>Menu/APSTTaskDetail/5/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0">Total Task Pending - <b><?=$psttd->b?></b></p></a><hr>
-    <p><a href="<?=base_url();?>Menu/APSTTaskDetail/6/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0">Total Task Completed - <b><?=$psttd->c?></b></a><span style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse25" role="button" aria-expanded="false" aria-controls="collapse25">Read More</p><hr>
-    <div class="collapse" id="collapse25">
-        <a href="<?=base_url();?>Menu/APSTTaskDetail/3/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Call Done- <b><?=$psttd->d-$psttd->e?></b></p></a><hr>
-        <a href="<?=base_url();?>Menu/APSTTaskDetail/3/<?=$uid?>/2/<?=$tdate?>/<?=$tdate?>/0"><p>Email Done- <b><?=$psttd->f-$psttd->g?></b></p></a><hr>
-        <a href="<?=base_url();?>Menu/APSTTaskDetail/7/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Action Taken Yes- <b><?=$psttd->r?></b></p></a><hr>
-        <a href="<?=base_url();?>Menu/APSTTaskDetail/8/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Action Taken No- <b><?=$psttd->s?></b></p></a><hr>
-        <a href="<?=base_url();?>Menu/APSTTaskDetail/9/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Purpose Achieved Yes- <b><?=$psttd->t?></b></p></a><hr>
-        <a href="<?=base_url();?>Menu/APSTTaskDetail/10/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Purpose Achieved No- <b><?=$psttd->u?></b></p></a>
-        <?php }?>
-    </div>
-</div>
-<div class="icon">
-    <i class="ion ion-stats-bars"></i>
-</div>
-<a href="PSTWork" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-</div>
-</div>
-
-
-
-<div class="col-lg-3 col-md-6 col-sm-12">
-<div class="small-box bg-light text-secondary">
-<div class="inner">
-    <?php $ttswwork = $this->Menu_model->new_pstttsw($uid,$tdate,0);
-    foreach($ttswwork as $tw){?>
-    <center><h5>Today's PST Completed Task Against Status</h5></center><hr>
-    <p><a href="StatusTaskPST/<?=$uid?>/<?=$tdate?>/1/0">Open - <b><?=$tw->a?></b></p></a><hr>
-    <p><a href="StatusTaskPST/<?=$uid?>/<?=$tdate?>/8/0">Open [RPEM] - <b><?=$tw->b?></b></a><br><span style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse11" role="button" aria-expanded="false" aria-controls="collapse11">Read More</p><hr>
-    <div class="collapse" id="collapse11">
-        <p><a href="StatusTaskPST/<?=$uid?>/<?=$tdate?>/2/0">Reachout - <b><?=$tw->c?></b></p></a><hr>
-        <p><a href="StatusTaskPST/<?=$uid?>/<?=$tdate?>/3/0">Tentative - <b><?=$tw->d?></b></a></p><hr>
-        <p><a href="StatusTaskPST/<?=$uid?>/<?=$tdate?>/4/0">Will-Do-Later - <b><?=$tw->e?></b></p></a><hr>
-        <p><a href="StatusTaskPST/<?=$uid?>/<?=$tdate?>/5/0">Not-Interest - <b><?=$tw->f?></b></p></a><hr>
-        <p><a href="StatusTaskPST/<?=$uid?>/<?=$tdate?>/10/0">TTD-Reachout - <b><?=$tw->j?></b></p></a><hr>
-        <p><a href="StatusTaskPST/<?=$uid?>/<?=$tdate?>/11/0">WNO-Reachout - <b><?=$tw->k?></b></p></a><hr>
-        <p><a href="StatusTaskPST/<?=$uid?>/<?=$tdate?>/6/0">Positive - <b><?=$tw->g?></b></p></a><hr>
-        <p><a href="StatusTaskPST/<?=$uid?>/<?=$tdate?>/12/0">Positive NAP - <b><?=$tw->l?></b></p></a><hr>
-        <p><a href="StatusTaskPST/<?=$uid?>/<?=$tdate?>/9/0">Very Positive - <b><?=$tw->i?></b></p></a><hr>
-        <p><a href="StatusTaskPST/<?=$uid?>/<?=$tdate?>/13/0">Very Positive NAP - <b><?=$tw->m?></b></p></a><hr>
-        <p><a href="StatusTaskPST/<?=$uid?>/<?=$tdate?>/7/0">Closure - <b><?=$tw->h?></b></p></a><hr>
-        <?php } ?>
-    </div>
-</div>
-<div class="icon">
-    <i class="ion ion-stats-bars"></i>
-</div>
-<a href="PSTStatusTaskD" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-</div>
-</div>
-
-<div class="col-lg-3 col-md-6 col-sm-12">
-<!-- small box -->
-<div class="small-box bg-light text-secondary">
-<div class="inner">
-    <?php
-    $sca = $this->Menu_model->final_pstscon1($uid,$tdate,$tdate,0);
-    ?>
-    <center><h5>Today's PST Status Conversion</h5></center><hr>
-    <?php  foreach($sca as $scid){
-    $string = $scid->scname;
-    $parts = explode(" -to- ", $string);
-    $firstS = $parts[0];
-    $secondS = $parts[1];
-    $firstS = $this->Menu_model->get_statusbyname($firstS);
-    $fsid = $firstS[0]->id;
-    $secondS = $this->Menu_model->get_statusbyname($secondS);
-    $ssid = $secondS[0]->id; ?>
-    <a href="FinalPSTSConversion/<?=$uid?>/<?=$tdate?>/<?=$tdate?>/<?=$fsid?>/<?=$ssid?>">
-        <?=$string?> - <b><?=$this->Menu_model->final_pstscon2($uid,$tdate,$tdate,0,$fsid,$ssid);?></b><hr>
-    </a>
-    <?php } ?>
-</div>
-<div class="icon">
-    <i class="ion ion-person-add"></i>
-</div>
-<a href="PSTSConversion" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-</div>
-</div>
-
-
-
-
-<!-- ./col -->
-<div class="col-lg-3 col-md-6 col-sm-12">
-<!-- small box -->
-<div class="small-box bg-light text-secondary">
-<div class="inner">
-    <center><h5>PST Work</h5></center><hr>
-    <p><a href="afterpsttaskonc">After PST Assign Work</a></p><hr>
-    <p><a href="changepst">Change PST</a></p><hr>
-    <p><a href="assignpst">Assign PST</a></p><hr>
-</div>
-<div class="icon">
-    <i class="ion ion-pie-graph"></i>
-</div>
-<a href="PSTWork" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-</div>
-</div>
-<!-- ./col -->
-<div class="col-lg-3 col-md-6 col-sm-12">
-<!-- small box -->
-<div class="small-box bg-light text-secondary">
-<div class="inner">
-    <center><h5>Upsell Client</h5></center><hr>
-    <p><a href="handoverapr"><b>Handover Approval</b></p></a><hr>
-    <a href="artworkapr"><p>Artwork Apr Pending</p></a><hr>
-    <a href="artworkaprdone"><p>Artwork Apr Done</p></a><hr>
-    <p><a href="ProgramDetail"><b>Total Handover</b></a><br><br><span style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" data-target="#collapseseven" aria-expanded="true" aria-controls="collapseseven">Read More</span></p><hr>
-    <div id="accordion">
-        <div class="icon">
-            <div id="collapseseven" class="collapse hide" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body">
-                    <p><a href="#">Get New Utilisation - <b>0</b></p></a><hr>
-                    <p><a href="#">Get Report - <b>0</b></a>
-                    <p><a href="#">Total Request Apr - <b>0</b></a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="icon">
-    <i class="ion ion-stats-bars"></i>
-</div>
-<a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-</div>
-</div>
-<!-- ./col -->
-
-<div class="col-lg-3 col-md-6 col-sm-12">
-<!-- small box -->
-<div class="small-box bg-light text-secondary">
-<div class="inner">
-    <?php
-    foreach($teamfu as $mc){
-    ?>
-    <center><h5>Total Funnel </h5></center><hr>
-    <p><a href="BDTOBDCTF"><b>Company TF BD to Other BD</b></a></p><hr>
-    <p><a href="BDFunnal/<?=$uid?>">All BD Funnel</p></a>
-    <p><a href="ProposalApr"><b>Proposal Approval</b></p></a><hr>
-    <p><a href="AllProposalDetail"><b>Proposal Detail</b></p></a><hr>
-    <p><a href="ProposalDetailbydate"><b>Proposal by Date</b></p></a><hr>
-    <p><a href="RemoveKClient"><b>Remove key client</b></p></a><hr>
-    <p><a href="RemovePKClient"><b>Remove positive key client</b></p></a><hr>
-    <p><a href="DeleteCMP"><b>Company Detele Request</b></a><br><a style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse3" role="button" aria-expanded="false" aria-controls="collapse3">Read More</a></p><hr>
-    
-    <div class="collapse" id="collapse3">
-        <p><b><a href="TotalCompanies">active+inactive BD Companies</a></b></p><hr>
-        <p><a href="companies/0">Total Companies - <b><?=$mc->a?></b></p></a><hr>
-        <p><a href="companies/1">Open - <b><?=$mc->b?></b></p></a><hr>
-        <p><a href="companies/8">Open [RPEM] - <b><?=$mc->i?></b></p></a><hr>
-        <p><a href="companies/2">Reachout - <b><?=$mc->c?></b></a>
-        <p><a href="companies/3">Tentative - <b><?=$mc->d?></b></p></a><hr>
-        <p><a href="companies/4">Will-Do-Later - <b><?=$mc->e?></b></p></a><hr>
-        <p><a href="companies/5">Not-Interest - <b><?=$mc->f?></b></p></a><hr>
-        <p><a href="companies/10">TTD-Reachout - <b><?=$mc->k?></b></p></a><hr>
-        <p><a href="companies/11">WNO-Reachout - <b><?=$mc->l?></b></p></a><hr>
-        <p><a href="companies/6">Positive - <b><?=$mc->g?></b></p></a><hr>
-        <p><a href="companies/9">Very Positive - <b><?=$mc->j?></b></p></a><hr>
-        <p><a href="companies/7">Closure - <b><?=$mc->h?></b></p></a><hr>
-        <p><a href="">Focus Funnel - <b><?=$mc->m?></b></p></a><hr>
-        <p><a href="">Upsell Client - <b><?=$mc->n?></b></p></a><hr>
-        <p><a href="">EX-BD Tf - <b><?=$mc->o?></b></p></a><hr>
-        <p><a href="companies/20">MP's/MLA - <b><?=$mc->p?></b></p></a><hr>
-        <p><a href="companies/21">Potential Partner BD - <b><?=$mc->q?></b></p></a><hr>
-        <p><a href="companies/25">Non Potential Partner BD - <b><?=$mc->u?></b></p></a><hr>
-        <p><a href="companies/26">Pending Potential Marking - <b><?=$mc->v?></b></p></a><hr>
-        <p><a href="companies/22">Potential Partner PST - <b><?=$mc->r?></b></p></a><hr>
-        <p><a href="companies/23">Potential Partner This QTR - <b><?=$mc->s?></b></p></a><hr>
-        <p><a href="companies/24">Potential Partner This FY - <b><?=$mc->t?></b></p></a><hr>
-        <?php } ?>
-        <p><a href="NewLead">Add New Lead</a></p>
-    </div></div>
-    <div class="icon">
-        <i class="ion ion-stats-bars"></i>
-    </div>
-    <a href="BDFunnel" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-</div>
-</div>
-<!-- ./col -->
-
-<div class="col-lg-3 col-md-6 col-sm-12">
-<!-- small box -->
-<div class="small-box bg-light text-secondary">
-    <div class="inner">
-        <?php
-        $apstc=$this->Menu_model->get_apstc($uid);
-        foreach($apstc as $mc){
-        ?>
-        <center><h5>PST Total Funnel </h5></center><hr>
-        <p><a href="PSTFunnal/<?=$uid?>">All PST Funnel</p></a>
-        <p><a href="pstcompanies/1">Open - <b><?=$mc->b?></b></p></a><hr>
-        <p><a href="pstcompanies/8">Open [RPEM] - <b><?=$mc->i?></b></p></a><hr>
-        <p><a href="pstcompanies/2">Reachout - <b><?=$mc->c?></b></a>
-        <a style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse17" role="button" aria-expanded="false" aria-controls="collapse17">Read More</a></p><hr>
-        <div class="collapse" id="collapse17">
-            <p><a href="pstcompanies/3">Tentative - <b><?=$mc->d?></b></p></a><hr>
-            <p><a href="pstcompanies/4">Will-Do-Later - <b><?=$mc->e?></b></p></a><hr>
-            <p><a href="pstcompanies/5">Not-Interest - <b><?=$mc->f?></b></p></a><hr>
-            <p><a href="pstcompanies/10">TTD-Reachout - <b><?=$mc->k?></b></p></a><hr>
-            <p><a href="pstcompanies/11">WNO-Reachout - <b><?=$mc->l?></b></p></a><hr>
-            <p><a href="pstcompanies/6">Positive - <b><?=$mc->g?></b></p></a><hr>
-            <p><a href="pstcompanies/12">Positive-NAP - <b><?=$mc->u?></b></p></a><hr>
-            <p><a href="pstcompanies/13">Very Positive-NAP - <b><?=$mc->v?></b></p></a><hr>
-            <p><a href="pstcompanies/9">Very Positive - <b><?=$mc->j?></b></p></a><hr>
-            <p><a href="pstcompanies/7">Closure - <b><?=$mc->h?></b></p></a><hr>
-            <p><a href="pstcompanies/14">Focus Funnel - <b><?=$mc->m?></b></p></a><hr>
-            <p><a href="pstcompanies/15">Upsell Client - <b><?=$mc->n?></b></p></a><hr>
-            <p><a href="pstcompanies/16">Key Client - <b><?=$mc->q?></b></p></a><hr>
-            <p><a href="pstcompanies/17">Positive Key Client - <b><?=$mc->r?></b></p></a><hr>
-            <p><a href="pstcompanies/18">Priority Calling - <b><?=$mc->s?></b></p></a><hr>
-            <p><a href="pstcompanies/19">Priority Tentative Calling - <b><?=$mc->t?></b></p></a><hr>
-            
-            <?php } ?>
-        </div>
-    </div>
-    <div class="icon">
-        <i class="ion ion-stats-bars"></i>
-    </div>
-    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-</div>
-</div>
-
-<div class="col-lg-3 col-md-6 col-sm-12">
-<!-- small box -->
-<div class="small-box bg-light text-secondary">
-    <div class="inner">
-        <center><h5>Self</h5></center><hr>
-        <?php $vpd = $this->Menu_model->get_pvpdetail($uid)?>
-        <p><a href="totalcdetail/14">Total No of Closure - <b><?=$vpd[0]->tcc?></b></a></p><hr>
-        <p><a href="totalcdetail/1">Total No of Positive - <b><?=$vpd[0]->tp?></b></a></p><hr>
-        <p><a href="totalcdetail/2">Total No of Very Positive - <b><?=$vpd[0]->tvp?></b></a></p><hr>
-        <p><a href="totalcdetail/14">Total Closure No of School- <b><?=$vpd[0]->ccos?></b></a></p><hr>
-        <p><a href="totalcdetail/3">Total positive No of School - <b><?=$vpd[0]->pos?></b></a><br><br><a style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse14" role="button" aria-expanded="false" aria-controls="collapse14">Read More</a></p><hr>
-        <div class="collapse" id="collapse14">
-            <p><a href="totalcdetail/4">Total Very positive No of School - <b><?=$vpd[0]->vpos?></b></a></p><hr>
-            <p><a href="totalcdetail/14">Total Closure Revenue - <b><?=$vpd[0]->ccfb?></b></a></p><hr>
-            <p><a href="totalcdetail/5">Total Positive Revenue - <b><?=$vpd[0]->pfb?></b></a></p><hr>
-            <p><a href="totalcdetail/6">Total Very Positive Revenue - <b><?=$vpd[0]->vpfb?></b></a></p><hr>
-            <p><a href="totalcdetail/7">Total Positive NAP - <b><?=$vpd[0]->tpnap?></b></a></p><hr>
-            <p><a href="totalcdetail/8">Total Very Positive NAP - <b><?=$vpd[0]->tvpnap?></b></a></p><hr>
-            <p><a href="totalcdetail/9">Total Positive NAP School - <b><?=$vpd[0]->pnapos?></b></a></p><hr>
-            <p><a href="totalcdetail/10">Total Very Positive NAP School - <b><?=$vpd[0]->vpnapos?></b></a></p><hr>
-            <p><a href="totalcdetail/11">Total Positive NAP Revenue - <b><?=$vpd[0]->pnapfb?></b></a></p><hr>
-            <p><a href="totalcdetail/12">Total Very Positive NAP Revenue - <b><?=$vpd[0]->vpnapfb?></b></a></p><hr>
-            <p><a href="totalcdetail/13"><b>All Data</b></a></p><hr>
-        </div>
-    </div>
-    <div class="icon">
-        <i class="ion ion-person-add"></i>
-    </div>
-    <a href="PSTSRData" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-</div>
-</div>
-<!-- /.row -->
-
-
-<div class="col-lg-3 col-md-6 col-sm-12">
-<!-- small box -->
-<div class="small-box bg-light text-secondary">
-    <div class="inner">
-        <center><h5>Team Bargin Meeting Detail</h5></center><hr>
-        <p><a href="PMTFTOBD"><b>Meeting TF to Other BD</b></a></p><hr>
-        <?php foreach($tbmeetd as $tmd){ ?>
-        <p><a href="plannerareport">Action Planner</b></a></p><hr>
-        <p><a href="plannerreport">Status Planner</b></a></p><hr>
-        <p><a href="momdetail">MOM Detail</b></a><a style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse15" role="button" aria-expanded="false" aria-controls="collapse15">Read More</a></p><hr>
-        <div class="collapse" id="collapse15">
-            <p><a href="TBMDF">Total RP Meeting</b></a></p><hr>
-            <p><a href="MeetingDetail/1/<?=$uid?>/<?=$tdate?>"><b>Meeting Detail</b></a></p><hr>
-            <p><a href="TBMD/1/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Total Bargin Plan - <b><?=$tmd->ab?></b></a></p><hr>
-            <p><a href="TBMD/2/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Not Started Bargin - <b><?=$tmd->a?></b></a></p><hr>
-            <p><a href="TBMD/2/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Started Bargin - <b><?=$tmd->i?></b></a></p><hr>
-            <p><a href="TBMD/3/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Not Close Bargin - <b><?=$tmd->b?></b></a></p><hr>
-            <p><a href="TBMD/3/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Close Bargin - <b><?=$tmd->b?></b></a></p><hr>
-            <p><a href="TBMD/3/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Lead not Updated - <b><?=$tmd->h?></b></a></p><hr>
-            <p><a href="TBMD/4/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Completed Bargin - <b><?=$tmd->c?></b></a></p><hr>
-            <p><a href="TBMD/5/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Total RP Meeting - <b><?=$tmd->d?></b></a></p><hr>
-            <p><a href="TBMD/6/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Total Non RP Meeting - <b><?=$tmd->e?></b></a></p><hr>
-            <p><a href="TBMD/7/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Total RP Priority - <b><?=$tmd->f?></b></a></p><hr>
-            <p><a href="TBMD/8/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Total RP Not Priority - <b><?=$tmd->g?></b></a></p><hr>
-            <p><a href="TBMD/9/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Total Only Got Detail - <b><?=$tmd->k?></b></a></p><hr>
-            
-            <?php } ?>
-        </div>
-    </div>
-    <div class="icon">
-        <i class="ion ion-pie-graph"></i>
-    </div>
-    <a href="TBMDetail" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-</div>
-</div>
-<!-- ./col -->
-
-
-<div class="col-lg-3 col-md-6 col-sm-12">
-<!-- small box -->
-<div class="small-box bg-light text-secondary">
-    <div class="inner">
-        <center><h5>Today's BD Task on PST Funnel</h5></center><hr>
-        <?php
-        $bdtofpstf = $this->Menu_model->get_bdtofpstf($uid,$tdate);
-        foreach($bdtofpstf as $tttd){?>
-        <p><a href="<?=base_url();?>Menu/APSTTaskDetail/4/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0">Total Task Assign/Planned - <b><?=$tttd->a?></b></p></a><hr>
-        <p><a href="<?=base_url();?>Menu/APSTTaskDetail/5/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0">Total Task Pending - <b><?=$tttd->b?></b></p></a><hr>
-        <p><a href="<?=base_url();?>Menu/APSTTaskDetail/6/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0">Total Task Completed - <b><?=$tttd->c?></b></p></a><hr>
-        <a href="<?=base_url();?>Menu/APSTTaskDetail/3/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Call Done- <b><?=$tttd->d-$tttd->e?></b></a>
-        <a style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse2" role="button" aria-expanded="false" aria-controls="collapse2">Read More</a></p><hr>
-        <div class="collapse" id="collapse2">
-            <a href="<?=base_url();?>Menu/APSTTaskDetail/3/<?=$uid?>/2/<?=$tdate?>/<?=$tdate?>/0"><p>Email Done- <b><?=$tttd->f-$tttd->g?></b></p></a><hr>
-            <a href="<?=base_url();?>Menu/APSTTaskDetail/3/<?=$uid?>/3/<?=$tdate?>/<?=$tdate?>/0"><p>Meeting Done- <b><?=$tttd->h-$tttd->i?></b></p></a><hr>
-            <a href="<?=base_url();?>Menu/APSTTaskDetail/3/<?=$uid?>/4/<?=$tdate?>/<?=$tdate?>/0"><p>Barg in Done- <b><?=$tttd->j-$tttd->k?></b></p></a><hr>
-            <a href="<?=base_url();?>Menu/APSTTaskDetail/3/<?=$uid?>/5/<?=$tdate?>/<?=$tdate?>/0"><p>Whatsapp Done- <b><?=$tttd->l-$tttd->m?></b></p></a><hr>
-            <a href="<?=base_url();?>Menu/APSTTaskDetail/3/<?=$uid?>/6/<?=$tdate?>/<?=$tdate?>/0"><p>MOM Done- <b><?=$tttd->n-$tttd->o?></b></p></a><hr>
-            <a href="<?=base_url();?>Menu/APSTTaskDetail/3/<?=$uid?>/7/<?=$tdate?>/<?=$tdate?>/0"><p>Proposal Done- <b><?=$tttd->p-$tttd->q?></b></p></a><hr>
-            <a href="<?=base_url();?>Menu/APSTTaskDetail/7/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Action Taken Yes- <b><?=$tttd->r?></b></p></a><hr>
-            <a href="<?=base_url();?>Menu/APSTTaskDetail/8/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Action Taken No- <b><?=$tttd->s?></b></p></a><hr>
-            <a href="<?=base_url();?>Menu/APSTTaskDetail/9/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Purpose Achieved Yes- <b><?=$tttd->t?></b></p></a><hr>
-            <a href="<?=base_url();?>Menu/APSTTaskDetail/10/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Purpose Achieved No- <b><?=$tttd->u?></b></p></a>
-            <?php }?>
-        </div>
-    </div>
-    <div class="icon">
-        <i class="ion ion-stats-bars"></i>
-    </div>
-    <a href="TeamWorkpst" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-</div>
-</div>
-
-<!-- ./col -->
-<div class="col-lg-3 col-md-6 col-sm-12">
-<div class="small-box bg-light text-secondary">
-    <div class="inner">
-        <center><h5>New Client Request</h5></center><hr>
-        <?php
-        $cont=0;$pass=0;$tass=0;$ini=0;$pend=0;$close=0;
-        foreach ($bd as $b){
-        $bdid = $b->user_id;
-        $bdallrequest=$this->Menu_model->bdrequest($bdid);
-        foreach($bdallrequest as $bdar){
-        $cont = $cont + $bdar->cont;
-        $pass = $pass + $bdar->pass;
-        $ini = $ini + $bdar->ini;
-        $pend = $pend + $bdar->pend;
-        $close = $close + $bdar->close;
-        }
-        }
-        ?>
-        <p><a href="TBDRequest/1">Total Request - <b><?=$cont;?></b></a></p><hr>
-        <p><a href="TotalRequest">Pending Apr - <b><?=$pass;?></b></a></p><hr>
-        <p><a href="TotalBDRequest/3">Total Apr - <b><?=$cont-$pass;?></b></a></p><hr>
-        <p><a href="TotalBDRequest/5">Total Request Pending - <b><?=$pend;?></b></a><br><a style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse6" role="button" aria-expanded="false" aria-controls="collapse6">Read More</a></p><hr>
-        <div class="collapse" id="collapse6">
-            <p><a href="TotalBDRequest/6">Total Request Completed - <b><?=$close;?></b></a></p>
-            
-            <p><a href="CreateRequest">Create Request</a></p>
-        </div></div>
-        <div class="icon">
-            <i class="ion ion-person-add"></i>
-        </div>
-        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-    </div>
-</div>
-<!-- ./col -->
-
-
-<div class="col-lg-3 col-md-6 col-sm-12">
-    <!-- small box -->
-    <div class="small-box bg-light text-secondary">
-        <div class="inner">
-            <center><h5>Today's MY Task Detail</h5></center><hr>
-            
-            <?php
-            foreach($mytaskd as $mytd){?>
-            <p><a href="<?=base_url();?>Menu/AMyTaskDetail/4/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0">Total Task Assign/Planned - <b><?=$mytd->a?></b></p></a><hr>
-            <p><a href="<?=base_url();?>Menu/AMyTaskDetail/5/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0">Total Task Pending - <b><?=$mytd->b?></b></p></a><hr>
-            <p><a href="<?=base_url();?>Menu/AMyTaskDetail/6/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0">Total Task Completed - <b><?=$mytd->c?></b></a><span style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse25" role="button" aria-expanded="false" aria-controls="collapse25">Read More</p><hr>
-            <div class="collapse" id="collapse25">
-                <a href="<?=base_url();?>Menu/AMyTaskDetail/3/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Call Done- <b><?=$mytd->d-$mytd->e?></b></p></a><hr>
-                <a href="<?=base_url();?>Menu/AMyTaskDetail/3/<?=$uid?>/2/<?=$tdate?>/<?=$tdate?>/0"><p>Email Done- <b><?=$mytd->f-$mytd->g?></b></p></a><hr>
-                <a href="<?=base_url();?>Menu/AMyTaskDetail/7/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Action Taken Yes- <b><?=$mytd->r?></b></p></a><hr>
-                <a href="<?=base_url();?>Menu/AMyTaskDetail/8/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Action Taken No- <b><?=$mytd->s?></b></p></a><hr>
-                <a href="<?=base_url();?>Menu/AMyTaskDetail/9/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Purpose Achieved Yes- <b><?=$mytd->t?></b></p></a><hr>
-                <a href="<?=base_url();?>Menu/AMyTaskDetail/10/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0"><p>Purpose Achieved No- <b><?=$mytd->u?></b></p></a>
-                <?php }?>
-            </div>
-        </div>
-        <div class="icon">
-            <i class="ion ion-stats-bars"></i>
-        </div>
-        <a href="MyWork" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-    </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-</div>
-<!-- /.row (main row) -->
-
-</div>
-</div>
 
 <div class="row">
 <div class="col-lg-8 col-sm">
@@ -1592,6 +1507,7 @@ chart.render();
 <!-- jQuery UI 1.11.4 -->
 <script src="<?=base_url();?>assets/js/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script>
 $.widget.bridge('uibutton', $.ui.button)
 </script>
@@ -1605,7 +1521,7 @@ $.widget.bridge('uibutton', $.ui.button)
 <script src="<?=base_url();?>assets/js/jquery.vmap.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery.vmap.usa.js"></script>
 <!-- jQuery Knob Chart -->
-<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- <script src="plugins/jquery-knob/jquery.knob.min.js"></script> -->
 <!-- daterangepicker -->
 <script src="<?=base_url();?>assets/js/moment.min.js"></script>
 <script src="<?=base_url();?>assets/js/daterangepicker.js"></script>
@@ -1632,6 +1548,9 @@ $.widget.bridge('uibutton', $.ui.button)
 <script src="<?=base_url();?>assets/js/adminlte.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="<?=base_url();?>assets/js/dashboard.js"></script>
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script> -->
+
 <style>
 #myInput {
 background-position: 10px 12px;
@@ -1662,21 +1581,28 @@ background-color: #eee;
 }
 </style>
 <script>
+    $(document).ready(function() {
+        
+    });
+</script>
+<script>
 function myFunction() {
-var input, filter, ul, li, a, i, txtValue;
-input = document.getElementById("myInput");
-filter = input.value.toUpperCase();
-ul = document.getElementById("myUL");
-li = ul.getElementsByTagName("li");
-for (i = 0; i < li.length; i++) {
-a = li[i].getElementsByTagName("a")[0];
-txtValue = a.textContent || a.innerText;
-if (txtValue.toUpperCase().indexOf(filter) > -1) {
-li[i].style.display = "";
-} else {
-li[i].style.display = "none";
-}
-}
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("myUL");
+    li = ul.getElementsByTagName("li");
+
+    for (i = 0; i < li.length; i++) {
+
+        a = li[i].getElementsByTagName("a")[0];
+        txtValue = a.textContent || a.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
 }
 </script>
 <script>
@@ -1687,6 +1613,110 @@ $("#example1").DataTable({
 $("#example2").DataTable({
 "responsive": true, "lengthChange": false, "autoWidth": false
 }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+</script>
+
+<!-- New scrip Tag for new dashboard <==================== START ==========> -->
+
+<script>
+    $(document).ready(function() {
+
+        $("#userType").change(function(){
+            // var selectedValues = $("#userType").val();
+            // console.log(selectedValues);
+            var selectedValues = $(this).val(); 
+            if (selectedValues.includes('select_all')) {
+            // Select all options
+                $('#userType option').prop('selected', true);
+                // Remove 'select_all' from the selected values
+                selectedValues = $('#userType option').map(function() {
+                    return this.value !== 'select_all' ? this.value : null;
+                }).get();
+            }
+            // var selectedValues = $("#userType").val(); // Get selected values
+            console.log(selectedValues);
+
+            $.ajax({
+                url: '<?=base_url();?>Menu/getRoleUser_New',
+                type: 'POST', 
+                data: {RoleId: selectedValues},
+                success: function(response) {
+                    // alert(response);
+                $("#user").html(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+    
+        $("#user").change(function(){
+
+            var selectedUser = $(this).val(); 
+            if (selectedUser.includes('select_all')) {
+            // Select all options
+                $('#user option').prop('selected', true);
+                // Remove 'select_all' from the selected values
+                selectedUser = $('#user option').map(function() {
+                    return this.value !== 'select_all' ? this.value : null;
+                }).get();
+            }
+            // var selectedValues = $("#userType").val(); // Get selected values
+            console.log(selectedUser);
+        });
+
+        $("#zone").change(function(){
+
+            var selectedZone = $(this).val(); 
+            if (selectedZone.includes('select_all')) {
+            // Select all options
+                $('#zone option').prop('selected', true);
+                // Remove 'select_all' from the selected values
+                selectedZone = $('#zone option').map(function() {
+                    return this.value !== 'select_all' ? this.value : null;
+                }).get();
+            }
+            // var selectedValues = $("#userType").val(); // Get selected values
+            console.log(selectedZone);
+            });
+    });
+</script>
+<script>
+     const teamDayTasks = <?php echo json_encode($TeamDayTasks); ?>;
+
+    const data = {
+        labels: Object.keys(teamDayTasks[0]),
+        datasets: [{
+            data: Object.values(teamDayTasks[0]),
+            backgroundColor: [
+                '#FF6384', '#36A2EB', '#FFCE56', '#FF6384', '#36A2EB', '#FFCE56',
+                '#FF6384', '#36A2EB', '#FFCE56', '#FF6384', '#36A2EB', '#FFCE56',
+                '#FF6384', '#36A2EB', '#FFCE56', '#FF6384', '#36A2EB', '#FFCE56',
+                '#FF6384', '#36A2EB'
+            ]
+        }]
+    };
+
+    const config = {
+            type: 'doughnut',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Team Day Tasks'
+                    }
+                }
+            },
+        };
+    //
+    window.onload = function() {
+            const ctx = document.getElementById('donutChart').getContext('2d');
+            new Chart(ctx, config);
+        };
 </script>
 </body>
 </html>

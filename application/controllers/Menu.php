@@ -8683,7 +8683,183 @@ class Menu extends CI_Controller {
         }
     }
 
+    // New TaskCheck <=========================================== START ==================================>
 
+    public function TaskCheck_New(){
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $userList = $this->Menu_model->get_userForTask();
+        $dep_name = $dt[0]->name;
+        $tdate=date('Y-m-d',strtotime("-1 days"));
+        $taskList = array();
+        // $userId = '100192';
+        if(isset($_POST['userId'])){
+
+            $userId = '100192';
+            $tdate = '2024-07-20';
+            // $userId = $_POST['userId'];
+            // echo $userId;die;
+            $taskList = $this->Menu_model->getTasks($userId,$tdate);
+        }
+
+        if(!empty($user)){
+            $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'selectedUser'=>$userId]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+
+    public function getTaskByUser(){
+        // var_dump($_POST);die;
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+
+        // $userId = $_POST['userId'];
+        // $tdate=date('Y-m-d',strtotime("-1 days"));
+        
+        $userId = '100192';
+        $tdate = '2024-07-20';
+        // var_dump($_POST);die;
+        $getTasks = $this->Menu_model->getTasks($userId,$tdate);
+        // var_dump($getTasks);die;
+        if(!empty($user)){
+            $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'tasks'=>$getTasks]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+
+    // New TaskCheck <=========================================== END ==================================>
+
+    // New Dashboard Changes <======= START =======>
+
+    public function Dashboard_New(){
+        date_default_timezone_set("Asia/Calcutta");
+        if(isset($_POST['tdate'])){
+        $tdate = $_POST['tdate'];
+        }
+        else{
+            $tdate = date('Y-m-d');
+        }
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $myid = $uid;
+
+
+        if($uid=='100103'){$uid=45;}
+        if($uid=='100149'){$uid=45;}
+        if($uid=='100142'){$uid=2;}
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        $fr=$this->Menu_model->get_freport($uid);
+        $bdc=$this->Menu_model->get_bdtcom($uid);
+        $mbdc=$this->Menu_model->get_mbdc($uid);
+        $atid=1;
+        $callr=$this->Menu_model->get_callingr($atid,$uid,$tdate);
+        $patc=$this->Menu_model->get_pat($atid,$uid,$tdate);
+        $tatc=$this->Menu_model->get_tat($atid,$uid,$tdate);
+        $atid=2;
+        $emailr=$this->Menu_model->get_callingr($atid,$uid,$tdate);
+        $pate=$this->Menu_model->get_pat($atid,$uid,$tdate);
+        $tate=$this->Menu_model->get_tat($atid,$uid,$tdate);
+        $atid=3;
+        $meetingr=$this->Menu_model->get_callingr($atid,$uid,$tdate);
+        $patm=$this->Menu_model->get_pat($atid,$uid,$tdate);
+        $tatm=$this->Menu_model->get_tat($atid,$uid,$tdate);
+        $pendingt=$this->Menu_model->get_pendingt($uid,$tdate);
+        $totalt=$this->Menu_model->get_totalt($myid,$tdate);
+        $ttdone=$this->Menu_model->get_ttdone($uid,$tdate);
+        $ttd=$this->Menu_model->get_totaltd($uid,$tdate);
+        $upt=$this->Menu_model->get_unplant($uid,$tdate);
+        $tsww=$this->Menu_model->get_tswwork($uid,$tdate);
+        $tptask=$this->Menu_model->get_tptask($uid);
+        $sc=$this->Menu_model->get_scon($uid,$tdate);
+        $barg=$this->Menu_model->get_bargdetail($uid,$tdate);
+        $autotasktimenew=$this->Menu_model->autotasktimenew($uid,$tdate);
+        $positive=$this->Menu_model->get_positive();
+        $vpositive=$this->Menu_model->get_vpositive();
+
+        // New functions <==== START ====>
+
+        $roles = $this->Menu_model->getRoles();
+        $zones = $this->Menu_model->getZones();
+        
+        // var_dump($roles);die;
+
+        // New functions <==== END ====>
+        $tnos=0;
+        $revenue=0;
+        $poc=0;
+        $vpoc=0;
+
+        foreach($positive as $po){
+            $poc++;
+            $iniid = $po->cid_id;
+            $tos=$this->Menu_model->get_initbyid($iniid);
+            $tnos +=  (int)$tos[0]->noofschools;
+            $revenue +=  (int)$tos[0]->fbudget;
+        }
+
+        foreach($vpositive as $vpo){
+            $vpoc++;
+            $iniid = $vpo->cid_id;
+            $tost=$this->Menu_model->get_initbyid($iniid);
+            $tnos +=  (int)$tost[0]->noofschools;
+            $revenue +=  (int)$tost[0]->fbudget;
+        }
+
+        $pstc=$this->Menu_model->get_pstc($uid);
+   
+        if(!empty($user)){
+            $this->load->view($dep_name.'/index_New',['myid'=>$myid,'ttdone'=>$ttdone,'upt'=>$upt,'user'=>$user,'fr'=>$fr,'callr'=>$callr,'emailr'=>$emailr,'meetingr'=>$meetingr,'pendingt'=>$pendingt,'totalt'=>$totalt,'patc'=>$patc,'tatc'=>$tatc,'pate'=>$pate,'tate'=>$tate,'patm'=>$patm,'tatm'=>$tatm,'sc'=>$sc,'tptask'=>$tptask,'ttd'=>$ttd,'barg'=>$barg,'uid'=>$uid,'pstc'=>$pstc,'poc'=>$poc,'vpoc'=>$vpoc,'tnos'=>$tnos,'revenue'=>$revenue,'tsww'=>$tsww,'bdc'=>$bdc,'tdate'=>$tdate,'autotasktimenew'=>$autotasktimenew,'mbdc'=>$mbdc,'roles'=>$roles,'zones'=>$zones]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+
+    public function getRoleUser_New(){
+        $RoleId= $this->input->post('RoleId');
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        // var_dump($RoleId); die;
+        if($user['type_id'] == 2){
+            $user_new = $this->db->select('*')->from('user_details')->where_in('type_id', $RoleId)->where(['status'=>'active','admin_id'=>$uid])->or_where('aadmin', $uid)->or_where('badmin', $uid)->get()->result();
+        }
+        if($user['type_id'] == 4){
+            if($RoleId == 3){
+                $user_new = $this->db->select('*')->from('user_details')->where_in('type_id', $RoleId)->where([ 'status'=>'active','badmin'=>$uid])->get()->result();
+            }else{
+                $user_new = $this->db->select('*')->from('user_details')->where_in('type_id', $RoleId)->where(['status'=>'active','aadmin'=>$uid])->get()->result();
+            }
+        }
+        // echo $this->db->last_query(); exit;
+        // echo  $data = '<option value="">Select User</option>';
+        echo $data = '<option value="">Select User</option>'.'<option value="select_all">Select All</option>';
+        foreach($user_new as $d){
+            echo  $data = '<option value='.$d->user_id.'>'.$d->name.'</option>';
+        }
+    }
+
+    public function DashboardFilter_New(){
+        var_dump($_POST);die;
+    }
+
+    // New Dashboard Changes <======= END =======>
     public function DayCloseCheck(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d',strtotime("-1 days"));
@@ -14579,19 +14755,19 @@ class Menu extends CI_Controller {
 
     //Select user according to role
     public function getRoleUser(){
-        $selectedOption= $this->input->post('selectedOption');
+        $RoleId= $this->input->post('RoleId');
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
-        // var_dump($user['type_id']); exit;
+        // var_dump($RoleId); die;
         if($user['type_id'] == 2){
-            $user = $this->db->select('*')->from('user_details')->where(['type_id'=> $selectedOption, 'status'=>'active','admin_id'=>$uid])->or_where('aadmin', $uid)->or_where('badmin', $uid)->get()->result();
+            $user = $this->db->select('*')->from('user_details')->where(['type_id'=> $RoleId, 'status'=>'active','admin_id'=>$uid])->or_where('aadmin', $uid)->or_where('badmin', $uid)->get()->result();
         }
         if($user['type_id'] == 4){
-            if($selectedOption == 3){
-                $user = $this->db->select('*')->from('user_details')->where(['type_id'=> $selectedOption, 'status'=>'active','badmin'=>$uid])->get()->result();
+            if($RoleId == 3){
+                $user = $this->db->select('*')->from('user_details')->where(['type_id'=> $RoleId, 'status'=>'active','badmin'=>$uid])->get()->result();
             }else{
-                $user = $this->db->select('*')->from('user_details')->where(['type_id'=> $selectedOption, 'status'=>'active','aadmin'=>$uid])->get()->result();
+                $user = $this->db->select('*')->from('user_details')->where(['type_id'=> $RoleId, 'status'=>'active','aadmin'=>$uid])->get()->result();
             }
         }
         // echo $this->db->last_query(); exit;

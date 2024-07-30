@@ -343,7 +343,6 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                   ?>
                 <center><h5>Total My Funnel </h5></center><hr>
                         <p><a href="pcompanies/0/<?=$uid?>">Total Companies - <b><?=$mc->a?></b></a><hr>
-                        <p><a href="bdcompanies/35/<?=$uid?>">Common Companies - <b><?=$mc->s?></b></a><hr>
                         <p><a href="bdcompanies/1/<?=$uid?>">Open - <b><?=$mc->b?></b></p></a><hr>
                         <p><a href="bdcompanies/8/<?=$uid?>">Open [RPEM] - <b><?=$mc->i?></b></p></a><hr>
                         <p><a href="bdcompanies/2/<?=$uid?>">Reachout - <b><?=$mc->c?></b></p></a><a style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse7" role="button" aria-expanded="false" aria-controls="collapse7">Read More</a></p><hr>
@@ -362,7 +361,7 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                         <p><a href="bdcompanies/15/<?=$uid?>">Upsell Client - <b><?=$mc->n?></b></p></a><hr>
                         <p><a href="bdcompanies/16/<?=$uid?>">Key Client - <b><?=$mc->q?></b></p></a><hr>
                         <?php } ?>
-                        <p><a href="NewLead">Add New Lead</a></p>
+                       
                     </div></div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
@@ -371,6 +370,45 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
             </div>
           </div>
           
+
+          <div class="col-lg-3 col-md-6 col-sm-12">
+            <!-- small box -->
+            <div class="small-box bg-light text-secondary">
+              <div class="inner">
+                  <?php 
+                  $comFunnel = $this->Menu_model->get_CommonFunnel($uid);
+                  // echo "<pre>";
+                  // print_r($comFunnel);
+                  foreach($comFunnel as $mc){
+                  ?>
+                <center><h5>Common Funnel </h5></center><hr>
+                        <p><a href="CommonCompaniesStatus/35/<?=$uid?>">Total Companies - <b><?=$mc->a?></b></a><hr>
+                        <p><a href="CommonCompaniesStatus/1/<?=$uid?>">Open - <b><?=$mc->b?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/8/<?=$uid?>">Open [RPEM] - <b><?=$mc->i?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/2/<?=$uid?>">Reachout - <b><?=$mc->c?></b></p></a><a style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse_common" role="button" aria-expanded="false" aria-controls="collapse7">Read More</a></p><hr>
+                        <div class="collapse" id="collapse_common">
+                        <p><a href="CommonCompaniesStatus/3/<?=$uid?>">Tentative - <b><?=$mc->d?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/4/<?=$uid?>">Will-Do-Later - <b><?=$mc->e?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/5/<?=$uid?>">Not-Interest - <b><?=$mc->f?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/10/<?=$uid?>">TTD-Reachout - <b><?=$mc->k?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/11/<?=$uid?>">WNO-Reachout - <b><?=$mc->l?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/6/<?=$uid?>">Positive - <b><?=$mc->g?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/9/<?=$uid?>">Very Positive - <b><?=$mc->j?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/12/<?=$uid?>">Positive NAP - <b><?=$mc->o?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/13/<?=$uid?>">Very Positive NAP - <b><?=$mc->p?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/7/<?=$uid?>">Closure - <b><?=$mc->h?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/14/<?=$uid?>">Focus Funnel - <b><?=$mc->m?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/15/<?=$uid?>">Upsell Client - <b><?=$mc->n?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/16/<?=$uid?>">Key Client - <b><?=$mc->q?></b></p></a><hr>
+                        <?php } ?>
+                      
+                    </div></div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+              <a href="companies/0" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
           
           <div class="col-lg-3 col-md-6 col-sm-12">
             <!-- small box -->

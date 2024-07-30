@@ -5616,6 +5616,8 @@ class Menu extends CI_Controller {
         // die;
         if($uyid ==15){
             $mdata = $this->Menu_model->get_userbyaSCid($aid);
+        }else if($uyid ==4){
+            $mdata = $this->Menu_model->get_userbyaaid($aid);
         }else{
             $mdata = $this->Menu_model->get_userbyaid($aid);
         }
@@ -8668,6 +8670,8 @@ class Menu extends CI_Controller {
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         $mdata = $this->Menu_model->get_daydetail($uid,$tdate);
+        $yesterday = date('Y-m-d', strtotime('-1 day', strtotime($tdate)));
+        $yestdata = $this->Menu_model->get_Yestdaydetail($uid,$yesterday);
 
         if($mdata)
         {$st = $mdata[0]->ustart;
@@ -8676,9 +8680,8 @@ class Menu extends CI_Controller {
             if($ct!=''){$do=2;}
         }else{$do=0;}
 
-
         if(!empty($user)){
-            $this->load->view($dep_name.'/DayManagement',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'tdate'=>$tdate,'uid'=>$uid,'do'=>$do]);
+            $this->load->view($dep_name.'/DayManagement',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'tdate'=>$tdate,'uid'=>$uid,'do'=>$do,'yestdata'=>$yestdata]);
         }else{
             redirect('Menu/main');
         }
@@ -11329,6 +11332,25 @@ class Menu extends CI_Controller {
         }
     }
 
+
+    public function CommonCompaniesStatus($code,$bdid){
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+      
+        $mdata=$this->Menu_model->get_CommonCompanies($bdid,$code);
+      
+        if(!empty($user)){
+            $this->load->view($dep_name.'/CommonCompanies',['user'=>$user,'mdata'=>$mdata,'code'=>$code,'uid'=>$uid,'bdid'=>$bdid]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+
     public function PSTbdcompanies($code,$bdid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11541,22 +11563,43 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
+        
+        if(isset($_POST['submit'])){
 
-
-        if($code==0){
-            $mdata=$this->Menu_model->get_pbdtcom($uid);
+            $commoncompanies = $_POST['commoncompanies'];   // meetings or topspender
+            $commonwith = $_POST['commonwith'];             // bd, pst, both
+            $topspender = $_POST['topspender'];             // yes, no
+            
+            if($commoncompanies =='meetings'){
+                $mdata=$this->Menu_model->get_ComCompanies($uid,$commonwith,$commoncompanies);
+            }
+            if($commoncompanies =='topspender'){
+                $mdata=$this->Menu_model->get_ComCompanies($uid,$topspender,$commoncompanies);
+            }
         }else{
-            $mdata=$this->Menu_model->get_pbdcombystatus($uid,$code);
+            if($code==0){
+                $mdata=$this->Menu_model->get_pbdtcom($uid);
+            }else{
+                $mdata=$this->Menu_model->get_pbdcombystatus($uid,$code);
+            }
+
+            $commoncompanies = '';   // meetings or topspender
+            $commonwith = '';             // bd, pst, both
+            $topspender = '';
         }
-    
-        //  echo $str = $this->db->last_query();
-        //  die;
+
         if(!empty($user)){
-            $this->load->view($dep_name.'/CreatedCompanies',['user'=>$user,'mdata'=>$mdata,'code'=>$code,'uid'=>$uid]);
+            $this->load->view($dep_name.'/CreatedCompanies',['user'=>$user,'mdata'=>$mdata,'code'=>$code,'uid'=>$uid,'commoncompanies'=>$commoncompanies,'commonwith'=>$commonwith,'topspender'=>$topspender]);
         }else{
             redirect('Menu/main');
         }
     }
+
+
+
+
+
+
 
     public function bdeff($tdate,$s){
         $user = $this->session->userdata('user');
@@ -18396,6 +18439,21 @@ public function CheckPlanTaskBetweenTimes($stime,$etime){
     $total_task = $this->Menu_model->TotalTaskBetweenTime($uid,$date,$stime,$etime);
     $this->load->view($dep_name.'/CheckPlanTaskBetweenTimes',['user'=>$user,'uid'=>$uid,'tdata'=>$total_task,'cdate'=>$date,'stime'=>$stime,'etime'=>$etime]);
 }
+
+
+public function dayscRequest(){
+    dd($_POST);
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

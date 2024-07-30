@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="wi$dth=device-wi$dth, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>STEM APP | WebAPP</title>
 <!-- Google Font: Source Sans Pro -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
@@ -32,6 +32,11 @@
 .scrollme {
 overflow-x: auto;
 }
+.flexitems {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
 </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -48,7 +53,7 @@ overflow-x: auto;
 <div class="container-fluid">
 <div class="row mb-2">
 <div class="col-sm-6">
-<h1 class="m-0">Created Companies</h1>
+<h1 class="m-0">Total Companies</h1>
 </div><!-- /.col -->
 <div class="col-sm-6">
 <ol class="breadcrumb float-sm-right">
@@ -68,11 +73,49 @@ overflow-x: auto;
 <div class="col-12">
 <div class="card">
 <div class="card-header">
-    <h3 class="card-title">Created Companies</h3>
+
+<div class="row">
+        <div class="col-md-10">
+        <div>
+        <form class="p-3" method="POST" action="">
+
+            <label for="">Common Companies
+            <select class="form-control" id="commoncompanies" name="commoncompanies" style="width:200px" >
+                <option <?php if($commoncompanies == ''){echo "selected";} ?> value="">Select </option>
+                <option <?php if($commoncompanies == 'meetings'){echo "selected";} ?> value="meetings">Because of meetings</option>
+                <option <?php if($commoncompanies == 'topspender'){echo "selected";} ?> value="topspender">Because of Top Spender </option>
+            </select>
+            </label>
+
+            <label id="commonwith">Common with
+            <select class="form-control" name="commonwith" style="width:200px">
+            <option <?php if($commonwith == ''){echo "selected";} ?> value="">Select </option>
+                <option <?php if($commonwith == 'bd'){echo "selected";} ?> value="bd">BD</option>
+                <option <?php if($commonwith == 'pst'){echo "selected";} ?> value="pst">PST</option>
+                <option <?php if($commonwith == 'both'){echo "selected";} ?> value="both">Both</option>
+            </select>
+            </label>
+    
+            <label id="topspender">Top Spender
+            <select class="form-control" name="topspender" style="width:200px">
+            <option <?php if($topspender == ''){echo "selected";} ?> value="">Select </option>
+                <option <?php if($topspender == 'yes'){echo "selected";} ?> value="yes">Yes</option>
+                <option <?php if($topspender == 'no'){echo "selected";} ?> value="no">No</option>
+            </select>
+            </label>
+                   
+            <button type="submit" name="submit" class="btn btn-primary mb-2">Submit</button> 
+            </form>
+              </div>
+    </div>
+    <div class="col-md-2 flexitems">
+      <a style="margin-top:40px;" class="p-2 bg-primary" href="<?=base_url();?>Menu/pcompanies/0/<?=$uid ?>">↻ Reset</a>
+    </div>
 </div>
 <!-- /.card-header -->
 <div class="card-body">
     <div class="container-fluid body-content">
+
         <div class="page-header">
             <div class="form-group">
                 <fieldset>
@@ -84,6 +127,7 @@ overflow-x: auto;
                                         <tr>
                                             <th>S.No.</th>
                                             <th>BD Name</th>
+                                            <th>Cluster Manager</th>
                                             <th>PST</th>
                                             <th>Company ID</th>
                                             <th>Company Name</th>
@@ -129,6 +173,7 @@ overflow-x: auto;
                                         $ciid = $init[0]->id;
                                         $pid = $init[0]->apst;
                                         $mbdid = $init[0]->mainbd;
+                                        $clm_id = $init[0]->clm_id;
                                         
                                         
                                         $tblc=$this->Menu_model->get_tblbyidwithremark($ciid);
@@ -145,7 +190,10 @@ overflow-x: auto;
                                         
                                         if($pid){$pstname=$this->Menu_model->get_userbyid($pid);$pstname=$pstname[0]->name;}
                                         else{$pstname='';}
-                                        
+
+                                        if($clm_id){$clm_name=$this->Menu_model->get_userbyid($clm_id);$clm_name=$clm_name[0]->name;}
+                                        else{$clm_name='';}
+
                                         if($mbdid){$bdname=$this->Menu_model->get_userbyid($mbdid);$bdname=$bdname[0]->name;}
                                         else{$bdname='';}
                                         
@@ -159,6 +207,7 @@ overflow-x: auto;
                                         <tr>
                                             <td><?=$i?></td>
                                             <td><?=$bdname?></td>
+                                            <td><?=$clm_name?></td>
                                             <td><?=$pstname?></td>
                                             <td><?=$cd[0]->id?></td>
                                             <td><a href="<?=base_url();?>Menu/CompanyDetails/<?=$cid?>"><?=$cd[0]->compname?></a></td>
@@ -330,6 +379,60 @@ $("#nextaction").html(result);
 }
 });
 });
+
+
+
+$( document ).ready(function() {
+// $("#commonwith").hide();
+var commoncompanies = '<?= $commoncompanies ?>';
+var topsepender = '<?= $topspender ?>';
+var commonwith = '<?= $commonwith ?>';
+
+if(commoncompanies == 'meetings'){
+    $("#topspender").hide();
+}
+    
+if(commoncompanies == 'topspender'){
+    $("#commonwith").hide();
+}
+
+if(commoncompanies == ''){
+    $("#commonwith").hide();
+    $("#topspender").hide();
+}
+
+$("#commoncompanies").change(function(){
+          var val = $(this).val();
+      
+          if (val == 'meetings') {
+                $("#commonwith").show();
+                $("#topspender").hide();
+            }else if (val == 'topspender') {
+                $("#topspender").show();
+                $("#commonwith").hide();
+            }else{
+                $("#commonwith").hide();
+                $("#topspender").hide();
+            }
+        });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 
 

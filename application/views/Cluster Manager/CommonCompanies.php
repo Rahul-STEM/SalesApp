@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="wi$dth=device-wi$dth, initial-scale=1">
-<title>STEM APP | WebAPP</title>
+<title>Common Companies | STEM APP | WebAPP</title>
 <!-- Google Font: Source Sans Pro -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
 <!-- Font Awesome -->
@@ -46,7 +46,6 @@ overflow-x: auto;
 <!-- Content Header (Page header) -->
 <div class="content-header">
 <div class="container-fluid">
-
 <div class="row mb-2">
 <div class="col-sm-6">
 <h1 class="m-0"><?php if($code == 35){echo "Common";}else{echo "Created";} ?> Companies</h1>

@@ -327,9 +327,20 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
     if(sizeof($rstData) > 0){
      
         foreach ($rstData as $rsData) {
+
+                $chk_user_types = explode(',', $rsData->user_types);
+
+                $rsuser_ids = $rsData->user_ids;
+                $user_ids_arr = explode(',', $rsuser_ids);
+             
+                if(in_array($uyid, $chk_user_types)) {
+
+                    if (empty($user_ids_arr[0]) || in_array($bdid, $user_ids_arr)) {
+
+
             $conditions = [
                 'action_id' => explode(',', $rsData->action_id),
-                'user_types' => explode(',', $rsData->user_types),
+                'user_types' => $chk_user_types,
                 'company_status' => explode(',', $rsData->company_status),
                 'partner_types' => explode(',', $rsData->partner_types),
                 'categorys' => explode(',', $rsData->categorys),
@@ -341,13 +352,13 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
             $allArrays = array_filter($conditions, function ($arr) { return $arr == ['all']; });
            
             if (count($allArrays) == count($conditions)) {
-                $this->session->set_flashdata('success_message', 'Admin Add Special Restriction on Task Planner for ' . $rst_sdate . ' to ' . $rst_edate);
+                $this->session->set_flashdata('error_message', 'Admin Add Special Restriction on Task Planner for ' . $rst_sdate . ' to ' . $rst_edate);
                 redirect('Menu/TaskPlanner/' . $pdate);
             } else {
 
                 if (array_key_exists('user_types', $allArrays) && array_key_exists('action_id', $allArrays)) {
                 
-                $this->session->set_flashdata('success_message', 'Admin Add Special Restriction on Task Planner for ' . $rst_sdate . ' to ' . $rst_edate);
+                $this->session->set_flashdata('error_message', 'Admin Add Special Restriction on Task Planner for ' . $rst_sdate . ' to ' . $rst_edate);
                 redirect('Menu/TaskPlanner/' . $pdate);
 
                 }
@@ -358,8 +369,7 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
                 return !empty($value[0]);
             });
             
-            $rsuser_ids = $rsData->user_ids;
-            $user_ids_arr = explode(',', $rsuser_ids);
+            
 
             if (array_key_exists('user_types', $difference) && array_key_exists('action_id', $difference) && array_key_exists('company_status', $difference) && array_key_exists('partner_types', $difference) && array_key_exists('categorys', $difference) && sizeof($difference) == 5 ) {
 
@@ -418,11 +428,11 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
                                                                         if($rsuser_ids !== ''){
                                                                             if (in_array($bdid, $user_ids_arr)) {
                                                                                
-                                                                                $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                                $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                                                                 redirect('Menu/TaskPlanner2/'.$pdate);
                                                                             }
                                                                         }else{
-                                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                            $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                                                             redirect('Menu/TaskPlanner2/'.$pdate);
                                                                         }
                                                                     }
@@ -434,11 +444,11 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
                                                                 if($rsuser_ids !== ''){
                                                                     if (in_array($bdid, $user_ids_arr)) {
                                             
-                                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                        $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                                                         redirect('Menu/TaskPlanner2/'.$pdate);
                                                                     }
                                                                 }else{
-                                                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                    $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                                                     redirect('Menu/TaskPlanner2/'.$pdate);
                                                                 }
                                                             }
@@ -454,11 +464,11 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
                                                 if($rsuser_ids !== ''){
                                                     if (in_array($bdid, $user_ids_arr)) {
                                                         
-                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                        $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                                         redirect('Menu/TaskPlanner2/'.$pdate);
                                                     }
                                                 }else{
-                                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                    $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                                     redirect('Menu/TaskPlanner2/'.$pdate);
                                                 }
 
@@ -473,11 +483,11 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
                                 if($rsuser_ids !== ''){
                                     if (in_array($bdid, $user_ids_arr)) {
                                         $flash_message = 'Company Status - '.$cur_cmp_status_name;
-                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                        $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                         redirect('Menu/TaskPlanner2/'.$pdate);
                                     }
                                 }else{
-                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                    $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                     redirect('Menu/TaskPlanner2/'.$pdate);
                                 }
                             }
@@ -545,11 +555,11 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
                                                                             if($rsuser_ids !== ''){
                                                                                 if (in_array($bdid, $user_ids_arr)) {
                                                                                     $flash_message = 'Company Status - '.$cur_cmp_status_name.' & Task Action - '.$ntactionname;
-                                                                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                                    $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                                                                     redirect('Menu/TaskPlanner2/'.$pdate);
                                                                                 }
                                                                             }else{
-                                                                                $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                                $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                                                                 redirect('Menu/TaskPlanner2/'.$pdate);
                                                                             }
                                                                         }
@@ -562,11 +572,11 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
                                                                     if($rsuser_ids !== ''){
                                                                         if (in_array($bdid, $user_ids_arr)) {
                                                                             
-                                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                            $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                                                             redirect('Menu/TaskPlanner2/'.$pdate);
                                                                         }
                                                                     }else{
-                                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                        $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                                                         redirect('Menu/TaskPlanner2/'.$pdate);
                                                                     }
 
@@ -581,11 +591,11 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
                                                     if($rsuser_ids !== ''){
                                                         if (in_array($bdid, $user_ids_arr)) {
                                                             $flash_message = 'Company Status - '.$cur_cmp_status_name;
-                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                            $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                                             redirect('Menu/TaskPlanner2/'.$pdate);
                                                         }
                                                     }else{
-                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                        $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                                         redirect('Menu/TaskPlanner2/'.$pdate);
                                                     }
                                                 }
@@ -657,11 +667,11 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
                                                                             if($rsuser_ids !== ''){
                                                                                 if (in_array($bdid, $user_ids_arr)) {
                                                                                    
-                                                                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                                    $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                                                                     redirect('Menu/TaskPlanner2/'.$pdate);
                                                                                 }
                                                                             }else{
-                                                                                $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                                $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                                                                 redirect('Menu/TaskPlanner2/'.$pdate);
                                                                             }
                                                                         }
@@ -673,11 +683,11 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
                                                                     if($rsuser_ids !== ''){
                                                                         if (in_array($bdid, $user_ids_arr)) {
                                                 
-                                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                            $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                                                             redirect('Menu/TaskPlanner2/'.$pdate);
                                                                         }
                                                                     }else{
-                                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                        $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                                                         redirect('Menu/TaskPlanner2/'.$pdate);
                                                                     }
                                                                 }
@@ -691,11 +701,11 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
                                                     if($rsuser_ids !== ''){
                                                         if (in_array($bdid, $user_ids_arr)) {
                                                             $flash_message = 'Company Status - '.$cur_cmp_status_name;
-                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                            $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                                             redirect('Menu/TaskPlanner2/'.$pdate);
                                                         }
                                                     }else{
-                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                        $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                                         redirect('Menu/TaskPlanner2/'.$pdate);
                                                     }
                                                 }
@@ -769,11 +779,11 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
                                                                                             if($rsuser_ids !== ''){
                                                                                                 if (in_array($bdid, $user_ids_arr)) {
                                                                                                    
-                                                                                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                                                    $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                                                                                     redirect('Menu/TaskPlanner2/'.$pdate);
                                                                                                 }
                                                                                             }else{
-                                                                                                $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                                                $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                                                                                 redirect('Menu/TaskPlanner2/'.$pdate);
                                                                                             }
                                                                                         }
@@ -785,11 +795,11 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
                                                                                     if($rsuser_ids !== ''){
                                                                                         if (in_array($bdid, $user_ids_arr)) {
                                                                 
-                                                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                                            $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                                                                             redirect('Menu/TaskPlanner2/'.$pdate);
                                                                                         }
                                                                                     }else{
-                                                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                                        $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                                                                         redirect('Menu/TaskPlanner2/'.$pdate);
                                                                                     }
                                                                                 }
@@ -804,11 +814,11 @@ public function SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$nta
                                                                     if($rsuser_ids !== ''){
                                                                         if (in_array($bdid, $user_ids_arr)) {
                                                                             
-                                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                            $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                                                             redirect('Menu/TaskPlanner2/'.$pdate);
                                                                         }
                                                                     }else{
-                                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                                        $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                                                         redirect('Menu/TaskPlanner2/'.$pdate);
                                                                     }
 
@@ -865,11 +875,11 @@ if (array_key_exists('user_types', $difference) && array_key_exists('action_id',
                                                         if($rsuser_ids !== ''){
                                                             if (in_array($bdid, $user_ids_arr)) {
                                                                 $flash_message = 'Company Status - '.$cur_cmp_status_name.' & Task Action - '.$ntactionname;
-                                                                $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                                                 redirect('Menu/TaskPlanner2/'.$pdate);
                                                             }
                                                         }else{
-                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                            $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                                             redirect('Menu/TaskPlanner2/'.$pdate);
                                                         }
                                                     }
@@ -882,11 +892,11 @@ if (array_key_exists('user_types', $difference) && array_key_exists('action_id',
                                                 if($rsuser_ids !== ''){
                                                     if (in_array($bdid, $user_ids_arr)) {
                                                         
-                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                        $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                                         redirect('Menu/TaskPlanner2/'.$pdate);
                                                     }
                                                 }else{
-                                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                    $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                                     redirect('Menu/TaskPlanner2/'.$pdate);
                                                 }
                                             }
@@ -944,11 +954,11 @@ if (array_key_exists('user_types', $difference) && array_key_exists('action_id',
                                                         if($rsuser_ids !== ''){
                                                             if (in_array($bdid, $user_ids_arr)) {
                                                             
-                                                                $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                                $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                                                 redirect('Menu/TaskPlanner2/'.$pdate);
                                                             }
                                                         }else{
-                                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                            $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                                             redirect('Menu/TaskPlanner2/'.$pdate);
                                                         }
                                                     }
@@ -960,11 +970,11 @@ if (array_key_exists('user_types', $difference) && array_key_exists('action_id',
                                                 if($rsuser_ids !== ''){
                                                     if (in_array($bdid, $user_ids_arr)) {
                             
-                                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                                        $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                                         redirect('Menu/TaskPlanner2/'.$pdate);
                                                     }
                                                 }else{
-                                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                                    $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                                     redirect('Menu/TaskPlanner2/'.$pdate);
                                                 }
                                             }
@@ -1011,11 +1021,11 @@ if (array_key_exists('user_types', $difference) && array_key_exists('action_id',
                                     if($rsuser_ids !== ''){
                                         if (in_array($bdid, $user_ids_arr)) {
                                             $flash_message = 'Company Status - '.$cur_cmp_status_name.' & Task Action - '.$ntactionname;
-                                            $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                            $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                             redirect('Menu/TaskPlanner2/'.$pdate);
                                         }
                                     }else{
-                                        $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                        $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                         redirect('Menu/TaskPlanner2/'.$pdate);
                                     }
                                 }
@@ -1027,11 +1037,11 @@ if (array_key_exists('user_types', $difference) && array_key_exists('action_id',
                             if($rsuser_ids !== ''){
                                 if (in_array($bdid, $user_ids_arr)) {
                                     $flash_message = 'Company Status - '.$cur_cmp_status_name;
-                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                    $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                     redirect('Menu/TaskPlanner2/'.$pdate);
                                 }
                             }else{
-                                $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                 redirect('Menu/TaskPlanner2/'.$pdate);
                             }
                         }
@@ -1047,18 +1057,13 @@ if (array_key_exists('user_types', $difference) && array_key_exists('action_id',
 // Start Check Restrction when admin add - user_types, action_id
 
 if (array_key_exists('user_types', $difference) && array_key_exists('action_id', $difference) && sizeof($difference) == 2) {
-                
-    foreach ($difference as $key => $value) {
-        if ($key == 'user_types' && in_array($uyid, $value)) {
-
-            $get_utypename = $this->Menu_model->get_utype($uyid);
-            $get_utypename = $get_utypename[0]->name;
 
             foreach ($difference as $key => $value) {
                 if ($key == 'user_types' && in_array($uyid, $value)) {
 
                     $get_utypename = $this->Menu_model->get_utype($uyid);
                     $get_utypename = $get_utypename[0]->name;
+
                     foreach ($difference as $key => $value) {
                         if ($key == 'action_id' && !in_array($ntaction, $value)) {
 
@@ -1069,12 +1074,12 @@ if (array_key_exists('user_types', $difference) && array_key_exists('action_id',
                             
                             if($rsuser_ids !== ''){
                                 if (in_array($bdid, $user_ids_arr)) {
-                                    $flash_message = 'Company Status - '.$cur_cmp_status_name.' & Task Action - '.$ntactionname;
-                                    $this->session->set_flashdata('success_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
+                                    $flash_message = $ntactionname;
+                                    $this->session->set_flashdata('error_message','Admin have Added Special Restriction for You Can not Plan '.$flash_message.' Task on Task Planner for you on date '.$rst_sdate .' to '.$rst_edate);
                                     redirect('Menu/TaskPlanner2/'.$pdate);
                                 }
                             }else{
-                                $this->session->set_flashdata('success_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
+                                $this->session->set_flashdata('error_message','Admin have Added Special Restriction of '.$flash_message.' Task on Task Planner for '.$rst_sdate .' to '.$rst_edate);
                                 redirect('Menu/TaskPlanner2/'.$pdate);
                             }
                         }
@@ -1082,12 +1087,13 @@ if (array_key_exists('user_types', $difference) && array_key_exists('action_id',
                 }
             }
         }
-    }
-}
+
                     
 // End Check Restrction when admin add - user_types, action_id
 
 // Handle other conditions as needed
+                    }
+                }
             }
         }
     }

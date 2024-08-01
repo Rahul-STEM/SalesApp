@@ -754,7 +754,12 @@ date_default_timezone_set("Asia/Kolkata");
                                                 <option value="yes">Priority (Definitely Will give business)</option>
                                               </select>
                                             </div>
-                                            
+                                            <hr>
+                                            <lable id="letmeetingsremarks">
+                                              <span class="text-danger">* Please provide details as to why it took you more than 30 minutes.</span>
+                                              <input type="text" id="remarksInput" placeholder="* Please provide details as to why it took you more than 30 minutes." name="letmeetingsremarks" class="form-control p-3 mt-2">
+                                            </lable>
+                                            <hr>
                                             <div id="location">
                                               <div id="map-container-google-3" class="z-depth-1-half map-container-3 p-3 m-3 border">
                                                 <iframe style="width:100%;height:200px;" id="myclocation" src="" frameborder="0" style="border:0" allowfullscreen></iframe>
@@ -1343,6 +1348,22 @@ date_default_timezone_set("Asia/Kolkata");
                                 var designation = response[0].designation;
                                 var phoneno = response[0].phoneno;
                                 var emailid = response[0].emailid;
+
+                                // Start Meeting 30 minute Conditions
+                                var startm = response[0].startm;
+                                var pastDate = new Date(startm.replace(' ', 'T'));
+                                var currentDate = new Date();
+                                var timeDifference = currentDate - pastDate;
+                                var minutesDifference = Math.floor(timeDifference / (1000 * 60));
+                                if(minutesDifference > 30){
+                                  $('#letmeetingsremarks').show();
+                                  $('#remarksInput').attr('required', true);
+                                }else{
+                                  $('#letmeetingsremarks').hide();
+                                }
+                                // End Meeting 30 minute Conditions
+
+
                                 document.getElementById("bmcname").value = compname;
                                 document.getElementById("bmcid").value = cid;
                                 document.getElementById("bmccid").value = ccid;

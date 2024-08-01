@@ -4640,7 +4640,7 @@ class Menu extends CI_Controller {
     $getplandateindata =  $getplandateindata->result();
 
         if(!empty($user)){
-            $this->load->view($dep_name.'/TaskPlanner2',['uid'=>$uid,'user'=>$user,'planbutnotinitedcnt'=>$planbutnotinitedcnt,'getplandt'=>$getplandateindata,'pendingtask'=>$pcount, 'mesaage'=>$mesaage,'adate'=>$adate,'tptime'=>$tptime,'getAutoTaskTime'=>$getAutoTaskTime,'getreqData'=>$getreqData,'oldPendTask'=>$oldplanbutnotinited,'type_id'=>$uyid]);
+            $this->load->view($dep_name.'/TaskPlanner2',['uid'=>$uid,'user'=>$user,'planbutnotinitedcnt'=>$planbutnotinitedcnt,'getplandt'=>$getplandateindata,'pendingtask'=>$pcount, 'mesaage'=>$mesaage,'adate'=>$adate,'tptime'=>$tptime,'getAutoTaskTime'=>$getAutoTaskTime,'getreqData'=>$getreqData,'oldPendTask'=>$oldplanbutnotinited]);
         }else{
             redirect('Menu/main');
         }
@@ -6947,7 +6947,6 @@ class Menu extends CI_Controller {
     }
 
     public function rpmclose(){
-
         $priority="";$closem="";$caddress="";$cpname="";$cpdes="";$cpno="";$cpemail="";
         $uid = $_POST['uid'];
         $cmid = $_POST['cmid'];
@@ -6965,11 +6964,8 @@ class Menu extends CI_Controller {
             $cpemail = $_POST['cpemail'];
         $lat = $_POST['lat'];
         $lng = $_POST['lng'];
-        $letmeetingsremarks = $_POST['letmeetingsremarks'];
-
-
         $this->load->model('Menu_model');
-        $cbmid = $this->Menu_model->close_rpm($uid,$closem,$caddress,$cpname,$cpdes,$cpno,$cpemail,$lat,$lng,$type,$priority,$cmid,$bmcid,$bmccid,$bminid,$bmtid,$letmeetingsremarks);
+        $cbmid = $this->Menu_model->close_rpm($uid,$closem,$caddress,$cpname,$cpdes,$cpno,$cpemail,$lat,$lng,$type,$priority,$cmid,$bmcid,$bmccid,$bminid,$bmtid);
         redirect('Menu/Dashboard');
 
     }
@@ -12996,13 +12992,10 @@ class Menu extends CI_Controller {
         $inid = rtrim($inid , ',');
        
         $remark=$this->Menu_model->get_purposebyinidnew($aid,$inid);
-        
+       
         echo  $data = '<option value="">Select Purpose</option>';
         foreach($remark as $d){
              echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
-        }
-        if(sizeof($remark) == 0){
-            echo '<option value="34">Fresh Meeting</option>';
         }
     }
 
@@ -14285,7 +14278,6 @@ class Menu extends CI_Controller {
         $id= $this->input->post('id');
         $this->load->model('Menu_model');
         $result=$this->Menu_model->get_bmalldata($id);
-
         echo json_encode($result);
     }
 
@@ -17788,18 +17780,7 @@ public function addplantask12(){
 
      $select_cluster = $this->input->post('select_cluster');
      $selectcompanybyuser = $this->input->post('selectcompanybyuser');
-    
-     if(!isset($_POST['selectcompanybyuser']) && $ntaction == 4){
-        $bmdate = $pdate.' '.$ptime.':00';
-        $partner = $this->Menu_model->createBargMeetingWithClusterId($bdid,$bmdate);
-        $this->session->set_flashdata('success_message',' Task Plan Successfully !!');
-        redirect('Menu/TaskPlanner2/'.$pdate);
-     }else{
-        $ntaction = 3;
-     }
-    
-
-
+ 
 // Abhishek Data Start
      $data = array(
         'selectstatusbyuser' => $this->input->post('selectstatusbyuser'),
@@ -17925,7 +17906,12 @@ public function addplantask12(){
         redirect('Menu/TaskPlanner/'.$pdate);
      }
 
-  
+    // if($bdid == 100095){
+        // Start Check Active Task Planner Restrication Set BY Admin 
+        $rstData = $this->Management_model->SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$ntaction,$ntppose,$selectby,$pdate,$selectcompanybyuser);     
+        // End Check Active Task Planner Restrication Set BY Admin 
+    // }
+    
      $totalttaskdata =$this->Menu_model->get_totaltdetailsDatewise($bdid,$pdate);
 
      $cosumeTime = '';
@@ -17953,7 +17939,7 @@ public function addplantask12(){
     
         if($cosumeTime > $remaingtime){
             $this->session->set_flashdata('success_message_plan','* Nice Job !! You have Successfully Achive Your Target Time.');
-            redirect('Menu/TaskPlanner2/'.$pdate);
+            redirect('Menu/TaskPlanner/'.$pdate);
         }else{
             $rrtime = $remaingtime - $cosumeTime;
         }
@@ -18046,10 +18032,6 @@ public function addplantask12(){
                 $this->Menu_model->updateClusterIdByinitID($uid,$tid,$select_cluster);
             }
            
-        // Start Check Active Task Planner Restrication Set BY Admin 
-        $rstData = $this->Management_model->SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$ntaction,$ntppose,$selectby,$pdate,$selectcompanybyuser);     
-        // End Check Active Task Planner Restrication Set BY Admin 
-
             $id = $this->Menu_model->add_plan2($pdate,$uid,$ptime,$inid,$ntaction,$ntstatus,$ntppose,$ttype,$tptime,$new_datetime,$selectby,$jsonData);
       
         }
@@ -18459,159 +18441,18 @@ public function CheckPlanTaskBetweenTimes($stime,$etime){
 }
 
 
-// Start Day Close Request
-
 public function dayscRequest(){
-
-    $user         = $this->session->userdata('user');
-    $data['user'] = $user;
-    $uid          = $user['user_id'];
-    $uyid         =  $user['type_id'];
-
-    $this->load->model('Menu_model');
-    $this->load->library('session');
-
-    $req_id           = $_POST['req_id'];
-    $req_answer       = $_POST['would_you_want'];
-    $message          = $_POST['requestForTodaysTaskPlan'];
-    $planbutnotinited = $this->Menu_model->CreateCloseDayRequest($uid,$req_id,$req_answer,$message);
-
-    $this->session->set_flashdata('success_message','* Day Close Request Send SuccessFully !');
-    redirect('Menu/DayManagement');
-    
+    dd($_POST);
 }
 
 
-public function YesterdayDayClose(){
-
-    $user_id    = $_POST['user_id'];
-    $lat        = $_POST['lat'];
-    $lng        = $_POST['lng'];
-    $req_id     = $_POST['req_id'];
-  
-    $filname    = $_FILES['filname']['name'];
-    $uploadPath = 'uploads/day/';
-
-    $this->load->library('session');
-    $this->load->model('Menu_model');
-
-    $flink      = $this->Menu_model->uploadfile($filname, $uploadPath);
-
-    $this->Menu_model->UpdateCloseYesterDay($flink,$user_id,$lat,$lng,$req_id);
-
-    $this->session->set_flashdata('success_message','* Yesterday Day Close SuccessFully ! Now Start Your Days');
-    redirect('Menu/DayManagement');
-}
-
-public function YesterDayDaysCloseRequest(){
-
-    $user           =   $this->session->userdata('user');
-    $data['user']   =   $user;
-    $uid            =   $user['user_id'];
-    $uyid           =   $user['type_id'];
-
-    $this->load->library('session');
-    $this->load->model('Menu_model');
-
-    $dt             =   $this->Menu_model->get_utype($uyid);
-    $tptime         =   $this->Menu_model->get_tptime($uid);
-    $tptime         =   $tptime[0]->tptime;
-    $dep_name       =   $dt[0]->name;
-
-    if(isset($_POST['targetdate'])){
-        $adate = $_POST['targetdate'];
-    }else{
-        $adate = date("Y-m-d");
-    }
-
-     $getreqData  =  $this->db->query("SELECT *,close_your_day_request.id FROM close_your_day_request LEFT JOIN user_details ON close_your_day_request.user_id = user_details.user_id WHERE user_details.aadmin = '$uid' and DATE(req_date) ='$adate'");
-     $getreqData  =  $getreqData->result();
-
-     if(!empty($user)){
-        $this->load->view($dep_name.'/YesterDayDaysCloseRequest',['uid'=>$uid,'user'=>$user,'adate'=>$adate,'getreqData'=>$getreqData]);
-    }else{
-        redirect('Menu/main');
-    }
-
-}
 
 
-public function YesterdayCloseRequestApprove($id,$type){
-
-    $user           = $this->session->userdata('user');
-    $data['user']   = $user;
-    $uid            = $user['user_id'];
-
-    $this->load->library('session');
-    $this->load->model('Menu_model');
-
-    if($type == 'Approved'){
-
-        $status     = "Approved";
-        $reamrks    = "Approved By ".$user['name'];
-        $apdate     =  date("Y-m-d H:i:s");
-        
-        $query =  $this->db->query("UPDATE `close_your_day_request` SET `approved_status`='$status',`approved_remarks`='$reamrks',`approved_date`='$apdate', `approved_by`='$uid' WHERE id = $id");
-
-        $this->session->set_flashdata('success_message','* Request Approved Successfully !');
-        redirect("Menu/YesterDayDaysCloseRequest");
-
-    }else{
-        redirect('Menu/main');
-    }
-}
-
-public function YesterdayCloseRequestReject(){
-    
-    $rejectid       = $_POST['reject'];
-    $rejectreamrk   = $_POST['rejectreamrk'];
-
-    $user           = $this->session->userdata('user');
-    $data['user']   = $user;
-    $uid            = $user['user_id'];
-    $status         = "Reject";
-    $apdate         =  date("Y-m-d H:i:s");
-
-    $this->load->library('session');
-    $this->load->model('Menu_model');
-    
-    $query =  $this->db->query("UPDATE `close_your_day_request` SET `approved_status`='$status',`approved_remarks`='$rejectreamrk',`approved_date`='$apdate', `approved_by`='$uid' WHERE id = '$rejectid'");
-
-    $this->session->set_flashdata('error_message','* Request Reject Successfully !');
-    redirect("Menu/YesterDayDaysCloseRequest");
-}
-
-// End Day Close Request
 
 
-public function get_SheduledMeetCompany(){
 
-    $uid= $this->input->post('uid');
-    $this->load->model('Menu_model');
-    $cmp = $this->Menu_model->get_SheduledMeetCmp($uid);
-    echo '<option value="">Select Company</option>';
-    foreach($cmp as $cmp){ ?>
-    <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
-        <?=$cmp->compname?> (<?=$cmp->pname?>)
-    </option>
-    <?php
 
-    }
-}
-public function get_BargeMeetCompany(){
 
-    $uid= $this->input->post('uid');
-    $this->load->model('Menu_model');
-    $cmp = $this->Menu_model->get_BargeMeetMeetCmp($uid);
-    echo '<option value="">Select Company</option>';
-    foreach($cmp as $cmp){ ?>
-    <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
-        <?=$cmp->compname?> (<?=$cmp->pname?>)
-    </option>
-    <?php
-
-    }
-}
 
 
 

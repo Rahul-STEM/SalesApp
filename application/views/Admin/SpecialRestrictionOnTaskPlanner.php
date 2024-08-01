@@ -335,7 +335,7 @@ overflow-x: auto;
                                          <td> 
                                         <?php 
                                           if($data->categorys ==''){
-                                            echo "<span class='p-2 bg-warning m-1' style='line-height: 50px;' >No Select</span>";
+                                            echo "<span class='p-2 bg-warning m-1' style='line-height: 50px;' >No&nbsp;Select</span>";
                                         }else{
                                             $arrays = explode(',', $data->categorys);
                                             foreach($arrays as $arr){

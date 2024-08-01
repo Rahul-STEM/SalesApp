@@ -184,12 +184,17 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?=base_url();?>Menu/YesterDayDaysCloseRequest" class="nav-link">
+                    <a href="<?=base_url();?>Menu/PendingTaskApprovelRequest" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Yesterday Day Close Request</p>
+                        <p>Pending Task Approvel Request</p>
                     </a>
                 </li>
-            
+                <!-- <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/Mytarget" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>My Target</p>
+                    </a>
+                </li> -->
                 
                 <li class="nav-item">
                     <a href="<?=base_url();?>Menu/assignpst" class="nav-link">

@@ -152,12 +152,6 @@
  .bgresactive{background: #263b0d!important;}
  .form-control.is-invalid, .was-validated .form-control:invalid {background-image: none !important;}
  .form-control.is-valid, .was-validated .form-control:valid {background-image: none !important;}   
- .select-readonly {
-    background-color: #f5f5f5; /* Light grey background */
-    color: #666; /* Dark grey text */
-    cursor: not-allowed; /* Change cursor to not-allowed */
-}
-
     </style>
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -171,22 +165,6 @@
         <!-- Content Header (Page header) -->
         <div class="content-header">
           <div class="container-fluid">
-
-          <?php 
-$action = $this->Menu_model->get_action();
-
-if($type_id == 3){
-  foreach ($action as $key => $value) {
-    if ($value->id == 17) {
-        unset($action[$key]);
-    }
-  }
-  $action = array_values($action);
-}
-
-          ?>
-
-
             <?php
               if ($this->session->flashdata('success_message')): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -727,7 +705,7 @@ if($type_id == 3){
                         <select id="tasktaction" name="tasktaction" class="form-control" >
                           <option selected disabled >Types of Task</option>
                           <option value="all">All</option>
-                          <?php
+                          <?php $action = $this->Menu_model->get_action();
                             foreach($action as $a){if($a->id!=4 && $a->id!=6 && $a->id!=8 && $a->id!=9 && $a->id!=11 && $a->id!=12){
                             ?>
                           <option value="<?=$a->id?>"><?=$a->name?></option>
@@ -766,7 +744,7 @@ if($type_id == 3){
                           <select id="task_action" class="form-control" name="task_action">
                             <option value="">Select Task</option>
                             <option value="all">All</option>
-                            <?php
+                            <?php $action = $this->Menu_model->get_action();
                               foreach($action as $a){
                               ?>
                             <option value="<?=$a->id?>"><?=$a->name?></option>
@@ -910,7 +888,9 @@ if($type_id == 3){
                           <select id="task_action_filter" class="form-control" name="task_action_filter">
                             <option value="">Select Task</option>
                             <option value="all">All</option>
-                            <?php foreach($action as $a){if($a->id!=9 && $a->id!=15){ ?>
+                            <?php $action = $this->Menu_model->get_action();
+                              foreach($action as $a){if($a->id!=9 && $a->id!=15 && $a->id!=17){
+                              ?>
                             <option value="<?=$a->id?>"><?=$a->name?></option>
                             <?php }} ?>
                           </select>
@@ -982,7 +962,9 @@ if($type_id == 3){
                             <select id="partnertype_taskData" class="form-control" name="task_action">
                               <option value="">Select Task</option>
                               <option value="all">All</option>
-                              <?php foreach($action as $a){ ?>
+                              <?php $action = $this->Menu_model->get_action();
+                                foreach($action as $a){
+                                ?>
                               <option value="<?=$a->id?>"><?=$a->name?></option>
                               <?php } ?>
                             </select>
@@ -1130,7 +1112,9 @@ if($type_id == 3){
                         <select id="firstQuarter1cstatysDataTask" name="" class="form-control">
                           <option selectedd disbaled value="" >Types of Task</option>
                           <option value="all">All</option>
-                          <?php foreach($action as $a){if($a->id!=4 && $a->id!=6 && $a->id!=8 && $a->id!=9 && $a->id!=11 && $a->id!=12){ ?>
+                          <?php $action = $this->Menu_model->get_action();
+                            foreach($action as $a){if($a->id!=4 && $a->id!=6 && $a->id!=8 && $a->id!=9 && $a->id!=11 && $a->id!=12){
+                            ?>
                           <option value="<?=$a->id?>"><?=$a->name?></option>
                           <?php }} ?>
                         </select>
@@ -1213,12 +1197,13 @@ if($type_id == 3){
                           <div class="form-group">
                             <select id="ntactionnew" name="ntaction" class="form-control" required="">
                               <option value="">Select Action</option>
-                              <?php  foreach($action as $a){if($a->id!=3 && $a->id!=4 && $a->id!=6 && $a->id!=8 && $a->id!=9 && $a->id!=11 && $a->id!=17 && $a->id!=15){ ?>
+                              <?php $action = $this->Menu_model->get_action();
+                                foreach($action as $a){if($a->id!=3 && $a->id!=4 && $a->id!=6 && $a->id!=8 && $a->id!=9 && $a->id!=11 && $a->id!=17 && $a->id!=15){
+                                ?>
                               <option value="<?=$a->id;?>"><?=$a->name;?></option>
                               <?php }} ?>
                             </select>
                           </div>
-
 
                           <div class="form-group">
                           <?php $clusters = $this->Menu_model->getClusterByUserId($uid); ?>
@@ -1827,7 +1812,6 @@ if($type_id == 3){
                  $('#status_taskaction_card').hide();
                  $('#auto_assign').hide();
                  $('#selectbarginCompanyType').hide();
-            
                 
                 });
         
@@ -2873,7 +2857,6 @@ if($type_id == 3){
                           $('#taskPurposebyuserCard').hide();
                           $("#selectcompany").show();
                           $("#bcytpe").hide();
-                        
                           
                           $.ajax({
                           url:'<?=base_url();?>Menu/get_SheduledMeetCompany',
@@ -2907,9 +2890,6 @@ if($type_id == 3){
                           });
 
                           $('#ntactionnew').append(newOption);
-                          
-                          $('#ntactionnew option').prop('disabled', true);
-                          $('#ntactionnew option[value="3"]').prop('disabled', false);
 
                           var inidids = '';
 
@@ -2948,8 +2928,7 @@ if($type_id == 3){
                           $('#maintaskcard').hide();
                           $("#bcytpe").show();
                           $('#selectbarginCompanyType').show();
-                   
-                        
+
                           $('#bcytpe').on('change', function() {
                             var bcytpe = $(this).val();
 
@@ -2988,12 +2967,7 @@ if($type_id == 3){
                           });
 
                           $('#ntactionnew').append(newOption);
-                         
-                          $("#ntppose").html("<option value='135'>Remeeting</option>");
-
-                          $('#ntactionnew option').prop('disabled', true);
-                          $('#ntactionnew option[value="4"]').prop('disabled', false);
-
+                       
                           }
                           });
                             }else if(bcytpe == 'Other'){
@@ -3008,15 +2982,11 @@ if($type_id == 3){
                               $('#ntppose').show();
                               $('#meeting-time').show();
                               $('#planbtn1').show();
-                              
                               var newOption = $('<option>', {
                               value: '4',
                               text: 'Barg in Meeting',
                               selected: true,
                           });
-
-                          $('#ntactionnew option').prop('disabled', true);
-                          $('#ntactionnew option[value="4"]').prop('disabled', false);
 
                           $('#ntactionnew').append(newOption);
                               $("#ntppose").html("<option value='34'>Fresh Meeting</option>");
@@ -3029,102 +2999,12 @@ if($type_id == 3){
 
 
 
-                        }else if(tasktaction ==17){
-                            // alert("Join Meeting");
-
-                          $("#ntppose").html("<option value=''>Select Purpose</option>");
-                          $('#status_taskaction_card').hide();
-                          $('#status_taskaction').hide();
-                          $('#taskActionbyuserCard').hide();
-                          $('#taskPurposebyuserCard').hide();
-                          $("#selectcompany").show();
-                          $("#bcytpe").hide();
-
-                          $('#ntactionnew option').prop('disabled', true);
-                          $('#ntactionnew option[value="17"]').prop('disabled', false);
-                          
-                          $.ajax({
-                          url:'<?=base_url();?>Menu/get_JoinMeetingsCompany',
-                          type: "POST",
-                          data: {
-                          uid: uid
-                          },
-                          cache: false,
-                          success: function a(result){
-                            $("#maintaskcard").show();
-
-                            $("#selectcompanybyuser").html(result);
-                            $("#selectcompanybyuser").show();
-                            $("#select_cluster").show();
-
-                            var optionCount = $('#selectcompanybyuser').find('option').length;
-                            optionCount = optionCount-1;
-                            $("#totalcompany").text('Total Company :'+ optionCount);
-                            $("#tasktaction").show();
-                            $("#tptime").val('');
-                            $("#tptime").show();
-                            $('#ntactionnew').show();
-                            $('#ntppose').show();
-                            $('#meeting-time').show();
-                            $('#planbtn1').show();
-                            $('#select_with_bd_pst').show();
-                           
-                          var newOption = $('<option>', {
-                              value: '17',
-                              text: 'Join Meeting',
-                              selected: true,
-                          });
-
-                          $('#ntactionnew option').prop('disabled', true);
-                          $('#ntactionnew option[value="17"]').prop('disabled', false);
-
-                          $('#ntactionnew').append(newOption);
-
-                            var inidids = '';
-
-                            $('#selectcompanybyuser').change(function() {
-                            var inidids = '';
-                            $('#selectcompanybyuser :selected').each(function(i, sel){
-                                inidids += $(sel).val() + ',';
-                            });
-                            inidids = inidids.slice(0, -1);
-
-                            $.ajax({
-                              url:'<?=base_url();?>Menu/getpurposebyinidnew',
-                              type: "POST",
-                              data: {
-                              inid: inidids,
-                              aid: 3
-                              },
-                              cache: false,
-                              success: function a(result){
-                                $("#ntppose").html(result);
-                              }
-                              });
-                             });
-
-                             
-                             
-
-
- 
-                          }
-                          });
-
-
-
-
                         }else{
 
                           $('#ntactionnew option[value="3"]').remove();
                           $('#ntactionnew option[value="4"]').remove();
-                          $('#ntactionnew option[value="17"]').remove();
                           $('#selectbarginCompanyType').hide();
                           $("#select_cluster").hide();
-                         
-                        
-                          $('#ntactionnew option').prop('disabled', false);
-
                           $("#ntppose").html("<option value=''>Select Purpose</option>");
 
                             $.ajax({

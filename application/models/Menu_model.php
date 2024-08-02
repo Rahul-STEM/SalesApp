@@ -6265,8 +6265,10 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         $date = date('Y-m-d H:i:s');
 
             if($type=='RP'){
-                if($cs=='1' || $cs=='2' || $cs=='8' || $cs=='10' || $cs=='11'){$status='2';}
-                else{$status=$cs;}
+                if($cs=='1' || $cs=='8' || $cs=='10' || $cs=='11'){$status='2';}elseif($cs=='2'){
+                    $status=3;
+                }else{$status=$cs;}
+
                 $query=$this->db->query("update barginmeeting set closem='$closem',clatitude='$lat',clongitude='$lng',status='RPClose',letmeetingsremarks='$letmeetingsremarks' WHERE id='$cmid'");
                 $query=$this->db->query("UPDATE tblcallevents SET remarks='Meeting Close With RP',nextCFID='$bmtid',updateddate='$date',status_id='$cs',nstatus_id='$status',actontaken='yes',purpose_achieved='yes',updation_data_type='update' WHERE id='$bmtid'");
                 $query=$this->db->query("update tblcallevents set priority='$priority',mtype='$type' WHERE id='$bmtid'");
@@ -6281,8 +6283,12 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                 $query=$this->db->query("UPDATE tblcallevents SET mtype='$type',remarks='Meeting Close With No RP',nextCFID='$bmtid',updateddate='$date',status_id='$cs',nstatus_id='$status',actontaken='no',purpose_achieved='no',updation_data_type='update' WHERE id='$bmtid'");
             }
             if($type=='Only Got Detail'){
-                if($cs=='1'){$status='8';}
-                else{$status=$cs;}
+                 
+                // if($cs=='1'){$status='8';}
+                // else{$status=$cs;}
+
+                $status='8';
+
                 $query=$this->db->query("update barginmeeting set closem='$closem',clatitude='$lat',clongitude='$lng',status='Close',letmeetingsremarks='$letmeetingsremarks' WHERE id='$cmid'");
                 $query=$this->db->query("UPDATE tblcallevents SET mtype='$type', remarks='Meeting Close With Only Got Detail',nextCFID='$bmtid',updateddate='$date',status_id='$cs',nstatus_id='$status',actontaken='yes',purpose_achieved='no',updation_data_type='update' WHERE id='$bmtid'");
                 $query=$this->db->query("update company_master set address='$caddress' WHERE id='$bmcid'");
@@ -6413,7 +6419,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
              $data1 = $query->result();
              $ltid = $data1[0]->mid;
  
-             $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, purpose_achieved, fwd_date, actontaken, nextaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type,plan,selectby,tptime,filter_by) VALUES ('$ltid', '0','no', '$date', 'no', '$ntppose', 'no','$date','4','$uid','$inid','66','','1','$uid','$date','$date','updated',1,'$selectby','$tptime','$jsonData')");
+             $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, purpose_achieved, fwd_date, actontaken, nextaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type,plan,selectby,tptime,filter_by) VALUES ('$ltid', '0','no', '$date', 'no', '$ntppose', 'no','$date','3','$uid','$inid','$ntppose','','1','$uid','$date','$date','updated',1,'$selectby','$tptime','$jsonData')");
              $ntid = $this->db->insert_id();
  
              $query=$this->db->query("update tblcallevents set nextCFID='$ntid' WHERE id='$ltid'");
@@ -11551,7 +11557,7 @@ public function UpdateCloseYesterDay($flink,$user_id,$lat,$lng,$req_id){
     }
 
 
-    public function createBargMeetingWithClusterId($uid,$bmdate){
+    public function createBargMeetingWithClusterId($uid,$bmdate,$select_cluster){
       
             $this->db->query("INSERT INTO company_master(compname, createddate,partnerType_id) VALUES ('Unknown', '$bmdate','1')");
             $cid = $this->db->insert_id();
@@ -11559,7 +11565,7 @@ public function UpdateCloseYesterDay($flink,$user_id,$lat,$lng,$req_id){
             $this->db->query("INSERT INTO company_contact_master(contactperson, emailid, phoneno, designation, type, createddate, company_id) VALUES ('', '', '', '', 'primary', '$bmdate', '$cid')");
             $ccid = $this->db->insert_id();
  
-            $this->db->query("INSERT INTO init_call(createDate, cmpid_id, creator_id,mainbd,cstatus) VALUES ('$bmdate','$cid','$uid','$uid','1')");
+            $this->db->query("INSERT INTO init_call(createDate, cmpid_id, creator_id,mainbd,cstatus,cluster_id) VALUES ('$bmdate','$cid','$uid','$uid','1','$select_cluster')");
             $inid = $this->db->insert_id();
  
             $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, purpose_achieved, fwd_date, actontaken, nextaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type,plan) VALUES ('0', '0','no', '$bmdate', 'no', 'Will Collect Data by RP Meeting', 'no','$bmdate','4','$uid','$inid','66','Will Collect Data by RP Meeting','1','$uid','$bmdate','$bmdate','updated',1)");
@@ -11569,8 +11575,70 @@ public function UpdateCloseYesterDay($flink,$user_id,$lat,$lng,$req_id){
              $bmid = $this->db->insert_id();
  
             $query=$this->db->query("update barginmeeting set cid='$cid',ccid='$ccid',inid='$inid',tid='$ntid' WHERE id='$bmid'");
-
     }
+ 
+
+    // CreateJoinMeetingTaskWithClusterId($uid,$bmdate,$ntaction,$ntppose){
+
+    public function CreateJoinMeetingTaskWithClusterId($uid,$selectcompanybyuser,$bmdate,$ntaction,$ntppose,$select_cluster){
+        
+        foreach($selectcompanybyuser as $bcid){
+        
+            $data = $this->Menu_model->get_initcallby_id($bcid);
+            $inid = $data[0]->id;
+            $cstatus = $data[0]->cstatus;
+            $cmpid_id = $data[0]->cmpid_id;
+            
+            $data2 = $this->Menu_model->get_ccdby_cid($cmpid_id);
+            $ccid = $data2[0]->id;
+
+            $data3 = $this->Menu_model->get_cdbyid($cmpid_id);
+            $compname = $data3[0]->compname;
+
+            $query=$this->db->query("SELECT MAX(id) mid FROM `tblcallevents` WHERE cid_id='$inid'");
+            $data1 = $query->result();
+            $ltid = $data1[0]->mid;
+
+            $query=$this->db->query("update init_call set cluster_id='$select_cluster' WHERE id='$inid'");
+
+            $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, purpose_achieved, fwd_date, actontaken, nextaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type,plan) VALUES ('$ltid', '0','no', '$bmdate', 'no', 'Will Collect Data by RP Meeting', 'no','$bmdate','$ntaction','$uid','$inid','$ntppose','Will Collect Data by RP Meeting','$cstatus','$uid','$bmdate','$bmdate','updated',1)");
+            $ntid = $this->db->insert_id();
+            $query=$this->db->query("update tblcallevents set nextCFID='$ntid' WHERE id='$ltid'");
+
+            $this->db->query("INSERT INTO barginmeeting(storedt,user_id,cid,company_name) VALUES ('$bmdate','$uid','$cmpid_id','$compname')");
+            $bmid = $this->db->insert_id();
+
+            $query=$this->db->query("update barginmeeting set ccid='$ccid',inid='$inid',tid='$ntid' WHERE id='$bmid'");
+
+            $this->db->query("INSERT INTO notify(uid,type,sms) VALUES ('$uid','1','Bargin Meeting Created form Funnel')");
+            }
+        }
 
 
+public function get_initcallby_id($inid){
+            $query=$this->db->query("SELECT * FROM init_call WHERE id='$inid'");
+            return $query->result();
+        }
+public function get_ccdby_cid($cid){
+            $query=$this->db->query("SELECT * FROM company_contact_master WHERE company_id='$cid' and type='primary'");
+            return $query->result();
+        }
+
+
+    public function get_JoinMeetingsCmp($uid){
+
+        $query=$this->db->query("SELECT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id WHERE (init_call.cstatus NOT IN (1, 8) AND init_call.mainbd != '$uid' AND init_call.clm_id = '$uid' AND init_call.apst != '')");
+
+        return $query->result();
+        }
+
+
+        public function get_actionIdfromTblCallEvent($tid){
+            $query = $this->db->query("SELECT actiontype_id FROM `tblcallevents` WHERE id='$tid'");
+            $data = $query->result();
+            $action = $data[0]->actiontype_id;
+            return $action;
+        }
+        
+        
 }

@@ -17789,13 +17789,25 @@ public function addplantask12(){
      $select_cluster = $this->input->post('select_cluster');
      $selectcompanybyuser = $this->input->post('selectcompanybyuser');
     
+
      if(!isset($_POST['selectcompanybyuser']) && $ntaction == 4){
+        
         $bmdate = $pdate.' '.$ptime.':00';
-        $partner = $this->Menu_model->createBargMeetingWithClusterId($bdid,$bmdate);
+        $partner = $this->Menu_model->createBargMeetingWithClusterId($bdid,$bmdate,$select_cluster);
         $this->session->set_flashdata('success_message',' Task Plan Successfully !!');
         redirect('Menu/TaskPlanner2/'.$pdate);
-     }else{
+     } if(isset($_POST['selectcompanybyuser']) && $ntaction == 4){
+       
         $ntaction = 3;
+     }
+     
+     if($ntaction == 17){
+       
+        $bmdate = $pdate.' '.$ptime.':00';
+        $partner = $this->Menu_model->CreateJoinMeetingTaskWithClusterId($bdid,$selectcompanybyuser,$bmdate,$ntaction,$ntppose,$select_cluster);
+        $this->session->set_flashdata('success_message',' Task Plan Successfully !!');
+        redirect('Menu/TaskPlanner2/'.$pdate);
+        
      }
     
 
@@ -18614,6 +18626,37 @@ public function get_BargeMeetCompany(){
 }
 
 
+public function get_JoinMeetingsCompany(){
+
+    $uid= $this->input->post('uid');
+    $this->load->model('Menu_model');
+    $cmp = $this->Menu_model->get_JoinMeetingsCmp($uid);
+    echo '<option value="">Select Company</option>';
+    foreach($cmp as $cmp){ ?>
+    <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
+        <?=$cmp->compname?> (<?=$cmp->pname?>)
+    </option>
+    <?php
+
+    }
+}
+
+
+public function getJoinMeetpurposebyinid(){
+    $inid= $this->input->post('inid');
+    $aid= $this->input->post('aid');
+    $this->load->model('Menu_model');
+    $da = '';
+    $inid = rtrim($inid , ',');
+   
+    $remark=$this->Menu_model->get_purposebyinidnew($aid,$inid);
+    
+    echo  $data = '<option value="">Select Purpose</option>';
+    foreach($remark as $d){
+         echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
+    }
+  
+}
 
 
 }

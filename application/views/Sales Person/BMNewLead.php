@@ -43,7 +43,9 @@
 
   <!-- Navbar -->
   <?php require('nav.php');?>
-  <?php require('addlog.php');?>
+  <?php 
+  // require('addlog.php');
+  ?>
   <!-- /.navbar -->
 
   

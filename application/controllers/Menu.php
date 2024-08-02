@@ -6,7 +6,9 @@ class Menu extends CI_Controller {
     public function main(){
         $msg = '';
         $this->load->model('Menu_model');
+        $this->load->model('Graph_model');
         $this->load->view('index');
+
     }
 
     public function logout(){
@@ -1278,6 +1280,7 @@ class Menu extends CI_Controller {
 
 
     public function FGraph2($cityid){
+        // var_dump($cityid);die;
         $code=2;
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1995,10 +1998,11 @@ class Menu extends CI_Controller {
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
+        // $this->load->model('Graph_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         if(!empty($user)){
-            $this->load->view($dep_name.'/TGraph1',['uid'=>$uid,'data'=>$dt, 'user'=>$user, 'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
+            $this->load->view($dep_name.'/TaskGraph1',['uid'=>$uid,'data'=>$dt, 'user'=>$user, 'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
         }else{
             redirect('Menu/main');
         }
@@ -8795,7 +8799,7 @@ class Menu extends CI_Controller {
 
         // New functions <==== START ====>
 
-        $roles = $this->Menu_model->getRoles();
+        $roles = $this->Menu_model->getRoles($id=null);
         $zones = $this->Menu_model->getZones();
         
         // var_dump($roles);die;
@@ -8855,9 +8859,129 @@ class Menu extends CI_Controller {
         }
     }
 
-    public function DashboardFilter_New(){
-        var_dump($_POST);die;
+    public function BDDayDetail_New($tdate,$code){
+        // var_dump($_POST);die;
+        $startDate = '';
+        $endDate = '';
+        if(isset($_POST['FromDate']) && isset($_POST['ToDate'])){
+
+            $startDate = $_POST['FromDate'];
+            $endDate = $_POST['ToDate'];
+
+        }else{
+
+            $startDate = date('Y-m-d');
+            $endDate = date('Y-m-d');
+
+        }
+
+        $sDate =$startDate;
+        $eDate= $endDate ;
+        if(isset($_POST['clear'])){
+            $_POST = array();
+        }
+        // var_dump($startDate);die;
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        $mdata = $this->Menu_model->get_BDdaydbyadNew($uid,$startDate,$endDate,$tdate,$code);
+        // var_dump($mdata);die;
+        $getWorkLocationCounts = $this->Menu_model->getWorkLocationCount($uid,$startDate,$endDate,$tdate);
+        // var_dump($getWorkLocationCounts);die;
+        $this->load->view($dep_name.'/BDDayDetail_New',['user'=>$user,'mdata'=>$mdata,'count'=>$getWorkLocationCounts,'uid'=>$uid,'tdate'=>$tdate,'code'=>$code,'startDate'=>$sDate,'endDate'=>$eDate]);
     }
+
+    public function ATaskDetail_New($code,$bdid,$atid,$sd,$ed){
+        
+        // var_dump($atid);die;
+        $startDate = '';
+        $endDate = '';
+        if(isset($_POST['FromDate']) && isset($_POST['EndDate'])){
+
+            $startDate = $_POST['FromDate'];
+            $endDate = $_POST['EndDate'];
+
+        }else{
+            $startDate = date('Y-m-d');
+            $endDate = date('Y-m-d');
+        }
+
+        $sd =$startDate;
+        $ed= $endDate ;
+        // echo $sd;
+        // echo $ed;
+        // die;
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+
+        $mtdata = $this->Menu_model->get_bwdalltaskdbyad_New($code,$atid,$bdid,$sd,$ed);
+        // var_dump($mtdata);die;
+        $tdate = date('Y-m-d');
+        $getCountData = $this->Menu_model->getTeamTasks($uid,$tdate,$sd,$ed);
+        // echo $this->db->last_query();die;
+
+        if(!empty($user)){
+            $this->load->view($dep_name.'/ATaskDetail_New',['uid'=>$uid,'user'=>$user,'atid'=>$atid,'sd'=>$sd,'ed'=>$ed,'code'=>$code,'bdid'=>$bdid,'mtdata'=>$mtdata,'getCountData'=>$getCountData]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+
+    public function companies_New($code,$PSTid=null){
+
+        // var_dump($_POST);die;
+        $PSTid = null;
+        // $endDate = '';
+        if(isset($_POST['PST'])){
+
+            $PSTid = $_POST['PST'];
+            // $endDate = $_POST['EndDate'];
+        }else{
+
+            $PSTid = null;
+
+        }
+        // var_dump($PSTid);die;
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        if($uid=='100103'){$uid=45;}
+        if($uid=='100149'){$uid=45;}
+        if($uid=='100142'){$uid=2;}
+
+        if($code==0){
+
+            $mdata=$this->Menu_model->get_bdtcom($uid);
+
+        }else{
+
+            $mdata=$this->Menu_model->get_bdcombystatus($uid,$code);
+
+        }
+
+        $getPST = $this->Menu_model->getPST($uid);
+        $TeamFunnelDetails = $this->Menu_model->getFunnelDetails($uid);
+
+        if(!empty($user)){
+            $this->load->view($dep_name.'/CreatedCompanies_New',['user'=>$user,'mdata'=>$mdata,'code'=>$code,'uid'=>$uid,'getPST'=>$getPST,'TeamFunnelDetails'=>$TeamFunnelDetails]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+
 
     // New Dashboard Changes <======= END =======>
     public function DayCloseCheck(){

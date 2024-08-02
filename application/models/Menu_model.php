@@ -688,6 +688,8 @@ WHERE cid = '$cid'");
     public function get_ridpending($uid){
         $db3 = $this->load->database('db3', TRUE);
         $query=$db3->query("SELECT CAST(replacereq.sdatet AS DATE) AS rdate, spd.project_code, client_handover.project_year, client_handover.id AS chid, spd.id AS sid, spd.sname, COUNT(*) AS noofmodel, status.name AS stname, replacereq.tid, SUM(CASE WHEN replacereq.type='replace' THEN 1 ELSE 0 END) AS `replace`, SUM(CASE WHEN replacereq.type='Repair' THEN 1 ELSE 0 END) AS `Repair` FROM replacereq INNER JOIN spd ON spd.id = replacereq.sid LEFT JOIN status ON status.id = spd.status INNER JOIN client_handover ON client_handover.projectcode = spd.project_code WHERE client_handover.bd_id = '$uid' and replacereq.status='Open' GROUP BY CAST(replacereq.sdatet AS DATE), spd.project_code, client_handover.project_year, client_handover.id, spd.id, spd.sname, status.name, replacereq.tid ORDER BY rdate DESC");
+
+        // var_dump($query);die;
         return $query->result();
     }
 
@@ -2741,7 +2743,7 @@ WHERE cid = '$cid'");
 
 
     public function get_fannalbycode($uid,$stid,$code){
-
+        // print_r($code);die;
         if($code==1){
             if($stid==0){$query=$this->db->query("SELECT *,init_call.id inid FROM init_call left JOIN company_master on company_master.id=init_call.cmpid_id WHERE mainbd='$uid'");}
             else{$query=$this->db->query("SELECT *,init_call.id inid FROM init_call left JOIN company_master on company_master.id=init_call.cmpid_id WHERE mainbd='$uid' and cstatus='$stid'");}
@@ -2774,6 +2776,7 @@ WHERE cid = '$cid'");
             $query=$this->db->query("SELECT *,init_call.id inid FROM init_call left JOIN company_master on company_master.id=init_call.cmpid_id WHERE mainbd='$uid' and cstatus='$stid'");
         }
 
+        // echo $this->db->last_query();die;
         return $query->result();
     }
 
@@ -3147,7 +3150,30 @@ WHERE cid = '$cid'");
     }
 
     public function get_alluserbyaid($uid){
-        $query=$this->db->query("SELECT * FROM user_details WHERE admin_id='$uid' and status='active'");
+
+        $utype = $this->Menu_model->get_userbyid($uid);
+        $utype = $utype[0]->type_id;
+        $subQuery = ' ';
+        if($utype==2){
+    
+            //if logged in user is ADMIN
+            $subQuery = "AND admin_id =  $uid";
+    
+        }elseif ($utype==4) {
+    
+            //if logged in user is PST
+            $subQuery = "AND pst_co =  $uid";
+    
+        }elseif ($utype==9) {
+    
+            // if logged in user is BDPST
+            $subQuery = "AND aadmin =  $uid";
+    
+        }else{
+            $subQuery = '';
+        }
+
+        $query=$this->db->query("SELECT * FROM user_details WHERE status='active' $subQuery ");
         return $query->result();
     }
 
@@ -5801,6 +5827,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         if($utype==13){$text = "user_details.aadmin='$uid'";}
         if($code==1){
         $query=$this->db->query("SELECT user_details.name bdname, cast(ustart as TIME) as start,cast(uclose as TIME) as close, user_day.* FROM user_day LEFT JOIN user_details ON user_details.user_id=user_day.user_id WHERE cast(ustart as DATE)='$tdate' and $text");
+        // echo $this->db->last_query();die;
         }elseif($code==2){
         $query=$this->db->query("SELECT user_details.name bdname, cast(ustart as TIME) as start,cast(uclose as TIME) as close, user_day.* FROM user_day LEFT JOIN user_details ON user_details.user_id=user_day.user_id WHERE cast(ustart as DATE)='$tdate' and $text and user_day.wffo=1");
         }elseif($code==3){
@@ -7492,7 +7519,9 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         return $query->result();
     }
     public function get_fannalcat($uid){
-        $query=$this->db->query("SELECT COUNT(CASE WHEN topspender!='yes' and focus_funnel!='yes' and upsell_client!='yes' and keycompany!='yes' and pkclient!='yes' and priorityc!='yes' THEN 1 END) nocat,COUNT(CASE WHEN topspender='yes' THEN topspender='yes' END) topspender,COUNT(CASE WHEN focus_funnel='yes' THEN focus_funnel='yes' END) focus_funnel,COUNT(CASE WHEN upsell_client='yes' THEN upsell_client='yes' END) upsell_client,COUNT(CASE WHEN keycompany='yes' THEN keycompany='yes' END) keycompany,COUNT(CASE WHEN pkclient='yes' THEN pkclient='yes' END) pkclient,COUNT(CASE WHEN priorityc='yes' THEN priorityc='yes' END) priorityc FROM init_call WHERE mainbd='$uid'");
+        $query=$this->db->query("SELECT COUNT(CASE WHEN topspender!='yes' and focus_funnel!='yes' and upsell_client!='yes' and keycompany!='yes' and pkclient!='yes' and priorityc!='yes' THEN 1 END) nocat,COUNT(CASE WHEN topspender='yes' THEN topspender='yes' END) topspender,COUNT(CASE WHEN focus_funnel='yes' THEN focus_funnel='yes' END) focus_funnel,COUNT(CASE WHEN upsell_client='yes' THEN upsell_client='yes' END) upsell_client,COUNT(CASE WHEN keycompany='yes' THEN keycompany='yes' END) keycompany,COUNT(CASE WHEN pkclient='yes' THEN pkclient='yes' END) pkclient,COUNT(CASE WHEN priorityc='yes' THEN priorityc='yes' END) priorityc FROM init_call WHERE  mainbd='$uid'");
+
+        // $query=$this->db->query("SELECT COUNT(CASE WHEN topspender!='yes' and focus_funnel!='yes' and upsell_client!='yes' and keycompany!='yes' and pkclient!='yes' and priorityc!='yes' THEN 1 END) nocat,COUNT(CASE WHEN topspender='yes' THEN topspender='yes' END) topspender,COUNT(CASE WHEN focus_funnel='yes' THEN focus_funnel='yes' END) focus_funnel,COUNT(CASE WHEN upsell_client='yes' THEN upsell_client='yes' END) upsell_client,COUNT(CASE WHEN keycompany='yes' THEN keycompany='yes' END) keycompany,COUNT(CASE WHEN pkclient='yes' THEN pkclient='yes' END) pkclient,COUNT(CASE WHEN priorityc='yes' THEN priorityc='yes' END) priorityc FROM init_call LEFT JOIN user_details ON user_details.user_id = init_call.mainbd WHERE user_details.admin_id = '$uid' AND user_details.type_id = '3' AND user_details.status = 'active'");
         return $query->result();
     }
 
@@ -7528,6 +7557,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         }else{
            $query=$this->db->query("Select city.id cityid, company_master.city,COUNT(*) cont from init_call LEFT JOIN company_master ON company_master.id=init_call.cmpid_id left join city on city.city=company_master.city WHERE init_call.mainbd='$uid' GROUP BY company_master.city,city.id");
         }
+        echo $this->db->last_query();die;
         return $query->result();
     }
 
@@ -7588,6 +7618,8 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
 
     public function get_opensday($uid,$sid,$sdate,$edate){
         $query=$this->db->query("SELECT TIMESTAMPDIFF(DAY,MAX(updateddate),now()) opensday FROM tblcallevents LEFT JOIN init_call ON init_call.id=tblcallevents.cid_id WHERE init_call.cstatus=tblcallevents.nstatus_id and cast(tblcallevents.updateddate as DATE) Between '2023-04-01' and '2024-03-31' and tblcallevents.cid_id IN (Select id from init_call WHERE init_call.mainbd='$uid') and tblcallevents.nextCFID!='0' and init_call.cstatus='$sid' GROUP BY init_call.id");
+
+        // echo $this->db->last_query()
         return $query->result();
     }
 
@@ -7605,6 +7637,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         COUNT(case when actiontype_id=10 then 1 end) as j,
         COUNT(case when actiontype_id=11 then 1 end) as k
         FROM tblcallevents  WHERE tblcallevents.cid_id IN (Select id from init_call WHERE init_call.mainbd='$uid' and init_call.cstatus='$stid') and nextCFID!='0' and cast(updateddate as DATE) Between '$sd' and '$ed'");
+        // echo $this->db->last_query();die;
         return $query->result();
     }
     public function get_monthwsaction($uid,$m,$y){
@@ -7621,6 +7654,8 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         COUNT(case when actiontype_id=10 then 1 end) as j,
         COUNT(case when actiontype_id=11 then 1 end) as k
         FROM tblcallevents  WHERE tblcallevents.cid_id IN (Select id from init_call WHERE init_call.mainbd='$uid') and nextCFID!='0' and Month(updateddate)='$m' and Year(updateddate)='$y'");
+
+        // echo $this->db->last_query();die;
         return $query->result();
     }
     public function get_monthwnewlead($uid,$m,$y){
@@ -7684,6 +7719,8 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
 
     public function get_taskolsna($uid,$st,$ac,$sd,$ed){
         $query=$this->db->query("SELECT COUNT(*) cont,action.name name, COUNT(CASE WHEN initiateddt>updateddate THEN 1 END) a, COUNT(CASE WHEN initiateddt<updateddate THEN 1 END) b FROM tblcallevents  LEFT JOIN action on action.id=tblcallevents.actiontype_id WHERE tblcallevents.cid_id IN (Select id from init_call WHERE init_call.mainbd='$uid' and init_call.cstatus='$st') and actiontype_id='$ac' and nextCFID!='0' and cast(updateddate as DATE) BETWEEN '$sd' and '$ed'");
+
+        // echo $this->db->last_query();die;
         return $query->result();
     }
 
@@ -7980,6 +8017,7 @@ return "Days: $days, Hours: $hours, Minutes: $minutes, Seconds: $seconds";
 
     public function get_taskstatuswisebwdall($uid,$sd,$ed){
         $query=$this->db->query("SELECT status.name stname,count(*) cont FROM tblcallevents LEFT JOIN status ON status.id=tblcallevents.status_id WHERE tblcallevents.cid_id IN (Select id from init_call WHERE init_call.mainbd='$uid') and nextCFID!='0' and cast(updateddate as DATE) BETWEEN '$sd' and '$ed' Group By status.name");
+        // echo $this->db->last_query();die;
         return $query->result();
     }
 
@@ -8010,6 +8048,7 @@ return "Days: $days, Hours: $hours, Minutes: $minutes, Seconds: $seconds";
 
     public function get_actiontypewbwdap($uid,$sd,$ed,$ac){
         $query=$this->db->query("SELECT count(*) cont, Count(Case When actontaken='no' and purpose_achieved='no' Then 1 End) anpn, Count(Case When actontaken='yes' and purpose_achieved='no' Then 1 End) aypn, Count(Case When actontaken='yes' and purpose_achieved='yes' Then 1 End) aypy FROM tblcallevents WHERE user_id='$uid' and nextCFID!='0' and cast(updateddate as DATE) BETWEEN '$sd' and '$ed' and actiontype_id='$ac'");
+        // echo $this->db->last_query();die;
         return $query->result();
     }
 
@@ -8186,6 +8225,7 @@ return "Days: $days, Hours: $hours, Minutes: $minutes, Seconds: $seconds";
 
     public function get_tasktypeupdate($uid,$sd,$ed,$ac){
         $query=$this->db->query("SELECT count(*) cont FROM tblcallevents WHERE user_id='$uid' and nextCFID!='0' and cast(updateddate as DATE) BETWEEN '$sd' and '$ed' and actiontype_id='$ac'");
+        // echo $this->db->last_query();die;
         return $query->result();
     }
 
@@ -11398,11 +11438,26 @@ public function getTasks($id,$date){
 
 // New Dashboard functions <========== START ==========>
 
-public function getRoles(){
+public function getRoles($type_id){
 
     $this->db->select('*');
     $this->db->from('user_type');
     $this->db->where('Active_Flag', 0);
+    if($type_id != 2){
+        $this->db->where('id', $type_id);
+    }
+    $query = $this->db->get();
+    // echo  $this->db->last_query(); die;
+    return $query->result();
+}
+
+public function getPST($uid){
+
+    $this->db->select('*');
+    $this->db->from('user_details');
+    $this->db->where('status', 'active');
+    $this->db->where('type_id', 4);
+    $this->db->where('admin_id', $uid);
 
     $query = $this->db->get();
     // echo  $this->db->last_query(); die;
@@ -11519,6 +11574,27 @@ public function getFunnelDetails($uid){
 }
 
 public function getTeamDeatilsByDate($uid,$tdate){
+
+    $utype = $this->Menu_model->get_userbyid($uid);
+    $utype = $utype[0]->type_id;
+    $subQuery = ' ';
+    if($utype==2){
+
+        //if logged in user is ADMIN
+        $subQuery = "AND admin_id =  $uid";
+
+    }elseif ($utype==4) {
+
+        //if logged in user is PST
+        $subQuery = "AND pst_co =  $uid";
+
+    }elseif ($utype==9) {
+
+        // if logged in user is BDPST
+        $subQuery = "AND aadmin =  $uid";
+
+    }
+
     $query=$this->db->query("SELECT
                 (
                 SELECT
@@ -11526,9 +11602,8 @@ public function getTeamDeatilsByDate($uid,$tdate){
                 FROM
                     user_details
                 WHERE
-                    admin_id = '45' AND
                 STATUS
-                    = 'active' AND type_id = 3
+                    = 'active' $subQuery 
             ) TotalTeamMembers,
             COUNT(*) TotalTeamMembersPresent,
             COUNT(CASE WHEN wffo = 1 THEN wffo
@@ -11540,13 +11615,16 @@ public function getTeamDeatilsByDate($uid,$tdate){
             FROM
                 user_day
             LEFT JOIN user_details ON user_details.user_id = user_day.user_id
-            WHERE cast(ustart as DATE)='$tdate' and user_details.admin_id='$uid'");
+            WHERE cast(ustart as DATE)='$tdate' $subQuery");
     // echo $this->db->last_query();die;
     return $query->result();
 }
 
-public function getTeamTasks($uid,$tdate){
-    $tdate = '2024-07-20';
+public function getTeamTasks($uid,$tdate,$sDate=null,$eDate=null){
+    $tdate = '2024-07-01';
+    // $sDate = '2024-07-01';
+    // $eDate = '2024-07-02';
+    
     $query=$this->db->select('
                 COUNT(*) AS TotalTasks,
                 COUNT(CASE WHEN nextCFID = 0 THEN 1 END) AS TotalPending,
@@ -11574,13 +11652,31 @@ public function getTeamTasks($uid,$tdate){
             $this->db->from('tblcallevents');
             $this->db->join('user_details', 'user_details.user_id = tblcallevents.assignedto_id', 'left');
             $this->db->where('user_details.admin_id', $uid);
-            $this->db->where('CAST(appointmentdatetime AS DATE) =', $tdate);
+            // $this->db->where('CAST(appointmentdatetime AS DATE) =', $tdate);
             $this->db->where('plan', 1);
             $this->db->where('user_details.type_id', 3);
+
+            if(!empty($sDate) && !empty($eDate) ){
+
+                $this->db->where('CAST(appointmentdatetime AS DATE) BETWEEN "'.$sDate.'" AND "'.$eDate.'"', NULL, FALSE);
+                // $this->db->where('user_details.admin_id', $uid);
+        
+            }else{
+                $this->db->where('CAST(appointmentdatetime AS DATE) =', $tdate);
+                
+                // $this->db->where('user_details.admin_id', $uid);
+            }
             // Get the result from the subquery
             $subquery = $this->db->get_compiled_select();
 
-            $this->db->select('*');
+            // $this->db->select('*');
+            $this->db->select('TotalTasks', false);
+            $this->db->select('TotalPending', false);
+            $this->db->select('TotalCompleted', false);
+            $this->db->select('ActionTakenYes', false);
+            $this->db->select('ActionTakenNo', false);
+            $this->db->select('PurposeAchievedYes', false);
+            $this->db->select('PurposeAchievedNo', false);
             $this->db->select('(d - e) AS CallsDone', false);
             $this->db->select('(f - g) AS EmailDone', false);
             $this->db->select('(h - i) AS MeetingDone', false);
@@ -11595,6 +11691,314 @@ public function getTeamTasks($uid,$tdate){
             // $result = $query->row_array();
             // return $result;
             return $query->result();
+}
+
+public function get_BDdaydbyadNew($uid,$startDate=null,$endDate=null,$code,$tdate,$userType=null,$users=null){
+    // var_dump($userType);die;
+    $tdate = '2024-07-20';
+    if($uid=='100103' || $uid=='100149' || $uid=='100114' || $uid=='100115'){$uid='45';}
+    $utype = $this->Menu_model->get_userbyid($uid);
+    $utype = $utype[0]->type_id;
+
+    $userType = array_filter($userType, function($value) {
+        return $value !== 'select_all';
+    });
+    
+    $users = array_filter($users, function($value) {
+        return $value !== 'select_all';
+    });
+    
+    // var_dump($userType);die;
+    // array_shift($userType);  
+    
+    // array_shift($users);
+
+    $userTypeString = implode(',', ($userType));
+    $userString = implode(',', ($users));
+
+    $addUserType = "";
+    $addUsers = "";
+
+    if(!empty($userType)){
+
+        $addUserType = "AND user_details.type_id IN($userTypeString)";
+    }
+    
+    if(!empty($users)){
+
+        $addUsers = "AND user_details.user_id IN($userString)";
+    }
+    
+    if($utype==2){$text = "user_details.admin_id='$uid' $addUserType $addUsers";}
+    if($utype==3){$text = "user_details.user_id='$uid'";}
+    if($utype==4){$text = "user_details.pst_co='$uid' $addUsers";}
+    if($utype==9){$text = "user_details.aadmin='$uid'  $addUsers";}
+    if($utype==15){$text = "user_details.sales_co='$uid' ";}
+    if($utype==13){$text = "user_details.aadmin='$uid' ";}
+
+    // var_dump($text);die;
+
+    if(!empty($startDate) && !empty($endDate)){
+        // var_dump($startDate);die;
+        $subQuery = "CAST(sdatet AS DATE) BETWEEN '$startDate' AND  '$endDate'";
+    }else{
+        $subQuery = "cast(ustart as DATE)='$tdate' ";
+    }
+
+    if($code==1){
+    $query=$this->db->query("SELECT user_details.name bdname,cast(sdatet as Date) as sdate, cast(ustart as TIME) as start,cast(uclose as TIME) as close, user_day.* FROM user_day LEFT JOIN user_details ON user_details.user_id=user_day.user_id WHERE ".$subQuery." and $text   ORDER BY sdate ASC");
+    // echo $this->db->last_query();die;
+    }elseif($code==2){
+    $query=$this->db->query("SELECT user_details.name bdname,cast(sdatet as Date) as sdate, cast(ustart as TIME) as start,cast(uclose as TIME) as close, user_day.* FROM user_day LEFT JOIN user_details ON user_details.user_id=user_day.user_id WHERE cast(ustart as DATE)='$tdate' and $text and user_day.wffo=1 ORDER BY sdate ASC");
+    }elseif($code==3){
+    $query=$this->db->query("SELECT user_details.name bdname,cast(sdatet as Date) as sdate, cast(ustart as TIME) as start,cast(uclose as TIME) as close, user_day.* FROM user_day LEFT JOIN user_details ON user_details.user_id=user_day.user_id WHERE cast(ustart as DATE)='$tdate' and $text and user_day.wffo=2 ORDER BY sdate ASC");
+    }elseif($code==4){
+    $query=$this->db->query("SELECT user_details.name bdname,cast(sdatet as Date) as sdate, cast(ustart as TIME) as start,cast(uclose as TIME) as close, user_day.* FROM user_day LEFT JOIN user_details ON user_details.user_id=user_day.user_id WHERE cast(ustart as DATE)='$tdate' and $text and user_day.wffo=3 ORDER BY sdatet ASC");
+    }else{
+    $query=$this->db->query("SELECT user_details.name bdname,cast(sdatet as Date) as sdate, cast(ustart as TIME) as start,cast(uclose as TIME) as close, user_day.* FROM user_day LEFT JOIN user_details ON user_details.user_id=user_day.user_id WHERE cast(ustart as DATE)='$tdate' and $text ORDER BY sdate ASC");
+    }
+    // echo $this->db->last_query(); exit;
+    return $query->result();
+}
+public function getWorkLocationCount($uid,$startDate=null,$endDate=null,$tdate,$userType=null,$users=null){
+    $tdate = '2024-07-20';
+    // echo  $tdate;die;
+
+    $utype = $this->Menu_model->get_userbyid($uid);
+    $utype = $utype[0]->type_id;
+    $subQuery = ' ';
+    // echo $utype;die;
+    
+    $userType = array_filter($userType, function($value) {
+        return $value !== 'select_all';
+    });
+    
+    $users = array_filter($users, function($value) {
+        return $value !== 'select_all';
+    });
+    
+    // var_dump($userType);die;
+    // array_shift($userType);  
+    
+    // array_shift($users);
+
+    $userTypeString = implode(',', ($userType));
+    $userString = implode(',', ($users));
+
+    $this->db->select("CASE
+        WHEN wffo = 1 THEN 'Work from Office'
+        WHEN wffo = 2 THEN 'Work from Filed'
+        WHEN wffo = 3 THEN 'Work from Filed + Office'
+        END AS status_description", FALSE);
+    $this->db->select("COUNT(*) AS wffo_count");
+
+    $this->db->from('user_day');
+    $this->db->join('user_details', 'user_details.user_id=user_day.user_id', 'left');
+    // $this->db->where_in('wffo', [1, 2, 3]);
+    if(!empty($startDate) && !empty($endDate) ){
+
+        $this->db->where('CAST(sdatet AS DATE) BETWEEN "'.$startDate.'" AND "'.$endDate.'"', NULL, FALSE);
+        if($utype==2){
+            
+            //if logged in user is ADMIN
+            $this->db->where('user_details.admin_id', $uid);
+            $this->db->where_in('user_details.type_id', $userTypeString);
+            $this->db->where_in('user_details.user_id', $userString);
+    
+        }elseif ($utype==4) {
+            // var_dump($utype);die;
+            //if logged in user is PST
+            $this->db->where('user_details.pst_co', $uid);
+            $this->db->where_in('user_details.user_id', $userString);
+    
+        }elseif ($utype==9) {
+    
+            // if logged in user is BDPST
+            $this->db->where('user_details.aadmin', $uid);
+            $this->db->where_in('user_details.user_id', $userString);
+    
+        }
+
+    }else{
+        $this->db->where('CAST(sdatet AS DATE) =', $tdate);
+        
+        if($utype==2){
+            
+            //if logged in user is ADMIN
+            $this->db->where('user_details.admin_id', $uid);
+            $this->db->where_in('user_details.type_id', $userTypeString);
+            $this->db->where_in('user_details.user_id', $userString);
+    
+        }elseif ($utype==4) {
+            // var_dump($utype);die;
+            //if logged in user is PST
+            $this->db->where('user_details.pst_co', $uid);
+            $this->db->where_in('user_details.user_id', $userString);
+    
+        }elseif ($utype==9) {
+    
+            // if logged in user is BDPST
+            $this->db->where('user_details.aadmin', $uid);
+            $this->db->where_in('user_details.user_id', $userString);
+    
+        }
+
+        // $this->db->where('user_details.admin_id', $uid);
+    }
+    // LEFT JOIN  ON user_details.user_id=user_day.user_id
+    $this->db->group_by('wffo');
+    $query = $this->db->get();
+    // echo $this->db->last_query();die;
+    return $query->result();
+}
+
+public function get_bwdalltaskdbyad_New($code,$atid,$uid,$sd,$ed){
+    $utype = $this->Menu_model->get_userbyid($uid);  
+    $utype = $utype[0]->type_id;
+    if($utype==2){$text = "user_details.admin_id='$uid' and user_details.type_id='3' and user_details.status='active'";}
+    if($utype==3){$text = "user_details.user_id='$uid'";}
+
+    if($utype==4){$text = "user_details.status='active' and ((user_details.pst_co='$uid' and user_details.type_id='3') or (user_details.pst_co='$uid' and user_details.type_id='13') or (user_details.user_id='$uid'))";}
+
+    if($utype==9){$text = "user_details.aadmin='$uid' and user_details.type_id='3' and user_details.status='active'";}
+
+    if($utype==13){$text = "user_details.aadmin='$uid' and user_details.type_id='3' and user_details.status='active'";}
+
+    if($utype==15){$text = "user_details.sales_co='$uid' and (user_details.type_id='3' or user_details.type_id='4' or user_details.type_id='13') and user_details.status='active'";}
+
+
+    if($code==4){
+
+        $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text and cast(appointmentdatetime  as DATE) BETWEEN '$sd' and '$ed' and plan=1");
+    
+
+    }elseif($code==5){
+       $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text and cast(appointmentdatetime  as DATE) BETWEEN '$sd' and '$ed' and plan=1 and nextCFID=0");
+
+    }elseif($code==6){
+       $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text and cast(appointmentdatetime  as DATE) BETWEEN '$sd' and '$ed' and plan=1 and nextCFID!=0");
+
+    }elseif($code==1){
+       $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text and cast(appointmentdatetime  as DATE) BETWEEN '$sd' and '$ed' and plan=1  and actiontype_id='$atid'");
+
+    }elseif($code==2){
+       $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text and cast(appointmentdatetime  as DATE) BETWEEN '$sd' and '$ed' and plan=1 and nextCFID=0 and actiontype_id='$atid'");
+
+    }elseif($code==3){
+       $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text and cast(appointmentdatetime  as DATE) BETWEEN '$sd' and '$ed' and plan=1 and nextCFID!=0 and actiontype_id='$atid'");
+
+    }elseif($code==7){
+       $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text and cast(appointmentdatetime  as DATE) BETWEEN '$sd' and '$ed' and plan=1 and nextCFID!=0 and actontaken='yes'");
+
+    }elseif($code==8){
+       $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text and cast(appointmentdatetime  as DATE) BETWEEN '$sd' and '$ed' and plan=1 and nextCFID!=0 and actontaken='no'");
+
+    }elseif($code==9){
+       $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text and cast(appointmentdatetime  as DATE) BETWEEN '$sd' and '$ed' and plan=1 and nextCFID!=0 and purpose_achieved='no'");
+
+    }elseif($code==10){
+       $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text and cast(appointmentdatetime  as DATE) BETWEEN '$sd' and '$ed' and plan=1 and nextCFID!=0 and actontaken='yes' and purpose_achieved='yes'");
+
+    }else{
+    $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text and cast(appointmentdatetime  as DATE) BETWEEN '$sd' and '$ed' and plan=1 and nextCFID!=0");
+  
+    }
+
+    // echo $this->db->last_query();
+    return $query->result();
+
+
+}
+
+public function getFunnel_New($uid,$code,$PSTid=null){
+    
+    $userd = $this->Menu_model->get_userbyid($uid);
+    $utid = $userd[0]->type_id;
+
+    $useradmin = $this->session->userdata('user');
+    $adminuyid =  $useradmin['type_id'];
+    // echo $adminuyid;die;
+    if($adminuyid == 2){
+        
+        if($utid==2){
+
+            // $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where user_details.user_id='$uid' and user_details.status='active' and mainbd!='' and mainbd is not null");
+
+            //new query
+            $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details ON user_details.user_id = mainbd LEFT JOIN company_master ON company_master.id = init_call.cmpid_id where user_details.admin_id='$uid' and user_details.status='active'");
+            // echo $this->db->last_query();die;
+        }elseif($utid==9){
+            $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where (user_details.user_id='$uid' or user_details.badmin='$uid') and user_details.status='active' and mainbd!='' and mainbd is not null");
+        }elseif($utid==13){
+
+            $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where (user_details.user_id='$uid') and user_details.status='active' and mainbd!='' and mainbd is not null");
+        }elseif($utid==3){
+            $query=$this->db->query("SELECT cmpid_id FROM init_call where mainbd='$uid'");
+
+        }elseif($utid==15){
+            // $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where (user_details.sales_co='$uid') and user_details.status='active' and mainbd!='' and mainbd is not null");
+            $query=$this->db->query("SELECT cmpid_id FROM init_call  LEFT JOIN user_details on user_details.user_id=init_call.apst where user_details.user_id='$uid' and user_details.status='active' and apst is not null and apst!=''");
+
+        }else{
+            $query=$this->db->query("SELECT cmpid_id FROM init_call where mainbd ='' or apst='$uid' or insidebd='$uid'");
+        }
+    }else{
+        if($utid==2){
+            $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where user_details.admin_id='$uid' and user_details.status='active' and mainbd!='' and mainbd is not null");
+        }elseif($utid==9){
+            $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where (user_details.aadmin='$uid' or user_details.badmin='$uid') and user_details.status='active' and mainbd!='' and mainbd is not null");
+        }elseif($utid==13){
+
+            $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where (user_details.aadmin='$uid') and user_details.status='active' and mainbd!='' and mainbd is not null");
+        }elseif($utid==3){
+            $query=$this->db->query("SELECT cmpid_id FROM init_call where mainbd='$uid'");
+
+        }elseif($utid==15){
+            // $query=$this->db->query("SELECT cmpid_id FROM init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd where (user_details.sales_co='$uid') and user_details.status='active' and mainbd!='' and mainbd is not null");
+            $query=$this->db->query("SELECT cmpid_id FROM init_call  LEFT JOIN user_details on user_details.user_id=init_call.apst where user_details.sales_co='$uid' and user_details.status='active' and apst is not null and apst!=''");
+
+        }else{
+            $query=$this->db->query("SELECT cmpid_id FROM init_call where mainbd='$uid' or apst='$uid' or insidebd='$uid'");
+        }
+    }
+    // echo $str = $this->db->last_query();
+
+    return $query->result();
+}
+
+public function get_taskstatuswisebwdall_New($uid,$sd,$ed){
+
+    $utype = $this->Menu_model->get_userbyid($uid);
+    $utype = $utype[0]->type_id;
+
+    if($utype==2){
+
+        $query=$this->db->query("SELECT status.name stname,count(*) cont FROM tblcallevents LEFT JOIN status ON status.id=tblcallevents.status_id WHERE tblcallevents.cid_id IN (Select init_call.id from init_call LEFT JOIN user_details on user_details.user_id=init_call.mainbd WHERE user_details.admin_id='$uid' and user_details.status='active') and nextCFID!='0' and cast(updateddate as DATE) BETWEEN '$sd' and '$ed' Group By status.name");
+        
+    }else{
+
+        $query=$this->db->query("SELECT status.name stname,count(*) cont FROM tblcallevents LEFT JOIN status ON status.id=tblcallevents.status_id WHERE tblcallevents.cid_id IN (Select id from init_call WHERE init_call.mainbd='$uid') and nextCFID!='0' and cast(updateddate as DATE) BETWEEN '$sd' and '$ed' Group By status.name");
+    }
+
+    return $query->result();
+}
+
+public function get_tasktypeupdateanpn_new($uid,$sd,$ed,$ac){
+
+    $utype = $this->Menu_model->get_userbyid($uid);
+    $utype = $utype[0]->type_id;
+
+    if($utype==2){
+
+        $query=$this->db->query("SELECT count(*) cont FROM tblcallevents WHERE user_id in(SELECT user_id from user_details where admin_id = '$uid' )and nextCFID!='0' and cast(updateddate as DATE) BETWEEN '$sd' and '$ed' and actiontype_id='$ac' and actontaken='no' and purpose_achieved='no'");
+
+    }else{
+
+        $query=$this->db->query("SELECT count(*) cont FROM tblcallevents WHERE user_id='$uid' and nextCFID!='0' and cast(updateddate as DATE) BETWEEN '$sd' and '$ed' and actiontype_id='$ac' and actontaken='no' and purpose_achieved='no'");
+    }
+
+    
+    return $query->result();
 }
 
 }

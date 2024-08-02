@@ -79,6 +79,7 @@ overflow-x: auto;
 <?php require('addpop.php');?>
 <!-- /.navbar -->
 <?php
+$tdate = '2024-07-20';
 $bd = $this->Menu_model->get_userbyaid($uid);
 $day = $this->Menu_model->get_daydbyad($uid,$tdate);
 $tttd = $this->Menu_model->get_tteamtd($uid,$tdate);
@@ -93,34 +94,7 @@ $TeamFunnelDetails = $this->Menu_model->getFunnelDetails($uid);
 $TeamDayDetails = $this->Menu_model->getTeamDeatilsByDate($uid,$tdate);
 $TeamDayTasks = $this->Menu_model->getTeamTasks($uid,$tdate);
 
-
-
-// var_dump($TeamDayTasks);die;
-
-// $teamDayTasks = [
-//     // 'TotalTasks' => '317',
-//     // 'TotalPending' => '165',
-//     // 'TotalCompleted' => '152',
-//     'd' => '166',
-//     'e' => '66',
-//     'f' => '122',
-//     'g' => '77',
-//     'h' => '0',
-//     'i' => '0',
-//     'j' => '22',
-//     'k' => '18',
-//     'l' => '0',
-//     'm' => '0',
-//     'n' => '1',
-//     'o' => '0',
-//     'p' => '3',
-//     'q' => '1',
-//     'r' => '83',
-//     's' => '69',
-//     't' => '83',
-//     'u' => '69'
-// ];
-
+// var_dump($TeamDayDetails);die;
 $mdata = $this->Menu_model->get_alluserbyaid($uid);
 ?>
 <!-- Content Wrapper. Contains page content -->
@@ -157,57 +131,12 @@ $mdata = $this->Menu_model->get_alluserbyaid($uid);
         <br>
             <div class="collapse" id="DashboardAnalysis" >
                 <div class="card card-body dashboard">
-                    <!-- <form action="<?=base_url();?>Menu/DashboardFilter_New" method="POST" >
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Select Role</label>
-                                    <select class="custom-select rounded-0" name="userType[]" id="userType" multiple>
-                                        <option value="select_all">Select All</option>
-                                        <?php foreach($roles as $r) {
-                                            if ($r->id <= $user['type_id']) {
-                                                continue;
-                                            }
-                                        ?>
-                                        <option value="<?= $r->id ?>"><?= $r->name ?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Select User</label>
-                                    <select id="user" class="custom-select rounded-0" name="user[]" data-live-search="true" multiple>
-                                        
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Select Zones</label>
-                                    <select class="custom-select rounded-0" name="zone[]" id="zone" multiple>
-                                        <option>Select Zone</option>
-                                        <option value="select_all">Select All</option>
-                                        <?php 
-                                            foreach($zones as $zone){ ?>
-                                                <option value="<?=$zone->id?>"> <?=$zone->name?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            
-                            <div class="col-md-3">
-                                <button type="submit" class="btn btn-primary">Filter</button>
-                            </div>
-                        </div> 
-                    </form> -->
                     <hr>
                     <div class="row DataCards">
                         <div class="col-lg-12 col-md-3 col-sm-12">
                             <div class="card card-primary collapsed-card">
                                 <div class="card-header text-center">
-                                    <b>Team and Funnel Details</b>
+                                    <b>Team and Task Details</b>
                                 <div class="card-tools">
                                     <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fa fa-plus"></i>
                                     </button>
@@ -220,31 +149,31 @@ $mdata = $this->Menu_model->get_alluserbyaid($uid);
                                                 <div class="card-header text-center">
                                                     <b>Team Detail</b>
                                                     <p>
-                                                        <strong><a href="BDDetail/<?=$uid?>">Total Team Members - <?= sizeof($mdata)?></a></strong>
+                                                        <strong><a href="<?=base_url();?>Dashboard/BDDayDetail_New/<?=$uid?>/<?=$tdate?>">Total Team Members - <?= sizeof($mdata)?></a></strong>
                                                     </p>
                                                 </div>
                                                 <div class="card-body">
                                                     <ul class="nav flex-column">
                                                         <li class="nav-item">
-                                                            <a href="BDDayDetail/<?=$tdate?>/1" class="nav-link">
+                                                            <a href="<?=base_url();?>Dashboard/BDDayDetail_New/<?=$tdate?>/1" class="nav-link">
                                                             Total Team Members Present - <span class="badge bg-success">
-                                                            <?=$TeamDayDetails[0]->TotalTeamMembers?></span>
+                                                            <?=$TeamDayDetails[0]->TotalTeamMembersPresent?></span>
                                                             </a>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a href="BDDayDetail/<?=$tdate?>/2" class="nav-link">
+                                                            <a href="<?=base_url();?>Dashboard/BDDayDetail/<?=$tdate?>/2" class="nav-link">
                                                             Total Work in Office - <span class="badge bg-success">
                                                             <?=$TeamDayDetails[0]->WorkFromOffice?></span>
                                                             </a>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a href="BDDayDetail/<?=$tdate?>/3" class="nav-link">
+                                                            <a href="<?=base_url();?>Dashboard/BDDayDetail/<?=$tdate?>/3" class="nav-link">
                                                             Total Work From Field - <span class="badge bg-success">
                                                             <?=$TeamDayDetails[0]->WorkFromField?></span>
                                                             </a>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a href="BDDayDetail/<?=$tdate?>/4" class="nav-link">
+                                                            <a href="<?=base_url();?>Dashboard/BDDayDetail/<?=$tdate?>/4" class="nav-link">
                                                             Total Work From Field + Office - <span class="badge bg-success">
                                                             <?=$TeamDayDetails[0]->WorkFromOfficeandField?></span>
                                                             </a>
@@ -263,6 +192,130 @@ $mdata = $this->Menu_model->get_alluserbyaid($uid);
                                                 </div>
                                             </div>
                                         </div>
+                                        
+                                        <div class="col-md-6">
+                                            <div class="card card-secondary">
+                                                <div class="card-header text-center">
+                                                <?php
+                                                    foreach($TeamDayTasks as $TeamDayTask){ ?>
+                                                    
+                                                    <b>Today's Team Task Details</b>
+                                                    <p>
+                                                        <strong><a href="<?=base_url();?>Dashboard/ATaskDetail_New/4/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0">Total Task Assigned/Planned -  <span class="badge bg-success"><?= $TeamDayTask->TotalTasks ?></span></a></strong>
+                                                    </p>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <ul class="nav flex-column">
+                                                            <?php
+                                                                //foreach($TeamDayTasks as $TeamDayTask){
+                                                                ?>
+                                                                <li class="nav-item">
+                                                                    <a href="<?=base_url();?>Dashboard/ATaskDetail_New/5/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Total Task Pending - <span class="badge bg-danger">
+                                                                    <?= $TeamDayTask->TotalPending ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="<?=base_url();?>Dashboard/ATaskDetail_New/3/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Calls Done - <span class="badge bg-primary">
+                                                                    <?= $TeamDayTask->CallsDone ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="<?=base_url();?>Dashboard/ATaskDetail_New/3/<?=$uid?>/2/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Emails Done - <span class="badge bg-primary">
+                                                                    <?= $TeamDayTask->EmailDone ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="<?=base_url();?>Dashboard/ATaskDetail_New/3/<?=$uid?>/3/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Meeting Done - <span class="badge bg-primary">
+                                                                    <?= $TeamDayTask->MeetingDone ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="<?=base_url();?>Dashboard/ATaskDetail_New/3/<?=$uid?>/4/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Barg in Meeting Done - <span class="badge bg-primary">
+                                                                    <?= $TeamDayTask->BargeMeetingDone ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="<?=base_url();?>Dashboard/ATaskDetail_New/3/<?=$uid?>/5/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    WhatsApp Done - <span class="badge bg-primary">
+                                                                    <?= $TeamDayTask->WhatsAppDone ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="<?=base_url();?>Dashboard/ATaskDetail_New/3/<?=$uid?>/6/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    MOM Done - <span class="badge bg-primary">
+                                                                    <?= $TeamDayTask->MoMDone ?></span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <ul class="nav flex-column">
+                                                                <li class="nav-item">
+                                                                    <a href="<?=base_url();?>Dashboard/ATaskDetail_New/6/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Total Task Completed - <span class=" badge bg-success">
+                                                                        <?= $TeamDayTask->TotalCompleted ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="<?=base_url();?>Dashboard/ATaskDetail_New/3/<?=$uid?>/7/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Proposal Done - <span class="badge bg-primary">
+                                                                    <?= $TeamDayTask->ProposalDone ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="<?=base_url();?>Dashboard/ATaskDetail_New/7/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Action taken Yes - <span class="badge bg-primary">
+                                                                    <?= $TeamDayTask->ActionTakenYes ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="<?=base_url();?>Dashboard/ATaskDetail_New/8/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Action taken No - <span class="badge bg-danger">
+                                                                    <?= $TeamDayTask->ActionTakenNo ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="<?=base_url();?>Dashboard/ATaskDetail_New/9/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Purpose Achieved Yes - <span class="badge bg-sucess">
+                                                                    <?= $TeamDayTask->PurposeAchievedYes ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="<?=base_url();?>Dashboard/ATaskDetail_New/10/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
+                                                                    Purpose Achieved No - <span class="badge bg-danger">
+                                                                    <?= $TeamDayTask->PurposeAchievedNo ?></span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <?php } ?>
+                                                    <!-- <div class="row">
+                                                        <canvas id="donutChart" ></canvas>
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-primary collapsed-card">
+                                <div class="card-header text-center">
+                                    <b>Funnel Details</b>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                                </div>
+                                <div class="card-body" id="funnelBody">
+                                    <div class="row">
                                         <div class="col-md-6">
                                             <div class="card card-secondary">
                                                 <div class="card-header text-center">
@@ -275,49 +328,49 @@ $mdata = $this->Menu_model->get_alluserbyaid($uid);
                                                         <div class="col-md-4">
                                                             <ul class="nav flex-column">
                                                                 <li class="nav-item">
-                                                                    <a href="companies/0" class="nav-link">
+                                                                    <a href="Dashboard/companies_New/0" class="nav-link">
                                                                     Total Companies - <span class="badge bg-success">
                                                                         <?= $TeamFunnelDetail->total ?></span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="nav-item">
-                                                                    <a href="companies/1" class="nav-link">
+                                                                    <a href="Dashboard/companies_New/1" class="nav-link">
                                                                     Open - <span class=" badge bg-success">
                                                                         <?= $TeamFunnelDetail->open ?></span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="nav-item">
-                                                                    <a href="companies/8" class="nav-link">
+                                                                    <a href="Dashboard/companies_New/8" class="nav-link">
                                                                     Open [RPEM] - <span class=" badge bg-success">
                                                                         <?= $TeamFunnelDetail->OpenRPEM ?></span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="nav-item">
-                                                                    <a href="companies/2" class="nav-link">
+                                                                    <a href="Dashboard/companies_New/2" class="nav-link">
                                                                     Reachout - <span class=" badge bg-success">
                                                                         <?= $TeamFunnelDetail->reachout ?></span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="nav-item">
-                                                                    <a href="companies/3" class="nav-link">
+                                                                    <a href="Dashboard/companies_New/3" class="nav-link">
                                                                     Tentative - <span class=" badge bg-warning">
                                                                         <?= $TeamFunnelDetail->tentative ?></span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="nav-item">
-                                                                    <a href="companies/4" class="nav-link">
+                                                                    <a href="Dashboard/companies_New/4" class="nav-link">
                                                                     Will-Do-Later - <span class=" badge bg-danger">
                                                                         <?= $TeamFunnelDetail->willDoLate ?></span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="nav-item">
-                                                                    <a href="companies/5" class="nav-link">
+                                                                    <a href="Dashboard/companies_New/5" class="nav-link">
                                                                     Not-Interest - <span class=" badge bg-danger">
                                                                         <?= $TeamFunnelDetail->NotIntrested ?></span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="nav-item">
-                                                                    <a href="companies/10" class="nav-link">
+                                                                    <a href="Dashboard/companies_New/10" class="nav-link">
                                                                     TTD-Reachout - <span class=" badge bg-success">
                                                                         <?= $TeamFunnelDetail->TTDReachout ?></span>
                                                                     </a>
@@ -333,25 +386,25 @@ $mdata = $this->Menu_model->get_alluserbyaid($uid);
                                                         <div class="col-md-4">
                                                             <ul class="nav flex-column">
                                                                 <li class="nav-item">
-                                                                    <a href="companies/11" class="nav-link">
+                                                                    <a href="Dashboard/companies_New/11" class="nav-link">
                                                                     WNO-Reachout - <span class=" badge bg-success">
                                                                         <?= $TeamFunnelDetail->WNOReachout ?></span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="nav-item">
-                                                                    <a href="companies/6" class="nav-link">
+                                                                    <a href="Dashboard/companies_New/6" class="nav-link">
                                                                     Positive - <span class="float-right badge bg-primary">
                                                                         <?= $TeamFunnelDetail->Positive ?></span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="nav-item">
-                                                                    <a href="companies/9" class="nav-link">
+                                                                    <a href="Dashboard/companies_New/9" class="nav-link">
                                                                     Very Positive - <span class="float-right badge bg-primary">
                                                                         <?= $TeamFunnelDetail->VeryPositive ?></span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="nav-item">
-                                                                    <a href="companies/7" class="nav-link">
+                                                                    <a href="Dashboard/companies_New/7" class="nav-link">
                                                                     Closure - <span class="float-right badge bg-primary">
                                                                         <?= $TeamFunnelDetail->Closure ?></span>
                                                                     </a>
@@ -456,117 +509,7 @@ $mdata = $this->Menu_model->get_alluserbyaid($uid);
                                                     <?php } ?>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="card card-secondary">
-                                                <div class="card-header text-center">
-                                                <?php
-                                                    foreach($TeamDayTasks as $TeamDayTask){ ?>
-                                                    
-                                                    <b>Today's Team Task Details</b>
-                                                    <p>
-                                                        <strong><a href="ATaskDetail/4/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0">Total Task Assigned/Planned -  <span class="badge bg-success"><?= $TeamDayTask->TotalTasks ?></span></a></strong>
-                                                    </p>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <ul class="nav flex-column">
-                                                            <?php
-                                                                //foreach($TeamDayTasks as $TeamDayTask){
-                                                                ?>
-                                                                <li class="nav-item">
-                                                                    <a href="ATaskDetail/5/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
-                                                                    Total Task Pending - <span class="badge bg-danger">
-                                                                    <?= $TeamDayTask->TotalPending ?></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a href="Menu/ATaskDetail/3/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
-                                                                    Calls Done - <span class="badge bg-primary">
-                                                                    <?= $TeamDayTask->CallsDone ?></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a href="Menu/ATaskDetail/3/<?=$uid?>/2/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
-                                                                    Emails Done - <span class="badge bg-primary">
-                                                                    <?= $TeamDayTask->EmailDone ?></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a href="Menu/ATaskDetail/3/<?=$uid?>/3/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
-                                                                    Meeting Done - <span class="badge bg-primary">
-                                                                    <?= $TeamDayTask->MeetingDone ?></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a href="Menu/ATaskDetail/3/<?=$uid?>/4/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
-                                                                    Barg in Meeting Done - <span class="badge bg-primary">
-                                                                    <?= $TeamDayTask->BargeMeetingDone ?></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a href="Menu/ATaskDetail/3/<?=$uid?>/5/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
-                                                                    WhatsApp Done - <span class="badge bg-primary">
-                                                                    <?= $TeamDayTask->WhatsAppDone ?></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a href="Menu/ATaskDetail/3/<?=$uid?>/6/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
-                                                                    MOM Done - <span class="badge bg-primary">
-                                                                    <?= $TeamDayTask->MoMDone ?></span>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <ul class="nav flex-column">
-                                                                <li class="nav-item">
-                                                                    <a href="ATaskDetail/6/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
-                                                                    Total Task Completed - <span class=" badge bg-success">
-                                                                        <?= $TeamDayTask->TotalCompleted ?></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a href="Menu/ATaskDetail/3/<?=$uid?>/7/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
-                                                                    Proposal Done - <span class="badge bg-primary">
-                                                                    <?= $TeamDayTask->ProposalDone ?></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a href="Menu/ATaskDetail/7/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
-                                                                    Action taken Yes - <span class="badge bg-primary">
-                                                                    <?= $TeamDayTask->ActionTakenYes ?></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a href="Menu/ATaskDetail/8/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
-                                                                    Action taken No - <span class="badge bg-danger">
-                                                                    <?= $TeamDayTask->ActionTakenNo ?></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a href="Menu/ATaskDetail/9/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
-                                                                    Purpose Achieved Yes - <span class="badge bg-sucess">
-                                                                    <?= $TeamDayTask->PurposeAchievedYes ?></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a href="Menu/ATaskDetail/10/<?=$uid?>/1/<?=$tdate?>/<?=$tdate?>/0" class="nav-link">
-                                                                    Purpose Achieved No - <span class="badge bg-danger">
-                                                                    <?= $TeamDayTask->PurposeAchievedNo ?></span>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <?php } ?>
-                                                    <!-- <div class="row">
-                                                        <canvas id="donutChart" ></canvas>
-                                                    </div> -->
-                                                </div>
-                                            </div>
-                                        </div>
+                                        </div>                                        
                                     </div>
                                 </div>
                             </div>
@@ -1633,10 +1576,10 @@ $("#example2").DataTable({
                 }).get();
             }
             // var selectedValues = $("#userType").val(); // Get selected values
-            console.log(selectedValues);
+            // console.log(selectedValues);
 
             $.ajax({
-                url: '<?=base_url();?>Menu/getRoleUser_New',
+                url: '<?=base_url();?>Dashboard/getRoleUser_New',
                 type: 'POST', 
                 data: {RoleId: selectedValues},
                 success: function(response) {

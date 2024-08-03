@@ -732,12 +732,17 @@ date_default_timezone_set("Asia/Kolkata");
                                             <input type="hidden" id="clat" name="lat">
                                             <input type="hidden" id="clng" name="lng">
                                             <input type="hidden" name="closem" value="<?=date('Y-m-d H:i:s')?>">
-                                            <center>Meeting Closed at <?=date('H:i:s')?></center>
+                                            <center>
+                                              <p>Meeting Closed at <?=date('H:i:s')?></p>
+                                            </center>
                                             <select name="type" id="RPMorN" class="form-control" required>
                                               <option value="NO RP">No RP Meeting</option>
                                               <option value="RP">RP Meeting</option>
                                               <option value="Only Got Detail">No RP But Got Details</option>
                                             </select>
+                                            <hr>
+                                            <select id="updateCompanyStatus" class="form-control" name="updateCompanyStatus" required=""></select>
+                                            <hr>
                                             <div id="RPMbox" style="display:none">
                                               <lable>Company Address</lable>
                                               <input type="text" id="caddress" name="caddress" class="form-control p-3 mt-2">
@@ -749,10 +754,37 @@ date_default_timezone_set("Asia/Kolkata");
                                               <input type="text" id="cpno" name="cpno" class="form-control p-3 mt-2">
                                               <lable>Contact Person Email ID</lable>
                                               <input type="text" id="cpemail" name="cpemail" class="form-control p-3 mt-2">
+                                              
+                                              <hr>
                                               <select id="priority" name="priority" class="form-control" required>
                                                 <option value="no">Non Priority (Will not give business)</option>
                                                 <option value="yes">Priority (Definitely Will give business)</option>
                                               </select>
+                                              <hr>
+                                              
+                                            <select id="company_as" class="form-control" name="company_as" required>
+                                                <option value="">Select About Company</option>
+                                                <option value="Good Company">Good Company</option>
+                                                <option value="Not a Big Company">Not a Big Company</option>
+                                                <option value="other">Other</option>
+                                            </select>
+
+                                             <div id="aboutCompany">
+                                                <hr><textarea name="company_descri" id="company_descri" class="form-control" placeholder="Write about the company"></textarea><hr>
+                                             </div>
+                                            
+                                             <hr>
+
+                                             <div class="form-group p-3">
+                                              <label>Potentional Client:</label><br>
+                                              <input type="radio" id="yes" name="potentional_client" value="yes" required>
+                                              <label for="male">YES</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                              <input type="radio" id="no" name="potentional_client" value="no" required>
+                                              <label for="no">No</label>
+                                          </div>
+
+
+
                                             </div>
                                             <hr>
                                             <lable id="letmeetingsremarks">
@@ -803,6 +835,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 <script type="text/javascript">
                                 $(document).ready(function() {
                                 // $('.select2').select2();
+                                $('#aboutCompany').hide();
                                 $('#bcname').select2();
                                 });
                                 document.querySelector('#button').disabled = true;
@@ -1348,7 +1381,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 var designation = response[0].designation;
                                 var phoneno = response[0].phoneno;
                                 var emailid = response[0].emailid;
-
+                               
                                 // Start Meeting 30 minute Conditions
                                 var startm = response[0].startm;
                                 var pastDate = new Date(startm.replace(' ', 'T'));
@@ -1363,6 +1396,68 @@ date_default_timezone_set("Asia/Kolkata");
                                 }
                                 // End Meeting 30 minute Conditions
 
+                                // Start Add Status
+                                var cstatus = 1;
+                                var meetingslct = $('#RPMorN').val();
+
+                                  if (meetingslct === 'NO RP') {
+                                      $.ajax({
+                                          url: 'GetStatusWhenMeetClose',
+                                          type: 'POST',
+                                          data: { cstatus: cstatus,meetingslct:'NO RP' },
+                                          success: function(response) {
+                                              $("#updateCompanyStatus").html(response);
+                                          }
+                                      });
+                                  }
+                                
+                                $('#RPMorN').on('change', function b() {
+                                var meetingslct =this.value;  // RP,Only Got Detail
+                        
+                                if(meetingslct=='RP'){
+                                  $.ajax({
+                                          url: 'GetStatusWhenMeetClose',
+                                          type: 'POST',
+                                          data: { cstatus: cstatus,meetingslct:meetingslct },
+                                          success: function(response) {
+                                              $("#updateCompanyStatus").html(response);
+                                          }
+                                      });
+                                } 
+
+                                if(meetingslct=='Only Got Detail'){
+                                  $.ajax({
+                                          url: 'GetStatusWhenMeetClose',
+                                          type: 'POST',
+                                          data: { cstatus: cstatus,meetingslct:meetingslct },
+                                          success: function(response) {
+                                              $("#updateCompanyStatus").html(response);
+                                          }
+                                      });
+                                }
+                                
+                                if (meetingslct === 'NO RP') {
+                                      $.ajax({
+                                          url: 'GetStatusWhenMeetClose',
+                                          type: 'POST',
+                                          data: { cstatus: cstatus,meetingslct:'NO RP' },
+                                          success: function(response) {
+                                              $("#updateCompanyStatus").html(response);
+                                          }
+                                      });
+                                  }
+                                });
+                                // End Status
+                                // Start About Company
+                                $('#company_as').on('change', function b() {
+                                  var company_as =this.value;
+                                  if( company_as == 'other'){
+                                    $("#aboutCompany").show();
+                                  }else{
+                                    $("#aboutCompany").hide();
+                                  }
+                                });
+                                // End About Company 
 
                                 document.getElementById("bmcname").value = compname;
                                 document.getElementById("bmcid").value = cid;

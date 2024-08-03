@@ -152,7 +152,8 @@
                               <br>            
                               <br>            
                               <br>            
-                              <br>     <br>            
+                              <br>     
+                              <br>            
                     
                             <div class="col-12 col-md-12 mb-12">
                                     <label for="validationSample04">Add Cluster</label>

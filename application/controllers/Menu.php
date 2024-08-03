@@ -4585,6 +4585,7 @@ class Menu extends CI_Controller {
         }   
 
         $pendingautotaskcmp = $this->Menu_model->get_PendingAutoTask($uid);
+       
         $pendingautotaskcmpcnt = sizeof($pendingautotaskcmp);
        
         if($pendingautotaskcmpcnt > 0){
@@ -6935,18 +6936,22 @@ class Menu extends CI_Controller {
         $cphoto = $_FILES['cphoto']['name'];
         $uploadPath = 'uploads/day/';
         $this->load->model('Menu_model');
+        $this->load->library('session');
         $flink = $this->Menu_model->cphotofile($cphoto, $uploadPath);
 
         $lat = $_POST['lat'];
         $lng = $_POST['lng'];
         $bscid = $_POST['bscid'];
-        $this->load->model('Menu_model');
         $cphoto = $flink;
         $cbmid = $this->Menu_model->start_rpm($uid,$startm,$company_name,$cphoto,$lat,$lng,$smid,$bscid);
+        $this->session->set_flashdata('success_message','Meeting Start SuccessFully !');
         redirect('Menu/Dashboard');
     }
 
     public function rpmclose(){
+
+        $this->load->model('Menu_model');
+        $this->load->library('session');
 
         $priority="";$closem="";$caddress="";$cpname="";$cpdes="";$cpno="";$cpemail="";
         $uid = $_POST['uid'];
@@ -6967,9 +6972,14 @@ class Menu extends CI_Controller {
         $lng = $_POST['lng'];
         $letmeetingsremarks = $_POST['letmeetingsremarks'];
 
+        $updateStatus = $_POST['updateCompanyStatus'];
+        $company_as = $_POST['company_as'];
+        if($company_as == 'other'){$company_descri = $_POST['company_descri'];}else{$company_descri = '';}
+        $potentional_client = $_POST['potentional_client'];
 
-        $this->load->model('Menu_model');
-        $cbmid = $this->Menu_model->close_rpm($uid,$closem,$caddress,$cpname,$cpdes,$cpno,$cpemail,$lat,$lng,$type,$priority,$cmid,$bmcid,$bmccid,$bminid,$bmtid,$letmeetingsremarks);
+        $cbmid = $this->Menu_model->close_rpm($uid,$closem,$caddress,$cpname,$cpdes,$cpno,$cpemail,$lat,$lng,$type,$priority,$cmid,$bmcid,$bmccid,$bminid,$bmtid,$letmeetingsremarks,$updateStatus,$company_as,$company_descri,$potentional_client);
+        
+        $this->session->set_flashdata('success_message','Meeting Close SuccessFully ! Please Update Your Lead');
         redirect('Menu/Dashboard');
 
     }
@@ -13951,6 +13961,7 @@ class Menu extends CI_Controller {
     }
 
     public function addbmcompany(){
+        $this->load->library('session');
         $uid= $this->input->post('uid');
         $bmid= $this->input->post('bmid');
         $cid= $this->input->post('cid');
@@ -13971,11 +13982,23 @@ class Menu extends CI_Controller {
         $phoneno= $this->input->post('phoneno');
         $draftop= $this->input->post('draftop');
         $designation= $this->input->post('designation');
+
         $top_spender= $this->input->post('top_spender');
         $upsell_client= $this->input->post('upsell_client');
         $focus_funnel= $this->input->post('focus_funnel');
+
+        $key_client= $this->input->post('key_client');
+        $potential_company = $this->input->post('potential_company');
+        $cluster_id= $this->input->post('cluster');
+
         $this->load->model('Menu_model');
-        $id=$this->Menu_model->submit_bmcompany($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$cid,$ccid,$inid,$tid,$bmid);
+
+
+        // $id=$this->Menu_model->submit_bmcompany($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$cid,$ccid,$inid,$tid,$bmid);
+
+        $id=$this->Menu_model->submit_bmcompany($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$cid,$ccid,$inid,$tid,$bmid,$key_client,$potential_company,$cluster_id);
+
+        $this->session->set_flashdata('success_message','Lead Update SuccessFully !');
         redirect('Menu/Dashboard');
 
     }
@@ -17797,8 +17820,7 @@ public function addplantask12(){
         $this->session->set_flashdata('success_message',' Task Plan Successfully !!');
         redirect('Menu/TaskPlanner2/'.$pdate);
      } if(isset($_POST['selectcompanybyuser']) && $ntaction == 4){
-       
-        $ntaction = 3;
+        $ntaction = 4;
      }
      
      if($ntaction == 17){
@@ -18015,8 +18037,9 @@ public function addplantask12(){
         if($selectby == 'Plan But Not Initiated'){
 
            $sact_type = $this->Menu_model->SelectTaskBYTid($tid);
-
-           if($sact_type ==4){
+           
+           if($sact_type ==4 || $sact_type == 17 || $sact_type == 3){
+          
             $this->Menu_model->updateBarginmeeting($tid,$new_datetime);
            }
      
@@ -18657,6 +18680,43 @@ public function getJoinMeetpurposebyinid(){
     }
   
 }
+
+
+public function GetStatusWhenMeetClose(){
+
+    $this->load->model('Menu_model');
+
+    $meetingslct = $_POST['meetingslct'];
+    
+    if($meetingslct == 'NO RP'){
+        $cstatus = $_POST['cstatus'];
+        $status_name = $this->Menu_model->get_statusbyid($cstatus);
+        // echo  $data = '<option disabled value="">Select Status</option>';
+        foreach($status_name as $d){
+            echo  $data = '<option selected value='.$d->id.'>'.$d->name.'</option>';
+        }
+    }
+    
+    if($meetingslct == 'RP'){
+        $cstatus = $_POST['cstatus'];
+        $status_name = $this->Menu_model->get_statusbyid(3);
+        // echo  $data = '<option disabled value="">Select Status</option>';
+        foreach($status_name as $d){
+            echo  $data = '<option selected value='.$d->id.'>'.$d->name.'</option>';
+        }
+    }
+    if($meetingslct == 'Only Got Detail'){
+        $cstatus = $_POST['cstatus'];
+        $status_name = $this->Menu_model->get_statusbyid(8);
+        // echo  $data = '<option disabled value="">Select Status</option>';
+        foreach($status_name as $d){
+            echo  $data = '<option selected value='.$d->id.'>'.$d->name.'</option>';
+        }
+    }
+
+}
+
+
 
 
 }

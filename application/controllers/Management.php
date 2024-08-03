@@ -542,7 +542,17 @@ public function getAllActiveUserInDepartment(){
              echo $data;
  }
 
+ public function Change_RP_To_No_RP(){
 
+    $mom_id= $this->input->post('mom_id');
+    $tid= $this->input->post('tid');
+    
+    $this->Menu_model->change_norp($tid);
+
+    $return = $this->Management_model->UpdateMOM_DataTo_NORP($mom_id,$this->uid,$tid);
+    echo $return;
+
+}
 
 
 

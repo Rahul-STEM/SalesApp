@@ -133,9 +133,13 @@ class Management_model  extends Menu_model {
 
 
     public function getAllPendngBDMoMData($suid,$tdate) {
-        $query=$this->db->query("SELECT * FROM `mom_data` WHERE user_id  = $suid and approved_status IS NULL");
+        
+        $query = $this->db->query("SELECT * FROM `mom_data` WHERE `user_id` = $suid AND (`approved_status` IS NULL OR `approved_status` != 'NO RP')");
+
         return $query->result();
     }
+
+
     public function getAllRejectBDMoMData($suid,$tdate) {
         $query=$this->db->query("SELECT * FROM `mom_data` WHERE user_id  = $suid and approved_status='Reject'");
         return $query->result();
@@ -196,7 +200,38 @@ class Management_model  extends Menu_model {
         $query =  $this->db->query("UPDATE `mom_data` SET `approved_status`='$approved_status',`approved_by`='$uaid',`approved_date`='$rejectDate',`reject_remarks`='$rejectreamrk' WHERE id = $rejectId");
     }
     public function MomApprovedByUserAdminInsert($approved_status,$id,$approvedreamrk,$approvedtDate,$uaid) {
-        $query =  $this->db->query("UPDATE `mom_data` SET `approved_status` = '$approved_status', `approved_by` = '$uaid', `cm_call_task` = 1, `pst_assign` = 1, `approved_date` = '$approvedtDate', `reject_remarks` = '$approvedreamrk' WHERE `id` = $id;");
+        $query =  $this->db->query("UPDATE `mom_data` SET `approved_status` = '$approved_status', `approved_by` = '$uaid', `cm_call_task` = 1, `pst_assign` = 1, `approved_date` = '$approvedtDate', `reject_remarks` = '$approvedreamrk' WHERE `id` = '$id'");
+    }
+    
+    public function UpdateMOM_DataTo_NORP($mom_id,$uaid,$tid) {
+        $approved_status = 'NO RP';
+        $approvedtDate = date("Y-m-d H:i:s");
+        $approvedreamrk = 'Meetings Converted To NO RP Successfully';
+        
+        $query =$this->db->query("SELECT cid_id FROM `tblcallevents` WHERE id = '$tid' ");
+        $resData =  $query->result();
+        $cid_id = $resData[0]->cid_id;
+        $query=$this->db->query("UPDATE `init_call` SET `cstatus` = `lstatus` WHERE id='$cid_id'");
+
+        $data = [
+            'approved_status' => $approved_status,
+            'approved_by' => $uaid,
+            'cm_call_task' => 0,
+            'pst_assign' => 1,
+            'pst_call_task' => 0,
+            'approved_date' => $approvedtDate,
+            'reject_remarks' => $approvedreamrk
+        ];
+        
+        $this->db->where('id', $mom_id);
+        $this->db->update('mom_data', $data);
+        
+        if ($this->db->affected_rows() > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
+        
     }
     
 

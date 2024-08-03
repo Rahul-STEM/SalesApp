@@ -55,6 +55,63 @@ overflow-x: auto;
     font-size: 19px;
     text-align: left;
 }
+.select2 {
+    width: 100%; /* Set the desired width */
+        }
+.modal-content {
+    background: #edf0f3 !important;
+    font-size: 14px;
+    }
+.modal-content .card-header.bg-info {
+    margin-top: 4px !important;
+    height: 20px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    background: #df338a !important;
+}
+.modal-content .card-body {
+    background: beige !important;
+    margin-bottom: 4px;
+}
+.momhbox{
+  background: antiquewhite;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+}
+.identify_school_box {
+    background: aliceblue;
+    padding: 10px;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+}
+
+  .select2 {
+      width: 100%; 
+  }
+  .content-wrapper>.content {
+    background: azure;
+}
+.inner h5{
+    background: blanchedalmond;
+    line-height: 35px;
+    font-size: 17px;
+    border-radius: 26px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+    font-weight: 700;
+}
+.bg-light, .bg-light>a {
+    color: #1f2d3d !important;
+    background: #ebf5cb !important;
+    border-radius: 40px;
+    position: relative;
+    overflow: hidden;
+    /* box-shadow: rgba(0, 0, 0, .1) 0 1px 2px 0; */
+    /* cursor: pointer; */
+    font-size: 19px;
+    text-align: left;
+}
 .small-box>.small-box-footer {
     background: #c5eb4d !important;
     font-weight: 500;
@@ -100,7 +157,27 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-
+        <?php if ($this->session->flashdata('pending_message')): ?>
+            <div class="alert alert-success alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <?= $this->session->flashdata('pending_message'); ?>
+        </div>
+        <?php endif; ?>
+        <?php if ($this->session->flashdata('success_message')): ?>
+            <div class="alert alert-success alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <?= $this->session->flashdata('success_message'); ?>
+        </div>
+        <?php endif; ?>
+        <?php
+        if ($this->session->flashdata('error_message')): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong> <?php echo $this->session->flashdata('error_message'); ?></strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <?php endif; ?>
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">

@@ -154,9 +154,9 @@
                                             <!-- <p><a href="<?=base_url();?>Management/MomApprovedByUserAdmin/<?= $dt->id?>/Approve/<?=$suid?>/<?=$tardate?>" class="btn btn-success mr-2" onclick="return confirm('Are you sure you want to Approved it?');" >Approve</a></p> -->
                                            
                                             <p><button type="button" class="btn btn-success" onclick="MomApprove(<?= $i ?>,<?= $dt->id?>,'Approve')">Approve</button></p>
-                                            <p><button type="button" class="btn btn-primary" onclick="Reject(<?= $i ?>,<?= $dt->id?>,'Reject')">Reject</button></p>
+                                            <p><button type="button" class="btn btn-primary" onclick="Reject(<?= $i ?>,<?= $dt->id?>,'Reject')">Edit</button></p>
                                           
-                                            <p><button type="button" class="btn btn-primary" id="rPtoNoRPConvert<?= $dt->tid?>" onclick="RPtoNoRPConvert(<?= $i ?>,<?= $dt->tid?>,'RPtoNoRPConvert')">RP to No RP Convert</button></p>
+                                            <p><button type="button" class="btn btn-primary" id="rPtoNoRPConvert<?= $dt->tid?>" onclick="RPtoNoRPConvert(<?= $dt->tid?>,<?= $dt->id?>,'RPtoNoRPConvert')">RP to No RP Convert</button></p>
                                         </div>
                                         <?php }else{ 
                                           if($approved_status =='Reject'){ ?>
@@ -341,21 +341,29 @@
               $('#mom_id').val(id);
               }
  
-function RPtoNoRPConvert(mid,id,val){
+function RPtoNoRPConvert(id,mom_id,val){
+
               let text = "Do You Want to Change RP to No RP Meeting.";
                 if (confirm(text) == true) {
                   text = "You pressed OK!";
       
                   var hideval = "#rPtoNoRPConvert"+id;
                   $.ajax({
-                    url:'<?=base_url();?>Menu/changenorp',
+                    url:'<?=base_url();?>Management/Change_RP_To_No_RP',
                     type: "POST",
                     data: {
-                    tid: id
+                    tid: id,
+                    mom_id: mom_id
                     },
                     cache: false,
                     success: function a(result){
-                      $(hideval).hide();
+                      console.log(result);
+                      if(result ==1){
+                        $(hideval).hide();
+                        location.reload();
+                      }else{
+                        alert('Something Wrong !');
+                      }
                     }
                     });
                 } else {

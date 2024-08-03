@@ -4397,7 +4397,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
     }
 
     public function get_totaltPendingAutoTaskdetails($uid){
-        $query=$this->db->query("SELECT tblcallevents.*,status.name,action.name aname,status.color,status.clr,init_call.cstatus cstatus,(SELECT name from status WHERE id=cstatus) csname, (select init_call.cmpid_id from init_call WHERE id=tblcallevents.cid_id) as cmpid_id,(select company_master.compname from company_master WHERE id=cmpid_id) as compname, (select company_master.id from company_master WHERE id=cmpid_id) as cid FROM tblcallevents left JOIN action ON action.id=tblcallevents.actiontype_id left JOIN init_call ON init_call.id=tblcallevents.cid_id left JOIN status ON status.id=init_call.cstatus WHERE user_id='$uid' AND actiontype_id != '' AND nextCFID = 0 and autotask=1 and plan =1 AND DATE(appointmentdatetime) < CURDATE()");
+        $query=$this->db->query("SELECT tblcallevents.*,status.name,action.name aname,status.color,status.clr,init_call.cstatus cstatus,(SELECT name from status WHERE id=cstatus) csname, (select init_call.cmpid_id from init_call WHERE id=tblcallevents.cid_id) as cmpid_id,(select company_master.compname from company_master WHERE id=cmpid_id) as compname, (select company_master.id from company_master WHERE id=cmpid_id) as cid FROM tblcallevents left JOIN action ON action.id=tblcallevents.actiontype_id left JOIN init_call ON init_call.id=tblcallevents.cid_id left JOIN status ON status.id=init_call.cstatus WHERE user_id='$uid' AND actiontype_id = '2' AND nextCFID = 0 and autotask=1 and plan =1 AND DATE(appointmentdatetime) < CURDATE()");
         // echo $this->db->last_query(); exit();
         return $query->result();
     }
@@ -6254,7 +6254,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         return  $smid;
     }
 
-    public function close_rpm($uid,$closem,$caddress,$cpname,$cpdes,$cpno,$cpemail,$lat,$lng,$type,$priority,$cmid,$bmcid,$bmccid,$bminid,$bmtid,$letmeetingsremarks){
+    public function close_rpm($uid,$closem,$caddress,$cpname,$cpdes,$cpno,$cpemail,$lat,$lng,$type,$priority,$cmid,$bmcid,$bmccid,$bminid,$bmtid,$letmeetingsremarks,$updateStatus,$company_as,$company_descri,$potentional_client){
 
         $query=$this->db->query("SELECT cstatus,init_call.id inid FROM tblcallevents left join init_call on init_call.id=tblcallevents.cid_id WHERE tblcallevents.id='$bmtid'");
         $data = $query->result();
@@ -6265,11 +6265,12 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         $date = date('Y-m-d H:i:s');
 
             if($type=='RP'){
-                if($cs=='1' || $cs=='8' || $cs=='10' || $cs=='11'){$status='2';}elseif($cs=='2'){
-                    $status=3;
-                }else{$status=$cs;}
+                // if($cs=='1' || $cs=='8' || $cs=='10' || $cs=='11'){$status='2';}elseif($cs=='2'){
+                //     $status=3;
+                // }else{$status=$cs;}
+                $status= $updateStatus;
 
-                $query=$this->db->query("update barginmeeting set closem='$closem',clatitude='$lat',clongitude='$lng',status='RPClose',letmeetingsremarks='$letmeetingsremarks' WHERE id='$cmid'");
+                $query=$this->db->query("update barginmeeting set closem='$closem',clatitude='$lat',clongitude='$lng',status='RPClose',letmeetingsremarks='$letmeetingsremarks',company_as='$company_as',company_descri='$company_descri',potentional_client='$potentional_client' WHERE id='$cmid'");
                 $query=$this->db->query("UPDATE tblcallevents SET remarks='Meeting Close With RP',nextCFID='$bmtid',updateddate='$date',status_id='$cs',nstatus_id='$status',actontaken='yes',purpose_achieved='yes',updation_data_type='update' WHERE id='$bmtid'");
                 $query=$this->db->query("update tblcallevents set priority='$priority',mtype='$type' WHERE id='$bmtid'");
                 $query=$this->db->query("update company_master set address='$caddress' WHERE id='$bmcid'");
@@ -6278,8 +6279,9 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
 
             }
             if($type=='NO RP'){
-                $status=$cs;
-                $query=$this->db->query("update barginmeeting set closem='$closem',clatitude='$lat',clongitude='$lng',status='Close',letmeetingsremarks='$letmeetingsremarks' WHERE id='$cmid'");
+                // $status=$cs;
+                $status= $updateStatus;
+                $query=$this->db->query("update barginmeeting set closem='$closem',clatitude='$lat',clongitude='$lng',status='Close',letmeetingsremarks='$letmeetingsremarks WHERE id='$cmid'");
                 $query=$this->db->query("UPDATE tblcallevents SET mtype='$type',remarks='Meeting Close With No RP',nextCFID='$bmtid',updateddate='$date',status_id='$cs',nstatus_id='$status',actontaken='no',purpose_achieved='no',updation_data_type='update' WHERE id='$bmtid'");
             }
             if($type=='Only Got Detail'){
@@ -6287,16 +6289,16 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                 // if($cs=='1'){$status='8';}
                 // else{$status=$cs;}
 
-                $status='8';
+                $status= $updateStatus;
 
-                $query=$this->db->query("update barginmeeting set closem='$closem',clatitude='$lat',clongitude='$lng',status='Close',letmeetingsremarks='$letmeetingsremarks' WHERE id='$cmid'");
+                $query=$this->db->query("update barginmeeting set closem='$closem',clatitude='$lat',clongitude='$lng',status='Close',letmeetingsremarks='$letmeetingsremarks',company_as='$company_as',company_descri='$company_descri',potentional_client='$potentional_client' WHERE id='$cmid'");
                 $query=$this->db->query("UPDATE tblcallevents SET mtype='$type', remarks='Meeting Close With Only Got Detail',nextCFID='$bmtid',updateddate='$date',status_id='$cs',nstatus_id='$status',actontaken='yes',purpose_achieved='no',updation_data_type='update' WHERE id='$bmtid'");
                 $query=$this->db->query("update company_master set address='$caddress' WHERE id='$bmcid'");
                 $query=$this->db->query("update company_contact_master set contactperson='$cpname',emailid='$cpemail',phoneno='$cpno',designation='$cpdes' WHERE id='$bmccid'");
                 $query=$this->db->query("update init_call set lstatus=cstatus,cstatus='$status' WHERE id='$inid'");
             }
 
-            $this->db->query("INSERT INTO notify(uid,type,sms) VALUES ('$uid','1','Bargin Meeting Closed')");
+            $this->db->query("INSERT INTO notify(uid,type,sms) VALUES ('$uid','1','Meeting Closed')");
             return  $cmid;
     }
 
@@ -6407,7 +6409,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
     public function add_plan2($pdate,$uid,$ptime,$inid,$ntaction,$ntstatus,$ntppose,$ttype,$tptime,$new_datetime,$selectby,$jsonData){
         $date = $new_datetime;
  
-        if($ntaction==3){
+        if($ntaction==3 || $ntaction==4){
  
              $data = $this->Menu_model->get_initbyid($inid);
              $bcid = $data[0]->cmpid_id;
@@ -6419,7 +6421,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
              $data1 = $query->result();
              $ltid = $data1[0]->mid;
  
-             $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, purpose_achieved, fwd_date, actontaken, nextaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type,plan,selectby,tptime,filter_by) VALUES ('$ltid', '0','no', '$date', 'no', '$ntppose', 'no','$date','3','$uid','$inid','$ntppose','','1','$uid','$date','$date','updated',1,'$selectby','$tptime','$jsonData')");
+             $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, purpose_achieved, fwd_date, actontaken, nextaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type,plan,selectby,tptime,filter_by) VALUES ('$ltid', '0','no', '$date', 'no', '$ntppose', 'no','$date','$ntaction','$uid','$inid','$ntppose','','1','$uid','$date','$date','updated',1,'$selectby','$tptime','$jsonData')");
              $ntid = $this->db->insert_id();
  
              $query=$this->db->query("update tblcallevents set nextCFID='$ntid' WHERE id='$ltid'");
@@ -6429,8 +6431,14 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
  
              $query=$this->db->query("update barginmeeting set ccid='$ccid',inid='$inid',tid='$ntid' WHERE id='$bmid'");
              
+             if($ntaction ==3){
+                $meetname =  "Sheduled Meeting";
+             }
+             if($ntaction ==4){
+                $meetname =  "Bargin Meeting";
+             }
 
-             $this->db->query("INSERT INTO notify(uid,type,sms) VALUES ('$uid','1','Bargin Meeting Created form Funnel')");
+             $this->db->query("INSERT INTO notify(uid,type,sms) VALUES ('$uid','1','$meetname Created form Funnel')");
 
 
          }else{
@@ -6550,7 +6558,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
 
     //    open,reachout,positive,positivenap,tentative,closure,cluster_id
 
-       $this->db->query("INSERT INTO init_call(draft, proposal, createDate, topspender, noofschools, proposaldate, proposal_type, proposal_amt, cmpid_id, creator_id,upsell_client,focus_funnel,mainbd,cstatus,keycompany,potential,open,reachout,positive,positivenap,tentative,closure,cluster_id) VALUES ('$draft', '$emailid', '$cdate', '$top_spender', '0', 'NA', 'NA', 'NA','$cid','$uid','$upsell_client','$focus_funnel','$uid','$status','$key_company','$potential_company','$openrpem','$reachout','$verypositive','$positivenap','$tentative','$closure','$clusterid')");
+       $this->db->query("INSERT INTO init_call(draft, proposal, createDate, topspender, noofschools, proposaldate, proposal_type, proposal_amt, cmpid_id, creator_id,upsell_client,focus_funnel,mainbd,cstatus,keycompany,potential,open,reachout,positive,positivenap,tentative,closure,cluster_id) VALUES ('$draft', '$emailid', '$cdate', '$top_spender', '0', 'NA', 'NA', 'NA','$cid','$uid','$upsell_client','$focus_funnel','$uid','$status','yes','$potential_company','$openrpem','$reachout','$verypositive','$positivenap','$tentative','$closure','$clusterid')");
        $inid = $this->db->insert_id();
 
 
@@ -6561,7 +6569,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
     }
 
 
-    public function submit_bmcompany($uid, $compname, $website, $country, $city,$state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$cid,$ccid,$inid,$tid,$bmid){
+    public function submit_bmcompany($uid, $compname, $website, $country, $city,$state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$cid,$ccid,$inid,$tid,$bmid,$key_client,$potential_company,$cluster_id){
 
         $query = $this->db->query("SELECT * FROM init_call WHERE cmpid_id='$cid'");
         $data = $query->result();
@@ -6586,14 +6594,13 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         $state = $this->Menu_model->get_statebyid($state);
         $country = $this->Menu_model->get_countrybyid($country);
 
-
        $this->db->query("update company_master set compname='$compname', draft='$draft', budget='$budget', address='$address', website='$website', createddate='$cdate', city='$city', country='$country', partnerType_id='$ctype', state='$state' where id='$cid'");
        $cid = $this->db->insert_id();
 
        $this->db->query("update company_contact_master set contactperson='$compconname', emailid='$emailid', phoneno='$phoneno', designation='$designation', createddate='$cdate' where id='$ccid'");
        $ccid = $this->db->insert_id();
 
-       $this->db->query("update init_call set draft='$draft', createDate='$cdate', topspender='$top_spender', creator_id='$uid',upsell_client='$upsell_client',focus_funnel='$focus_funnel',mainbd='$uid',cstatus='$status' where id='$inid'");
+       $this->db->query("update init_call set draft='$draft', createDate='$cdate', topspender='$top_spender', creator_id='$uid',upsell_client='$upsell_client',focus_funnel='$focus_funnel',mainbd='$uid',cstatus='$status',pkclient='$key_client',potential='$potential_company',cluster_id='$cluster_id' where id='$inid'");
 
        $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type,plan,autotask) VALUES ('$tid', '0', '$draft', '', '$date', 'no', '$next_action', 'NA','NA','no','$date','$next_action_id','$assign_to','$inid','$purpose','$remark_msg','$status','$assign_to','$date','$date','updated','1','1')");
        $tblid = $this->db->insert_id();
@@ -9148,7 +9155,7 @@ WHERE plan = '1'  and nextCFID='0' and actiontype_id='$aid' and status_id='$stid
 
     public function get_PendingAutoTask($uid){
 
-        $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND nextCFID = 0 and autotask=1 and plan =1 AND DATE(appointmentdatetime) < CURDATE()");
+        $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND nextCFID = 0 and autotask=1 and actiontype_id = 2 and plan =1 AND DATE(appointmentdatetime) < CURDATE()");
 
         return $query->result();
     }

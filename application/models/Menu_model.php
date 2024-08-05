@@ -11647,5 +11647,9 @@ public function get_ccdby_cid($cid){
             return $action;
         }
         
+
+        public function UserUpdatefeedinMeeting($meetid,$meetwith_person){
+            $query=$this->db->query("UPDATE `barginmeeting` SET `meetwith_right_person`='$meetwith_person' WHERE id='$meetid'");
+        }
         
 }

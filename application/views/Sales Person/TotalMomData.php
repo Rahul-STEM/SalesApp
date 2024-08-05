@@ -160,6 +160,14 @@
                                         <?php if($dt->approved_status == 'Approved'){
                                           echo "<span class='bg-success p-2'> Approved&nbsp;Success </span>";
                                         } ?>
+
+                                        <?php if($dt->approved_status == 'NO RP'){ ?>
+                                        <div>
+                                          <p><?php echo "<span class='bg-danger p-2'>NO RP</span>"; ?></p>
+                                           
+                                        </div>
+                                        <?php }?>
+
                                         <?php if($dt->approved_status == ''){
                                           echo "<span class='bg-warning p-2'> Pending </span>";
                                         } ?>

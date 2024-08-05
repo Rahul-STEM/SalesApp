@@ -134,7 +134,7 @@ class Management_model  extends Menu_model {
 
     public function getAllPendngBDMoMData($suid,$tdate) {
         
-        $query = $this->db->query("SELECT * FROM `mom_data` WHERE `user_id` = $suid AND (`approved_status` IS NULL OR `approved_status` != 'NO RP')");
+        $query = $this->db->query("SELECT * FROM `mom_data` WHERE `user_id` = $suid AND (`approved_status` IS NULL)");
 
         return $query->result();
     }

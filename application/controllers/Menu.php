@@ -3957,6 +3957,7 @@ class Menu extends CI_Controller {
         redirect('Menu/Dashboard');
     }
     public function submittask1(){
+
         $this->load->library('session');
         $status=1;$filname="";$tid="";$uid="";$action_id="";$ystatus="";$remark="";$remark_msg="";$noremark="";$purpose="";$nremark_msg="";$rpmmom='null';$mom='null';$flink='null';$flink1='null';$flink2='null';
         $tid = $_POST['tid'];
@@ -3995,8 +3996,6 @@ class Menu extends CI_Controller {
         if(isset($_POST['nremark_msg'])){$nremark = $_POST['nremark_msg'];}
         if(isset($_POST['rpmmom'])){$rpmmom = $_POST['rpmmom'];}
         if(isset($_POST['nadate'])){$nadate = $_POST['nadate'];}else{$nadate='0';}
-
-
 
         if(isset($_FILES['filname']['name'])){$filname = $_FILES['filname']['name'];
             $uploadPath = 'uploads/proposal/';
@@ -4121,7 +4120,29 @@ class Menu extends CI_Controller {
  
           // End mom acten taken yes
 
+          if($action_id == 10){
+            $init_id = $_POST['cmpid'];
+            $getcmpinfo1 =  $this->Menu_model->get_cmpbyinid($init_id);
+            $org_compname =  $getcmpinfo1[0]->compname;
+            if($org_compname =='Unknown'){
+                $status =1;
+            }
+        }
+
         $id = $this->Menu_model->submit_task1($tid,$uid,$cmpid,$actontaken,$action_id,$status,$remark,$rpmmom,$purpose,$flink,$flink1,$flink2,$partner,$noofsc,$pbudgetme,$LinkedIn,$Facebook,$YouTube,$Instagram,$OtherSocial,$nadate);
+      
+        
+        if($action_id == 10){
+            $getcmpinfo1 =  $this->Menu_model->get_cmpbyinid($init_id);
+            $org_compname =  $getcmpinfo1[0]->compname;
+            
+            if($org_compname =='Unknown'){
+                redirect("Menu/AddNewLead/$init_id"); 
+                $this->session->set_flashdata('success_message',' Please Add Your Lead ');
+            }
+        }
+
+
         redirect('Menu/Dashboard');
     }
 
@@ -13868,6 +13889,7 @@ class Menu extends CI_Controller {
         }
     }
 
+ 
 
     public function BMNewLead($bmid){
         $user = $this->session->userdata('user');
@@ -17859,7 +17881,13 @@ public function addplantask12(){
         
      }
     
+     if(!isset($_POST['selectcompanybyuser']) && $ntaction == 10){
 
+        $bmdate = $pdate.' '.$ptime.':00';
+        $partner = $this->Menu_model->CreateNewResearchTask($bdid,$bmdate,$ntaction,$ntppose);
+        $this->session->set_flashdata('success_message',' Task Plan Successfully !!');
+        redirect('Menu/TaskPlanner2/'.$pdate);
+     }
 
 // Abhishek Data Start
      $data = array(
@@ -18762,6 +18790,68 @@ public function MeetingFeedBack(){
     redirect('Menu/Dashboard');
 
 }
+
+public function AddNewLead($init_id){
+    $user = $this->session->userdata('user');
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $alluser=$this->Menu_model->get_user();
+    $status=$this->Menu_model->get_status();
+    $action=$this->Menu_model->get_action();
+    $states=$this->Menu_model->get_states();
+    $partner=$this->Menu_model->get_partner();
+
+    if(!empty($user)){
+        $this->load->view($dep_name.'/AddNewLead',['user'=>$user,'alluser'=>$alluser,'status'=>$status,'action'=>$action,'states'=>$states,'partner'=>$partner,'uid'=>$uid,'init_id'=>$init_id]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+
+public function addcompany_new(){
+    $uid= $this->input->post('uid');
+    $compname= $this->input->post('compname');
+    $website= $this->input->post('website');
+    $country= $this->input->post('country');
+    $city= $this->input->post('city');
+    $state= $this->input->post('state');
+    $draft= $this->input->post('draft');
+    $address= $this->input->post('address');
+    $ctype= $this->input->post('ctype');
+    $budget= $this->input->post('budget');
+    $compconname= $this->input->post('compconname');
+    $emailid= $this->input->post('emailid');
+    $phoneno= $this->input->post('phoneno');
+    $draftop= $this->input->post('draftop');
+    $designation= $this->input->post('designation');
+    $top_spender= $this->input->post('top_spender');
+    $upsell_client= $this->input->post('upsell_client');
+    $focus_funnel= $this->input->post('focus_funnel');
+    $key_company=$this->input->post('key_company');
+    $potential_company=$this->input->post('potential_company');
+
+    $clusterid      =   $this->input->post('cluster');
+    $cstatusid      =   $this->input->post('cstatusid');
+
+    $openrpem       =   $this->input->post('openrpem');
+    $reachout       =   $this->input->post('reachout');
+    $tentative      =   $this->input->post('tentative');
+    $positivenap    =   $this->input->post('positivenap');
+    $verypositive   =   $this->input->post('verypositive');
+    $closure        =   $this->input->post('closure');
+    $init_id        =   $this->input->post('init_id');
+
+    $this->load->model('Menu_model');
+    $id=$this->Menu_model->submit_company_new($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$key_company,$potential_company,$openrpem,$reachout,$verypositive,$positivenap,$tentative,$closure,$clusterid,$cstatusid,$init_id);
+
+
+
+    redirect('Menu/Dashboard');
+}
+
 
 
 }

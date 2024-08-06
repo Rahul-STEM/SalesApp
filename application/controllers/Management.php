@@ -335,6 +335,8 @@ class Management extends Menu {
     $tardate = $this->input->post('tardate');
     $user_id = $this->input->post('user_id');
 
+    dd($_POST);
+
       $data = array(
         'ccstatus' => $this->input->post('ccstatus'),
         'action_id' => $this->input->post('action_id'),

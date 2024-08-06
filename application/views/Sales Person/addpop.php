@@ -13,7 +13,7 @@ date_default_timezone_set("Asia/Kolkata");
         </div> <!-- // END .modal-header -->
         <div id="moshow" class="modal-body">
           <div class="card row m-2">
-            <div class="col-12 col-md-12">
+            <div class="col-12 col-md-12" id="new_reserach1">
               <div class="card-header bg-info">Task Detail</div>
               <div class="card-body">
                 Current Task : <lable id="ctname"></lable><br>
@@ -23,7 +23,7 @@ date_default_timezone_set("Asia/Kolkata");
             </div>
           </div>
           <div class="card row m-2">
-            <div class="col-12 col-md-12">
+            <div class="col-12 col-md-12" id="new_reserach2">
               <input type="hidden" value="" id="test">
               <a href="" target="_blank" id="cmplink"><div class="card-header bg-info"><lable id="cname"></lable></div></a>
               <div class="card-body">
@@ -44,7 +44,11 @@ date_default_timezone_set("Asia/Kolkata");
           </div>
           <div class="card row m-2" id="taskbox">
             <div class="col-12 col-md-12">
-              <div class="card-header bg-info"></div>
+              <div class="card-header bg-info">
+                <div>
+                    <p id="reaserch_message" class="mt-3 text-white"></p>
+                </div>
+              </div>
               <div class="card-body">
                 <form action="<?=base_url();?>Menu/submittask1" method="POST" enctype="multipart/form-data">
                   <input type="hidden" name="ccstatus" id="cstatus">
@@ -312,18 +316,20 @@ date_default_timezone_set("Asia/Kolkata");
                   </div>
                   
                   <div id="ifyes" style="display:none">
-                    <div class="col-12 col-md-12 mb-3">
+                    <div class="col-12 col-md-12 mb-3" id="new_reserach3">
                       <label for="validationSample04">Next Status</label>
                       <select type="text" class="form-control" name="ystatus" placeholder="State" id="ystatus" required>
                       </select>
                     </div>
-                    <div class="col-12 col-md-12 mb-12">
+                    <div class="col-12 col-md-12 mb-12" id="new_reserach4">
                       <label for="remark_msg">Remarks</label>
                       <textarea type="text" class="form-control" name="yremark_msg" id="remark_msg"  required></textarea>
                       <div class="invalid-feedback">.</div>
                       <div class="valid-feedback">Looks good!</div>
                     </div>
+                    <p id="reaserch_message1" class="mt-3 p-2"></p>
                   </div>
+                
                   <div id="ifno" style="display:none">
                     <input type="hidden" name="yaction_id" id="yaction_id">
                     <div class="col-12 col-md-12 mb-3">
@@ -1364,7 +1370,29 @@ date_default_timezone_set("Asia/Kolkata");
                                 document.getElementById("wlink").href = "https://wa.me/91"+phoneno;
                                 document.getElementById("glink").href = "mailto:"+emailid;
                                 document.getElementById("cmplink").href = "CompanyDetails/"+cmid;
-                                //  alert(ctname);
+
+                                if(ctname=='Research'){
+                                  $("#reaserch_message").show();
+                                  $("#reaserch_message").html('<h5 class="p-2">Research</h5>');
+                                  $("#reaserch_message1").text('* Add New Lead Please Submit this form');
+                                  if(cname == 'Unknown'){
+                                    $("#new_reserach1").hide();
+                                    $("#new_reserach2").hide();
+                                    $("#new_reserach3").hide();
+                                    $("#new_reserach4").hide();
+                                    $('#button').removeAttr('disabled');
+                                  }else{
+                                    $("#new_reserach1").show();
+                                    $("#new_reserach2").show();
+                                    $("#new_reserach3").show();
+                                    $("#new_reserach4").show();
+                                    $("#reaserch_message").hide();
+                                    $("#reaserch_message1").hide();
+                                  }
+                                }else{
+                                  $("#reaserch_message").hide();
+                                  $("#reaserch_message1").hide();
+                                }
                                 if(ctname=='Call' || ctname=='Whatsapp Activity'){
                                 //  alert(ctname);
                                 //  document.getElementById("moshow").classList.add('d-lg-none');
@@ -1805,5 +1833,14 @@ $("#rpmsClick").click(function(){
         span.remove-field.bg-danger {
     padding: 6px;
     border-radius: 34%;
+}
+p#reaserch_message {
+    color: green;
+    font-weight: 500;
+    font-size: 16px;
+}
+p#reaserch_message1 {
+    color: green;
+    font-weight: 500;
 }
 </style>

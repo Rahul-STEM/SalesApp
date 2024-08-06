@@ -9119,7 +9119,10 @@ WHERE plan = '1'  and nextCFID='0' and actiontype_id='$aid' and status_id='$stid
 
     public function get_old_cmp_planbutnotinited_with_spcl_req($taskaction,$uid){
       
-            $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id ='$uid' AND actiontype_id=$taskaction AND nextCFID = 0 and plan=1 and autotask = 0 AND DATE(appointmentdatetime) < CURDATE()");
+            // $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id ='$uid' AND actiontype_id=$taskaction AND nextCFID = 0 and plan=1 and autotask = 0 AND DATE(appointmentdatetime) < CURDATE()");
+
+            $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id ='$uid' AND actiontype_id=$taskaction AND nextCFID = 0 and plan=1  AND DATE(appointmentdatetime) < CURDATE()");
+
         return $query->result();
     }
 
@@ -9148,7 +9151,7 @@ WHERE plan = '1'  and nextCFID='0' and actiontype_id='$aid' and status_id='$stid
 
         public function get_all_old_cmp_planbutnotinited($uid){
 
-            $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND autotask =0 and plan=1 AND nextCFID = 0 AND DATE(appointmentdatetime) < CURDATE()");
+            $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' and plan=1 AND nextCFID = 0 AND DATE(appointmentdatetime) < CURDATE()");
         return $query->result();
     }
 
@@ -9161,14 +9164,15 @@ WHERE plan = '1'  and nextCFID='0' and actiontype_id='$aid' and status_id='$stid
     }
     public function get_PendingTask($uid){
 
-        $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND nextCFID = 0 and autotask=0 and plan =1 AND DATE(appointmentdatetime) = CURDATE()");
+        $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND nextCFID = 0 and plan =1 AND DATE(appointmentdatetime) = CURDATE()");
 
         return $query->result();
     }
 
     public function get_OLDPendingTask($uid){
 
-        $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND nextCFID = 0 and autotask=0 and plan =1 AND DATE(appointmentdatetime) < CURDATE()");
+        $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND nextCFID = 0 and plan =1 AND DATE(appointmentdatetime) < CURDATE()");
+        // $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND nextCFID = 0 and autotask=1 and plan =1 AND DATE(appointmentdatetime) < CURDATE()");
 
         return $query->result();
     }
@@ -11651,5 +11655,119 @@ public function get_ccdby_cid($cid){
         public function UserUpdatefeedinMeeting($meetid,$meetwith_person){
             $query=$this->db->query("UPDATE `barginmeeting` SET `meetwith_right_person`='$meetwith_person' WHERE id='$meetid'");
         }
+
+
+        public function CreateNewResearchTask($uid,$bmdate,$ntaction,$ntppose){
+      
+            $this->db->query("INSERT INTO company_master(compname, createddate,partnerType_id) VALUES ('Unknown', '$bmdate','1')");
+            $cid = $this->db->insert_id();
+ 
+            $this->db->query("INSERT INTO company_contact_master(contactperson, emailid, phoneno, designation, type, createddate, company_id) VALUES ('', '', '', '', 'primary', '$bmdate', '$cid')");
+            $ccid = $this->db->insert_id();
+ 
+            $this->db->query("INSERT INTO init_call(createDate, cmpid_id, creator_id,mainbd,cstatus) VALUES ('$bmdate','$cid','$uid','$uid','1')");
+            $inid = $this->db->insert_id();
+ 
+            $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, purpose_achieved, fwd_date, actontaken, nextaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type,plan) VALUES ('0', '0','no', '$bmdate', 'no', '10', 'no','$bmdate','10','$uid','$inid','94','Research and Data Collection','1','$uid','$bmdate','$bmdate','updated',1)");
+            $ntid = $this->db->insert_id();
+ 
+    }
+
+
+
+    public function submit_company_new($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$key_company,$potential_company,$openrpem,$reachout,$verypositive,$positivenap,$tentative,$closure,$clusterid,$cstatusid,$init_id){
+        // echo $draft; die;
+
+        $assign_to = $uid;
+        // $status = $cstatusid;
+        $status = 1;
+        $remark_msg = 'Research done';
+        $action = 1;
+        $purpose = 1;
+        $next_action_id = 1;
+        $next_action = 'Will do research on client complete details';
+        date_default_timezone_set("Asia/Kolkata");
+        $date = date('Y-m-d H:i:s');
+
+        $city = $this->Menu_model->get_citybyname($city);
+        $state = $this->Menu_model->get_statebyname($state);
+        $country = $this->Menu_model->get_countrybyname($country);
+        $cdate=date('Y-m-d');
+
+        $getcmpinfo =  $this->get_cmpbyinid($init_id);
+
+        $org_cid =  $getcmpinfo[0]->cmpid_id;
+
+        $data = array(
+            'draft' => $draft,
+            'proposal' => $emailid,
+            'createDate' => $cdate,
+            'topspender' => $top_spender,
+            'noofschools' => '0',
+            'proposaldate' => 'NA',
+            'proposal_type' => 'NA',
+            'proposal_amt' => 'NA',
+            'upsell_client' => $upsell_client,
+            'focus_funnel' => $focus_funnel,
+            'cstatus' => $status,
+            'keycompany' => 'yes',
+            'potential' => $potential_company,
+            'open' => $openrpem,
+            'reachout' => $reachout,
+            'positive' => $verypositive,
+            'positivenap' => $positivenap,
+            'tentative' => $tentative,
+            'closure' => $closure,
+            'cluster_id' => $clusterid
+        );
+        
+        // Assuming you have a condition to identify which row to update
+        $this->db->where('id', $init_id);
+        $this->db->update('init_call', $data);
+        
+
+        $cmp_data = array(
+            'compname' => $compname,
+            'draft' => $draft,
+            'budget' => $budget,
+            'address' => $address,
+            'website' => $website,
+            'createddate' => $cdate,
+            'city' => $city,
+            'country' => $country,
+            'partnerType_id' => $ctype,
+            'state' => $state
+        );
+        
+        // Assuming $cid is the ID of the company you want to update
+        $this->db->where('id', $org_cid);
+        $this->db->update('company_master', $cmp_data);
+        
+
+        $ccmp_data = array(
+            'contactperson' => $compconname,
+            'emailid' => $emailid,
+            'phoneno' => $phoneno,
+            'designation' => $designation,
+            'type' => 'primary',
+            'createddate' => $cdate,
+            'draft' => $draft
+        );
+        
+        $this->db->where('company_id', $org_cid); // Add more conditions if needed
+        $this->db->update('company_contact_master', $ccmp_data);
+
+    //    open,reachout,positive,positivenap,tentative,closure,cluster_id
+
+    $getcmpinfo1 =  $this->get_cmpbyinid($init_id);
+    $org_compname =  $getcmpinfo1[0]->compname;
+
+       $this->db->query("INSERT INTO notify(uid,type,sms) VALUES ('$uid','1','New Lead Added Company Name is $org_compname')");
+    }
+
+
+
+
+
         
 }

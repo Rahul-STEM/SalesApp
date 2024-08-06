@@ -531,6 +531,7 @@ if($type_id == 3){
                       
                       $getPendingTask = $this->Menu_model->get_PendingTask($uid);
                       $getoldPendingTask = $this->Menu_model->get_OLDPendingTask($uid);
+                      // dd($getoldPendingTask);
                       $getpendSize = sizeof($getPendingTask);
                       $getoldPendingTaskcnt = sizeof($getoldPendingTask);
                       
@@ -921,6 +922,14 @@ if($type_id == 3){
                       <div id="selectbarginCompanyType" class="form-group">
                           <select id="bcytpe" name="bcytpe" class="form-control mt-2">
                               <option value="">Select Bargin Company Type</option>
+                              <option value="From Funnel">From Funnel</option>
+                              <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div id="selectReseachCompanyType" class="form-group">
+                          <select id="researchType" name="researchType" class="form-control mt-2">
+                              <option value="">Select Research Type</option>
                               <option value="From Funnel">From Funnel</option>
                               <option value="Other">Other</option>
                             </select>
@@ -1827,6 +1836,7 @@ if($type_id == 3){
                  $('#status_taskaction_card').hide();
                  $('#auto_assign').hide();
                  $('#selectbarginCompanyType').hide();
+                 $('#selectReseachCompanyType').hide();
             
                 
                 });
@@ -2873,7 +2883,7 @@ if($type_id == 3){
                           $('#taskPurposebyuserCard').hide();
                           $("#selectcompany").show();
                           $("#bcytpe").hide();
-                        
+                          $('#selectReseachCompanyType').hide();
                           
                           $.ajax({
                           url:'<?=base_url();?>Menu/get_SheduledMeetCompany',
@@ -2948,7 +2958,7 @@ if($type_id == 3){
                           $('#maintaskcard').hide();
                           $("#bcytpe").show();
                           $('#selectbarginCompanyType').show();
-                   
+                          $('#selectReseachCompanyType').hide();
                         
                           $('#bcytpe').on('change', function() {
                             var bcytpe = $(this).val();
@@ -3039,6 +3049,7 @@ if($type_id == 3){
                           $('#taskPurposebyuserCard').hide();
                           $("#selectcompany").show();
                           $("#bcytpe").hide();
+                          $('#selectReseachCompanyType').hide();
 
                           $('#ntactionnew option').prop('disabled', true);
                           $('#ntactionnew option[value="17"]').prop('disabled', false);
@@ -3114,6 +3125,76 @@ if($type_id == 3){
 
 
 
+                        }else if(tasktaction ==10){
+                          // alert('Research');
+                          $('#selectReseachCompanyType').show();
+                          $('#bcytpe').hide();
+                          
+                          $('#researchType').on('change', function() {
+
+                          
+                            var researchType = $(this).val();
+
+                          if(researchType == 'From Funnel'){
+                            $('#maintaskcard').show();
+                            $("#selectcompany").show();
+
+                            $.ajax({
+                              url:'<?=base_url();?>Menu/getstatuscmp',
+                              type: "POST",
+                              data: {
+                              sid:1,
+                              uid: uid
+                              },
+                              cache: false,
+                              success: function a(result){
+                          
+                            $("#maintaskcard").show();
+
+                            $("#selectcompanybyuser").html(result);
+                            $("#selectcompanybyuser").show();
+                            $("#select_cluster").hide();
+
+                            var optionCount = $('#selectcompanybyuser').find('option').length;
+                            optionCount = optionCount-1;
+                            $("#totalcompany").text('Total Company :'+ optionCount);
+                            $("#tasktaction").show();
+                            $("#tptime").val('');
+                            $("#tptime").show();
+                            $('#ntactionnew').show();
+                            $('#ntppose').show();
+                            $('#meeting-time').show();
+                            $('#planbtn1').show();
+                           
+                            $('#ntactionnew option').prop('disabled', true);
+                            $('#ntactionnew option[value="10"]').prop('disabled', false).prop('selected', true);
+                            $("#ntppose").html("<option value='94'>Research & Data Collection</option>");
+
+                              }
+                              });
+
+                            }
+                            
+                            else if(researchType == 'Other'){
+
+                              $("#maintaskcard").show();
+                              $("#selectcompany").hide();
+                              $("#select_cluster").hide();
+                              $("#tasktaction").show();
+                              $("#tptime").val('');
+                              $("#tptime").show();
+                              $('#ntactionnew').show();
+                              $('#ntppose').show();
+                              $('#meeting-time').show();
+                              $('#planbtn1').show();
+                              $('#selectcompanybyuser').removeAttr('required');
+                              $('#ntactionnew option').prop('disabled', true);
+                              $('#ntactionnew option[value="10"]').prop('disabled', false).prop('selected', true);
+                              $("#ntppose").html("<option value='94'>Research & Data Collection</option>");
+
+                            }
+                            
+                        });
                         }else{
 
                           $('#ntactionnew option[value="3"]').remove();
@@ -3121,7 +3202,7 @@ if($type_id == 3){
                           $('#ntactionnew option[value="17"]').remove();
                           $('#selectbarginCompanyType').hide();
                           $("#select_cluster").hide();
-                         
+                          $('#selectReseachCompanyType').hide();
                         
                           $('#ntactionnew option').prop('disabled', false);
 

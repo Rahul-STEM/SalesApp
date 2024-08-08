@@ -1740,8 +1740,6 @@ date_default_timezone_set("Asia/Kolkata");
         });
     </script>
     <script>
-
-
 $("#rpmsClick").click(function(){
   var val = $("#bmcname").val();
     if(val == 'Unknown' || val == ''){

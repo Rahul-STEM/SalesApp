@@ -177,7 +177,7 @@ $action = $this->Menu_model->get_action();
 
 if($type_id == 3){
   foreach ($action as $key => $value) {
-    if ($value->id == 17) {
+    if ($value->id == 17 || $value->id == 18) {
         unset($action[$key]);
     }
   }
@@ -1192,8 +1192,14 @@ if($type_id == 3){
                                 <label>Select Assign</label>
                                 <select class="form-control" id="slct_barg_in_meeting1">
                                   <option disabled value="" >Select Assign</option>
-                                  <option value="From Funnel">Self Assign</option>
-                                  <option value="Other">Other Assign</option>
+                                  <!-- <option value="From Funnel">Self Assign</option>
+                                  <option value="Other">Other Assign</option> -->
+                                  <option value="Call Assign on Tentive Status">Call Assign on Tentive Status</option>
+                                  <option value="Mom Check">MOM Check</option>
+                                  <option value="Praposal Check">Praposal Check</option>
+                                  <option value="Handover Check">Handover Check</option>
+                                  <option value="BD Request Check">BD Request Check</option>
+                                  <option value="Praposal write">BD Request Check</option>
                                 </select>
                             </div>
                         </div>
@@ -4514,16 +4520,17 @@ $(document).ready(function(){
                 $('#ntactionnew option[value="10"]').prop('disabled', true);
             }
         });
+
+        $('#selectcompanybyuser').on('change', function() {
+                var selectedOptions = $(this).find('option:selected');
+                if (selectedOptions.length > 3) {
+                    alert('You can select only 3 companies at a Time.');
+                    // Deselect the last selected option
+                    selectedOptions.last().prop('selected', false);
+                }
+            });
 });
 </script>
-
-
-
-
-
-
-
-
 
 
       <!-- /.row (main row) -->

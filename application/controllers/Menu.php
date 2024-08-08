@@ -4073,6 +4073,9 @@ class Menu extends CI_Controller {
              $ischoolcnt = rtrim($ischoolcnt, ',');
             //  no_of_school End
 
+            $client_int_type_project = $this->input->post('client_int_type_project');
+            if($client_int_type_project == ''){$client_int_type_project = '';}
+
              $data = array(
                  'ccstatus' => $cstatus,
                  'action_id' => $this->input->post('action_id'),
@@ -4104,7 +4107,7 @@ class Menu extends CI_Controller {
                  'Letter_organization_designation' => $this->input->post('Letter_organization_designation'),
                  'Letter_organization_location' => $this->input->post('Letter_organization_location'),
                  'client_int_school_visit' => $this->input->post('client_int_school_visit'),
-                 'client_int_type_project' => $this->input->post('client_int_type_project'),
+                 'client_int_type_project' => $client_int_type_project,
                  'client_int_school_date' => $this->input->post('client_int_school_date'),
                  'client_int_school_state' => $this->input->post('client_int_school_state'),
                  'client_int_school_district' => $this->input->post('client_int_school_district'),
@@ -17807,6 +17810,13 @@ public function addplantask11(){
             
             $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
 
+            $tbl_id = $this->Menu_model->getTBLTaskByID($tid); 
+            $tbl_getaction = $tbl_id[0]->actiontype_id;
+            if($tbl_getaction == 3 || $tbl_getaction ==4){
+                $query =  $this->db->query("UPDATE `barginmeeting` SET `storedt`='$new_datetime' WHERE tid =$tbl_id ");
+            } 
+            
+        
         }else if($selectby == 'Review Target Date'){
 
         if($pendingTaskcnt > 0){
@@ -17835,6 +17845,7 @@ public function addplantask11(){
 
 public function addplantask12(){
 
+    
     $this->load->model('Menu_model');
     $this->load->model('Management_model');
     $this->load->library('session');
@@ -17888,6 +17899,25 @@ public function addplantask12(){
         $this->session->set_flashdata('success_message',' Task Plan Successfully !!');
         redirect('Menu/TaskPlanner2/'.$pdate);
      }
+
+
+    $CheckingData = $this->input->post('check_data');  // Checking_Data
+
+     if($CheckingData == 'Mom Check'){
+        $bmdate = $pdate.' '.$ptime.':00';
+        $addMOMCheckTask = $this->Menu_model->CreateTaskForMOMCheck($bdid,$bmdate);
+        $this->session->set_flashdata('success_message',' Task Plan Successfully !!');
+        redirect('Menu/TaskPlanner2/'.$pdate);
+     }
+    //  else{
+    //     echo "data";
+    //      dd($_POST);  
+    //  }
+
+
+
+
+
 
 // Abhishek Data Start
      $data = array(
@@ -18093,15 +18123,21 @@ public function addplantask12(){
 
            $sact_type = $this->Menu_model->SelectTaskBYTid($tid);
            
-           if($sact_type ==4 || $sact_type == 17 || $sact_type == 3){
-          
+           if($sact_type ==4 || $sact_type == 17 || $sact_type == 3){ 
             $this->Menu_model->updateBarginmeeting($tid,$new_datetime);
            }
      
-
             $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
           
-        }else if($selectby == 'Review Target Date'){
+        }else if($selectby == 'Plan When MOM Approved'){
+
+            $sact_type = $this->Menu_model->SelectTaskBYTid($tid);
+        
+             $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
+             $currentdatetime = date("Y-m-d H:i:s");
+             $query =  $this->db->query("UPDATE `auto_assign_task` SET `status`='1',`updated_at`='$currentdatetime' WHERE call_tid = $tid");
+
+         } else if($selectby == 'Review Target Date'){
 
        if(date("Y-m-d") !== $pdate){
             if($pendingTodaysTaskcnt > 0){
@@ -18847,9 +18883,86 @@ public function addcompany_new(){
     $this->load->model('Menu_model');
     $id=$this->Menu_model->submit_company_new($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$key_company,$potential_company,$openrpem,$reachout,$verypositive,$positivenap,$tentative,$closure,$clusterid,$cstatusid,$init_id);
 
-
-
     redirect('Menu/Dashboard');
+}
+
+// Get Slef Assign Task
+public function getAutoAssignTask(){
+
+    $this->load->model('Menu_model');
+
+    $uid            = $this->input->post('uid');
+    $selectedValue  = $this->input->post('selectedValue');
+  
+    $cmps = $this->Menu_model->getTaskAssignBySelf($uid);
+
+    $groupedByActionTypes = [];
+    foreach ($cmps as $objects) {
+        $action_id = $objects->action_id;
+        if (!isset($groupedByActionTypes[$action_id])) {
+            $groupedByActionTypes[$action_id] = [];
+        }
+        $groupedByActionTypes[$action_id][] = $objects;
+    }
+
+    // echo "<pre>";
+    // print_r($groupedByActionTypes);
+
+    echo '<option value="">Select Task</option>';
+    
+    foreach($groupedByActionTypes as $key => $petotaskData){
+        $getaction_name = $this->Menu_model->get_actionbyid($key)[0]->name;
+        $getaction_namecnts = sizeof($petotaskData);
+        echo "<option value='$key'>$getaction_name($getaction_namecnts)</options>";
+      }
+}
+public function getAutoAssignTaskWithType(){
+
+    $this->load->model('Menu_model');
+    $uid            = $this->input->post('uid');
+    $selectedValue  = $this->input->post('selectedValue');
+    $tasktype       = $this->input->post('tasktype');
+  
+    $cmps = $this->Menu_model->getTaskAssignBySelfWithTaskType($uid,$tasktype);
+    $callTids = array_map(function($item) {
+        return $item->call_tid;
+    }, $cmps);
+    
+    $callTidsString = implode(', ', $callTids);
+    $tasks = $this->Menu_model->getTBLTaskByID($callTidsString);
+    $data = '';
+    foreach ($tasks as $c) {
+        $getcomp = $this->Menu_model->get_cmp_PlanPendingwork($c->cid_id);
+        foreach ($getcomp as $cmpData) {
+            $data .= '<option value="' . $c->id . '">' . $cmpData->compname.' ('.$cmpData->pname . ')</option>';
+        }
+    }
+    echo $data;
+}
+public function getPendingTeamMoM(){
+
+    $user           =   $this->session->userdata('user');
+    $data['user']   =   $user;
+    $uid            =   $user['user_id'];
+    $uyid           =   $user['type_id'];
+
+    $this->load->model('Menu_model');
+    $uid        = $this->input->post('uid');
+
+    $users      = $this->Menu_model->get_userbyaaid($uid);
+ 
+    $user_id    = array_map(function($item) {
+        return $item->user_id;
+    }, $users);
+    
+    $user_id = implode(', ', $user_id);
+    // $query=$this->db->query("SELECT * FROM `mom_data` WHERE user_id IN ($user_id) AND approved_status IS NULL");
+    $query=$this->db->query("SELECT * FROM `mom_data` WHERE mom_data.`user_id` IN ($user_id) AND `approved_status` IS NULL AND NOT EXISTS (SELECT 1 FROM `tblcallevents` WHERE `mom_data`.`id` = `tblcallevents`.`reviewtype`)");
+
+    $data =  $query->result();
+    $pending_momdata =  sizeof($data);
+    echo $pending_momdata;
+
 }
 
 

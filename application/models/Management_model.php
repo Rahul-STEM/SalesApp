@@ -200,7 +200,7 @@ class Management_model  extends Menu_model {
         $query =  $this->db->query("UPDATE `mom_data` SET `approved_status`='$approved_status',`approved_by`='$uaid',`approved_date`='$rejectDate',`reject_remarks`='$rejectreamrk' WHERE id = $rejectId");
     }
     public function MomApprovedByUserAdminInsert($approved_status,$id,$approvedreamrk,$approvedtDate,$uaid) {
-        $query =  $this->db->query("UPDATE `mom_data` SET `approved_status` = '$approved_status', `approved_by` = '$uaid', `cm_call_task` = 1, `pst_assign` = 1, `approved_date` = '$approvedtDate', `reject_remarks` = '$approvedreamrk' WHERE `id` = '$id'");
+        $query =  $this->db->query("UPDATE `mom_data` SET `approved_status` = '$approved_status', `approved_by` = '$uaid', `cm_call_task` = 1, `pst_assign` = 1,`pst_call_task` = 1, `approved_date` = '$approvedtDate', `reject_remarks` = '$approvedreamrk' WHERE `id` = '$id'");
     }
     
     public function UpdateMOM_DataTo_NORP($mom_id,$uaid,$tid) {
@@ -248,12 +248,13 @@ class Management_model  extends Menu_model {
     }
 
 
-    public function CreateTask($fwd_date,$actiontype_id,$init_id,$nextaction,$ass_user_id,$purpose_id,$autotask,$auto_plan,$ccstatus) {
+    public function CreateTask($fwd_date,$actiontype_id,$init_id,$nextaction,$ass_user_id,$purpose_id,$autotask,$auto_plan,$ccstatus,$task_remarks) {
+            $current_date = date("Y-m-d H:i:s");
             $data = array(
                 'lastCFID' => 0,
                 'nextCFID' => 0,
                 'purpose_achieved' => 'no',
-                'fwd_date' => $fwd_date,
+                'fwd_date' => $current_date,
                 'actontaken' => 'no',
                 'nextaction' => $nextaction,
                 'mom_received' => 'no',
@@ -270,7 +271,8 @@ class Management_model  extends Menu_model {
                 'updation_data_type' => 'updated',
                 'plan' => 1,
                 'autotask' => $autotask,
-                'auto_plan' => $auto_plan
+                'auto_plan' => $auto_plan,
+                'mom_remarks' => $task_remarks
             );
 
             // Insert the data into the database
@@ -280,7 +282,7 @@ class Management_model  extends Menu_model {
     }
 
 
-    public function CreateTaskForAutoAssign($user_id,$to_user_id,$ccstatus,$init_cmpid,$call_tid,$action_id) {
+    public function CreateTaskForAutoAssign($user_id,$to_user_id,$ccstatus,$init_cmpid,$call_tid,$action_id,$mom_id,$remarks) {
 
         $data = array(
             'user_id' => $user_id,
@@ -289,6 +291,8 @@ class Management_model  extends Menu_model {
             'init_cmpid' => $init_cmpid,
             'call_tid' => $call_tid,
             'action_id' => $action_id,
+            'mom_id' => $mom_id,
+            'remarks' => $remarks,
             'status' => '0'
         );
 

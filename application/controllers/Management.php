@@ -268,9 +268,17 @@ class Management extends Menu {
         $purpose_id = 1;
         $autotask = 1;
         $auto_plan = 1;
- 
-        $insert_id = $this->Management_model->CreateTask($fwd_date,$actiontype_id,$init_id,$nextaction,$ass_user_id,$purpose_id,$autotask,$auto_plan,$ccstatus);
-        $this->Management_model->CreateTaskForAutoAssign($ass_user_id,$ass_user_id,$ccstatus,$init_id,$insert_id,$actiontype_id);
+
+        // dd($_POST);
+        // die;
+
+        $this->Management_model->MomApprovedByUserAdminInsert($approved_status,$id,$approvedreamrk,$approvedtDate,$this->uid,$finalRemarks);
+
+        $task_remarks = "Task Create After MOM Approved";
+
+        $insert_id = $this->Management_model->CreateTask($fwd_date,$actiontype_id,$init_id,$nextaction,$ass_user_id,$purpose_id,$autotask,$auto_plan,$ccstatus,$task_remarks);
+       
+        $this->Management_model->CreateTaskForAutoAssign($ass_user_id,$ass_user_id,$ccstatus,$init_id,$insert_id,$actiontype_id,$id,$task_remarks);
       
         $cudetail = $this->Menu_model->get_userbyid($mom_user_id);
         $get_pst_co = $cudetail[0]->pst_co;
@@ -279,11 +287,9 @@ class Management extends Menu {
         $this->Management_model->AssignPSTAfterMomApproved($init_cmpid,$get_pst_co);
         $this->Management_model->AssignCLMAfterMomApproved($init_cmpid,$clm_aadmin);
 
-        $insert_id = $this->Management_model->CreateTask($fwd_date,$actiontype_id,$init_id,$nextaction,$get_pst_co,$purpose_id,$autotask,$auto_plan,$ccstatus);
-        $this->Management_model->CreateTaskForAutoAssign($ass_user_id,$get_pst_co,$ccstatus,$init_id,$insert_id,$actiontype_id);
+        $insert_id = $this->Management_model->CreateTask($fwd_date,$actiontype_id,$init_id,$nextaction,$get_pst_co,$purpose_id,$autotask,$auto_plan,$ccstatus,$task_remarks);
+        $this->Management_model->CreateTaskForAutoAssign($ass_user_id,$get_pst_co,$ccstatus,$init_id,$insert_id,$actiontype_id,$id,$task_remarks);
 
-        $this->Management_model->MomApprovedByUserAdminInsert($approved_status,$id,$approvedreamrk,$approvedtDate,$this->uid,$finalRemarks);
-  
         redirect('Management/MomData/'.$suid.'/'.$tardate);
 
     }
@@ -334,51 +340,90 @@ class Management extends Menu {
     $tbl_id = $this->input->post('id');
     $tardate = $this->input->post('tardate');
     $user_id = $this->input->post('user_id');
+    //  presentation Start
+     $presentation = $_POST['presentation'];
+     $presentationdata = '';
+     foreach($presentation as $prs){
+         $presentationdata .=$prs.',';
+     }
+     $presentationdata = rtrim($presentationdata, ',');
+     //  presentation End
 
-    dd($_POST);
+    //  identify_school_state Start
+     $ischool_state = $_POST['identify_school_state'];
+     $ischoolstate = '';
+     foreach($ischool_state as $state){
+        $ischoolstate .=$state.',';
+     }
+     $ischoolstate = rtrim($ischoolstate, ',');
+    //  identify_school_state End
 
-      $data = array(
-        'ccstatus' => $this->input->post('ccstatus'),
-        'action_id' => $this->input->post('action_id'),
-        'tid' => $this->input->post('tid'),
-        'user_id' => $this->input->post('user_id'),
-        'init_cmpid' => $this->input->post('init_cmpid'),
-        'actontaken' => $this->input->post('actontaken'),
-        'meetingdonewinitiator' => $this->input->post('meetingdonewinitiator'),
-        'presentation' => $this->input->post('presentation'),
-        'project_intervention_select' => $this->input->post('project_intervention_select'),
-        'project_intervention' => $this->input->post('project_intervention'),
-        'client_has_adopted_select' => $this->input->post('client_has_adopted_select'),
-        'client_has_adopted' => $this->input->post('client_has_adopted'),
-        'approving_autorities' => $this->input->post('approving_autorities'),
-        'budget_for_cfyear' => $this->input->post('budget_for_cfyear'),
-        'fund_sanstion_limit' => $this->input->post('fund_sanstion_limit'),
-        'other_specific_remarks' => $this->input->post('other_specific_remarks'),
-        'submit_proposal' => $this->input->post('submit_proposal'),
-        'proposal_no_of_school' => $this->input->post('proposal_no_of_school'),
-        'proposal_of_budget' => $this->input->post('proposal_of_budget'),
-        'identify_school' => $this->input->post('identify_school'),
-        'identify_school_state' => $this->input->post('identify_school_state'),
-        'identify_school_district' => $this->input->post('identify_school_district'),
-        'no_of_school' => $this->input->post('no_of_school'),
-        'permission_letter' => $this->input->post('permission_letter'),
-        'permission_letter_rech' => $this->input->post('permission_letter_rech'),
-        'Letter_organization_name' => $this->input->post('Letter_organization_name'),
-        'Letter_organization_designation' => $this->input->post('Letter_organization_designation'),
-        'Letter_organization_location' => $this->input->post('Letter_organization_location'),
-        'client_int_school_visit' => $this->input->post('client_int_school_visit'),
-        'client_int_school_date' => $this->input->post('client_int_school_date'),
-        'client_int_school_state' => $this->input->post('client_int_school_state'),
-        'client_int_school_district' => $this->input->post('client_int_school_district'),
-        'client_int_no_of_school' => $this->input->post('client_int_no_of_school'),
-        'intervention_cm_pst_sh' => $this->input->post('intervention_cm_pst_sh'),
-        'rpmmom' => $this->input->post('rpmmom'),
-        'partner' => $this->input->post('partner')
-    );
+    //  identify_school_district Start
+     $ischool_district = $_POST['identify_school_district'];
+     $ischooldistrict = '';
+     foreach($ischool_district as $district){
+        $ischooldistrict .=$district.',';
+     }
+     $ischooldistrict = rtrim($ischooldistrict, ',');
+    //  identify_school_district End
+
+     //  no_of_school Start
+     $ino_of_school = $_POST['no_of_school'];
+     $ischoolcnt = '';
+     foreach($ino_of_school as $school){
+        $ischoolcnt .=$school.',';
+     }
+     $ischoolcnt = rtrim($ischoolcnt, ',');
+    //  no_of_school End
+
+    $client_int_type_project = $this->input->post('client_int_type_project');
+    if($client_int_type_project == ''){$client_int_type_project = '';}
+
+     $data = array(
+         'ccstatus' => $this->input->post('ccstatus'),
+         'action_id' => $this->input->post('action_id'),
+         'user_id' => $this->input->post('user_id'),
+         'init_cmpid' => $this->input->post('init_cmpid'),
+         'tid' => $this->input->post('tid'),
+         'actontaken' => $this->input->post('actontaken'),
+         'meetingdonewinitiator' => $this->input->post('meetingdonewinitiator'),
+         'presentation' => $presentationdata,
+         'project_intervention_select' => $this->input->post('project_intervention_select'),
+         'project_intervention' => $this->input->post('project_intervention'),
+         'client_has_adopted_select' => $this->input->post('client_has_adopted_select'),
+         'client_has_adopted' => $this->input->post('client_has_adopted'),
+         'approving_autorities' => $this->input->post('approving_autorities'),
+         'budget_for_cfyear' => $this->input->post('budget_for_cfyear'),
+         'fund_sanstion_limit' => $this->input->post('fund_sanstion_limit'),
+         'other_specific_remarks' => $this->input->post('other_specific_remarks'),
+         'submit_proposal' => $this->input->post('submit_proposal'),
+         'proposal_no_of_school' => $this->input->post('proposal_no_of_school'),
+         'proposal_of_budget' => $this->input->post('proposal_of_budget'),
+         'proposal_of_location' => $this->input->post('proposal_of_location'),
+         'identify_school' => $this->input->post('identify_school'),
+         'identify_school_state' => $ischoolstate,
+         'identify_school_district' =>$ischooldistrict,
+         'no_of_school' => $ischoolcnt,
+         'permission_letter' => $this->input->post('permission_letter'),
+         'permission_letter_rech' => $this->input->post('permission_letter_rech'),
+         'Letter_organization_name' => $this->input->post('Letter_organization_name'),
+         'Letter_organization_designation' => $this->input->post('Letter_organization_designation'),
+         'Letter_organization_location' => $this->input->post('Letter_organization_location'),
+         'client_int_school_visit' => $this->input->post('client_int_school_visit'),
+         'client_int_type_project' => $client_int_type_project,
+         'client_int_school_date' => $this->input->post('client_int_school_date'),
+         'client_int_school_state' => $this->input->post('client_int_school_state'),
+         'client_int_school_district' => $this->input->post('client_int_school_district'),
+         'client_int_no_of_school' => $this->input->post('client_int_no_of_school'),
+         'intervention_cm_pst_sh' => $this->input->post('intervention_cm_pst_sh'),
+         'rpmmom' => $this->input->post('rpmmom'),
+         'partner' => $this->input->post('partner'),
+     );
 
     // Pass data to model to insert into the database
     $this->db->insert('mom_data', $data);
     $insert_id = $this->db->insert_id();
+    // echo $this->db->last_query();;
     $query =  $this->db->query("UPDATE `mom_data` SET `edit_cnt`='$insert_id' WHERE id = $tbl_id");
 
     redirect('Management/MomData/'.$user_id.'/'.$tardate);

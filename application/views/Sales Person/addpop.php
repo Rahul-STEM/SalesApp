@@ -1748,6 +1748,16 @@ $("#rpmsClick").click(function(){
       alert("* Please Enter Valid Company Name");
       $('#bmcname').css('border', '1px solid red');
       return false;
+    }else if(val !=='' ){
+      
+        var inputVal = $('#bmcname').val();           // Get the value entered in the input field
+        var hindiRegex = /[\u0900-\u097F]/;     // Regular expression to detect Hindi characters
+        if(hindiRegex.test(inputVal)){
+           alert('Hindi characters are not Allowed'); // Show the error message if Hindi characters are found
+            return false;
+        }else {
+          return true;
+        }
     }else{
       localStorage.setItem('startMeetformSubmitted', 'true');
       return true;

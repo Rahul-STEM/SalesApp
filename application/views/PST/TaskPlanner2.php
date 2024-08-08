@@ -177,7 +177,7 @@ $action = $this->Menu_model->get_action();
 
 if($type_id == 3){
   foreach ($action as $key => $value) {
-    if ($value->id == 17 || $value->id == 18) {
+    if ($value->id == 17) {
         unset($action[$key]);
     }
   }
@@ -613,7 +613,7 @@ if($type_id == 3){
                         </div>
                         <div class="form-check">
                           <label class="form-check-label custom-radio-label">
-                          <input type="radio" class="form-check-input" name="optradio" value="Self Assign" >Self Assign
+                          <input type="radio" class="form-check-input" name="optradio" value="Auto Assign" >Auto Assign
                           </label>
                         </div>
 
@@ -1210,8 +1210,6 @@ if($type_id == 3){
                                 <select class="form-control" id="slct_auto_assign_task_type">
                                 </select>
                             </div>
-                           <hr>
-                           <p id="pendingdata_message"></p>
                         </div>
 
                   </div>
@@ -1255,7 +1253,6 @@ if($type_id == 3){
                             </select>
                           </div>
 
-                     
 
                           <input type="hidden" id="hiddenSelectStatus" name="selectstatusbyuser">
                           <input type="hidden" id="hiddenTaskAction" name="tasktaction">
@@ -1306,7 +1303,6 @@ if($type_id == 3){
                             </select>
                           </div>
                           <input type="hidden" class="form-control" value="" id="selectby" name="selectby">
-                          <input type="hidden" class="form-control" value="" id="check_data" name="check_data">
                           <center><button class="btn btn-primary m-3" type="submit" id="planbtn1">Submit</button></center>
                         </div>
                       </form>
@@ -1856,8 +1852,6 @@ if($type_id == 3){
                  $('#selectbarginCompanyType').hide();
                  $('#selectReseachCompanyType').hide();
                  $('#slct_auto_assign_task_type').hide();
-                 $('#pendingdata_message').hide();
-               
             
                 
                 });
@@ -4228,7 +4222,7 @@ if($type_id == 3){
                     
             
 
-                    if(val == 'Self Assign'){
+                    if(val == 'Auto Assign'){
                     
                     $('#auto_assign').show();
                     $(".taskselectionarea").hide();
@@ -4242,11 +4236,10 @@ if($type_id == 3){
 
                     $('#slct_auto_assign_task').on('change', function() {
                         var selectedValue = $(this).val();
-
+                        // alert(selectedValue);
+                        // Self Assign // Other Assign
                         if(selectedValue == 'Call Assign on Tentive Status'){
                           $('#selectby').val('Plan When MOM Approved'); 
-                          $('#pendingdata_message').hide();
-                          $('#start_check,#end_check').removeAttr('required');
                           $.ajax({
                             url:'<?=base_url();?>Menu/getAutoAssignTask',
                             type: "POST",
@@ -4278,7 +4271,6 @@ if($type_id == 3){
                               console.log(result);
 
                         $("#maintaskcard").show();
-                        $("#selectcompany").show();
                         $("#selectcompanybyuser").html(result);
                         $("#selectcompanybyuser").show();
                         var optionCount = $('#selectcompanybyuser').find('option').length;
@@ -4290,6 +4282,7 @@ if($type_id == 3){
                         $('#meeting-time').show();
                         $('#planbtn1').show();
                         $('#ntactionnew').show();
+                        $('#ntppose').show();
                         $('#ntactionnew').hide();
                         $('#ntppose').hide();
                         $('#ntppose,#ntactionnew').removeAttr('required');
@@ -4297,44 +4290,13 @@ if($type_id == 3){
                         });
                       });   
                         }else{
-
+                          alert("other select");
+                          
                           $('#slct_auto_assign_task_type').hide();
-
-                          if(selectedValue =='Mom Check'){
-                                $.ajax({
-                                url:'<?=base_url();?>Menu/getPendingTeamMoM',
-                                type: "POST",
-                                data: {
-                                uid: uid
-                                },
-                                cache: false,
-                                success: function a(result){
-                                  if(result >0){
-                                    $("#maintaskcard").show();
-                                    $("#selectcompany").hide();
-                                    $("#selectcompanybyuser").hide();
-                                    $("#tptime").show();
-                                    $('#meeting-time').show();
-                                    $('#planbtn1').show();
-                                    $('#ntactionnew').hide();
-                                    $('#ntactionnew').hide();
-                                    $('#ntppose').hide();
-                                    $('#ntppose,#ntactionnew,#selectcompanybyuser').removeAttr('required');
-                                  }
-                                  $('#pendingdata_message').show();
-                                  $('#pendingdata_message').text(result +" Pending MOM For Check");
-                                  $('#check_data').val(selectedValue);
-                              }
-                            });
-                          }
                         }
                     });
                     }else{
                       $('#auto_assign').hide();
-                      $('#ntppose, #ntactionnew, #selectcompanybyuser').attr('required', 'required');
-                      $("#selectcompany").show();
-                      $('#pendingdata_message').hide();
-        
                     }
 
 

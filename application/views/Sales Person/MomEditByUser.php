@@ -38,6 +38,10 @@
 .form-control {
     background: azure !important;
 }
+span.remove-field.bg-danger {
+    padding: 6px;
+    border-radius: 34%;
+}
     </style>
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -50,7 +54,17 @@
             <div class="row">
               <div class="col-12">
                 <?php 
-                
+               
+               $id         = $momdata[0]->id;
+               $ccstatus   = $momdata[0]->ccstatus;
+               $action_id  = $momdata[0]->action_id;
+               $user_id    = $momdata[0]->user_id;
+               $init_cmpid = $momdata[0]->init_cmpid;
+               $tid        = $momdata[0]->tid;
+               $actontaken = $momdata[0]->actontaken;
+
+               $getCompanyData = $this->Menu_model->get_cmpbyinid($init_cmpid);
+               $getCompanyPartner = $this->Menu_model->get_partnerbyid($getCompanyData[0]->partnerType_id)[0]->name;
 
                 $meetingdonewinitiator = $momdata[0]->meetingdonewinitiator;
 
@@ -114,6 +128,16 @@
                               <!-- Start Meeting Form -->
                   <form method="post" action="<?=base_url();?>/Management/UpdateEditMomData">
                
+                    <input type="hidden" class="form-control" value="<?= $id ?>" id="id" name="id">
+                    <input type="hidden" class="form-control" value="<?= $tardate ?>" name="tardate">
+                    <input type="hidden" class="form-control" value="<?= $ccstatus ?>" id="ccstatus" name="ccstatus">
+                    <input type="hidden" class="form-control" value="<?= $tid ?>" name="tid">
+                    <input type="hidden" class="form-control" value="<?= $action_id ?>" id="action_id" name="action_id">
+                    <input type="hidden" class="form-control" value="<?= $user_id ?>" id="user_id" name="user_id">
+                    <input type="hidden" class="form-control" value="<?= $init_cmpid ?>" id="init_cmpid" name="init_cmpid">
+                    <input type="hidden" class="form-control" value="<?= $actontaken ?>" id="actontaken" name="actontaken">
+                    <input type="hidden" class="form-control" value="<?= $getCompanyPartner ?>" name="partner">
+
                   <label>Meeting done with Initiator or influencer and decision maker of the company</label>
                     <select class="form-control" name="meetingdonewinitiator">
                     <option value="Initiator" <?php if ($meetingdonewinitiator == 'Initiator') echo 'selected'; ?>>Initiator</option>
@@ -123,16 +147,6 @@
 
                     <hr>
                     <label>Presentation and pitching is done for which offering :</label>
-                    <!-- <select class="form-control" name="presentation[]" multiple >
-                        <option value="MSC">MSC</option>
-                        <option value="Tinkering">Tinkering</option>
-                        <option value="Bala">Bala</option>
-                        <option value="Astronomy">Astronomy</option>
-                        <option value="DIY">DIY</option>
-                        <option value="NSP">NSP</option>
-                        <option value="Science Lab">Science Lab</option>
-                        <option value="Smart Class">Smart Class</option>
-                    </select> -->
                     <?php 
                     $presentationArray = explode(',', $presentation);
                     // HTML part
@@ -156,95 +170,105 @@
                           <option value="Health" <?php if ($project_intervention_select == 'Health') echo 'selected'; ?> >Health</option>
                           <option value="Nutrition" <?php if ($project_intervention_select == 'Nutrition') echo 'selected'; ?> >Nutrition</option>
                           <option value="Others" <?php if ($project_intervention_select == 'Others') echo 'selected'; ?> >Others</option>
-                      </select>
-                     
+                      </select> 
                       <br>
                       <input type="text" class="form-control" name="project_intervention" id="project_interventionText" placeholder="Please add client's thematic Area for Project Intervention in the current financial Year">
-                  
                     </div>
                     <hr>
                     <div>
                       <label>Does the client has adopted any schools ?</label>
-                      <select class="form-control" id="client_has_adopted_select" required name="client_has_adopted_select">
+                      <select class="form-control" id="client_has_adopted_select"  name="client_has_adopted_select">
                         <option value="no" <?php if ($client_has_adopted_select == 'no') echo 'selected'; ?>>No</option>
                         <option value="yes" <?php if ($client_has_adopted_select == 'yes') echo 'selected'; ?>>Yes</option>
                       </select>
                       <br>
                       <textarea type="text" class="form-control" name="client_has_adopted" placeholder="Please specify details of the schools that client has adopted"  id="client_has_adoptedText" rows="3"><?=$client_has_adopted?></textarea> 
                     </div>
-
                     <hr>
                     <div>
                       <label>Who are the approving autorities of the proposal ?</label>
-                      <textarea required class="form-control" name="approving_autorities" placeholder="Please type name and designation of the officer approving the proposal"><?=$approving_autorities?></textarea>
+                      <textarea  class="form-control" name="approving_autorities" placeholder="Please type name and designation of the officer approving the proposal"><?=$approving_autorities?></textarea>
                     </div>
-
                     <hr>
                     <div>
                       <label>What is the left over budget for the current financial year ?</label>
-                      <input type="number" required class="form-control" name="budget_for_cfyear" value="<?=$budget_for_cfyear?>" placeholder="Please Type budget for the current financial year">
+                      <input type="number"  class="form-control" name="budget_for_cfyear" value="<?=$budget_for_cfyear?>" placeholder="Please Type budget for the current financial year">
                     </div>
-
                     <hr>
                     <div>
                       <label>what is the fund sanction limit at their level ?</label>
-                      <input type="number" required class="form-control" name="fund_sanstion_limit" value="<?=$fund_sanstion_limit?>" placeholder="Please Type fund sanction limit at their level">
+                      <input type="number"  class="form-control" name="fund_sanstion_limit" value="<?=$fund_sanstion_limit?>" placeholder="Please Type fund sanction limit at their level">
                     </div>
-
                     <hr>
                     <div>
                       <label>Any other specific remarks regards to the meeting ?</label>
-                      <textarea type="text" required class="form-control" name="other_specific_remarks" placeholder="specific remarks regards to the meeting"  rows="3"><?=$other_specific_remarks?></textarea> 
+                      <textarea type="text"  class="form-control" name="other_specific_remarks" placeholder="specific remarks regards to the meeting"  rows="3"><?=$other_specific_remarks?></textarea> 
                     </div>
-
-                    
                     <hr>
                     <div>
                     <label>Do we need to submit the proposal ?</label>
-                    <select class="form-control" required name="submit_proposal" id="submit_proposal_select" >
+                    <select class="form-control"  name="submit_proposal" id="submit_proposal_select" >
                         <option value="no" <?php if ($submit_proposal == 'no') echo 'selected'; ?> >No</option>
                         <option value="yes" <?php if ($submit_proposal == 'yes') echo 'selected'; ?> >Yes</option>
                     </select>
                     <br>
-                    <!-- <input type="file" required class="form-control" id="submit_proposal_file" name="submit_proposal_file" placeholder="submit the proposal">
-                    <small class="text-danger" id="smallProposaltext" > <i>* Proposal should be submitted through NGO/STEM/Govt Body (No of Schools/Location/Budget)</i></small> -->
-
                     <div id="submit_proposal_file" class="identify_school_box">
-                    <input type="text" required class="form-control"name="proposal_no_of_school" value="<?=$proposal_no_of_school?>" placeholder="Proposed number of schools"> <br>
-                    <input type="text" required class="form-control"name="proposal_of_budget" value="<?=$proposal_of_budget?>" placeholder="Proposed budget"><br>
-                    <input type="text" required class="form-control"name="proposal_of_location" value="<?=$proposal_of_location?>" placeholder="Proposed location"><br>
-                 
+                    <input type="text"  class="form-control"name="proposal_no_of_school" value="<?=$proposal_no_of_school?>" placeholder="Proposed number of schools"> <br>
+                    <input type="text"  class="form-control"name="proposal_of_budget" value="<?=$proposal_of_budget?>" placeholder="Proposed budget"><br>
+                    <input type="text"  class="form-control"name="proposal_of_location" value="<?=$proposal_of_location?>" placeholder="Proposed location"><br>
                     </div>
-
                     </div>
-
                      <hr>
                     <div>
                     <label>Do we need to identify school ?</label>
-                    <select class="form-control" required name="identify_school" id="identify_school_select" >
-                        <option value="no" >No</option>
-                        <option value="yes">Yes</option>
+                    <select class="form-control"  name="identify_school" id="identify_school_select" >
+                        <option value="no" <?php if ($identify_school == 'no') echo 'selected'; ?> >No</option>
+                        <option value="yes" <?php if ($identify_school == 'yes') echo 'selected'; ?> >Yes</option>
                     </select>
-                    
+                    <?php 
+                    if($identify_school == 'yes'){
+                      $states = explode(',', $identify_school_state);
+                      $districts = explode(',', $identify_school_district);
+                      $schoolCounts = explode(',', $no_of_school);
+
+                      // Combine into a single array
+                      $combinedArray = [];
+
+                      for ($i = 0; $i < count($states); $i++) {
+                          $combinedArray[] = [
+                              'identify_school_state' => $states[$i],
+                              'identify_school_district' => $districts[$i],
+                              'no_of_school' => $schoolCounts[$i]
+                          ];
+                      }
+                    }
+                   $combinedArraycnt = sizeof($combinedArray);
+                    ?>
                     <br>
                     <div id="identify_school_box" class="identify_school_box">
                       <div class="text-right mb-2">
                       <span id="add_field" class="p-2 bg-primary" >+</span>
                       </div>
-                    <input type="text" required class="form-control"name="identify_school_state[]" placeholder="Enter Name of State"> <br>
-                    <input type="text" required class="form-control"name="identify_school_district[]" placeholder="Enter Name of District"><br>
-                    <input type="text" required class="form-control"name="no_of_school[]" placeholder="Enter No of School">
-                   
+                      <?php 
+                         if($combinedArraycnt > 0){
+                              foreach($combinedArray as $arrays){ ?>
+                              <lable>Name of State : </lable>
+                                   <input type="text"  class="form-control"name="identify_school_state[]" value="<?=$arrays['identify_school_state']?>" placeholder="Enter Name of State">
+                                   <lable>Name of District : </lable>
+                                   <input type="text"  class="form-control"name="identify_school_district[]" value="<?=$arrays['identify_school_district']?>" placeholder="Enter Name of District">
+                                   <lable>No of School : </lable>
+                                   <input type="text"  class="form-control"name="no_of_school[]" value="<?=$arrays['no_of_school']?>" placeholder="Enter No of School"> <br/>
+                            <?php } } ?>
                     </div>
                     
                     </div>
          
                     <hr>
                     <div>
-                    <label>School permission letter required ?</label>
-                    <select class="form-control" required name="permission_letter" id="permission_letter_select" >
-                        <option value="no">No</option>
-                        <option value="yes">Yes</option>
+                    <label>School permission letter  ?</label>
+                    <select class="form-control"  name="permission_letter" id="permission_letter_select" >
+                        <option value="no" <?php if ($permission_letter == 'no') echo 'selected'; ?> >No</option>
+                        <option value="yes" <?php if ($permission_letter == 'yes') echo 'selected'; ?> >Yes</option>
                     </select>
                     </div>
                 
@@ -254,74 +278,70 @@
                     <div id="permission_letter_box" class="identify_school_box" >
                     <label>Letter should be address to whom in the organization, along with Name and designation and Location</label>
 
-                    <select class="form-control" required name="permission_letter_rech" >
-                        <option value="NGO">NGO</option>
-                        <option value="STEM">STEM</option>
+                    <select class="form-control"  name="permission_letter_rech" >
+                        <option value="NGO" <?php if ($permission_letter_rech == 'NGO') echo 'selected'; ?> >NGO</option>
+                        <option value="STEM" <?php if ($permission_letter_rech == 'STEM') echo 'selected'; ?> >STEM</option>
                     </select>
                     <br>
-
-                    <input type="text" required class="form-control"name="Letter_organization_name" placeholder="Add Concern person name"> <br>
-                    <input type="text" required class="form-control"name="Letter_organization_designation" placeholder="Enter Name of Designation"><br>
-                    <input type="text" required class="form-control"name="Letter_organization_location" placeholder="Enter Location">
+                     <lable>Concern person name : </lable>              
+                    <input type="text"  value="<?=$letter_organization_name?>" class="form-control"name="Letter_organization_name" placeholder="Add Concern person name"> <br>
+                    <lable>Name of Designation : </lable> 
+                    <input type="text"  value="<?=$letter_organization_designation?>" class="form-control"name="Letter_organization_designation" placeholder="Enter Name of Designation"><br>
+                    <lable>Location : </lable> 
+                    <input type="text"  value="<?=$letter_organization_location?>" class="form-control"name="Letter_organization_location" placeholder="Enter Location">
                     </div>  
                     </div>
 
                     <hr>
                     <div>
                     <label>Client is interested for School Visit ?</label>
-                    <select class="form-control" required name="client_int_school_visit" id="client_int_school_select">
-                        <option value="no">No</option>
-                        <option value="yes">Yes</option>
+                    <select class="form-control"  name="client_int_school_visit" id="client_int_school_select">
+                        <option value="no" <?php if ($client_int_school_visit == 'no') echo 'selected'; ?> >No</option>
+                        <option value="yes" <?php if ($client_int_school_visit == 'yes') echo 'selected'; ?> >Yes</option>
                     </select>
                     <br>
                     <div id="client_int_school_box" class="identify_school_box">
 
-                    <!-- <input type="text" required class="form-control"name="client_int_type_project" placeholder="Add type of project"> -->
+                    <!-- <input type="text"  class="form-control"name="client_int_type_project" placeholder="Add type of project"> -->
                     <select class="form-control" name="client_int_type_project">
                       <option selected disabled>Select Type of project</option>
-                      <option value="MSC">MSC</option>
-                      <option value="Tinkering">Tinkering</option>
-                      <option value="Bala">Bala</option>
-                      <option value="Astronomy">Astronomy</option>
-                      <option value="DIY">DIY</option>
-                      <option value="NSP">NSP</option>
-                      <option value="Science Lab">Science Lab</option>
-                      <option value="Smart Class">Smart Class</option>
+                      <option value="MSC" <?php if ($client_int_type_project == 'MSC') echo 'selected'; ?>>MSC</option>
+                      <option value="Tinkering" <?php if ($client_int_type_project == 'Tinkering') echo 'selected'; ?>>Tinkering</option>
+                      <option value="Bala" <?php if ($client_int_type_project == 'Bala') echo 'selected'; ?>>Bala</option>
+                      <option value="Astronomy" <?php if ($client_int_type_project == 'Astronomy') echo 'selected'; ?>>Astronomy</option>
+                      <option value="DIY" <?php if ($client_int_type_project == 'DIY') echo 'selected'; ?>>DIY</option>
+                      <option value="NSP" <?php if ($client_int_type_project == 'NSP') echo 'selected'; ?>>NSP</option>
+                      <option value="Science Lab" <?php if ($client_int_type_project == 'Science Lab') echo 'selected'; ?>>Science Lab</option>
+                      <option value="Smart Class" <?php if ($client_int_type_project == 'Smart Class') echo 'selected'; ?>>Smart Class</option>
                     </select>
                     <br>
-                    <input type="date" required class="form-control"name="client_int_school_date" placeholder="Select Date"> <br>
-                    <input type="text" required class="form-control"name="client_int_school_state" placeholder="Enter State"> <br>
-                    <input type="text" required class="form-control"name="client_int_school_district" placeholder="Enter Name of District"><br>
-                    <input type="number" required class="form-control"name="client_int_no_of_school" placeholder="Enter no of School">
+                    <lable>Date : </lable>
+                    <input type="date"  value="<?=$client_int_school_date?>" class="form-control"name="client_int_school_date" placeholder="Select Date"> <br>
+                    <lable>State : </lable>
+                    <input type="text"  value="<?=$client_int_school_state?>" class="form-control"name="client_int_school_state" placeholder="Enter State"> <br>
+                    <lable>District : </lable>
+                    <input type="text"  value="<?=$client_int_school_district?>" class="form-control"name="client_int_school_district" placeholder="Enter Name of District"><br>
+                    <lable>Number of School : </lable>
+                    <input type="number"  value="<?=$client_int_no_of_school?>" class="form-control"name="client_int_no_of_school" placeholder="Enter no of School">
                     </div>
 
                     </div>
                     <hr>
                     <div>
                     <label>Do you need intervention from Cluster/PST/ Sales Head ?</label>
-                    <select class="form-control" required name="intervention_cm_pst_sh" id="client_int_school_select" >
-                        <option value="Cluster">Cluster</option>
-                        <option value="PST">PST</option>
-                        <option value="Sales Head">Sales Head</option>
+                    <select class="form-control"  name="intervention_cm_pst_sh" id="client_int_school_select" >
+                        <option <?php if ($intervention_cm_pst_sh == 'Cluster') echo 'selected'; ?> value="Cluster">Cluster</option>
+                        <option <?php if ($intervention_cm_pst_sh == 'PST') echo 'selected'; ?> value="PST">PST</option>
+                        <option <?php if ($intervention_cm_pst_sh == 'Sales Head') echo 'selected'; ?> value="Sales Head">Sales Head</option>
                     </select>
                     </div> 
 
                     <hr>
                     <label>Write Short MOM Remarks</label>
-                      <textarea type="text" class="form-control" id="rpmmom" name="rpmmom" rows="3" required></textarea> 
+                      <textarea type="text" class="form-control" id="rpmmom" name="rpmmom" rows="3" ><?=$rpmmom ?></textarea> 
                   </div>
                   <!-- End Meeting Form -->
-
-                               
-
-
-
-
-
-
-
-                  
-                                   <hr>
+                              <hr>
                                    <button type="submit" class="btn btn-primary">Submit</button>
                               </form>
                           </fieldset>
@@ -469,9 +489,9 @@
            $('#add_field').click(function() {
                 $('#identify_school_box').append(`
                     <div class="identify_school_box mt-2">
-                        <input type="text" required class="form-control" name="identify_school_state[]" placeholder="Enter Name of State"> <br>
-                        <input type="text" required class="form-control" name="identify_school_district[]" placeholder="Enter Name of District"><br>
-                        <input type="text" required class="form-control" name="no_of_school[]" placeholder="Enter No of School">
+                        <input type="text"  class="form-control" name="identify_school_state[]" placeholder="Enter Name of State"> <br>
+                        <input type="text"  class="form-control" name="identify_school_district[]" placeholder="Enter Name of District"><br>
+                        <input type="text"  class="form-control" name="no_of_school[]" placeholder="Enter No of School">
                         <br>
                          <span class="remove-field bg-danger mt-4">-</span>
                     </div>
@@ -483,10 +503,6 @@
                 $(this).parent().remove();
             });
             // End Add More School Data When Mom Upload 
-
-
-
-
         });
     </script>
   </body>

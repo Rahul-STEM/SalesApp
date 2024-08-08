@@ -9136,7 +9136,7 @@ WHERE plan = '1'  and nextCFID='0' and actiontype_id='$aid' and status_id='$stid
         // $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id ='$uid' AND actiontype_id !='' AND nextCFID = 0 AND cast(appointmentdatetime AS DATE) !='$tdate'");
 
         // if($uid == 100095){
-            $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND autotask =0 and plan=1 AND nextCFID = 0 AND DATE(appointmentdatetime) = CURDATE()");
+            $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND autotask =0 and plan=1 AND nextCFID = 0 AND DATE(appointmentdatetime) = CURDATE() AND appointmentdatetime != '0000-00-00 00:00:00'");
             // echo $str = $this->db->last_query();
         // }else{
         // $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' and plan=1 AND nextCFID = 0 AND DATE(appointmentdatetime) < CURDATE()");
@@ -9151,7 +9151,7 @@ WHERE plan = '1'  and nextCFID='0' and actiontype_id='$aid' and status_id='$stid
 
         public function get_all_old_cmp_planbutnotinited($uid){
 
-            $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' and plan=1 AND nextCFID = 0 AND DATE(appointmentdatetime) < CURDATE()");
+            $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' and plan=1 AND nextCFID = 0 AND DATE(appointmentdatetime) < CURDATE() AND appointmentdatetime != '0000-00-00 00:00:00'");
         return $query->result();
     }
 
@@ -9164,14 +9164,14 @@ WHERE plan = '1'  and nextCFID='0' and actiontype_id='$aid' and status_id='$stid
     }
     public function get_PendingTask($uid){
 
-        $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND nextCFID = 0 and plan =1 AND DATE(appointmentdatetime) = CURDATE()");
+        $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND nextCFID = 0 and plan =1 AND DATE(appointmentdatetime) = CURDATE() AND appointmentdatetime != '0000-00-00 00:00:00'");
 
         return $query->result();
     }
 
     public function get_OLDPendingTask($uid){
 
-        $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND nextCFID = 0 and plan =1 AND DATE(appointmentdatetime) < CURDATE()");
+        $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND nextCFID = 0 and plan =1 AND DATE(appointmentdatetime) < CURDATE() AND appointmentdatetime != '0000-00-00 00:00:00'");
         // $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND nextCFID = 0 and autotask=1 and plan =1 AND DATE(appointmentdatetime) < CURDATE()");
 
         return $query->result();
@@ -11766,8 +11766,89 @@ public function get_ccdby_cid($cid){
     }
 
 
+    // Task After MOM Approved and Update using Task Planner
+    public function getTaskAfterMomApproved($uid){
+
+        $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND nextCFID = 0 and plan =1 AND appointmentdatetime = '0000-00-00 00:00:00' AND mom_remarks ='Task Create After MOM Approved';");
+    return $query->result();
+}
+    public function getSelfAutoAssignTaskMOM($uid){
+        $query=$this->db->query("SELECT DISTINCT tbl.*, aat.user_id AS auser_id, aat.to_user_id AS touser_id FROM tblcallevents AS tbl LEFT JOIN auto_assign_task AS aat ON aat.to_user_id = tbl.assignedto_id WHERE tbl.actiontype_id != '' AND tbl.nextCFID = 0 AND tbl.plan = 1 AND tbl.appointmentdatetime = '0000-00-00 00:00:00' AND aat.user_id = aat.to_user_id AND tbl.mom_remarks = 'Task Create After MOM Approved' AND tbl.assignedto_id = '$uid'");
+    return $query->result();
+}
+    public function getTaskAssignBySelf($uid){
+        $query=$this->db->query("SELECT * FROM `auto_assign_task` WHERE to_user_id ='$uid' and status = 0 ");
+    return $query->result();
+}
+
+    public function getTaskAssignBySelfWithTaskType($uid,$tasktype){
+        $query=$this->db->query("SELECT * FROM `auto_assign_task` WHERE to_user_id ='$uid' and action_id ='$tasktype' and status = 0 ");
+    return $query->result();
+}
+
+    public function getTBLTaskByID($ids){
+        $query=$this->db->query("SELECT * FROM `tblcallevents` WHERE id IN ($ids)");
+    return $query->result();
+}
 
 
+//     public function getTaskAssignByOther($uid){
+//         $query=$this->db->query("SELECT * FROM `auto_assign_task` WHERE user_id != to_user_id and to_user_id ='$uid' and status = 0 ");
+//     return $query->result();
+// }
+
+public function CreateTaskForMOMCheck($bdid,$bmdate){
+
+    $users      = $this->Menu_model->get_userbyaaid($bdid);
+    $user_id    = array_map(function($item) {
+        return $item->user_id;
+    }, $users);
+    
+    $user_ids = implode(', ', $user_id);
+    $query=$this->db->query("SELECT * FROM `mom_data` WHERE mom_data.`user_id` IN ($user_ids) AND `approved_status` IS NULL AND NOT EXISTS (SELECT 1 FROM `tblcallevents` WHERE `mom_data`.`id` = `tblcallevents`.`reviewtype`)");
+    $mdata =  $query->result();
+    $i=1;
+    foreach($mdata as $data){
+        $init_cmpid = $data->init_cmpid;
+        $ccstatus = $data->ccstatus;
+        $user_id = $data->user_id;
+        $tid = $data->tid;
+        $mom_tid = $data->id;
+
+        if($i !==1){
+                $dateTime = new DateTime($bmdate);
+                $dateTime->modify('+5 minutes');
+                $bmdate = $dateTime->format('Y-m-d H:i:s');
+        }
+        // Generate mom Task
+        $data = array(
+            'lastCFID' => $tid,
+            'nextCFID' => '0',
+            'purpose_achieved' => 'no',
+            'fwd_date' => $bmdate,
+            'actontaken' => 'no',
+            'nextaction' => '51',
+            'mom_received' => 'no',
+            'appointmentdatetime' => $bmdate,
+            'actiontype_id' => '18',
+            'assignedto_id' => $bdid,
+            'cid_id' => $init_cmpid,
+            'purpose_id' => '127',
+            'remarks' => 'MOM Review Task After BD Submit',
+            'status_id' =>$ccstatus,
+            'user_id' => $bdid,
+            'date' => $bmdate,
+            'updateddate' => $bmdate,
+            'updation_data_type' => 'updated',
+            'reviewtype' => $mom_tid,
+            'plan' => 1
+        );
+
+        // Insert data into the database
+        $this->db->insert('tblcallevents', $data);
+        $i++;
+    }
+}
 
         
 }

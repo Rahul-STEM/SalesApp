@@ -1150,8 +1150,51 @@ public function getResCompanyStatus($cmpid){
 }
 
 
+public function UpdateMOMAterCheck_DataTo_NORP($mom_id,$uaid,$tid,$ntid) {
+    $approved_status = 'NO RP';
+    $approvedtDate = date("Y-m-d H:i:s");
+    $approvedreamrk = 'Meetings Converted To NO RP Successfully';
+    
+    $query =$this->db->query("SELECT cid_id FROM `tblcallevents` WHERE id = '$tid' ");
+    $resData =  $query->result();
+    $cid_id = $resData[0]->cid_id;
+    $query=$this->db->query("UPDATE `init_call` SET `cstatus` = `lstatus` WHERE id='$cid_id'");
 
+    $remark = 'NO RP FOUND';
+    $date = date("Y-m-d H:i:s");
+    $dataup = array(
+        'remarks' => $remark,
+        'nextCFID' => $tid,
+        'updateddate' => $date,
+        'actontaken' => 'yes',
+        'purpose_achieved' => 'no',
+        'updation_data_type' => 'update'
+    );
+    
+    $this->db->where('id', $ntid);
+    $this->db->update('tblcallevents', $dataup);
+    
 
+    $data = [
+        'approved_status' => $approved_status,
+        'approved_by' => $uaid,
+        'cm_call_task' => 0,
+        'pst_assign' => 1,
+        'pst_call_task' => 0,
+        'approved_date' => $approvedtDate,
+        'reject_remarks' => $approvedreamrk
+    ];
+    
+    $this->db->where('id', $mom_id);
+    $this->db->update('mom_data', $data);
+    
+    if ($this->db->affected_rows() > 0) {
+        return 1;
+    } else {
+        return 0;
+    }
+    
+}
 
 
 }

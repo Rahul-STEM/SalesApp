@@ -149,13 +149,12 @@
                                 <td>
                                       <?php  
                                      
-                                      if($dt->approved_by == ''){ ?>
+                                      if($dt->approved_by == ''){
+                                         ?>
                                         <div>
-                                            <!-- <p><a href="<?=base_url();?>Management/MomApprovedByUserAdmin/<?= $dt->id?>/Approve/<?=$suid?>/<?=$tardate?>" class="btn btn-success mr-2" onclick="return confirm('Are you sure you want to Approved it?');" >Approve</a></p> -->
-                                           
+                          
                                             <p><button type="button" class="btn btn-success" onclick="MomApprove(<?= $i ?>,<?= $dt->id?>,'Approve')">Approve</button></p>
                                             <p><button type="button" class="btn btn-primary" onclick="Reject(<?= $i ?>,<?= $dt->id?>,'Reject')">Edit</button></p>
-                                          
                                             <p><button type="button" class="btn btn-primary" id="rPtoNoRPConvert<?= $dt->tid?>" onclick="RPtoNoRPConvert(<?= $dt->tid?>,<?= $dt->id?>,'RPtoNoRPConvert')">RP to No RP Convert</button></p>
                                         </div>
                                         <?php }else{ 
@@ -327,10 +326,7 @@
     </script>
 
 
-<script type='text/javascript'>
-
-
-              
+<script type='text/javascript'>      
  function Reject(mid,id,val){
               $('#exampleModalCenterdata').modal('show');
               $('#rejectid').val(id);

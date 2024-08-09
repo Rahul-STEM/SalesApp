@@ -601,6 +601,135 @@ public function getAllActiveUserInDepartment(){
 
 }
 
+// MOM Check BY RESPECTIVE MANAGER : 
+public function MomDataCheck($mon_tid,$ce_id){
+
+    $cdate = date("Y-m-d");
+    $momdata = $this->Menu_model->getRequestMOMBYID($mon_tid);
+
+    if(!empty($this->user)){
+            $this->load->view($this->dep_name.'/MomDataCheck',['uid'=>$this->uid,'user'=>$this->user,'cdate'=>$cdate,'momdata'=>$momdata,'t_id'=>$mon_tid,'ce_id'=>$ce_id]);
+        }else{
+            redirect('Menu/main');
+        }
+}
+
+
+// Update After MOM Check 
+
+public function MomApprovedByUserAdminAfterCheck(){
+
+    $id             = $_POST['mom_id'];
+    $ntid             = $_POST['ntid'];
+    $right_remarks  = $_POST['right_remarks'];
+    $mom_yes_no     = $_POST['mom_yes_no'];
+
+    $finalRemarks   = $right_remarks.' - '.$mom_yes_no;
+   
+    $approvedtDate  = date("y-m-d H:i:s");
+    $approved_status= 'Approved';
+    $approvedreamrk = $finalRemarks;
+
+    $momdata        = $this->Management_model->getMomByID($id);
+    $init_cmpid     = $momdata[0]->init_cmpid;
+    $tid_calleve    = $momdata[0]->tid;
+    $ccstatus       = $momdata[0]->ccstatus;
+    $mom_user_id    = $momdata[0]->user_id;
+
+    $fwd_date       = '';
+    // $fwd_date = date("Y-m-d h:i:s");
+    $actiontype_id  = 1;
+    $init_id        = $init_cmpid;
+    $nextaction     = 1;
+    $ass_user_id    = $this->uid;
+    $purpose_id     = 1;
+    $autotask       = 1;
+    $auto_plan      = 1;
+
+    $this->Management_model->MomApprovedByUserAdminInsert($approved_status,$id,$approvedreamrk,$approvedtDate,$this->uid,$finalRemarks);
+
+    $task_remarks = "Task Create After MOM Approved";
+
+    $insert_id = $this->Management_model->CreateTask($fwd_date,$actiontype_id,$init_id,$nextaction,$ass_user_id,$purpose_id,$autotask,$auto_plan,$ccstatus,$task_remarks);
+   
+    $this->Management_model->CreateTaskForAutoAssign($ass_user_id,$ass_user_id,$ccstatus,$init_id,$insert_id,$actiontype_id,$id,$task_remarks);
+  
+    $cudetail = $this->Menu_model->get_userbyid($mom_user_id);
+    $get_pst_co = $cudetail[0]->pst_co;
+    $clm_aadmin = $cudetail[0]->aadmin;
+    
+    $this->Management_model->AssignPSTAfterMomApproved($init_cmpid,$get_pst_co);
+    $this->Management_model->AssignCLMAfterMomApproved($init_cmpid,$clm_aadmin);
+
+    $insert_id = $this->Management_model->CreateTask($fwd_date,$actiontype_id,$init_id,$nextaction,$get_pst_co,$purpose_id,$autotask,$auto_plan,$ccstatus,$task_remarks);
+    $this->Management_model->CreateTaskForAutoAssign($ass_user_id,$get_pst_co,$ccstatus,$init_id,$insert_id,$actiontype_id,$id,$task_remarks);
+
+    $remark = 'RP FOUND';
+    $cur_date = date("Y-m-d H:i:s");
+    $dataup = array(
+        'remarks' => $remark,
+        'nextCFID' => $tid_calleve,
+        'updateddate' => $cur_date,
+        'actontaken' => 'yes',
+        'purpose_achieved' => 'yes',
+        'updation_data_type' => 'update'
+    );
+    
+    $this->db->where('id', $ntid);
+    $this->db->update('tblcallevents', $dataup);
+
+    $this->session->set_flashdata('success_message', 'MOM Approved Successfully !');
+    redirect('Menu/Dashboard');
+
+}
+
+public function MomRejectByUserAdminAfterCheck(){
+
+    $rejectId = $_POST['reject'];
+    $mom_otid = $_POST['mom_otid'];
+    $ntid = $_POST['ntid'];
+    $rejectreamrk = $_POST['rejectreamrk'];
+   
+    $rejectDate = date("y-m-d H:i:s");
+    $approved_status = 'Reject';
+
+    $momdata = $this->Management_model->MomRejectByUserAdminInsert($approved_status,$rejectId,$rejectreamrk,$rejectDate,$this->uid);
+
+
+    $remark = 'Reject RP For Reupdate';
+    $cur_date = date("Y-m-d H:i:s");
+    $dataup = array(
+        'remarks' => $remark,
+        'nextCFID' => $mom_otid,
+        'updateddate' => $cur_date,
+        'actontaken' => 'yes',
+        'purpose_achieved' => 'no',
+        'updation_data_type' => 'update'
+    );
+    
+    $this->db->where('id', $ntid);
+    $this->db->update('tblcallevents', $dataup);
+
+  
+    $this->session->set_flashdata('success_message', 'MOM Reject Successfully !');
+    redirect('Menu/Dashboard');
+  
+}
+
+public function Change_RP_To_No_RP_ACHECK(){
+
+    $mom_id= $this->input->post('mom_id');
+    $tid= $this->input->post('tid');
+    $ntid= $this->input->post('ntid');
+    
+    $this->Menu_model->change_norp($tid);
+
+    $return = $this->Management_model->UpdateMOMAterCheck_DataTo_NORP($mom_id,$this->uid,$tid,$ntid);
+    echo $return;
+
+}
+
+
 
 
 }

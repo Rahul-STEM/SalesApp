@@ -4931,7 +4931,9 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
     }
 
     public function get_ttbyd($uid,$tdate){
-        $query=$this->db->query("SELECT count(*) ab,COUNT(CASE WHEN actiontype_id=1 THEN actiontype_id END) a,COUNT(CASE WHEN actiontype_id=2 THEN actiontype_id END) b,COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) c,COUNT(CASE WHEN actiontype_id=4 THEN actiontype_id END) d,COUNT(CASE WHEN actiontype_id=5 THEN actiontype_id END) e,COUNT(CASE WHEN actiontype_id=6 THEN actiontype_id END) f,COUNT(CASE WHEN actiontype_id=7 THEN actiontype_id END) g,COUNT(CASE WHEN actiontype_id=8 THEN actiontype_id END) h,COUNT(CASE WHEN actiontype_id=9 THEN actiontype_id END) i,COUNT(CASE WHEN actiontype_id=10 THEN actiontype_id END) j,COUNT(CASE WHEN actiontype_id=11 THEN actiontype_id END) k,COUNT(CASE WHEN actiontype_id=12 THEN actiontype_id END) l,COUNT(CASE WHEN actiontype_id=13 THEN actiontype_id END) m from tblcallevents WHERE assignedto_id='$uid' and cast(appointmentdatetime AS DATE)='$tdate'and nextCFID=0 and plan=1");
+        // $query=$this->db->query("SELECT count(*) ab,COUNT(CASE WHEN actiontype_id=1 THEN actiontype_id END) a,COUNT(CASE WHEN actiontype_id=2 THEN actiontype_id END) b,COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) c,COUNT(CASE WHEN actiontype_id=4 THEN actiontype_id END) d,COUNT(CASE WHEN actiontype_id=5 THEN actiontype_id END) e,COUNT(CASE WHEN actiontype_id=6 THEN actiontype_id END) f,COUNT(CASE WHEN actiontype_id=7 THEN actiontype_id END) g,COUNT(CASE WHEN actiontype_id=8 THEN actiontype_id END) h,COUNT(CASE WHEN actiontype_id=9 THEN actiontype_id END) i,COUNT(CASE WHEN actiontype_id=10 THEN actiontype_id END) j,COUNT(CASE WHEN actiontype_id=11 THEN actiontype_id END) k,COUNT(CASE WHEN actiontype_id=12 THEN actiontype_id END) l,COUNT(CASE WHEN actiontype_id=13 THEN actiontype_id END) m from tblcallevents WHERE assignedto_id='$uid' and cast(appointmentdatetime AS DATE)='$tdate'and nextCFID=0 and plan=1");
+
+        $query=$this->db->query("SELECT COUNT(CASE WHEN actiontype_id=1 THEN actiontype_id END) a, COUNT(CASE WHEN actiontype_id=2 THEN actiontype_id END) b, COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) c, COUNT(CASE WHEN actiontype_id=4 THEN actiontype_id END) d, COUNT(CASE WHEN actiontype_id=5 THEN actiontype_id END) e, COUNT(CASE WHEN actiontype_id=6 THEN actiontype_id END) f, COUNT(CASE WHEN actiontype_id=7 THEN actiontype_id END) g, COUNT(CASE WHEN actiontype_id=8 THEN actiontype_id END) h, COUNT(CASE WHEN actiontype_id=9 THEN actiontype_id END) i, COUNT(CASE WHEN actiontype_id=10 THEN actiontype_id END) j, COUNT(CASE WHEN actiontype_id=11 THEN actiontype_id END) k, COUNT(CASE WHEN actiontype_id=12 THEN actiontype_id END) l,COUNT(CASE WHEN actiontype_id=13 THEN actiontype_id END) m, ( COUNT(CASE WHEN actiontype_id=1 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=2 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=4 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=5 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=6 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=7 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=8 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=9 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=10 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=11 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=12 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=13 THEN actiontype_id END) ) as ab FROM tblcallevents WHERE assignedto_id='$uid' AND CAST(appointmentdatetime AS DATE)='$tdate' AND nextCFID=0 AND plan=1");
         return $query->result();
     }
     public function get_ttbydone($uid,$tdate){
@@ -6972,8 +6974,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                        if($action_id=='5'){$status=$cs;}
                        if($action_id=='7'){
                            $status=$cs;
-                           $this->db->query("INSERT INTO proposal(user_id, proattach, tid, main, partner, noofsc, pbudgetme)
-                                                                VALUES ('$uid','$flink','$tid','1','$partner','$noofsc','$pbudgetme')");
+                           $this->db->query("INSERT INTO proposal(user_id, proattach, tid, main, partner, noofsc, pbudgetme)VALUES ('$uid','$flink','$tid','1','$partner','$noofsc','$pbudgetme')");
                            $remark='Will be Upload Proposal for Approval';
                        }
                        if($action_id=='10'){$status=$cs;}
@@ -11849,6 +11850,20 @@ public function CreateTaskForMOMCheck($bdid,$bmdate){
         $i++;
     }
 }
+
+public function geTodaysMOMCheckTask($uid,$tdate){
+    $query=$this->db->query("SELECT tblcallevents.*,status.name,action.name aname,status.color,status.clr,init_call.cstatus cstatus,(SELECT name from status WHERE id=cstatus) csname, (select init_call.cmpid_id from init_call WHERE id=tblcallevents.cid_id) as cmpid_id,(select company_master.compname from company_master WHERE id=cmpid_id) as compname, (select company_master.id from company_master WHERE id=cmpid_id) as cid FROM tblcallevents left JOIN action ON action.id=tblcallevents.actiontype_id left JOIN init_call ON init_call.id=tblcallevents.cid_id left JOIN status ON status.id=init_call.cstatus WHERE user_id='$uid' and cast(appointmentdatetime AS DATE)='$tdate' and nextCFID='0' and plan=1 AND actiontype_id = 18 OR actiontype_id = 19");
+    return $query->result();
+}
+
+public function getRequestMOMBYID($id){
+    $query=$this->db->query("SELECT * FROM `mom_data` WHERE `id` ='$id'");
+    return $query->result();
+}
+
+
+
+
 
         
 }

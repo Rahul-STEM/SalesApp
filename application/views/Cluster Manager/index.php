@@ -1489,52 +1489,94 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
               </div></div></div>
             <div class="col-lg-4 col-sm">
             <div class="card card-primary card-outline card-outline-tabs">
-                <?php $ptd = $this->Menu_model->get_tptd($uid,$tdate);
+              <?php $ptd = $this->Menu_model->get_tptd($uid,$tdate);
                 $ptsd = $this->Menu_model->get_tptsd($uid,$tdate);?>
               <div class="card-header text-center bg-info"><b>Created Pending Task to be Schedule</b></div>
-              <div class="card-header text-center bg-light"><b>
+              <hr>
+            <div class="card-header text-center bg-light" style="border-radius:unset"><b>
               Total Task <?=$ptd[0]->ab?> | Call(<?=$ptd[0]->a?>) | Email(<?=$ptd[0]->b?>) | Whatsapp(<?=$ptd[0]->e?>) | Meeting(<?=$ptd[0]->c+$ptd[0]->d?>) | MOM(<?=$ptd[0]->f?>) | Proposal(<?=$ptd[0]->g?>)
-              </b></div>
-              <div class="card-header text-center bg-light"><b>
+              </b>
+            </div>
+            <hr>
+            <div class="card-header text-center bg-light" style="border-radius:unset" ><b>
               Open(<?=$ptsd[0]->a?>) | Open RPEM(<?=$ptsd[0]->b?>) | Rechaout(<?=$ptsd[0]->c?>) | Tentative(<?=$ptsd[0]->d?>) | WDL(<?=$ptsd[0]->e?>) | NI(<?=$ptsd[0]->f?>) | TTD(<?=$ptsd[0]->g?>) | WNO(<?=$ptsd[0]->h?>) | Positive(<?=$ptsd[0]->i?>) | Very Positive(<?=$ptsd[0]->j?>) | Closure(<?=$ptsd[0]->k?>)
-              </b></div>
-            
+              </b>
+            </div>
+            <hr>
+
+            <div class="card-header text-center bg-light" style="border-radius:unset" >
+            <p>
+              <?php 
+              $gettodaysmom = $this->Menu_model->geTodaysMOMCheckTask($uid,$tdate);
+              $groupedByActionTypes = [];
+              foreach ( $gettodaysmom as $objects) {
+                  $actionTypeId = $objects->actiontype_id;
+                  if (!isset($groupedByActionTypes[$actionTypeId])) {
+                      $groupedByActionTypes[$actionTypeId] = [];
+                  }
+                  $groupedByActionTypes[$actionTypeId][] = $objects;
+              }
+
+            foreach ( $groupedByActionTypes as $key => $getchk){
+                  $taid=$this->Menu_model->get_actionbyid($key);
+                  $checkname = $taid[0]->name;
+                  $getSize = sizeof($getchk); ?>
+                <a class="btn btn-primary checkingreport" data-toggle="collapse" href="#collapseCheck<?=$key?>" role="button" aria-expanded="false" aria-controls="collapseCheck<?=$key?>">
+                  <?= $checkname.'('.$getSize.')'; ?>
+                </a>
+          <?php } ?>
+          <?php
+             foreach ($groupedByActionTypes as $key => $checkTasks) { ?> 
+              <div class="collapse multi-collapse"  id="collapseCheck<?=$key?>">
+              <div class="card card-body">
+              <?php 
+              foreach ($checkTasks as $checkTask) {
+                  $ce_tskid = $checkTask->id;
+                  $tskid = $checkTask->actiontype_id;
+                  $reviewtype = $checkTask->reviewtype;
+                  $taid=$this->Menu_model->get_actionbyid($tskid);
+
+                  $time = $checkTask->appointmentdatetime;
+                  $time = date('h:i a', strtotime($time));
+                 
+                  if($tskid == 18){
+                    $reqmom = $this->Menu_model->getRequestMOMBYID($reviewtype);
+                    $reqmom_user = $reqmom[0]->user_id;
+                    $reqmom_uname = $this->Menu_model->get_userbyid($reqmom_user)[0]->name;
+                  }
+                  if($tskid == 19){
+                    $reqmom_uname = '';
+                  }
+              ?>
+              <a href="<?=base_url();?>Management/MomDataCheck/<?=$reviewtype?>/<?=$ce_tskid?>">
+                  <div class="list-group-item list-group-item-action checkrepoData">
+                      <span class="flex">
+                          <strong class="text-secondary mr-1"><?=$checkTask->compname?></strong><br>
+                          <small class="text-secondary mr-1"> Request Name - <?=$reqmom_uname?></small><br>
+                          <small class="text-muted">Check Time:- <?=$time?></small>
+                      </span>
+                  </div>
+              </a>
+               <?php  } ?>
+               </div>
+              </div>
+              <?php }  ?>
+            </div>
+            <hr>
+            <style>
+              .checkingreport{
+                margin: 4px;
+              }
+              .checkrepoData{
+                margin: 4px;
+                background: beige;
+                color: white !important;
+              }
+            </style>
+
+
                 </div>
                 
-                
-                <!-- <div class="card card-primary card-outline card-outline-tabs">
-                <?php 
-                // $patd = $this->Menu_model->get_atptd($uid,$tdate);
-                //       $patsd = $this->Menu_model->get_atptsd($uid,$tdate);
-                ?>
-              <div class="card-header text-center bg-info"><b>Auto Pending Task to be Schedule</b></div>
-              <div class="card-header text-center bg-light"><b>
-              Total Task <?=$patd[0]->ab?> | Call(<?=$patd[0]->a?>) | Email(<?=$patd[0]->b?>) | Whatsapp(<?=$patd[0]->e?>) | Meeting(<?=$patd[0]->c+$patd[0]->d?>) | MOM(<?=$patd[0]->f?>) | Proposal(<?=$patd[0]->g?>)
-              </b></div>
-              <div class="card-header text-center bg-light"><b>
-              Open(<?=$patsd[0]->a?>) | Open RPEM(<?=$patsd[0]->b?>) | Rechaout(<?=$patsd[0]->c?>) | Tentative(<?=$patsd[0]->d?>) | WDL(<?=$patsd[0]->e?>) | NI(<?=$patsd[0]->f?>) | TTD(<?=$patsd[0]->g?>) | WNO(<?=$patsd[0]->h?>) | Positive(<?=$patsd[0]->i?>) | Very Positive(<?=$patsd[0]->j?>) | Closure(<?=$patsd[0]->k?>)
-              </b></div>
-              <div class="card-body">
-                    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
-                        <ul id="myUL">
-                            <?php 
-                            // $ai=0;foreach($totalt as $tt){if($tt->plan==0){if($tt->autotask==0){
-                              // ?>
-                          <li><a>
-                           <?=$tt->aname?> | 
-                           <strong class="text-secondary"><?=$tt->compname?> | <b style="color:<?=$tt->color?>"><?=$tt->csname?></b></strong>
-                           <button id="add_plan<?=$ai?>" value="<?=$tt->id?>">Plan</button>
-                          </a>
-                          
-                          </li><?php 
-                          // $ai++;}}} 
-                          ?>
-                        </ul>
-                  </div>
-                </div> -->
-            
-            
-              
           </div>
         </div>
 </div>

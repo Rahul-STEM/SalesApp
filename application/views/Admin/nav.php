@@ -1,188 +1,67 @@
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
 
-  <!-- Left navbar links -->
+    <!-- Left navbar links -->
 
-  <ul class="navbar-nav">
+    <ul class="navbar-nav">
 
-    <li class="nav-item">
+        <li class="nav-item">
 
-      <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
 
-    </li>
+        </li>
 
 
 
-    <li class="nav-item d-none d-sm-inline-block">
+        <li class="nav-item d-none d-sm-inline-block">
 
-      <a href="Dashboard" class="nav-link">Home</a>
+            <a href="Dashboard" class="nav-link">Home</a>
 
-    </li>
+        </li>
 
-    <li class="nav-item d-none d-sm-inline-block">
+        <li class="nav-item d-none d-sm-inline-block">
 
-      <button type="button" class="btn btn-primary" onclick="goBack()">Go Back</button>
+            <button type="button" class="btn btn-primary" onclick="goBack()">Go Back</button>
 
-      <button type="button" class="btn btn-secondary" onclick="goForward()">Go Forward</button>
+            <button type="button" class="btn btn-secondary" onclick="goForward()">Go Forward</button>
 
-    </li>
+        </li>
 
-  </ul>
+    </ul>
 
-  <!-- Right navbar links -->
+    <!-- Right navbar links -->
 
-  <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ml-auto">
 
-    <!-- Navbar Search -->
 
+        <h4>HI! <?= $user['name'] ?></h4>
 
+        <input type="hidden" id="ur_id" value="<?= $uid ?>">
 
-    <!-- Messages Dropdown Menu
+        <li class="nav-item">
 
-      <li class="nav-item dropdown">
+            <a class="nav-link" href="<?= base_url(); ?>/Menu/Notification">
 
-        <a class="nav-link" data-toggle="dropdown" href="#">
+                <i class="far fa-bell"></i>
 
-          <i class="far fa-comments"></i>
+                <?php $notify = $this->Menu_model->notify($uid); ?>
 
-          <span class="badge badge-danger navbar-badge">3</span>
+                <span class="badge badge-warning navbar-badge"><?= sizeof($notify); ?></span>
 
-        </a>
+            </a>
 
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        </li>
 
-          <a href="#" class="dropdown-item">
+        <li class="nav-item">
 
-            
+            <a class="nav-link" data-widget="fullscreen" href="#" role="button">
 
-            <div class="media">
+                <i class="fas fa-expand-arrows-alt"></i>
 
-              <img src="<?= base_url(); ?>assets/image/user/Team.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+            </a>
 
-              <div class="media-body">
+        </li>
 
-                <h3 class="dropdown-item-title">
-
-                  User 1
-
-                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-
-                </h3>
-
-                <p class="text-sm">Call me whenever you can...</p>
-
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-
-              </div>
-
-            </div>
-
-            
-
-          </a>
-
-          <div class="dropdown-divider"></div>
-
-          <a href="#" class="dropdown-item">
-
-            
-
-            <div class="media">
-
-              <img src="<?= base_url(); ?>assets/image/user/Team.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-
-              <div class="media-body">
-
-                <h3 class="dropdown-item-title">
-
-                User 2
-
-                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-
-                </h3>
-
-                <p class="text-sm">I got your message bro</p>
-
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-
-              </div>
-
-            </div>
-
-            
-
-          </a>
-
-          <div class="dropdown-divider"></div>
-
-          <a href="#" class="dropdown-item">
-
-            
-
-            <div class="media">
-
-              <img src="<?= base_url(); ?>assets/image/user/Team.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-
-              <div class="media-body">
-
-                <h3 class="dropdown-item-title">
-
-                User 3
-
-                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-
-                </h3>
-
-                <p class="text-sm">The subject goes here</p>
-
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-
-              </div>
-
-            </div>
-
-            
-
-          </a>
-
-          <div class="dropdown-divider"></div>
-
-          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-
-        </div>
-
-      </li>-->
-
-    <!-- Notifications Dropdown Menu -->
-
-    <h4>HI! <?= $user['name'] ?></h4>
-
-    <input type="hidden" id="ur_id" value="<?= $uid ?>">
-
-    <li class="nav-item">
-
-      <a class="nav-link" href="<?= base_url(); ?>/Menu/Notification">
-
-        <i class="far fa-bell"></i>
-
-        <?php $notify = $this->Menu_model->notify($uid); ?>
-
-        <span class="badge badge-warning navbar-badge"><?= sizeof($notify); ?></span>
-
-      </a>
-
-    </li>
-
-    <li class="nav-item">
-
-      <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-
-        <i class="fas fa-expand-arrows-alt"></i>
-
-      </a>
-
-    </li>
-
-  </ul>
+    </ul>
 
 </nav>
 
@@ -192,87 +71,78 @@
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
-  <!-- Brand Logo -->
+    <!-- Brand Logo -->
 
-  <img src="https://stemlearning.in/wp-content/uploads/2020/07/stem-new-logo-2-1.png" width="80%" class="p-3">
+    <img src="https://stemlearning.in/wp-content/uploads/2020/07/stem-new-logo-2-1.png" width="80%" class="p-3">
 
-  <center>
-    <h5 class="text-white"><b>STEM APP</b></h5>
-  </center>
+    <center>
+        <h5 class="text-white"><b>STEM APP</b></h5>
+    </center>
 
-  <hr>
-
-
-
-  <!-- Sidebar -->
-
-  <div class="sidebar">
-
-    <!-- Sidebar user panel (optional) -->
-
-    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-
-      <div class="image">
-
-        <img src="<?= base_url(); ?>assets/image/user/Team.jpg" class="img-circle elevation-2" alt="User Image">
-
-      </div>
-
-      <div class="info">
-
-        <a href="#" class="d-block">User Name</a>
-
-      </div>
-
-    </div>
+    <hr>
 
 
 
+    <!-- Sidebar -->
 
+    <div class="sidebar">
 
+        <!-- Sidebar user panel (optional) -->
 
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
 
+            <div class="image">
 
+                <img src="<?= base_url(); ?>assets/image/user/Team.jpg" class="img-circle elevation-2" alt="User Image">
 
-    <!-- Sidebar Menu -->
+            </div>
 
-    <nav class="mt-2">
+            <div class="info">
 
-      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <a href="#" class="d-block">User Name</a>
 
-        <!-- Add icons to the links using the .nav-icon class
+            </div>
+
+        </div>
+        <!-- Sidebar Menu -->
+
+        <nav class="mt-2">
+
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+                <!-- Add icons to the links using the .nav-icon class
 
                with font-awesome or any other icon font library -->
 
-        <li class="nav-item">
+                <li class="nav-item">
 
-          <a href="<?= base_url(); ?>Menu/Dashboard" class="nav-link">
+                    <a href="<?= base_url(); ?>Menu/Dashboard" class="nav-link">
 
-            <i class="far fa-circle nav-icon"></i>
+                        <i class="far fa-circle nav-icon"></i>
 
-            <p>Dashboard</p>
+                        <p>Dashboard</p>
 
-          </a>
+                    </a>
 
-        </li>
-
-
-
-        <li class="nav-item">
-
-          <a class="nav-link" href="<?= base_url(); ?>Menu/NewFunnel">
-
-            <i class="far fa-circle nav-icon"></i>
-
-            <p>New Funnel Added</p>
-
-          </a>
-
-        </li>
+                </li>
 
 
 
-        <!--<li class="nav-item">
+                <li class="nav-item">
+
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/NewFunnel">
+
+                        <i class="far fa-circle nav-icon"></i>
+
+                        <p>New Funnel Added</p>
+
+                    </a>
+
+                </li>
+
+
+
+                <!--<li class="nav-item">
 
             <a href="<?= base_url(); ?>Menu/LiveTaskTracking" class="nav-link">
 
@@ -292,243 +162,219 @@
 
 
 
-        <li class="nav-item">
+                <li class="nav-item">
 
-          <a class="nav-link" href="<?= base_url(); ?>Menu/NotworkCompanyBDPST">
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/NotworkCompanyBDPST">
 
-            <i class="far fa-circle nav-icon"></i>
+                        <i class="far fa-circle nav-icon"></i>
 
-            <p>Not Work Company by BDPST</p>
+                        <p>Not Work Company by BDPST</p>
 
-          </a>
+                    </a>
 
-        </li>
+                </li>
 
+                <li class="nav-item">
 
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/CategoryStatusPage">
 
+                        <i class="far fa-circle nav-icon"></i>
 
+                        <p>Category Wise Status</p>
 
+                    </a>
 
+                </li>
 
-        <li class="nav-item">
+                <li class="nav-item">
 
-          <a class="nav-link" href="<?= base_url(); ?>Menu/CategoryStatusPage">
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/TeamDailyReport/<?= date('Y-m-d') ?>">
 
-            <i class="far fa-circle nav-icon"></i>
+                        <i class="far fa-circle nav-icon"></i>
 
-            <p>Category Wise Status</p>
+                        <p>Team Daily Report</p>
 
-          </a>
+                    </a>
 
-        </li>
+                </li>
 
-        <li class="nav-item">
+                <li class="nav-item">
 
-          <a class="nav-link" href="<?= base_url(); ?>Menu/TeamDailyReport/<?= date('Y-m-d') ?>">
+                    <a href="<?= base_url(); ?>Menu/TodaysTaskApprovelRequest" class="nav-link">
 
-            <i class="far fa-circle nav-icon"></i>
+                        <i class="far fa-circle nav-icon"></i>
 
-            <p>Team Daily Report</p>
+                        <p>Task Approvel Request</p>
 
-          </a>
+                    </a>
 
-        </li>
+                </li>
 
-        <li class="nav-item">
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/AllReviewPlaing">
 
-          <a href="<?= base_url(); ?>Menu/TodaysTaskApprovelRequest" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
 
-            <i class="far fa-circle nav-icon"></i>
+                        <p>Plan BD Review</p>
 
-            <p>Task Approvel Request</p>
+                    </a>
+                </li>
 
-          </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/Mytarget">
 
-        </li>
+                        <i class="far fa-circle nav-icon"></i>
 
-        <li class="nav-item">
+                        <p>My target</p>
+                    </a>
+                </li>
 
-          <a class="nav-link" href="<?= base_url(); ?>Menu/AllReviewPlaing">
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/AllPSTReviewPlaing">
 
-            <i class="far fa-circle nav-icon"></i>
+                        <i class="far fa-circle nav-icon"></i>
 
-            <p>Plan BD Review</p>
+                        <p>Plan PST Review</p>
 
-          </a>
+                    </a>
 
-        </li>
+                </li>
 
+                <li class="nav-item">
 
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/ReviewReport">
 
-        <li class="nav-item">
+                        <i class="far fa-circle nav-icon"></i>
 
-          <a class="nav-link" href="<?= base_url(); ?>Menu/Mytarget">
+                        <p>All Review Report</p>
 
-            <i class="far fa-circle nav-icon"></i>
+                    </a>
 
-            <p>My target</p>
+                </li>
 
-          </a>
+                <li class="nav-item">
 
-        </li>
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/PSTReviewReportSummary">
 
+                        <i class="far fa-circle nav-icon"></i>
 
+                        <p>PST Review Summary</p>
 
-        <li class="nav-item">
+                    </a>
 
-          <a class="nav-link" href="<?= base_url(); ?>Menu/AllPSTReviewPlaing">
+                </li>
 
-            <i class="far fa-circle nav-icon"></i>
+                <li class="nav-item">
 
-            <p>Plan PST Review</p>
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/BDReviewReportSummary">
 
-          </a>
+                        <i class="far fa-circle nav-icon"></i>
 
-        </li>
+                        <p>BD Review Summary</p>
 
-        <li class="nav-item">
+                    </a>
 
-          <a class="nav-link" href="<?= base_url(); ?>Menu/ReviewReport">
+                </li>
 
-            <i class="far fa-circle nav-icon"></i>
 
-            <p>All Review Report</p>
 
-          </a>
+                <li class="nav-item">
 
-        </li>
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/NOREVIEWCOMP">
 
-        <li class="nav-item">
+                        <i class="far fa-circle nav-icon"></i>
 
-          <a class="nav-link" href="<?= base_url(); ?>Menu/PSTReviewReportSummary">
+                        <p>No Review Company</p>
 
-            <i class="far fa-circle nav-icon"></i>
+                    </a>
 
-            <p>PST Review Summary</p>
+                </li>
 
-          </a>
+                <li class="nav-item">
 
-        </li>
+                    <a href="<?= base_url(); ?>Menu/TaskCheck" class="nav-link">
 
-        <li class="nav-item">
+                        <i class="far fa-circle nav-icon"></i>
 
-          <a class="nav-link" href="<?= base_url(); ?>Menu/BDReviewReportSummary">
+                        <p>Task Check</p>
 
-            <i class="far fa-circle nav-icon"></i>
+                    </a>
 
-            <p>BD Review Summary</p>
+                </li>
 
-          </a>
+                <li class="nav-item">
 
-        </li>
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/BDWORKBWDBYTC">
 
+                        <i class="far fa-circle nav-icon"></i>
 
+                        <p>Work B/W Date</p>
 
-        <li class="nav-item">
+                    </a>
 
-          <a class="nav-link" href="<?= base_url(); ?>Menu/NOREVIEWCOMP">
+                </li>
 
-            <i class="far fa-circle nav-icon"></i>
+                <li class="nav-item">
 
-            <p>No Review Company</p>
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/RPTHISYEAR">
 
-          </a>
+                        <i class="far fa-circle nav-icon"></i>
 
-        </li>
+                        <p>RP This Year</p>
 
-        <li class="nav-item">
+                    </a>
 
-          <a href="<?= base_url(); ?>Menu/TaskCheck" class="nav-link">
+                </li>
 
-            <i class="far fa-circle nav-icon"></i>
+                <li class="nav-item">
 
-            <p>Task Check</p>
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/BDNotWorkDD">
 
-          </a>
+                        <i class="far fa-circle nav-icon"></i>
 
-        </li>
+                        <p>NO Work B/W Date</p>
 
-        <li class="nav-item">
+                    </a>
 
-          <a class="nav-link" href="<?= base_url(); ?>Menu/BDWORKBWDBYTC">
+                </li>
 
-            <i class="far fa-circle nav-icon"></i>
+                <li class="nav-item">
 
-            <p>Work B/W Date</p>
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/PSTWorkOnRPCompanies">
 
-          </a>
+                        <i class="far fa-circle nav-icon"></i>
 
-        </li>
+                        <p>PST Work On RP Companies (Newly Assigned) </p>
 
-        <li class="nav-item">
+                    </a>
 
-          <a class="nav-link" href="<?= base_url(); ?>Menu/RPTHISYEAR">
+                </li>
 
-            <i class="far fa-circle nav-icon"></i>
+                <li class="nav-item">
 
-            <p>RP This Year</p>
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/PSTWorkOnRPALLCompanies">
 
-          </a>
+                        <i class="far fa-circle nav-icon"></i>
 
-        </li>
+                        <p>PST Work On RP Companies (All Assigned)</p>
 
-        <li class="nav-item">
+                    </a>
 
-          <a class="nav-link" href="<?= base_url(); ?>Menu/BDNotWorkDD">
+                </li>
 
-            <i class="far fa-circle nav-icon"></i>
+                <li class="nav-item">
 
-            <p>NO Work B/W Date</p>
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/PSTWorkOnRPPACompanies">
 
-          </a>
+                        <i class="far fa-circle nav-icon"></i>
 
-        </li>
+                        <p>PST Work On RP Companies (Previously Assigned)</p>
 
+                    </a>
 
+                </li>
 
-        <li class="nav-item">
-
-          <a class="nav-link" href="<?= base_url(); ?>Menu/PSTWorkOnRPCompanies">
-
-            <i class="far fa-circle nav-icon"></i>
-
-            <p>PST Work On RP Companies (Newly Assigned) </p>
-
-          </a>
-
-        </li>
-
-
-
-        <li class="nav-item">
-
-          <a class="nav-link" href="<?= base_url(); ?>Menu/PSTWorkOnRPALLCompanies">
-
-            <i class="far fa-circle nav-icon"></i>
-
-            <p>PST Work On RP Companies (All Assigned)</p>
-
-          </a>
-
-        </li>
-
-
-
-        <li class="nav-item">
-
-          <a class="nav-link" href="<?= base_url(); ?>Menu/PSTWorkOnRPPACompanies">
-
-            <i class="far fa-circle nav-icon"></i>
-
-            <p>PST Work On RP Companies (Previously Assigned)</p>
-
-          </a>
-
-        </li>
-
-
-
-        <!--<li class="nav-item">
+                <!--<li class="nav-item">
 
             <a class="nav-link" href="<?= base_url(); ?>Menu/CONVERSIONBWDATE" >
 
@@ -554,142 +400,132 @@
 
           </li>-->
 
+                <li class="nav-item">
 
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/AllUtilisation">
 
+                        <i class="far fa-circle nav-icon"></i>
 
+                        <p>All Utilisation</p>
 
-        <li class="nav-item">
+                    </a>
 
-          <a class="nav-link" href="<?= base_url(); ?>Menu/AllUtilisation">
+                </li>
 
-            <i class="far fa-circle nav-icon"></i>
+                <li class="nav-item dropdown">
 
-            <p>All Utilisation</p>
+                    <a href="" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
 
-          </a>
+                        <i class="far fa-circle nav-icon"></i>
 
-        </li>
+                        <p>Analysis</p>
 
-        <li class="nav-item dropdown">
+                    </a>
 
-          <a href="" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
+                    <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
 
-            <i class="far fa-circle nav-icon"></i>
+                        <a class="dropdown-item" href="<?= base_url(); ?>Menu/funnel">FGraph</a>
 
-            <p>Analysis</p>
+                        <a class="dropdown-item" href="<?= base_url(); ?>Menu/day">DGraph</a>
 
-          </a>
+                        <a class="dropdown-item" href="<?= base_url(); ?>Menu/request">RGraph</a>
 
-          <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="<?= base_url(); ?>Menu/region">ROGraph</a>
 
-            <a class="dropdown-item" href="<?= base_url(); ?>Menu/funnel">FGraph</a>
+                        <a class="dropdown-item" href="<?= base_url(); ?>Menu/task">TGraph</a>
 
-            <a class="dropdown-item" href="<?= base_url(); ?>Menu/day">DGraph</a>
+                    </div>
 
-            <a class="dropdown-item" href="<?= base_url(); ?>Menu/request">RGraph</a>
+                </li>
 
-            <a class="dropdown-item" href="<?= base_url(); ?>Menu/region">ROGraph</a>
+                <!--<li class="nav-item">-->
 
-            <a class="dropdown-item" href="<?= base_url(); ?>Menu/task">TGraph</a>
+                <!--  <a class="nav-link" href="<?= base_url(); ?>Menu/AnnualReviewReport" >-->
 
-          </div>
+                <!--    <i class="far fa-circle nav-icon"></i>-->
 
-        </li>
+                <!--    <p>Annual Review Report</p>-->
 
-        <!--<li class="nav-item">-->
+                <!--  </a>-->
 
-        <!--  <a class="nav-link" href="<?= base_url(); ?>Menu/AnnualReviewReport" >-->
+                <!--</li>-->
 
-        <!--    <i class="far fa-circle nav-icon"></i>-->
+                <li class="nav-item">
 
-        <!--    <p>Annual Review Report</p>-->
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/ReviewPage">
 
-        <!--  </a>-->
+                        <i class="far fa-circle nav-icon"></i>
 
-        <!--</li>-->
+                        <p>Annual Review Report</p>
 
-        <li class="nav-item">
+                    </a>
 
-          <a class="nav-link" href="<?= base_url(); ?>Menu/ReviewPage">
+                </li>
 
-            <i class="far fa-circle nav-icon"></i>
+                <!--<li class="nav-item">-->
 
-            <p>Annual Review Report</p>
+                <!--  <a class="nav-link" href="<?= base_url(); ?>Menu/AnnualReviewReportDataInAdmin" >-->
 
-          </a>
+                <!--    <i class="far fa-circle nav-icon"></i>-->
 
-        </li>
+                <!--    <p>Annual Review Report</p>-->
 
-        <!--<li class="nav-item">-->
+                <!--  </a>-->
 
-        <!--  <a class="nav-link" href="<?= base_url(); ?>Menu/AnnualReviewReportDataInAdmin" >-->
+                <!--</li>-->
 
-        <!--    <i class="far fa-circle nav-icon"></i>-->
 
-        <!--    <p>Annual Review Report</p>-->
 
-        <!--  </a>-->
+                <li class="nav-item">
 
-        <!--</li>-->
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/HumHongeTaiyarReportAdmin">
 
+                        <i class="far fa-circle nav-icon"></i>
 
+                        <p>Hum Honge Taiyar Report</p>
 
-        <li class="nav-item">
+                    </a>
 
-          <a class="nav-link" href="<?= base_url(); ?>Menu/HumHongeTaiyarReportAdmin">
+                </li>
 
-            <i class="far fa-circle nav-icon"></i>
+                <li class="nav-item">
 
-            <p>Hum Honge Taiyar Report</p>
+                    <a class="nav-link" href="<?= base_url(); ?>Menu/HumHongeTaiyarReportApprove">
 
-          </a>
+                        <i class="far fa-circle nav-icon"></i>
 
-        </li>
+                        <p>Hum Honge Taiyar Approve Report</p>
 
-        <li class="nav-item">
+                    </a>
 
-          <a class="nav-link" href="<?= base_url(); ?>Menu/HumHongeTaiyarReportApprove">
+                </li>
 
-            <i class="far fa-circle nav-icon"></i>
+                <!--<li class="nav-item">-->
 
-            <p>Hum Honge Taiyar Approve Report</p>
+                <!--  <a class="nav-link" href="<?= base_url(); ?>Menu/FAQReport" >-->
 
-          </a>
+                <!--    <i class="far fa-circle nav-icon"></i>-->
 
-        </li>
+                <!--    <p>FAQ Report</p>-->
 
-        <!--<li class="nav-item">-->
+                <!--  </a>-->
 
-        <!--  <a class="nav-link" href="<?= base_url(); ?>Menu/FAQReport" >-->
+                <!--</li>-->
 
-        <!--    <i class="far fa-circle nav-icon"></i>-->
+                <li class="nav-item">
 
-        <!--    <p>FAQ Report</p>-->
+                    <a href="<?= base_url(); ?>Menu/AssignTask" class="nav-link">
 
-        <!--  </a>-->
+                        <i class="far fa-circle nav-icon"></i>
 
-        <!--</li>-->
+                        <p>Assign Task</p>
 
-        <li class="nav-item">
+                    </a>
 
-          <a href="<?= base_url(); ?>Menu/AssignTask" class="nav-link">
+                </li>
 
-            <i class="far fa-circle nav-icon"></i>
-
-            <p>Assign Task</p>
-
-          </a>
-
-        </li>
-
-
-
-
-
-
-
-        <!--
+                <!--
 
           <li class="nav-item">
 
@@ -717,212 +553,182 @@
 
           -->
 
-        <li class="nav-item">
+                <li class="nav-item">
 
-          <a href="<?= base_url(); ?>Menu/logout" class="nav-link">
+                    <a href="<?= base_url(); ?>Menu/logout" class="nav-link">
 
-            <i class="far fa-circle nav-icon"></i>
+                        <i class="far fa-circle nav-icon"></i>
 
-            <p>Logout</p>
+                        <p>Logout</p>
 
-          </a>
+                    </a>
 
-        </li>
+                </li>
 
+            </ul>
 
+        </nav>
 
-      </ul>
+        <!-- /.sidebar-menu -->
 
-    </nav>
+        <hr>
+        <center>
+            <lable class="text-warning"><b>Alert!</b></lable>
+        </center>
+        <hr>
 
-    <!-- /.sidebar-menu -->
+        <span id="alsmss"></span>
 
-    <hr>
-    <center>
-      <lable class="text-warning"><b>Alert!</b></lable>
-    </center>
-    <hr>
+    </div>
 
-    <span id="alsmss"></span>
-
-  </div>
-
-  <!-- /.sidebar -->
+    <!-- /.sidebar -->
 
 </aside>
 
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script> -->
 
 <script>
 
+    $(document).ready(function () {
+
+        // trackLocation();
+
+    });
 
 
 
-
-
-
-  $(document).ready(function () {
-
-    trackLocation();
-
-  });
-
-
-
-  function handleGeolocationError() {
-
-    const bodyElement = document.querySelector("body");
-
-    bodyElement.style.display = "none";
-
-    alert('Error: Geolocation is not available or location services are turned off.');
-
-  }
-
-  function handleGeolocationSuccess(position) {
-
-    const latitude = position.coords.latitude;
-
-    const longitude = position.coords.longitude;
-
-    const contentDiv = document.getElementById("content");
-
-    contentDiv.style.display = "block";
-
-  }
-
-  function getLocation() {
-
-    if ("geolocation" in navigator) {
-
-      navigator.geolocation.getCurrentPosition(handleGeolocationSuccess, handleGeolocationError);
-
-    } else {
-
-      const errorMessage = document.getElementById("error-message");
-
-      errorMessage.style.display = "block";
-
-    }
-
-  }
-
-  // window.onload = getLocation;
-
-
-
-
-
-
-
-  function startCamera() {
-
-    navigator.mediaDevices.getUserMedia({ video: true })
-
-      .then(function (stream) {
-
-      })
-
-      .catch(function (error) {
+    function handleGeolocationError() {
 
         const bodyElement = document.querySelector("body");
 
         bodyElement.style.display = "none";
 
-        alert('Error: Camera access permission denied.');
+        alert('Error: Geolocation is not available or location services are turned off.');
 
-      });
+    }
 
-  }
+    function handleGeolocationSuccess(position) {
 
-  // startCamera();
+        const latitude = position.coords.latitude;
 
+        const longitude = position.coords.longitude;
 
+        const contentDiv = document.getElementById("content");
 
+        contentDiv.style.display = "block";
 
+    }
 
+    // function getLocation() {
 
+    //     if ("geolocation" in navigator) {
 
+    //         navigator.geolocation.getCurrentPosition(handleGeolocationSuccess, handleGeolocationError);
 
+    //     } else {
 
-  function trackLocation() {
+    //         const errorMessage = document.getElementById("error-message");
 
-    if ("geolocation" in navigator) {
+    //         errorMessage.style.display = "block";
 
-      navigator.geolocation.getCurrentPosition(
+    //     }
 
-        function (position) {
+    // }
 
-          var ur_id = document.getElementById("ur_id").value;
+    // window.onload = getLocation;
 
-          var latitude = position.coords.latitude;
+    function startCamera() {
 
-          var longitude = position.coords.longitude;
+        navigator.mediaDevices.getUserMedia({ video: true })
 
-          $.ajax({
+            .then(function (stream) {
 
-            url: '<?= base_url(); ?>Menu/store_location',
+            })
 
-            method: 'post',
+            .catch(function (error) {
 
-            data: { latitude: latitude, longitude: longitude, ur_id: ur_id },
+                const bodyElement = document.querySelector("body");
 
-            success: function (result) {
+                bodyElement.style.display = "none";
 
-            }
+                alert('Error: Camera access permission denied.');
 
-          });
+            });
 
-        },
+    }
 
-        function (error) {
+    // startCamera();
 
-          console.error("Error getting location: " + error.message);
+    // function trackLocation() {
+
+    //     if ("geolocation" in navigator) {
+
+    //         navigator.geolocation.getCurrentPosition(
+
+    //             function (position) {
+
+    //                 var ur_id = document.getElementById("ur_id").value;
+
+    //                 var latitude = position.coords.latitude;
+
+    //                 var longitude = position.coords.longitude;
+
+    //                 $.ajax({
+
+    //                     url: '<?= base_url(); ?>Menu/store_location',
+
+    //                     method: 'post',
+
+    //                     data: { latitude: latitude, longitude: longitude, ur_id: ur_id },
+
+    //                     success: function (result) {
+
+    //                     }
+
+    //                 });
+
+    //             },
+
+    //             function (error) {
+
+    //                 console.error("Error getting location: " + error.message);
+
+    //             }
+
+    //         );
+
+    //     }
+
+    //     else { console.error("Geolocation is not supported by this browser."); }
+
+    // }
+
+    function goBack() { window.history.back(); }
+
+    function goForward() { window.history.forward(); }
+
+    var ur_id = document.getElementById("ur_id").value;
+
+    $.ajax({
+
+        url: '<?= base_url(); ?>Menu/adminpopup',
+
+        method: 'post',
+
+        data: { ur_id: ur_id },
+
+        success: function (result) {
+
+            var res = result;
+
+            $("#alsmss").html(result);
 
         }
 
-      );
-
-    }
-
-    else { console.error("Geolocation is not supported by this browser."); }
-
-  }
-
-
-
-
-
-  function goBack() { window.history.back(); }
-
-  function goForward() { window.history.forward(); }
-
-
-
-  var ur_id = document.getElementById("ur_id").value;
-
-  $.ajax({
-
-    url: '<?= base_url(); ?>Menu/adminpopup',
-
-    method: 'post',
-
-    data: { ur_id: ur_id },
-
-    success: function (result) {
-
-      var res = result;
-
-      $("#alsmss").html(result);
-
-    }
-
-  });
-
-
+    });
 
 </script>

@@ -101,7 +101,21 @@
             </div>
 
             <div class="card">
-                <div class="card-header"><h3 class="text-center"><center><b>Task Detail <br>(from <?=$sd?> to <?=$ed?>)</b></center></h3>
+                <div class="card-header"><h3 class="text-center"><center><b>
+                <?php 
+
+                    if ($code == 4) {
+                        $status = 'Total';
+                    }elseif ($code == 5) {
+                        $status = 'Pending';
+                    }elseif ($code == 6) {
+                        $status = 'Completed';
+                    }else{
+                        $status = '';
+                    }
+                
+                ?>    
+                <?php echo $status;echo ' '; ?>Task Detail <br>(from <?=$sd?> to <?=$ed?>)</b></center></h3>
                 </div>
               <!-- /.card-header -->
               <div class="card-body">

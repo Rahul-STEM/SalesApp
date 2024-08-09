@@ -7557,7 +7557,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         }else{
            $query=$this->db->query("Select city.id cityid, company_master.city,COUNT(*) cont from init_call LEFT JOIN company_master ON company_master.id=init_call.cmpid_id left join city on city.city=company_master.city WHERE init_call.mainbd='$uid' GROUP BY company_master.city,city.id");
         }
-        echo $this->db->last_query();die;
+        // echo $this->db->last_query();die;
         return $query->result();
     }
 

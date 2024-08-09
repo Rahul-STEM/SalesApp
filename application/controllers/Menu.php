@@ -8925,9 +8925,9 @@ class Menu extends CI_Controller {
 
         $mtdata = $this->Menu_model->get_bwdalltaskdbyad_New($code,$atid,$bdid,$sd,$ed);
         // var_dump($mtdata);die;
+        // echo $this->db->last_query();die;
         $tdate = date('Y-m-d');
         $getCountData = $this->Menu_model->getTeamTasks($uid,$tdate,$sd,$ed);
-        // echo $this->db->last_query();die;
 
         if(!empty($user)){
             $this->load->view($dep_name.'/ATaskDetail_New',['uid'=>$uid,'user'=>$user,'atid'=>$atid,'sd'=>$sd,'ed'=>$ed,'code'=>$code,'bdid'=>$bdid,'mtdata'=>$mtdata,'getCountData'=>$getCountData]);
@@ -10927,6 +10927,8 @@ class Menu extends CI_Controller {
         }else{
             $mdata=$this->Menu_model->get_bdcombystatus($uid,$code);
         }
+
+        // var_dump($mdata);die;
         if(!empty($user)){
             $this->load->view($dep_name.'/CreatedCompanies',['user'=>$user,'mdata'=>$mdata,'code'=>$code,'uid'=>$uid]);
         }else{
@@ -11660,10 +11662,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
 
 
     public function BDRequestSummary($code){

@@ -1,9 +1,0 @@
-RewriteEngine on
-RewriteCond $1 !^(index\.php|resources|robots\.txt)
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php/$1 [L,QSA] 
-RewriteCond %{HTTP_HOST} ^stemapp\.in$ [OR]
-RewriteCond %{HTTP_HOST} ^www\.stemapp\.in$
-RewriteRule ^/?$ "https\:\/\/stemapp\.in\/Menu\/main" [R=301,L]
-

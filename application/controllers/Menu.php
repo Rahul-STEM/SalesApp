@@ -4721,10 +4721,6 @@ class Menu extends CI_Controller {
             $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask Before Going Task Planner Page');
             redirect('Menu/Dashboard2');
         }   
-<<<<<<< HEAD
-       
-
-=======
 
 
         $oldplanbutnotinited = $this->Menu_model->get_all_old_cmp_planbutnotinited($uid);
@@ -4734,7 +4730,6 @@ class Menu extends CI_Controller {
             // redirect("Menu/TaskPlanner2/".$adate);
         }   
        
->>>>>>> stem-sales/main
         $planbutnotinitedcnt = sizeof($planbutnotinited);
         $getreqData  =  $this->db->query("SELECT * FROM `task_plan_for_today` WHERE user_id =$uid and date='$adate'");
         $getreqData =  $getreqData->result();
@@ -4767,28 +4762,15 @@ class Menu extends CI_Controller {
         $minutes = $timecount % 60;
         $mesaage = $hours ." Hours ".$minutes." Minutes Pending For Task Work";
    
-<<<<<<< HEAD
-
-    if($planbutnotinitedcnt > 0){
-        $this->session->set_flashdata('error_message', $planbutnotinitedcnt . ' Pending tasks - First, Plan You Old Pending Task with Plan But Not Initiated');
-    }
-   
-
-=======
     // if($planbutnotinitedcnt > 0){
     //     $this->session->set_flashdata('error_message', $planbutnotinitedcnt . ' Pending tasks - First, Plan You Old Pending Task with Plan But Not Initiated');
     // }
    
->>>>>>> stem-sales/main
     $getplandateindata  =  $this->db->query("SELECT * FROM `autotask_time` where user_id='$uid' AND date ='$adate'");
     $getplandateindata =  $getplandateindata->result();
 
         if(!empty($user)){
-<<<<<<< HEAD
-            $this->load->view($dep_name.'/TaskPlanner2',['uid'=>$uid,'user'=>$user,'planbutnotinitedcnt'=>$planbutnotinitedcnt,'getplandt'=>$getplandateindata,'pendingtask'=>$pcount, 'mesaage'=>$mesaage,'adate'=>$adate,'tptime'=>$tptime,'getAutoTaskTime'=>$getAutoTaskTime,'getreqData'=>$getreqData]);
-=======
             $this->load->view($dep_name.'/TaskPlanner2',['uid'=>$uid,'user'=>$user,'planbutnotinitedcnt'=>$planbutnotinitedcnt,'getplandt'=>$getplandateindata,'pendingtask'=>$pcount, 'mesaage'=>$mesaage,'adate'=>$adate,'tptime'=>$tptime,'getAutoTaskTime'=>$getAutoTaskTime,'getreqData'=>$getreqData,'oldPendTask'=>$oldplanbutnotinited,'type_id'=>$uyid]);
->>>>>>> stem-sales/main
         }else{
             redirect('Menu/main');
         }
@@ -4802,21 +4784,10 @@ class Menu extends CI_Controller {
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
-<<<<<<< HEAD
-
-
-        $userData  =  $this->db->query("SELECT * FROM `user_details` WHERE user_id = $uid");
-        $userData =  $userData->result();
-
-        // echo "<pre>";
-        // print_r($userData[0]->type_id);
-        // die;
-=======
         
         $userData  =  $this->db->query("SELECT * FROM `user_details` WHERE user_id = $uid");
         $userData =  $userData->result();
 
->>>>>>> stem-sales/main
         $type_id =  $userData[0]->type_id;
         $inside =  $userData[0]->inside;
 
@@ -4849,12 +4820,6 @@ class Menu extends CI_Controller {
 
         $setdatebyuser              = $_POST['setdatebyuser'];
         $requestForTodaysTaskPlan   = $_POST['requestForTodaysTaskPlan'];
-<<<<<<< HEAD
-
-
-        $this->db->query("INSERT INTO `task_plan_for_today`(`user_id`,`admin_id`, `date`, `request_remarks`) VALUES ('$uid','$auid','$setdatebyuser','$requestForTodaysTaskPlan')");
-
-=======
         
         $taskcnt   = $_POST['taskcnt'];
         $would_you_want   = $_POST['would_you_want'];
@@ -4880,7 +4845,6 @@ class Menu extends CI_Controller {
         $setdatebyuser = $setdatebyuser.' '.date('H:i:s');
        
         $this->db->query("INSERT INTO `request_old_pend_task`(`user_id`, `req_date`,`taskcnt`, `request_remarks`) VALUES ('$uid','$setdatebyuser','$oldPendTaskcnt','$requestremarks')");
->>>>>>> stem-sales/main
 
         $this->load->library('session');
         $this->session->set_flashdata('success_message', 'Your request has been successfully sent to the administrator. Please wait for approval.');
@@ -4906,16 +4870,6 @@ class Menu extends CI_Controller {
             $adate = date("Y-m-d");
         }
 
-<<<<<<< HEAD
-        // $getteamids = '';
-        // $getbdteam = $this->Menu_model->getTeamDetails($uid);
-        //  foreach($getbdteam as $team){
-        //      $getteamids .=$team->user_id.',';
-        //  }
-        //  $getteamid = rtrim($getteamids, ',');
-
-=======
->>>>>>> stem-sales/main
          $getreqData  =  $this->db->query("SELECT * FROM `task_plan_for_today` WHERE admin_id = $uid and date='$adate'");
          $getreqData =  $getreqData->result();
 
@@ -4927,8 +4881,6 @@ class Menu extends CI_Controller {
 
     }
 
-<<<<<<< HEAD
-=======
 
 
     public function PendingTaskApprovelRequest(){
@@ -4962,7 +4914,6 @@ class Menu extends CI_Controller {
     }
 
 
->>>>>>> stem-sales/main
     public function TodaysTaskapprove($id,$type){
         $user = $this->session->userdata('user');
         $data['user'] = $user;

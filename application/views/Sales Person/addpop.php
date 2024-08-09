@@ -1,4 +1,4 @@
-<?php $uid=$user['user_id'];
+<span?php $uid=$user['user_id'];
 date_default_timezone_set("Asia/Kolkata");
 ?>
 <div id="add_note" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-standard-title" aria-hidden="true">
@@ -13,7 +13,7 @@ date_default_timezone_set("Asia/Kolkata");
         </div> <!-- // END .modal-header -->
         <div id="moshow" class="modal-body">
           <div class="card row m-2">
-            <div class="col-12 col-md-12">
+            <div class="col-12 col-md-12" id="new_reserach1">
               <div class="card-header bg-info">Task Detail</div>
               <div class="card-body">
                 Current Task : <lable id="ctname"></lable><br>
@@ -23,7 +23,7 @@ date_default_timezone_set("Asia/Kolkata");
             </div>
           </div>
           <div class="card row m-2">
-            <div class="col-12 col-md-12">
+            <div class="col-12 col-md-12" id="new_reserach2">
               <input type="hidden" value="" id="test">
               <a href="" target="_blank" id="cmplink"><div class="card-header bg-info"><lable id="cname"></lable></div></a>
               <div class="card-body">
@@ -44,7 +44,11 @@ date_default_timezone_set("Asia/Kolkata");
           </div>
           <div class="card row m-2" id="taskbox">
             <div class="col-12 col-md-12">
-              <div class="card-header bg-info"></div>
+              <div class="card-header bg-info">
+                <div>
+                    <p id="reaserch_message" class="mt-3 text-white"></p>
+                </div>
+              </div>
               <div class="card-body">
                 <form action="<?=base_url();?>Menu/submittask1" method="POST" enctype="multipart/form-data">
                   <input type="hidden" name="ccstatus" id="cstatus">
@@ -77,19 +81,22 @@ date_default_timezone_set("Asia/Kolkata");
                     <input type="file" class="form-control-file" name="filname1" required>
                     <textarea type="text" class="form-control" placeholder="Remark" required></textarea>
                   </div>
+
+
+                   <!-- Start Meeting Form -->
+
                   <div class="p-3 write_mom_section" id="test6" style="display: none;">
-                 
                   <div class="text-center momhbox">
                     <div> <label> <i>MINUTES OF MEETING (MoM)</i> </label>
                     <!-- <hr style="width:200px;"> -->
                   </div>
                   </div>
-
-
-                  <label>Meeting done with Initiator or infulencer or discision maker of the company</label>
+                  
+                  <label>Meeting done with Initiator or influencer and decision maker of the company</label>
                     <select class="form-control" name="meetingdonewinitiator">
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
+                        <option value="Initiator">Initiator</option>
+                        <option value="Influencer">Influencer</option>
+                        <option value="Decision maker">Decision maker</option>
                     </select>
                     <hr>
                     <label>Presentation and pitching is done for which offering :</label>
@@ -100,7 +107,8 @@ date_default_timezone_set("Asia/Kolkata");
                         <option value="Astronomy">Astronomy</option>
                         <option value="DIY">DIY</option>
                         <option value="NSP">NSP</option>
-                        <option value="DIY">Science Lab</option>
+                        <option value="Science Lab">Science Lab</option>
+                        <option value="Smart Class">Smart Class</option>
                     </select>
                     <hr>
                     <input type="hidden" name="momdata" value="momdata">
@@ -124,13 +132,13 @@ date_default_timezone_set("Asia/Kolkata");
                         <option value="yes">Yes</option>
                       </select>
                       <br>
-                      <textarea type="text" class="form-control" name="client_has_adopted" placeholder="Please Specify details of client has adopted any schools"  id="client_has_adoptedText" rows="3"></textarea> 
+                      <textarea type="text" class="form-control" name="client_has_adopted" placeholder="Please specify details of the schools that client has adopted"  id="client_has_adoptedText" rows="3"></textarea> 
                     </div>
 
                     <hr>
                     <div>
                       <label>Who are the approving autorities of the proposal ?</label>
-                      <input type="text" required class="form-control" name="approving_autorities" placeholder="Please Type Name of the officer approving the proposal">
+                      <textarea required class="form-control" name="approving_autorities" placeholder="Please type name and designation of the officer approving the proposal"></textarea>
                     </div>
 
                     <hr>
@@ -141,8 +149,8 @@ date_default_timezone_set("Asia/Kolkata");
 
                     <hr>
                     <div>
-                      <label>what is the fund sanstion limit at their level ?</label>
-                      <input type="number" required class="form-control" name="fund_sanstion_limit" placeholder="Please Type fund sanstion limit at their level">
+                      <label>what is the fund sanction limit at their level ?</label>
+                      <input type="number" required class="form-control" name="fund_sanstion_limit" placeholder="Please Type fund sanction limit at their level">
                     </div>
 
                     <hr>
@@ -163,8 +171,9 @@ date_default_timezone_set("Asia/Kolkata");
                     <small class="text-danger" id="smallProposaltext" > <i>* Proposal should be submitted through NGO/STEM/Govt Body (No of Schools/Location/Budget)</i></small> -->
 
                     <div id="submit_proposal_file" class="identify_school_box">
-                    <input type="text" required class="form-control"name="proposal_no_of_school" placeholder="Number of school for Proposal"> <br>
-                    <input type="text" required class="form-control"name="proposal_of_budget" placeholder="Budget of Proposal"><br>
+                    <input type="text" required class="form-control"name="proposal_no_of_school" placeholder="Proposed number of schools"> <br>
+                    <input type="text" required class="form-control"name="proposal_of_budget" placeholder="Proposed budget"><br>
+                    <input type="text" required class="form-control"name="proposal_of_location" placeholder="Proposed location"><br>
                  
                     </div>
 
@@ -177,12 +186,18 @@ date_default_timezone_set("Asia/Kolkata");
                         <option value="no">No</option>
                         <option value="yes">Yes</option>
                     </select>
+                    
                     <br>
                     <div id="identify_school_box" class="identify_school_box">
-                    <input type="text" required class="form-control"name="identify_school_state" placeholder="Enter Name of State"> <br>
-                    <input type="text" required class="form-control"name="identify_school_district" placeholder="Enter Name of District"><br>
-                    <input type="text" required class="form-control"name="no_of_school" placeholder="Enter No of School">
+                      <div class="text-right mb-2">
+                      <span id="add_field" class="p-2 bg-primary" >+</span>
+                      </div>
+                    <input type="text" required class="form-control"name="identify_school_state[]" placeholder="Enter Name of State"> <br>
+                    <input type="text" required class="form-control"name="identify_school_district[]" placeholder="Enter Name of District"><br>
+                    <input type="text" required class="form-control"name="no_of_school[]" placeholder="Enter No of School">
+                   
                     </div>
+                    
                     </div>
          
                     <hr>
@@ -201,12 +216,12 @@ date_default_timezone_set("Asia/Kolkata");
                     <label>Letter should be address to whom in the organization, along with Name and designation and Location</label>
 
                     <select class="form-control" required name="permission_letter_rech" >
-                        <option value="Through District Administrator"> Through District Administrator</option>
-                        <option value="Directly from School">Directly from School</option>
+                        <option value="NGO">NGO</option>
+                        <option value="STEM">STEM</option>
                     </select>
                     <br>
 
-                    <input type="text" required class="form-control"name="Letter_organization_name" placeholder="Enter Name"> <br>
+                    <input type="text" required class="form-control"name="Letter_organization_name" placeholder="Add Concern person name"> <br>
                     <input type="text" required class="form-control"name="Letter_organization_designation" placeholder="Enter Name of Designation"><br>
                     <input type="text" required class="form-control"name="Letter_organization_location" placeholder="Enter Location">
                     </div>  
@@ -215,16 +230,27 @@ date_default_timezone_set("Asia/Kolkata");
                     <hr>
                     <div>
                     <label>Client is interested for School Visit ?</label>
-                    <select class="form-control" required name="client_int_school_visit" id="client_int_school_select" >
+                    <select class="form-control" required name="client_int_school_visit" id="client_int_school_select">
                         <option value="no">No</option>
                         <option value="yes">Yes</option>
                     </select>
                     <br>
                     <div id="client_int_school_box" class="identify_school_box">
+
+                    <!-- <input type="text" required class="form-control"name="client_int_type_project" placeholder="Add type of project"> -->
+                      <option value="MSC">MSC</option>
+                      <option value="Tinkering">Tinkering</option>
+                      <option value="Bala">Bala</option>
+                      <option value="Astronomy">Astronomy</option>
+                      <option value="DIY">DIY</option>
+                      <option value="NSP">NSP</option>
+                      <option value="Science Lab">Science Lab</option>
+                      <option value="Smart Class">Smart Class</option>
+                    </select>
+                    <br>
                     <input type="date" required class="form-control"name="client_int_school_date" placeholder="Select Date"> <br>
                     <input type="text" required class="form-control"name="client_int_school_state" placeholder="Enter State"> <br>
                     <input type="text" required class="form-control"name="client_int_school_district" placeholder="Enter Name of District"><br>
-                    <input type="number" required class="form-control"name="client_int_no_of_school" placeholder="Enter no of School">
                     </div>
 
                     </div>
@@ -242,7 +268,7 @@ date_default_timezone_set("Asia/Kolkata");
                     <label>Write Short MOM Remarks</label>
                       <textarea type="text" class="form-control" id="rpmmom" name="rpmmom" rows="3" required></textarea> 
                   </div>
-                  
+                  <!-- End Meeting Form -->
 
                   </div>
                   
@@ -287,18 +313,20 @@ date_default_timezone_set("Asia/Kolkata");
                   </div>
                   
                   <div id="ifyes" style="display:none">
-                    <div class="col-12 col-md-12 mb-3">
+                    <div class="col-12 col-md-12 mb-3" id="new_reserach3">
                       <label for="validationSample04">Next Status</label>
                       <select type="text" class="form-control" name="ystatus" placeholder="State" id="ystatus" required>
                       </select>
                     </div>
-                    <div class="col-12 col-md-12 mb-12">
+                    <div class="col-12 col-md-12 mb-12" id="new_reserach4">
                       <label for="remark_msg">Remarks</label>
                       <textarea type="text" class="form-control" name="yremark_msg" id="remark_msg"  required></textarea>
                       <div class="invalid-feedback">.</div>
                       <div class="valid-feedback">Looks good!</div>
                     </div>
+                    <p id="reaserch_message1" class="mt-3 p-2"></p>
                   </div>
+                
                   <div id="ifno" style="display:none">
                     <input type="hidden" name="yaction_id" id="yaction_id">
                     <div class="col-12 col-md-12 mb-3">
@@ -690,12 +718,13 @@ date_default_timezone_set("Asia/Kolkata");
                                       <center>Meeting Started at <?=date('H:i:s')?></center>
                                       <input type="text" name="company_name" class="form-control p-3 mt-2" id="bmcname">
                                       <input type="file" name="cphoto" accept="image/*" required class="form-control p-3 mt-2" capture="camera">
+                                      
                                       <div id="location">
                                         <div id="map-container-google-3" class="z-depth-1-half map-container-3 p-3 m-3 border">
                                           <iframe style="width:100%;height:200px;" id="mylocation" src="" frameborder="0" style="border:0" allowfullscreen></iframe>
                                         </div>
                                       </div>
-                                      <button type="submit" class="btn btn-primary mt-3" onclick="this.form.submit(); this.disabled = true;">Submit</button>
+                                      <button type="submit" id="rpmsClick" class="btn btn-primary mt-3">Submit</button>
                                     </form>
                                   </div>
                                   
@@ -731,12 +760,17 @@ date_default_timezone_set("Asia/Kolkata");
                                             <input type="hidden" id="clat" name="lat">
                                             <input type="hidden" id="clng" name="lng">
                                             <input type="hidden" name="closem" value="<?=date('Y-m-d H:i:s')?>">
-                                            <center>Meeting Closed at <?=date('H:i:s')?></center>
+                                            <center>
+                                              <p>Meeting Closed at <?=date('H:i:s')?></p>
+                                            </center>
                                             <select name="type" id="RPMorN" class="form-control" required>
                                               <option value="NO RP">No RP Meeting</option>
                                               <option value="RP">RP Meeting</option>
                                               <option value="Only Got Detail">No RP But Got Details</option>
                                             </select>
+                                            <hr>
+                                            <select id="updateCompanyStatus" class="form-control" name="updateCompanyStatus" required=""></select>
+                                            <hr>
                                             <div id="RPMbox" style="display:none">
                                               <lable>Company Address</lable>
                                               <input type="text" id="caddress" name="caddress" class="form-control p-3 mt-2">
@@ -748,12 +782,44 @@ date_default_timezone_set("Asia/Kolkata");
                                               <input type="text" id="cpno" name="cpno" class="form-control p-3 mt-2">
                                               <lable>Contact Person Email ID</lable>
                                               <input type="text" id="cpemail" name="cpemail" class="form-control p-3 mt-2">
+                                              
+                                              <hr>
                                               <select id="priority" name="priority" class="form-control" required>
-                                                <option value="no">Non Priority</option>
-                                                <option value="yes">Priority</option>
+                                                <option value="no">Non Priority (Will not give business)</option>
+                                                <option value="yes">Priority (Definitely Will give business)</option>
                                               </select>
-                                            </div>
+                                              <hr>
+                                              
+                                            <select id="company_as" class="form-control" name="company_as" required>
+                                                <option value="">Select About Company</option>
+                                                <option value="Good Company">Good Company</option>
+                                                <option value="Not a Big Company">Not a Big Company</option>
+                                                <option value="other">Other</option>
+                                            </select>
+
+                                             <div id="aboutCompany">
+                                                <hr><textarea name="company_descri" id="company_descri" class="form-control" placeholder="Write about the company"></textarea><hr>
+                                             </div>
                                             
+                                             <hr>
+
+                                             <div class="form-group p-3">
+                                              <label>Potentional Client:</label><br>
+                                              <input type="radio" id="yes" name="potentional_client" value="yes" required>
+                                              <label for="male">YES</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                              <input type="radio" id="no" name="potentional_client" value="no" required>
+                                              <label for="no">No</label>
+                                          </div>
+
+
+
+                                            </div>
+                                            <hr>
+                                            <lable id="letmeetingsremarks">
+                                              <span class="text-danger">* Please provide details as to why it took you more than 30 minutes.</span>
+                                              <input type="text" id="remarksInput" placeholder="* Please provide details as to why it took you more than 30 minutes." name="letmeetingsremarks" class="form-control p-3 mt-2">
+                                            </lable>
+                                            <hr>
                                             <div id="location">
                                               <div id="map-container-google-3" class="z-depth-1-half map-container-3 p-3 m-3 border">
                                                 <iframe style="width:100%;height:200px;" id="myclocation" src="" frameborder="0" style="border:0" allowfullscreen></iframe>
@@ -789,6 +855,47 @@ date_default_timezone_set("Asia/Kolkata");
                                   </div>
                                 </div>
                                 
+
+
+                      <!-- Modal -->
+                      <div class="modal fade MeetingFeedBackformClass" id="myModalStartMeet" tabindex="-1" role="dialog" aria-labelledby="myModalLabelcmpname" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                      <h5 class="modal-title" id="myModalLabelcmpname"></h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                      </button>
+                                  </div>
+                                  <div class="modal-body">
+                                    
+                                  <form action="<?=base_url();?>Menu/MeetingFeedBack" id="MeetingFeedBackform" method="post">
+
+                                      <input type="hidden" name="uid" value="<?=$uid?>">
+                                      <input type="hidden" name="cmp_id" value="" id="cmp_id">
+                                      <input type="hidden" name="meeting_id" value="" id="meeting_id">
+
+                                      <hr>
+                                      <lable>Are you meet with Right Person or Not</lable>
+                                      <select class="form-control" name="meet_user_feed">
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                      </select>
+
+                                        <hr>
+                                        <center>
+                                        <button type="submit" class="btn btn-primary mt-3" onclick="this.form.submit(); this.disabled = true;">Submit</button>
+                                        </center>
+
+                                    </form>
+                                  
+
+                                  </div>
+                                 
+                              </div>
+                          </div>
+                      </div>
+                                
                                 
                                 
                                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -797,6 +904,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 <script type="text/javascript">
                                 $(document).ready(function() {
                                 // $('.select2').select2();
+                                $('#aboutCompany').hide();
                                 $('#bcname').select2();
                                 });
                                 document.querySelector('#button').disabled = true;
@@ -1259,7 +1367,29 @@ date_default_timezone_set("Asia/Kolkata");
                                 document.getElementById("wlink").href = "https://wa.me/91"+phoneno;
                                 document.getElementById("glink").href = "mailto:"+emailid;
                                 document.getElementById("cmplink").href = "CompanyDetails/"+cmid;
-                                //  alert(ctname);
+
+                                if(ctname=='Research'){
+                                  $("#reaserch_message").show();
+                                  $("#reaserch_message").html('<h5 class="p-2">Research</h5>');
+                                  $("#reaserch_message1").text('* Add New Lead Please Submit this form');
+                                  if(cname == 'Unknown'){
+                                    $("#new_reserach1").hide();
+                                    $("#new_reserach2").hide();
+                                    $("#new_reserach3").hide();
+                                    $("#new_reserach4").hide();
+                                    $('#button').removeAttr('disabled');
+                                  }else{
+                                    $("#new_reserach1").show();
+                                    $("#new_reserach2").show();
+                                    $("#new_reserach3").show();
+                                    $("#new_reserach4").show();
+                                    $("#reaserch_message").hide();
+                                    $("#reaserch_message1").hide();
+                                  }
+                                }else{
+                                  $("#reaserch_message").hide();
+                                  $("#reaserch_message1").hide();
+                                }
                                 if(ctname=='Call' || ctname=='Whatsapp Activity'){
                                 //  alert(ctname);
                                 //  document.getElementById("moshow").classList.add('d-lg-none');
@@ -1311,6 +1441,11 @@ date_default_timezone_set("Asia/Kolkata");
                                 if(len > 0){
                                 var compname = response[0].compname;
                                 var cid = response[0].cid;
+
+                                // localStorage.setItem('startMeetformSubmitted', 'true');
+                                let myObjectData = { compname: compname, cid: cid,bmid: id };
+                                localStorage.setItem("myObjectKey", JSON.stringify(myObjectData));
+
                                 document.getElementById("bmcname").value = compname;
                                 document.getElementById("bscid").value = cid;
                                 }
@@ -1342,6 +1477,84 @@ date_default_timezone_set("Asia/Kolkata");
                                 var designation = response[0].designation;
                                 var phoneno = response[0].phoneno;
                                 var emailid = response[0].emailid;
+                               
+                                // Start Meeting 30 minute Conditions
+                                var startm = response[0].startm;
+                                var pastDate = new Date(startm.replace(' ', 'T'));
+                                var currentDate = new Date();
+                                var timeDifference = currentDate - pastDate;
+                                var minutesDifference = Math.floor(timeDifference / (1000 * 60));
+                                if(minutesDifference > 30){
+                                  $('#letmeetingsremarks').show();
+                                  $('#remarksInput').attr('required', true);
+                                }else{
+                                  $('#letmeetingsremarks').hide();
+                                }
+                                // End Meeting 30 minute Conditions
+
+                                // Start Add Status
+                                var cstatus = 1;
+                                var meetingslct = $('#RPMorN').val();
+
+                                  if (meetingslct === 'NO RP') {
+                                      $.ajax({
+                                          url: 'GetStatusWhenMeetClose',
+                                          type: 'POST',
+                                          data: { cstatus: cstatus,meetingslct:'NO RP' },
+                                          success: function(response) {
+                                              $("#updateCompanyStatus").html(response);
+                                          }
+                                      });
+                                  }
+                                
+                                $('#RPMorN').on('change', function b() {
+                                var meetingslct =this.value;  // RP,Only Got Detail
+                        
+                                if(meetingslct=='RP'){
+                                  $.ajax({
+                                          url: 'GetStatusWhenMeetClose',
+                                          type: 'POST',
+                                          data: { cstatus: cstatus,meetingslct:meetingslct },
+                                          success: function(response) {
+                                              $("#updateCompanyStatus").html(response);
+                                          }
+                                      });
+                                } 
+
+                                if(meetingslct=='Only Got Detail'){
+                                  $.ajax({
+                                          url: 'GetStatusWhenMeetClose',
+                                          type: 'POST',
+                                          data: { cstatus: cstatus,meetingslct:meetingslct },
+                                          success: function(response) {
+                                              $("#updateCompanyStatus").html(response);
+                                          }
+                                      });
+                                }
+                                
+                                if (meetingslct === 'NO RP') {
+                                      $.ajax({
+                                          url: 'GetStatusWhenMeetClose',
+                                          type: 'POST',
+                                          data: { cstatus: cstatus,meetingslct:'NO RP' },
+                                          success: function(response) {
+                                              $("#updateCompanyStatus").html(response);
+                                          }
+                                      });
+                                  }
+                                });
+                                // End Status
+                                // Start About Company
+                                $('#company_as').on('change', function b() {
+                                  var company_as =this.value;
+                                  if( company_as == 'other'){
+                                    $("#aboutCompany").show();
+                                  }else{
+                                    $("#aboutCompany").hide();
+                                  }
+                                });
+                                // End About Company 
+
                                 document.getElementById("bmcname").value = compname;
                                 document.getElementById("bmcid").value = cid;
                                 document.getElementById("bmccid").value = ccid;
@@ -1522,3 +1735,116 @@ date_default_timezone_set("Asia/Kolkata");
             $('#permission_letter_select').trigger('change');
         });
     </script>
+    <script>
+$("#rpmsClick").click(function(){
+  var val = $("#bmcname").val();
+    if(val == 'Unknown' || val == ''){
+      alert("* Please Enter Valid Company Name");
+      $('#bmcname').css('border', '1px solid red');
+      return false;
+    }else if(val !=='' ){
+      
+        var inputVal = $('#bmcname').val();           // Get the value entered in the input field
+        var hindiRegex = /[\u0900-\u097F]/;     // Regular expression to detect Hindi characters
+        if(hindiRegex.test(inputVal)){
+           alert('Hindi characters are not Allowed'); // Show the error message if Hindi characters are found
+            return false;
+        }else {
+          return true;
+        }
+    }else{
+      localStorage.setItem('startMeetformSubmitted', 'true');
+      return true;
+    }
+});
+</script>
+
+
+<script>
+    $(document).ready(function() {
+
+        if (localStorage.getItem('startMeetformSubmitted') === 'true') {
+            setTimeout(function() {
+                
+              let retrievedObject = JSON.parse(localStorage.getItem("myObjectKey"));
+                var compname = retrievedObject.compname;
+                var cid_id = retrievedObject.cid;
+                var bmid_id = retrievedObject.bmid;
+                
+                $("#myModalLabelcmpname").text(compname);
+                $("#cmp_id").val(cid_id);
+                $("#meeting_id").val(bmid_id);
+
+                $('#myModalStartMeet').modal('show');
+                 // Show the freeze overlay
+                $('#freezeOverlay').show();
+                localStorage.removeItem('startMeetformSubmitted');
+            // }, 3000);
+            }, 600000);
+        }
+
+        $('#MeetingFeedBackform').submit(function(event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+            // Optionally: Show a message or perform other actions
+            // alert('Form submission is currently disabled. Please interact with the modal.');
+            // If you want to hide the freeze overlay after some time or based on an action:
+            // $('#freezeOverlay').hide();
+            $('.MeetingFeedBackform').on('hidden.bs.modal', function () {
+            $('#freezeOverlay').hide();
+        });
+        });
+
+        // Start Add More School Data When Mom Upload 
+           // Function to add a new set of fields
+           $('#add_field').click(function() {
+                $('#identify_school_box').append(`
+                    <div class="identify_school_box mt-2">
+                        <input type="text" required class="form-control" name="identify_school_state[]" placeholder="Enter Name of State"> <br>
+                        <input type="text" required class="form-control" name="identify_school_district[]" placeholder="Enter Name of District"><br>
+                        <input type="text" required class="form-control" name="no_of_school[]" placeholder="Enter No of School">
+                        <br>
+                         <span class="remove-field bg-danger mt-4">-</span>
+                    </div>
+                `);
+            });
+
+            // Function to remove a set of fields
+            $('#identify_school_box').on('click', '.remove-field', function() {
+                $(this).parent().remove();
+            });
+            // End Add More School Data When Mom Upload 
+    });
+</script>
+
+<style>
+   .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1000;
+        }
+        .overlay.active {
+            display: block;
+        }
+        body.frozen {
+            overflow: hidden;
+        }
+        span.remove-field.bg-danger {
+    padding: 6px;
+    border-radius: 34%;
+}
+p#reaserch_message {
+    color: green;
+    font-weight: 500;
+    font-size: 16px;
+}
+p#reaserch_message1 {
+    color: green;
+    font-weight: 500;
+}
+</style>

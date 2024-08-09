@@ -154,6 +154,15 @@ $dataPoints2 = array(
   <?= $this->session->flashdata('pending_message'); ?>
 </div>
 <?php endif; ?>
+<<<<<<< HEAD
+=======
+<?php if ($this->session->flashdata('success_message')): ?>
+    <div class="alert alert-success alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <?= $this->session->flashdata('success_message'); ?>
+</div>
+<?php endif; ?>
+>>>>>>> stem-sales/main
 
 <?php
               if ($this->session->flashdata('error_message')): ?>
@@ -1159,6 +1168,20 @@ $dataPoints2 = array(
                             foreach($barg as $brg){
                                 $bs = $brg->status;
                                 $cid = $brg->cid;
+
+                                $tid = $brg->tid;
+
+                                $action_id = $this->Menu_model->get_actionIdfromTblCallEvent($tid);
+                                if($action_id == 3){
+                                  $meet_name = 'Sheduled Meeting';
+                                }
+                                if($action_id == 4){
+                                  $meet_name = 'Barg in Meeting';
+                                }
+                                if($action_id == 17){
+                                  $meet_name = 'Join Meeting';
+                                }
+
                                 $cd = $this->Menu_model->get_cdbyid($cid);
                                 ?>
                                 <?php if($bs=='Pending'){?>
@@ -1168,7 +1191,7 @@ $dataPoints2 = array(
                                         <?=$cd[0]->city?> |
                                         <?=$cd[0]->state?> |
                                         <?=$brg->storedt?> |
-                                        <b class="text-success">Start Meeting</b>
+                                        <b class="text-success">Start Meeting (<?=$meet_name; ?>)</b>
                                     </div></button>
                                 <?php }if($bs=='Start'){?>
                                     <button style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;" id="closem<?=$bl?>" value="<?=$brg->id?>">
@@ -1177,7 +1200,7 @@ $dataPoints2 = array(
                                         <?=$cd[0]->city?> |
                                         <?=$cd[0]->state?> |
                                         <?=$brg->storedt?> |
-                                        <b class="text-danger">Close Meeting</b>
+                                        <b class="text-danger">Close Meeting (<?=$meet_name; ?>)</b>
                                     </div>
                             <?php $bl++;}} ?>
                         </div>

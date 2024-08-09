@@ -112,11 +112,7 @@
       function drawChart1() {
         var data = google.visualization.arrayToDataTable([
           ['Status', 'No of Task'],
-            <?php 
-            $status = $this->Menu_model->get_taskstatuswisebwdall($uid,$sd,$ed);
-            // $this->load->model('Graph_model');
-            // $status = $this->Menu_model->get_taskstatuswisebwdall_New($uid,$sd,$ed);
-
+            <?php $status = $this->Menu_model->get_taskstatuswisebwdall($uid,$sd,$ed);
              foreach($status as $st){?>
              ["<?=$st->stname?> (<?=$st->cont?>)", <?=$st->cont?>],
     	    <?php } ?>
@@ -476,71 +472,58 @@
     </div>
 
     <script>
-    var myContext = document.getElementById("stackedChartID21").getContext('2d');
+        var myContext = document.getElementById("stackedChartID21").getContext('2d');
+        var myChart21 = new Chart(myContext, {
+            type: 'bar',
+            data: {
+                labels: [
+                    
+                    <?php   $currentDate = new DateTime();
+                            $financialYear = ($currentDate->format('m') >= 4) ? $currentDate->format('Y') : ($currentDate->format('Y') - 1);
+                            for ($month = 4; $month <= 15; $month++) {
+                                $adjustedMonth = ($month <= 12) ? $month : ($month - 12);
+                                $year = ($month <= 12) ? $financialYear : ($financialYear + 1);
+                                $monthName = DateTime::createFromFormat('!m', $adjustedMonth)->format('F');?>
+                    "<?=$monthName?> (<?=$year?>)", <?php } ?>],
+                datasets: [
+                    
+                    <?php 
+                    $colors = array('red','blue','green','yellow','purple','orange','pink','brown','cyan','magenta','teal','lime','violet','indigo','gray');
 
-    // Function to generate labels
-    function generateLabels() {
-        var labels = [];
-        <?php
-        $currentDate = new DateTime();
-        $financialYear = ($currentDate->format('m') >= 4) ? $currentDate->format('Y') : ($currentDate->format('Y') - 1);
-        for ($month = 4; $month <= 15; $month++) {
-            $adjustedMonth = ($month <= 12) ? $month : ($month - 12);
-            $year = ($month <= 12) ? $financialYear : ($financialYear + 1);
-            $monthName = DateTime::createFromFormat('!m', $adjustedMonth)->format('F'); ?>
-            labels.push("<?=$monthName?> (<?=$year?>)");
-        <?php } ?>
-        return labels;
-    }
-
-    // Function to generate dataset
-    function generateDataset(label, backgroundColor, getDataFunc, acid) {
-        var data = [];
-        <?php
-        $currentDate = new DateTime();
-        $financialYear = ($currentDate->format('m') >= 4) ? $currentDate->format('Y') : ($currentDate->format('Y') - 1);
-        for ($month = 4; $month <= 15; $month++) {
-            $adjustedMonth = ($month <= 12) ? $month : ($month - 12);
-            $year = ($month <= 12) ? $financialYear : ($financialYear + 1);
-            $accont = $this->Menu_model->$getDataFunc($uid, $month, $year, $acid); ?>
-            data.push(<?=$accont[0]->cont ?? 0?>);
-        <?php } ?>
-        return {
-            label: label,
-            backgroundColor: backgroundColor,
-            data: data,
-            stack: 'Stack 0'
-        };
-    }
-
-    // Generate chart
-    var myChart21 = new Chart(myContext, {
-        type: 'bar',
-        data: {
-            labels: generateLabels(),
-            datasets: [
-                <?php
-                $colors = array('red','blue','green','yellow','purple','orange','pink','brown','cyan','magenta','teal','lime','violet','indigo','gray');
-                $action = $this->Menu_model->get_action();
-                $i = 0;
-                foreach($action as $ac) {
-                    $acid = $ac->id; ?>
-                    generateDataset('<?=$ac->name?>', '<?=$colors[$i]?>', 'get_mywisetaskall', <?=$acid?>),
-                <?php $i++; } ?>
-            ]
-        },
-        options: {
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Month Wise No of Task'
-                }
+                    $action = $this->Menu_model->get_action(); $i=0; foreach($action as $ac){
+                        $acid = $ac->id; ?>
+                    {
+                        label: '<?=$ac->name?>',
+                        backgroundColor: "<?=$colors[$i]?>",
+                        data: [
+                            
+                            <?php $currentDate = new DateTime();
+                        $financialYear = ($currentDate->format('m') >= 4) ? $currentDate->format('Y') : ($currentDate->format('Y') - 1);
+                        for ($month = 4; $month <= 15; $month++) {
+                            $adjustedMonth = ($month <= 12) ? $month : ($month - 12);
+                            $year = ($month <= 12) ? $financialYear : ($financialYear + 1);
+                            $accont = $this->Menu_model->get_mywisetaskall($uid,$month,$year,$acid);?>
+                            <?=$accont[0]->cont?>,<?php } ?>],
+                        stack: 'Stack 0',
+                    },
+                    <?php $i++;} ?>
+                ],
+            },
+            options: {
+                
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Month Wise No of Task'
+                    },
+                    
+                
             },
             onClick: function (evt, activeElements) {
                 if (activeElements && activeElements.length) {
                     const clickedDatasetIndex = activeElements[0].datasetIndex;
-                    let allOthersHidden = true;
 
+                    let allOthersHidden = true;
                     for (let i = 0; i < myChart21.data.datasets.length; i++) {
                         if (i !== clickedDatasetIndex && !myChart21.getDatasetMeta(i).hidden) {
                             allOthersHidden = false;
@@ -548,8 +531,14 @@
                         }
                     }
 
-                    for (let i = 0; i < myChart21.data.datasets.length; i++) {
-                        myChart21.getDatasetMeta(i).hidden = allOthersHidden ? false : (i !== clickedDatasetIndex);
+                    if (allOthersHidden) {
+                        for (let i = 0; i < myChart21.data.datasets.length; i++) {
+                            myChart21.getDatasetMeta(i).hidden = false;
+                        }
+                    } else {
+                        for (let i = 0; i < myChart21.data.datasets.length; i++) {
+                            myChart21.getDatasetMeta(i).hidden = (i !== clickedDatasetIndex);
+                        }
                     }
 
                     myChart21.update();
@@ -557,8 +546,7 @@
             }
         }
     });
-</script>
-
+    </script>
       
       
       

@@ -38,6 +38,10 @@
 .form-control {
     background: azure !important;
 }
+span.remove-field.bg-danger {
+    padding: 6px;
+    border-radius: 34%;
+}
     </style>
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -50,8 +54,67 @@
             <div class="row">
               <div class="col-12">
                 <?php 
-                
-                // dd($momdata);
+               
+               $id         = $momdata[0]->id;
+               $ccstatus   = $momdata[0]->ccstatus;
+               $action_id  = $momdata[0]->action_id;
+               $user_id    = $momdata[0]->user_id;
+               $init_cmpid = $momdata[0]->init_cmpid;
+               $tid        = $momdata[0]->tid;
+               $actontaken = $momdata[0]->actontaken;
+
+               $getCompanyData = $this->Menu_model->get_cmpbyinid($init_cmpid);
+               $getCompanyPartner = $this->Menu_model->get_partnerbyid($getCompanyData[0]->partnerType_id)[0]->name;
+
+                $meetingdonewinitiator = $momdata[0]->meetingdonewinitiator;
+
+                $presentation          = $momdata[0]->presentation;
+
+                $project_intervention_select = $momdata[0]->project_intervention_select;
+                $project_intervention        = $momdata[0]->project_intervention;
+
+                $client_has_adopted_select   = $momdata[0]->client_has_adopted_select;
+                $client_has_adopted          = $momdata[0]->client_has_adopted;
+
+                $approving_autorities   = $momdata[0]->approving_autorities;
+
+                $budget_for_cfyear      = $momdata[0]->budget_for_cfyear;
+
+                $fund_sanstion_limit    = $momdata[0]->fund_sanstion_limit;
+
+                $other_specific_remarks = $momdata[0]->other_specific_remarks;
+
+                $submit_proposal        = $momdata[0]->submit_proposal;
+                $proposal_no_of_school  = $momdata[0]->proposal_no_of_school;
+                $proposal_of_budget     = $momdata[0]->proposal_of_budget;
+                $proposal_of_location   = $momdata[0]->proposal_of_location;
+
+                $identify_school             = $momdata[0]->identify_school;
+                $identify_school_state       = $momdata[0]->identify_school_state;
+                $identify_school_district    = $momdata[0]->identify_school_district;
+                $no_of_school                = $momdata[0]->no_of_school;
+
+
+                $permission_letter                = $momdata[0]->permission_letter;
+                $permission_letter_rech           = $momdata[0]->permission_letter_rech;
+                $letter_organization_name         = $momdata[0]->Letter_organization_name;
+                $letter_organization_designation  = $momdata[0]->Letter_organization_designation;
+                $letter_organization_location     = $momdata[0]->Letter_organization_location;
+
+
+                $client_int_school_visit     = $momdata[0]->client_int_school_visit;
+                $client_int_type_project     = $momdata[0]->client_int_type_project;
+                $client_int_school_date      = $momdata[0]->client_int_school_date;
+                $client_int_school_state     = $momdata[0]->client_int_school_state;
+                $client_int_school_district  = $momdata[0]->client_int_school_district;
+                $client_int_no_of_school     = $momdata[0]->client_int_no_of_school;
+
+                $intervention_cm_pst_sh     = $momdata[0]->intervention_cm_pst_sh;
+
+                $rpmmom     = $momdata[0]->rpmmom;
+
+                $partner     = $momdata[0]->partner;
+
                 ?>
                 <div class="card mt-2">
                   <div class="card-header bg-info">
@@ -62,224 +125,225 @@
                       <div class="page-header">
                         <div class="form-group">
                           <fieldset>
-                            <?php foreach($momdata as $mdata): ?>
-                                <?php 
-                                    unset($mdata->cm_call_task);
-                                    unset($mdata->bd_request_task);
-                                    unset($mdata->school_visit_task);
-                                    unset($mdata->pst_assign);
-                                    unset($mdata->cdate);
-                                    unset($mdata->approved_status);
-                                    unset($mdata->approved_by);
-                                    unset($mdata->approved_date);
-                                    unset($mdata->reject_remarks);
-                                    unset($mdata->edit_cnt);
-                                    // echo "<pre>";
-                                    // print_r($mdata);
-                                   
-                                    ?>
-                                 
+                              <!-- Start Meeting Form -->
+                  <form method="post" action="<?=base_url();?>/Management/UpdateEditMomData">
+               
+                    <input type="hidden" class="form-control" value="<?= $id ?>" id="id" name="id">
+                    <input type="hidden" class="form-control" value="<?= $tardate ?>" name="tardate">
+                    <input type="hidden" class="form-control" value="<?= $ccstatus ?>" id="ccstatus" name="ccstatus">
+                    <input type="hidden" class="form-control" value="<?= $tid ?>" name="tid">
+                    <input type="hidden" class="form-control" value="<?= $action_id ?>" id="action_id" name="action_id">
+                    <input type="hidden" class="form-control" value="<?= $user_id ?>" id="user_id" name="user_id">
+                    <input type="hidden" class="form-control" value="<?= $init_cmpid ?>" id="init_cmpid" name="init_cmpid">
+                    <input type="hidden" class="form-control" value="<?= $actontaken ?>" id="actontaken" name="actontaken">
+                    <input type="hidden" class="form-control" value="<?= $getCompanyPartner ?>" name="partner">
 
-                                <form method="post" action="<?=base_url();?>/Management/UpdateEditMomData">
-                                    
-                                <?php 
-                                 foreach ($mdata as $key => $value):
-                                
-                                if($key == 'id'){ ?>
-                                     <input type="hidden" class="form-control" value="<?= $value ?>" id="id" name="id">
-                                     <input type="hidden" class="form-control" value="<?= $tardate ?>" name="tardate">
-                                <?php } ?>
-                                <?php if($key == 'ccstatus'){ ?>
-                                     <input type="hidden" class="form-control" value="<?= $value ?>" id="ccstatus" name="ccstatus">
-                                <?php } ?>
-                                <?php if($key == 'tid'){ ?>
-                                     <input type="hidden" class="form-control" value="<?= $value ?>" id="ccstatus" name="tid">
-                                <?php } ?>
-                                <?php if($key == 'action_id'){ ?>
-                                     <input type="hidden" class="form-control" value="<?= $value ?>" id="action_id" name="action_id">
-                                <?php } ?>
-                                <?php if($key == 'user_id'){ ?>
-                                     <input type="hidden" class="form-control" value="<?= $value ?>" id="user_id" name="user_id">
-                                <?php } ?>
-                                <?php if($key == 'init_cmpid'){ ?>
-                                     <input type="hidden" class="form-control" value="<?= $value ?>" id="init_cmpid" name="init_cmpid">
-                                <?php } ?>
-                                <?php if($key == 'actontaken'){ ?>
-                                     <input type="hidden" class="form-control" value="<?= $value ?>" id="actontaken" name="actontaken">
-                                <?php } ?>
+                  <label>Meeting done with Initiator or influencer and decision maker of the company</label>
+                    <select class="form-control" name="meetingdonewinitiator">
+                    <option value="Initiator" <?php if ($meetingdonewinitiator == 'Initiator') echo 'selected'; ?>>Initiator</option>
+                    <option value="Influencer" <?php if ($meetingdonewinitiator == 'Influencer') echo 'selected'; ?>>Influencer</option>
+                    <option value="Decision maker" <?php if ($meetingdonewinitiator == 'Decision maker') echo 'selected'; ?>>Decision maker</option>
+                    </select>
 
+                    <hr>
+                    <label>Presentation and pitching is done for which offering :</label>
+                    <?php 
+                    $presentationArray = explode(',', $presentation);
+                    // HTML part
+                    echo '<select class="form-control" name="presentation[]" multiple>';
+                    $options = [
+                    'MSC', 'Tinkering', 'Bala', 'Astronomy', 'DIY', 'NSP', 'Science Lab', 'Smart Class'
+                    ];
+                    foreach ($options as $option) {
+                    $selected = in_array($option, $presentationArray) ? 'selected' : '';
+                    echo '<option value="' . $option . '" ' . $selected . '>' . $option . '</option>';
+                    }
+                    echo '</select>'; 
+                    ?>
+                    <hr>
+                    <input type="hidden" name="momdata" value="momdata">
 
-                                <?php if($key == 'meetingdonewinitiator'){ ?>
-                                    <label for="meetingdonewinitiator">Meeting done with Initiator or infulencer or discision maker of the company</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="meetingdonewinitiator" name="meetingdonewinitiator">
-                                     <hr>
-                                <?php } ?>
-                                
-                                <?php if($key == 'presentation'){ ?>
-                                    <label for="presentation">Presentation and pitching is done for which offering :</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="presentation" name="presentation">
-                                     <hr>
-                                <?php } ?>
+                    <div>
+                      <label>What is the client's thematic Area for Project Intervention in the current financial Year</label>
+                      <select class="form-control" id="project_intervention_select" name="project_intervention_select">
+                          <option value="Education" <?php if ($project_intervention_select == 'Education') echo 'selected'; ?> >Education</option>
+                          <option value="Health" <?php if ($project_intervention_select == 'Health') echo 'selected'; ?> >Health</option>
+                          <option value="Nutrition" <?php if ($project_intervention_select == 'Nutrition') echo 'selected'; ?> >Nutrition</option>
+                          <option value="Others" <?php if ($project_intervention_select == 'Others') echo 'selected'; ?> >Others</option>
+                      </select> 
+                      <br>
+                      <input type="text" class="form-control" name="project_intervention" id="project_interventionText" placeholder="Please add client's thematic Area for Project Intervention in the current financial Year">
+                    </div>
+                    <hr>
+                    <div>
+                      <label>Does the client has adopted any schools ?</label>
+                      <select class="form-control" id="client_has_adopted_select"  name="client_has_adopted_select">
+                        <option value="no" <?php if ($client_has_adopted_select == 'no') echo 'selected'; ?>>No</option>
+                        <option value="yes" <?php if ($client_has_adopted_select == 'yes') echo 'selected'; ?>>Yes</option>
+                      </select>
+                      <br>
+                      <textarea type="text" class="form-control" name="client_has_adopted" placeholder="Please specify details of the schools that client has adopted"  id="client_has_adoptedText" rows="3"><?=$client_has_adopted?></textarea> 
+                    </div>
+                    <hr>
+                    <div>
+                      <label>Who are the approving autorities of the proposal ?</label>
+                      <textarea  class="form-control" name="approving_autorities" placeholder="Please type name and designation of the officer approving the proposal"><?=$approving_autorities?></textarea>
+                    </div>
+                    <hr>
+                    <div>
+                      <label>What is the left over budget for the current financial year ?</label>
+                      <input type="number"  class="form-control" name="budget_for_cfyear" value="<?=$budget_for_cfyear?>" placeholder="Please Type budget for the current financial year">
+                    </div>
+                    <hr>
+                    <div>
+                      <label>what is the fund sanction limit at their level ?</label>
+                      <input type="number"  class="form-control" name="fund_sanstion_limit" value="<?=$fund_sanstion_limit?>" placeholder="Please Type fund sanction limit at their level">
+                    </div>
+                    <hr>
+                    <div>
+                      <label>Any other specific remarks regards to the meeting ?</label>
+                      <textarea type="text"  class="form-control" name="other_specific_remarks" placeholder="specific remarks regards to the meeting"  rows="3"><?=$other_specific_remarks?></textarea> 
+                    </div>
+                    <hr>
+                    <div>
+                    <label>Do we need to submit the proposal ?</label>
+                    <select class="form-control"  name="submit_proposal" id="submit_proposal_select" >
+                        <option value="no" <?php if ($submit_proposal == 'no') echo 'selected'; ?> >No</option>
+                        <option value="yes" <?php if ($submit_proposal == 'yes') echo 'selected'; ?> >Yes</option>
+                    </select>
+                    <br>
+                    <div id="submit_proposal_file" class="identify_school_box">
+                    <input type="text"  class="form-control"name="proposal_no_of_school" value="<?=$proposal_no_of_school?>" placeholder="Proposed number of schools"> <br>
+                    <input type="text"  class="form-control"name="proposal_of_budget" value="<?=$proposal_of_budget?>" placeholder="Proposed budget"><br>
+                    <input type="text"  class="form-control"name="proposal_of_location" value="<?=$proposal_of_location?>" placeholder="Proposed location"><br>
+                    </div>
+                    </div>
+                     <hr>
+                    <div>
+                    <label>Do we need to identify school ?</label>
+                    <select class="form-control"  name="identify_school" id="identify_school_select" >
+                        <option value="no" <?php if ($identify_school == 'no') echo 'selected'; ?> >No</option>
+                        <option value="yes" <?php if ($identify_school == 'yes') echo 'selected'; ?> >Yes</option>
+                    </select>
+                    <?php 
+                    if($identify_school == 'yes'){
+                      $states = explode(',', $identify_school_state);
+                      $districts = explode(',', $identify_school_district);
+                      $schoolCounts = explode(',', $no_of_school);
 
-                                <?php if($key == 'project_intervention_select'){ ?>
-                                    <label for="project_intervention_select">What is the client's thematic Area for Project Intervention in the current financial Year</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="project_intervention_select" name="project_intervention_select">
-                                     <hr>
-                                <?php } ?>
+                      // Combine into a single array
+                      $combinedArray = [];
 
-                                <?php if($key == 'project_intervention'){ ?>
-                                    <label for="project_intervention">What is the client's Other thematic Area for Project Intervention in the current financial Year</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="project_intervention" name="project_intervention">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'client_has_adopted_select'){ ?>
-                                    <label for="client_has_adopted_select">Does the client has adopted any schools ?</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="client_has_adopted_select" name="client_has_adopted_select">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'client_has_adopted'){ ?>
-                                    <label for="client_has_adopted">Specify details of client has adopted any schools</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="client_has_adopted" name="client_has_adopted">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'approving_autorities'){ ?>
-                                    <label for="approving_autorities">Who are the approving autorities of the proposal ?</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="approving_autorities" name="approving_autorities">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'budget_for_cfyear'){ ?>
-                                    <label for="budget_for_cfyear">What is the left over budget for the current financial year ?</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="budget_for_cfyear" name="budget_for_cfyear">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'fund_sanstion_limit'){ ?>
-                                    <label for="fund_sanstion_limit">what is the fund sanstion limit at their level ?</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="fund_sanstion_limit" name="fund_sanstion_limit">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'other_specific_remarks'){ ?>
-                                    <label for="other_specific_remarks">Any other specific remarks regards to the meeting ?</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="other_specific_remarks" name="other_specific_remarks">
-                                     <hr>
-                                <?php } ?>
+                      for ($i = 0; $i < count($states); $i++) {
+                          $combinedArray[] = [
+                              'identify_school_state' => $states[$i],
+                              'identify_school_district' => $districts[$i],
+                              'no_of_school' => $schoolCounts[$i]
+                          ];
+                      }
+                    }
+                   $combinedArraycnt = sizeof($combinedArray);
+                    ?>
+                    <br>
+                    <div id="identify_school_box" class="identify_school_box">
+                      <div class="text-right mb-2">
+                      <span id="add_field" class="p-2 bg-primary" >+</span>
+                      </div>
+                      <?php 
+                         if($combinedArraycnt > 0){
+                              foreach($combinedArray as $arrays){ ?>
+                              <lable>Name of State : </lable>
+                                   <input type="text"  class="form-control"name="identify_school_state[]" value="<?=$arrays['identify_school_state']?>" placeholder="Enter Name of State">
+                                   <lable>Name of District : </lable>
+                                   <input type="text"  class="form-control"name="identify_school_district[]" value="<?=$arrays['identify_school_district']?>" placeholder="Enter Name of District">
+                                   <lable>No of School : </lable>
+                                   <input type="text"  class="form-control"name="no_of_school[]" value="<?=$arrays['no_of_school']?>" placeholder="Enter No of School"> <br/>
+                            <?php } } ?>
+                    </div>
+                    
+                    </div>
+         
+                    <hr>
+                    <div>
+                    <label>School permission letter  ?</label>
+                    <select class="form-control"  name="permission_letter" id="permission_letter_select" >
+                        <option value="no" <?php if ($permission_letter == 'no') echo 'selected'; ?> >No</option>
+                        <option value="yes" <?php if ($permission_letter == 'yes') echo 'selected'; ?> >Yes</option>
+                    </select>
+                    </div>
+                
+                    <hr>
+                    <div>
+                     
+                    <div id="permission_letter_box" class="identify_school_box" >
+                    <label>Letter should be address to whom in the organization, along with Name and designation and Location</label>
 
-                                <?php if($key == 'submit_proposal'){ ?>
-                                    <label for="submit_proposal">Do we need to submit the proposal ?</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="submit_proposal" name="submit_proposal">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'proposal_no_of_school'){ ?>
-                                    <label for="proposal_no_of_school">Number of school for Proposal</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="proposal_no_of_school" name="proposal_no_of_school">
-                                     <hr>
-                                <?php } ?>
+                    <select class="form-control"  name="permission_letter_rech" >
+                        <option value="NGO" <?php if ($permission_letter_rech == 'NGO') echo 'selected'; ?> >NGO</option>
+                        <option value="STEM" <?php if ($permission_letter_rech == 'STEM') echo 'selected'; ?> >STEM</option>
+                    </select>
+                    <br>
+                     <lable>Concern person name : </lable>              
+                    <input type="text"  value="<?=$letter_organization_name?>" class="form-control"name="Letter_organization_name" placeholder="Add Concern person name"> <br>
+                    <lable>Name of Designation : </lable> 
+                    <input type="text"  value="<?=$letter_organization_designation?>" class="form-control"name="Letter_organization_designation" placeholder="Enter Name of Designation"><br>
+                    <lable>Location : </lable> 
+                    <input type="text"  value="<?=$letter_organization_location?>" class="form-control"name="Letter_organization_location" placeholder="Enter Location">
+                    </div>  
+                    </div>
 
-                                <?php if($key == 'proposal_of_budget'){ ?>
-                                    <label for="proposal_of_budget">Budget of Proposal</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="proposal_of_budget" name="proposal_of_budget">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'identify_school'){ ?>
-                                    <label for="identify_school">Do we need to identify school ?</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="identify_school" name="identify_school">
-                                     <hr>
-                                <?php } ?>
+                    <hr>
+                    <div>
+                    <label>Client is interested for School Visit ?</label>
+                    <select class="form-control"  name="client_int_school_visit" id="client_int_school_select">
+                        <option value="no" <?php if ($client_int_school_visit == 'no') echo 'selected'; ?> >No</option>
+                        <option value="yes" <?php if ($client_int_school_visit == 'yes') echo 'selected'; ?> >Yes</option>
+                    </select>
+                    <br>
+                    <div id="client_int_school_box" class="identify_school_box">
 
-                                <?php if($key == 'identify_school_state'){ ?>
-                                    <label for="identify_school_state">Name of State to identify school</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="identify_school_state" name="identify_school_state">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'identify_school_district'){ ?>
-                                    <label for="identify_school_district">Name of District to identify school</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="identify_school_district" name="identify_school_district">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'no_of_school'){ ?>
-                                    <label for="no_of_school">Number of identify school</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="no_of_school" name="no_of_school">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'permission_letter'){ ?>
-                                    <label for="permission_letter">School permission letter required ?</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="permission_letter" name="permission_letter">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'permission_letter_rech'){ ?>
-                                    <label for="permission_letter_rech">Letter should be address to whom in the organization, along with Name and designation and Location</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="permission_letter_rech" name="permission_letter_rech">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'Letter_organization_name'){ ?>
-                                    <label for="Letter_organization_name">Letter Organization Name</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="Letter_organization_name" name="Letter_organization_name">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'Letter_organization_designation'){ ?>
-                                    <label for="Letter_organization_designation">Organization Designation Name</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="Letter_organization_designation" name="Letter_organization_designation">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'Letter_organization_location'){ ?>
-                                    <label for="Letter_organization_location">Organization Location Name</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="Letter_organization_location" name="Letter_organization_location">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'client_int_school_visit'){ ?>
-                                    <label for="client_int_school_visit">Client is interested for School Visit ?</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="client_int_school_visit" name="client_int_school_visit">
-                                <?php } ?>
-                                <?php if($key == 'client_int_school_date'){ ?>
-                                    <label for="client_int_school_date">Date for Client is interested for School Visit ?</label>
-                                     <input type="date" class="form-control" value="<?= $value ?>" id="client_int_school_date" name="client_int_school_date">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'client_int_school_state'){ ?>
-                                    <label for="client_int_school_state">State for Client is interested for School Visit ?</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="client_int_school_state" name="client_int_school_state">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'client_int_school_district'){ ?>
-                                    <label for="client_int_school_district">District for Client is interested for School Visit ?</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="client_int_school_district" name="client_int_school_district">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'client_int_no_of_school'){ ?>
-                                    <label for="client_int_no_of_school">Number of School for Client is interested for School Visit ?</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="client_int_no_of_school" name="client_int_no_of_school">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'intervention_cm_pst_sh'){ ?>
-                                    <label for="intervention_cm_pst_sh">Do you need intervention from Cluster/PST/ Sales Head ?</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="intervention_cm_pst_sh" name="intervention_cm_pst_sh">
-                                     <hr>
-                                <?php } ?>
-                                <?php if($key == 'rpmmom'){ ?>
-                                    <label for="rpmmom">Short MOM Remarks</label>
-                                     <input type="text" class="form-control" value="<?= $value ?>" id="rpmmom" name="rpmmom">
-                                     <hr>
-                                <?php } ?>
-                                    
+                    <!-- <input type="text"  class="form-control"name="client_int_type_project" placeholder="Add type of project"> -->
+                    <select class="form-control" name="client_int_type_project">
+                      <option selected disabled>Select Type of project</option>
+                      <option value="MSC" <?php if ($client_int_type_project == 'MSC') echo 'selected'; ?>>MSC</option>
+                      <option value="Tinkering" <?php if ($client_int_type_project == 'Tinkering') echo 'selected'; ?>>Tinkering</option>
+                      <option value="Bala" <?php if ($client_int_type_project == 'Bala') echo 'selected'; ?>>Bala</option>
+                      <option value="Astronomy" <?php if ($client_int_type_project == 'Astronomy') echo 'selected'; ?>>Astronomy</option>
+                      <option value="DIY" <?php if ($client_int_type_project == 'DIY') echo 'selected'; ?>>DIY</option>
+                      <option value="NSP" <?php if ($client_int_type_project == 'NSP') echo 'selected'; ?>>NSP</option>
+                      <option value="Science Lab" <?php if ($client_int_type_project == 'Science Lab') echo 'selected'; ?>>Science Lab</option>
+                      <option value="Smart Class" <?php if ($client_int_type_project == 'Smart Class') echo 'selected'; ?>>Smart Class</option>
+                    </select>
+                    <br>
+                    <lable>Date : </lable>
+                    <input type="date"  value="<?=$client_int_school_date?>" class="form-control"name="client_int_school_date" placeholder="Select Date"> <br>
+                    <lable>State : </lable>
+                    <input type="text"  value="<?=$client_int_school_state?>" class="form-control"name="client_int_school_state" placeholder="Enter State"> <br>
+                    <lable>District : </lable>
+                    <input type="text"  value="<?=$client_int_school_district?>" class="form-control"name="client_int_school_district" placeholder="Enter Name of District"><br>
+                    <lable>Number of School : </lable>
+                    <input type="number"  value="<?=$client_int_no_of_school?>" class="form-control"name="client_int_no_of_school" placeholder="Enter no of School">
+                    </div>
 
+                    </div>
+                    <hr>
+                    <div>
+                    <label>Do you need intervention from Cluster/PST/ Sales Head ?</label>
+                    <select class="form-control"  name="intervention_cm_pst_sh" id="client_int_school_select" >
+                        <option <?php if ($intervention_cm_pst_sh == 'Cluster') echo 'selected'; ?> value="Cluster">Cluster</option>
+                        <option <?php if ($intervention_cm_pst_sh == 'PST') echo 'selected'; ?> value="PST">PST</option>
+                        <option <?php if ($intervention_cm_pst_sh == 'Sales Head') echo 'selected'; ?> value="Sales Head">Sales Head</option>
+                    </select>
+                    </div> 
 
-                                     <?php endforeach; ?>
-                                     <hr>
-                                     <button type="submit" class="btn btn-primary">Submit</button>
-                                </form>
-
-
-
-
-
-
-
-
-
-
-
-
-                           
-                            <?php endforeach; ?>
+                    <hr>
+                    <label>Write Short MOM Remarks</label>
+                      <textarea type="text" class="form-control" id="rpmmom" name="rpmmom" rows="3" ><?=$rpmmom ?></textarea> 
+                  </div>
+                  <!-- End Meeting Form -->
+                              <hr>
+                                   <button type="submit" class="btn btn-primary">Submit</button>
+                              </form>
                           </fieldset>
                         </div>
                         <hr />
@@ -357,10 +421,89 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="<?=base_url();?>assets/js/dashboard.js"></script>
     <script>
-      $("#example1").DataTable({
-        "responsive": false, "lengthChange": false, "autoWidth": false,
-        "buttons": ["csv", "excel", "pdf", "print",]
-      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        $(document).ready(function() {
+          $('#smallProposaltext').hide();
+          $('#identify_school_box').hide();
+          $('#permission_letter_box').hide();
+
+            $('#project_intervention_select').change(function() {
+                if ($(this).val() === 'Others') {
+                    $('#project_interventionText').show();
+                } else {
+                    $('#project_interventionText').hide();
+                }
+            });
+
+            $('#client_has_adopted_select').change(function() {
+                if ($(this).val() === 'yes') {
+                    $('#client_has_adoptedText').show();
+                } else {
+                    $('#client_has_adoptedText').hide();
+
+                }
+            });
+
+            $('#submit_proposal_select').change(function() {
+                if ($(this).val() === 'yes') {
+                    $('#submit_proposal_file').show();
+                    $('#smallProposaltext').show();
+                } else {
+                    $('#submit_proposal_file').hide();
+                    $('#smallProposaltext').hide();
+                }
+            });
+            $('#identify_school_select').change(function() {
+                if ($(this).val() === 'yes') {
+                    $('#identify_school_box').show();
+                } else {
+                    $('#identify_school_box').hide();
+                }
+            });
+            $('#client_int_school_select').change(function() {
+                if ($(this).val() === 'yes') {
+                    $('#client_int_school_box').show();
+                } else {
+                    $('#client_int_school_box').hide();
+                }
+            });
+            
+            $('#permission_letter_select').change(function() {
+                if ($(this).val() === 'yes') {
+                    $('#permission_letter_box').show();
+                } else {
+                    $('#permission_letter_box').hide();
+                }
+            });
+
+            // Trigger the change event on page load in case "Others" is preselected
+            $('#project_intervention_select').trigger('change');
+            $('#client_has_adopted_select').trigger('change');
+            $('#submit_proposal_select').trigger('change');
+            $('#identify_school_select').trigger('change');
+            $('#client_int_school_select').trigger('change');
+            $('#permission_letter_select').trigger('change');
+
+
+             // Start Add More School Data When Mom Upload 
+           // Function to add a new set of fields
+           $('#add_field').click(function() {
+                $('#identify_school_box').append(`
+                    <div class="identify_school_box mt-2">
+                        <input type="text"  class="form-control" name="identify_school_state[]" placeholder="Enter Name of State"> <br>
+                        <input type="text"  class="form-control" name="identify_school_district[]" placeholder="Enter Name of District"><br>
+                        <input type="text"  class="form-control" name="no_of_school[]" placeholder="Enter No of School">
+                        <br>
+                         <span class="remove-field bg-danger mt-4">-</span>
+                    </div>
+                `);
+            });
+
+            // Function to remove a set of fields
+            $('#identify_school_box').on('click', '.remove-field', function() {
+                $(this).parent().remove();
+            });
+            // End Add More School Data When Mom Upload 
+        });
     </script>
   </body>
 </html>

@@ -3,7 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="wi$dth=device-wi$dth, initial-scale=1">
+<<<<<<< HEAD
     <title>STEM APP | WebAPP</title>
+=======
+    <title>Mom Data | STEM APP | WebAPP</title>
+>>>>>>> stem-sales/main
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
     <!-- Font Awesome -->
@@ -152,8 +156,16 @@
                                       if($dt->approved_by == ''){ ?>
                                         <div>
                                             <!-- <p><a href="<?=base_url();?>Management/MomApprovedByUserAdmin/<?= $dt->id?>/Approve/<?=$suid?>/<?=$tardate?>" class="btn btn-success mr-2" onclick="return confirm('Are you sure you want to Approved it?');" >Approve</a></p> -->
+<<<<<<< HEAD
                                             <p><button type="button" class="btn btn-success"  onclick="MomApprove(<?= $i ?>,<?= $dt->id?>,'Reject')">Approve</button></p>
                                             <p><button type="button" class="btn btn-primary"  onclick="Reject(<?= $i ?>,<?= $dt->id?>,'Reject')">Reject</button></p>
+=======
+                                           
+                                            <p><button type="button" class="btn btn-success" onclick="MomApprove(<?= $i ?>,<?= $dt->id?>,'Approve')">Approve</button></p>
+                                            <p><button type="button" class="btn btn-primary" onclick="Reject(<?= $i ?>,<?= $dt->id?>,'Reject')">Edit</button></p>
+                                          
+                                            <p><button type="button" class="btn btn-primary" id="rPtoNoRPConvert<?= $dt->tid?>" onclick="RPtoNoRPConvert(<?= $dt->tid?>,<?= $dt->id?>,'RPtoNoRPConvert')">RP to No RP Convert</button></p>
+>>>>>>> stem-sales/main
                                         </div>
                                         <?php }else{ 
                                           if($approved_status =='Reject'){ ?>
@@ -216,6 +228,11 @@
                   </div>
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> stem-sales/main
                   <div class="modal fade" id="exampleModalCenterdataApprove" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                       <div class="modal-content">
@@ -313,6 +330,10 @@
     <script src="<?=base_url();?>assets/js/adminlte.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="<?=base_url();?>assets/js/dashboard.js"></script>
+<<<<<<< HEAD
+=======
+  
+>>>>>>> stem-sales/main
     <script>
       $("#example1").DataTable({
         "responsive": false, "lengthChange": false, "autoWidth": false,
@@ -320,6 +341,7 @@
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     </script>
 
+<<<<<<< HEAD
 <script>
     function statusupdate(val,blogid){
       var statusupdate = "#statusupdate"+blogid;
@@ -358,5 +380,53 @@
               }
               </script>
 
+=======
+
+<script type='text/javascript'>
+
+
+              
+ function Reject(mid,id,val){
+              $('#exampleModalCenterdata').modal('show');
+              $('#rejectid').val(id);
+              }
+
+ function MomApprove(mid,id,val){
+              $('#exampleModalCenterdataApprove').modal('show');
+              $('#mom_id').val(id);
+              }
+ 
+function RPtoNoRPConvert(id,mom_id,val){
+
+              let text = "Do You Want to Change RP to No RP Meeting.";
+                if (confirm(text) == true) {
+                  text = "You pressed OK!";
+      
+                  var hideval = "#rPtoNoRPConvert"+id;
+                  $.ajax({
+                    url:'<?=base_url();?>Management/Change_RP_To_No_RP',
+                    type: "POST",
+                    data: {
+                    tid: id,
+                    mom_id: mom_id
+                    },
+                    cache: false,
+                    success: function a(result){
+                      console.log(result);
+                      if(result ==1){
+                        $(hideval).hide();
+                        location.reload();
+                      }else{
+                        alert('Something Wrong !');
+                      }
+                    }
+                    });
+                } else {
+                  text = "You canceled!";
+                  alert(text);
+                }
+              }
+            </script>
+>>>>>>> stem-sales/main
   </body>
 </html>

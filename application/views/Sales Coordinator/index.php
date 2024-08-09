@@ -353,7 +353,7 @@ $mytaskd = $this->Menu_model->get_admintteamtd($myid,$tdate);
                         <p><a href="companies/23">Potential Partner This QTR - <b><?=$mc->s?></b></p></a><hr>
                         <p><a href="companies/24">Potential Partner This FY - <b><?=$mc->t?></b></p></a><hr>
                         <?php } ?>
-                        <p><a href="NewLead">Add New Lead</a></p>
+                        <!-- <p><a href="NewLead">Add New Lead</a></p> -->
                     </div></div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>

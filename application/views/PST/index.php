@@ -480,7 +480,7 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
                 <p><a href="pcompanies/19">Priority Tentative Calling Pending  - <b><?=$mc->t?></b></p></a><hr>
                 <p><a href="pcompanies/17">Positive Key Client - <b><?=$mc->r?></b></p></a><hr>
                 <p><a href="BDNotWorkDD"><b>No Work B/W Date</b></a></p><hr>
-                <p><a href="BDFunnal/45">All BD Funnel</p></a>
+                <p><a href="BDFunnal/<?=$uid;?>">All BD Funnel</p></a>
                 <?php } ?>
                 
             </div>

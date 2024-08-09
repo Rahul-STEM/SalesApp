@@ -90,8 +90,8 @@
 <?php $colors = array('red','blue','green','yellow','purple','orange','pink','brown','cyan','magenta','teal','lime','violet','indigo','gray');?>
 
 <body>
-    <div style="display:block">
-        <canvas id="combinedChartID1" style="display:block"></canvas>
+    <div style="width: 80%; margin: auto;">
+        <canvas id="combinedChartID1"></canvas>
     </div>
 
     <script>
@@ -105,9 +105,7 @@
                     data: [
                         <?php 
                         $action = $this->Menu_model->get_action(); $i=1; foreach($action as $ac){ $acid = $ac->id;
-                        // $task = $this->Menu_model->get_tasktypeupdateanpn($uid,$sd,$ed,$acid);
-                        $task = $this->Menu_model->get_tasktypeupdateanpn_new($uid,$sd,$ed,$acid);
-
+                        $task = $this->Menu_model->get_tasktypeupdateanpn($uid,$sd,$ed,$acid);
                         foreach($task as $ts){
                         ?>
                         <?=$ts->cont?>,

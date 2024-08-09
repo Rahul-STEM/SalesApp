@@ -103,10 +103,14 @@ $bd = $this->Menu_model->get_userbyaid($uid);
                                         </tr>
                                     </thead>
                                     <tbody>
+<<<<<<< HEAD
                                         <?php 
                                             $i=1
                                             foreach(){
                                         ?>
+=======
+                                      
+>>>>>>> stem-sales/main
                                     <tr>
                                         <td><?=$i?></td>
                                         <td>0</td>
@@ -115,7 +119,11 @@ $bd = $this->Menu_model->get_userbyaid($uid);
                                         <td>0</td>
                                         <td>0</td>
                                     </tr>
+<<<<<<< HEAD
                                     <?php $i++;} ?>  
+=======
+                               
+>>>>>>> stem-sales/main
                                   </tbody>
                                 </table> 
                             </div>

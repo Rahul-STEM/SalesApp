@@ -6,9 +6,13 @@ class Menu extends CI_Controller {
     public function main(){
         $msg = '';
         $this->load->model('Menu_model');
+<<<<<<< HEAD
         $this->load->model('Graph_model');
         $this->load->view('index');
 
+=======
+        $this->load->view('index');
+>>>>>>> stem-sales/main
     }
 
     public function logout(){
@@ -1280,7 +1284,10 @@ class Menu extends CI_Controller {
 
 
     public function FGraph2($cityid){
+<<<<<<< HEAD
         // var_dump($cityid);die;
+=======
+>>>>>>> stem-sales/main
         $code=2;
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1998,11 +2005,18 @@ class Menu extends CI_Controller {
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
+<<<<<<< HEAD
         // $this->load->model('Graph_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         if(!empty($user)){
             $this->load->view($dep_name.'/TaskGraph1',['uid'=>$uid,'data'=>$dt, 'user'=>$user, 'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
+=======
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        if(!empty($user)){
+            $this->load->view($dep_name.'/TGraph1',['uid'=>$uid,'data'=>$dt, 'user'=>$user, 'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
+>>>>>>> stem-sales/main
         }else{
             redirect('Menu/main');
         }
@@ -3962,11 +3976,15 @@ class Menu extends CI_Controller {
     }
     public function submittask1(){
 
+<<<<<<< HEAD
         // echo "<pre>";
         // print_r($_POST);
         // die;
 
 
+=======
+        $this->load->library('session');
+>>>>>>> stem-sales/main
         $status=1;$filname="";$tid="";$uid="";$action_id="";$ystatus="";$remark="";$remark_msg="";$noremark="";$purpose="";$nremark_msg="";$rpmmom='null';$mom='null';$flink='null';$flink1='null';$flink2='null';
         $tid = $_POST['tid'];
         $uid = $_POST['uid'];
@@ -4005,8 +4023,11 @@ class Menu extends CI_Controller {
         if(isset($_POST['rpmmom'])){$rpmmom = $_POST['rpmmom'];}
         if(isset($_POST['nadate'])){$nadate = $_POST['nadate'];}else{$nadate='0';}
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> stem-sales/main
         if(isset($_FILES['filname']['name'])){$filname = $_FILES['filname']['name'];
             $uploadPath = 'uploads/proposal/';
             $this->load->model('Menu_model');
@@ -4044,16 +4065,60 @@ class Menu extends CI_Controller {
          $action_id = $_POST['action_id'];
 
          if($actontaken == 'yes' && $action_id == 6 && $momdata =='momdata'){
+<<<<<<< HEAD
            
              $meetingdonewinitiator = $_POST['meetingdonewinitiator'];
              $presentation = $_POST['presentation'];
              $presentationdata = '';
  
+=======
+            
+             $meetingdonewinitiator = $_POST['meetingdonewinitiator'];
+
+            //  presentation Start
+             $presentation = $_POST['presentation'];
+             $presentationdata = '';
+>>>>>>> stem-sales/main
              foreach($presentation as $prs){
                  $presentationdata .=$prs.',';
              }
              $presentationdata = rtrim($presentationdata, ',');
+<<<<<<< HEAD
  
+=======
+             //  presentation End
+ 
+            //  identify_school_state Start
+             $ischool_state = $_POST['identify_school_state'];
+             $ischoolstate = '';
+             foreach($ischool_state as $state){
+                $ischoolstate .=$state.',';
+             }
+             $ischoolstate = rtrim($ischoolstate, ',');
+            //  identify_school_state End
+
+            //  identify_school_district Start
+             $ischool_district = $_POST['identify_school_district'];
+             $ischooldistrict = '';
+             foreach($ischool_district as $district){
+                $ischooldistrict .=$district.',';
+             }
+             $ischooldistrict = rtrim($ischooldistrict, ',');
+            //  identify_school_district End
+
+             //  no_of_school Start
+             $ino_of_school = $_POST['no_of_school'];
+             $ischoolcnt = '';
+             foreach($ino_of_school as $school){
+                $ischoolcnt .=$school.',';
+             }
+             $ischoolcnt = rtrim($ischoolcnt, ',');
+            //  no_of_school End
+
+            $client_int_type_project = $this->input->post('client_int_type_project');
+            if($client_int_type_project == ''){$client_int_type_project = '';}
+
+>>>>>>> stem-sales/main
              $data = array(
                  'ccstatus' => $cstatus,
                  'action_id' => $this->input->post('action_id'),
@@ -4074,16 +4139,28 @@ class Menu extends CI_Controller {
                  'submit_proposal' => $this->input->post('submit_proposal'),
                  'proposal_no_of_school' => $this->input->post('proposal_no_of_school'),
                  'proposal_of_budget' => $this->input->post('proposal_of_budget'),
+<<<<<<< HEAD
                  'identify_school' => $this->input->post('identify_school'),
                  'identify_school_state' => $this->input->post('identify_school_state'),
                  'identify_school_district' => $this->input->post('identify_school_district'),
                  'no_of_school' => $this->input->post('no_of_school'),
+=======
+                 'proposal_of_location' => $this->input->post('proposal_of_location'),
+                 'identify_school' => $this->input->post('identify_school'),
+                 'identify_school_state' => $ischoolstate,
+                 'identify_school_district' =>$ischooldistrict,
+                 'no_of_school' => $ischoolcnt,
+>>>>>>> stem-sales/main
                  'permission_letter' => $this->input->post('permission_letter'),
                  'permission_letter_rech' => $this->input->post('permission_letter_rech'),
                  'Letter_organization_name' => $this->input->post('Letter_organization_name'),
                  'Letter_organization_designation' => $this->input->post('Letter_organization_designation'),
                  'Letter_organization_location' => $this->input->post('Letter_organization_location'),
                  'client_int_school_visit' => $this->input->post('client_int_school_visit'),
+<<<<<<< HEAD
+=======
+                 'client_int_type_project' => $client_int_type_project,
+>>>>>>> stem-sales/main
                  'client_int_school_date' => $this->input->post('client_int_school_date'),
                  'client_int_school_state' => $this->input->post('client_int_school_state'),
                  'client_int_school_district' => $this->input->post('client_int_school_district'),
@@ -4094,11 +4171,41 @@ class Menu extends CI_Controller {
              );
              // Call the model function to insert the data
              $id = $this->Menu_model->add_momData($data);
+<<<<<<< HEAD
+=======
+             $this->session->set_flashdata('success_message','Mom Data Submit SuccessFully !');
+>>>>>>> stem-sales/main
          }
  
           // End mom acten taken yes
 
+<<<<<<< HEAD
         $id = $this->Menu_model->submit_task1($tid,$uid,$cmpid,$actontaken,$action_id,$status,$remark,$rpmmom,$purpose,$flink,$flink1,$flink2,$partner,$noofsc,$pbudgetme,$LinkedIn,$Facebook,$YouTube,$Instagram,$OtherSocial,$nadate);
+=======
+          if($action_id == 10){
+            $init_id = $_POST['cmpid'];
+            $getcmpinfo1 =  $this->Menu_model->get_cmpbyinid($init_id);
+            $org_compname =  $getcmpinfo1[0]->compname;
+            if($org_compname =='Unknown'){
+                $status =1;
+            }
+        }
+
+        $id = $this->Menu_model->submit_task1($tid,$uid,$cmpid,$actontaken,$action_id,$status,$remark,$rpmmom,$purpose,$flink,$flink1,$flink2,$partner,$noofsc,$pbudgetme,$LinkedIn,$Facebook,$YouTube,$Instagram,$OtherSocial,$nadate);
+      
+        
+        if($action_id == 10){
+            $getcmpinfo1 =  $this->Menu_model->get_cmpbyinid($init_id);
+            $org_compname =  $getcmpinfo1[0]->compname;
+            
+            if($org_compname =='Unknown'){
+                redirect("Menu/AddNewLead/$init_id"); 
+                $this->session->set_flashdata('success_message',' Please Add Your Lead ');
+            }
+        }
+
+
+>>>>>>> stem-sales/main
         redirect('Menu/Dashboard');
     }
 
@@ -4111,20 +4218,32 @@ class Menu extends CI_Controller {
     }
 
     public function daysc(){
+<<<<<<< HEAD
         $autotask=0;
+=======
+      
+>>>>>>> stem-sales/main
         $wffo=0;
         $do = $_POST['do'];
         if(isset($_POST['wffo'])){$wffo = $_POST['wffo'];}
         $user_id = $_POST['user_id'];
         $lat = $_POST['lat'];
         $lng = $_POST['lng'];
+<<<<<<< HEAD
         $autotask = $_POST['autotask'];
+=======
+      
+>>>>>>> stem-sales/main
         $filname = $_FILES['filname']['name'];
         $uploadPath = 'uploads/day/';
         $this->load->model('Menu_model');
         $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
 
+<<<<<<< HEAD
         $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do,$autotask);
+=======
+        $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
+>>>>>>> stem-sales/main
         redirect('Menu/Dashboard');
     }
 
@@ -4579,15 +4698,43 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
 
         $planbutnotinited = $this->Menu_model->get_allcmp_planbutnotinited($uid);
+<<<<<<< HEAD
         $pendingautotaskcmp = $this->Menu_model->get_PendingAutoTask($uid);
         $pendingautotaskcmpcnt = sizeof($pendingautotaskcmp);
       
+=======
+
+        
+        $user_day = $this->Menu_model->get_daydetail($uid,date("Y-m-d"));
+
+        if(sizeof($user_day) == 0){
+            $this->session->set_flashdata('error_message','* Please Start Your Day');
+            redirect('Menu/DayManagement');
+        }   
+
+        $pendingautotaskcmp = $this->Menu_model->get_PendingAutoTask($uid);
+       
+        $pendingautotaskcmpcnt = sizeof($pendingautotaskcmp);
+       
+>>>>>>> stem-sales/main
         if($pendingautotaskcmpcnt > 0){
             $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask Before Going Task Planner Page');
             redirect('Menu/Dashboard2');
         }   
+<<<<<<< HEAD
        
 
+=======
+
+
+        $oldplanbutnotinited = $this->Menu_model->get_all_old_cmp_planbutnotinited($uid);
+        $oldplanbutnotinitedcnt = sizeof($oldplanbutnotinited);
+        if($oldplanbutnotinitedcnt > 0){
+            $this->session->set_flashdata('error_message','Total '. $oldplanbutnotinitedcnt . ' Yesterday Pending Task.');
+            // redirect("Menu/TaskPlanner2/".$adate);
+        }   
+       
+>>>>>>> stem-sales/main
         $planbutnotinitedcnt = sizeof($planbutnotinited);
         $getreqData  =  $this->db->query("SELECT * FROM `task_plan_for_today` WHERE user_id =$uid and date='$adate'");
         $getreqData =  $getreqData->result();
@@ -4620,17 +4767,28 @@ class Menu extends CI_Controller {
         $minutes = $timecount % 60;
         $mesaage = $hours ." Hours ".$minutes." Minutes Pending For Task Work";
    
+<<<<<<< HEAD
 
     if($planbutnotinitedcnt > 0){
         $this->session->set_flashdata('error_message', $planbutnotinitedcnt . ' Pending tasks - First, Plan You Old Pending Task with Plan But Not Initiated');
     }
    
 
+=======
+    // if($planbutnotinitedcnt > 0){
+    //     $this->session->set_flashdata('error_message', $planbutnotinitedcnt . ' Pending tasks - First, Plan You Old Pending Task with Plan But Not Initiated');
+    // }
+   
+>>>>>>> stem-sales/main
     $getplandateindata  =  $this->db->query("SELECT * FROM `autotask_time` where user_id='$uid' AND date ='$adate'");
     $getplandateindata =  $getplandateindata->result();
 
         if(!empty($user)){
+<<<<<<< HEAD
             $this->load->view($dep_name.'/TaskPlanner2',['uid'=>$uid,'user'=>$user,'planbutnotinitedcnt'=>$planbutnotinitedcnt,'getplandt'=>$getplandateindata,'pendingtask'=>$pcount, 'mesaage'=>$mesaage,'adate'=>$adate,'tptime'=>$tptime,'getAutoTaskTime'=>$getAutoTaskTime,'getreqData'=>$getreqData]);
+=======
+            $this->load->view($dep_name.'/TaskPlanner2',['uid'=>$uid,'user'=>$user,'planbutnotinitedcnt'=>$planbutnotinitedcnt,'getplandt'=>$getplandateindata,'pendingtask'=>$pcount, 'mesaage'=>$mesaage,'adate'=>$adate,'tptime'=>$tptime,'getAutoTaskTime'=>$getAutoTaskTime,'getreqData'=>$getreqData,'oldPendTask'=>$oldplanbutnotinited,'type_id'=>$uyid]);
+>>>>>>> stem-sales/main
         }else{
             redirect('Menu/main');
         }
@@ -4644,6 +4802,7 @@ class Menu extends CI_Controller {
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
+<<<<<<< HEAD
 
 
         $userData  =  $this->db->query("SELECT * FROM `user_details` WHERE user_id = $uid");
@@ -4652,6 +4811,12 @@ class Menu extends CI_Controller {
         // echo "<pre>";
         // print_r($userData[0]->type_id);
         // die;
+=======
+        
+        $userData  =  $this->db->query("SELECT * FROM `user_details` WHERE user_id = $uid");
+        $userData =  $userData->result();
+
+>>>>>>> stem-sales/main
         $type_id =  $userData[0]->type_id;
         $inside =  $userData[0]->inside;
 
@@ -4670,8 +4835,11 @@ class Menu extends CI_Controller {
             $auid = 100024;
         }
 
+<<<<<<< HEAD
 // echo $auid; 
 // die;
+=======
+>>>>>>> stem-sales/main
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
@@ -4681,10 +4849,38 @@ class Menu extends CI_Controller {
 
         $setdatebyuser              = $_POST['setdatebyuser'];
         $requestForTodaysTaskPlan   = $_POST['requestForTodaysTaskPlan'];
+<<<<<<< HEAD
 
 
         $this->db->query("INSERT INTO `task_plan_for_today`(`user_id`,`admin_id`, `date`, `request_remarks`) VALUES ('$uid','$auid','$setdatebyuser','$requestForTodaysTaskPlan')");
 
+=======
+        
+        $taskcnt   = $_POST['taskcnt'];
+        $would_you_want   = $_POST['would_you_want'];
+
+        $this->db->query("INSERT INTO `task_plan_for_today`(`user_id`,`admin_id`, `date`, `request_remarks`,`taskcnt`,`would_you_want`) VALUES ('$uid','$auid','$setdatebyuser','$requestForTodaysTaskPlan','$taskcnt','$would_you_want')");
+
+        $this->load->library('session');
+        $this->session->set_flashdata('success_message', 'Your request has been successfully sent to the administrator. Please wait for approval.');
+         redirect("Menu/TaskPlanner/".date('Y-m-d'));
+    }
+    public function RequestForYestTaskPlan(){
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+
+        $setdatebyuser    = $_POST['setdatebyuser'];
+        $requestremarks   = $_POST['todaysPendingTaskPlanrem'];
+        $oldPendTaskcnt   = $_POST['oldPendTaskcnt'];
+
+        $setdatebyuser = $setdatebyuser.' '.date('H:i:s');
+       
+        $this->db->query("INSERT INTO `request_old_pend_task`(`user_id`, `req_date`,`taskcnt`, `request_remarks`) VALUES ('$uid','$setdatebyuser','$oldPendTaskcnt','$requestremarks')");
+>>>>>>> stem-sales/main
 
         $this->load->library('session');
         $this->session->set_flashdata('success_message', 'Your request has been successfully sent to the administrator. Please wait for approval.');
@@ -4710,6 +4906,7 @@ class Menu extends CI_Controller {
             $adate = date("Y-m-d");
         }
 
+<<<<<<< HEAD
         // $getteamids = '';
         // $getbdteam = $this->Menu_model->getTeamDetails($uid);
         //  foreach($getbdteam as $team){
@@ -4717,6 +4914,8 @@ class Menu extends CI_Controller {
         //  }
         //  $getteamid = rtrim($getteamids, ',');
 
+=======
+>>>>>>> stem-sales/main
          $getreqData  =  $this->db->query("SELECT * FROM `task_plan_for_today` WHERE admin_id = $uid and date='$adate'");
          $getreqData =  $getreqData->result();
 
@@ -4728,6 +4927,42 @@ class Menu extends CI_Controller {
 
     }
 
+<<<<<<< HEAD
+=======
+
+
+    public function PendingTaskApprovelRequest(){
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $tptime=$this->Menu_model->get_tptime($uid);
+        $tptime = $tptime[0]->tptime;
+        $dep_name = $dt[0]->name;
+
+        if(isset($_POST['targetdate'])){
+            $adate = $_POST['targetdate'];
+        }else{
+            $adate = date("Y-m-d");
+        }
+
+         $getreqData  =  $this->db->query("SELECT `request_old_pend_task`.`id` AS tid, `request_old_pend_task`.*, `user_details`.* FROM `request_old_pend_task` LEFT JOIN `user_details` ON `request_old_pend_task`.`user_id` = `user_details`.`user_id` WHERE `user_details`.`aadmin` = '$uid' AND CAST(`request_old_pend_task`.`req_date` AS DATE) = '$adate'");
+         $getreqData =  $getreqData->result();
+        
+         if(!empty($user)){
+            $this->load->view($dep_name.'/PendingTaskApprovelRequest',['uid'=>$uid,'user'=>$user,'adate'=>$adate,'getreqData'=>$getreqData]);
+        }else{
+            redirect('Menu/main');
+        }
+
+    }
+
+
+>>>>>>> stem-sales/main
     public function TodaysTaskapprove($id,$type){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -4743,6 +4978,25 @@ class Menu extends CI_Controller {
         }
     }
 
+<<<<<<< HEAD
+=======
+
+    public function TodaysPendingTaskapprove($id,$type){
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+       
+        if($type == 'Approve'){
+            $status = 1;
+            $reamrks = "Approved By ".$user['name'];
+            $query =  $this->db->query("UPDATE `request_old_pend_task` SET `approvel_status`='$status',`approvel_by`='$uid',`approvel_reamrks`='$reamrks' WHERE id = $id");
+            redirect("Menu/PendingTaskApprovelRequest");
+        }else{
+            redirect('Menu/main');
+        }
+    }
+
+>>>>>>> stem-sales/main
     public function TodaysTaskReject(){
         $rejectid = $_POST['reject'];
         $rejectreamrk = $_POST['rejectreamrk'];
@@ -4755,6 +5009,20 @@ class Menu extends CI_Controller {
     }
 
 
+<<<<<<< HEAD
+=======
+    public function TodaysPendingsTaskRequestReject(){
+        $rejectid = $_POST['reject'];
+        $rejectreamrk = $_POST['rejectreamrk'];
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $status = 0;
+        $query =  $this->db->query("UPDATE `request_old_pend_task` SET `approvel_status`='$status',`approvel_reamrks`='$rejectreamrk',`approvel_by`='$uid' WHERE id = $rejectid");
+        redirect("Menu/PendingTaskApprovelRequest");
+    }
+
+>>>>>>> stem-sales/main
 
     public function ndplan(){
         $uid = $_POST['bdid'];
@@ -5538,6 +5806,11 @@ class Menu extends CI_Controller {
         // die;
         if($uyid ==15){
             $mdata = $this->Menu_model->get_userbyaSCid($aid);
+<<<<<<< HEAD
+=======
+        }else if($uyid ==4){
+            $mdata = $this->Menu_model->get_userbyaaid($aid);
+>>>>>>> stem-sales/main
         }else{
             $mdata = $this->Menu_model->get_userbyaid($aid);
         }
@@ -6855,18 +7128,35 @@ class Menu extends CI_Controller {
         $cphoto = $_FILES['cphoto']['name'];
         $uploadPath = 'uploads/day/';
         $this->load->model('Menu_model');
+<<<<<<< HEAD
+=======
+        $this->load->library('session');
+>>>>>>> stem-sales/main
         $flink = $this->Menu_model->cphotofile($cphoto, $uploadPath);
 
         $lat = $_POST['lat'];
         $lng = $_POST['lng'];
         $bscid = $_POST['bscid'];
+<<<<<<< HEAD
         $this->load->model('Menu_model');
         $cphoto = $flink;
         $cbmid = $this->Menu_model->start_rpm($uid,$startm,$company_name,$cphoto,$lat,$lng,$smid,$bscid);
+=======
+        $cphoto = $flink;
+        $cbmid = $this->Menu_model->start_rpm($uid,$startm,$company_name,$cphoto,$lat,$lng,$smid,$bscid);
+        $this->session->set_flashdata('success_message','Meeting Start SuccessFully !');
+>>>>>>> stem-sales/main
         redirect('Menu/Dashboard');
     }
 
     public function rpmclose(){
+<<<<<<< HEAD
+=======
+
+        $this->load->model('Menu_model');
+        $this->load->library('session');
+
+>>>>>>> stem-sales/main
         $priority="";$closem="";$caddress="";$cpname="";$cpdes="";$cpno="";$cpemail="";
         $uid = $_POST['uid'];
         $cmid = $_POST['cmid'];
@@ -6884,8 +7174,21 @@ class Menu extends CI_Controller {
             $cpemail = $_POST['cpemail'];
         $lat = $_POST['lat'];
         $lng = $_POST['lng'];
+<<<<<<< HEAD
         $this->load->model('Menu_model');
         $cbmid = $this->Menu_model->close_rpm($uid,$closem,$caddress,$cpname,$cpdes,$cpno,$cpemail,$lat,$lng,$type,$priority,$cmid,$bmcid,$bmccid,$bminid,$bmtid);
+=======
+        $letmeetingsremarks = $_POST['letmeetingsremarks'];
+
+        $updateStatus = $_POST['updateCompanyStatus'];
+        $company_as = $_POST['company_as'];
+        if($company_as == 'other'){$company_descri = $_POST['company_descri'];}else{$company_descri = '';}
+        $potentional_client = $_POST['potentional_client'];
+
+        $cbmid = $this->Menu_model->close_rpm($uid,$closem,$caddress,$cpname,$cpdes,$cpno,$cpemail,$lat,$lng,$type,$priority,$cmid,$bmcid,$bmccid,$bminid,$bmtid,$letmeetingsremarks,$updateStatus,$company_as,$company_descri,$potentional_client);
+
+        $this->session->set_flashdata('success_message','Meeting Close SuccessFully ! Please Update Your Lead');
+>>>>>>> stem-sales/main
         redirect('Menu/Dashboard');
 
     }
@@ -8590,6 +8893,8 @@ class Menu extends CI_Controller {
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         $mdata = $this->Menu_model->get_daydetail($uid,$tdate);
+        $yesterday = date('Y-m-d', strtotime('-1 day', strtotime($tdate)));
+        $yestdata = $this->Menu_model->get_Yestdaydetail($uid,$yesterday);
 
         if($mdata)
         {$st = $mdata[0]->ustart;
@@ -8598,9 +8903,8 @@ class Menu extends CI_Controller {
             if($ct!=''){$do=2;}
         }else{$do=0;}
 
-
         if(!empty($user)){
-            $this->load->view($dep_name.'/DayManagement',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'tdate'=>$tdate,'uid'=>$uid,'do'=>$do]);
+            $this->load->view($dep_name.'/DayManagement',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'tdate'=>$tdate,'uid'=>$uid,'do'=>$do,'yestdata'=>$yestdata]);
         }else{
             redirect('Menu/main');
         }
@@ -8687,6 +8991,7 @@ class Menu extends CI_Controller {
         }
     }
 
+<<<<<<< HEAD
     // New TaskCheck <=========================================== START ==================================>
 
     public function TaskCheck_New(){
@@ -8984,6 +9289,9 @@ class Menu extends CI_Controller {
 
 
     // New Dashboard Changes <======= END =======>
+=======
+
+>>>>>>> stem-sales/main
     public function DayCloseCheck(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d',strtotime("-1 days"));
@@ -10927,8 +11235,11 @@ class Menu extends CI_Controller {
         }else{
             $mdata=$this->Menu_model->get_bdcombystatus($uid,$code);
         }
+<<<<<<< HEAD
 
         // var_dump($mdata);die;
+=======
+>>>>>>> stem-sales/main
         if(!empty($user)){
             $this->load->view($dep_name.'/CreatedCompanies',['user'=>$user,'mdata'=>$mdata,'code'=>$code,'uid'=>$uid]);
         }else{
@@ -11549,6 +11860,28 @@ class Menu extends CI_Controller {
         }
     }
 
+<<<<<<< HEAD
+=======
+
+    public function CommonCompaniesStatus($code,$bdid){
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+      
+        $mdata=$this->Menu_model->get_CommonCompanies($bdid,$code);
+      
+        if(!empty($user)){
+            $this->load->view($dep_name.'/CommonCompanies',['user'=>$user,'mdata'=>$mdata,'code'=>$code,'uid'=>$uid,'bdid'=>$bdid]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+
+>>>>>>> stem-sales/main
     public function PSTbdcompanies($code,$bdid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11664,6 +11997,13 @@ class Menu extends CI_Controller {
     }
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> stem-sales/main
     public function BDRequestSummary($code){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11757,6 +12097,7 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
+<<<<<<< HEAD
 
 
         if($code==0){
@@ -11769,11 +12110,49 @@ class Menu extends CI_Controller {
         //  die;
         if(!empty($user)){
             $this->load->view($dep_name.'/CreatedCompanies',['user'=>$user,'mdata'=>$mdata,'code'=>$code,'uid'=>$uid]);
+=======
+        
+        if(isset($_POST['submit'])){
+
+            $commoncompanies = $_POST['commoncompanies'];   // meetings or topspender
+            $commonwith = $_POST['commonwith'];             // bd, pst, both
+            $topspender = $_POST['topspender'];             // yes, no
+            
+            if($commoncompanies =='meetings'){
+                $mdata=$this->Menu_model->get_ComCompanies($uid,$commonwith,$commoncompanies);
+            }
+            if($commoncompanies =='topspender'){
+                $mdata=$this->Menu_model->get_ComCompanies($uid,$topspender,$commoncompanies);
+            }
+        }else{
+            if($code==0){
+                $mdata=$this->Menu_model->get_pbdtcom($uid);
+            }else{
+                $mdata=$this->Menu_model->get_pbdcombystatus($uid,$code);
+            }
+
+            $commoncompanies = '';   // meetings or topspender
+            $commonwith = '';             // bd, pst, both
+            $topspender = '';
+        }
+
+        if(!empty($user)){
+            $this->load->view($dep_name.'/CreatedCompanies',['user'=>$user,'mdata'=>$mdata,'code'=>$code,'uid'=>$uid,'commoncompanies'=>$commoncompanies,'commonwith'=>$commonwith,'topspender'=>$topspender]);
+>>>>>>> stem-sales/main
         }else{
             redirect('Menu/main');
         }
     }
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+>>>>>>> stem-sales/main
     public function bdeff($tdate,$s){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -12342,10 +12721,24 @@ class Menu extends CI_Controller {
         $uid= $this->input->post('uid');
         $task_action= $this->input->post('tasktaction');
         $this->load->model('Menu_model');
+<<<<<<< HEAD
         // $cmp = $this->Menu_model->get_statuscmpnotplan($sid,$uid);
         $cmp = $this->Menu_model->taskactionnotplan_filter1($sid,$task_action,$uid);;
         echo '<option value="">Select Company</option>';
         foreach($cmp as $cmp){ ?>
+=======
+        $cmp = $this->Menu_model->get_statuscmpnotplan($sid,$uid);
+        // $cmp = $this->Menu_model->taskactionnotplan_filter1($sid,$task_action,$uid);
+        $uniqueCompanies = [];
+        foreach ($cmp as $company) {
+            $uniqueCompanies[$company->compname] = $company;
+        }
+        
+        $uniqueCompanies = array_values($uniqueCompanies); // Optional: reindex the array
+      
+        echo '<option value="">Select Company</option>';
+        foreach($uniqueCompanies as $cmp){ ?>
+>>>>>>> stem-sales/main
         <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
@@ -12394,6 +12787,16 @@ class Menu extends CI_Controller {
         $cmp = $this->Menu_model->get_allcmp_planbutnotinited($uid);
         echo sizeof($cmp);
     }
+<<<<<<< HEAD
+=======
+    public function getallcmp_planbutnotinitedold(){
+        $taskaction= $this->input->post('taskaction');
+        $uid= $this->input->post('uid');
+        $this->load->model('Menu_model');
+        $cmp = $this->Menu_model->get_all_old_cmp_planbutnotinited($uid);
+        echo sizeof($cmp);
+    }
+>>>>>>> stem-sales/main
 
     public function getallcmp_PendingAutotask(){
         $taskaction= $this->input->post('taskaction');
@@ -12422,6 +12825,27 @@ class Menu extends CI_Controller {
        echo $data;
     }
 
+<<<<<<< HEAD
+=======
+
+    public function getcmp_planbutnotinitedOld(){
+        $taskaction= $this->input->post('taskaction');
+        $uid= $this->input->post('uid');
+        $this->load->model('Menu_model');
+        $cmp = $this->Menu_model->get_old_cmp_planbutnotinited_with_spcl_req($taskaction,$uid);
+       
+        $data = '';
+        $callsids = '';
+        foreach ($cmp as $c) {
+            $getcomp = $this->Menu_model->get_cmp_PlanPendingwork($c->cid_id);
+            foreach ($getcomp as $cmpData) {
+                $data .= '<option value="' . $c->id . '">' . $cmpData->compname.' ('.$cmpData->pname . ')</option>';
+            }
+        }
+       echo $data;
+    }
+
+>>>>>>> stem-sales/main
     public function getcmp_PendingAutotaskonPlanner(){
         $taskaction= $this->input->post('taskaction');
         $uid= $this->input->post('uid');
@@ -13133,18 +13557,31 @@ class Menu extends CI_Controller {
         $inid = rtrim($inid , ',');
        
         $remark=$this->Menu_model->get_purposebyinidnew($aid,$inid);
+<<<<<<< HEAD
        
+=======
+        
+>>>>>>> stem-sales/main
         echo  $data = '<option value="">Select Purpose</option>';
         foreach($remark as $d){
              echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }
+<<<<<<< HEAD
+=======
+        if(sizeof($remark) == 0){
+            echo '<option value="34">Fresh Meeting</option>';
+        }
+>>>>>>> stem-sales/main
     }
 
     public function changenorp(){
         $tid= $this->input->post('tid');
         $this->load->model('Menu_model');
         $remark=$this->Menu_model->change_norp($tid);
+<<<<<<< HEAD
 
+=======
+>>>>>>> stem-sales/main
     }
 
 
@@ -13966,6 +14403,10 @@ class Menu extends CI_Controller {
         }
     }
 
+<<<<<<< HEAD
+=======
+ 
+>>>>>>> stem-sales/main
 
     public function BMNewLead($bmid){
         $user = $this->session->userdata('user');
@@ -14086,6 +14527,10 @@ class Menu extends CI_Controller {
     }
 
     public function addbmcompany(){
+<<<<<<< HEAD
+=======
+        $this->load->library('session');
+>>>>>>> stem-sales/main
         $uid= $this->input->post('uid');
         $bmid= $this->input->post('bmid');
         $cid= $this->input->post('cid');
@@ -14106,11 +14551,31 @@ class Menu extends CI_Controller {
         $phoneno= $this->input->post('phoneno');
         $draftop= $this->input->post('draftop');
         $designation= $this->input->post('designation');
+<<<<<<< HEAD
         $top_spender= $this->input->post('top_spender');
         $upsell_client= $this->input->post('upsell_client');
         $focus_funnel= $this->input->post('focus_funnel');
         $this->load->model('Menu_model');
         $id=$this->Menu_model->submit_bmcompany($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$cid,$ccid,$inid,$tid,$bmid);
+=======
+
+        $top_spender= $this->input->post('top_spender');
+        $upsell_client= $this->input->post('upsell_client');
+        $focus_funnel= $this->input->post('focus_funnel');
+
+        $key_client= $this->input->post('key_client');
+        $potential_company = $this->input->post('potential_company');
+        $cluster_id= $this->input->post('cluster');
+
+        $this->load->model('Menu_model');
+
+
+        // $id=$this->Menu_model->submit_bmcompany($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$cid,$ccid,$inid,$tid,$bmid);
+
+        $id=$this->Menu_model->submit_bmcompany($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$cid,$ccid,$inid,$tid,$bmid,$key_client,$potential_company,$cluster_id);
+
+        $this->session->set_flashdata('success_message','Lead Update SuccessFully !');
+>>>>>>> stem-sales/main
         redirect('Menu/Dashboard');
 
     }
@@ -14420,6 +14885,10 @@ class Menu extends CI_Controller {
         $id= $this->input->post('id');
         $this->load->model('Menu_model');
         $result=$this->Menu_model->get_bmalldata($id);
+<<<<<<< HEAD
+=======
+
+>>>>>>> stem-sales/main
         echo json_encode($result);
     }
 
@@ -14877,6 +15346,7 @@ class Menu extends CI_Controller {
 
     //Select user according to role
     public function getRoleUser(){
+<<<<<<< HEAD
         $RoleId= $this->input->post('RoleId');
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -14890,6 +15360,21 @@ class Menu extends CI_Controller {
                 $user = $this->db->select('*')->from('user_details')->where(['type_id'=> $RoleId, 'status'=>'active','badmin'=>$uid])->get()->result();
             }else{
                 $user = $this->db->select('*')->from('user_details')->where(['type_id'=> $RoleId, 'status'=>'active','aadmin'=>$uid])->get()->result();
+=======
+        $selectedOption= $this->input->post('selectedOption');
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        // var_dump($user['type_id']); exit;
+        if($user['type_id'] == 2){
+            $user = $this->db->select('*')->from('user_details')->where(['type_id'=> $selectedOption, 'status'=>'active','admin_id'=>$uid])->or_where('aadmin', $uid)->or_where('badmin', $uid)->get()->result();
+        }
+        if($user['type_id'] == 4){
+            if($selectedOption == 3){
+                $user = $this->db->select('*')->from('user_details')->where(['type_id'=> $selectedOption, 'status'=>'active','badmin'=>$uid])->get()->result();
+            }else{
+                $user = $this->db->select('*')->from('user_details')->where(['type_id'=> $selectedOption, 'status'=>'active','aadmin'=>$uid])->get()->result();
+>>>>>>> stem-sales/main
             }
         }
         // echo $this->db->last_query(); exit;
@@ -17869,6 +18354,16 @@ public function addplantask11(){
             
             $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
 
+<<<<<<< HEAD
+=======
+            $tbl_id = $this->Menu_model->getTBLTaskByID($tid); 
+            $tbl_getaction = $tbl_id[0]->actiontype_id;
+            if($tbl_getaction == 3 || $tbl_getaction ==4){
+                $query =  $this->db->query("UPDATE `barginmeeting` SET `storedt`='$new_datetime' WHERE tid =$tbl_id ");
+            } 
+            
+        
+>>>>>>> stem-sales/main
         }else if($selectby == 'Review Target Date'){
 
         if($pendingTaskcnt > 0){
@@ -17897,6 +18392,10 @@ public function addplantask11(){
 
 public function addplantask12(){
 
+<<<<<<< HEAD
+=======
+    
+>>>>>>> stem-sales/main
     $this->load->model('Menu_model');
     $this->load->model('Management_model');
     $this->load->library('session');
@@ -17906,9 +18405,18 @@ public function addplantask12(){
     $uid = $user['user_id'];
     $uyid =  $user['type_id'];
 
+<<<<<<< HEAD
     $pendingTask = $this->Menu_model->get_allcmp_planbutnotinited($uid);
     $pendingTaskcnt = sizeof($pendingTask);
 
+=======
+    $todayspendingTask = $this->Menu_model->get_allcmp_planbutnotinited($uid);
+    $pendingOldTask = $this->Menu_model->get_all_old_cmp_planbutnotinited($uid);
+
+    $pendingTodaysTaskcnt = sizeof($todayspendingTask);
+    $pendingOldTask = sizeof($pendingOldTask);
+    
+>>>>>>> stem-sales/main
      $bdid = $this->input->post('bdid');
      $tptime = $this->input->post('tptime');
      $ptime = $this->input->post('ptime');
@@ -17918,14 +18426,186 @@ public function addplantask12(){
      $pdate = $this->input->post('pdate');
 
      $select_cluster = $this->input->post('select_cluster');
+<<<<<<< HEAD
     
      $selectcompanybyuser = $this->input->post('selectcompanybyuser');
+=======
+     $selectcompanybyuser = $this->input->post('selectcompanybyuser');
+    
+
+     if(!isset($_POST['selectcompanybyuser']) && $ntaction == 4){
+        
+        $bmdate = $pdate.' '.$ptime.':00';
+        $partner = $this->Menu_model->createBargMeetingWithClusterId($bdid,$bmdate,$select_cluster);
+        $this->session->set_flashdata('success_message',' Task Plan Successfully !!');
+        redirect('Menu/TaskPlanner2/'.$pdate);
+     } if(isset($_POST['selectcompanybyuser']) && $ntaction == 4){
+        $ntaction = 4;
+     }
+     
+     if($ntaction == 17){
+       
+        $bmdate = $pdate.' '.$ptime.':00';
+        $partner = $this->Menu_model->CreateJoinMeetingTaskWithClusterId($bdid,$selectcompanybyuser,$bmdate,$ntaction,$ntppose,$select_cluster);
+        $this->session->set_flashdata('success_message',' Task Plan Successfully !!');
+        redirect('Menu/TaskPlanner2/'.$pdate);
+        
+     }
+    
+     if(!isset($_POST['selectcompanybyuser']) && $ntaction == 10){
+
+        $bmdate = $pdate.' '.$ptime.':00';
+        $partner = $this->Menu_model->CreateNewResearchTask($bdid,$bmdate,$ntaction,$ntppose);
+        $this->session->set_flashdata('success_message',' Task Plan Successfully !!');
+        redirect('Menu/TaskPlanner2/'.$pdate);
+     }
+
+
+    $CheckingData = $this->input->post('check_data');  // Checking_Data
+
+     if($CheckingData == 'Mom Check'){
+        $bmdate = $pdate.' '.$ptime.':00';
+        $addMOMCheckTask = $this->Menu_model->CreateTaskForMOMCheck($bdid,$bmdate);
+        $this->session->set_flashdata('success_message',' Task Plan Successfully !!');
+        redirect('Menu/TaskPlanner2/'.$pdate);
+     }
+    //  else{
+    //     echo "data";
+    //      dd($_POST);  
+    //  }
+
+
+
+
+
+
+// Abhishek Data Start
+     $data = array(
+        'selectstatusbyuser' => $this->input->post('selectstatusbyuser'),
+        'tasktaction' => $this->input->post('tasktaction'),
+        'taskActionbyuser' => $this->input->post('taskActionbyuser'),
+        'taskPurposebyuser' => $this->input->post('taskPurposebyuser'),
+        'selectstatusbyusernotplaned' => $this->input->post('selectstatusbyusernotplaned'),
+        'task_action' => $this->input->post('task_action'),
+        'daysfiltercard_anp_date' => $this->input->post('daysfiltercard_anp_date'),
+        'selectdcategory' => $this->input->post('selectdcategory'),
+        'statusfiltercardCat' => $this->input->post('statusfiltercardCat'),
+        'taskActionbyusercat' => $this->input->post('taskActionbyusercat'),
+        'taskPurposebyusercatdata' => $this->input->post('taskPurposebyusercatdata'),
+        'clusterNameLocaction' => $this->input->post('clusterNameLocaction'),
+        'statusfilterCluster' => $this->input->post('statusfilterCluster'),
+        'taskActionbyCluster' => $this->input->post('taskActionbyCluster'),
+        'taskPurposebyCluster' => $this->input->post('taskPurposebyCluster'),
+        'companyLocation' => $this->input->post('companyLocation'),
+        'selectactionplane' => $this->input->post('selectactionplane'),
+        'daysfilter' => $this->input->post('daysfilter'),
+        'pstAssignCardData' => $this->input->post('pstAssignCardData'),
+        'status_taskaction' => $this->input->post('status_taskaction'),
+        'task_action_filter' => $this->input->post('task_action_filter'),
+        'taskActionbyuserCardData' => $this->input->post('taskActionbyuserCardData'),
+        'taskPurposebyuserCardData' => $this->input->post('taskPurposebyuserCardData'),
+        'partnertype_select' => $this->input->post('partnertype_select'),
+        'partnertype_cstatusData' => $this->input->post('partnertype_cstatusData'),
+        'partnertype_taskData' => $this->input->post('partnertype_taskData'),
+        'partnertype_taskActionData' => $this->input->post('partnertype_taskActionData'),
+        'partnertype_taskPurposeData' => $this->input->post('partnertype_taskPurposeData'),
+        'samestatuslast15daysData' => $this->input->post('samestatuslast15daysData'),
+        'partnertype_planbutData' => $this->input->post('partnertype_planbutData'),
+        'daysfilter2_samedays' => $this->input->post('daysfilter2_samedays'),
+        'planbut_taskActionData' => $this->input->post('planbut_taskActionData'),
+        'planbut_taskPurposeData' => $this->input->post('planbut_taskPurposeData'),
+        'planbutnoinit_TaskData' => $this->input->post('planbutnoinit_TaskData'),
+        'firstQuarter1cstatysData' => $this->input->post('firstQuarter1cstatysData'),
+        'firstQuarter1cstatysDataTask' => $this->input->post('firstQuarter1cstatysDataTask'),
+        'firstQuarter1taskActionbyuser' => $this->input->post('firstQuarter1taskActionbyuser'),
+        'firstQuarter1taskPurposebyuser' => $this->input->post('firstQuarter1taskPurposebyuser'),
+        'reviewTargetreviewtypeData' => $this->input->post('reviewTargetreviewtypeData'),
+        'reviewTargetReviewSelfData' => $this->input->post('reviewTargetReviewSelfData')
+        // 'curuserid' => $this->input->post('curuserid'),
+        // 'pdate' => $this->input->post('pdate'),
+        // 'tptime' => $this->input->post('tptime'),
+        // 'meeting_time' => $this->input->post('meeting_time'),
+        // 'selectcompanybyuser' => $this->input->post('selectcompanybyuser'),
+        // 'ntactionnew' => $this->input->post('ntactionnew'),
+        // 'ntppose' => $this->input->post('ntppose')
+    );
+
+    $selectedFields = [];
+    $other = [];
+    $statusId = null;
+    $actionId = null;
+    $statusIndex = null;
+    $actionIndex = null;
+ 
+     //echo"<pre>data ";print_r($data);
+ 
+ 
+     foreach($data as $key => $value){
+         if(isset($value) && !empty($value)){
+             $selectedFields[$key] = $value;
+            //echo"<pre>selectedFields inside loop ";print_r($selectedFields);
+            //echo 'here'.$value;
+ 
+            if ($value == 'A-yes' || $value == 'A-no') {
+                 $selectedFields['Action'] = $value;
+             }
+             if ($value == 'P-yes' || $value == 'P-no') {
+                 $selectedFields['Purpose'] = $value;
+             }
+ 
+             if(($key != 'partnertype_select') && ($key != 'partnertype_planbutData')){
+                 if (is_numeric($value)) {
+                     //echo $value;
+                     if ($statusId == null)  {
+                         $statusId = $value;
+                         $statusArr = $this->Menu_model->get_statusbyid($statusId);
+                         $statusName = $statusArr[0]->name ? $statusId:'NULL';
+                         $selectedFields['comp_status'] = $statusName;
+ 
+                     } elseif ($actionId == null) {
+                         $actionId = $value;
+                         $actionArr = $this->Menu_model->get_actionbyid($actionId);
+                         $actionName = $actionArr[0]->name ? $actionId:'NULL';
+                         $selectedFields['task'] = $actionName;
+         
+                     }
+                 }
+             }
+             if($key == 'partnertype_select' || $key == 'partnertype_planbutData'){
+                 $partner = $this->Menu_model->get_partnerbyid($value);
+                 $partnername = $partner[0]->name;
+                 $selectedFields['Partner'] = $partnername;
+                 //echo $partnername;
+             }
+            
+         }
+     }
+ 
+     $finalArr = [];
+     $anotherArr = [];
+     $keyArr = ['comp_status', 'task', 'Action', 'Purpose'];
+ 
+     foreach($selectedFields as $key => $value){
+         if(in_array($key, $keyArr)){
+             $finalArr[$key] = $value;
+         }elseif(!in_array($key, $keyArr) && !is_numeric($value)){
+             $anotherArr[$key] = $value;
+         }
+     }
+     
+     $array = array_unique (array_merge ($finalArr, $anotherArr));
+
+    // END Abhishek Data Star
+
+    $jsonData = json_encode($array);
+>>>>>>> stem-sales/main
 
      if(sizeof($selectcompanybyuser) > 3){
         $this->session->set_flashdata('success_message',' You can only have three company plans at a time !!');
         redirect('Menu/TaskPlanner/'.$pdate);
      }
 
+<<<<<<< HEAD
         // if($bdid == 100095){
             // Start Check Active Task Planner Restrication Set BY Admin 
             $rstData = $this->Management_model->SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$ntaction,$ntppose,$selectby,$pdate,$selectcompanybyuser);     
@@ -17933,6 +18613,9 @@ public function addplantask12(){
         // }
         
 
+=======
+  
+>>>>>>> stem-sales/main
      $totalttaskdata =$this->Menu_model->get_totaltdetailsDatewise($bdid,$pdate);
 
      $cosumeTime = '';
@@ -17960,7 +18643,11 @@ public function addplantask12(){
     
         if($cosumeTime > $remaingtime){
             $this->session->set_flashdata('success_message_plan','* Nice Job !! You have Successfully Achive Your Target Time.');
+<<<<<<< HEAD
             redirect('Menu/TaskPlanner/'.$pdate);
+=======
+            redirect('Menu/TaskPlanner2/'.$pdate);
+>>>>>>> stem-sales/main
         }else{
             $rrtime = $remaingtime - $cosumeTime;
         }
@@ -18006,6 +18693,7 @@ public function addplantask12(){
         $newdate->modify($modifystr);
         $new_datetime = $newdate->format('Y-m-d H:i:s');
 
+<<<<<<< HEAD
         if($selectby == 'Plan But Not Initiated'){
             
             $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
@@ -18023,6 +18711,55 @@ public function addplantask12(){
             $this->session->set_flashdata('success_message',' First Plan Your Old Pending Task Using Filter - Plan But Not Initiated');
             redirect('Menu/TaskPlanner/'.$pdate);
         }
+=======
+
+        if($selectby == 'Plan But Not Initiated'){
+
+           $sact_type = $this->Menu_model->SelectTaskBYTid($tid);
+           
+           if($sact_type ==4 || $sact_type == 17 || $sact_type == 3){ 
+            $this->Menu_model->updateBarginmeeting($tid,$new_datetime);
+           }
+     
+            $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
+          
+        }else if($selectby == 'Plan When MOM Approved'){
+
+            $sact_type = $this->Menu_model->SelectTaskBYTid($tid);
+        
+             $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
+             $currentdatetime = date("Y-m-d H:i:s");
+             $query =  $this->db->query("UPDATE `auto_assign_task` SET `status`='1',`updated_at`='$currentdatetime' WHERE call_tid = $tid");
+
+         } else if($selectby == 'Review Target Date'){
+
+       if(date("Y-m-d") !== $pdate){
+            if($pendingTodaysTaskcnt > 0){
+                $this->session->set_flashdata('success_message_plan',' First Plan Your Todays Pending Task]');
+                redirect('Menu/TaskPlanner2/'.$pdate);
+            }
+       }elseif(date("Y-m-d") == $pdate){
+        if($pendingOldTaskcnt > 0){
+            $this->session->set_flashdata('success_message_plan',' First Plan Your Yesterday Pending Task]');
+            redirect('Menu/TaskPlanner2/'.$pdate);
+        }
+    }    
+        
+        $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
+        }else{
+
+    if(date("Y-m-d") !== $pdate){     
+        if($pendingTodaysTaskcnt > 0){
+            $this->session->set_flashdata('success_message',' First Plan Your Yesterday Pending Task.');
+            redirect('Menu/TaskPlanner2/'.$pdate);
+        }
+    }elseif(date("Y-m-d") == $pdate){
+        if($pendingOldTaskcnt > 0){
+            $this->session->set_flashdata('success_message_plan',' First Plan Your Todays Pending Task]');
+            redirect('Menu/TaskPlanner2/'.$pdate);
+        }
+    }
+>>>>>>> stem-sales/main
 
             $ttype = $ntaction;
 
@@ -18030,13 +18767,26 @@ public function addplantask12(){
                 $this->Menu_model->updateClusterIdByinitID($uid,$tid,$select_cluster);
             }
            
+<<<<<<< HEAD
             $id = $this->Menu_model->add_plan2($pdate,$uid,$ptime,$inid,$ntaction,$ntstatus,$ntppose,$ttype,$tptime,$new_datetime,$selectby);
+=======
+        // Start Check Active Task Planner Restrication Set BY Admin 
+        $rstData = $this->Management_model->SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$ntaction,$ntppose,$selectby,$pdate,$selectcompanybyuser);     
+        // End Check Active Task Planner Restrication Set BY Admin 
+
+            $id = $this->Menu_model->add_plan2($pdate,$uid,$ptime,$inid,$ntaction,$ntstatus,$ntppose,$ttype,$tptime,$new_datetime,$selectby,$jsonData);
+      
+>>>>>>> stem-sales/main
         }
     }
 
     $this->session->set_flashdata('success_message_plan',' Task Plan Successfully !! and Total Remaining Time For Task Plan '.$rrtime. ' Minutes');
 
+<<<<<<< HEAD
     redirect('Menu/TaskPlanner/'.$pdate);
+=======
+    redirect('Menu/TaskPlanner2/'.$pdate);
+>>>>>>> stem-sales/main
 }
 
 
@@ -18058,19 +18808,39 @@ public function approveDailyTask(){
     $cdate = date("Y-m-d");
     $taskcount = sizeof($tid);
 
+<<<<<<< HEAD
     if($status !=='select'){
         if($taskcount > 0){
         foreach($tid as $id){
             // $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
             // echo $id;
             echo $id;
+=======
+    if($status){
+        if($taskcount > 0){
+        foreach($tid as $id){
+            if($status == 'Approve')
+            {
+                $query =  $this->db->query("UPDATE `tblcallevents` SET `approved_status` = 1, `approved_by`='$uid' WHERE  id = $id");
+                //echo $id;
+            }
+            if($status == 'Reject')
+            {
+                $query =  $this->db->query("UPDATE `tblcallevents` SET `approved_status` = 0, `approved_by`='$uid' WHERE  id = $id");
+                //echo $id;
+            }
+>>>>>>> stem-sales/main
 
             //  echo "<pre>";
             //  print_r($tid);
 
         }
 
+<<<<<<< HEAD
         $this->session->set_flashdata('success_message','Totol '.$taskcount.' Task '.$status.' Successfully');
+=======
+        $this->session->set_flashdata('success_message','Total '.$taskcount.' Task '.$status.' Successfully');
+>>>>>>> stem-sales/main
         redirect('Menu/CheckTaskDetailsByUser/'.$suser.'/'.$cdate);
         }else{
             $this->session->set_flashdata('error_message','* Select At List one Task For '.$status);
@@ -18082,6 +18852,36 @@ public function approveDailyTask(){
     }
 }
 
+<<<<<<< HEAD
+=======
+    public function AssignTaskById($tableId, $taskdate)
+    {
+        $this->load->model('Menu_model');
+        $this->load->library('session');
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        $taskDetails = $this->Menu_model->get_tbldata($tableId);
+        $userdtl = $this->Menu_model->get_userbyid($taskDetails[0]->user_id);
+        //echo"<pre>taskDetails ";print_r($taskDetails);exit;
+        $this->load->view($dep_name.'/AssignTaskById',['user'=>$user,'uid'=>$uid,'tableId'=>$tableId, 'taskDetails' => $taskDetails, 'userdtl' => $userdtl]);
+    }
+
+public function getcmpbyStatus(){
+
+        $uid= $this->input->post('uid');
+        $status= $this->input->post('status');
+        $this->load->model('Menu_model');
+        $this->load->library('session');
+
+        $cmp = $this->Menu_model->get_statuscmp($status,$uid);
+        //echo"<pre>";print_r($cmp);exit;
+        echo json_encode($cmp);
+    }
+>>>>>>> stem-sales/main
 
 
 // public function getTotalTaskData(){
@@ -18388,8 +19188,14 @@ public function session_plan_time_close(){
     $dt=$this->Menu_model->StorePlannerSessionClose($uid,$pcdatetime,$pctime,$totaltime);
 }
 
+<<<<<<< HEAD
 
 public function CheckPlanTaskBetweenTimes($date,$stime,$etime,$uid){
+=======
+// Start on Local Server - 2024-07-22
+
+public function CheckPlanTaskBetweenTimes($stime,$etime){
+>>>>>>> stem-sales/main
     $user = $this->session->userdata('user');
     $data['user'] = $user;
     $uid = $user['user_id'];
@@ -18397,12 +19203,403 @@ public function CheckPlanTaskBetweenTimes($date,$stime,$etime,$uid){
     $this->load->model('Menu_model');
     $dt=$this->Menu_model->get_utype($uyid);
     $dep_name = $dt[0]->name;
+<<<<<<< HEAD
     echo $date;
     
     dd($user);
     $this->load->view($dep_name.'/CheckPlanTaskBetweenTimes',['user'=>$user,'uid'=>$uid]);
+=======
+    $date = date("Y-m-d");
+    $total_task = $this->Menu_model->TotalTaskBetweenTime($uid,$date,$stime,$etime);
+    $this->load->view($dep_name.'/CheckPlanTaskBetweenTimes',['user'=>$user,'uid'=>$uid,'tdata'=>$total_task,'cdate'=>$date,'stime'=>$stime,'etime'=>$etime]);
+}
+
+
+// Start Day Close Request
+
+public function dayscRequest(){
+
+    $user         = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid          = $user['user_id'];
+    $uyid         =  $user['type_id'];
+
+    $this->load->model('Menu_model');
+    $this->load->library('session');
+
+    $req_id           = $_POST['req_id'];
+    $req_answer       = $_POST['would_you_want'];
+    $message          = $_POST['requestForTodaysTaskPlan'];
+    $planbutnotinited = $this->Menu_model->CreateCloseDayRequest($uid,$req_id,$req_answer,$message);
+
+    $this->session->set_flashdata('success_message','* Day Close Request Send SuccessFully !');
+    redirect('Menu/DayManagement');
+    
+}
+
+
+public function YesterdayDayClose(){
+
+    $user_id    = $_POST['user_id'];
+    $lat        = $_POST['lat'];
+    $lng        = $_POST['lng'];
+    $req_id     = $_POST['req_id'];
+  
+    $filname    = $_FILES['filname']['name'];
+    $uploadPath = 'uploads/day/';
+
+    $this->load->library('session');
+    $this->load->model('Menu_model');
+
+    $flink      = $this->Menu_model->uploadfile($filname, $uploadPath);
+
+    $this->Menu_model->UpdateCloseYesterDay($flink,$user_id,$lat,$lng,$req_id);
+
+    $this->session->set_flashdata('success_message','* Yesterday Day Close SuccessFully ! Now Start Your Days');
+    redirect('Menu/DayManagement');
+}
+
+public function YesterDayDaysCloseRequest(){
+
+    $user           =   $this->session->userdata('user');
+    $data['user']   =   $user;
+    $uid            =   $user['user_id'];
+    $uyid           =   $user['type_id'];
+
+    $this->load->library('session');
+    $this->load->model('Menu_model');
+
+    $dt             =   $this->Menu_model->get_utype($uyid);
+    $tptime         =   $this->Menu_model->get_tptime($uid);
+    $tptime         =   $tptime[0]->tptime;
+    $dep_name       =   $dt[0]->name;
+
+    if(isset($_POST['targetdate'])){
+        $adate = $_POST['targetdate'];
+    }else{
+        $adate = date("Y-m-d");
+    }
+
+     $getreqData  =  $this->db->query("SELECT *,close_your_day_request.id FROM close_your_day_request LEFT JOIN user_details ON close_your_day_request.user_id = user_details.user_id WHERE user_details.aadmin = '$uid' and DATE(req_date) ='$adate'");
+     $getreqData  =  $getreqData->result();
+
+     if(!empty($user)){
+        $this->load->view($dep_name.'/YesterDayDaysCloseRequest',['uid'=>$uid,'user'=>$user,'adate'=>$adate,'getreqData'=>$getreqData]);
+    }else{
+        redirect('Menu/main');
+    }
+
+}
+
+
+public function YesterdayCloseRequestApprove($id,$type){
+
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+
+    $this->load->library('session');
+    $this->load->model('Menu_model');
+
+    if($type == 'Approved'){
+
+        $status     = "Approved";
+        $reamrks    = "Approved By ".$user['name'];
+        $apdate     =  date("Y-m-d H:i:s");
+        
+        $query =  $this->db->query("UPDATE `close_your_day_request` SET `approved_status`='$status',`approved_remarks`='$reamrks',`approved_date`='$apdate', `approved_by`='$uid' WHERE id = $id");
+
+        $this->session->set_flashdata('success_message','* Request Approved Successfully !');
+        redirect("Menu/YesterDayDaysCloseRequest");
+
+    }else{
+        redirect('Menu/main');
+    }
+}
+
+public function YesterdayCloseRequestReject(){
+    
+    $rejectid       = $_POST['reject'];
+    $rejectreamrk   = $_POST['rejectreamrk'];
+
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+    $status         = "Reject";
+    $apdate         =  date("Y-m-d H:i:s");
+
+    $this->load->library('session');
+    $this->load->model('Menu_model');
+    
+    $query =  $this->db->query("UPDATE `close_your_day_request` SET `approved_status`='$status',`approved_remarks`='$rejectreamrk',`approved_date`='$apdate', `approved_by`='$uid' WHERE id = '$rejectid'");
+
+    $this->session->set_flashdata('error_message','* Request Reject Successfully !');
+    redirect("Menu/YesterDayDaysCloseRequest");
+}
+
+// End Day Close Request
+
+
+public function get_SheduledMeetCompany(){
+
+    $uid= $this->input->post('uid');
+    $this->load->model('Menu_model');
+    $cmp = $this->Menu_model->get_SheduledMeetCmp($uid);
+    echo '<option value="">Select Company</option>';
+    foreach($cmp as $cmp){ ?>
+    <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
+        <?=$cmp->compname?> (<?=$cmp->pname?>)
+    </option>
+    <?php
+
+    }
+}
+public function get_BargeMeetCompany(){
+
+    $uid= $this->input->post('uid');
+    $this->load->model('Menu_model');
+    $cmp = $this->Menu_model->get_BargeMeetMeetCmp($uid);
+    echo '<option value="">Select Company</option>';
+    foreach($cmp as $cmp){ ?>
+    <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
+        <?=$cmp->compname?> (<?=$cmp->pname?>)
+    </option>
+    <?php
+
+    }
+}
+
+
+public function get_JoinMeetingsCompany(){
+
+    $uid= $this->input->post('uid');
+    $this->load->model('Menu_model');
+    $cmp = $this->Menu_model->get_JoinMeetingsCmp($uid);
+    echo '<option value="">Select Company</option>';
+    foreach($cmp as $cmp){ ?>
+    <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
+        <?=$cmp->compname?> (<?=$cmp->pname?>)
+    </option>
+    <?php
+
+    }
+}
+
+
+public function getJoinMeetpurposebyinid(){
+    $inid= $this->input->post('inid');
+    $aid= $this->input->post('aid');
+    $this->load->model('Menu_model');
+    $da = '';
+    $inid = rtrim($inid , ',');
+   
+    $remark=$this->Menu_model->get_purposebyinidnew($aid,$inid);
+    
+    echo  $data = '<option value="">Select Purpose</option>';
+    foreach($remark as $d){
+         echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
+    }
+  
+}
+
+
+public function GetStatusWhenMeetClose(){
+
+    $this->load->model('Menu_model');
+
+    $meetingslct = $_POST['meetingslct'];
+    
+    if($meetingslct == 'NO RP'){
+        $cstatus = $_POST['cstatus'];
+        $status_name = $this->Menu_model->get_statusbyid($cstatus);
+        // echo  $data = '<option disabled value="">Select Status</option>';
+        foreach($status_name as $d){
+            echo  $data = '<option selected value='.$d->id.'>'.$d->name.'</option>';
+        }
+    }
+    
+    if($meetingslct == 'RP'){
+        $cstatus = $_POST['cstatus'];
+
+        // if($cstatus=='1' || $cstatus=='8' || $cstatus=='10' || $cstatus=='11'){
+        //     $status=2;
+        // }
+
+        $status_name = $this->Menu_model->get_statusbyid(3);
+        // echo  $data = '<option disabled value="">Select Status</option>';
+        foreach($status_name as $d){
+            echo  $data = '<option selected value='.$d->id.'>'.$d->name.'</option>';
+        }
+    }
+    if($meetingslct == 'Only Got Detail'){
+        $cstatus = $_POST['cstatus'];
+        $status_name = $this->Menu_model->get_statusbyid(8);
+        // echo  $data = '<option disabled value="">Select Status</option>';
+        foreach($status_name as $d){
+            echo  $data = '<option selected value='.$d->id.'>'.$d->name.'</option>';
+        }
+    }
+
+}
+
+
+public function MeetingFeedBack(){
+    $this->load->model('Menu_model');
+
+    $uid            = $_POST['uid'];
+    $cmp_id         = $_POST['cmp_id'];
+    $meeting_id     = $_POST['meeting_id'];
+    $meetwith__person = $_POST['meet_user_feed'];
+
+    $this->Menu_model->UserUpdatefeedinMeeting($meeting_id,$meetwith__person);
+
+    redirect('Menu/Dashboard');
+
+}
+
+public function AddNewLead($init_id){
+    $user = $this->session->userdata('user');
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $alluser=$this->Menu_model->get_user();
+    $status=$this->Menu_model->get_status();
+    $action=$this->Menu_model->get_action();
+    $states=$this->Menu_model->get_states();
+    $partner=$this->Menu_model->get_partner();
+
+    if(!empty($user)){
+        $this->load->view($dep_name.'/AddNewLead',['user'=>$user,'alluser'=>$alluser,'status'=>$status,'action'=>$action,'states'=>$states,'partner'=>$partner,'uid'=>$uid,'init_id'=>$init_id]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+
+public function addcompany_new(){
+    $uid= $this->input->post('uid');
+    $compname= $this->input->post('compname');
+    $website= $this->input->post('website');
+    $country= $this->input->post('country');
+    $city= $this->input->post('city');
+    $state= $this->input->post('state');
+    $draft= $this->input->post('draft');
+    $address= $this->input->post('address');
+    $ctype= $this->input->post('ctype');
+    $budget= $this->input->post('budget');
+    $compconname= $this->input->post('compconname');
+    $emailid= $this->input->post('emailid');
+    $phoneno= $this->input->post('phoneno');
+    $draftop= $this->input->post('draftop');
+    $designation= $this->input->post('designation');
+    $top_spender= $this->input->post('top_spender');
+    $upsell_client= $this->input->post('upsell_client');
+    $focus_funnel= $this->input->post('focus_funnel');
+    $key_company=$this->input->post('key_company');
+    $potential_company=$this->input->post('potential_company');
+
+    $clusterid      =   $this->input->post('cluster');
+    $cstatusid      =   $this->input->post('cstatusid');
+
+    $openrpem       =   $this->input->post('openrpem');
+    $reachout       =   $this->input->post('reachout');
+    $tentative      =   $this->input->post('tentative');
+    $positivenap    =   $this->input->post('positivenap');
+    $verypositive   =   $this->input->post('verypositive');
+    $closure        =   $this->input->post('closure');
+    $init_id        =   $this->input->post('init_id');
+
+    $this->load->model('Menu_model');
+    $id=$this->Menu_model->submit_company_new($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$key_company,$potential_company,$openrpem,$reachout,$verypositive,$positivenap,$tentative,$closure,$clusterid,$cstatusid,$init_id);
+
+    redirect('Menu/Dashboard');
+}
+
+// Get Slef Assign Task
+public function getAutoAssignTask(){
+
+    $this->load->model('Menu_model');
+
+    $uid            = $this->input->post('uid');
+    $selectedValue  = $this->input->post('selectedValue');
+  
+    $cmps = $this->Menu_model->getTaskAssignBySelf($uid);
+
+    $groupedByActionTypes = [];
+    foreach ($cmps as $objects) {
+        $action_id = $objects->action_id;
+        if (!isset($groupedByActionTypes[$action_id])) {
+            $groupedByActionTypes[$action_id] = [];
+        }
+        $groupedByActionTypes[$action_id][] = $objects;
+    }
+
+    // echo "<pre>";
+    // print_r($groupedByActionTypes);
+
+    echo '<option value="">Select Task</option>';
+    
+    foreach($groupedByActionTypes as $key => $petotaskData){
+        $getaction_name = $this->Menu_model->get_actionbyid($key)[0]->name;
+        $getaction_namecnts = sizeof($petotaskData);
+        echo "<option value='$key'>$getaction_name($getaction_namecnts)</options>";
+      }
+}
+public function getAutoAssignTaskWithType(){
+
+    $this->load->model('Menu_model');
+    $uid            = $this->input->post('uid');
+    $selectedValue  = $this->input->post('selectedValue');
+    $tasktype       = $this->input->post('tasktype');
+  
+    $cmps = $this->Menu_model->getTaskAssignBySelfWithTaskType($uid,$tasktype);
+    $callTids = array_map(function($item) {
+        return $item->call_tid;
+    }, $cmps);
+    
+    $callTidsString = implode(', ', $callTids);
+    $tasks = $this->Menu_model->getTBLTaskByID($callTidsString);
+    $data = '';
+    foreach ($tasks as $c) {
+        $getcomp = $this->Menu_model->get_cmp_PlanPendingwork($c->cid_id);
+        foreach ($getcomp as $cmpData) {
+            $data .= '<option value="' . $c->id . '">' . $cmpData->compname.' ('.$cmpData->pname . ')</option>';
+        }
+    }
+    echo $data;
+}
+public function getPendingTeamMoM(){
+
+    $user           =   $this->session->userdata('user');
+    $data['user']   =   $user;
+    $uid            =   $user['user_id'];
+    $uyid           =   $user['type_id'];
+
+    $this->load->model('Menu_model');
+    $uid        = $this->input->post('uid');
+
+    $users      = $this->Menu_model->get_userbyaaid($uid);
+ 
+    $user_id    = array_map(function($item) {
+        return $item->user_id;
+    }, $users);
+    
+    $user_id = implode(', ', $user_id);
+    // $query=$this->db->query("SELECT * FROM `mom_data` WHERE user_id IN ($user_id) AND approved_status IS NULL");
+    $query=$this->db->query("SELECT * FROM `mom_data` WHERE mom_data.`user_id` IN ($user_id) AND `approved_status` IS NULL AND NOT EXISTS (SELECT 1 FROM `tblcallevents` WHERE `mom_data`.`id` = `tblcallevents`.`reviewtype`)");
+
+    $data =  $query->result();
+    $pending_momdata =  sizeof($data);
+    echo $pending_momdata;
+
+>>>>>>> stem-sales/main
 }
 
 
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> stem-sales/main

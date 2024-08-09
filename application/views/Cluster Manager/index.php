@@ -55,6 +55,66 @@ overflow-x: auto;
     font-size: 19px;
     text-align: left;
 }
+<<<<<<< HEAD
+=======
+.select2 {
+    width: 100%; /* Set the desired width */
+        }
+.modal-content {
+    background: #edf0f3 !important;
+    font-size: 14px;
+    }
+.modal-content .card-header.bg-info {
+    margin-top: 4px !important;
+    height: 20px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    background: #df338a !important;
+}
+.modal-content .card-body {
+    background: beige !important;
+    margin-bottom: 4px;
+}
+.momhbox{
+  background: antiquewhite;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+}
+.identify_school_box {
+    background: aliceblue;
+    padding: 10px;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+}
+
+  .select2 {
+      width: 100%; 
+  }
+  .content-wrapper>.content {
+    background: azure;
+}
+.inner h5{
+    background: blanchedalmond;
+    line-height: 35px;
+    font-size: 17px;
+    border-radius: 26px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+    font-weight: 700;
+}
+.bg-light, .bg-light>a {
+    color: #1f2d3d !important;
+    background: #ebf5cb !important;
+    border-radius: 40px;
+    position: relative;
+    overflow: hidden;
+    /* box-shadow: rgba(0, 0, 0, .1) 0 1px 2px 0; */
+    /* cursor: pointer; */
+    font-size: 19px;
+    text-align: left;
+}
+>>>>>>> stem-sales/main
 .small-box>.small-box-footer {
     background: #c5eb4d !important;
     font-weight: 500;
@@ -100,7 +160,31 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
+<<<<<<< HEAD
 
+=======
+        <?php if ($this->session->flashdata('pending_message')): ?>
+            <div class="alert alert-success alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <?= $this->session->flashdata('pending_message'); ?>
+        </div>
+        <?php endif; ?>
+        <?php if ($this->session->flashdata('success_message')): ?>
+            <div class="alert alert-success alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <?= $this->session->flashdata('success_message'); ?>
+        </div>
+        <?php endif; ?>
+        <?php
+        if ($this->session->flashdata('error_message')): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong> <?php echo $this->session->flashdata('error_message'); ?></strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <?php endif; ?>
+>>>>>>> stem-sales/main
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -361,7 +445,11 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                         <p><a href="bdcompanies/15/<?=$uid?>">Upsell Client - <b><?=$mc->n?></b></p></a><hr>
                         <p><a href="bdcompanies/16/<?=$uid?>">Key Client - <b><?=$mc->q?></b></p></a><hr>
                         <?php } ?>
+<<<<<<< HEAD
                         <p><a href="NewLead">Add New Lead</a></p>
+=======
+                       
+>>>>>>> stem-sales/main
                     </div></div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
@@ -370,6 +458,48 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
             </div>
           </div>
           
+<<<<<<< HEAD
+=======
+
+          <div class="col-lg-3 col-md-6 col-sm-12">
+            <!-- small box -->
+            <div class="small-box bg-light text-secondary">
+              <div class="inner">
+                  <?php 
+                  $comFunnel = $this->Menu_model->get_CommonFunnel($uid);
+                  // echo "<pre>";
+                  // print_r($comFunnel);
+                  foreach($comFunnel as $mc){
+                  ?>
+                <center><h5>Common Funnel </h5></center><hr>
+                        <p><a href="CommonCompaniesStatus/35/<?=$uid?>">Total Companies - <b><?=$mc->a?></b></a><hr>
+                        <p><a href="CommonCompaniesStatus/1/<?=$uid?>">Open - <b><?=$mc->b?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/8/<?=$uid?>">Open [RPEM] - <b><?=$mc->i?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/2/<?=$uid?>">Reachout - <b><?=$mc->c?></b></p></a><a style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse_common" role="button" aria-expanded="false" aria-controls="collapse7">Read More</a></p><hr>
+                        <div class="collapse" id="collapse_common">
+                        <p><a href="CommonCompaniesStatus/3/<?=$uid?>">Tentative - <b><?=$mc->d?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/4/<?=$uid?>">Will-Do-Later - <b><?=$mc->e?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/5/<?=$uid?>">Not-Interest - <b><?=$mc->f?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/10/<?=$uid?>">TTD-Reachout - <b><?=$mc->k?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/11/<?=$uid?>">WNO-Reachout - <b><?=$mc->l?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/6/<?=$uid?>">Positive - <b><?=$mc->g?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/9/<?=$uid?>">Very Positive - <b><?=$mc->j?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/12/<?=$uid?>">Positive NAP - <b><?=$mc->o?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/13/<?=$uid?>">Very Positive NAP - <b><?=$mc->p?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/7/<?=$uid?>">Closure - <b><?=$mc->h?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/14/<?=$uid?>">Focus Funnel - <b><?=$mc->m?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/15/<?=$uid?>">Upsell Client - <b><?=$mc->n?></b></p></a><hr>
+                        <p><a href="CommonCompaniesStatus/16/<?=$uid?>">Key Client - <b><?=$mc->q?></b></p></a><hr>
+                        <?php } ?>
+                      
+                    </div></div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+              <a href="companies/0" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+>>>>>>> stem-sales/main
           
           <div class="col-lg-3 col-md-6 col-sm-12">
             <!-- small box -->
@@ -963,8 +1093,27 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                              <?php 
                             $bl=0;
                             foreach($barg as $brg){
+<<<<<<< HEAD
                                 $bs = $brg->status;
                                 $cid = $brg->cid;
+=======
+                              
+                                $bs = $brg->status;
+                                $cid = $brg->cid;
+                                $tid = $brg->tid;
+
+                                $action_id = $this->Menu_model->get_actionIdfromTblCallEvent($tid);
+                                if($action_id == 3){
+                                  $meet_name = 'Sheduled Meeting';
+                                }
+                                if($action_id == 4){
+                                  $meet_name = 'Barg in Meeting';
+                                }
+                                if($action_id == 17){
+                                  $meet_name = 'Join Meeting';
+                                }
+
+>>>>>>> stem-sales/main
                                 $cd = $this->Menu_model->get_cdbyid($cid);
                                 ?>
                                 <?php if($bs=='Pending'){?>
@@ -974,7 +1123,11 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                         <?=$cd[0]->city?> | 
                                         <?=$cd[0]->state?> | 
                                         <?=$brg->storedt?> | 
+<<<<<<< HEAD
                                         <b class="text-success">Start Meeting</b>
+=======
+                                        <b class="text-success">Start Meeting (<?=$meet_name; ?>)</b>
+>>>>>>> stem-sales/main
                                     </div></button>
                                 <?php }if($bs=='Start'){?>
                                     <button style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;" id="closem<?=$bl?>" value="<?=$brg->id?>">
@@ -983,7 +1136,11 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                         <?=$cd[0]->city?> | 
                                         <?=$cd[0]->state?> | 
                                         <?=$brg->storedt?> |
+<<<<<<< HEAD
                                         <b class="text-danger">Close Meeting</b>
+=======
+                                        <b class="text-danger">Close Meeting (<?=$meet_name; ?>)</b>
+>>>>>>> stem-sales/main
                                     </div>
                             <?php $bl++;}} ?>
                         </div>

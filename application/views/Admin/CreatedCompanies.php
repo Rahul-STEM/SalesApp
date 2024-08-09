@@ -126,7 +126,6 @@ overflow-x: auto;
 											$bdid = $init[0]->mainbd;
 											$bdname=$this->Menu_model->get_userbyid($bdid);
 											$tblc=$this->Menu_model->get_tblbyidwithremark($ciid);
-											// var_dump($tblc);die;
 											$logs = sizeof($tblc);
 										
 											if($sid){$sid=$this->Menu_model->get_statusbyid($sid);$sid=$sid[0]->name;}
@@ -165,11 +164,7 @@ overflow-x: auto;
 												<td><?=$creatername?></td>
 												<td><?=$cd[0]->createddate?></td>
 												<td><?=$sid?></td>
-												<td><?php if(!empty($tblc[0]->remarks)) {
-													echo $tblc[0]->remarks;
-												}else{
-													echo '';
-												} ?></td>
+												<td><?=$tblc[0]->remarks?></td>
 												
 											</tr>
 											<?php $i++;} ?>

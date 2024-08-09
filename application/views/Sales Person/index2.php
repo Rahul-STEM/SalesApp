@@ -147,13 +147,18 @@ $dataPoints2 = array(
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-    <?php if ($this->session->flashdata('pending_message')): ?>
+<?php if ($this->session->flashdata('pending_message')): ?>
     <div class="alert alert-success alert-dismissible">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
   <?= $this->session->flashdata('pending_message'); ?>
 </div>
 <?php endif; ?>
-
+<?php if ($this->session->flashdata('success_message')): ?>
+    <div class="alert alert-success alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <?= $this->session->flashdata('success_message'); ?>
+</div>
+<?php endif; ?>
 <?php
 if ($this->session->flashdata('error_message')): ?>
 <div class="alert alert-danger alert-dismissible fade show" role="alert">

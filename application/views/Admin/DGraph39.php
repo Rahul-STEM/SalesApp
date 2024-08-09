@@ -398,7 +398,7 @@
 <script src="<?=base_url();?>assets/js/sparkline.js"></script>
 <script src="<?=base_url();?>assets/js/jquery.vmap.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery.vmap.usa.js"></script>
-<script src="<?=base_url();?>plugins/jquery-knob/jquery.knob.min.js"></script>
+<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
 <script src="<?=base_url();?>assets/js/moment.min.js"></script>
 <script src="<?=base_url();?>assets/js/daterangepicker.js"></script>
 <script src="<?=base_url();?>assets/js/tempusdominus-bootstrap-4.min.js"></script>

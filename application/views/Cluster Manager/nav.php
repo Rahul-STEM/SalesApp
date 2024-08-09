@@ -180,6 +180,7 @@
                 <li class="nav-item">
                     <a href="<?=base_url();?>Menu/TodaysTaskApprovelRequest" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
+<<<<<<< HEAD
                         <p>Task Approvel Request</p>
                     </a>
                 </li>
@@ -189,6 +190,18 @@
                         <p>My Target</p>
                     </a>
                 </li> -->
+=======
+                        <p>Task Planner Approvel Request</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/YesterDayDaysCloseRequest" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Yesterday Day Close Request</p>
+                    </a>
+                </li>
+            
+>>>>>>> stem-sales/main
                 
                 <li class="nav-item">
                     <a href="<?=base_url();?>Menu/assignpst" class="nav-link">

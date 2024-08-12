@@ -4684,9 +4684,6 @@ class Menu extends CI_Controller {
         $minutes = $timecount % 60;
         $mesaage = $hours ." Hours ".$minutes." Minutes Pending For Task Work";
    
-    // if($planbutnotinitedcnt > 0){
-    //     $this->session->set_flashdata('error_message', $planbutnotinitedcnt . ' Pending tasks - First, Plan You Old Pending Task with Plan But Not Initiated');
-    // }
    
     $getplandateindata  =  $this->db->query("SELECT * FROM `autotask_time` where user_id='$uid' AND date ='$adate'");
     $getplandateindata =  $getplandateindata->result();
@@ -5173,6 +5170,16 @@ class Menu extends CI_Controller {
         }
         $pstc=$this->Menu_model->get_pstc($uid);
    
+        $pendingautotaskcmp = $this->Menu_model->get_PendingAutoTask($uid);
+       
+       $pendingautotaskcmpcnt = sizeof($pendingautotaskcmp);
+      
+       if($pendingautotaskcmpcnt > 0){
+           $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask Before Going Task Planner Page');
+           redirect('Menu/Dashboard2');
+       } 
+
+
         if(!empty($user)){
             $this->load->view($dep_name.'/index',['myid'=>$myid,'ttdone'=>$ttdone,'upt'=>$upt,'user'=>$user,'fr'=>$fr,'callr'=>$callr,'emailr'=>$emailr,'meetingr'=>$meetingr,'pendingt'=>$pendingt,'totalt'=>$totalt,'patc'=>$patc,'tatc'=>$tatc,'pate'=>$pate,'tate'=>$tate,'patm'=>$patm,'tatm'=>$tatm,'sc'=>$sc,'tptask'=>$tptask,'ttd'=>$ttd,'barg'=>$barg,'uid'=>$uid,'pstc'=>$pstc,'poc'=>$poc,'vpoc'=>$vpoc,'tnos'=>$tnos,'revenue'=>$revenue,'tsww'=>$tsww,'bdc'=>$bdc,'tdate'=>$tdate,'autotasktimenew'=>$autotasktimenew,'mbdc'=>$mbdc]);
         }else{
@@ -11211,13 +11218,28 @@ class Menu extends CI_Controller {
         $priorityclient = $_POST['priorityclient'];
         $upsellclient = $_POST['upsellclient'];
         $focusyclient = $_POST['focusyclient'];
+        $review_time = $_POST['travelcluster'];
+        $review_time = $_POST['cluster'];
 
-
-
+        $review_time = $_POST['review_time'];
 
         $this->load->model('Menu_model');
-        $this->Menu_model->all_bdrremark($deletef,$patnertype,$topspender,$keyclient,$pkeyclient,$priorityclient,$upsellclient,$focusyclient,$rid,$inid,$bdid,$remark,$ntdate,$ntaction,$pstuid,$exsid,$exdate,$rtype,$taskupdate,$potential,$ans1,$ans2,$ans3,$ans4,$requeststatus,$csrbudget,$bdscholl);
-        redirect('Menu/AllReviewPlaing/');
+        
+        // dd($_POST);
+
+        if($review_time == 'First Time'){
+
+            $this->Menu_model->all_bdrremark($deletef,$patnertype,$topspender,$keyclient,$pkeyclient,$priorityclient,$upsellclient,$focusyclient,$rid,$inid,$bdid,$remark,$ntdate,$ntaction,$pstuid,$exsid,$exdate,$rtype,$taskupdate,$potential,$ans1,$ans2,$ans3,$ans4,$requeststatus,$csrbudget,$bdscholl);
+            redirect('Menu/AllReviewPlaing/');
+
+        }
+        if($review_time == 'Many Time'){
+            echo $review_time;
+            dd($_POST);
+        }
+
+
+       
     }
 
 
@@ -18958,6 +18980,154 @@ public function getPendingTeamMoM(){
     $pending_momdata =  sizeof($data);
     echo $pending_momdata;
 
+}
+
+// 10-08-2024
+
+public function getstatuscmpnotplanedCompany(){
+
+    $user           =   $this->session->userdata('user');
+    $data['user']   =   $user;
+    // $uid            =   $user['user_id'];
+    $uyid           =   $user['type_id'];
+    
+    $sid= $this->input->post('sid');
+    $uid= $this->input->post('uid');
+    $this->load->model('Menu_model');
+
+    if($sid == 4 || $sid == 5){
+        if($uyid == 3){
+            $days = 15;
+        }elseif($uyid == 13 || $uyid == 4){
+            $days = 30;
+        }else{
+            $days = 8;
+        }
+    }else{
+        $days = 8;
+    }
+
+    $cmps = $this->Menu_model->CompanyThatBDHasNoWorkedInDays($uid,$days,$sid);
+  
+    echo '<option value="">Select Company</option>';
+    foreach($cmps as $cmp){ ?>
+    <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
+<?=$cmp->compname?> (<?=$cmp->pname?>)
+</option>
+    <?php
+
+    }
+}
+
+
+public function nostatuschange_indate(){
+
+    $user           =   $this->session->userdata('user');
+    $data['user']   =   $user;
+    // $uid            =   $user['user_id'];
+    $uyid           =   $user['type_id'];
+    
+    $sid= $this->input->post('sid');
+    $uid= $this->input->post('uid');
+    $this->load->model('Menu_model');
+
+    if($sid == 4 || $sid == 5){
+        if($uyid == 3){
+            $days = 15;
+        }elseif($uyid == 13 || $uyid == 4){
+            $days = 30;
+        }else{
+            $days = 8;
+        }
+    }else{
+        $days = 8;
+    }
+
+    $cmps = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$days,$sid);
+
+    $cdate = date("Y-m-d");
+
+    echo '<option value="">Select Company</option>';
+    foreach($cmps as $cmp){ ?>
+    <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
+<?=$cmp->compname?> (<?=$cmp->pname?>)
+</option>
+    <?php
+
+    }
+}
+
+
+
+public function NeedYourAttention(){
+    $user = $this->session->userdata('user');
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $alluser=$this->Menu_model->get_user();
+    $status=$this->Menu_model->get_status();
+    $action=$this->Menu_model->get_action();
+    $states=$this->Menu_model->get_states();
+    $partner=$this->Menu_model->get_partner();
+    $allteam   = $this->Menu_model->get_userbyaaid($uid);
+    
+    if(!empty($user)){
+        $this->load->view($dep_name.'/NeedYourAttention',['user'=>$user,'team'=>$allteam,'status'=>$status,'action'=>$action,'states'=>$states,'partner'=>$partner,'uid'=>$uid]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+
+
+
+// Review Start 
+public function PlanningForReview(){
+
+    $pdate              = $_POST['plandate'];
+    $review_plantime    = $_POST['review_plantime'];
+    $uid                = $_POST['uid'];
+    $bdid               = $_POST['bdid'];
+    $fixdate            = $_POST['fixdate'];
+    $reviewtype         = $_POST['reviewtype'];
+    $meetlink           = $_POST['meetlink'];
+    $this->load->library('session');
+    $this->load->model('Menu_model');
+
+    $plandate = $pdate.' '.$review_plantime;
+
+    $this->Menu_model->plan_review($plandate,$uid,$bdid,$reviewtype,$meetlink,$fixdate);
+    $this->session->set_flashdata('success_message', 'Review Plan Successfully !');
+    redirect('Menu/TaskPlanner2/'.$pdate);
+}
+
+
+
+public function CheckFirstTimeReviewInYear(){
+
+    $user   = $this->session->userdata('user');
+    $uid    = $user['user_id'];
+    $uyid   =  $user['type_id'];
+    $cyear  = date("Y");
+    $inid   = $_POST['inid'];
+    $this->load->model('Menu_model');
+    $getFirstTimeReview = $this->Menu_model->GetFirstTimeReviewInYear($uid,$inid,$cyear);
+    $getFirstTimeReviewcnt = sizeof($getFirstTimeReview);
+    echo $getFirstTimeReviewcnt;
+
+}
+
+
+public function GetCompnayDetailsUsiingInit(){
+    $user   = $this->session->userdata('user');
+    $uid    = $user['user_id'];
+    $uyid   =  $user['type_id'];
+    $cyear  = date("Y");
+    $inid   = $_POST['inid'];
+    $this->load->model('Menu_model');
+    $inidData = $this->Menu_model->get_cmpbyinid($inid);
+    echo json_encode($inidData);
 }
 
 

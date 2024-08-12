@@ -101,7 +101,7 @@
           $uystart_id = $yestdata[0]->id;
           $uystart = $yestdata[0]->ustart;
           $uyclose = $yestdata[0]->uclose;
-          
+
           // Check Yesterday Day Close or Not
           if ($yestdatacnt == 1) {?>
         <div class="row">

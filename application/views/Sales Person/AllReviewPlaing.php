@@ -25,13 +25,16 @@
   <link rel="stylesheet" href="<?=base_url();?>assets/css/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="<?=base_url();?>assets/css/summernote-bs4.min.css">
+  <style>
+    div#cmpmanytime {
+    background: aliceblue;
+    padding:10px;
+}
+  </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-
   <!-- Preloader -->
-  
-
   <!-- Navbar -->
   <?php require('nav.php');?>
   <!-- /.navbar -->
@@ -59,60 +62,10 @@
            <?php
            $revst = $this->Menu_model->get_reviewstarted($uid);
            if($revst){$bdid = $revst[0]->bdid;}else{$bdid=0;}
+     
            if($bdid==0){
            ?>
-           <div class="col-sm col-md-6 col-lg-6 m-auto">
-              <div class="card card-primary card-outline">
-              <div class="card-body box-profile">
-                  <h3 class="text-center">Plan Review/Calling Task</h3>
-                  <hr>
-                  <form action="<?=base_url();?>Menu/planreview" method="post">
-                    <div class="was-validated">
-                    <div class="form-group">
-                        <input type="hidden" name="uid" value="<?=$uid?>">
-                        <?php date_default_timezone_set("Asia/Kolkata"); ?>
-                        <lable>Review Start Date</lable>
-                        <input type="datetime-local" name="plandate" value="<?=date('Y-m-d H:i:s')?>" min="<?=date('Y-m-d H:i:s')?>" class="form-control" required="">
-                        
-                        <div class="invalid-feedback">Please provide Plan Date Time.</div>
-                        <div class="valid-feedback">Looks good!</div>
-                        <div class="mt-4">
-                            <select class="form-control" name="reviewtype" required="" id="reviewtype">
-                                <option value="Self Weekly">Self Weekly</option>
-                                <option value="Self Fortnightly">Self Fortnightly</option>
-                                <option value="Self Monthly">Self Monthly</option>
-                                <option value="Self Quarterly">Self Quarterly</option>
-                            </select>
-                        </div>
-                        
-                        <input type="checkbox" id="myCheckbox" onclick="myFunction()">
-                        <label>Do You Want to Change Period Time Frame.</label><br>
-                        
-                        <lable>Review Period</lable>
-                        <input type="date" name="fixdate" id="fixdate" value="<?=date('Y-m-d')?>" min="2023-04-01" class="form-control" required="" readOnly>
-                        
-                        
-                        <div class="mt-4">
-                            <select class="form-control" name="bdid" required="">
-                                <option value="<?=$uid?>"><?=$user['name']?></option>
-                            </select>
-                        </div>
-                        <div class="mt-4">
-                            <input type="text" name="meetlink" placeholder="Meeting Link" class="form-control" required="">
-                            <div class="invalid-feedback">Please provide Meeting LInk.</div>
-                        <div class="valid-feedback">Looks good!</div>
-                        </div>
-                    </div>
-                    <div class="form-group text-center">
-                        <button type="submit" class="btn btn-success" onclick="this.form.submit(); this.disabled = true;">Create Plan</button>
-                    </div>
-                    </div>
-                  </form>
-            </div>
-          </div>
-      </div> 
-      
-      <div class="col-sm col-md-6 col-lg-6 m-auto">
+      <div class="col-md-6 offset-lg-3 m-auto">
               <div class="card card-primary card-outline">
               <div class="card-body box-profile">
                   <h3 class="text-center">Start Review/Calling Task</h3>
@@ -164,10 +117,14 @@
                         <div class="mt-4">
                             <select class="form-control" id="statusid" name="statusid" required="">
                                 <option value="">Select Status</option>
-                                <?php $status = $this->Menu_model->get_status(); foreach($status as $st){?>
-                                
+                                <?php 
+
+                                $status_array = [1,4,5,8];
+
+                                $status = $this->Menu_model->get_status(); foreach($status as $st){?>
+                                <?php if(in_array($st->id, $status_array)){ ?>
                                 <option value="<?=$st->id?>"><?=$st->name?></option>
-                                <?php } ?>
+                                <?php }} ?>
                             </select>
                             <div class="invalid-feedback">Please Create Plan First.</div>
                             <div class="valid-feedback">Looks good!</div>
@@ -201,21 +158,30 @@
          </div>
      </div>
      
-     <div class="card p-3" id="graphlog">
-         
-         
+     <div class="card p-3" id="graphlog"></div>
      </div>
      
+
+
+
+
      
-     </div>
-     
+
+
+
      <div class="col-sm col-md-6 col-lg-6 m-auto">
+
          <div class="card card-primary card-outline">
+            <img src="http://localhost/StemSales/assets/image/2391280.jpg" id="hideimage" alt="">
+         <div id="loadcompinfo">
+
+                                    
+
              <form action="<?=base_url();?>Menu/bdrtaskc" method="post">
                  <input type="hidden" id="rtype" name="rtype" value="<?=$revst[0]->reviewtype;?>">
-              <div class="card-body box-profile" id="cmpdata">
-              </div>
                   <div class="was-validated m-3">
+                  <div class="card-body box-profile" id="cmpdata">
+                  </div>
                     <div class="form-group">
                         <textarea class="form-control" name="remark" placeholder="Review Remark..."  required=""></textarea>
                     </div>
@@ -223,8 +189,13 @@
                    <input type="hidden" name="pstuid" value="<?=$uid?>">
                    <input type="hidden" name="bduid" value="<?=$bdid?>">
                    <input type="hidden" name="rid" value="<?=$revst[0]->rid;?>">
+
+                   <div id="cmpfirsttime"> 
+
+                   <input type="hidden" id="review_time" name="review_time" value="">
                    <div id="orrr">
-                           <lable>Potential / Non-Potential Clients? </lable>
+
+                           <lable>Potential / Non-Potential Clients? <span id="potentialclient"></span> </lable>
                            <select class="form-control" id="potential" name="potential">
                                <option value='yes'>Potential</option>
                                <option value='no'>Non-Potential</option>
@@ -325,17 +296,196 @@
                            <option>No</option>
                            <option>Yes</option>
                        </select>
+                       <hr>
+                       <div class="col-12 col-md-12 mb-12">
+                       <lable>Cluster is Right or not </lable>
+                       <select class="form-control" id="travelcluster" name="travelcluster">
+                       <option value="yes">Yes</option>
+                           <option value="no">No</option>
+                       </select>
+                       </div>
+                       <div class="col-12 col-md-12 mb-12" id ="travelclustercard">
+                            <label for="validationSample04">Select Travel Cluster</label>
+                            <?php $clusterData = $this->Menu_model->getClusterByUserId($uid);  ?>
+                            <select id="cluster" class="form-control" name="cluster" required>
+                                <option selected disabled>Select Cluster</option>   
+                                <?php foreach($clusterData as $cdata): ?>
+                                <option value="<?=$cdata->id?>"><?=$cdata->clustername ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+
+                       </div>    
+
+
+                       <div id="cmpmanytime">  
+                        
+                   
+                       <div>
                        
-                   <div id="rosterhide">
+                       <div class="col-12 col-md-12 mb-12">
+                            <label for="validationSample04"> How many task were done</label>
+                            <input type="number" class="form-control" name="how_many_task"> 
+                        </div>
+                       <div class="col-12 col-md-12 mb-12">
+                            <label for="validationSample04"> Is the frequency of the task right? </label>
+                            <select id="cluster" class="form-control" name="cluster" required>
+                                <option selected value="">Select</option>   
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select> 
+                        </div>
+                       <div class="col-12 col-md-12 mb-12">
+                            <label for="validationSample04"> Are the type of task right? </label>
+                            <select id="cluster" class="form-control" name="cluster" required>
+                                <option selected value="">Select</option>   
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select> 
+                        </div>
+                       <div class="col-12 col-md-12 mb-12">
+                            <label for="validationSample04"> RP Meeting done (y/n) </label>
+                            <select id="cluster" class="form-control" name="cluster" required>
+                                <option selected value="">Select</option>   
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select> 
+                        </div>
+                        <hr>
+                        <div class="card p-2" style="background: antiquewhite" >
+                            <p>If select yes then - RP Meeting done (y/n) </p>
+                            <div class="col-12 col-md-12 mb-12">
+                                <label for="validationSample04">write MOM Done (y/n)</label>
+                                <select id="cluster" class="form-control" name="cluster" required>
+                                    <option selected value="">Select</option>   
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select> 
+                            </div>
+                            <div class="col-12 col-md-12 mb-12">
+                                <label for="validationSample04">Social networking done (y/n)</label>
+                                <select id="cluster" class="form-control" name="cluster" required>
+                                    <option selected value="">Select</option>   
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select> 
+                            </div>
+                            <div class="col-12 col-md-12 mb-12">
+                                <label for="validationSample04">Is this category right? (y/n) </label>
+                                <select id="cluster" class="form-control" name="cluster" required>
+                                    <option selected value="">Select</option>   
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select> 
+                            </div>
+                            <div class="col-12 col-md-12 mb-12">
+                                <label for="validationSample04">Is this current status right?</label>
+                                <select id="cluster" class="form-control" name="cluster" required>
+                                    <option selected value="">Select</option>   
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select> 
+                            </div>
+                        </div>
+                       
+
+                        <hr>
+                        <div class="card p-2" style="background: antiquewhite">
+                            <p>If select NO then - RP Meeting done (y/n) </p>
+                            <div class="col-12 col-md-12 mb-12">
+                                <label for="validationSample04">Social networking done (y/n)</label>
+                                <select id="cluster" class="form-control" name="cluster" required>
+                                    <option selected value="">Select</option>   
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select> 
+                            </div>
+                            <div class="col-12 col-md-12 mb-12">
+                                <label for="validationSample04">Is this category right? (y/n) </label>
+                                <select id="cluster" class="form-control" name="cluster" required>
+                                    <option selected value="">Select</option>   
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select> 
+                            </div>
+                            <div class="col-12 col-md-12 mb-12">
+                                <label for="validationSample04">Is this current status right? </label>
+                                <select id="cluster" class="form-control" name="cluster" required>
+                                    <option selected value="">Select</option>   
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select> 
+                            </div>
+                            <div class="col-12 col-md-12 mb-12">
+                                <label for="validationSample04">How many times barge meeting done?</label>
+                                <select id="cluster" class="form-control" name="cluster" required>
+                                    <option selected value="">Select</option>   
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select> 
+                            </div>
+                            <div class="col-12 col-md-12 mb-12">
+                                <label for="validationSample04">Research prospecting ?</label>
+                                <select id="cluster" class="form-control" name="cluster" required>
+                                    <option selected value="">Select</option>   
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select> 
+                            </div>
+                            <div class="col-12 col-md-12 mb-12">
+                                <label for="validationSample04">Base location or out station travel?</label>
+                                <select id="cluster" class="form-control" name="cluster" required>
+                                    <option selected value="">Select</option>   
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select> 
+                            </div>
+                        </div>
+                              
+                        
+                       
+                        
+                        <div class="col-12 col-md-12 mb-12">
+                            <label for="validationSample02"> Partner Type</label>
+                            <?php  $partner=$this->Menu_model->get_partner(); ?>
+                            <select id="ctype" name="ctype" class="form-control" required>
+                                <option value="">Select Partner Type</option>
+                                <?php foreach($partner as $p){?>
+                                <option value="<?=$p->id?>"><?=$p->name?></option>
+                                <?php }?>
+                            </select>
+                        </div>
+
+                        <div class="col-12 col-md-12 mb-12">
+                            <label for="validationSample02">Do you need any intervention or suppert from? </label>
+                            <select id="ctype" name="ctype" class="form-control" required>
+                                <option value="">Select</option>
+                                <option value="Cluster manager">Cluster manager</option>
+                                <option value="PST">PST </option>
+                                <option value="Sales Head">Sales Head</option>
+                            </select>
+                        </div>
+
+
+                       </div>
+
+                       
+                        </div>
+
+                    <hr>                
+                   <div class="card p-2" id="rosterhide">
                        <center><h5>Create Task</h5></center>
                        <input type="datetime-local" id="ntdate" name="ntdate" value="<?=date('Y-m-d H:i:s');?>" class="form-control" required="">
                        <lable>Select Action</lable>
                        <select id="ntaction" name="ntaction" class="form-control"  required="">
                            <option value="">Select Action</option>
                            <?php $action = $this->Menu_model->get_action();
-                           foreach($action as $a){?>
-                               <option value="<?=$a->id?>"><?=$a->name?></option>
-                           <?php } ?>
+                            $action_array = [1,3,4];
+                           foreach($action as $a){
+                            if(in_array($a->id, $action_array)){ ?> 
+                            <option value="<?=$a->id?>"><?=$a->name?></option>
+                           <?php }} ?>
                        </select>
                        <lable>Select Purpose</lable>
                        <select id="ntppose" class="form-control" name="ntppose" required="">
@@ -357,10 +507,15 @@
                         <button type="submit" class="btn btn-success" onclick="this.form.submit(); this.disabled = true;">Submit</button>
                     </div>
                     </div>
-                    
                   </form>
               
-     </div></div>
+     </div>
+     </div>
+    </div>
+
+
+
+
      <div class="col-sm col-md-12 col-lg-12 m-auto">
          <div class="card card-primary card-outline">
               <div class="card-body box-profile">
@@ -398,10 +553,30 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type='text/javascript'>
 
+
+$( document ).ready(function() {
+    $("#cmpfirsttime").hide();
+    $("#cmpmanytime").hide();
+    $("#loadcompinfo").hide();
+    $("#travelclustercard").hide();
+});
+
+
+
 $('#otherremark').on('change', function b() {
     var val = this.value;
     if(val=='Other'){document.getElementById("otherremark1").readOnly = false;}else{
     document.getElementById("otherremark1").value=val;document.getElementById("otherremark1").readOnly = true;}
+});
+
+$('#travelcluster').on('change', function b() {
+    var val = this.value;
+    if(val=='yes'){
+        $("#travelclustercard").hide();
+    }else{
+        $("#travelclustercard").show();
+    }
+  
 });
 
 $('#ans1').on('change', function b() {
@@ -440,12 +615,9 @@ $('#csrbudget').on('change', function b() {
         var bdscholl = document.getElementById("bdscholl");
         bdscholl.min = 1;
         bdscholl.max = 2;
-        
+        ''
     }
 });
-
-
-
 
 $("#orrr").hide();
 $('#statusid').on('change', function b() {
@@ -593,6 +765,59 @@ uid: uid
 cache: false,
 success: function a(result){
 $("#graphlog").html(result);
+}
+});
+
+$.ajax({
+url:'<?=base_url();?>Menu/CheckFirstTimeReviewInYear',
+type: "POST",
+data: {
+inid: inid,
+uid: uid
+},
+cache: false,
+success: function a(result){
+    $("#loadcompinfo").show();
+    $("#hideimage").hide();
+    if(result == 0){
+    $("#cmpfirsttime").show();
+    $("#cmpmanytime").hide();
+    $("#review_time").val('First Time');
+
+    $.ajax({
+    url:'<?=base_url();?>Menu/GetCompnayDetailsUsiingInit',
+    type: "POST",
+    data: {
+    inid: inid,
+    uid: uid
+    },
+    cache: false,
+    success: function a(result){
+        var jsonArray       = JSON.parse(result);
+        var companyName     = jsonArray[0].compname; 
+        var pkclient        = jsonArray[0].pkclient; 
+        var fbudget         = jsonArray[0].fbudget; 
+        var noofschools     = jsonArray[0].noofschools; 
+        var cstatus         = jsonArray[0].cstatus; 
+        var partnerType_id  = jsonArray[0].partnerType_id; 
+        var topspender      = jsonArray[0].topspender; 
+        var pkclient        = jsonArray[0].pkclient; 
+        var priorityc       = jsonArray[0].priorityc; 
+        var upsell_client   = jsonArray[0].upsell_client; 
+        var focus_funnel    = jsonArray[0].focus_funnel; 
+        var cluster_id      = jsonArray[0].cluster_id; 
+        
+        // console.log(companyName);
+        console.log(result);
+    }
+    });
+
+}else if(result == 1){
+    $("#cmpfirsttime").hide();
+    $("#cmpmanytime").show();
+    $("#review_time").val('Many Time');
+
+}
 }
 });
 });
@@ -748,8 +973,13 @@ $('#ntaction').on('change', function f() {
 <script>
     $("#example1").DataTable({
       "responsive": false, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      "buttons": ["csv"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+
+
+
+
 </script>
 </body>
 </html>

@@ -147,7 +147,7 @@
       }
       ?>
     <style>
-.scrollme{overflow-x:auto;h1{font-size:36px;color:#333}p{font-size:24px;color:#666;margin:10px}.container{background-color:#fff;padding:20px;border-radius:10px;box-shadow:0 0 10px rgb(0 0 0 / .2)}}.custom-card{padding:20px;border:1px solid #e0e0e0;border-radius:5px}.custom-card-header{background-color:#007bff;color:#fff;padding:10px 20px;border-radius:5px 5px 0 0}.custom-radio-label{font-weight:700}.card.container-fluid{background-color:honeydew}p#totalcompany{font-size:12px;padding:10px;color:green;font-weight:700;font-family:sans-serif}label{font-size:12px!important}div#maintaskcard{background:antiquewhite}div#selectCategory{background:#fff6dd}div#actionnotplaned{background:#434630;color:#fff}.card.p-4.taskselectionarea,#companyLocationdatacard,#selectCategory{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}div#selectCategory{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}.modal-footer{justify-content:center!important}div#pstAssignCard,div#taskActionCard,div#partnertype,div#actionPlanned,div#companyLocationdatacard,div#clusterLocactionFiltercard,div#sameStatusLastLimitDays,div#planbutnotinitiatedcard,div#planbutnotinitiatedcardold,div#auto_assign,div#pendingAutotaskCard,div#firstQuarter1,div#reviewTargetDate{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}div#maintaskcard{background:#bfbfbf}.card-header.custom-card-header{border-radius:43px;text-align:center;padding:2px}.custom-card{background:#efb2b2}span.alertmessagecmp{font-size:14px;padding:2px;color:red}div#plantimerBox{background:linear-gradient(to right,#a80077,#66ff00);border-radius: 56px;box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;}span#timer{font-size:38px;color:#fff}.stopbtntimer{align-items:center;justify-content:center;display:flex}button#stop{padding: 7px 12px;} table.dataTable>thead>tr>th:not(.sorting_disabled), table.dataTable>thead>tr>td:not(.sorting_disabled) {padding-right: 30px; background: #851241;color: white;}
+.scrollme{overflow-x:auto;h1{font-size:36px;color:#333}p{font-size:24px;color:#666;margin:10px}.container{background-color:#fff;padding:20px;border-radius:10px;box-shadow:0 0 10px rgb(0 0 0 / .2)}}.custom-card{padding:20px;border:1px solid #e0e0e0;border-radius:5px}.custom-card-header{background-color:#007bff;color:#fff;padding:10px 20px;border-radius:5px 5px 0 0}.custom-radio-label{font-weight:700}.card.container-fluid{background-color:honeydew}p#totalcompany{font-size:12px;padding:10px;color:green;font-weight:700;font-family:sans-serif}label{font-size:12px!important}div#maintaskcard{background:antiquewhite}div#selectCategory{background:#fff6dd}div#actionnotplaned{background:#434630;color:#fff}.card.p-4.taskselectionarea,#companyLocationdatacard,#selectCategory{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff;}div#selectCategory{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}.modal-footer{justify-content:center!important}div#pstAssignCard,div#taskActionCard,div#partnertype,div#actionPlanned,div#companyLocationdatacard,div#clusterLocactionFiltercard,div#sameStatusLastLimitDays,div#planbutnotinitiatedcard,div#actionnotplaned_NeedYour,div#planbutnotinitiatedcardold,div#auto_assign,div#compulsive_task_card,div#pendingAutotaskCard,div#firstQuarter1,div#reviewTargetDate{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}div#maintaskcard{background:#bfbfbf}.card-header.custom-card-header{border-radius:43px;text-align:center;padding:2px}.custom-card{background:#efb2b2}span.alertmessagecmp{font-size:14px;padding:2px;color:red}div#plantimerBox{background:linear-gradient(to right,#a80077,#66ff00);border-radius: 56px;box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;}span#timer{font-size:38px;color:#fff}.stopbtntimer{align-items:center;justify-content:center;display:flex}button#stop{padding: 7px 12px;} table.dataTable>thead>tr>th:not(.sorting_disabled), table.dataTable>thead>tr>td:not(.sorting_disabled) {padding-right: 30px; background: #851241;color: white;}
 .hrclass{box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;}
  .bgresactive{background: #263b0d!important;}
  .form-control.is-invalid, .was-validated .form-control:invalid {background-image: none !important;}
@@ -157,6 +157,9 @@
     color: #666; /* Dark grey text */
     cursor: not-allowed; /* Change cursor to not-allowed */
 }
+/* body{
+
+} */
 
     </style>
   </head>
@@ -241,7 +244,7 @@ if($type_id == 3){
           display:flex;
           }
         </style>
-        <div class="container">
+        <div class="container-fluid">
           <div class="card p-2 bg-primary">
             <div class="row">
               <div class="col-md-8"></div>
@@ -557,6 +560,51 @@ if($type_id == 3){
                         </label>
                         </div>
                         <?php }else{ ?>
+                    <?php 
+                       $days = 8;
+                       if($type_id ==3){
+                        $cmpstatus = '1,2,8';  // Status with - Open, Reachout, Open RPEM
+                        $dyslimit = 15;
+                       }else if($type_id ==13 || $type_id ==4){
+                        $cmpstatus = '3,6,9,12,13';  // Status with - Tentive, Positive, Very Positive, Positive NAP, Very Positive NAP
+                        $dyslimit = 30;
+                       }
+                       $cmpstatss = '4,5'; // Status with - WDL AND NI
+
+                        $statusnochangecmp = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$days,$cmpstatus);
+                        $statusnochangecmpcnt = sizeof($statusnochangecmp);
+
+                        $statusnochangecmp_wdl_nl = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$dyslimit,$cmpstatss);
+                        $statusnochangecmp_wdl_nl_cnt = sizeof($statusnochangecmp_wdl_nl);
+
+                        $status_nochangecnt = $statusnochangecmpcnt + $statusnochangecmp_wdl_nl_cnt;
+                        if($status_nochangecnt > 0){$cssct = 'text-danger';}else{$cssct = '';}
+
+                        ?>
+
+                          <div class="form-check">
+                          <label>
+                            <input type="radio" class="form-check-input" name="optradio" value="Compulsive Task"> <span class="<?=$cssct?>"> Compulsive Task (<?=$status_nochangecnt ?>) </span>
+                          </label>
+                        </div>
+
+                      <?php 
+                 
+                        $getBDNoWorked = $this->Menu_model->CompanyThatBDHasNoWorkedInDays($uid,$days,$cmpstatus);
+                        $getBDNoWorkedcnt = sizeof($getBDNoWorked);
+
+                        $getBDNoWorked_wdl_nl = $this->Menu_model->CompanyThatBDHasNoWorkedInDays($uid,$dyslimit,$cmpstatss);
+                        $getBDNoWorked_wdl_nlcnt = sizeof($getBDNoWorked_wdl_nl);
+
+                        $notworkedcnt = $getBDNoWorkedcnt + $getBDNoWorked_wdl_nlcnt;
+                        if($notworkedcnt > 0){$cssc = 'text-danger';}else{$cssc = '';}
+                        ?>
+                        <div class="form-check">
+                        <label>
+                        <input type="radio" class="form-check-input" name="optradio" value="actionNotPlannedNeed" > <span class="<?=$cssc?>"> Action Not Planned  <?php if($notworkedcnt > 0){echo '('.$notworkedcnt.')';}?></span>
+                        </label>
+                        </div>
+
                         <div class="form-check">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Compnay Name" >Company Name
@@ -611,11 +659,13 @@ if($type_id == 3){
                           <input type="radio" class="form-check-input" name="optradio" value="PST Assign" >Other Assign
                           </label>
                         </div>
+                        <?php if($type_id ==13 || $type_id ==4){ ?>
                         <div class="form-check">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Self Assign" >Self Assign
                           </label>
                         </div>
+                        <?php } ?>
 
                         <!-- <div class="form-check">
                           <label class="form-check-label custom-radio-label">
@@ -628,11 +678,8 @@ if($type_id == 3){
                           <input type="radio" class="form-check-input" name="optradio" value="Review Target Date" > Review Target Date
                           </label>
                         </div>
-                        <!-- <div class="form-check">
-                        <label>
-                        <input type="radio" class="form-check-input" name="optradio" value="actionNotPlanned" > Action Not Planned
-                        </label>
-                        </div> -->
+
+                       
 
                        
                         <?php  } }?>
@@ -753,6 +800,8 @@ if($type_id == 3){
                       </div>
                     </div>
                     <div id="actionnotplaned" class="card p-4" >
+
+
                       <input type="hidden" name="selectbyuser" id="selectbyuser" value=""> 
                       <div class="form-group" id="selectstatus" >
                         <lable>Select Company Status : </lable>
@@ -765,6 +814,7 @@ if($type_id == 3){
                           <?php endforeach; ?>
                         </select>
                       </div>
+
                       <div id="task_actionCard">
                         <div class="form-group">
                           <label>Task/Action</label>
@@ -790,6 +840,52 @@ if($type_id == 3){
                         </select>
                       </div>
                     </div>
+
+                    <div id="actionnotplaned_NeedYour" class="card p-4">
+                    <lable>Select Company Status : </lable>
+                    <hr>
+                        <select class="form-control" id="selectstatusbyusernotplanedCompany">
+                            <option value="">Select Task</option>
+                                <?php 
+                                $getBDNoWorkedcnts = [];
+                                  foreach ($getBDNoWorked as $objects) {
+                                      $cstatus = $objects->cstatus;
+                                      if (!isset($getBDNoWorkedcnts[$cstatus])) {
+                                          $getBDNoWorkedcnts[$cstatus] = [];
+                                      }
+                                      $getBDNoWorkedcnts[$cstatus][] = $objects;
+                                  }
+
+                                  $getBDNoWorkedcnts_wdlnl = [];
+                                  foreach ($getBDNoWorked_wdl_nl as $objects_wdl_nl) {
+                                      $cstatus = $objects_wdl_nl->cstatus;
+                                      if (!isset($getBDNoWorkedcnts_wdlnl[$cstatus])) {
+                                          $getBDNoWorkedcnts_wdlnl[$cstatus] = [];
+                                      }
+                                      $getBDNoWorkedcnts_wdlnl[$cstatus][] = $objects_wdl_nl;
+                                  }
+
+
+
+                                ?>
+                            <?php 
+                              foreach($getBDNoWorkedcnts as $key => $npstatus){
+                                $getstatus_name = $this->Menu_model->get_statusbyid($key)[0]->name;
+                                $npstatuscnt = sizeof($npstatus);
+                                echo "<option class='text-danger' value='$key'>$getstatus_name($npstatuscnt)</options>";
+                              }
+
+                              foreach($getBDNoWorkedcnts_wdlnl as $key => $npstatus){
+                                $getstatus_name = $this->Menu_model->get_statusbyid($key)[0]->name;
+                                $npstatuscnt = sizeof($npstatus);
+                                echo "<option class='text-danger' value='$key'>$getstatus_name($npstatuscnt)</options>";
+                              }
+                            ?>
+                          </select>
+                    </div>
+
+
+
                     <div id="selectCategory" class="card p-4" >
                       <input type="hidden" name="selectbyuser" id="selectbyuser" value=""> 
                       <div class="form-group" id="selectCategorybyuser" >
@@ -1214,9 +1310,60 @@ if($type_id == 3){
                            <p id="pendingdata_message"></p>
                         </div>
 
+                        <div id="compulsive_task_card" class="card p-4" >
+                        <div class="form-group" id="compulsive_task_card1">
+                        <label>Select Status</label>
+
+
+                        <?php  if($status_nochangecnt > 0){ ?>
+                        <select class="form-control" id="statusnochanhecomp_status">
+                            <option value="">Select Task</option>
+                                <?php 
+                                $statusnochanhecomp = [];
+                                  foreach ($statusnochangecmp as $objects) {
+                                      $cstatus = $objects->cstatus;
+                                      if (!isset($statusnochanhecomp[$cstatus])) {
+                                          $statusnochanhecomp[$cstatus] = [];
+                                      }
+                                      $statusnochanhecomp[$cstatus][] = $objects;
+                                  }
+
+                                  $statusnochanhecomp_wdl = [];
+                                  foreach ($statusnochangecmp_wdl_nl as $objects_wdl_nl) {
+                                      $cstatus = $objects_wdl_nl->cstatus;
+                                      if (!isset($statusnochanhecomp_wdl[$cstatus])) {
+                                          $statusnochanhecomp_wdl[$cstatus] = [];
+                                      }
+                                      $statusnochanhecomp_wdl[$cstatus][] = $objects_wdl_nl;
+                                  }
+                                ?>
+                            <?php 
+                              foreach($statusnochanhecomp as $key => $npstatus){
+                                $getstatus_name = $this->Menu_model->get_statusbyid($key)[0]->name;
+                                $npstatuscnt = sizeof($npstatus);
+                                echo "<option class='text-danger' value='$key'>$getstatus_name($npstatuscnt)</options>";
+                              }
+                              foreach($statusnochanhecomp_wdl as $key => $npstatus){
+                                $getstatus_name = $this->Menu_model->get_statusbyid($key)[0]->name;
+                                $npstatuscnt = sizeof($npstatus);
+                                echo "<option class='text-danger' value='$key'>$getstatus_name($npstatuscnt)</options>";
+                              }
+                            ?>
+                          </select>
+                        <?php } ?>
+                      </div>
+                      </div>
+
+
+
+
+
                   </div>
 
                   <div class="card col-lg-4 col-sm-4 p-2" id="content">
+                    <div class="card" id="taskplanningimg"  >
+                      <img src="https://stemapp.in//assets/image/planning1.jpg" alt="" >
+                    </div>
                   <div class="card p-4" id="maintaskcard">
                   <p id="demo" class="text-center text-white hrclass p-2">Time Spent in Task Planning: 00:00:00</p>
                       <form method="post" action="<?=base_url();?>Menu/addplantask12" id="myForm" >
@@ -1850,24 +1997,18 @@ if($type_id == 3){
                  $('#select_cluster').hide();
                  $('#selectcompanyname_barg').hide();
 
-                //  $('.js-example-basic-multiple').select2();
                  $('#status_taskaction_card').hide();
                  $('#auto_assign').hide();
                  $('#selectbarginCompanyType').hide();
                  $('#selectReseachCompanyType').hide();
                  $('#slct_auto_assign_task_type').hide();
                  $('#pendingdata_message').hide();
-               
-            
-                
+                 $('#compulsive_task_card').hide();
+                 $('#actionnotplaned_NeedYour').hide();
                 });
         
                 $("#mainbox").hide();$("#ScheduledBox").hide();
-                // $("#statusid6").hide();
                 $("#box0").hide();$("#box1").hide();$("#box2").hide();$("#box3").hide();$("#box4").hide();$("#box5").hide();
-        
-        
-             
                 $('#ntactionnew').on('change', function f() {    
                 var inid = document.getElementById("selectcompanybyuser").value;
                 var aid = document.getElementById("ntactionnew").value;
@@ -1902,7 +2043,7 @@ if($type_id == 3){
                 var val = radio.value;
                 
                 $("#selectby").val(val);
-                
+
                 if(val=='Compnay Name'){
                    $('#selectcompanyname').show();
                     $("#maintaskcard").hide();
@@ -1910,15 +2051,11 @@ if($type_id == 3){
                     $("#actionnotplaned").hide();
                     $('#ntactionnew').hide();
                     $('#companyLocation').hide();
-        
                     $('#tasktaction').hide();
                     $('#taskActionbyuser').hide();
                     $('#taskPurposebyuser').hide();
-        
                     var uid = $("#curuserid").val();
-
                     $("#selectstatus").show();
-                    
                     $('#search_company').on('input', function() {
                           var inputVal = $(this).val();
                           var options = $('#data').find('option').map(function() {
@@ -1954,6 +2091,8 @@ if($type_id == 3){
                               $('#ntppose').show();
                               $('#meeting-time').show();
                               $('#planbtn1').show();
+                              $("#taskplanningimg").hide();
+
                               }
                               });
                           }
@@ -1985,14 +2124,11 @@ if($type_id == 3){
                         $('#ntppose').show();
                         $('#meeting-time').show();
                         $('#planbtn1').show();
-                        
+                        $("#taskplanningimg").hide();
                         }
                         });
                     });
-        
-                    
-                   
-        
+
                     $('#tasktaction').on('change', function() {
                         var uid = $("#curuserid").val();
                         var tasktaction = $(this).val();
@@ -2015,16 +2151,13 @@ if($type_id == 3){
                         $('#taskActionbyuser').show();
                             }
                         });
-        
                         });
-        
         
                     $('#taskActionbyuser').on('change', function() {
                         var uid = $("#curuserid").val();
                         var taskActionbyuser = $(this).val();
                         var tasktaction = $('#tasktaction').val();
                         var selectedValue = $('#selectstatusbyuser').val();
-        
                         $.ajax({
                         url:'<?=base_url();?>Menu/getTaskActionYesorNobyuser',
                         type: "POST",
@@ -2044,17 +2177,14 @@ if($type_id == 3){
                         $('#taskPurposebyuser').show();
                             }
                         });
-        
                         });
         
-        
                         $('#taskPurposebyuser').on('change', function() {
-                            var uid = $("#curuserid").val();
+                        var uid = $("#curuserid").val();
                         var taskPurposebyuser = $(this).val();
                         var tasktaction = $('#tasktaction').val();
                         var selectedValue = $('#selectstatusbyuser').val();
                         var taskActionbyuser = $('#taskActionbyuser').val();
-        
                         $.ajax({
                         url:'<?=base_url();?>Menu/getTaskPurposeYesorNobyuser',
                         type: "POST",
@@ -2081,18 +2211,14 @@ if($type_id == 3){
                   $('#selectcompanyname').hide();
                 }
         
-        
                 if(val == 'actionNotPlanned'){
-        
                     $("#maintaskcard").hide();
                     $("#actionPlanned").hide();
                     $("#actionnotplaned").show();
                     $('#companyLocationdata').hide();
-        
                     $('#tasktaction').hide();
                     $('#taskActionbyuser').hide();
                     $('#taskPurposebyuser').hide();
-                 
                     $('#selectstatusbyusernotplaned').on('change', function() {
                     var selectstatusbyusernotplaned = $(this).val();
                     $("#selectcompanybyuser").html('');
@@ -2125,9 +2251,9 @@ if($type_id == 3){
                         });
                     });
         
-        
+                   
+
                     $('#task_action').on('change', function() {
-        
                     var selectstatusbyusernotplaned = $('#selectstatusbyusernotplaned').val();
                     var task_action = $(this).val();
         
@@ -2198,12 +2324,10 @@ if($type_id == 3){
                         }
                         });
                     });
-        
-        
-        
                 }else{
                     $("#actionnotplaned").hide();
                     $("#daysfiltercard_anp").hide();
+                    $('#ntactionnew option').prop('disabled', false);
                 }
         
         
@@ -2248,6 +2372,7 @@ if($type_id == 3){
                         $('#ntppose').show();
                         $('#meeting-time').show();
                         $('#planbtn1').show();
+                        $("#taskplanningimg").hide();
                         }
                         });
                     });
@@ -2306,7 +2431,6 @@ if($type_id == 3){
                         });
         
                         $('#taskPurposebyuser').on('change', function() {
-        
                         var taskPurposebyuser = $(this).val();
                         var tasktaction = $('#tasktaction').val();
                         var selectedValue = $('#selectstatusbyuser').val();
@@ -2337,22 +2461,18 @@ if($type_id == 3){
                 }
                 
                 if(val=='Location'){
-                
                     $("#maintaskcard").hide();
                     $("#actionPlanned").show();
                     $("#actionnotplaned").hide();
                     $('#ntactionnew').hide();
                     $('#tasktaction').hide();
-        
                     $('#taskActionbyuser').hide();
                     $('#taskPurposebyuser').hide();
-        
                     $("#selectstatus").hide();
                     $('#companyLocationdata').show();
                      $('#companyLocation').show();
                      $("#companyLocationdatacard").show();
                      
-        
                      $(".taskselectionarea").hide();
                      var uid = $("#curuserid").val();
                     $.ajax({
@@ -2396,6 +2516,7 @@ if($type_id == 3){
                         $('#meeting-time').show();
                         $('#planbtn1').show();
                         $("#selectactionplanecard").show();
+                        $("#taskplanningimg").hide();
                         }
                         });
                     });
@@ -2437,7 +2558,7 @@ if($type_id == 3){
                 }else{
                     // alert("Please Chhose Right Action");
                 }
-                    });
+                  });
                 }else{
                     $("#companyLocationdatacard").hide();
                     $(".taskselectionarea").show();
@@ -2451,18 +2572,15 @@ if($type_id == 3){
                 $(".taskselectionarea").hide();
                 $("#maintaskcard").hide();
                 $('#selectCategory').show();
-        
                 $("#maintaskcard").hide();
                 $("#actionPlanned").hide();
                 $("#actionnotplaned").hide();
                 $('#ntactionnew').hide();
                 $('#tasktaction').hide();
-        
                 $("#selectstatus").hide();
                 $('#companyLocationdata').hide();
                 $('#companyLocation').hide();
                 $('#statusfiltercardCategory').hide();
-        
                     $('#selectdcategory').on('change', function() {
                         var uid = $("#curuserid").val();
                         $("#selectcompanybyuser").html('');
@@ -2491,13 +2609,13 @@ if($type_id == 3){
                         $('#meeting-time').show();
                         $('#planbtn1').show();
                         $('#statusfiltercardCategory').show();
+                        $("#taskplanningimg").hide();
                         }
                         });
                     });
         
                     $('#statusfiltercardCat').on('change', function() {
-                        var uid = $("#curuserid").val();
-           
+                      var uid = $("#curuserid").val();
                        var  selectdcategory = $('#selectdcategory').val();
                        var statusfiltercardCat = $(this).val();
                         $.ajax({
@@ -2529,18 +2647,13 @@ if($type_id == 3){
                         });
                     });
         
-                    
                     $('#taskActionbyusercat').on('change', function() {
                         var uid = $("#curuserid").val();
                         $("#selectcompanybyuser").html('');
                        var selectdcategory = $('#selectdcategory').val();
                        var statusfiltercardCat = $('#statusfiltercardCat').val();
                        var taskActionbyusercatcat = $(this).val();
-                       
-                    //    alert(selectdcategory);
-                    //    alert(statusfiltercardCat);
-                    //    alert(taskActionbyusercatcat);
-        
+
                         $.ajax({
                         url:'<?=base_url();?>Menu/getcmpbycategory13',
                         type: "POST",
@@ -2575,13 +2688,10 @@ if($type_id == 3){
                     $('#taskPurposebyusercatdata').on('change', function() {
                         var uid = $("#curuserid").val();
                         $("#selectcompanybyuser").html('');
-        
                        var taskActionbyusercat = $('#taskActionbyusercat').val();
                        var selectdcategory = $('#selectdcategory').val();
                        var statusfiltercardCat = $('#statusfiltercardCat').val();
                        var taskPurposebyusercat = $(this).val();
-        
-                       
                        $.ajax({
                         url:'<?=base_url();?>Menu/getcmpbycategory13',
                         type: "POST",
@@ -2601,26 +2711,20 @@ if($type_id == 3){
                         // optionCount = optionCount-1;
                         $("#totalcompany").text('Total Company :'+ optionCount);
                         $("#tasktaction").hide();
-        
                         $("#tptime").val('');
                         $("#tptime").show();
                         $('#ntactionnew').show();
                         $('#ntppose').show();
                         $('#meeting-time').show();
-                        $('#planbtn1').show();
-        
+                        $('#planbtn1').show();   
                         }
                         });
-        
                     });
-        
                 }else{
                     $('#selectCategory').hide();
                 }
         
-        
                 if(val == 'Cluster Location'){
-        
                 $(".taskselectionarea").hide();
                 $("#maintaskcard").hide();
                 $('#selectCategory').hide();
@@ -2676,7 +2780,6 @@ if($type_id == 3){
                     // optionCount = optionCount-1;
                     $("#totalcompany").text('Total Company :'+ optionCount);
                     $("#tasktaction").hide();
-        
                     $("#tptime").val('');
                     $("#tptime").show();
                     $('#ntactionnew').show();
@@ -2684,12 +2787,10 @@ if($type_id == 3){
                     $('#meeting-time').show();
                     $('#planbtn1').show();
                     $('#statusfiltercardCluster').show();
-        
+                    $("#taskplanningimg").hide();
                     }
                     });
-        
                     });
-        
         
                     $('#statusfilterCluster').on('change', function() {
                     var uid = $("#curuserid").val();
@@ -2716,7 +2817,6 @@ if($type_id == 3){
                     // optionCount = optionCount-1;
                     $("#totalcompany").text('Total Company :'+ optionCount);
                     $("#tasktaction").hide();
-        
                     $("#tptime").val('');
                     $("#tptime").show();
                     $('#ntactionnew').show();
@@ -2724,10 +2824,8 @@ if($type_id == 3){
                     $('#meeting-time').show();
                     $('#planbtn1').show();
                     $('#taskActionbyuserCluster').show();
-        
                     }
                     });
-        
                     });
         
                     $('#taskActionbyCluster').on('change', function() {
@@ -2765,13 +2863,9 @@ if($type_id == 3){
                     $('#meeting-time').show();
                     $('#planbtn1').show();
                     $('#taskPurposebyuserCluster').show();
-        
                     }
                     });
-        
                     });
-        
-        
                     $('#taskPurposebyCluster').on('change', function() {
                     var uid = $("#curuserid").val();
                     $("#selectcompanybyuser").html('');
@@ -2808,24 +2902,19 @@ if($type_id == 3){
                     $('#ntppose').show();
                     $('#meeting-time').show();
                     $('#planbtn1').show();
-        
                     }
                     });
-        
                     });
                 }else{
                     $('#clusterLocactionFiltercard').hide();
                 }
         
                 if(val == 'PST Assign'){
-        
                     var uid = $("#curuserid").val();
                     $(".taskselectionarea").hide();
                     $('#pstAssignCard').show();
-        
                     $('#pstAssignCardData').on('change', function() {
                         var pstAssignfilter= $(this).val();
-                  
                             $.ajax({
                             url:'<?=base_url();?>Menu/getpstassigncmp',
                             type: "POST",
@@ -2851,16 +2940,14 @@ if($type_id == 3){
                             $('#ntppose').show();
                             $('#meeting-time').show();
                             $('#planbtn1').show();
+                            $("#taskplanningimg").hide();
                             }
                             });
                     });
-        
                 }else{
                     $('#pstAssignCard').hide();
                     
                 }
-        
-        
                 if(val == 'PST Assigned Not Worked'){
                     $('#taskActionCard').show();
                     var uid = $("#curuserid").val();
@@ -2872,30 +2959,23 @@ if($type_id == 3){
                   $('#ntactionnew option[value="3"]').remove();
                   $('#ntactionnew option[value="4"]').remove();
                 }
-
-
                 if(val == 'Task Action'){
-
                     var uid = $("#curuserid").val();
                     $(".taskselectionarea").hide();
                     $('#taskActionCard').show();
                     $('#maintaskcard').hide();
-                    
                     $('#taskaction_card_area').show();
                     $('#task_action_filter').show();
-         
                     // $('#taskaction_card_area').hide();
                     $('#taskPurposebyuserCard').hide();
                     $('#taskActionbyuserCard').hide();
                     $('#status_taskaction').hide();
-        
                     $('#task_action_filter').on('change', function() {
 
                         $("#selectcompanybyuser").html('');
                         $("#totalcompany").text('');
                         var uid = $("#curuserid").val();
                         var tasktaction = $(this).val();
-
                         if(tasktaction ==3){
                           $("#ntppose").html("<option value=''>Select Purpose</option>");
                           $('#status_taskaction_card').hide();
@@ -2905,7 +2985,6 @@ if($type_id == 3){
                           $("#selectcompany").show();
                           $("#bcytpe").hide();
                           $('#selectReseachCompanyType').hide();
-                          
                           $.ajax({
                           url:'<?=base_url();?>Menu/get_SheduledMeetCompany',
                           type: "POST",
@@ -2915,11 +2994,9 @@ if($type_id == 3){
                           cache: false,
                           success: function a(result){
                             $("#maintaskcard").show();
-
                             $("#selectcompanybyuser").html(result);
                             $("#selectcompanybyuser").show();
                             $("#select_cluster").show();
-
                             var optionCount = $('#selectcompanybyuser').find('option').length;
                             optionCount = optionCount-1;
                             $("#totalcompany").text('Total Company :'+ optionCount);
@@ -2930,27 +3007,22 @@ if($type_id == 3){
                             $('#ntppose').show();
                             $('#meeting-time').show();
                             $('#planbtn1').show();
-                           
+                            $("#taskplanningimg").hide();
                           var newOption = $('<option>', {
                               value: '3',
                               text: 'Scheduled Meeting',
                               selected: true,
                           });
-
                           $('#ntactionnew').append(newOption);
-                          
                           $('#ntactionnew option').prop('disabled', true);
                           $('#ntactionnew option[value="3"]').prop('disabled', false);
-
                           var inidids = '';
-
                             $('#selectcompanybyuser').change(function() {
                             var inidids = '';
                             $('#selectcompanybyuser :selected').each(function(i, sel){
                                 inidids += $(sel).val() + ',';
                             });
                             inidids = inidids.slice(0, -1);
-
                             $.ajax({
                               url:'<?=base_url();?>Menu/getpurposebyinidnew',
                               type: "POST",
@@ -2963,13 +3035,9 @@ if($type_id == 3){
                                 $("#ntppose").html(result);
                               }
                               });
-
                         });
- 
                           }
                           });
-
-                        
                         }else if(tasktaction ==4){
                           $("#ntppose").html("<option value='34'>Fresh Meeting</option>");
                           $('#status_taskaction_card').hide();
@@ -2980,10 +3048,8 @@ if($type_id == 3){
                           $("#bcytpe").show();
                           $('#selectbarginCompanyType').show();
                           $('#selectReseachCompanyType').hide();
-                        
                           $('#bcytpe').on('change', function() {
                             var bcytpe = $(this).val();
-
                           if(bcytpe == 'From Funnel'){
                             $('#maintaskcard').show();
                             $("#selectcompany").show();
@@ -2996,11 +3062,9 @@ if($type_id == 3){
                           cache: false,
                           success: function a(result){
                             $("#maintaskcard").show();
-
                             $("#selectcompanybyuser").html(result);
                             $("#selectcompanybyuser").show();
                             $("#select_cluster").show();
-
                             var optionCount = $('#selectcompanybyuser').find('option').length;
                             optionCount = optionCount-1;
                             $("#totalcompany").text('Total Company :'+ optionCount);
@@ -3011,7 +3075,6 @@ if($type_id == 3){
                             $('#ntppose').show();
                             $('#meeting-time').show();
                             $('#planbtn1').show();
-                           
                           var newOption = $('<option>', {
                               value: '4',
                               text: 'Barg in Meeting',
@@ -3019,16 +3082,13 @@ if($type_id == 3){
                           });
 
                           $('#ntactionnew').append(newOption);
-                         
                           $("#ntppose").html("<option value='135'>Remeeting</option>");
-
                           $('#ntactionnew option').prop('disabled', true);
                           $('#ntactionnew option[value="4"]').prop('disabled', false);
 
                           }
                           });
                             }else if(bcytpe == 'Other'){
-
                               $("#maintaskcard").show();
                               $("#selectcompany").hide();
                               $("#select_cluster").show();
@@ -3053,16 +3113,8 @@ if($type_id == 3){
                               $("#ntppose").html("<option value='34'>Fresh Meeting</option>");
                               $('#selectcompanybyuser').removeAttr('required');
                             }
-
-
-
                           });
-
-
-
                         }else if(tasktaction ==17){
-                            // alert("Join Meeting");
-
                           $("#ntppose").html("<option value=''>Select Purpose</option>");
                           $('#status_taskaction_card').hide();
                           $('#status_taskaction').hide();
@@ -3071,7 +3123,6 @@ if($type_id == 3){
                           $("#selectcompany").show();
                           $("#bcytpe").hide();
                           $('#selectReseachCompanyType').hide();
-
                           $('#ntactionnew option').prop('disabled', true);
                           $('#ntactionnew option[value="17"]').prop('disabled', false);
                           
@@ -3084,11 +3135,9 @@ if($type_id == 3){
                           cache: false,
                           success: function a(result){
                             $("#maintaskcard").show();
-
                             $("#selectcompanybyuser").html(result);
                             $("#selectcompanybyuser").show();
                             $("#select_cluster").show();
-
                             var optionCount = $('#selectcompanybyuser').find('option').length;
                             optionCount = optionCount-1;
                             $("#totalcompany").text('Total Company :'+ optionCount);
@@ -3100,7 +3149,6 @@ if($type_id == 3){
                             $('#meeting-time').show();
                             $('#planbtn1').show();
                             $('#select_with_bd_pst').show();
-                           
                           var newOption = $('<option>', {
                               value: '17',
                               text: 'Join Meeting',
@@ -3109,7 +3157,6 @@ if($type_id == 3){
 
                           $('#ntactionnew option').prop('disabled', true);
                           $('#ntactionnew option[value="17"]').prop('disabled', false);
-
                           $('#ntactionnew').append(newOption);
 
                             var inidids = '';
@@ -3134,28 +3181,14 @@ if($type_id == 3){
                               }
                               });
                              });
-
-                             
-                             
-
-
- 
                           }
                           });
 
-
-
-
                         }else if(tasktaction ==10){
-                          // alert('Research');
                           $('#selectReseachCompanyType').show();
                           $('#bcytpe').hide();
-                          
                           $('#researchType').on('change', function() {
-
-                          
                             var researchType = $(this).val();
-
                           if(researchType == 'From Funnel'){
                             $('#maintaskcard').show();
                             $("#selectcompany").show();
@@ -3171,11 +3204,9 @@ if($type_id == 3){
                               success: function a(result){
                           
                             $("#maintaskcard").show();
-
                             $("#selectcompanybyuser").html(result);
                             $("#selectcompanybyuser").show();
                             $("#select_cluster").hide();
-
                             var optionCount = $('#selectcompanybyuser').find('option').length;
                             optionCount = optionCount-1;
                             $("#totalcompany").text('Total Company :'+ optionCount);
@@ -3186,14 +3217,11 @@ if($type_id == 3){
                             $('#ntppose').show();
                             $('#meeting-time').show();
                             $('#planbtn1').show();
-                           
                             $('#ntactionnew option').prop('disabled', true);
                             $('#ntactionnew option[value="10"]').prop('disabled', false).prop('selected', true);
                             $("#ntppose").html("<option value='94'>Research & Data Collection</option>");
-
                               }
                               });
-
                             }
                             
                             else if(researchType == 'Other'){
@@ -3212,21 +3240,16 @@ if($type_id == 3){
                               $('#ntactionnew option').prop('disabled', true);
                               $('#ntactionnew option[value="10"]').prop('disabled', false).prop('selected', true);
                               $("#ntppose").html("<option value='94'>Research & Data Collection</option>");
-
                             }
-                            
                         });
                         }else{
-
                           $('#ntactionnew option[value="3"]').remove();
                           $('#ntactionnew option[value="4"]').remove();
                           $('#ntactionnew option[value="17"]').remove();
                           $('#selectbarginCompanyType').hide();
                           $("#select_cluster").hide();
                           $('#selectReseachCompanyType').hide();
-                        
                           $('#ntactionnew option').prop('disabled', false);
-
                           $("#ntppose").html("<option value=''>Select Purpose</option>");
 
                             $.ajax({
@@ -3255,11 +3278,7 @@ if($type_id == 3){
                                 }
                             });
                         }
-
-                       
-        
                         });
-
 
                     $('#status_taskaction').on('change', function() {
                     var selectstatusbyusernotplaned = $(this).val();
@@ -3277,7 +3296,6 @@ if($type_id == 3){
                         },
                         cache: false,
                         success: function a(result){
-                      
                             $("#selectcompanybyuser").html(result);
                               $("#selectcompanybyuser").show();
                               var optionCount = $('#selectcompanybyuser').find('option').length;
@@ -3293,7 +3311,6 @@ if($type_id == 3){
                         var taskActionbyuserCardData = $(this).val();
                         var selectedValue1 = $('#status_taskaction').val();
                         var tasktaction =  $('#task_action_filter').val();
-                       
                         $.ajax({
                         url:'<?=base_url();?>Menu/taskactionnotplan_filter_action',
                         type: "POST",
@@ -3313,17 +3330,13 @@ if($type_id == 3){
                         $('#taskPurposebyuserCard').show();
                             }
                         });
-        
                         });
-        
         
                     $('#taskPurposebyuserCardData').on('change', function() {
                         var taskPurposebyuserCardData = $(this).val();
                         var taskActionbyuserCardData =  $('#taskActionbyuserCardData').val();
                         var selectedValue1 = $('#status_taskaction').val();
                         var tasktaction =  $('#task_action_filter').val();
-                        
-                       
                         $.ajax({
                         url:'<?=base_url();?>Menu/taskactionnotplan_filter_purpose',
                         type: "POST",
@@ -3361,7 +3374,6 @@ if($type_id == 3){
                     $('#taskaction_card_area').hide();
                     $('#taskActionbyuserCard').hide();
                     $('#taskPurposebyuserCard').hide();
-        
                     $('#partnertype_select').on('change', function() {
                     var partnertype = $(this).val();
                     $("#selectcompanybyuser").html('');
@@ -3388,7 +3400,7 @@ if($type_id == 3){
                         $('#meeting-time').show();
                         $('#planbtn1').show();
                         $('#partnertype_cstatus').show();
-        
+                        $("#taskplanningimg").hide();
                         }
                         });
                     });
@@ -3422,7 +3434,6 @@ if($type_id == 3){
                         $('#meeting-time').show();
                         $('#planbtn1').show();
                         $('#partnertype_task').show();
-        
                         }
                         });
                     });
@@ -3458,7 +3469,6 @@ if($type_id == 3){
                         $('#meeting-time').show();
                         $('#planbtn1').show();
                         $('#partnertype_taskAction').show();
-        
                         }
                         });
                     });
@@ -3501,8 +3511,6 @@ if($type_id == 3){
                         });
                     });
         
-        
-        
                     $('#partnertype_taskPurposeData').on('change', function() {
                     var partnertype_taskPurpose = $(this).val();
                     $("#selectcompanybyuser").html('');
@@ -3541,8 +3549,6 @@ if($type_id == 3){
                         }
                         });
                     });
-        
-        
                     }else{
                         $('#partnertype').hide();
                     }
@@ -3600,19 +3606,16 @@ if($type_id == 3){
                         $('#meeting-time').show();
                         $('#planbtn1').show();
                         $('#partnertype_cstatus').show();
-                       
                         $('#ntactionnew').hide();
                         $('#ntppose').hide();
-
+                        $("#taskplanningimg").hide();
                         $('#planbtn1').click(function() {
-
                                 var newValue = '0';
                                 var newText = 'Pending Task Action';
                                 $('#ntactionnew').append(new Option(newText, newValue));
                                 $('#ntppose').append(new Option(newText, newValue));
                                 $('#ntactionnew').val(newValue);
-                                $('#ntppose').val(newValue);
-                               
+                                $('#ntppose').val(newValue);   
                             });
                         }
                         });
@@ -3621,7 +3624,6 @@ if($type_id == 3){
                         $('#planbutnotinitiatedcard').hide();
                     }
         
-
                     if(val == 'Plan But Not Initiated Old'){
                     $('#taskActionCard').show();
                     $('#planbutnotinitiatedcardold').show();
@@ -3675,7 +3677,7 @@ if($type_id == 3){
                         $('#meeting-time').show();
                         $('#planbtn1').show();
                         $('#partnertype_cstatus').show();
-                       
+                        $("#taskplanningimg").hide();
                         $('#ntactionnew').hide();
                         $('#ntppose').hide();
 
@@ -3698,9 +3700,6 @@ if($type_id == 3){
                     }else{
                         $('#planbutnotinitiatedcardold').hide();
                     }
-
-
-
                     if(val == 'FirstQuarter1'){
                     $('#firstQuarter1cstatys').show();
                     $('#taskActionCard').hide();
@@ -3737,7 +3736,7 @@ if($type_id == 3){
                         $('#partnertype_cstatus').show();
                         $('#ntactionnew').hide();
                         $('#ntppose').hide();
-                        
+                        $("#taskplanningimg").hide();
                         }
                         });
 
@@ -3768,11 +3767,9 @@ if($type_id == 3){
                         $('#meeting-time').show();
                         $('#planbtn1').show();
                         $('#firstQuarter1cstatysDataTask').show();
-                        
                         }
                         });
                     });
-
 
                     $('#firstQuarter1cstatysDataTask').on('change', function() {
                         var uid = $("#curuserid").val();
@@ -3796,16 +3793,12 @@ if($type_id == 3){
                         $('#firstQuarter1taskActionbyuser').show();
                             }
                         });
-        
                         });
-
-
                         $('#firstQuarter1taskActionbyuser').on('change', function() {
                         var uid = $("#curuserid").val();
                         var taskActionbyuser = $(this).val();
                         var tasktaction = $('#firstQuarter1cstatysDataTask').val();
                         var selectedValue = $('#selectstatusbyuser').val();
-        
                         $.ajax({
                         url:'<?=base_url();?>Menu/getTaskActionYesorNobyuser',
                         type: "POST",
@@ -3829,7 +3822,6 @@ if($type_id == 3){
         
                         });
         
-
                         $('#firstQuarter1taskPurposebyuser').on('change', function() {
                             var uid = $("#curuserid").val();
                         var taskPurposebyuser = $(this).val();
@@ -3858,14 +3850,10 @@ if($type_id == 3){
                         });
         
                         });
-        
-                        
                     }else{
                         $('#firstQuarter1').hide();  
                     }
-        
                     if(val == 'Same Status Last Limit Days'){
-        
                     $('#taskActionCard').show();
                     $('#sameStatusLastLimitDays').show();
         
@@ -3878,7 +3866,6 @@ if($type_id == 3){
                     $('#taskActionbyuserCard').hide();
                     $('#taskPurposebyuserCard').hide();
                     
-        
                     $('#samestatuslast15daysData').on('change', function() {
                     var samestatuslast15daysData = $(this).val();
                     $("#selectcompanybyuser").html('');
@@ -3905,7 +3892,7 @@ if($type_id == 3){
                         $('#meeting-time').show();
                         $('#planbtn1').show();
                         $('#partnertype_planbut').show();
-        
+                        $("#taskplanningimg").hide();
                         }
                         });
                     });
@@ -3918,7 +3905,6 @@ if($type_id == 3){
         
                     var uid = $("#curuserid").val();
                     var samestatuslast15daysData = $('#samestatuslast15daysData').val();
-        
                         $.ajax({
                         url:'<?=base_url();?>Menu/getcmp_samestatuslastdaysPartner',
                         type: "POST",
@@ -3945,9 +3931,6 @@ if($type_id == 3){
                         }
                         });
                     });
-        
-
-
         
                     $('#daysfilter2_samedays').on('change', function() {
                     var daysfilter2_samedays = $(this).val();
@@ -3981,7 +3964,6 @@ if($type_id == 3){
                         $('#meeting-time').show();
                         $('#planbtn1').show();
                         $('#planbut_taskActioncard').show();
-        
                         }
                         });
                     });
@@ -4026,8 +4008,6 @@ if($type_id == 3){
                         });
                     });
         
-        
-        
                     $('#planbut_taskPurposeData').on('change', function() {
                     var planbut_taskPurposeData = $(this).val();
                     $("#selectcompanybyuser").html('');
@@ -4070,7 +4050,6 @@ if($type_id == 3){
                         $('#sameStatusLastLimitDays').hide();
                     }
 
-
                     if(val == 'Review Target Date'){
 
                         $('#taskActionCard').hide();
@@ -4083,8 +4062,6 @@ if($type_id == 3){
                         $('#taskaction_card_area').hide();
                         $('#taskActionbyuserCard').hide();
                         $('#taskPurposebyuserCard').hide();
-
-
 
                         $('#reviewTargetreviewtypeData').on('change', function() {
                         var getreviewtype = $(this).val();
@@ -4114,12 +4091,10 @@ if($type_id == 3){
                         $('#planbtn1').show();
                         $('#reviewTargetReviewSelf').show();
                         // $('#reviewTargetDate_typeoftaskCard').show();
-                        
+                        $("#taskplanningimg").hide();
                         }
                         });
                     });
-                    
-                    
                         $('#reviewTargetReviewSelfData').on('change', function() {
                         var getreviewtypeself = $(this).val();
                         var getreviewtype = $('#reviewTargetreviewtypeData').val();
@@ -4149,7 +4124,6 @@ if($type_id == 3){
                         $('#planbtn1').show();
                         $('#reviewTargetReviewSelf').show();
                         // $('#reviewTargetDate_typeoftaskCard').show();
-                        
                         }
                         });
                     });
@@ -4181,7 +4155,6 @@ if($type_id == 3){
                         $('#meeting-time').show();
                         $('#planbtn1').show();
                         $('#reviewTargetDate_typeoftaskCard').show();
-                        
                         }
                         });
                     });
@@ -4216,7 +4189,6 @@ if($type_id == 3){
                         $('#meeting-time').show();
                         $('#planbtn1').show();
                         $('#reviewTargetDate_Action').show();
-                        
                         }
                         });
                     });
@@ -4225,11 +4197,7 @@ if($type_id == 3){
                         $('#reviewTargetDate').hide();
                     }
 
-                    
-            
-
                     if(val == 'Self Assign'){
-                    
                     $('#auto_assign').show();
                     $(".taskselectionarea").hide();
                     $('#partnertype').hide();
@@ -4239,10 +4207,8 @@ if($type_id == 3){
                     $('#taskActionbyuserCard').hide();
                     $('#taskPurposebyuserCard').hide();
                     var uid = $("#curuserid").val();
-
                     $('#slct_auto_assign_task').on('change', function() {
                         var selectedValue = $(this).val();
-
                         if(selectedValue == 'Call Assign on Tentive Status'){
                           $('#selectby').val('Plan When MOM Approved'); 
                           $('#pendingdata_message').hide();
@@ -4260,11 +4226,9 @@ if($type_id == 3){
                               $("#slct_auto_assign_task_type").html(result);
                             }
                             });
-
                             $('#slct_auto_assign_task_type').on('change', function() {
-                              var tasktype = $(this).val(); //when is mom task
-                              var slcttasktype = $('#slct_auto_assign_task').val(); //when is mom task
-   
+                            var tasktype = $(this).val(); //when is mom task
+                            var slcttasktype = $('#slct_auto_assign_task').val(); //when is mom task
                             $.ajax({
                             url:'<?=base_url();?>Menu/getAutoAssignTaskWithType',
                             type: "POST",
@@ -4275,31 +4239,29 @@ if($type_id == 3){
                             },
                             cache: false,
                             success: function a(result){
-                              console.log(result);
-
-                        $("#maintaskcard").show();
-                        $("#selectcompany").show();
-                        $("#selectcompanybyuser").html(result);
-                        $("#selectcompanybyuser").show();
-                        var optionCount = $('#selectcompanybyuser').find('option').length;
-                        if(optionCount == 0){
-                            optionCount = 0;
-                        }
-                        $("#totalcompany").text('Total Company :'+ optionCount);
-                        $("#tptime").show();
-                        $('#meeting-time').show();
-                        $('#planbtn1').show();
-                        $('#ntactionnew').show();
-                        $('#ntactionnew').hide();
-                        $('#ntppose').hide();
-                        $('#ntppose,#ntactionnew').removeAttr('required');
-                          }
+                              // console.log(result);
+                            $("#maintaskcard").show();
+                            $("#selectcompany").show();
+                            $("#selectcompanybyuser").html(result);
+                            $("#selectcompanybyuser").show();
+                            var optionCount = $('#selectcompanybyuser').find('option').length;
+                            if(optionCount == 0){
+                                optionCount = 0;
+                            }
+                            $("#totalcompany").text('Total Company :'+ optionCount);
+                            $("#tptime").show();
+                            $('#meeting-time').show();
+                            $('#planbtn1').show();
+                            $('#ntactionnew').show();
+                            $('#ntactionnew').hide();
+                            $('#ntppose').hide();
+                            $("#taskplanningimg").hide();
+                            $('#ntppose,#ntactionnew').removeAttr('required');
+                              }
                         });
                       });   
                         }else{
-
                           $('#slct_auto_assign_task_type').hide();
-
                           if(selectedValue =='Mom Check'){
                                 $.ajax({
                                 url:'<?=base_url();?>Menu/getPendingTeamMoM',
@@ -4337,12 +4299,101 @@ if($type_id == 3){
         
                     }
 
+                    if(val == 'Compulsive Task'){
 
+                    $('#compulsive_task_card').show();
+                    $(".taskselectionarea").hide();
+                    $('#partnertype').hide();
+                    $('#maintaskcard').hide();
+                    $('#status_taskaction_card').hide();
+                    $('#taskaction_card_area').hide();
+                    $('#taskActionbyuserCard').hide();
+                    $('#taskPurposebyuserCard').hide();
+                    var uid = $("#curuserid").val();
+                    
+                    $('#statusnochanhecomp_status').on('change', function() {
+                    var selectstatusbyusernotplaned = $(this).val();
+                    $("#selectcompanybyuser").html('');
+                    $("#totalcompany").text('');
+                    var uid = $("#curuserid").val();
+               
+                        $.ajax({
+                        url:'<?=base_url();?>Menu/nostatuschange_indate',
+                        type: "POST",
+                        data: {
+                        sid: selectstatusbyusernotplaned,
+                        uid: uid
+                        },
+                        cache: false,
+                        success: function a(result){
+                        $("#maintaskcard").show();
+                        $("#selectcompanybyuser").html(result);
+                        $("#selectcompanybyuser").show();
+                        var optionCount = $('#selectcompanybyuser').find('option').length;
+                        optionCount = optionCount-1;
+                        $("#totalcompany").text('Total Company :'+ optionCount);
+                        $("#tptime").show();
+                        $('#ntactionnew').show();
+                        $('#ntppose').show();
+                        $('#meeting-time').show();
+                        $('#planbtn1').show();
+                        $("#taskplanningimg").hide();
+                        $('#ntactionnew option').prop('disabled', true);
+                        $('#ntactionnew option[value="1"]').prop('disabled', false);
+                        }
+                        });
+                    });
+                    }else{
+                      $('#compulsive_task_card').hide();
+                      $('#ntactionnew option').prop('disabled', false);
+                      $("#selectcompany").show();
+                      $('#pendingdata_message').hide();
+                    }
 
+                    if(val == 'actionNotPlannedNeed'){
+                      $("#actionnotplaned_NeedYour").show();
+                      $("#actionPlanned").hide();
+                      $('#selectstatusbyusernotplanedCompany').on('change', function() {
+                    var selectstatusbyusernotplaned = $(this).val();
+                    $("#selectcompanybyuser").html('');
+                    $("#totalcompany").text('');
+                    var uid = $("#curuserid").val();
+               
+                        $.ajax({
+                        url:'<?=base_url();?>Menu/getstatuscmpnotplanedCompany',
+                        type: "POST",
+                        data: {
+                        sid: selectstatusbyusernotplaned,
+                        uid: uid
+                        },
+                        cache: false,
+                        success: function a(result){
+                        $("#maintaskcard").show();
+                        $("#selectcompanybyuser").html(result);
+                        $("#selectcompanybyuser").show();
+                        var optionCount = $('#selectcompanybyuser').find('option').length;
+                        optionCount = optionCount-1;
+                        $("#totalcompany").text('Total Company :'+ optionCount);
+                        $("#tptime").show();
+                        $('#ntactionnew').show();
+                        $('#ntppose').show();
+                        $('#meeting-time').show();
+                        $('#planbtn1').show();
+                        $("#taskplanningimg").hide();
+                        $('#ntactionnew option').prop('disabled', true);
+                        $('#ntactionnew option[value="1"]').prop('disabled', false);
+                        }
+                        });
+                    });
+                    }else{
+                    $("#actionnotplaned_NeedYour").hide();
+                    $("#daysfiltercard_anp").hide();
+                    $('#ntactionnew option').prop('disabled', false);
+                    $("#taskplanningimg").show();
+                    }
                 });
                 });
                
-
           $(document).ready(function() {
 
             $('#planningStart1').hide();
@@ -4630,6 +4681,8 @@ $(document).ready(function(){
                     selectedOptions.last().prop('selected', false);
                 }
             });
+
+        
 });
 </script>
 
@@ -4712,6 +4765,9 @@ $("#example4").DataTable({
 "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 10,
 "buttons": ["excel", "pdf"]
 }).buttons().container().appendTo('#example4_wrapper .col-md-6:eq(0)');
+
+// https://stemapp.in//assets/image/planning1.jpg
+
 
     </script>
   </body>

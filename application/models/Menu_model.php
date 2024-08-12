@@ -7948,11 +7948,18 @@ return "Days: $days, Hours: $hours, Minutes: $minutes, Seconds: $seconds";
         $query=$this->db->query("SELECT * FROM init_call where id='$inid'");
         $data = $query->result();
         $stid = $data[0]->cstatus;
+        $cmpid_id = $data[0]->cmpid_id;
 
+        $cmpDataq=$this->db->query("SELECT * FROM `company_contact_master` WHERE company_id = '$cmpid_id'");
+        $cmpData = $cmpDataq->result();
+        $ccid = $cmpData[0]->id;
+
+        $cmp_data = $this->Menu_model->get_cmpbyinid($inid);
+        $cmp_name = $cmp_data[0]->compname;
+      
         $query=$this->db->query("SELECT max(id) mid FROM tblcallevents where cid_id='$inid'");
         $data1 = $query->result();
         $mid = $data1[0]->mid;
-
 
         $queryres=$this->db->query("SELECT * FROM `allreview` WHERE uid = $bdid AND closet IS NULL");
         $queryres = $queryres->result();
@@ -7962,17 +7969,75 @@ return "Days: $days, Hours: $hours, Minutes: $minutes, Seconds: $seconds";
         VALUES ('$mid', '$mid', '$tdatet', '$tdatet','8','127','$remark','$pstuid','$inid','$stid','$pstuid','$tdatet','$tdatet','yes','yes','$reviewtype')");
         $ntid = $this->db->insert_id();
 
-
         if($rtype=='Roaster'){
             $this->db->query("INSERT INTO allreviewdata(pst, bdid, remark, rid, csid, inid, taskupdate) VALUES ('$pstuid','$bdid','$remark','$rid','$stid','$inid','$taskupdate')");
-
         }else{
 
-        $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID,remarks,plan, fwd_date, appointmentdatetime, actiontype_id,purpose_id, assignedto_id, cid_id, status_id, user_id, date, updateddate,reviewtype)
-        VALUES ('0', '0','','1', '$ntdate', '$ntdate','$ntaction','127','$bdid','$inid','$stid','$bdid','$ntdate','$ntdate','$reviewtype')");
-        $ntid = $this->db->insert_id();
+        $createtask_data = array(
+                'lastCFID' => '0',
+                'nextCFID' => '0',
+                'remarks' => '',
+                'plan' => '1',
+                'fwd_date' => $ntdate,
+                'appointmentdatetime' => $ntdate,
+                'actiontype_id' => $ntaction,
+                'purpose_id' => '127',
+                'assignedto_id' => $bdid,
+                'cid_id' => $inid,
+                'status_id' => $stid,
+                'user_id' => $bdid,
+                'date' => $ntdate,
+                'updateddate' => $ntdate,
+                'reviewtype' => $reviewtype
+            );
 
+            // Insert data into tblcallevents
+            $this->db->insert('tblcallevents', $createtask_data);
+            $ntid = $this->db->insert_id();
 
+        
+        if($ntaction == 3 || $ntaction == 4){
+
+            $tasktdata = array(
+                'lastCFID'              => '0',
+                'nextCFID'              => '0',
+                'purpose_achieved'      => 'no',
+                'fwd_date'              => $ntdate,
+                'actontaken'            => 'no',
+                'nextaction'            => 'Will Collect Data by RP Meeting',
+                'mom_received'          => 'no',
+                'appointmentdatetime'   => $ntdate,
+                'actiontype_id'         => $ntaction,
+                'assignedto_id'         => $bdid,
+                'cid_id'                => $inid,
+                'purpose_id'            => '66',
+                'remarks'               => 'Will Collect Data by RP Meeting',
+                'status_id'             => '1',
+                'user_id'               => $bdid,
+                'date'                  => $ntdate,
+                'updateddate'           => $ntdate,
+                'updation_data_type'    => 'updated',
+                'plan'                  => '1'
+            );
+            
+            // Insert data into tblcallevents
+            $this->db->insert('tblcallevents',$tasktdata);
+            $cntid = $this->db->insert_id();
+        
+            $meeting_data = array(
+                'storedt' => $ntdate,
+                'user_id' => $bdid,
+                'cid'     => $cmpid_id,
+                'ccid'    => $ccid,
+                'inid'    => $inid,
+                'tid'     => $cntid,
+                'company_name' => $cmp_name
+            );
+            
+            $this->db->insert('barginmeeting', $meeting_data);
+            $bmid = $this->db->insert_id();
+        }
+       
         $this->db->query("INSERT INTO allreviewdata(deletef,patnertype,topspender,keyclient,pkeyclient,priorityclient,upsellclient,focusyclient,pst, bdid, remark, ntid, exsid, exdate, rid, csid, inid, ans1, ans2, ans3, ans4, requeststatus, nschool, nrvenue, potential) VALUES ('$deletef','$patnertype','$topspender','$keyclient','$pkeyclient','$priorityclient','$upsellclient','$focusyclient','$pstuid','$bdid','$remark','$ntid','$exsid','$exdate','$rid','$stid','$inid','$ans1','$ans2','$ans3','$ans4','$requeststatus','$nschool','$nrvenue','$potential')");
         }
     }
@@ -9122,7 +9187,7 @@ WHERE plan = '1'  and nextCFID='0' and actiontype_id='$aid' and status_id='$stid
       
             // $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id ='$uid' AND actiontype_id=$taskaction AND nextCFID = 0 and plan=1 and autotask = 0 AND DATE(appointmentdatetime) < CURDATE()");
 
-            $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id ='$uid' AND actiontype_id=$taskaction AND nextCFID = 0 and plan=1  AND DATE(appointmentdatetime) < CURDATE()");
+            $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id ='$uid' AND actiontype_id=$taskaction AND nextCFID = 0 and plan=1  AND DATE(appointmentdatetime) < CURDATE()  AND appointmentdatetime != '0000-00-00 00:00:00'");
 
         return $query->result();
     }
@@ -11861,6 +11926,33 @@ public function getRequestMOMBYID($id){
     return $query->result();
 }
 
+
+// 10-08-2024
+
+public function getCompanyWhichNoStatusChange($uid,$days,$status){
+
+    // $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE init_call.mainbd = '$uid' AND init_call.cstatus IN ($status) AND (tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE()) AND (SELECT COUNT(*) FROM tblcallevents WHERE tblcallevents.cid_id = init_call.id) >= 1");
+
+    $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE init_call.mainbd = '$uid' AND init_call.cstatus IN ($status) AND (tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE()) AND ((SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id) >= 1) AND NOT EXISTS (SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND tce.user_id = '$uid' AND DATE(tce.appointmentdatetime) = CURDATE())");
+    return $query->result();
+}
+
+public function CompanyThatBDHasNoWorkedInDays($uid,$days,$status){
+
+    $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname,init_call.cstatus FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE init_call.mainbd = '$uid' AND init_call.cstatus IN ($status) AND ( tblcallevents.id IS NULL OR tblcallevents.appointmentdatetime < NOW() - INTERVAL $days DAY )");
+    return $query->result();
+}
+
+// Review Start 
+public function GetFirstTimeReviewInYear($uid,$inid,$year){
+    $aprilFirst = "$year-04-01";
+    $query=$this->db->query("SELECT * FROM `allreviewdata` 
+          WHERE bdid = '$uid' 
+          AND inid = '$inid' 
+          AND YEAR(sdatet) = '$year' 
+          AND sdatet >= '$aprilFirst'");
+    return $query->result();
+}
 
 
 

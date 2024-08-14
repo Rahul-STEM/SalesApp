@@ -4132,6 +4132,7 @@ class Menu extends CI_Controller {
             }
         }
 
+     
         $id = $this->Menu_model->submit_task1($tid,$uid,$cmpid,$actontaken,$action_id,$status,$remark,$rpmmom,$purpose,$flink,$flink1,$flink2,$partner,$noofsc,$pbudgetme,$LinkedIn,$Facebook,$YouTube,$Instagram,$OtherSocial,$nadate);
       
         
@@ -11209,7 +11210,6 @@ class Menu extends CI_Controller {
         $requeststatus = $_POST['requeststatus'];
         $taskupdate = "NO";
 
-
         $deletef = $_POST['deletef'];
         $patnertype = $_POST['patnertype'];
         $topspender = $_POST['topspender'];
@@ -11218,24 +11218,70 @@ class Menu extends CI_Controller {
         $priorityclient = $_POST['priorityclient'];
         $upsellclient = $_POST['upsellclient'];
         $focusyclient = $_POST['focusyclient'];
-        $review_time = $_POST['travelcluster'];
-        $review_time = $_POST['cluster'];
+
+        $travelcluster = $_POST['travelcluster'];
+        $cluster_id = $_POST['cluster_id'];
 
         $review_time = $_POST['review_time'];
 
         $this->load->model('Menu_model');
-        
-        // dd($_POST);
+        $this->load->library('session');
+       
+        if($rtype == 'Roaster'){
+            $this->Menu_model->all_bdrremark($deletef,$patnertype,$topspender,$keyclient,$pkeyclient,$priorityclient,$upsellclient,$focusyclient,$rid,$inid,$bdid,$remark,$ntdate,$ntaction,$pstuid,$exsid,$exdate,$rtype,$taskupdate,$potential,$ans1,$ans2,$ans3,$ans4,$requeststatus,$csrbudget,$bdscholl,$travelcluster,$cluster_id);
+            $this->session->set_flashdata('success_message','Review Done SuccessFully !');
+            redirect('Menu/AllReviewPlaing/');
+        }
+
 
         if($review_time == 'First Time'){
 
-            $this->Menu_model->all_bdrremark($deletef,$patnertype,$topspender,$keyclient,$pkeyclient,$priorityclient,$upsellclient,$focusyclient,$rid,$inid,$bdid,$remark,$ntdate,$ntaction,$pstuid,$exsid,$exdate,$rtype,$taskupdate,$potential,$ans1,$ans2,$ans3,$ans4,$requeststatus,$csrbudget,$bdscholl);
+            $this->Menu_model->all_bdrremark($deletef,$patnertype,$topspender,$keyclient,$pkeyclient,$priorityclient,$upsellclient,$focusyclient,$rid,$inid,$bdid,$remark,$ntdate,$ntaction,$pstuid,$exsid,$exdate,$rtype,$taskupdate,$potential,$ans1,$ans2,$ans3,$ans4,$requeststatus,$csrbudget,$bdscholl,$travelcluster,$cluster_id);
+            $this->session->set_flashdata('success_message','Review Done SuccessFully !');
             redirect('Menu/AllReviewPlaing/');
 
         }
         if($review_time == 'Many Time'){
-            echo $review_time;
-            dd($_POST);
+
+            $ex_status_id   = $_POST['exsid'];
+            $exdate         = $_POST['exdate'];
+
+            $ntaction       = $_POST['ntaction'];
+            $ntppose        = $_POST['ntppose'];
+            $ntdate         = $_POST['ntdate'];
+
+            $sdate = date("Y-m-d H:i:s");
+            $data = array(
+                'sdatet'                  => $sdate,
+                'user_id'                 => $pstuid,
+                'bdid'                    => $bdid,
+                'remark'                  => $remark,
+                'inid'                    => $inid,
+                'how_many_task'           => $this->input->post('how_many_task'),
+                'frequency_of_the_task'   => $this->input->post('frequency_of_the_task'),
+                'type_of_task'            => $this->input->post('type_of_task'),
+                'rp_meeting_done'         => $this->input->post('rp_meeting_done'),
+                'mom_done'                => $this->input->post('mom_done'),
+                'social_networking_done'  => $this->input->post('social_networking_done'),
+                'category_right'          => $this->input->post('category_right'),
+                'slct_category'           => $this->input->post('slct_category'),
+                'current_status_right'    => $this->input->post('current_status_right'),
+                'many_times_barge_meeting'=> $this->input->post('many_times_barge_meeting'),
+                'research_prospecting'    => $this->input->post('research_prospecting'),
+                'base_or_travel_location' => $this->input->post('base_or_travel_location'),
+                'partner_type_right'            => $this->input->post('partner_type_right'),
+                'partner_type'            => $this->input->post('slct_partner_type'),
+                'suppert'                 => $this->input->post('intervention_or_suppert'),
+                'rtype'                   => $this->input->post('rtype'),
+                'ex_status_id'            => $this->input->post('exsid'),
+                'exdate'                  => $this->input->post('exdate')
+            );
+            
+           
+            $this->Menu_model->InsterManyTimeReview($rid,$inid,$pstuid,$bdid,$remark,$ntdate,$ntaction,$rtype,$taskupdate,$data);
+
+            $this->session->set_flashdata('success_message','Review Done SuccessFully !');
+            redirect('Menu/AllReviewPlaing/');
         }
 
 
@@ -18192,7 +18238,7 @@ public function addplantask12(){
         // Start Check Active Task Planner Restrication Set BY Admin 
         $rstData = $this->Management_model->SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$ntaction,$ntppose,$selectby,$pdate,$selectcompanybyuser);     
         // End Check Active Task Planner Restrication Set BY Admin 
-
+     
             $id = $this->Menu_model->add_plan2($pdate,$uid,$ptime,$inid,$ntaction,$ntstatus,$ntppose,$ttype,$tptime,$new_datetime,$selectby,$jsonData);
       
         }
@@ -19058,30 +19104,6 @@ public function nostatuschange_indate(){
 }
 
 
-
-public function NeedYourAttention(){
-    $user = $this->session->userdata('user');
-    $uid = $user['user_id'];
-    $uyid =  $user['type_id'];
-    $this->load->model('Menu_model');
-    $dt=$this->Menu_model->get_utype($uyid);
-    $dep_name = $dt[0]->name;
-    $alluser=$this->Menu_model->get_user();
-    $status=$this->Menu_model->get_status();
-    $action=$this->Menu_model->get_action();
-    $states=$this->Menu_model->get_states();
-    $partner=$this->Menu_model->get_partner();
-    $allteam   = $this->Menu_model->get_userbyaaid($uid);
-    
-    if(!empty($user)){
-        $this->load->view($dep_name.'/NeedYourAttention',['user'=>$user,'team'=>$allteam,'status'=>$status,'action'=>$action,'states'=>$states,'partner'=>$partner,'uid'=>$uid]);
-    }else{
-        redirect('Menu/main');
-    }
-}
-
-
-
 // Review Start 
 public function PlanningForReview(){
 
@@ -19129,7 +19151,86 @@ public function GetCompnayDetailsUsiingInit(){
     $inidData = $this->Menu_model->get_cmpbyinid($inid);
     echo json_encode($inidData);
 }
+public function GetTaskOfReciewCompany(){
+    $user   = $this->session->userdata('user');
+    $uid    = $user['user_id'];
+    $uyid   =  $user['type_id'];
+    $cyear  = date("Y");
+    $inid   = $_POST['inid'];
+    $bdid   = $_POST['bdid'];
+    $this->load->model('Menu_model');
 
+    $data   = [];
+    $query  = $this->db->query("SELECT * FROM `allreviewdata` WHERE inid = '$inid' and bdid = '$bdid' ORDER BY `id` DESC LIMIT 1");
+    $data1  =  $query->result();
+
+    $sdatet     = $data1[0]->sdatet;
+    $exsid      = $data1[0]->exsid;
+    $exdate     = $data1[0]->exdate;
+    $reviewtype = $data1[0]->reviewtype;
+
+    $statusname = $this->Menu_model->get_statusbyid($exsid)[0]->name;
+    $inidData   = $this->Menu_model->get_cmpbyinid($inid);
+    $cstatus    = $inidData[0]->cstatus;
+    $cur_statusname = $this->Menu_model->get_statusbyid($cstatus)[0]->name;
+
+    $data ['review_date']= $sdatet;
+    $data ['expet_status_name']= $statusname;
+    $data ['expet_status_date']= $exdate;
+    $data ['current_status_name']= $cur_statusname;
+    $data ['review_type']= $reviewtype;
+
+    echo json_encode($data);
+}
+
+
+
+
+public function getPartnerBYID(){
+    $user   = $this->session->userdata('user');
+    $uid    = $user['user_id'];
+    $uyid   =  $user['type_id'];
+    $cyear  = date("Y");
+    $name   = $_POST['name'];
+    $pid   = $_POST['pid'];
+
+    $this->load->model('Menu_model');
+    if($name = 'Partner'){
+        $partner = $this->Menu_model->get_partnerbyid($pid);
+        $partnername = $partner[0]->name;
+        echo $partnername;
+    }
+    
+}
+
+public function NeedYourAttentionInCompany(){
+    $user = $this->session->userdata('user');
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+
+    $sid= $this->input->post('sid');
+    $uid= $this->input->post('uid');
+
+    $days = 8;
+
+    $nya_data  = $this->Menu_model->NeedYourAttentions($days,$sid);
+
+    echo '<option value="">Select Company</option>';
+    foreach($nya_data as $cmp){ ?>
+        <option style="color: #d90d2b;" title="<?= $cmp->days ?> Days - <?=$cmp->compname?> (<?= $cmp->bdname ?>)" value="<?=$cmp->inid?>">
+        <?= $cmp->days ?> Days - <?=$cmp->compname?> (<?= $cmp->bdname ?> )
+        </option>
+            <?php
+
+            }
+
+    // if(!empty($user)){
+    //     $this->load->view($dep_name.'/NeedYourAttention',['user'=>$user,'team'=>$allteam,'status'=>$status,'action'=>$action,'states'=>$states,'partner'=>$partner,'uid'=>$uid]);
+    // }else{
+    //     redirect('Menu/main');
+    // }
+}
 
 
 }

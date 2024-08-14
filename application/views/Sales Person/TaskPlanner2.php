@@ -246,7 +246,7 @@ if($type_id == 3){
             <div class="row">
               <div class="col-md-8"></div>
               <div class="col-md-4">
-                <form class="setpaldate" action="<?=base_url();?>Menu/TaskPlanner/<?=$adate ?>" method="post">
+                <form class="setpaldate" action="<?=base_url();?>Menu/TaskPlanner2/<?=$adate ?>" method="post">
                   <?php $next_date = date('Y-m-d', strtotime('+1 day', strtotime($adate))); ?>
                   <input type="date" class="form-control m-2" name="adate" value="<?=$adate?>" required="" id="plandate"  min="<?= date('Y-m-d') ?>" max="<?= $next_date ?>">
                   <input type="submit" class="btn btn-warning m-2" value="Set Date">

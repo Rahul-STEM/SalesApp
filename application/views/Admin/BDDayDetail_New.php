@@ -357,7 +357,7 @@
 
     <!-- jQuery Knob Chart -->
 
-    <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+    <!-- <script src="plugins/jquery-knob/jquery.knob.min.js"></script> -->
 
     <!-- daterangepicker -->
 
@@ -419,11 +419,11 @@
 
     $("#example1").DataTable({
 
-        "responsive": false, "lengthChange": false, "autoWi$dth": false,
+        "responsive": false, "lengthChange": false, "autoWidth": false,
 
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
 
-    }).buttons().container().appen$dto('#example1_wrapper .col-md-6:eq(0)');
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
 </script>
 <script>

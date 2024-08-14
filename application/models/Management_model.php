@@ -14,21 +14,27 @@ class Management_model  extends Menu_model {
 
 
     public function CheckingDayManage($uid,$cdate){
-
+        $cdate = '2024-07-20';
         $utype = $this->Menu_model->get_userbyid($uid);
         $utype = $utype[0]->type_id;
         if($utype ==15){
-            $query=$this->db->query("SELECT user_details.user_id, user_details.name,user_day.* FROM `user_day` LEFT JOIN user_details on user_details.user_id = user_day.user_id WHERE user_details.sales_co = $uid and cast(sdatet as DATE)='$cdate'");
+            
+            $query=$this->db->query("SELECT user_details.user_id, user_details.name,user_day.*,task_plan_for_today.date,task_plan_for_today.request_remarks,task_plan_for_today.created_at FROM `user_day` LEFT JOIN user_details on user_details.user_id = user_day.user_id LEFT JOIN task_plan_for_today on task_plan_for_today.user_id = user_day.user_id AND CAST(task_plan_for_today.date as DATE) = CAST(sdatet AS DATE) WHERE user_details.sales_co = $uid and cast(sdatet as DATE)='$cdate'");
         }
         if($utype ==13){
-            $query=$this->db->query("SELECT user_details.user_id, user_details.name,user_day.* FROM `user_day` LEFT JOIN user_details on user_details.user_id = user_day.user_id WHERE user_details.aadmin = $uid and cast(sdatet as DATE)='$cdate'");
+            
+            $query=$this->db->query("SELECT user_details.user_id, user_details.name,user_day.*,task_plan_for_today.date,task_plan_for_today.request_remarks,task_plan_for_today.created_at FROM `user_day` LEFT JOIN user_details on user_details.user_id = user_day.user_id LEFT JOIN task_plan_for_today on task_plan_for_today.user_id = user_day.user_id AND CAST(task_plan_for_today.date as DATE) = CAST(sdatet AS DATE) WHERE user_details.aadmin = $uid and cast(sdatet as DATE)='$cdate'");
         }
         if($utype ==2){
-            $query=$this->db->query("SELECT user_details.user_id, user_details.name,user_day.* FROM `user_day` LEFT JOIN user_details on user_details.user_id = user_day.user_id WHERE user_details.admin_id = $uid and cast(sdatet as DATE)='$cdate'");
+            
+            $query=$this->db->query("SELECT user_details.user_id, user_details.name,user_day.*,task_plan_for_today.date,task_plan_for_today.request_remarks,task_plan_for_today.created_at FROM `user_day` LEFT JOIN user_details on user_details.user_id = user_day.user_id LEFT JOIN task_plan_for_today on task_plan_for_today.user_id = user_day.user_id AND CAST(task_plan_for_today.date as DATE) = CAST(sdatet AS DATE) WHERE user_details.admin_id = $uid and cast(sdatet as DATE)='$cdate'");
         }
         if($utype ==4){
-            $query=$this->db->query("SELECT user_details.user_id, user_details.name,user_day.* FROM `user_day` LEFT JOIN user_details on user_details.user_id = user_day.user_id WHERE user_details.pst_co = $uid and cast(sdatet as DATE)='$cdate'");
+            
+            $query=$this->db->query("SELECT user_details.user_id, user_details.name,user_day.*,task_plan_for_today.date,task_plan_for_today.request_remarks,task_plan_for_today.created_at FROM `user_day` LEFT JOIN user_details on user_details.user_id = user_day.user_id LEFT JOIN task_plan_for_today on task_plan_for_today.user_id = user_day.user_id AND CAST(task_plan_for_today.date as DATE) = CAST(sdatet AS DATE) WHERE user_details.pst_co = $uid and cast(sdatet as DATE)='$cdate'");
         }
+
+        // echo $this->db->last_query();die;
         return $query->result();
        
     }
@@ -73,6 +79,7 @@ class Management_model  extends Menu_model {
 
     public function CheckingYesterDayConsumeTime($uid,$date) {
         $query=$this->db->query("SELECT * FROM `user_day` WHERE user_id = $uid and cast(sdatet as DATE)='$date'");
+        // echo $this->db->last_query();die;
         return $query->result();
     }
 

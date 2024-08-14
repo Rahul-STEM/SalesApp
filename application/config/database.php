@@ -100,12 +100,9 @@ $db['default'] = array(
 
 $db['db2'] = array(
 	'dsn'	=> '',
-	// 'hostname' => 'stemlearning.in',
-	'hostname' => 'localhost',
-	// 'username' => 'steml1og_stemfun',
-	// 'password' => 's0RkDLtTvN0t',
-	'username' => 'root',
-	'password' => '',
+	'hostname' => 'stemlearning.in',
+	'username' => 'steml1og_stemfun',
+	'password' => 's0RkDLtTvN0t',
 	'database' => 'steml1og_stemf',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

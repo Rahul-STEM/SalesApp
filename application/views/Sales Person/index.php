@@ -154,15 +154,12 @@ $dataPoints2 = array(
   <?= $this->session->flashdata('pending_message'); ?>
 </div>
 <?php endif; ?>
-<<<<<<< HEAD
-=======
 <?php if ($this->session->flashdata('success_message')): ?>
     <div class="alert alert-success alert-dismissible">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
   <?= $this->session->flashdata('success_message'); ?>
 </div>
 <?php endif; ?>
->>>>>>> stem-sales/main
 
 <?php
               if ($this->session->flashdata('error_message')): ?>

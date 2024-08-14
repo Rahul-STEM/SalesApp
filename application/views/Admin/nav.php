@@ -746,7 +746,7 @@
 
   
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script> 
 
@@ -758,53 +758,53 @@
 
 
 
-$(document).ready(function() {
+// $(document).ready(function() {
 
-    trackLocation();
+//     //trackLocation();
 
-});
+// });
 
 
 
-function handleGeolocationError() {
+// function handleGeolocationError() {
 
-   const bodyElement = document.querySelector("body");
+//    const bodyElement = document.querySelector("body");
 
-   bodyElement.style.display = "none";
+//    bodyElement.style.display = "none";
 
-   alert('Error: Geolocation is not available or location services are turned off.');
+//    alert('Error: Geolocation is not available or location services are turned off.');
 
-}
+// }
 
-function handleGeolocationSuccess(position) {
+// function handleGeolocationSuccess(position) {
 
-    const latitude = position.coords.latitude;
+//     const latitude = position.coords.latitude;
 
-    const longitude = position.coords.longitude;
+//     const longitude = position.coords.longitude;
 
-    const contentDiv = document.getElementById("content");
+//     const contentDiv = document.getElementById("content");
 
-    contentDiv.style.display = "block";
+//     contentDiv.style.display = "block";
 
-}
+// }
 
-function getLocation() {
+// function getLocation() {
 
-    if ("geolocation" in navigator) {
+//     if ("geolocation" in navigator) {
 
-        navigator.geolocation.getCurrentPosition(handleGeolocationSuccess, handleGeolocationError);
+//         navigator.geolocation.getCurrentPosition(handleGeolocationSuccess, handleGeolocationError);
 
-    } else {
+//     } else {
 
-        const errorMessage = document.getElementById("error-message");
+//         const errorMessage = document.getElementById("error-message");
 
-        errorMessage.style.display = "block";
+//         errorMessage.style.display = "block";
 
-    }
+//     }
 
-}
+// }
 
-window.onload = getLocation;
+// window.onload = getLocation;
 
 
 
@@ -832,7 +832,7 @@ function startCamera() {
 
 }
 
-startCamera();
+// startCamera();
 
 
 
@@ -842,49 +842,49 @@ startCamera();
 
 
 
-function trackLocation() {
+// function trackLocation() {
 
-    if ("geolocation" in navigator) {
+//     if ("geolocation" in navigator) {
 
-      navigator.geolocation.getCurrentPosition(
+//       navigator.geolocation.getCurrentPosition(
 
-        function (position) {
+//         function (position) {
 
-          var ur_id = document.getElementById("ur_id").value;
+//           var ur_id = document.getElementById("ur_id").value;
 
-          var latitude = position.coords.latitude;
+//           var latitude = position.coords.latitude;
 
-          var longitude = position.coords.longitude;
+//           var longitude = position.coords.longitude;
 
-            $.ajax({
+//             $.ajax({
 
-                url:'<?=base_url();?>Menu/store_location',
+//                 url:'<?=base_url();?>Menu/store_location',
 
-                 method: 'post',
+//                  method: 'post',
 
-                 data: {latitude: latitude, longitude: longitude, ur_id: ur_id},
+//                  data: {latitude: latitude, longitude: longitude, ur_id: ur_id},
 
-                 success: function(result){
+//                  success: function(result){
 
-                }
+//                 }
 
-            });
+//             });
 
-        },
+//         },
 
-        function (error) {
+//         function (error) {
 
-          console.error("Error getting location: " + error.message);
+//           console.error("Error getting location: " + error.message);
 
-        }
+//         }
 
-      );
+//       );
 
-    } 
+//     } 
 
-    else {console.error("Geolocation is not supported by this browser.");} 
+//     else {console.error("Geolocation is not supported by this browser.");} 
 
-}
+// }
 
 
 
@@ -898,23 +898,23 @@ function goForward() { window.history.forward(); }
 
     var ur_id = document.getElementById("ur_id").value;
 
-    $.ajax({
+    // $.ajax({
 
-    url:'<?=base_url();?>Menu/adminpopup',
+    // url:'<?=base_url();?>Menu/adminpopup',
 
-     method: 'post',
+    //  method: 'post',
 
-     data: {ur_id: ur_id},
+    //  data: {ur_id: ur_id},
 
-     success: function(result){
+    //  success: function(result){
 
-        var res = result;
+    //     var res = result;
 
-        $("#alsmss").html(result);
+    //     $("#alsmss").html(result);
 
-    }
+    // }
 
-    });
+    // });
 
     
 

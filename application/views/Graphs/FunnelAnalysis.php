@@ -420,7 +420,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 </script>
 <script>
-
     // Function to handle radio button change
     function handleRadioChange() {
         const selectedRadio = document.querySelector('input[name="radioFilter"]:checked');

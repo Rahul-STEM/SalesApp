@@ -111,11 +111,7 @@
                 <div class="card card-primary card-outline">
                   <div class="card-body box-profile">
                     <div class="bg-warning colapsboxsha text-center mt-2 mb-2">
-<<<<<<< HEAD
-                      <h3><i>Todays Task Approvel Request</i></h3>
-=======
                       <h3><i>Todays Task Planner Approvel Request</i></h3>
->>>>>>> stem-sales/main
                     </div>
                     <?php
                     $utype = $this->Menu_model->get_userbyid($userid);
@@ -133,15 +129,10 @@
                               <thead>
                                 <tr>
                                   <th scope="col">#</th>
-<<<<<<< HEAD
-                                  <th scope="col">User Name</th>
-                                  <th scope="col">Date</th>
-=======
                                   <th scope="col">Name</th>
                                   <th scope="col">Date</th>
                                   <th scope="col">Request Type</th>
                                   <th scope="col">Pending Task</th>
->>>>>>> stem-sales/main
                                   <th scope="col">Request Message</th>
                                   <th scope="col">Approvel Status</th>
                                   <th scope="col">Remarks</th>
@@ -155,13 +146,9 @@
                                 <tr>
                                   <th><?= $j ?></th>
                                   <td><?= $this->Menu_model->get_userbyid($data->user_id)[0]->name ?></td>
-<<<<<<< HEAD
-                                  <td><?= $data->date ?></td>
-=======
                                   <td><?= $data->created_at ?></td>
                                   <td><?= $data->would_you_want ?></td>
                                   <td><?= $data->taskcnt ?></td>
->>>>>>> stem-sales/main
                                   <td><?= $data->request_remarks ?></td>
                                   <td>
                                     <?php

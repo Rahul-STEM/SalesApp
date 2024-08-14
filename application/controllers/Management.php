@@ -27,7 +27,7 @@ class Management extends Menu {
         $this->dep_name = $this->dt[0]->name;
    
         if (in_array(!$this->uyid, [15, 13, 2, 4])) {
-            echo "Stem Learning Pvt Ltd";
+            echo "Stem Learning Pvt Ltd..!!!";
             echo "<br/>";
             exit;
         }
@@ -75,21 +75,7 @@ class Management extends Menu {
         }
     }
 
-    public function CheckingDayManagement_New(){
 
-        $cdate = date("Y-m-d");
-        $sdate = new DateTime($cdate);
-        $sdate->modify('-1 day');
-        $previousDate = $sdate->format('Y-m-d');
-
-        $dayData = $this->Management_model->CheckingDayManage($this->uid,$cdate);
-        // var_dump($dayData);die;
-        if(!empty($this->user)){
-            $this->load->view($this->dep_name.'/CheckingDayManagement_New',['uid'=>$this->uid,'user'=>$this->user,'dayData'=>$dayData,'cdate'=>$cdate,'previousDate'=>$previousDate]);
-        }else{
-            redirect('Menu/main');
-        }
-    }
 
     public function CheckingYesterDayTask($type,$userid,$sdate){
         
@@ -148,6 +134,22 @@ class Management extends Menu {
 
 
     // New Daymanagement changes <======== START =======>
+    public function CheckingDayManagement_New(){
+
+        $cdate = date("Y-m-d");
+        $sdate = new DateTime($cdate);
+        $sdate->modify('-1 day');
+        $previousDate = $sdate->format('Y-m-d');
+
+        $dayData = $this->Management_model->CheckingDayManage($this->uid,$cdate);
+        // var_dump($dayData);die;
+        if(!empty($this->user)){
+            $this->load->view($this->dep_name.'/CheckingDayManagement_New',['uid'=>$this->uid,'user'=>$this->user,'dayData'=>$dayData,'cdate'=>$cdate,'previousDate'=>$previousDate]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+
     public function checkdayswithStarNew(){
         
         // var_dump($_POST);die;
@@ -178,12 +180,9 @@ class Management extends Menu {
             'feedback_by'=>$this->uid,
         ];
 
-        // var_dump($_POST);die;
-
         $result = $this->Management_model->AddStarRatingNew($data);
         // var_dump($result);die;
         echo json_encode($result);
-
 
         // $this->session->set_flashdata('success_message', 'Star Rating Added Successfully');
         // redirect('Management/CheckingDayManagement');

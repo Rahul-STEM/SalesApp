@@ -108,7 +108,7 @@
         <?php get_avragetasktime()?>
         ["Open-RPEM", <?=$stage1[0]->days?>, "#76A7FA"],
         
-        <?php }  ?>
+        <?php //}  ?>
       ]);
       
 

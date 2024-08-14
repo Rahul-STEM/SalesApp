@@ -55,8 +55,6 @@ overflow-x: auto;
     font-size: 19px;
     text-align: left;
 }
-<<<<<<< HEAD
-=======
 .select2 {
     width: 100%; /* Set the desired width */
         }
@@ -114,7 +112,6 @@ overflow-x: auto;
     font-size: 19px;
     text-align: left;
 }
->>>>>>> stem-sales/main
 .small-box>.small-box-footer {
     background: #c5eb4d !important;
     font-weight: 500;
@@ -160,9 +157,6 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-<<<<<<< HEAD
-
-=======
         <?php if ($this->session->flashdata('pending_message')): ?>
             <div class="alert alert-success alert-dismissible">
           <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -184,7 +178,6 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
         </button>
         </div>
         <?php endif; ?>
->>>>>>> stem-sales/main
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -445,11 +438,7 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                         <p><a href="bdcompanies/15/<?=$uid?>">Upsell Client - <b><?=$mc->n?></b></p></a><hr>
                         <p><a href="bdcompanies/16/<?=$uid?>">Key Client - <b><?=$mc->q?></b></p></a><hr>
                         <?php } ?>
-<<<<<<< HEAD
-                        <p><a href="NewLead">Add New Lead</a></p>
-=======
                        
->>>>>>> stem-sales/main
                     </div></div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
@@ -458,8 +447,6 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
             </div>
           </div>
           
-<<<<<<< HEAD
-=======
 
           <div class="col-lg-3 col-md-6 col-sm-12">
             <!-- small box -->
@@ -499,7 +486,6 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
               <a href="companies/0" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
->>>>>>> stem-sales/main
           
           <div class="col-lg-3 col-md-6 col-sm-12">
             <!-- small box -->
@@ -1093,10 +1079,6 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                              <?php 
                             $bl=0;
                             foreach($barg as $brg){
-<<<<<<< HEAD
-                                $bs = $brg->status;
-                                $cid = $brg->cid;
-=======
                               
                                 $bs = $brg->status;
                                 $cid = $brg->cid;
@@ -1113,7 +1095,6 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                   $meet_name = 'Join Meeting';
                                 }
 
->>>>>>> stem-sales/main
                                 $cd = $this->Menu_model->get_cdbyid($cid);
                                 ?>
                                 <?php if($bs=='Pending'){?>
@@ -1123,11 +1104,7 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                         <?=$cd[0]->city?> | 
                                         <?=$cd[0]->state?> | 
                                         <?=$brg->storedt?> | 
-<<<<<<< HEAD
-                                        <b class="text-success">Start Meeting</b>
-=======
                                         <b class="text-success">Start Meeting (<?=$meet_name; ?>)</b>
->>>>>>> stem-sales/main
                                     </div></button>
                                 <?php }if($bs=='Start'){?>
                                     <button style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;" id="closem<?=$bl?>" value="<?=$brg->id?>">
@@ -1136,11 +1113,7 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                         <?=$cd[0]->city?> | 
                                         <?=$cd[0]->state?> | 
                                         <?=$brg->storedt?> |
-<<<<<<< HEAD
-                                        <b class="text-danger">Close Meeting</b>
-=======
                                         <b class="text-danger">Close Meeting (<?=$meet_name; ?>)</b>
->>>>>>> stem-sales/main
                                     </div>
                             <?php $bl++;}} ?>
                         </div>

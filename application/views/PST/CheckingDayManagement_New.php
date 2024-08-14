@@ -135,7 +135,7 @@
                                         <table id="TodayMorningTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
-                                                    <!-- <th>#</th> -->
+                                                    <th>#</th>
                                                     <th>Name</th>
                                                     <th>Start Time</th>
                                                     <th>Start Image</th>
@@ -157,7 +157,7 @@
                                                     $teamuid = $data->user_id;
                                                 ?>
                                                 <tr>
-                                                    <!-- <td><?= $i; ?></td> -->
+                                                    <td><?= $i; ?></td>
                                                     <td><?= $data->name; ?></td>
                                                     <td data-question="Started at Good Time" data-userid="<?= $data->user_id; ?>" data-period="Mornings" data-cdate="<?= $cdate; ?>">
                                                         <?= $data->ustart; ?>
@@ -428,7 +428,7 @@
                                                         $checkReqTime = $this->Management_model->CheckTaskPlanRequest($teamuid,$cdate);
                                                         if(sizeof($checkReqTime) > 0){ ?>
                                                         <b>Request Reamarks : </b><?= $checkReqTime[0]->request_remarks ?> <hr>
-                                                        <b>Approval Status :<br/><br> </b> 
+                                                        <b>Approvel Status :<br/><br> </b> 
                                                         <?php if($checkReqTime[0]->approvel_status == 'Approved'){ ?>
                                                         <span class="bg-success p-1"> <?= $checkReqTime[0]->approvel_status ?></span>
                                                         <?php } ?>
@@ -440,7 +440,7 @@
                                                             <span class="bg-warning p-1"> Pending</span>
                                                         <?php } ?>
                                                         <hr>
-                                                        <b>Admin Remarks : </b> <?= $checkReqTime[0]->remarks ?>
+                                                        <b>Admin Reamarks : </b> <?= $checkReqTime[0]->remarks ?>
                                                         <?php }else{
                                                             echo "No Request";
                                                         }
@@ -520,7 +520,7 @@
                                         <table id="YesterdayEveningTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
-                                                    <!-- <th>#</th> -->
+                                                    <th>#</th>
                                                     <th>Name</th>
                                                     <th>Yesterday Day Manage Time</th>
                                                     <th>Yesterday AutoTask Time</th>
@@ -530,7 +530,6 @@
                                                     <th>Yesterday Close Image</th>
                                                     <th>Yesterday End Comment</th>
                                                     <th>Yesterday Close Google Map </th>
-                                                    <th>Planner Remarks</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -539,7 +538,7 @@
                                                     $teamuid = $data->user_id;
                                                 ?>
                                                 <tr>
-                                                    <!-- <td><?= $i; ?></td> -->
+                                                    <td><?= $i; ?></td>
                                                     <td><?= $data->name; ?></td>
                                                     <td data-question="The Day Ended at a good time" data-userid="<?= $data->user_id; ?>" data-period="Yesterday Evening" data-cdate="<?= $cdate; ?>" >
                                                         <?php 
@@ -768,50 +767,7 @@
                                                                 }
                                                                 echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
                                                             }  ?>
-                                                    </td> 
-                                                    <td data-question="Was day planned correctly" data-userid="<?= $data->user_id; ?>" data-period="Yesterday Evening" data-cdate="<?= $cdate; ?>">
-                                                        When planner was planned on - <b><?= $data->created_at?></b>
-                                                        <br>
-                                                        <br>
-                                                        When planner was approved - <b><?= $data->date?></b>
-
-                                                        <br><br><hr>
-                                                        <p class="question">Was day planned correctly..??</p>
-                                                        <?php 
-                                                            $sdate = new DateTime($cdate);
-                                                            $sdate->modify('-1 day');
-                                                            $previousDate = $sdate->format('Y-m-d');
-                                                            
-                                                            $chkStarRating = $this->Management_model->CheckStarRatingsExistorNot_New($teamuid,$previousDate,'Was day planned correctly','Yesterday Evening');
-
-                                                            if(sizeof($chkStarRating) == 0){ ?> 
-                                                        <div class="rating">
-                                                            <input type="radio" name="rat14_<?= $data->user_id; ?>" value="5" id="65_<?= $data->user_id; ?>"><label for="65_<?= $data->user_id; ?>">☆</label>
-                                                            <input type="radio" name="rat14_<?= $data->user_id; ?>" value="4" id="64_<?= $data->user_id; ?>"><label for="64_<?= $data->user_id; ?>">☆</label>
-                                                            <input type="radio" name="rat14_<?= $data->user_id; ?>" value="3" id="63_<?= $data->user_id; ?>"><label for="63_<?= $data->user_id; ?>">☆</label>
-                                                            <input type="radio" name="rat14_<?= $data->user_id; ?>" value="2" id="62_<?= $data->user_id; ?>"><label for="62_<?= $data->user_id; ?>">☆</label>
-                                                            <input type="radio" name="rat14_<?= $data->user_id; ?>" value="1" id="61_<?= $data->user_id; ?>"><label for="61_<?= $data->user_id; ?>">☆</label>
-                                                        </div> 
-                                                        <?php }else{
-                                                                foreach($chkStarRating as $star){
-                                                                    // var_dump($chkStarRating);die;
-                                                                    $starRating = $star->star;
-                                                                    $starRemark = $star->remarks;
-                                                                    
-                                                                }
-                                                                echo "<hr>";
-                                                                echo "<span class='text-dark font-weight-normal'><b>Total Star Given</b> :</span>";
-                                                                echo "<div class='star-rating'>";
-                                                                $totalStars = 5;
-                                                                for ($i = 0; $i < $starRating; $i++) {
-                                                                    echo "<i class='fas fa-star'></i>"; // filled star
-                                                                }
-                                                                for ($i = $starRating; $i < $totalStars; $i++) {
-                                                                    echo "<i class='far fa-star'></i>"; // empty star
-                                                                }
-                                                                echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
-                                                            }  ?>
-                                                    </td>       
+                                                    </td>        
                                                 </tr>
                                                 <?php $i++; endforeach; ?>
                                             </tbody>
@@ -821,14 +777,14 @@
                                         <table id="YesterdayTaskTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
-                                                    <!-- <th>#</th> -->
+                                                    <th>#</th>
                                                     <th>Name</th>
                                                     <th>Yesterday Total Plan Task</th>
                                                     <th>Yesterday Total Pending Task</th>
                                                     <th>Yesterday Total Autotask Task</th>
                                                     <th>Yesterday Total Done Task</th>
                                                     <th>Yesterday Total Consume Time</th>
-                                                    <!-- <th>Planner Remarks</th> -->
+                                                    <!-- <th>Yesterday Task FeedBack</th> -->
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -837,7 +793,7 @@
                                                     $teamuid = $data->user_id;
                                                 ?>
                                                 <tr>
-                                                    <!-- <td><?= $i ?></td> -->
+                                                    <td><?= $i++ ?></td>
                                                     <td><?= $data->name; ?></td>
                                                     <td data-question="Yesterday Total Plan Task is Good" data-userid="<?= $data->user_id; ?>" data-period="Yesterday Task" data-cdate="<?= $cdate; ?>">
                                                         <?php $dayData = $this->Management_model->CheckingYesterDayTaskStatus($teamuid); ?>
@@ -959,7 +915,6 @@
                                                                 }
                                                                 echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
                                                             }  ?>
-                                                    </td>
                                                     <td data-question="Yesterday Total Done Task is Good" data-userid="<?= $data->user_id; ?>" data-period="Yesterday Task" data-cdate="<?= $cdate; ?>">   
                                                         <a class="text-primary" target="_BLANK" href="<?= base_url().'Management/CheckingYesterDayTask/done/'.$teamuid.'/'.$cdate ?>"><?= $dayData[0]->done ?></a>
 
@@ -1032,12 +987,7 @@
 
                                                         <!--  -->
                                                     </td>
-                                                    <!-- <td>
-                                                        When planner was planned on - 
-                                                        <br>
-                                                        <br>
-                                                        When planner was approved - 
-                                                    </td> -->
+                                                    
                                                 </tr>
                                                 <?php $i++; endforeach; ?>
                                             </tbody>
@@ -1052,6 +1002,9 @@
                             <div class="modal fade" id="ReviewModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Modal title</h5>
+                                        </div>
                                         <div class="modal-body">
                                         <form >
                                             <input type="hidden" name="starID" id="starID">
@@ -1084,27 +1037,27 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   
 
-<script type='text/javascript'>
+    <script type='text/javascript'>
 
     function feedBackButton(mid,id,val){
     // alert(val); // MorningsfeedBack
-        if(val == 'MorningsfeedBack'){
-            $('#exampleModalCenter').modal('show');
-            $('#selectedusermorning').val(id);
-        }
-
-        if(val == 'yesterdayEveningfeedBack'){
-            // alert(val);
-            $('#yesterDayeveningModalCenter').modal('show');
-            $('#selecteduserYevening').val(id);
-        }
-        if(val == 'yesterdayTaskfeedBack'){
-            // alert(val);
-            $('#taskModalCenter').modal('show');
-            $('#selecteduserytask').val(id);
-        }
-
+    if(val == 'MorningsfeedBack'){
+        $('#exampleModalCenter').modal('show');
+        $('#selectedusermorning').val(id);
     }
+
+    if(val == 'yesterdayEveningfeedBack'){
+        // alert(val);
+        $('#yesterDayeveningModalCenter').modal('show');
+        $('#selecteduserYevening').val(id);
+    }
+    if(val == 'yesterdayTaskfeedBack'){
+        // alert(val);
+        $('#taskModalCenter').modal('show');
+        $('#selecteduserytask').val(id);
+    }
+
+}
 
 </script>
 
@@ -1189,8 +1142,8 @@
             $("#YesterdayEveningTable").DataTable({
                 "responsive": false,
                 "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["csv", "excel", "pdf", "print"]
+                "autoWidth": true
+                // "buttons": ["csv", "excel", "pdf", "print"]
             });
 
             $("#TodayMorningTable").DataTable({
@@ -1203,8 +1156,8 @@
             $("#YesterdayTaskTable").DataTable({
                 "responsive": false,
                 "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["csv", "excel", "pdf", "print"]
+                "autoWidth": true
+                // "buttons": ["csv", "excel", "pdf", "print"]
             });
         });
 
@@ -1248,10 +1201,8 @@
                             }, 1000);
         
                             setTimeout(function() {
-                                $('#success-message').fadeOut('slow', function() {
-                                    location.reload();
-                                });
-                            }, 1000);
+                                $('#success-message').fadeOut('slow');
+                            }, 3000);
         
                             // location.reload();
                         }
@@ -1287,10 +1238,10 @@
                         }, 1000);
     
                         setTimeout(function() {
-                            $('#success-message').fadeOut('slow', function() {
-                                location.reload();
-                            });
-                        }, 1000);
+                            $('#success-message').fadeOut('slow');
+                        }, 3000);
+        
+                            location.reload();
                     },
                     error: function() {
                         alert("There was an error submitting the rating.");

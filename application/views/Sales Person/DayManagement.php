@@ -134,7 +134,7 @@
                     <div class="card bg-warning p-2">
                       <p>Time diffrence is </p>
                       <hr>
-                      <b><?=$this->Menu_model->timediff($uystart,$ctdate);?></b>
+                      <b><?=$this->Menu_model->timediff($uystart,date('d-m-Y H:m:s'));?></b>
                     </div>
                   </div>
                 </div>
@@ -198,7 +198,10 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <?php $i=1; foreach($getDayCloseRequest as $data){ ?>
+                      <?php $i=1; foreach($getDayCloseRequest as $data){ 
+                        // var_dump($data);
+                        // var_dump($data);
+                        ?>
                       <tr>
                         <td><?= $i; ?></td>
                         <td><?= $this->Menu_model->get_userbyid($data->user_id)[0]->name ?></td>

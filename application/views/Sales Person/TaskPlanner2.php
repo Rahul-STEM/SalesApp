@@ -92,6 +92,12 @@
           timeInput.setAttribute('max', '19:00');
           timeInput.addEventListener('change', validateTimeInput);
       });
+      document.addEventListener('DOMContentLoaded', function() {
+          const timeInput = document.getElementById('meetingtimerequest3');
+          timeInput.setAttribute('min', '10:00');
+          timeInput.setAttribute('max', '19:00');
+          timeInput.addEventListener('change', validateTimeInput);
+      });
 
       document.addEventListener('DOMContentLoaded', function() {
           const timeInput = document.getElementById('review_plantime');
@@ -319,7 +325,7 @@ if($type_id == 3){
                   ?>
 
             <div class="card p-2 bg-dark text-center">
-              <h5><i>If you want to plan task for todays you need to first approvel.</i></h5>
+              <h5><i>If you want to plan task for todays you need to first approval.</i></h5>
             </div>
             <form class="was-validated" action="<?=base_url();?>Menu/RequestForTodaysTaskPlan/<?=$adate ?>" method="post">
               <input type="hidden" value="<?= $adate?>" name="setdatebyuser">
@@ -613,14 +619,14 @@ if($type_id == 3){
                         </div>
 
                         <?php 
-                        if($type_id ==13 || $type_id == 4){
+                        if($type_id ==  13 || $type_id == 4){
+                          $dyslimit = 8;
                           if($type_id == 13){
-                            $dyslimit = 8;
                             $cmpstatus = '1,2,8';  // Status with - Open, Reachout, Open RPEM
                            }else if($type_id == 4){
                             $cmpstatus = '3,6,9,12,13';  // Status with - Tentive, Positive, Very Positive, Positive NAP, Very Positive NAP
                            }
-                          $need_your_atte = $this->Menu_model->NeedYourAttentions($dyslimit,$cmpstatss);
+                          $need_your_atte = $this->Menu_model->NeedYourAttentions($dyslimit,$cmpstatus);
                           $need_your_attecnt = sizeof($need_your_atte);
                           if($need_your_attecnt > 0){$cssc = 'text-danger';}else{$cssc = '';}
                           ?>
@@ -736,12 +742,17 @@ if($type_id == 3){
                         </div>
                         <div class="modal-body" style="background: darkslategrey;color: white;" >
                         <input type="hidden" id="pdate" value="<?=$adate?>" name="pdate" required=""> 
-                          <lable>Start Time : </lable>
+                          <lable>Todays Start Time : </lable>
                         <input type="time" id="meetingtimerequest1" name="start_meeting_time" min="10:00" max="19:00" class="form-control" required=""> 
-                          <hr>
-                          <lable>End Time : </lable>
-                        <input type="time" id="meetingtimerequest2" name="end_meeting_time" min="10:00" max="19:00" class="form-control" required=""> 
                           
+                        <lable>Todays End Time : </lable>
+                        <input type="time" id="meetingtimerequest2" name="end_meeting_time" min="10:00" max="19:00" class="form-control" required=""> 
+                        <hr>
+                        <div id="taskcounttable">
+                        </div>
+                        <hr>
+                        <lable>Tomorrow Start Time : </lable>
+                        <input type="time" id="meetingtimerequest3" name="start_tommorow_task_time" min="10:00" max="19:00" class="form-control" required=""> 
                         <hr>
                         <lable>Purpose For Plan Change : </lable>
                           <textarea name="purpose" class="form-control" placeholder="Please Enter Purpose" required="" ></textarea>
@@ -3103,6 +3114,7 @@ if($type_id == 3){
                     $('#status_taskaction').hide();
                     $('#task_action_filter').on('change', function() {
 
+                        $("#taskplanningimg").hide();
                         $("#selectcompanybyuser").html('');
                         $("#totalcompany").text('');
                         var uid = $("#curuserid").val();
@@ -3179,9 +3191,11 @@ if($type_id == 3){
                           $("#bcytpe").show();
                           $('#selectbarginCompanyType').show();
                           $('#selectReseachCompanyType').hide();
+                          $("#taskplanningimg").show();
                           $('#bcytpe').on('change', function() {
                             var bcytpe = $(this).val();
                           if(bcytpe == 'From Funnel'){
+                            $("#taskplanningimg").hide();
                             $('#maintaskcard').show();
                             $("#selectcompany").show();
                           $.ajax({
@@ -3220,6 +3234,7 @@ if($type_id == 3){
                           }
                           });
                             }else if(bcytpe == 'Other'){
+                              $("#taskplanningimg").hide();
                               $("#maintaskcard").show();
                               $("#selectcompany").hide();
                               $("#select_cluster").show();
@@ -4715,10 +4730,54 @@ if($type_id == 3){
                 $('#timer').text("00:00:00"); // Reset the timer display
                 toggleFormVisibility();
             }
+
+
+            $('#meetingtimerequest2').on('change', function() {
+              var mtime1 = $('#meetingtimerequest1').val();
+              if(mtime1 == ''){
+                alert("Please Enter Start Time");
+                  $('#meetingtimerequest2').val('');
+              }else{
+                var mtime2 = $(this).val();
+                $.ajax({
+                        url:'<?=base_url();?>Menu/GetTaskBeetweenUserTime',
+                        type: "POST",
+                        data: {
+                          mtime1: mtime1,
+                          mtime2: mtime2
+                        },
+                        cache: false,
+                        success: function a(result){
+                          $('#taskcounttable').html(result);
+                        }
+                        });
+              }
           });
 
 
-               
+          $('#end-time').on('change', function() {
+              var startTime = $('#start-time').val();
+              if (startTime === '') {
+                  alert("Please Enter Start Time");
+                  $('#end-time').val('');
+              } else {
+                  var endTime = $(this).val();
+                  var startTimeMinutes = convertTimeToMinutes(startTime);
+                  var endTimeMinutes = convertTimeToMinutes(endTime);
+                  // Check if the difference is more than 90 minutes
+                  if ((endTimeMinutes - startTimeMinutes) > 90) {
+                      alert('Auto Task Max Time is Only 90 Minutes');
+                      $('#end-time').val('');
+                  }
+              }
+          });
+          function convertTimeToMinutes(time) {
+                          var timeParts = time.split(':');
+                          var hours = parseInt(timeParts[0], 10);
+                          var minutes = parseInt(timeParts[1], 10);
+                          return (hours * 60) + minutes;
+                      }
+          });
       </script>
       <style>
         #myInput {

@@ -8745,7 +8745,6 @@ class Menu extends CI_Controller {
         $mdata = $this->Menu_model->get_daydetail($uid,$tdate);
         $yesterday = date('Y-m-d', strtotime('-1 day', strtotime($tdate)));
         $yestdata = $this->Menu_model->get_Yestdaydetail($uid,$yesterday);
-
         if($mdata)
         {$st = $mdata[0]->ustart;
          $ct = $mdata[0]->uclose;
@@ -18551,21 +18550,23 @@ $mdata2 = $this->Menu_model->get_all_bd_Fresh_RP_meetings_New($tids);
 
 public function SpecialRequestForLeave(){
 
-    $pdate = $_POST['pdate'];
-    $stime = $_POST['start_meeting_time'];
-    $etime = $_POST['end_meeting_time'];
-    $purpose = $_POST['purpose'];
+    $pdate      = $_POST['pdate'];
+    $stime      = $_POST['start_meeting_time'];
+    $etime      = $_POST['end_meeting_time'];
+    $purpose    = $_POST['purpose'];
+    $sttt       = $_POST['start_tommorow_task_time'];
 
-    $user = $this->session->userdata('user');
+    $user       = $this->session->userdata('user');
     $data['user'] = $user;
-    $uid = $user['user_id'];
-    $uyid =  $user['type_id'];
+    $uid        = $user['user_id'];
+    $uyid       = $user['type_id'];
     $this->load->model('Menu_model');
     $this->load->library('session');
-    $dt =$this->Menu_model->get_utype($uyid);
+    $dt         = $this->Menu_model->get_utype($uyid);
     $dep_name = $dt[0]->name;
 
-    $this->Menu_model->add_SpecialRequestForLeave($uid,$pdate,$stime,$etime,$purpose);
+    $this->Menu_model->add_SpecialRequestForLeave($uid,$pdate,$stime,$etime,$purpose,$sttt);
+    
     $this->session->set_flashdata('success_message_plan','Request For Plan Change Sended Successfully !');
 
     redirect('Menu/TaskPlanner/'.$pdate);
@@ -18713,8 +18714,7 @@ public function YesterDayDaysCloseRequest(){
         $adate = date("Y-m-d");
     }
 
-     $getreqData  =  $this->db->query("SELECT *,close_your_day_request.id FROM close_your_day_request LEFT JOIN user_details ON close_your_day_request.user_id = user_details.user_id WHERE user_details.aadmin = '$uid' and DATE(req_date) ='$adate'");
-     $getreqData  =  $getreqData->result();
+    $getreqData  =   $this->Menu_model->GetDayCloseRequestData($uid,$adate,$uyid);
 
      if(!empty($user)){
         $this->load->view($dep_name.'/YesterDayDaysCloseRequest',['uid'=>$uid,'user'=>$user,'adate'=>$adate,'getreqData'=>$getreqData]);
@@ -19231,6 +19231,154 @@ public function NeedYourAttentionInCompany(){
     //     redirect('Menu/main');
     // }
 }
+
+
+public function SpecialRequestForLeaveSomeTimeData(){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+
+    $requests = $this->Menu_model->getSpecialRequestForLeaveData($uid,$uyid);
+
+    
+    $this->load->view($dep_name.'/SpecialRequestForLeaveSomeTimeData',['user'=>$user,'uid'=>$uid,'requests'=>$requests]);
+}
+
+
+public function AdminAcceptSpecialRequest(){
+
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+    $uyid           =  $user['type_id'];
+
+    $this->load->model('Menu_model');
+    $this->load->library('session');
+
+    $req_id     = $_POST['id'];
+    $status     = $_POST['status'];
+    $remarks    = $_POST['remarks'];
+    
+    $current_datetime   = date("Y-m-d H:i:s");
+
+    if($status == 'Approved'){
+        
+        $message_variable   = 'success_message';
+        $reqData            =   $this->Menu_model->getSpecialRequestForLeaveByID($req_id);
+        $req_user_id        =   $reqData[0]->user_id;
+        $req_date           =   $reqData[0]->date;
+        $req_stime          =   $reqData[0]->stime;
+        $req_etime          =   $reqData[0]->etime;
+        $start_tommorow     =   $reqData[0]->start_tommorow;
+        $current_date       = date("Y-m-d");
+     
+        $tomorrow_date = date('Y-m-d', strtotime($req_date . ' +1 day'));
+       
+        $tostime = $start_tommorow;
+
+        $tasks = $this->Menu_model->getTaskBetweenTime($req_user_id,$current_date,$req_stime,$req_etime);
+        $taskssize = sizeof($tasks);
+ 
+        if($taskssize > 0){
+            $i=1;
+            foreach($tasks as $task){
+                $task_id        =  $task->id;
+                $task_date      =  $task->appointmentdatetime;
+                $actiontype_id  =  $task->actiontype_id;
+                $act = $this->Menu_model->get_actionbyid($actiontype_id);
+                $yesttime = $act[0]->yest;
+
+                if($i == 1){
+                    $newDateTime = $tomorrow_date . ' ' . $tostime;
+                }else{
+
+                        $start = new DateTime($newDateTime);
+                        $start->modify("+$yesttime minutes");
+                        $newDateTime = $start->format('Y-m-d H:i:s');
+                }
+
+                $query  = $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$newDateTime' WHERE id='$task_id'");
+
+                $query  = $this->db->query("UPDATE `special_request_for_leave` SET `approve_by`='$uid',`approve_status`='$status',`approve_date`='$current_datetime',`approve_remarks`='$remarks' WHERE id = '$req_id'");
+               
+                $i++;
+            }
+        }
+    }
+    if($status == 'Reject'){
+        $message_variable = 'reject_message';
+        $query  = $this->db->query("UPDATE `special_request_for_leave` SET `approve_by`='$uid',`approve_status`='$status',`approve_date`='$current_datetime',`approve_remarks`='$remarks' WHERE id = '$req_id'");
+    }
+
+    $this->session->set_flashdata($message_variable, 'Request '.$status.' Successfully !');
+    redirect('Menu/SpecialRequestForLeaveSomeTimeData');
+
+}
+
+
+
+
+public function GetTaskBeetweenUserTime(){
+
+    $user   = $this->session->userdata('user');
+    $uid    = $user['user_id'];
+    $uyid   =  $user['type_id'];
+    $this->load->model('Menu_model');
+
+    $mtime1 = $this->input->post('mtime1');
+    $mtime2 = $this->input->post('mtime2');
+
+    $cdate = date("Y-m-d");
+    $tasks = $this->Menu_model->getTaskBetweenTimeWithAction($uid,$cdate,$mtime1,$mtime2);
+    
+    $html = '';
+        $html .= "<table class='table'>
+        <thead class='thead-dark'>
+            <tr>
+                <th>Task Name</th>
+                <th>Count</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>";
+
+        $totoaltime = '';
+        foreach ($tasks as $item) {
+            $act = $this->Menu_model->get_actionbyid($item->aid);
+            $yesttime = $act[0]->yest;
+            $tasktime = $item->cont * $yesttime;
+            $totoaltime +=$tasktime;
+            $html .= "<tr>
+                <td>{$item->acname}</td>
+                <td>{$item->cont}</td>
+                <td>{$tasktime} Minutes</td>
+
+            </tr>";
+        }
+
+        $hours = floor($totoaltime / 60);  // Get the number of full hours
+        $remainingMinutes = $totoaltime % 60; // Get the remaining minutes
+
+        $html .= "<tr>
+        <td colspan='3'>Total Time : {$hours} hours and {$remainingMinutes} minutes</td>
+    </tr>";
+        $html .= "</tbody>
+        </table>";
+
+        echo $html;
+
+
+
+  
+}
+
+
+
+
 
 
 }

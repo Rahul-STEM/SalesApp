@@ -142,7 +142,7 @@
    
                                 
   <div class="card p-2 bg-dark text-center">
-      <h5><i>If you want to plan task for todays you need to first approvel.</i></h5>
+      <h5><i>If you want to plan task for todays you need to first approval.</i></h5>
   </div> 
   
    <?php 

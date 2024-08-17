@@ -129,7 +129,18 @@
               <p>Dashboard</p>
             </a>
           </li>
-          
+          <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/DayManagement" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Day Management</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/YesterDayDaysCloseRequest" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Yesterday Day Close Request</p>
+                    </a>
+                </li>
           <li class="nav-item">
             <a href="<?=base_url();?>Menu/LiveTaskTracking" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
@@ -204,7 +215,7 @@
               <p>BD Review Summary</p>
             </a>
           </li>
-
+   
           <li class="nav-item">
             <a class="nav-link" href="<?=base_url();?>/Management/CheckingDayManagement" >
               <i class="far fa-circle nav-icon"></i>

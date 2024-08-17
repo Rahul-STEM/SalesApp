@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Annual Comany Report | STEM APP| WebAPP</title>
+    <title>Yesterday Day Close Request | STEM APP| WebAPP</title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
     <!-- Font Awesome -->
@@ -85,12 +85,12 @@
         <!-- /.content-header -->
         <section class="content">
           <div class="container-fluid">
-            
+            <?php //dd($getreqData); ?>
             <div class="card p-2 bg-primary">
               <div class="row">
                 <div class="col-md-8"></div>
                 <div class="col-md-4">
-                  <form class="setpaldate" action="<?=base_url();?>Menu/TodaysTaskApprovelRequest" method="post">
+                  <form class="setpaldate" action="<?=base_url();?>Menu/YesterDayDaysCloseRequest" method="post">
                     <input type="date" class="form-control m-2" name="targetdate" value="<?=$adate?>" required="" id="plandate">
                     <input type="submit" class="btn btn-warning m-2" value="Set Date">
                   </form>
@@ -99,19 +99,26 @@
             </div>
             <div class="row p-3">
               <div class="col-sm col-md-12 col-lg-12 m-auto">
-                <?php if ($this->session->flashdata('action_message')): ?>
+                <?php if ($this->session->flashdata('success_message')): ?>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                  <strong> <?php echo $this->session->flashdata('action_message'); ?></strong>
+                  <strong> <?php echo $this->session->flashdata('success_message'); ?></strong>
                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                
+                <?php endif; ?>
+                <?php if ($this->session->flashdata('error_message')): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <strong> <?php echo $this->session->flashdata('error_message'); ?></strong>
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
                 <?php endif; ?>
                 <div class="card card-primary card-outline">
                   <div class="card-body box-profile">
                     <div class="bg-warning colapsboxsha text-center mt-2 mb-2">
-                      <h3><i>Todays Task Planner Approval Request</i></h3>
+                      <h3><i>Yesterday Day Close Request</i></h3>
                     </div>
                     <?php
                     $utype = $this->Menu_model->get_userbyid($userid);
@@ -126,16 +133,17 @@
                           <!--<h4 class="ApprovedStatus Pending">Changes For Academic year 2024-24</h4> -->
                           <div class="table-responsive">
                             <table id="exampledata" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                              <thead>
+                              <thead class="bg-primary">
                                 <tr>
                                   <th scope="col">#</th>
                                   <th scope="col">Name</th>
                                   <th scope="col">Date</th>
-                                  <th scope="col">Request Type</th>
-                                  <th scope="col">Pending Task</th>
+                                  <th scope="col">Request Reason</th>
                                   <th scope="col">Request Message</th>
+                                  <th scope="col">Approved By</th>
+                                  <th scope="col">Approved Remarks</th>
+                                  <th scope="col">Approved Date</th>
                                   <th scope="col">Approvel Status</th>
-                                  <th scope="col">Remarks</th>
                                   <th scope="col">Action</th>
                                 </tr>
                               </thead>
@@ -147,31 +155,33 @@
                                   <th><?= $j ?></th>
                                   <td><?= $this->Menu_model->get_userbyid($data->user_id)[0]->name ?></td>
                                   <td><?= $data->created_at ?></td>
-                                  <td><?= $data->would_you_want ?></td>
-                                  <td><?= $data->taskcnt ?></td>
-                                  <td><?= $data->request_remarks ?></td>
+                                  <td><?= $data->why_did_you ?></td>
+                                  <td><?= $data->req_remarks ?></td>
+                                  <td><?= $this->Menu_model->get_userbyid($data->approved_by)[0]->name ?></th>
+                                  <td><?= $data->approved_remarks ?></td>
+                                  <td><?= $data->approved_date ?></td>
                                   <td>
                                     <?php
-                                    if($data->approvel_status == ''){ ?>
+                                    if($data->approved_status == ''){ ?>
                                     <span class="p-1 bg-warning mr-2">Pending</span>
-                                    <?php }else if($data->approvel_status == 'Approved'){ ?>
+                                    <?php }else if($data->approved_status == 'Approved'){ ?>
                                     <span class="p-1 bg-success mr-2">Approved</span>
                                     <?php }else{ ?>
                                     <span class="p-1 bg-danger mr-2">Reject</span>
                                     <?php }?>
                                   </td>
-                                  <td><?=$data->remarks ?></td>
+                                 
                                   <td>
                                     
                                     <?php
-                                    if($data->approvel_status == ''){ ?>
+                                    if($data->approved_status == ''){ ?>
                                     
                                     <div>
-                                      <p><a href="<?=base_url();?>Menu/TodaysTaskapprove/<?= $data->id?>/Approve" class="btn btn-success mr-2" onclick="return confirm('Are you sure you want to Approved id?');" >Approve</a></p>
+                                      <p><a href="<?=base_url();?>Menu/YesterdayCloseRequestApprove/<?= $data->id?>/Approved" class="btn btn-success mr-2" onclick="return confirm('Are you sure you want to Approved id?');" >Approve</a></p>
                                       <p><button type="button" class="btn btn-primary"  onclick="Reject(<?= $j ?>,<?= $data->id?>,'Reject')">Reject</button></p>
                                     </div>
                                     
-                                    <?php }else if($data->approvel_status == 'Approved'){ ?>
+                                    <?php }else if($data->approved_status == 'Approved'){ ?>
                                     <span class="p-1 bg-success mr-2">Approved</span>
                                     <?php }else{ ?>
                                     <span class="p-1 bg-danger mr-2">Reject</span>
@@ -199,7 +209,7 @@
                             </button>
                           </div>
                           <div class="modal-body">
-                            <form action="<?=base_url();?>Menu/TodaysTaskReject" method="post" >
+                            <form action="<?=base_url();?>Menu/YesterdayCloseRequestReject" method="post" >
                               <input type="hidden" id="rejectid" value="" name="reject">
                               <div class="mb-3 mt-3">
                                 <textarea id="rejectreamrk" name="rejectreamrk" cols="30" placeholder="Add Remark " class="form-control"  rows="4"></textarea>
@@ -304,7 +314,7 @@
   <script>
   $("#exampledata").DataTable({
   "responsive": false, "lengthChange": false, "autoWidth": false,
-  "buttons": ["copy", "csv", "excel", "pdf", "print"]
+  "buttons": ["csv", "excel"]
   }).buttons().container().appendTo('#exampledata_wrapper .col-md-6:eq(0)');
   
   </script>

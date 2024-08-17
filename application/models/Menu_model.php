@@ -3280,7 +3280,7 @@ WHERE cid = '$cid'");
     public function get_bdtcom($uid){
         $userd = $this->Menu_model->get_userbyid($uid);
         $utid = $userd[0]->type_id;
-
+        
         $useradmin = $this->session->userdata('user');
         $adminuyid =  $useradmin['type_id'];
         if($adminuyid == 2){
@@ -4993,7 +4993,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
 
         $utype = $this->Menu_model->get_userbyid($uid);
         $utype = $utype[0]->type_id;
-    
+     
         if($utype==2){$text = "user_details.admin_id='$uid' and user_details.type_id='3' and user_details.status='active'";}
         if($utype==3){$text = "user_details.user_id='$uid'";}
         if($utype==9){$text = "user_details.aadmin='$uid' and user_details.type_id='3' and user_details.status='active'";}
@@ -11696,14 +11696,50 @@ public function get_userbyids($uids){
      return $query->result();
 }
 
-public function add_SpecialRequestForLeave($uid,$pdate,$stime,$etime,$purpose){
-    $this->db->query("INSERT INTO `special_request_for_leave`(`user_id`, `date`, `stime`, `etime`, `prupose`) VALUES ('$uid','$pdate','$stime','$etime','$purpose')");
+public function add_SpecialRequestForLeave($uid,$pdate,$stime,$etime,$purpose,$sttt){
+    $this->db->query("INSERT INTO `special_request_for_leave`(`user_id`, `date`, `stime`, `etime`, `prupose`,`start_tommorow`) VALUES ('$uid','$pdate','$stime','$etime','$purpose','$sttt')");
 }
 
 public function get_SpecialRequestForLeave($uid){
     $query = $this->db->query("SELECT * FROM `special_request_for_leave` WHERE user_id = $uid order by id DESC");
     return $query->result();
 }
+
+public function getSpecialRequestForLeaveData($uid,$uyid){
+ 
+    if($uyid ==13){
+        $text = "user.aadmin = '$uid'";
+    }else if($uyid ==4){
+        $text = "user.pst_co = '$uid'";
+    }else if($uyid ==15){
+        $text = "user.sales_co = '$uid'";
+    }else{
+        $text = "user_details.aadmin = '$uid'";
+    }
+
+    $query = $this->db->query("SELECT srl.*,user.name FROM `special_request_for_leave` as srl LEFT JOIN user_details as user on srl.user_id = user.user_id WHERE $text and date = CURDATE() order by id DESC");
+    return $query->result();
+}
+
+public function getSpecialRequestForLeaveByID($id){
+    $query = $this->db->query("SELECT * FROM `special_request_for_leave` WHERE id ='$id'");
+    return $query->result();
+}
+
+public function getTaskBetweenTime($uid,$date,$stime,$etime){
+    $query = $this->db->query("SELECT * from tblcallevents WHERE user_id='$uid' and cast(appointmentdatetime AS DATE)='$date' and plan=1 And autotask=0 and cast(appointmentdatetime AS TIME) BETWEEN '$stime' and '$etime'");
+    return $query->result();
+}
+
+
+public function getTaskBetweenTimeWithAction($uid,$tdate,$t1,$t2){
+    $query=$this->db->query("SELECT action.name acname,action.id aid,action.clr aclr,COUNT(*) cont from tblcallevents LEFT JOIN action ON action.id=tblcallevents.actiontype_id WHERE user_id='$uid' and cast(appointmentdatetime AS DATE)='$tdate' and plan=1 And autotask=0 and cast(appointmentdatetime AS TIME) BETWEEN '$t1' and '$t2' GROUP BY action.name,action.clr ORDER BY `acname` ASC");
+    return $query->result();
+}
+
+
+
+
 public function CheckExistsTaskTime($uid,$pdate,$timeValue){
     $stime = $timeValue.':00';
     $query = $this->db->query("SELECT * FROM `tblcallevents` WHERE user_id = '$uid' AND cast(appointmentdatetime as DATE) = '$pdate' AND  cast(appointmentdatetime as time) = '$stime' AND actiontype_id != '' AND nextCFID = 0 AND lastCFID = 0 AND plan = 1");
@@ -12162,9 +12198,6 @@ public function getRequestMOMBYID($id){
 
 public function getCompanyWhichNoStatusChange($uid,$days,$status){
 
-    // $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE init_call.mainbd = '$uid' AND init_call.cstatus IN ($status) AND (tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE()) AND (SELECT COUNT(*) FROM tblcallevents WHERE tblcallevents.cid_id = init_call.id) >= 1");
-
-
     $user_data  = $this->session->userdata('user');
     $user_id    = $user_data['user_id'];
     $uyid       =  $user_data['type_id'];
@@ -12178,17 +12211,8 @@ public function getCompanyWhichNoStatusChange($uid,$days,$status){
         $text = "init_call.mainbd = '$uid'";
     }
 
-    // $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE $text AND init_call.cstatus IN ($status) AND (tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE()) AND ((SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id) >= 1) AND NOT EXISTS (SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND tce.user_id = '$uid' AND DATE(tce.appointmentdatetime) = CURDATE())");
-
-    // $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE $text AND init_call.cstatus =8 AND (tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE()) AND ((SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id) >= 1) AND NOT EXISTS ( SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND tce.user_id = '$uid' AND DATE(tce.appointmentdatetime) = CURDATE() )");
-
-    $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE $text AND init_call.cstatus IN ($status) AND (tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE()) AND ((SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id) >= 1) AND NOT EXISTS (SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND tce.user_id = '$uid' AND DATE(tce.appointmentdatetime) = CURDATE())");
+    $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE $text AND init_call.cstatus IN ($status) AND (tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE()) AND ((SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id) >= 8) AND NOT EXISTS (SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND tce.user_id = '$uid' AND DATE(tce.appointmentdatetime) = CURDATE())");
     // echo $this->db->last_query();
-
-
-
-
-
 
     return $query->result();
 }
@@ -12256,6 +12280,26 @@ public function NeedYourAttentions($days,$status){
     return $query->result();
 }
 
+
+public function GetDayCloseRequestData($uid,$adate,$uyid){
+
+    if($uyid ==13){
+        $text = "user_details.aadmin = '$uid'";
+    }else if($uyid ==4){
+        $text = "user_details.pst_co = '$uid'";
+    }else if($uyid ==15){
+        $text = "user_details.sales_co = '$uid'";
+    }else if($uyid ==2){
+        $text = "user_details.admin_id = '$uid'";
+    }else{
+        $text = "user_details.aadmin = '$uid'";
+    }
+
+    $getreqData  =  $this->db->query("SELECT *,close_your_day_request.id FROM close_your_day_request LEFT JOIN user_details ON close_your_day_request.user_id = user_details.user_id WHERE $text and DATE(req_date) ='$adate'");
+    $getreqData  =  $getreqData->result();
+    return $getreqData;
+
+}
 
         
 }

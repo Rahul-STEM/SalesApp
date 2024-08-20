@@ -19095,8 +19095,8 @@ public function nostatuschange_indate(){
 
     echo '<option value="">Select Company</option>';
     foreach($cmps as $cmp){ ?>
-    <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
-<?=$cmp->compname?> (<?=$cmp->pname?>)
+    <option style="color: #d90d2b;" title="<?=$cmp->days?> Days - <?=$cmp->compname?> (<?=$cmp->pname?>)" value="<?=$cmp->inid?>">
+    <?=$cmp->days?> Days - <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
     <?php
 
@@ -19377,7 +19377,22 @@ public function GetTaskBeetweenUserTime(){
 }
 
 
+public function getUserDayStartStatus(){
+    
+    $user   = $this->session->userdata('user');
+    $uid    = $user['user_id'];
+    $uyid   =  $user['type_id'];
+    $this->load->model('Menu_model');
 
+    $user_day = $this->Menu_model->getUserDayStartDetails($uid,date("Y-m-d"));
+    $user_day_wffo = $user_day[0]->wffo;
+    
+    echo $user_day_wffo;
+
+
+
+
+}
 
 
 

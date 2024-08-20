@@ -595,7 +595,7 @@ if($type_id == 3){
 
                         ?>
 
-                          <div class="form-check">
+                          <div class="form-check" id="compulsive_task_filter">
                           <label>
                             <input type="radio" class="form-check-input" name="optradio" value="Compulsive Task"> <span class="<?=$cssct?>"> Compulsive Task (<?=$status_nochangecnt ?>) </span>
                           </label>
@@ -612,7 +612,7 @@ if($type_id == 3){
                         $notworkedcnt = $getBDNoWorkedcnt + $getBDNoWorked_wdl_nlcnt;
                         if($notworkedcnt > 0){$cssc = 'text-danger';}else{$cssc = '';}
                         ?>
-                        <div class="form-check">
+                        <div class="form-check" id="actionNotPlannedNeed_filter">
                         <label>
                         <input type="radio" class="form-check-input" name="optradio" value="actionNotPlannedNeed" > <span class="<?=$cssc?>"> Action Not Planned  <?php if($notworkedcnt > 0){echo '('.$notworkedcnt.')';}?></span>
                         </label>
@@ -630,7 +630,7 @@ if($type_id == 3){
                           $need_your_attecnt = sizeof($need_your_atte);
                           if($need_your_attecnt > 0){$cssc = 'text-danger';}else{$cssc = '';}
                           ?>
-                          <div class="form-check">
+                          <div class="form-check" id="need_your_attention_filter">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Need Your Attention" > 
                           
@@ -638,12 +638,12 @@ if($type_id == 3){
                           </label>
                         </div>
                          <?php } ?> 
-                        <div class="form-check">
+                        <div class="form-check" id="company_name_filter">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Compnay Name" >Company Name
                           </label>
                         </div>
-                        <div class="form-check">
+                        <div class="form-check" id="company_status_filter">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Status" >Status
                           </label>
@@ -661,7 +661,7 @@ if($type_id == 3){
                           </label>
                         </div> -->
 
-                        <div class="form-check">
+                        <div class="form-check" id="cluster_location_fiilter">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Cluster Location" >Cluster Location
                           </label>
@@ -669,42 +669,42 @@ if($type_id == 3){
 
                       
 
-                        <div class="form-check">
+                        <div class="form-check" id="company_category_filter">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Category" >Category
                           </label>
                         </div>
 
-                        <div class="form-check">
+                        <div class="form-check" id="partner_type_filter">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Partner Type" >Partner Type
                           </label>
                         </div>
                 
-                        <div class="form-check">
+                        <div class="form-check" id="ssllimit_days_filter">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Same Status Last Limit Days" >Same Status Last Limit Days 
                           </label>
                         </div>
                         
-                        <div class="form-check">
+                        <div class="form-check" id="other_assign_filter">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="PST Assign" >Other Assign
                           </label>
                         </div>
                         <?php if($type_id ==13 || $type_id ==4){ ?>
-                        <div class="form-check">
+                        <div class="form-check" id="self_assign_filter" >
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Self Assign" >Self Assign
                           </label>
                         </div>
                         <?php } ?>
-                        <div class="form-check">
+                        <div class="form-check" id="review_target_date_filter">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Review Target Date" > Review Target Date
                           </label>
                         </div>
-                        <div class="form-check">
+                        <div class="form-check" id="review_planning_filter">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Review Planning">  Review Planning
                           </label>
@@ -775,7 +775,7 @@ if($type_id == 3){
                         <div class="col-6">
                         </div>
                         <div class="col-6">
-                          <div class="form-group">
+                          <div class="form-group" id="actionNotPlanned_task_filter">
                             <input type="radio" id="option2" name="optradio" value="actionNotPlanned">
                             <label>Action Not Planned </label>                          
                           </div>
@@ -1358,10 +1358,10 @@ if($type_id == 3){
                                   <option value="Other Assign">Other Assign</option> -->
                                   <option value="Call Assign on Tentive Status">Call Assign on Tentive Status</option>
                                   <option value="Mom Check">MOM Check</option>
-                                  <option value="Praposal Check">Praposal Check</option>
+                                  <!-- <option value="Praposal Check">Praposal Check</option>
                                   <option value="Handover Check">Handover Check</option>
                                   <option value="BD Request Check">BD Request Check</option>
-                                  <option value="Praposal write">BD Request Check</option>
+                                  <option value="Praposal write">BD Request Check</option> -->
                                 </select>
                             </div>
                             <div class="form-group">
@@ -4603,12 +4603,6 @@ if($type_id == 3){
 
 
 
-
-
-
-
-
-
                 });
                 });
                
@@ -4777,6 +4771,41 @@ if($type_id == 3){
                           var minutes = parseInt(timeParts[1], 10);
                           return (hours * 60) + minutes;
                       }
+
+
+         var uid = $("#curuserid").val();
+          $.ajax({
+            url:'<?=base_url();?>Menu/getUserDayStartStatus',
+            type: "POST",
+            data: {
+              uid: uid,
+            },
+            cache: false,
+            success: function a(result){
+                if(result ==2){
+                  $('#compulsive_task_filter input[name="optradio"]').prop('disabled', true);
+                  // $('#compulsive_task_filter label').css('text-decoration', 'line-through');
+                  $('#actionNotPlannedNeed_filter input[name="optradio"]').prop('disabled', true);
+                  $('#company_name_filter input[name="optradio"]').prop('disabled', true);
+                  $('#company_status_filter input[name="optradio"]').prop('disabled', true);
+
+                  $('#cluster_location_fiilter input[name="optradio"]').prop('disabled', true);
+                  $('#company_category_filter input[name="optradio"]').prop('disabled', true);
+                  $('#partner_type_filter input[name="optradio"]').prop('disabled', true);
+                  $('#ssllimit_days_filter input[name="optradio"]').prop('disabled', true);
+
+                  $('#other_assign_filter input[name="optradio"]').prop('disabled', true);
+                  $('#self_assign_filter input[name="optradio"]').prop('disabled', true);
+                  $('#review_target_date_filter input[name="optradio"]').prop('disabled', true);
+                  $('#review_planning_filter input[name="optradio"]').prop('disabled', true);
+                  $('#need_your_attention_filter input[name="optradio"]').prop('disabled', true);
+
+                  $('#actionNotPlanned_task_filter input[name="optradio"]').prop('disabled', true);
+                  $('#task_action_filter option').not('[value="3"], [value="4"]').attr('disabled', true);
+
+                }
+            }
+            });
           });
       </script>
       <style>
@@ -5034,7 +5063,6 @@ $("#example4").DataTable({
 }).buttons().container().appendTo('#example4_wrapper .col-md-6:eq(0)');
 
 // https://stemapp.in//assets/image/planning1.jpg
-
 
     </script>
   </body>

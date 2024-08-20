@@ -12211,7 +12211,12 @@ public function getCompanyWhichNoStatusChange($uid,$days,$status){
         $text = "init_call.mainbd = '$uid'";
     }
 
-    $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE $text AND init_call.cstatus IN ($status) AND (tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE()) AND ((SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id) >= 8) AND NOT EXISTS (SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND tce.user_id = '$uid' AND DATE(tce.appointmentdatetime) = CURDATE())");
+    // $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE $text AND init_call.cstatus IN ($status) AND (tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE()) AND ((SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id) >= 8) AND NOT EXISTS (SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND tce.user_id = '$uid' AND DATE(tce.appointmentdatetime) = CURDATE())");
+
+    // $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus, DATEDIFF(CURDATE(), tblcallevents.appointmentdatetime) AS days FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE $text AND init_call.cstatus IN ($status) AND tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE() AND (SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id) >= 3 AND NOT EXISTS (SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND tce.user_id = '$uid' AND DATE(tce.appointmentdatetime) = CURDATE()) HAVING days > $days");
+
+    $query=$this->db->query("SELECT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus, MAX(DATEDIFF(CURDATE(), tblcallevents.appointmentdatetime)) AS days FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE $text AND init_call.cstatus IN ($status) AND tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE() AND (SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id) >= 3 AND NOT EXISTS (SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND tce.user_id = '$uid' AND DATE(tce.appointmentdatetime) = CURDATE()) GROUP BY init_call.id, company_master.compname, partner_master.name, init_call.cstatus HAVING days > $days");
+
     // echo $this->db->last_query();
 
     return $query->result();
@@ -12301,5 +12306,16 @@ public function GetDayCloseRequestData($uid,$adate,$uyid){
 
 }
 
+public function getUserDayStartDetails($uid,$tdate){
+
+    $query=$this->db->query("SELECT * FROM user_day WHERE user_id='$uid' and cast(sdatet as DATE)='$tdate'");
+    return $query->result();
+
+}
+
         
+
+
+
+
 }

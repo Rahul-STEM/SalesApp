@@ -101,11 +101,11 @@
           $uystart_id = $yestdata[0]->id;
           $uystart = $yestdata[0]->ustart;
           $uyclose = $yestdata[0]->uclose;
-  
+
           // Check Yesterday Day Close or Not
           if ($yestdatacnt == 1) {?>
         <div class="row">
-          <div class="col-sm col-md-10 col-lg-10 m-auto">
+          <div class="col-sm-12 col-md-12 col-lg-12 m-auto">
             <div class="card card-primary card-outline">
               <div class="card-body box-profile">
                 <div class="blink">
@@ -116,25 +116,35 @@
                 </marquee>
                 <hr>
                 <div class="row">
-                  <div class="col-md-4 text-center">
+                  <div class="col-md-3 text-center">
                     <div class="card bg-success p-2">
                       <p>You have Started your Day at </p>
                       <hr>
                       <b><?=$uystart ?></b>
                     </div>
                   </div>
-                  <div class="col-md-4 text-center">
+                  <div class="col-md-3 text-center">
                     <div class="card bg-danger p-2">
                       <p>But you have not closed your day yet.</p>
                       <hr>
                       <b>0000-00-00 00:00:00</b>
                     </div>
                   </div>
-                  <div class="col-md-4 text-center">
+                  <div class="col-md-3 text-center">
                     <div class="card bg-warning p-2">
                       <p>Time diffrence is </p>
                       <hr>
                       <b><?=$this->Menu_model->timediff($uystart,$ctdate);?></b>
+                    </div>
+                  </div>
+                  <div class="col-md-3 text-center">
+                    <div class="card bg-warning p-2">
+                      <p>Yesterday Pending Task </p>
+                      <hr>
+                      <b><?php 
+                          $getoldPendingTask = $this->Menu_model->get_OLDPendingTask($uid);
+                          echo $getoldPendingTaskcnt = sizeof($getoldPendingTask);
+                      ?></b>
                     </div>
                   </div>
                 </div>

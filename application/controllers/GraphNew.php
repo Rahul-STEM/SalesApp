@@ -58,7 +58,7 @@ class GraphNew extends CI_Controller {
 
             $chartData = $this->Graph_Model->get_fannalstwise($uid,$userTypeid,$sdate,$edate);
 
-            $TableData = $this->Graph_Model->get_fannalbycode($uid,$userTypeid,$sdate,$edate);
+            $TableData = $this->Graph_Model->get_fannalbycode_OG($uid,$userTypeid,$sdate,$edate);
 
             // var_dump($chartData);die;
             if(!empty($user)){
@@ -69,9 +69,6 @@ class GraphNew extends CI_Controller {
             }else{
                 redirect('Menu/main');
             }
-
-
-
     }
 
     public function FunnelAnalysis() {
@@ -153,7 +150,6 @@ class GraphNew extends CI_Controller {
             $category = '';
         }
 
-
         // $sdate = '2024-03-01';
         // var_dump($sdate,$edate);die;
             $user = $this->session->userdata('user');
@@ -185,10 +181,7 @@ class GraphNew extends CI_Controller {
                 redirect('Menu/main');
             }
 
-
-
     }
-
 
     public function getUserByCluster(){
 
@@ -218,8 +211,7 @@ class GraphNew extends CI_Controller {
         $selected_partnerType = str_replace('"', '', $_POST['selected_partnerType']);
         $arrayselected_cluster = str_replace('"', '', $_POST['arrayselected_cluster']);
         $arrayselected_user = str_replace('"', '', $_POST['arrayselected_user']);
-        // $status_id =  $_POST['stid'];
-// print_r($status_id);die;
+
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -228,8 +220,6 @@ class GraphNew extends CI_Controller {
         $dep_name = $dt[0]->name;
 
         $StatusWiseFunnelData = $this->Graph_Model->getStatusWiseFunnelData($uid,$sdate,$edate,$selected_partnerType,$arrayselected_cluster,$arrayselected_user,$status_id);
-        // echo "<pre>";
-        // print_r($StatusWiseFunnelData);die;
 
         if(!empty($user)){
             $this->load->view('include/header');
@@ -240,4 +230,242 @@ class GraphNew extends CI_Controller {
             redirect('Menu/main');
         }
     }
+
+    public function CityWiseFunnelAnalysis() {
+
+        // var_dump($_POST);die;
+
+        if(isset($_POST['startDate']) && isset($_POST['endDate'])){
+
+            $sdate = $_POST['startDate'];
+            $edate = $_POST['endDate'];
+        }
+        else{
+
+            $sdate = date('Y-m-d');
+            $edate = date('Y-m-d');
+        }
+
+        
+        if(isset($_POST['cluster'])){
+
+            $cluster = array_filter($_POST['cluster'], function($value) {
+                return $value !== 'select_all';
+            });
+
+            $cluster = implode(',', ($cluster));
+
+        }else{
+
+            $cluster = '';
+        }
+
+        // $sdate = '2024-03-01';
+        // var_dump($sdate,$edate);die;
+            $user = $this->session->userdata('user');
+            $data['user'] = $user;
+            $uid = $user['user_id'];
+            $userTypeid =  $user['type_id'];
+            $dt=$this->Graph_Model->get_utype($userTypeid);
+            $dep_name = $dt[0]->name;
+
+            $roles = $this->Graph_Model->getRoles($dt[0]->id);
+
+            // $TableData = $this->Graph_Model->get_TableData($uid,$userTypeid,$sdate,$edate,$cluster);
+            $TableData = $this->Graph_Model->getCityWiseTableDetails($uid,$userTypeid,$sdate,$edate);
+            $GraphData = $this->Graph_Model->getCityWiseGraphDetails($uid,$userTypeid,$sdate,$edate);
+            // $TableData = '';
+            // var_dump($GraphData);die;
+
+            
+            // var_dump($data);die;
+            if(!empty($user)){
+                $this->load->view('include/header');
+                $this->load->view($dep_name.'/nav',['uid'=>$uid,'user'=>$user]);
+                $this->load->view('Graphs/CityWiseFunnelAnalysis',['uid'=>$uid,'user'=>$user, 'sdate'=>$sdate,'edate'=>$edate,'TableData'=>$TableData,'roles'=>$roles,'GraphData'=>$GraphData]);
+                $this->load->view('include/footer');
+            }else{
+                redirect('Menu/main');
+            }
+
+
+
+    }
+
+    public function PartnerWiseFunnelAnalysis() {
+
+        // var_dump($_POST);die;
+        if(isset($_POST['startDate']) && isset($_POST['endDate'])){
+
+            $sdate = $_POST['startDate'];
+            $edate = $_POST['endDate'];
+        }
+        else{
+
+            $sdate = date('Y-m-d');
+            $edate = date('Y-m-d');
+        }
+
+
+        if(isset($_POST['partnerType'])){
+
+            $partnerType = array_filter($_POST['partnerType'], function($value) {
+                return $value !== 'select_all';
+            });
+
+            // $partnerType = implode(',', ($partnerType));
+
+        }else{
+
+            $partnerType = '';
+        }
+
+        // echo $partnerType;die;
+        $partner_type = $this->Graph_Model->getPartnerType();
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $userTypeid =  $user['type_id'];
+        $dt=$this->Graph_Model->get_utype($userTypeid);
+        $dep_name = $dt[0]->name;
+
+        $roles = $this->Graph_Model->getRoles($dt[0]->id);
+
+
+        $GraphData = $this->Graph_Model->getPartnerWiseGraphDetails($uid,$userTypeid,$sdate,$edate,$partnerType);
+        $TableData = $this->Graph_Model->getPartnerWiseTableDetails($uid,$userTypeid,$sdate,$edate,$partnerType);
+        // var_dump($GraphData);die;
+
+        if(!empty($user)){
+            $this->load->view('include/header');
+            $this->load->view($dep_name.'/nav',['uid'=>$uid,'user'=>$user]);
+            $this->load->view('Graphs/PartnerWiseFunnelAnalysis',['uid'=>$uid,'user'=>$user, 'sdate'=>$sdate,'edate'=>$edate,'partner_type'=>$partner_type,'TableData'=>$TableData,'roles'=>$roles,'GraphData'=>$GraphData]);
+            $this->load->view('include/footer');
+        }else{
+            redirect('Menu/main');
+        }
+
+
+
+    }
+
+    public function CategoryWiseFunnelAnalysis() {
+
+        // var_dump($_POST);die;
+        if(isset($_POST['startDate']) && isset($_POST['endDate'])){
+
+            $sdate = $_POST['startDate'];
+            $edate = $_POST['endDate'];
+        }
+        else{
+
+            $sdate = date('Y-m-d');
+            $edate = date('Y-m-d');
+        }
+
+
+        if(isset($_POST['category'])){
+
+            $category = array_filter($_POST['category'], function($value) {
+                return $value !== 'select_all';
+            });
+
+            // $category = implode(',', ($category));
+
+        }else{
+
+            $category = '';
+        }
+
+        // var_dump($category);die;
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $userTypeid =  $user['type_id'];
+        $dt=$this->Graph_Model->get_utype($userTypeid);
+        $dep_name = $dt[0]->name;
+
+        $roles = $this->Graph_Model->getRoles($dt[0]->id);
+
+
+        $GraphData = $this->Graph_Model->getCategoryWiseGraphDetails($uid,$userTypeid,$sdate,$edate,$category);
+        $TableData = $this->Graph_Model->getCategoryWiseTableDetails($uid,$userTypeid,$sdate,$edate,$category);
+        
+        // $GraphData = '';
+        // $TableData = '';
+        // var_dump($TableData);die;
+
+        if(!empty($user)){
+            $this->load->view('include/header');
+            $this->load->view($dep_name.'/nav',['uid'=>$uid,'user'=>$user]);
+            $this->load->view('Graphs/CategoryWiseFunnelAnalysis',['uid'=>$uid,'user'=>$user, 'sdate'=>$sdate,'edate'=>$edate,'TableData'=>$TableData,'roles'=>$roles,'GraphData'=>$GraphData]);
+            $this->load->view('include/footer');
+        }else{
+            redirect('Menu/main');
+        }
+
+
+
+    }
+
+
+    public function CompanyWithSameStatusSinceFunnleAnalysis() {
+
+        // var_dump($_POST);die;
+        if(isset($_POST['startDate']) && isset($_POST['endDate'])){
+
+            $sdate = $_POST['startDate'];
+            $edate = $_POST['endDate'];
+        }
+        else{
+
+            $sdate = date('Y-m-d');
+            $edate = date('Y-m-d');
+        }
+
+        if(isset($_POST['category'])){
+
+            $category = array_filter($_POST['category'], function($value) {
+                return $value !== 'select_all';
+            });
+
+        }else{
+
+            $category = '';
+        }
+
+        // var_dump($category);die;
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $userTypeid =  $user['type_id'];
+        $dt=$this->Graph_Model->get_utype($userTypeid);
+        $dep_name = $dt[0]->name;
+
+        $roles = $this->Graph_Model->getRoles($dt[0]->id);
+
+        $status = $this->Graph_Model->getStatus();
+
+
+        // $GraphData = $this->Graph_Model->getCategoryWiseGraphDetails($uid,$userTypeid,$sdate,$edate,$category);
+        // $TableData = $this->Graph_Model->getCategoryWiseTableDetails($uid,$userTypeid,$sdate,$edate,$category);
+        
+        $GraphData = '';
+        $TableData = '';
+        // var_dump($TableData);die;
+
+        if(!empty($user)){
+            $this->load->view('include/header');
+            $this->load->view($dep_name.'/nav',['uid'=>$uid,'user'=>$user]);
+            $this->load->view('Graphs/CompanyWithSameStatusSinceFunnleAnalysis',['uid'=>$uid,'user'=>$user, 'sdate'=>$sdate,'edate'=>$edate,'status'=>$status,'TableData'=>$TableData,'roles'=>$roles,'GraphData'=>$GraphData]);
+            $this->load->view('include/footer');
+        }else{
+            redirect('Menu/main');
+        }
+
+
+
+    }
+
+    
 }

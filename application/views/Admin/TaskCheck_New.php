@@ -207,7 +207,7 @@
                                                 <th>Planned Date-time</th>
                                                 <th>Initiated Date-time</th>
                                                 <th>Update Date-time</th>
-                                                <th>Time Taken to Complete Task</th>
+                                                <!-- <th>Time Taken to Complete Task</th> -->
                                                 <!-- <th>Action Performed Time</th> -->
                                                 <th>Status</th>
                                                 <th>Last Task Planned Date</th>
@@ -293,7 +293,8 @@
                                                     <?php ?>
                                                 </td>
                                                 <td data-question="Was Task Initiated on time" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>"><?= $task->start_time; ?>
-                                            
+                                                    <br><br>
+                                                    Time taken from planning to initiate : <b> <?= $task->time_diff1; ?></b>
                                                 <br><br><hr>
 
                                                     <p class="question">Was Task Initiated on time..??</p>
@@ -333,6 +334,9 @@
                                                 }  ?>
                                                 </td>
                                                 <td data-question="Was Task Updated on time" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>"><?= $task->end_time; ?>
+                                                <br><br>
+                                                    Time taken from initiating to update : <b> <?= $task->time_diff; ?></b>
+                                                    
                                                     <br><hr>
 
                                                     <p class="question">Was Task Updated on time..??</p>
@@ -371,7 +375,7 @@
                                                     }  ?>
 
                                                 </td>
-                                                <td data-question="time taken to complete task was correct" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>">
+                                                <!-- <td data-question="time taken to complete task was correct" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>">
                                                     
                                                     Time taken from planning to initiate : <b> <?= $task->time_diff1; ?></b>
                                                     <br>
@@ -414,7 +418,7 @@
                                                             }
                                                             echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
                                                         }  ?>
-                                                </td>
+                                                </td> -->
                                                 <!-- <td></td> -->
                                                 <td data-question="status change was correct" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>"><?=$task->old_status?> to <?=$task->new_status?>
                                                     <br><hr>

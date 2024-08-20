@@ -8860,14 +8860,15 @@ class Menu extends CI_Controller {
         if(isset($_POST['userId'])){
 
             // $userId = '100192';
-            $tdate = '2024-07-20';
+            // $tdate = '2024-07-20';
             $userId = $_POST['userId'];
             // echo $userId;die;
             $taskList = $this->Menu_model->getTasks($userId,$tdate);
             // $taskList = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($userId,$tdate);
-        }else{
-            $userId = '100192';
         }
+        // else{
+        //     $userId = '100192';
+        // }
 
         if(!empty($user)){
             $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId]);

@@ -194,23 +194,17 @@
                                                                 $updatedDate = 'NA';
                                                                 $diffString ='NA';
                                                             }
-                                                            // $updatedDate = $tblc[0]->updateddate;
-                                                            
-                                                            // var_dump($interval);die;
+
                                                         ?>
                                                         <div class="col-md-4 mb-4 filter-item" data-category="<?= htmlspecialchars($TableDataGrid->stname) ?>">
                                                             <div class="card-body p-3 border rounded border-success hover-div d-flex flex-column align-items-stretch h-100 text-dark">
 
                                                                 Current Status<br><b style="color:<?=$TableDataGrid->stclr?>"><?=$TableDataGrid->stname?></b><hr>
                                                                 Company Name<br><b><?=$TableDataGrid->company_name?></b><hr>
-                                                                <!-- Address<br><b><?=$TableDataGrid->company_address?></b><hr>
-                                                                City<br><b><?=$TableDataGrid->city?></b><hr>
-                                                                State<br><b><?=$TableDataGrid->state?></b><hr> -->
                                                                 Partner Type<br><b style=""><?=$TableDataGrid->partner_type?></b><hr>
                                                                 Current Remark<br><b style=""><?=$tblc[0]->remarks?></b><hr>
                                                                 Last Action Done By<br><b><?=$tblc[0]->last_updated_by?></b><hr>
                                                                 Last Action Date<br><b><?=$tblc[0]->updateddate?></b><hr>
-                                                                <!-- Last Remark on the company<br><hr> -->
                                                                 Same Status Since<br><b><?=$diffString?></b><hr>
                                                                 <div class="rounded-circle bg-danger" style="position: absolute;bottom: -10px; left: 40%; transform: translateX(-50%); width: 20px; height: 20px;"></div>
                                                                 <div class="rounded-circle bg-danger" style="position: absolute;bottom: -10px; left: 60%; transform: translateX(-50%); width: 20px; height: 20px;"></div>

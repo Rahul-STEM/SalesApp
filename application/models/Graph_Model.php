@@ -178,7 +178,6 @@ class Graph_Model extends CI_Model
         $this->db->from('partner_master');
 
         $query = $this->db->get();
-        // echo  $this->db->last_query(); die;
         return $query->result();
 
     }
@@ -216,6 +215,18 @@ class Graph_Model extends CI_Model
 
         $this->db->select('*');
         $this->db->from('categories');
+
+        $query = $this->db->get();
+        // echo  $this->db->last_query(); die;
+        return $query->result();
+
+    }
+
+    public function getStatus()
+    {
+
+        $this->db->select('*');
+        $this->db->from('status');
 
         $query = $this->db->get();
         // echo  $this->db->last_query(); die;
@@ -418,10 +429,6 @@ class Graph_Model extends CI_Model
         $this->db->select('ic.cmpid_id cmpid_id');
         $this->db->select('user_details.name bd_name');
         $this->db->select('ud_bd.name pst_name');
-
-
-
-
         $this->db->from('init_call ic');
         $this->db->join('company_master', 'company_master.id = ic.cmpid_id', 'left');
         $this->db->join('city', 'city.id = company_master.city', 'left');
@@ -451,6 +458,354 @@ class Graph_Model extends CI_Model
         $query = $this->db->get();
 
         //    echo $this->db->last_query();die;
+        return $query->result();
+    }
+
+
+    public function getCityWiseGraphDetails($uid, $userTypeid, $sdate, $edate){
+
+            // $query=$this->db->query("Select city.id cityid, company_master.city,COUNT(*) cont from init_call LEFT JOIN user_details ON user_details.user_id=init_call.mainbd LEFT JOIN company_master ON company_master.id=init_call.cmpid_id left join city on city.city=company_master.city WHERE user_details.admin_id='$uid' and user_details.type_id='3' and user_details.status='active' GROUP BY company_master.city,city.id");
+            // echo "hii";die;
+            $this->db->select('city.id cityid');
+            $this->db->select('city.city city');
+            $this->db->select('COUNT(*) cont');
+            $this->db->from('init_call ic');
+            $this->db->join('company_master', 'company_master.id = ic.cmpid_id', 'left');
+            $this->db->join('city', 'city.id = company_master.city', 'inner');
+            $this->db->join('user_details', 'user_details.user_id = ic.mainbd');
+
+            if ($userTypeid == 2) {
+
+                $this->db->where('user_details.admin_id',$uid);
+                
+            }elseif ($userTypeid == 4) {
+                
+                $this->db->where_in('pst_co', $uid);
+
+            }elseif ($userTypeid == 9 || $userTypeid == 13) {
+                
+                $this->db->where_in('aadmin', $uid);
+            }else{
+                $this->db->where('user_id', $uid);
+            }
+
+            $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
+            $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
+
+            $this->db->group_by('city.city');
+            $this->db->group_by('city.id');
+            $query = $this->db->get();
+            // echo $this->db->last_query();die;
+
+            return $query->result();
+    }
+
+    public function getCityWiseTableDetails($uid,$userTypeid,$sdate,$edate){
+
+        $this->db->select('ic.id ic_id');
+        $this->db->select('status.clr stclr');
+        $this->db->select('status.id stid');
+        $this->db->select('status.name stname');
+        $this->db->select('company_master.compname company_name');
+        $this->db->select('company_master.address company_address');
+        $this->db->select('city.city city');
+        $this->db->select('states.state state');
+        $this->db->select('partner_master.name partner_type');
+        $this->db->from('init_call ic');
+        $this->db->join('company_master', 'company_master.id = ic.cmpid_id', 'left');
+        $this->db->join('city', 'city.id = company_master.city', 'INNER');
+        $this->db->join('states', 'states.id = company_master.state', 'left');
+        $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
+        $this->db->join('status', 'status.id = ic.cstatus', 'left');
+        $this->db->join('user_details', 'user_details.user_id = ic.mainbd', 'left');
+
+        if ($userTypeid == 2) {
+
+            $this->db->where('user_details.admin_id',$uid);
+            
+        }elseif ($userTypeid == 4) {
+            
+            $this->db->where_in('pst_co', $uid);
+
+        }elseif ($userTypeid == 9 || $userTypeid == 13) {
+            
+            $this->db->where_in('aadmin', $uid);
+        }else{
+            $this->db->where('user_id', $uid);
+        }
+
+        $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
+        $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
+
+        // $this->db->group_by('company_master.city');
+        $this->db->group_by('city.id');
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+
+        return $query->result();
+    }
+
+    public function getPartnerWiseGraphDetails($uid,$userTypeid,$sdate,$edate,$partnerType){
+
+        $this->db->select('partner_master.id PartnerMasterID');
+        $this->db->select('partner_master.name PartnerMasterName');
+        $this->db->select('partner_master.clr PartnerMasterclr');
+        $this->db->select('COUNT(*) cont');
+        $this->db->from('init_call ic');
+        $this->db->join('company_master', 'company_master.id = ic.cmpid_id', 'left');
+        $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
+        $this->db->join('user_details', 'user_details.user_id = ic.mainbd');
+
+        if ($userTypeid == 2) {
+
+            $this->db->where('user_details.admin_id',$uid);
+            
+        }elseif ($userTypeid == 4) {
+            
+            $this->db->where_in('pst_co', $uid);
+
+        }elseif ($userTypeid == 9 || $userTypeid == 13) {
+            
+            $this->db->where_in('aadmin', $uid);
+        }else{
+            $this->db->where('user_id', $uid);
+        }
+
+        if ($partnerType != '') {
+
+            $this->db->where_in('company_master.partnerType_id', $partnerType);
+        }
+
+
+        $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
+        $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
+
+        // $this->db->group_by('PartnerMasterName');
+        $this->db->group_by('PartnerMasterID');
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+
+        return $query->result();
+    }
+
+    public function getPartnerWiseTableDetails($uid,$userTypeid,$sdate,$edate,$partnerType){
+
+        // echo $partnerType;die;
+        $this->db->select('ic.id ic_id');
+        $this->db->select('status.clr stclr');
+        $this->db->select('status.id stid');
+        $this->db->select('status.name stname');
+        $this->db->select('company_master.compname company_name');
+        $this->db->select('company_master.address company_address');
+        $this->db->select('city.city city');
+        $this->db->select('states.state state');
+        $this->db->select('partner_master.name partner_typeName');
+        $this->db->select('partner_master.id partner_typeID');
+        $this->db->select('partner_master.clr PartnerMasterclr');
+        $this->db->from('init_call ic');
+        $this->db->join('company_master', 'company_master.id = ic.cmpid_id', 'left');
+        $this->db->join('city', 'city.id = company_master.city', 'left');
+        $this->db->join('states', 'states.id = company_master.state', 'left');
+        $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
+        $this->db->join('status', 'status.id = ic.cstatus', 'left');
+        $this->db->join('user_details', 'user_details.user_id = ic.mainbd', 'left');
+        
+        
+        if ($userTypeid == 2) {
+
+            $this->db->where('user_details.admin_id',$uid);
+            
+        }elseif ($userTypeid == 4) {
+            
+            $this->db->where_in('pst_co', $uid);
+
+        }elseif ($userTypeid == 9 || $userTypeid == 13) {
+            
+            $this->db->where_in('aadmin', $uid);
+        }else{
+            $this->db->where('user_id', $uid);
+        }
+
+
+        if ($partnerType != '') {
+
+            $this->db->where_in('company_master.partnerType_id', $partnerType);
+        }
+    
+        $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
+        $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
+
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+
+        return $query->result();
+    
+    }
+
+    public function getCategoryWiseGraphDetails($uid,$userTypeid,$sdate,$edate,$category){
+
+        // print_r($category);die;
+        $this->db->select("
+                COUNT(CASE WHEN topspender != 'yes' AND focus_funnel != 'yes' AND upsell_client != 'yes' AND keycompany != 'yes' AND pkclient != 'yes' AND priorityc != 'yes' THEN 1 END) AS nocat,
+                COUNT(CASE WHEN topspender = 'yes' THEN 1 END) AS topspender,
+                COUNT(CASE WHEN focus_funnel = 'yes' THEN 1 END) AS focus_funnel,
+                COUNT(CASE WHEN upsell_client = 'yes' THEN 1 END) AS upsell_client,
+                COUNT(CASE WHEN keycompany = 'yes' THEN 1 END) AS keycompany,
+                COUNT(CASE WHEN pkclient = 'yes' THEN 1 END) AS pkclient,
+                COUNT(CASE WHEN priorityc = 'yes' THEN 1 END) AS priorityc
+            ");
+
+        
+        $this->db->from('init_call ic');
+        $this->db->join('user_details', 'user_details.user_id = ic.mainbd','left');
+        $this->db->join('company_master', 'company_master.id = ic.cmpid_id', 'left');
+        $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
+        if ($userTypeid == 2) {
+
+            $this->db->where('user_details.admin_id',$uid);
+            
+        }elseif ($userTypeid == 4) {
+            
+            $this->db->where_in('pst_co', $uid);
+
+        }elseif ($userTypeid == 9 || $userTypeid == 13) {
+            
+            $this->db->where_in('aadmin', $uid);
+        }else{
+            $this->db->where('user_id', $uid);
+        }
+
+        if ($category != '') {
+
+            foreach ($category as $singleCategory) {
+
+                if ($singleCategory == 'topspender') {
+
+                     $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'focus_funnel') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'upsell_client') {
+                    
+                    $this->db->or_where('upsell_client', 'yes');
+
+                }
+                if($singleCategory == 'keycompany') {
+                    
+                    $this->db->or_where('keycompany', 'yes');
+
+                }
+                if($singleCategory == 'pkclient ') {
+                    
+                    $this->db->or_where('pkclient', 'yes'); 
+                }
+                if($singleCategory == 'priorityc ') {
+                    
+                    $this->db->or_where('priorityc', 'yes');
+                }
+            }  
+
+        }
+
+
+        $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
+        $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
+
+        $query = $this->db->get();
+
+        // echo $this->db->last_query();die;
+        return $query->result();
+    }
+
+    public function getCategoryWiseTableDetails($uid,$userTypeid,$sdate,$edate,$category){
+
+        $this->db->select('ic.id ic_id');
+        $this->db->select('ic.topspender topspender');
+        $this->db->select('ic.focus_funnel focus_funnel');
+        $this->db->select('ic.upsell_client upsell_client');
+        $this->db->select('ic.keycompany keycompany');
+        $this->db->select('ic.pkclient pkclient');
+        $this->db->select('ic.priorityc priorityc');
+        $this->db->select('status.clr stclr');
+        $this->db->select('status.id stid');
+        $this->db->select('status.name stname');
+        $this->db->select('company_master.compname company_name');
+        $this->db->select('company_master.address company_address');
+        $this->db->select('city.city city');
+        $this->db->select('states.state state');
+        $this->db->select('partner_master.name partner_typeName');
+        $this->db->select('partner_master.id partner_typeID');
+        $this->db->select('partner_master.clr PartnerMasterclr');
+        $this->db->from('init_call ic');
+        $this->db->join('company_master', 'company_master.id = ic.cmpid_id', 'left');
+        $this->db->join('city', 'city.id = company_master.city', 'left');
+        $this->db->join('states', 'states.id = company_master.state', 'left');
+        $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
+        $this->db->join('status', 'status.id = ic.cstatus', 'left');
+        $this->db->join('user_details', 'user_details.user_id = ic.mainbd', 'left');
+        
+        
+        if ($userTypeid == 2) {
+
+            $this->db->where('user_details.admin_id',$uid);
+            
+        }elseif ($userTypeid == 4) {
+            
+            $this->db->where_in('pst_co', $uid);
+
+        }elseif ($userTypeid == 9 || $userTypeid == 13) {
+            
+            $this->db->where_in('aadmin', $uid);
+        }else{
+            $this->db->where('user_id', $uid);
+        }
+
+        if ($category != '') {
+
+            foreach ($category as $singleCategory) {
+
+                if ($singleCategory == 'topspender') {
+
+                     $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'focus_funnel') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'upsell_client') {
+                    
+                    $this->db->or_where('upsell_client', 'yes');
+
+                }
+                if($singleCategory == 'keycompany') {
+                    
+                    $this->db->or_where('keycompany', 'yes');
+
+                }
+                if($singleCategory == 'pkclient ') {
+                    
+                    $this->db->or_where('pkclient', 'yes'); 
+                }
+                if($singleCategory == 'priorityc ') {
+                    
+                    $this->db->or_where('priorityc', 'yes');
+                }
+            }  
+
+        }
+
+        $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
+        $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
+
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+
         return $query->result();
     }
 }

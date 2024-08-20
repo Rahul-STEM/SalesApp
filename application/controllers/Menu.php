@@ -8855,20 +8855,16 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $tdate=date('Y-m-d H:i:s');
         $taskList = array();
-        // $userId = '100192';
-        // $userList = '';
+
         if(isset($_POST['userId'])){
 
-            // $userId = '100192';
-            // $tdate = '2024-07-20';
             $userId = $_POST['userId'];
-            // echo $userId;die;
             $taskList = $this->Menu_model->getTasks($userId,$tdate);
-            // $taskList = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($userId,$tdate);
+
         }
-        // else{
-        //     $userId = '100192';
-        // }
+        else{
+            $userId = '';
+        }
 
         if(!empty($user)){
             $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId]);
@@ -8878,7 +8874,6 @@ class Menu extends CI_Controller {
     }
 
     public function getTaskByUser(){
-        // var_dump($_POST);die;
 
         $user = $this->session->userdata('user');
         $data['user'] = $user;

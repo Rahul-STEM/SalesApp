@@ -52,20 +52,11 @@
                                             <select class="custom-select rounded-0" name="status[]" id="status" multiple>
                                                 <option value="select_all">Select All</option>
                                                 <?php foreach($status as $SingleStatus) { ?>
-                                                    <option value="<?= $SingleStatus->id ?>"><?= $SingleStatus->name ?></option>
+                                                    <option value="<?= $SingleStatus->id ?>" <?= in_array($SingleStatus->id, $SelectedStatus) ? 'selected' : '' ?>><?= htmlspecialchars($SingleStatus->name) ?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
                                     </div>
-
-                                    <!-- Users -->
-                                    <!-- <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Select User</label>
-                                            <select id="user" class="custom-select rounded-0" name="user[]" data-live-search="true" multiple>
-                                            </select>
-                                        </div>
-                                    </div> -->
 
                                     <div class="col-lg-3 col-sm-6">
                                         <br>
@@ -99,131 +90,10 @@
                                             <div class="card">
                                                 <div class="card-header">
                                                     <div class="row">
-                                                        <?php foreach ($GraphData as $GraphDataSingle) { 
-                                                            // var_dump($GraphDataSingle);
-                                                            ?>
-                                                            <div class="col-md-2 mb-2" >
-                                                                <div class="card card p-2 col-sm m-auto bg-light" data-partnerType1="<?= htmlspecialchars($GraphDataSingle->PartnerMasterName) ?>">
-                                                                    <strong>
-                                                                        <a href="#" style="color:<?=$GraphDataSingle->PartnerMasterclr?>">
-                                                                            <?=$GraphDataSingle->PartnerMasterName?> - <?=$GraphDataSingle->cont?>
-                                                                        </a>
-                                                                    </strong>
-                                                                </div>
-                                                            </div>
-                                                        <?php }?>
-                                                    </div>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                    <?php foreach($TableData as $TableDataGrid){
-                                                        $tblc=$this->Graph_Model->get_tblbyidwithremark($TableDataGrid->ic_id);
-                                                        if (sizeof($tblc) != 0) {
-                                                            $remark=$tblc[0]->remarks;
-                                                            $lastUpdateDate = $tblc[0]->updateddate;
-                                                            $currentDate = new DateTime();
-                                                            // var_dump($currentDate);die;
-                                                           $NoUpdateSince = date_diff_format($lastUpdateDate, $currentDate->format('Y-m-d H:i:s'));
-                                                        }else{
-                                                            $remark= "";
-                                                            $lastUpdateDate = "";
-                                                            $NoUpdateSince = "";
-                                                        }   
-                                                        ?> 
-                                                        <div class="col-md-4 mb-4 filter-item" data-partnerType1="<?= htmlspecialchars($TableDataGrid->partner_typeName) ?>">
-                                                            <div class="card-body p-3 border rounded border-success hover-div d-flex flex-column align-items-stretch h-100 text-dark">
-                                                                <!-- City : <br>
-                                                                <strong><?= $TableDataGrid->city ?></strong><hr> -->
-                                                                Current Status : <br>
-                                                                <strong><?= $TableDataGrid->stname ?></strong><hr>
-                                                                Company Name : <br>
-                                                                <strong><?= $TableDataGrid->company_name ?></strong><hr>
-                                                                Partner Type : <br>
-                                                                <strong style="color:<?=$TableDataGrid->PartnerMasterclr?>"><?= $TableDataGrid->partner_typeName ?></strong><hr>
-                                                                Current Remark<br><b style=""><?=$remark?></b><hr>
-                                                                Last Action Date<br><b><?=$lastUpdateDate?></b><hr>
-                                                                Same Status Since<br><b><?=$NoUpdateSince?></b><hr>
-                                                                <div class="rounded-circle bg-danger" style="position: absolute;bottom: -10px; left: 40%; transform: translateX(-50%); width: 20px; height: 20px;"></div>
-                                                                <div class="rounded-circle bg-danger" style="position: absolute;bottom: -10px; left: 60%; transform: translateX(-50%); width: 20px; height: 20px;"></div>
-                                                            </div>
-                                                        </div>
-                                                    <?php } ?>
-                                                    </div>
-                                                </div>
-                                            </div>  
-                                        </div>
-                                        <div class="tab-pane fade" id="TableView" role="tabpanel" aria-labelledby="nav_TableView">
-                                            <div class="card card-body">
-                                                <div class="table-responsive" id="tbdata">
-                                                    <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                                                        <thead>
-                                                            <!-- <th>City</th> -->
-                                                            <th>Current Status</th>
-                                                            <th>Company Name</th>
-                                                            <th>Partner Type</th>
-                                                            <th>Current Remark</th>
-                                                            <th>Last Action Date</th>
-                                                            <th>Same Status Since</th>
-                                                        </thead>
-                                                        <tbody>
-                                                            <?php 
 
-                                                                $i=1;
-                                                                foreach($TableData as $TableRow){ 
-                                                                    $tblc=$this->Graph_Model->get_tblbyidwithremark($TableRow->ic_id);
-                                                                        if (sizeof($tblc) != 0) {
-                                                                            $remark=$tblc[0]->remarks;
-                                                                            $lastUpdateDate = $tblc[0]->updateddate;
-                                                                            $currentDate = new DateTime();
-                                                                            // var_dump($currentDate);die;
-                                                                        $NoUpdateSince = date_diff_format($lastUpdateDate, $currentDate->format('Y-m-d H:i:s'));
-                                                                        }else{
-                                                                            $remark= "";
-                                                                            $lastUpdateDate = "";
-                                                                            $NoUpdateSince = "";
-                                                                        }   
-                                                                    ?> 
-                                                                    <tr>
-                                                                        <!-- <td><?= $TableRow->city ?></td> -->
-                                                                        <td><?= $TableRow->stname ?></td>
-                                                                        <td><?= $TableRow->company_name ?></td>
-                                                                        <td style="color:<?=$TableRow->PartnerMasterclr?>"><?= $TableRow->partner_typeName ?></td>
-                                                                        <td><?= $remark ?></td>
-                                                                        <td><?= $lastUpdateDate ?></td>
-                                                                        <td><?= $NoUpdateSince ?></td>
-                                                                    </tr>
-                                                                <?php } ?>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                           
-                                        </div>
-                                        <div class="tab-pane fade" id="TabView" role="tabpanel" aria-labelledby="nav_TabView">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                <?php foreach ($GraphData as $GraphDataGrid) { 
-                                                    
-                                                    $formId = 'hiddenForm_' . htmlspecialchars($GraphDataGrid->PartnerMasterID);
-                                                    
-                                                    ?>
-                                                    <form id="<?= $formId; ?>" action="<?= base_url(); ?>GraphNew/SinglePartnerWiseData/<?=$GraphDataGrid->PartnerMasterID?>" method="POST" style="display: none;">
-
-                                                        <input type="hidden" name="partnetType_id" value="<?= htmlspecialchars($GraphDataGrid->PartnerMasterID); ?>">
-                                                        <input type="hidden" name="sdate" value="<?= htmlspecialchars($sdate); ?>">
-                                                        <input type="hidden" name="edate" value="<?= htmlspecialchars($edate); ?>">
-                                                    </form>
-                                                    <div class="col-md-3 mb-2" >
-                                                        <div class="card card p-3 col-sm m-auto bg-light">
-                                                            <strong>
-                                                                <a href="#" onclick="document.getElementById('<?= $formId; ?>').submit();"  style="color:<?=$GraphDataGrid->PartnerMasterclr ?>"><?=$GraphDataGrid->PartnerMasterName?> - <?=$GraphDataGrid->cont?>
-	                                                            </a>
-                                                            </strong>
-                                                        </div>
                                                     </div>
-                                                    <?php } ?>
                                                 </div>
-                                            </div>
+                                            </div> 
                                         </div>
                                     </div>
                                 </div>
@@ -238,6 +108,96 @@
 
 <script src="https://www.gstatic.com/charts/loader.js"></script>
 
+<script type="text/javascript">
+google.charts.load("current", { packages: ['corechart'] });
+
+
+google.charts.setOnLoadCallback(drawStackedColumnChart);
+    function drawStackedColumnChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Status');
+        data.addColumn('number', '0-10');
+        data.addColumn({type: 'string', role: 'annotation'});
+        data.addColumn('number', '10-20');
+        data.addColumn({type: 'string', role: 'annotation'});
+        data.addColumn('number', '20-30');
+        data.addColumn({type: 'string', role: 'annotation'});
+        data.addColumn('number', '30+');
+        data.addColumn({type: 'string', role: 'annotation'});
+        data.addColumn({type: 'string', role: 'annotationText'});
+        data.addRows([
+
+        <?php
+        
+        // $status = $this->Menu_model->get_status();
+
+        foreach($SelectedStatus as $SelectedSingleStatus){
+            // SelectedStatus
+            // $SingleStatus = $SingleStatus->id;
+
+            if($SelectedSingleStatus !='14'){
+
+            // $opensday = $this->Menu_model->get_opensday($uid,$stid,$sd,$ed);
+            $opensday = SameStatusTillDate($uid, $userTypeid, $sdate, $edate, $SelectedSingleStatus);
+            
+            // echo "<pre>";
+            // var_dump($opensday);die;
+            $countLessThan10 = 0;
+            $countLessThan20 = 0;
+            $countLessThan30 = 0;
+            $countMoreThan30 = 0;
+
+            foreach ($opensday as $object) {
+
+                if ($object->opensday <= 10) {
+                        $countLessThan10++;
+                    } elseif ($object->opensday <= 20) { // Corrected condition
+                        $countLessThan20++;
+                    } elseif ($object->opensday <= 30) { // Corrected condition
+                        $countLessThan30++;
+                    } else {
+                        $countMoreThan30++;
+                    }
+            }
+            ?>
+            ['<?=$object->name?>', <?=$countLessThan10?>, '<?=$countLessThan10?>', <?=$countLessThan20?>, '<?=$countLessThan20?>', <?=$countLessThan30?>, '<?=$countLessThan30?>', <?=$countMoreThan30?>, '<?=$countMoreThan30?>', '<?=$SelectedSingleStatus?>'],
+            <?php
+            }
+        }
+        ?>
+        ]);
+        
+        var options = {
+           
+            legend: { position: 'right' },
+            isStacked: true,
+            hAxis: {
+                title: 'Status',
+            },
+            vAxis: {
+                title: 'Count',
+                minValue: 0,
+            },
+            tooltip: {
+                trigger: 'both',
+                isHtml: true,
+            },
+            annotations: {
+                alwaysOutside: false,
+                textStyle: {
+                fontSize: 8,
+                },
+            },
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('CompanyWithSameStatusChart'));
+
+        chart.draw(data, options);
+    }
+
+</script>
+
+
 <script>
     $("#example1").DataTable({
       "responsive": false, "lengthChange": false, "autoWidth": false,
@@ -246,117 +206,51 @@
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
 
     // Get all category cards
-    const categoryCards = document.querySelectorAll('.card-header .card');
-    // Get all filter items
-    const filterItems = document.querySelectorAll('.filter-item');
+        const categoryCards = document.querySelectorAll('.card-header .card');
+        // Get all filter items
+        const filterItems = document.querySelectorAll('.filter-item');
 
     // Function to filter grid items
-    function filterItemsByCategory(partnerType) {
-        filterItems.forEach(item => {
-            // Check if the data-partnerType matches the selected partnerType
-            if (item.dataset.partnertype1 === partnerType || partnerType === 'All') {
-                item.style.display = 'block';  // Show item
-            } else {
-                item.style.display = 'none';   // Hide item
+            function filterItemsByCategory(partnerType) {
+                filterItems.forEach(item => {
+                    // Check if the data-partnerType matches the selected partnerType
+                    if (item.dataset.partnertype1 === partnerType || partnerType === 'All') {
+                        item.style.display = 'block';  // Show item
+                    } else {
+                        item.style.display = 'none';   // Hide item
+                    }
+                });
             }
-        });
-    }
 
-    // Attach click event listeners to category cards
-    categoryCards.forEach(card => {
-        card.addEventListener('click', function() {
-            const partnerType = this.dataset.partnertype1;
-            console.log('Selected Partner Type:', partnerType); // Debugging
-            filterItemsByCategory(partnerType);
-        });
+            // Attach click event listeners to category cards
+            categoryCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const partnerType = this.dataset.partnertype1;
+                    console.log('Selected Partner Type:', partnerType); // Debugging
+                    filterItemsByCategory(partnerType);
+                });
+            });
+
+            // Optional: Show all items by default
+            filterItemsByCategory('All');
     });
-
-    // Optional: Show all items by default
-    filterItemsByCategory('All');
-});
-</script>
-
-<script>
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
-    
-    function drawChart() {
-
-        const GraphData = <?php echo json_encode($GraphData); ?>;
-
-        const code = '';
-        // console.log(chartData);
-        const filteredData = GraphData.filter(item => item.PartnerMasterName && item.cont);
-
-        const labels = filteredData.map(item => item.PartnerMasterName);
-        const dataValues = filteredData.map(item => Number(item.cont));
-
-        const dataArray = [
-            ['Partners', 'Count']  // Adjust column names as needed
-        ];
-
-        for (let i = 0; i < labels.length; i++) {
-            dataArray.push([labels[i], dataValues[i]]);
-        }
-
-        const data = google.visualization.arrayToDataTable(dataArray);
-        const options = {
-            title:'Partner Wise Funnel Graph',
-            is3D:true
-        };
-
-        const chart = new google.visualization.PieChart(document.getElementById('CompanyWithSameStatusChart'));
-
-        chart.draw(data, options);
-    }
-</script>
-
-<script>
-    // Function to handle radio button change
-    function handleRadioChange() {
-        const selectedRadio = document.querySelector('input[name="radioFilter"]:checked');
-        
-        if (selectedRadio) {
-            const selectedOption = selectedRadio.id;
-            
-            const filterByClusterID = document.getElementById('cluster');
-            const filterByRoleID = document.getElementById('userType');
-            
-            if (selectedOption === 'filterByCluster') {
-                
-                filterByClusterID.disabled = false;
-                filterByRoleID.disabled = true;
-
-            } else if (selectedOption === 'filterByRole') {
-
-                filterByClusterID.disabled = true;
-                filterByRoleID.disabled = false;
-            }
-        }
-    }
-
-    // Attach change event listener to all radio buttons
-    document.querySelectorAll('input[name="option"]').forEach(radio => {
-        radio.addEventListener('change', handleRadioChange);
-    });
-
 </script>
 
 <script>
     $(document).ready(function() {
         
-        $("#partnerType").change(function(){
+        $("#status").change(function(){
 
             var selectedPartnerType = $(this).val(); 
 
             if (selectedPartnerType.includes('select_all')) {
             // Select all options
-                $('#partnerType option').prop('selected', true);
+                $('#status option').prop('selected', true);
                 // Remove 'select_all' from the selected values
-                selectedPartnerType = $('#partnerType option').map(function() {
+                selectedPartnerType = $('#status option').map(function() {
                     return this.value !== 'select_all' ? this.value : null;
                 }).get();
 

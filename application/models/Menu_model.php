@@ -7654,7 +7654,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         // $query=$this->db->query("SELECT TIMESTAMPDIFF(DAY,MAX(updateddate),now()) opensday FROM tblcallevents LEFT JOIN init_call ON init_call.id=tblcallevents.cid_id WHERE init_call.cstatus=tblcallevents.nstatus_id and cast(tblcallevents.updateddate as DATE) Between '2023-04-01' and '2024-03-31' and tblcallevents.cid_id IN (Select id from init_call WHERE init_call.mainbd='$uid') and tblcallevents.nextCFID!='0' and init_call.cstatus='$sid' GROUP BY init_call.id");
 
         $query=$this->db->query("SELECT TIMESTAMPDIFF(DAY,MAX(updateddate),now()) opensday FROM tblcallevents LEFT JOIN init_call ON init_call.id=tblcallevents.cid_id WHERE init_call.cstatus=tblcallevents.nstatus_id and tblcallevents.cid_id IN (Select id from init_call WHERE init_call.mainbd='$uid') and tblcallevents.nextCFID!='0' and init_call.cstatus='$sid' GROUP BY init_call.id");
-        // echo $this->db->last_query();die;
+        echo $this->db->last_query();die;
         return $query->result();
     }
 
@@ -11200,8 +11200,6 @@ ORDER BY tblcallevents.updateddate");
         $uyid =  $user['type_id'];
 
         $query=$this->db->query("SELECT * FROM user_details where  admin_id='$uid' and status='active'");
-
-
         // echo $this->db->last_query(); exit;
         return $query->result();
     }
@@ -11482,6 +11480,7 @@ public function get_userForTask($uid,$uyid){
         $this->db->where('aadmin',$uid);
     }
 
+    $this->db->where('status','active');
     $query = $this->db->get();
         // echo  $this->db->last_query(); die;
     return $query->result();

@@ -14,6 +14,7 @@ class GraphNew extends CI_Controller {
         parent::__construct();
         // Load common libraries, helpers, or models here
         $this->load->helper('url');
+        $this->load->helper('SameStatusTillDate_helper');
         $this->load->library('session');
         $this->load->library('pagination');
         $this->load->model('Graph_Model');
@@ -423,15 +424,16 @@ class GraphNew extends CI_Controller {
             $edate = date('Y-m-d');
         }
 
-        if(isset($_POST['category'])){
+        if(isset($_POST['status'])){
 
-            $category = array_filter($_POST['category'], function($value) {
+            $SelectedStatus = array_filter($_POST['status'], function($value) {
                 return $value !== 'select_all';
             });
 
+            
         }else{
 
-            $category = '';
+            $SelectedStatus = '';
         }
 
         // var_dump($category);die;
@@ -447,17 +449,17 @@ class GraphNew extends CI_Controller {
         $status = $this->Graph_Model->getStatus();
 
 
-        // $GraphData = $this->Graph_Model->getCategoryWiseGraphDetails($uid,$userTypeid,$sdate,$edate,$category);
-        // $TableData = $this->Graph_Model->getCategoryWiseTableDetails($uid,$userTypeid,$sdate,$edate,$category);
+        // $GraphData = $this->Graph_Model->getCompanyWithSameStatusGraphDetails($uid,$userTypeid,$sdate,$edate,$SelectedStatus);
+        $TableData = $this->Graph_Model->getCompanyWithSameStatusTableDetails($uid,$userTypeid,$sdate,$edate,$SelectedStatus);
         
         $GraphData = '';
-        $TableData = '';
+        // $TableData = '';
         // var_dump($TableData);die;
 
         if(!empty($user)){
             $this->load->view('include/header');
             $this->load->view($dep_name.'/nav',['uid'=>$uid,'user'=>$user]);
-            $this->load->view('Graphs/CompanyWithSameStatusSinceFunnleAnalysis',['uid'=>$uid,'user'=>$user, 'sdate'=>$sdate,'edate'=>$edate,'status'=>$status,'TableData'=>$TableData,'roles'=>$roles,'GraphData'=>$GraphData]);
+            $this->load->view('Graphs/CompanyWithSameStatusSinceFunnleAnalysis',['uid'=>$uid,'user'=>$user, 'sdate'=>$sdate,'edate'=>$edate,'SelectedStatus'=>$SelectedStatus,'status'=>$status,'TableData'=>$TableData,'userTypeid'=>$userTypeid,'GraphData'=>$GraphData]);
             $this->load->view('include/footer');
         }else{
             redirect('Menu/main');

@@ -17686,7 +17686,28 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-    public function CheckTaskDetailsByUser($userid,$taskdateselect){
+
+
+    // public function CheckTaskDetailsByUser($userid,$taskdateselect){
+       
+    //     $user = $this->session->userdata('user');
+    //     $data['user'] = $user;
+    //     $uid = $user['user_id'];
+    //     $uyid =  $user['type_id'];
+    //     $this->load->model('Menu_model');
+    //     $this->load->library('session');
+    //     $dt=$this->Menu_model->get_utype($uyid);
+    //     $dep_name = $dt[0]->name;
+    //     //  $totalttaskdata =$this->Menu_model->get_totaltdetails($userid,$taskdateselect);
+    // //    $totalttask =$this->Menu_model->get_totaltdetails($userid,$taskdate);
+    //     if(!empty($user)){
+    //         $this->load->view($dep_name.'/CheckTaskDetailsByUser',['uid'=>$uid,'user'=>$user,'tuser_uid'=>$userid,'taskdate'=>$taskdateselect,'selected_date' => $selected_date]);
+    //     }else{
+    //         redirect('Menu/main');
+    //     }
+    // }
+
+  public function CheckTaskDetailsByUser($userid,$taskdateselect){
        
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -17696,16 +17717,20 @@ class Menu extends CI_Controller {
         $this->load->library('session');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-        //  $totalttaskdata =$this->Menu_model->get_totaltdetails($userid,$taskdateselect);
-    //    $totalttask =$this->Menu_model->get_totaltdetails($userid,$taskdate);
+        $selected_date = $this->input->post('adate');
+
+        if(isset($_POST['adate'])){
+            $taskdateselect = $_POST['adate'];
+        }else{
+            $taskdateselect = date("Y-m-d");
+        }
+    
         if(!empty($user)){
-            $this->load->view($dep_name.'/CheckTaskDetailsByUser',['uid'=>$uid,'user'=>$user,'tuser_uid'=>$userid,'taskdate'=>$taskdateselect]);
+            $this->load->view($dep_name.'/CheckTaskDetailsByUser',['uid'=>$uid,'user'=>$user,'tuser_uid'=>$userid,'taskdate'=>$taskdateselect, 'selected_date' => $selected_date]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
 
 
     public function updatecompanyOpenOrOpenRPM(){
@@ -18250,40 +18275,93 @@ public function addplantask12(){
 
 
 
+// public function approveDailyTask(){
+
+//     $this->load->model('Menu_model');
+//     $this->load->library('session');
+  
+//     $user = $this->session->userdata('user');
+//     $data['user'] = $user;
+//     $uid = $user['user_id'];
+//     $uyid =  $user['type_id'];
+
+//     $status = $this->input->post('status');
+//     $tid = $this->input->post('tid');
+//     $suser = $this->input->post('suser');
+
+//     $cdate = date("Y-m-d");
+//     $taskcount = sizeof($tid);
+
+//     if($status){
+//         if($taskcount > 0){
+//         foreach($tid as $id){
+//             if($status == 'Approve')
+//             {
+//                 $query =  $this->db->query("UPDATE `tblcallevents` SET `approved_status` = 1, `approved_by`='$uid' WHERE  id = $id");
+//                 //echo $id;
+//             }
+//             if($status == 'Reject')
+//             {
+//                 $query =  $this->db->query("UPDATE `tblcallevents` SET `approved_status` = 0, `approved_by`='$uid' WHERE  id = $id");
+//                 //echo $id;
+//             }
+
+//             //  echo "<pre>";
+//             //  print_r($tid);
+
+//         }
+
+//         $this->session->set_flashdata('success_message','Total '.$taskcount.' Task '.$status.' Successfully');
+//         redirect('Menu/CheckTaskDetailsByUser/'.$suser.'/'.$cdate);
+//         }else{
+//             $this->session->set_flashdata('error_message','* Select At List one Task For '.$status);
+//             redirect('Menu/CheckTaskDetailsByUser/'.$suser.'/'.$cdate);
+//         }
+//     }else{
+//         $this->session->set_flashdata('error_message','* Please Select Valid Approve / Reject Status');
+//         redirect('Menu/CheckTaskDetailsByUser/'.$suser.'/'.$cdate);
+//     }
+// }
+
+
 public function approveDailyTask(){
 
     $this->load->model('Menu_model');
     $this->load->library('session');
   
-    $user = $this->session->userdata('user');
+    $user   = $this->session->userdata('user');
     $data['user'] = $user;
-    $uid = $user['user_id'];
-    $uyid =  $user['type_id'];
-
+    $uid    = $user['user_id'];
+    $uyid   =  $user['type_id'];
     $status = $this->input->post('status');
-    $tid = $this->input->post('tid');
-    $suser = $this->input->post('suser');
-
-    $cdate = date("Y-m-d");
+    $tid    = $this->input->post('tid');
+    $suser  = $this->input->post('suser');
+    $cdate  = date("Y-m-d");
     $taskcount = sizeof($tid);
 
     if($status){
         if($taskcount > 0){
         foreach($tid as $id){
+
+            $taskData = $this->Menu_model->getTBLTaskByID($id);
+            $task_action_id = $taskData[0]->actiontype_id;
+
             if($status == 'Approve')
             {
                 $query =  $this->db->query("UPDATE `tblcallevents` SET `approved_status` = 1, `approved_by`='$uid' WHERE  id = $id");
-                //echo $id;
+
+                if($task_action_id == 3 || $task_action_id == 4 || $task_action_id == 17){
+                    $query =  $this->db->query("UPDATE `barginmeeting` SET `approved_status` = 1, `approved_by`='$uid' WHERE  tid = $id");
+                }
             }
             if($status == 'Reject')
             {
                 $query =  $this->db->query("UPDATE `tblcallevents` SET `approved_status` = 0, `approved_by`='$uid' WHERE  id = $id");
-                //echo $id;
+
+                if($task_action_id == 3 || $task_action_id == 4 || $task_action_id == 17){
+                    $query =  $this->db->query("UPDATE `barginmeeting` SET `approved_status` = 0, `approved_by`='$uid' WHERE  tid = $id");
+                }
             }
-
-            //  echo "<pre>";
-            //  print_r($tid);
-
         }
 
         $this->session->set_flashdata('success_message','Total '.$taskcount.' Task '.$status.' Successfully');
@@ -18298,6 +18376,23 @@ public function approveDailyTask(){
     }
 }
 
+
+public function selfAssign($tableId, $selfAssign, $taskdate){
+
+        $data = array(
+            'self_assign' => $selfAssign,
+        );
+
+        $this->db->where('id', $tableId);
+        $this->db->update('tblcallevents', $data);
+
+       $query = $this->db->query("SELECT * FROM `tblcallevents` WHERE `id` = $tableId");
+       $result = $query->result_array();
+
+        $this->session->set_flashdata('success_message','Request for self assign was sent successfully to the user');
+        redirect('Menu/CheckTaskDetailsByUser/'.$result[0]['user_id'].'/'.$taskdate);
+    }
+
     public function AssignTaskById($tableId, $taskdate)
     {
         $this->load->model('Menu_model');
@@ -18310,9 +18405,130 @@ public function approveDailyTask(){
         $dep_name = $dt[0]->name;
         $taskDetails = $this->Menu_model->get_tbldata($tableId);
         $userdtl = $this->Menu_model->get_userbyid($taskDetails[0]->user_id);
-        //echo"<pre>taskDetails ";print_r($taskDetails);exit;
         $this->load->view($dep_name.'/AssignTaskById',['user'=>$user,'uid'=>$uid,'tableId'=>$tableId, 'taskDetails' => $taskDetails, 'userdtl' => $userdtl]);
     }
+    public function getPurposeByAction(){
+        $inid= $this->input->post('initId');
+        $aid= $this->input->post('aId');
+        $this->load->model('Menu_model');
+        $da = '';
+        $inid = rtrim($inid , ',');
+        $remark=$this->Menu_model->get_purposebyinidnew($aid,$inid);
+        echo json_encode($remark);
+    }
+
+     public function dailyTaskAssignById(){
+        $this->load->model('Menu_model');
+        $cuser = $this->session->userdata('user');
+        $taskDetailsJson= $this->input->post('taskDetails');
+        $taskDetails    = json_decode($taskDetailsJson, true);
+        $eventId        = $taskDetails[0]['id'];
+        $filterBy       = json_decode($taskDetails[0]['filter_by'], true);
+        $selectby       = "Task Assign By User Manager";
+        $task_date      = $this->input->post('date_display');
+        $time_display   = $this->input->post('time_display');
+        $current_status = $this->input->post('current_status');
+        $inid           = $this->input->post('company');
+        $ntaction       = $this->input->post('task_action');
+        $ntppose        = $this->input->post('ntppose');
+        $ntdate         = $task_date.' '.$time_display;
+        $bdid           = json_decode($taskDetails[0]['user_id'], true);
+        $approved_user  = $cuser['user_id'];
+        $query          =   $this->db->query("SELECT * FROM init_call where id='$inid'");
+        $data           =   $query->result();
+        $stid           =   $data[0]->cstatus;
+        $cmpid_id       =   $data[0]->cmpid_id;
+        $cmpDataq       =  $this->db->query("SELECT * FROM `company_contact_master` WHERE company_id = '$cmpid_id'");
+        $cmpData        = $cmpDataq->result();
+        $ccid           = $cmpData[0]->id;
+
+        $cmp_data = $this->Menu_model->get_cmpbyinid($inid);
+        $cmp_name = $cmp_data[0]->compname;
+        
+        if($ntaction == 3 || $ntaction == 4){
+
+            $tasktdata = array(
+                'lastCFID'              => '0',
+                'nextCFID'              => '0',
+                'purpose_achieved'      => 'no',
+                'fwd_date'              => $ntdate,
+                'actontaken'            => 'no',
+                'nextaction'            => 'Will Collect Data by RP Meeting',
+                'mom_received'          => 'no',
+                'appointmentdatetime'   => $ntdate,
+                'actiontype_id'         => $ntaction,
+                'assignedto_id'         => $bdid,
+                'cid_id'                => $inid,
+                'purpose_id'            => $ntppose,
+                'remarks'               => 'Will Collect Data by RP Meeting',
+                'status_id'             => $stid,
+                'user_id'               => $bdid,
+                'date'                  => $ntdate,
+                'updateddate'           => $ntdate,
+                'updation_data_type'    => 'updated',
+                'plan'                  => '1',
+                'selectby'              => $selectby,
+                'approved_status'       => 1,
+                'approved_by'           => $approved_user,
+                'self_assign'           => 2,
+            );
+            
+            // Insert data into tblcallevents
+            $this->db->insert('tblcallevents',$tasktdata);
+            $cntid = $this->db->insert_id();
+        
+            $meeting_data = array(
+                'storedt' => $ntdate,
+                'user_id' => $bdid,
+                'cid'     => $cmpid_id,
+                'ccid'    => $ccid,
+                'inid'    => $inid,
+                'tid'     => $cntid,
+                'company_name' => $cmp_name,
+                'approved_status' => 1,
+                'approved_by' => $approved_user
+            );
+            
+            $this->db->insert('barginmeeting', $meeting_data);
+            $bmid = $this->db->insert_id();
+        }else{
+            $createtask_data = array(
+                'lastCFID' => '0',
+                'nextCFID' => '0',
+                'remarks' => '',
+                'plan' => '1',
+                'fwd_date' => $ntdate,
+                'appointmentdatetime' => $ntdate,
+                'actiontype_id' => $ntaction,
+                'purpose_id' => $ntppose,
+                'assignedto_id' => $bdid,
+                'cid_id' => $inid,
+                'status_id' => $stid,
+                'user_id' => $bdid,
+                'date' => $ntdate,
+                'updateddate' => $ntdate,
+                'selectby'      => $selectby,
+                'approved_status' => 1,
+                'approved_by'   => $approved_user,
+                'self_assign' => 2
+            );
+
+            // Insert data into tblcallevents
+            $this->db->insert('tblcallevents', $createtask_data);
+            $ntid = $this->db->insert_id();
+        }
+ 
+    $data = array(
+        'self_assign' => 2
+    );
+        // Updating the database
+        $this->db->where('id', $eventId);
+        $this->db->update('tblcallevents', $data);
+
+        $this->session->set_flashdata('success_message','Task assigned Successfuly');
+        redirect('Menu/CheckTaskDetailsByUser/'.$taskDetails[0]['user_id'].'/'.$task_date);
+    }
+
 
 public function getcmpbyStatus(){
 
@@ -18320,12 +18536,161 @@ public function getcmpbyStatus(){
         $status= $this->input->post('status');
         $this->load->model('Menu_model');
         $this->load->library('session');
-
         $cmp = $this->Menu_model->get_statuscmp($status,$uid);
-        //echo"<pre>";print_r($cmp);exit;
         echo json_encode($cmp);
     }
 
+
+    public function UserTaskViewPage(){
+        $this->load->model('Menu_model');
+        $this->load->library('session');
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        $selected_date = $this->input->post('adate');
+    
+        if(isset($_POST['adate'])){
+            $date = $_POST['adate'];
+        }else{
+            $date = date("Y-m-d");
+        }
+    
+        $taskPlanInfo = $this->Menu_model->get_tblDataByUserId($uid, $date);
+        if(!empty($user)){
+            $this->load->view($dep_name.'/UserTaskViewPage',['uid'=>$uid,'user'=>$user, 'taskPlanInfo'=> $taskPlanInfo, 'date'=>$date, 'selected_date' => $selected_date]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+
+     public function selfTaskAssignPage($tableId){
+        $this->load->model('Menu_model');
+        $this->load->library('session');
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        $date =  date('Y-m-d');
+        $taskDetails = $this->Menu_model->get_tbldata($tableId);
+        $userdtl = $this->Menu_model->get_userbyid($taskDetails[0]->user_id);
+
+        if(!empty($user)){
+            $this->load->view($dep_name.'/selfTaskAssignPage',['uid'=>$uid,'user'=>$user, 'taskDetails'=> $taskDetails, 'date'=>$date, 'userdtl' => $userdtl]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+
+
+    public function selfTaskAssign(){
+
+    $this->load->model('Menu_model');
+    $cuser = $this->session->userdata('user');
+    $taskDetailsJson= $this->input->post('taskDetails');
+    $taskDetails    = json_decode($taskDetailsJson, true);
+    $eventId        = $taskDetails[0]['id'];
+    $filterBy       = json_decode($taskDetails[0]['filter_by'], true);
+    $selectby       = "User Assigned Task via Admin Request";
+    $task_date      = $this->input->post('date_display');
+    $time_display   = $this->input->post('time_display');
+    $current_status = $this->input->post('current_status');
+    $inid           = $this->input->post('company');
+    $ntaction       = $this->input->post('task_action');
+    $ntppose        = $this->input->post('ntppose');
+    $ntdate         = $task_date.' '.$time_display;
+    $bdid           = json_decode($taskDetails[0]['user_id'], true);
+    $approved_user  = $cuser['user_id'];
+    $query          =   $this->db->query("SELECT * FROM init_call where id='$inid'");
+    $data           =   $query->result();
+    $stid           =   $data[0]->cstatus;
+    $cmpid_id       =   $data[0]->cmpid_id;
+    $cmpDataq       =  $this->db->query("SELECT * FROM `company_contact_master` WHERE company_id = '$cmpid_id'");
+    $cmpData        = $cmpDataq->result();
+    $ccid           = $cmpData[0]->id;
+
+    $cmp_data = $this->Menu_model->get_cmpbyinid($inid);
+    $cmp_name = $cmp_data[0]->compname;
+    
+    if($ntaction == 3 || $ntaction == 4){
+
+        $tasktdata = array(
+            'lastCFID'              => '0',
+            'nextCFID'              => '0',
+            'purpose_achieved'      => 'no',
+            'fwd_date'              => $ntdate,
+            'actontaken'            => 'no',
+            'nextaction'            => 'Will Collect Data by RP Meeting',
+            'mom_received'          => 'no',
+            'appointmentdatetime'   => $ntdate,
+            'actiontype_id'         => $ntaction,
+            'assignedto_id'         => $bdid,
+            'cid_id'                => $inid,
+            'purpose_id'            => $ntppose,
+            'remarks'               => 'Will Collect Data by RP Meeting',
+            'status_id'             => $stid,
+            'user_id'               => $bdid,
+            'date'                  => $ntdate,
+            'updateddate'           => $ntdate,
+            'updation_data_type'    => 'updated',
+            'plan'                  => '1',
+            'selectby'              => $selectby
+        );
+        
+        // Insert data into tblcallevents
+        $this->db->insert('tblcallevents',$tasktdata);
+        $cntid = $this->db->insert_id();
+    
+        $meeting_data = array(
+            'storedt' => $ntdate,
+            'user_id' => $bdid,
+            'cid'     => $cmpid_id,
+            'ccid'    => $ccid,
+            'inid'    => $inid,
+            'tid'     => $cntid,
+            'company_name' => $cmp_name
+        );
+        
+        $this->db->insert('barginmeeting', $meeting_data);
+        $bmid = $this->db->insert_id();
+    }else{
+        $createtask_data = array(
+            'lastCFID' => '0',
+            'nextCFID' => '0',
+            'remarks' => '',
+            'plan' => '1',
+            'fwd_date' => $ntdate,
+            'appointmentdatetime' => $ntdate,
+            'actiontype_id' => $ntaction,
+            'purpose_id' => $ntppose,
+            'assignedto_id' => $bdid,
+            'cid_id' => $inid,
+            'status_id' => $stid,
+            'user_id' => $bdid,
+            'date' => $ntdate,
+            'updateddate' => $ntdate,
+            'selectby'    => $selectby
+        );
+
+        // Insert data into tblcallevents
+        $this->db->insert('tblcallevents', $createtask_data);
+        $ntid = $this->db->insert_id();
+    }
+
+    $data = array(
+        'self_assign' => 3
+    );
+    // Updating the database
+    $this->db->where('id', $eventId);
+    $this->db->update('tblcallevents', $data);
+
+    $this->session->set_flashdata('success_message','User Assigned Task via Admin Request Successfuly !');
+    redirect('Menu/UserTaskViewPage');
+    }
 
 // public function getTotalTaskData(){
 

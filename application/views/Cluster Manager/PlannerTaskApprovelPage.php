@@ -203,135 +203,13 @@
                                             </td>
                                         </tr>
                                         <?php $i++; endforeach; ?>
-                                    
                                         </tbody>
                                       </table>
                                     </div>
                                   </div>   
                               </div>
-
                               <hr>
-
-
-                              
-
-
-
                               <hr>
-
-
-                              <div class="table-responsive">
-                                <div class="card bg-success p-3 text-center">
-                                    <h5>Total Complete Task</h5>
-                                </div>
-                                  <div class="table-responsive">
-                                    <div class="pdf-viwer">
-                                      <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                                        <thead>
-                                          <tr>
-                                            <th>Sr. no</th>
-                                            <th>User Name</th>
-                                            <!-- <th>All </th> -->
-                                            <th>Call</th>
-                                            <th>Email</th>
-                                            <th>Meeting</th>
-                                            <th>WA</th>
-                                            <th>Research</th>
-                                            <th>Social Networking</th>
-                                            <th>Social Activity</th>
-                                            <th>MOM</th>
-                                            <th>Proposal</th>
-                                            <th>Visit Meeting</th>
-                                            <th>Total Minutes</th>
-                                            <th>Check Task</th>
-                                            <th>Action</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                    <?php 
-                                    $i=1;
-                                    foreach($getbdteam as $team): 
-                                
-                                        $ttbydc = $totalDone =$this->Menu_model->get_ttbydone($team->user_id,$sdate);;
-                                        $barg=$this->Menu_model->get_bargdetail1($team->user_id,$sdate);
-                                        $totalttaskdata =$this->Menu_model->get_totaltdetailsDone($team->user_id,$sdate);
-                                      
-                                        $taskplanmincount = 0;
-
-                                        foreach($totalttaskdata as $taskdata){ 
-                                            $actiontype_id = $taskdata->actiontype_id;
-                                            if($actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==1 || $actiontype_id ==10 || $actiontype_id ==15){
-                                                $taskplanmincount = $taskplanmincount+5;
-                                            }else if($actiontype_id ==2 || $actiontype_id ==6){
-                                                $taskplanmincount = $taskplanmincount+10;
-                                            }else if($actiontype_id ==3 || $actiontype_id ==4 || $actiontype_id ==12){
-                                                $taskplanmincount = $taskplanmincount+30;
-                                            }else if($actiontype_id ==7){
-                                                $taskplanmincount = $taskplanmincount+15;
-                                            }else if($actiontype_id ==11 || $actiontype_id ==13 || $actiontype_id ==14){
-                                                $taskplanmincount = $taskplanmincount+2;
-                                            }else{
-                                                $new_datetime = $taskplanmincount;
-                                            }
-                                        }
-
-                                    ?>
-                                        <tr>
-                                            <td><?= $i; ?></td>
-                                            <td> <a href="<?=base_url();?>Menu/userDetails/<?=$team->user_id ?>"> <?= $team->name ?></a></td>
-                                            <!-- <td><?=$ttbydc[0]->ab?></td> -->
-                                            <td><?=$ttbydc[0]->a?></td>
-                                            <td><?=$ttbydc[0]->b?></td>
-                                            <td><?=$ttbydc[0]->c?></td>
-                                            <td><?=$ttbydc[0]->e?></td>
-                                            <td><?=$ttbydc[0]->h?></td>
-                                            <td><?=$ttbydc[0]->i?></td>
-                                            <td><?=$ttbydc[0]->j?></td>
-                                            <td><?=$ttbydc[0]->f?></td>
-                                            <td><?=$ttbydc[0]->g?></td>
-                                            <td>
-                                            <?php
-                                                $bm=0;
-                                                foreach($barg as $bgs){
-                                                    $bs = $bgs->status;
-                                                    if($bs=='Pending'){$bm++;}
-                                                }
-                                                ?>
-                                                <?=$bm?>
-                                            </td>
-                                         
-                                            <td>
-                                                <?php
-                                                $hours = floor($taskplanmincount / 60);
-                                                $remainingMinutes = $taskplanmincount % 60;
-                                                echo "$hours hours and $remainingMinutes minutes.";
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                <a href="<?=base_url();?>Menu/CheckTaskDetailsByUser/<?=$team->user_id?>/<?= $sdate; ?>"> Show </a>
-                                            </td>
-                                              <td>
-                                               
-                                            <div>
-                                               <span class="bg-success p-2">complete</span>
-                                              </div>
-                                            </td>
-                                        </tr>
-                                        <?php $i++; endforeach; ?>
-                                    
-                                        </tbody>
-                                      </table>
-                                    </div>
-                                  </div>   
-                              </div>
-
-
-
-
-
-
-
-
                             </div>
                             </fieldset>
                             </div>

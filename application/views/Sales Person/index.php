@@ -852,10 +852,6 @@ $dataPoints2 = array(
                                       <b>Auto Task - <?= $ast1 ?> to <?= $aet2 ?></b><br>
                                       Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) | MOM(<?=$ted[0]->f?>) | Proposal(<?=$ted[0]->g?>)
                                 </div>
-
-
-
-
                                 <div id="collapse91912" class="collapse" aria-labelledby="headingThree33" data-parent="#accordion">
                                   <div class="card-body">
                                     <?php

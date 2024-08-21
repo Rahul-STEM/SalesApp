@@ -383,10 +383,17 @@
             </a>
 
           </li>
+          <li class="nav-item">
 
-          
+            <a href="<?=base_url();?>Menu/UserTaskViewPage" class="nav-link">
 
-         
+              <i class="far fa-circle nav-icon"></i>
+
+              <p>Todays Task Status</p>
+
+            </a>
+
+          </li>
 
           <?php 
 
@@ -799,9 +806,5 @@ function goForward() { window.history.forward(); }
     }
 
     });
-
-
-
-
-
 </script>
+

@@ -75,13 +75,13 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                        <form action="<?=base_url();?>Menu/dailyTaskAssignById" method="post">
+                        <form action="<?=base_url();?>Menu/selfTaskAssign" method="post">
                               <div class="row">
                                   <div class="col-4">
                                       <div class="form-group">
                                           <label>User</label>
                                           <input type='text' class='form-control' id='user' name='user' value='<?= $userdtl[0]->name ?>' readonly>
-                                          <?php //echo"<pre>";print_r($taskDetails);exit;?>
+                                          <?php //echo"<pre>taskDetails view";print_r($taskDetails);exit;?>
                                           <input type='hidden' id='taskDetails' name='taskDetails' value='<?= json_encode($taskDetails) ?>'>
                                       </div>
                                   </div>
@@ -90,7 +90,6 @@
                                       <div class="form-group">
                                           <label>Date</label>
                                           <input type='text' class='form-control' id='date_display' name='date_display' value='<?= date('Y-m-d', strtotime($taskDetails[0]->appointmentdatetime)) ?>' readonly>
-                                          <!-- <input type='hidden' id='date_hidden' name='date' value='<?= date('Y-m-d', strtotime($taskDetails[0]->appointmentdatetime)) ?>'> -->
                                       </div>
                                   </div>
 
@@ -98,7 +97,6 @@
                                       <div class="form-group">
                                           <label>Time</label>
                                           <input type='text' class='form-control' id='time_display' name='time_display' value='<?= date('H:i:s', strtotime($taskDetails[0]->appointmentdatetime)) ?>' readonly>
-                                          <!-- <input type='hidden' id='time_hidden' name='time' value='<?= date('H:i:s', strtotime($taskDetails[0]->appointmentdatetime)) ?>'> -->
                                       </div>
                                   </div>
                               </div>
@@ -113,7 +111,6 @@
                                               <option value="<?=$status->id?>"><?=$status->name?></option>
                                               <?php } ?>
                                           </select>
-                                          <!-- <input type='hidden' id='current_status_hidden' name='current_status_hidden'> -->
                                       </div>
                                   </div>
                               </div>
@@ -124,7 +121,6 @@
                                           <label>Company <span class="ccount" style="font-size:12px; padding-left:10px"></span></label>
                                           <select id="company" class="form-control select2" name="company">
                                           </select>
-                                          <!-- <input type='hidden' id='company_hidden' name='company_hidden'> -->
                                       </div>
                                   </div>
                                   <div class="col-4">
@@ -136,7 +132,6 @@
                                               <option value="<?=$a->id?>"><?=$a->name?></option>
                                               <?php } ?>
                                           </select>
-                                          <!-- <input type='hidden' id='task_action_hidden' name='task_action_hidden'> -->
                                       </div>
                                   </div>
 
@@ -145,7 +140,6 @@
                                           <label>Target Purpose</label>
                                           <select id="ntppose" class="form-control" name="ntppose">
                                           </select>
-                                          <!-- <input type='hidden' id='ntppose_hidden' name='ntppose_hidden'> -->
                                       </div>
                                   </div>
                               </div>
@@ -235,6 +229,7 @@
         $('#current_status').change(function() {
             var uid = <?= $userdtl[0]->user_id ?>;
             var statusId = $(this).val();
+
             $.ajax({
                 url: '<?=base_url();?>Menu/getcmpbyStatus',
                 type: 'POST',
@@ -292,16 +287,6 @@
           $('#ntppose').val('');
           $('#task_action').val('');
       });
-
-        // $('form').submit(function() {
-        //     $('#user_hidden').val($('#user').val());
-        //     $('#date_hidden').val($('#date_display').val());
-        //     $('#time_hidden').val($('#time_display').val());
-        //     $('#current_status_hidden').val($('#current_status').val());
-        //     $('#company_hidden').val($('#company').val());
-        //     $('#task_action_hidden').val($('#task_action').val());
-        //     $('#ntppose_hidden').val($('#ntppose').val());
-        // });
     
     });
 </script>

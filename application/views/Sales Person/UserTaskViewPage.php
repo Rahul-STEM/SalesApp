@@ -38,7 +38,6 @@
     justify-content: right;
     display: flex;
 }
-
 .formselect {
     margin-top: 10px;
 }
@@ -83,7 +82,7 @@ span.tsby {
 
             <div class="row mb-2">
               <div class="col-sm-6">
-                <h4 class="m-0"> <i>Plan Task Details</i> </h4>
+                <h4 class="m-0"> <i>Planned Task Status</i> </h4>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
@@ -100,92 +99,52 @@ span.tsby {
                 <!-- Main content -->
                 <section class="content">
                   <div class="container-fluid">
-                  <div class="row">
-                             <div class="col-md-4"> 
-                                    <div class="dateform text-left">
-                                    <form method="post" action="<?=base_url();?>Menu/CheckTaskDetailsByUser/<?=$tuser_uid?>/<?=$taskdate?>">
-                                        <input type="date" class="" name="adate" value="<?=$taskdate?>"  id="plandate"  max="<?= date('Y-m-d') ?>">
-                                        <input type="submit" class="" value="Set Date">
-                                    </form>
-                                    </div>
-                                  </div>
-                             </div>
                     <div class="row">
-                      <div class="col-12">
-                      <div class="card">
-                        <div class="card-header">
-                          <h3 class="card-title"></h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                          <div class="body-content">
-                            <div class="page-header">
-                            <?php 
-                      
-                                        $totalttaskdata =$this->Menu_model->getTotalUserTaskDetails($tuser_uid,$taskdate);
-                                        
-                                        $taskplanmincount = 0;
-                                        $new_datetimemin = '';
-                                        foreach($totalttaskdata as $taskdata){ 
-                                            $actiontype_id = $taskdata->actiontype_id;
+                    <div class="col-md-4">
+                    <form class="setpaldate" action="<?=base_url();?>Menu/UserTaskViewPage" method="post">
+                      <input type="date" class=" m-2" name="adate" value="<?=$date?>" required="" id="plandate"  max="<?= date('Y-m-d') ?>">
+                      <input type="submit" class="btn-warning m-2" value="Set Date">
+                    </form>
+                    </div>
+                    </div> 
+                    
+                    <?php 
+                   
+                      $totalttaskdata =$this->Menu_model->getTotalUserTaskDetails($uid,$date);
+                      $taskplanmincount = 0;
+                      $new_datetimemin = '';
+                      foreach($totalttaskdata as $taskdata){ 
+                          $actiontype_id = $taskdata->actiontype_id;
 
-                                            if($actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==1 || $actiontype_id ==10 || $actiontype_id ==15){
-                                                $taskplanmincount += 5;
-                                            }else if($actiontype_id ==2 || $actiontype_id ==6){
-                                                $taskplanmincount += 10;
-                                            }else if($actiontype_id ==3 || $actiontype_id ==4 || $actiontype_id ==12 || $actiontype_id ==17){
-                                                $taskplanmincount += 30;
-                                            }else if($actiontype_id ==7){
-                                                $taskplanmincount += 15;
-                                            }else if($actiontype_id ==11 || $actiontype_id ==13 || $actiontype_id ==14){
-                                                $taskplanmincount += 2;
-                                            }
-                                        }
+                          if($actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==1 || $actiontype_id ==10 || $actiontype_id ==15){
+                              $taskplanmincount += 5;
+                          }else if($actiontype_id ==2 || $actiontype_id ==6){
+                              $taskplanmincount += 10;
+                          }else if($actiontype_id ==3 || $actiontype_id ==4 || $actiontype_id ==12 || $actiontype_id ==17){
+                              $taskplanmincount += 30;
+                          }else if($actiontype_id ==7){
+                              $taskplanmincount += 15;
+                          }else if($actiontype_id ==11 || $actiontype_id ==13 || $actiontype_id ==14){
+                              $taskplanmincount += 2;
+                          }
+                      }
+
+                      $lunchtime      = 30;      // Lunch Time 45 Miniute
+                      $autoTasktime   = 90;  // 90 Minutes For Auto Task
+                      $topp           = 60; // 60 Minutes For Tommorow Planner Planning
+                      $texpense_time  = $lunchtime + $autoTasktime + $topp; // totol expense time
+                      $nine_hours_planning =540; // 9 hours Planning = 9* 60 = 540 Minutes 
+                      $userplanetime = $nine_hours_planning - $texpense_time; // total plan time  - 345 minutes
+                      $plannerremTime = $userplanetime - $taskplanmincount;
                  
-                                        $lunchtime      = 30;      // Lunch Time 45 Miniute
-                                        $autoTasktime   = 90;  // 90 Minutes For Auto Task
-                                        $topp           = 60; // 60 Minutes For Tommorow Planner Planning
-                                        $texpense_time  = $lunchtime + $autoTasktime + $topp; // totol expense time
-                                        $nine_hours_planning =540; // 9 hours Planning = 9* 60 = 540 Minutes 
-                                        $userplanetime = $nine_hours_planning - $texpense_time; // total plan time  - 345 minutes
-                                        $plannerremTime = $userplanetime - $taskplanmincount;
-                                   
-                                       ?>
-                             
-                              <form method="post" action="<?=base_url();?>Menu/approveDailyTask">
-                              <fieldset>
-                                 <div class="card">
-                                  
-                                  <!-- <div class="col-md-4"> 
-                                    <div class="dateform text-left">
-                                    <form method="post" action="<?=base_url();?>Menu/CheckTaskDetailsByUser">
-                                        <input type="date" class="form-control m-2" name="adate" value="<?=$adate?>"  id="plandate"  max="<?= date('Y-m-d') ?>">
-                                        <input type="submit" class="btn btn-warning m-2" value="Set Date">
-                                    </form>
-                                    </div>
-                                  </div> -->
-                                  <?php 
-                                  if($taskplanmincount >= $userplanetime){    
-                                    $background = 'bg-success';                           
-                                  ?>
-                                  
-                                 <div class="taskaprroveform text-right">
-                                      <input type="hidden" name="suser" value="<?=$tuser_uid;?>" >
-                                        <select class="form-control form-select formselect" aria-label="Default select example" name="status" style="width:300px;" >
-                                          <option selected value="" >Select Approve/Reject</option>
-                                          <option value="Approve">Approve</option>
-                                          <option value="Reject">Reject</option>
-                                        </select>
-                                        <button class="btn btn-primary m-2" type="submit" >Submit</button>
-                                    </form>
-                                  </div>
-                                    <?php }else{
-                                      $background = 'bg-danger';
-                                    } ?>
-
-
-                <?php if($taskplanmincount <= $userplanetime){  ?>         
-                <marquee class="p-2 mt-1 <?=$background?>"  onMouseOver="this.stop()" onMouseOut="this.start()" width="100%" behavior="left" bgcolor="pink">
+            
+                  if($taskplanmincount >= $userplanetime){    
+                        $background = 'bg-success';                           
+                    }else{
+                        $background = 'bg-danger';
+                      } 
+                   if($taskplanmincount <= $userplanetime){  ?>         
+                <marquee class="p-2 mt-1 <?=$background?>" onMouseOver="this.stop()" onMouseOut="this.start()" width="100%" behavior="left" bgcolor="pink">
                   <h6> 
                   <?php 
                       $uprhours = floor( $plannerremTime / 60);
@@ -194,32 +153,44 @@ span.tsby {
                     <p><?=$uprhours?> hour <?=$uprremainingMinutes ?> Minute remaining for task plan to enable Task Approval Function.</p>
                   </h6>
                 </marquee>
-                <?php }?> 
-                <marquee class="p-2 mt-1" width="100%"  onMouseOver="this.stop()" onMouseOut="this.start()" behavior="left" bgcolor="pink">
+                <?php }else{  ?>  
+                  <marquee class="p-2 mt-1 <?=$background?>" onMouseOver="this.stop()" onMouseOut="this.start()" width="100%" behavior="left" bgcolor="pink">
+                  <h6> 
+                    <p>Congratulations! You've successfully achieved your planning time. Your dedication and hard work are truly commendable. Keep up the great momentum! 🎉</p>
+                  </h6>
+                </marquee>
+                <?php }?>
+                <marquee class="p-2 mt-1" width="100%" onMouseOver="this.stop()" onMouseOut="this.start()" behavior="left" bgcolor="pink">
                   <h6> Lunch Time : <?= $lunchtime ?>  Miniute || Auto Task Time : <?= $autoTasktime?> Minutes || Tommorow Planner Planning : <?=$topp ?>  Minutes || 9 hours Planning = 9* 60 = 540 Minutes || Total Time For (Lunch + Auto Task + Tommorow Planner) : <?=$texpense_time?>  Minutes || Task Planner Should be <?php echo 540 - $texpense_time;?> Minutes</h6>
                 </marquee>
-                                 <hr>
-                                
+                      <div class="card">
+                        <div class="card-header">
+                          <h3 class="card-title"></h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                          <div class="body-content">
+                            <div class="page-header">
+                              <!-- <form method="post" action="<?=base_url();?>Menu/UserTaskViewPage"> -->
+                              <!-- <input type="hidden" name="selected_date" id="selected_date" value="<?= $date ?>">
+                              //<button class="btn btn-primary m-2" type="submit" >Submit</button> -->
+                              <fieldset>
+                                 <div class="card">
                                     <div class="text-center p-2 bg-info">
-                                       <h5><i>Task Plan By - 
-                                        <?php 
-                                        $dt = $taskdate; 
-                                        $udetail = $this->Menu_model->get_userbyid($tuser_uid);
+                                       <h5><i>Task Planned By - 
+                                        <?php  
+                                        $udetail = $this->Menu_model->get_userbyid($uid);
                                         echo $udetail[0]->name;
                                        ?>  </i></h5>
-                                       <p><i><b><?= $dt ?></b></i></p>
-                                       <p>
-                                        <b>
+                                       <b>
                                           <?php
                                           $hours = floor($taskplanmincount / 60);
                                           $remainingMinutes = $taskplanmincount % 60;
                                           echo " User Planned $hours hours and $remainingMinutes minutes.";
                                             ?>
                                         </b>
-                                       </p>
                                     </div>
                                     <hr>
-
                                     <div class="card p-2 <?= $background?>">
                                         <div class="row">
                                       
@@ -243,16 +214,15 @@ span.tsby {
                                              $uprhours = floor( $plannerremTime / 60);
                                              $uprremainingMinutes =  $plannerremTime % 60;
                                              if($taskplanmincount <= $userplanetime){  
-                                              ?>
-                                              <p>Remaing Time For Plan Time : <?php  echo "$uprhours hours and $uprremainingMinutes minutes."; ?></p>
-                                             <?php }else{
+                                            ?>
+                                            <p>Remaing Time For Plan Time : <?php  echo "$uprhours hours and $uprremainingMinutes minutes."; ?></p>
+                                           <?php } else{
                                               echo "successfully achieved their planning time.";
-                                             } ?> 
+                                             } ?>  
                                           </div>
                                         </div>
                                     </div>
-
-
+                                    <hr>
                                 <div class="table-responsive">
                                   <div class="table-responsive">
                                     <div class="pdf-viwer">
@@ -269,18 +239,16 @@ span.tsby {
                                                     <th>Filter By</th>
                                                     <th>Task Work Status</th>
                                                     <th>Action Status</th>
-                                                    <th>Approved By</th>
+                                                    <th>Approved/Rejected By</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php 
+                                            <?php 
                                                 $i = 1;
-                                                
-                                                //echo $dt;
-                                                $totalttask =$this->Menu_model->getTotalUserTaskDetails($tuser_uid, $dt);
-
-                                                foreach ($totalttask as $taskdata) { 
+                                                $selectDate = isset($selected_date) ? $selected_date: $date;
+                                                $totalttaskdata = $this->Menu_model->get_totalDetailsForTask($uid, $selectDate);
+                                                foreach ($totalttaskdata as $taskdata) { 
                                                     $taid = $taskdata->actiontype_id;
                                                     $tblId = $taskdata->id;
                                                     $taid = $this->Menu_model->get_actionbyid($taid);
@@ -289,10 +257,10 @@ span.tsby {
                                                     $rimby = $taskdata->reminderby;
                                                     $rimat = $taskdata->reminderat;
                                                     $status = $taskdata->approved_status;
-                                                    $self_assign = $taskdata->self_assign;
                                                     $approver = $taskdata->approved_by;
                                                     $filter_by = json_decode($taskdata->filter_by, true);
                                                     $selectby = $taskdata->selectby;
+                                                    $selfAssign = $taskdata->self_assign;
                                                     $rimbyname = $this->Menu_model->get_userbyid($rimby);
                                                     $time = date('h:i a', strtotime($time));
                                                 ?>
@@ -305,8 +273,7 @@ span.tsby {
                                                     <td><?= $taskdata->appointmentdatetime ?></td>
                                                     <td><?= $selectby ?></td>
                                                     <td>
-                                                        <?php 
-                                                        if (is_array($filter_by)) : ?>
+                                                        <?php if (is_array($filter_by)) : ?>
                                                             <?php foreach ($filter_by as $key => $value) : ?>
                                                                 <?= $key ?> - <?= $value ?><br>
                                                             <?php endforeach; ?>
@@ -320,12 +287,13 @@ span.tsby {
                                                         <span class="p-1 bg-success mr-2">Complete</span>
                                                       <?php } ?>
                                                     </td>
-                                                      <td>
+                                                    <td>
                                                           <span class="p-1 bg-<?= ($status == 1) ? 'success' : (($status == '') ? 'warning' : 'danger');?> mr-2">
                                                           <?= ($status == 1) ? 'Approved' : (($status == '') ? 'Pending' : 'Rejected'); ?>
                                                           </span>
                                                       </td>
-                                                      <td><?php
+                                                      <td>
+                                                      <?php
                                                       if($approver ==''){ ?>
                                                          <span class="p-1 bg-warning mr-2">Pending</span>
                                                       <?php }else{
@@ -333,37 +301,30 @@ span.tsby {
                                                       $name = $userData[0]->name;
                                                       echo $name;
                                                       }
-                                                       ?></td>
+                                                       ?>
+                                                       </td>
                                                       <td>
-                                                      <?php if($status ==''){?>
-                                                        <div>
-                                                            <input type="checkbox" id="scales" value="<?= $taskdata->id ?>" name="tid[]" />
-                                                        </div>
-                                                        <?php }elseif($status == 0){
-                                                          if($self_assign == ''){ ?>
-                                                          <div>
-                                                            <button type="button" class="btn btn-primary" onclick="window.location.href='<?= base_url(); ?>Menu/AssignTaskById/<?= $tblId ?>/<?= $taskdate ?>'">Assign Task</button> <hr>
-                                                            <button type="button" class="btn btn-secondary" id="self_assign" style="margin-left: 10px;" onclick="window.location.href='<?= base_url(); ?>Menu/selfAssign/<?= $tblId ?>/1/<?= $taskdate ?>'" <?= ($self_assign == 1) ? 'disabled' : '' ?>>Self Assign</button>
+                                                      <?php if($selfAssign == 1){?>
+                                                          <div>                                                         
+                                                          <button type="button" class="btn btn-primary" onclick="window.location.href='<?= base_url(); ?>Menu/selfTaskAssignPage/<?= $tblId ?>'">Self Assign task</button>
                                                           </div>
-                                                         <?php  }else if($self_assign == 1){ ?>
-                                                          <span class="p-1 bg-success mr-2">Admin&nbsp;Created&nbsp;Self-Assign&nbsp;Request</span>
-                                                          <?php } else if($self_assign == 2){?>
+                                                        <?php }else if($selfAssign == 2){ ?>
                                                           <span class="p-1 bg-success mr-2">Task&nbsp;successfully&nbsp;assigned&nbsp;by&nbsp;admin!</span>
-                                                            <?php }else if($self_assign == 3){ ?>
-                                                              <span class="p-1 bg-success mr-2">Task&nbsp;successfully&nbsp;assigned&nbsp;by&nbsp;user!</span>
-                                                           <?php }?>
-                                                        <?php }elseif($status == 1){ ?>
-                                                          <span class="p-1 bg-success mr-2">Approved</span> 
-                                                       <?php }?>
+                                                       <?php }else if($selfAssign == 3){ ?>
+                                                          <span class="p-1 bg-success mr-2">User&nbsp;Assigned&nbsp;Task&nbsp;via&nbsp;Admin&nbsp;Request</span>
+                                                       <?php }else if($status ==1 && $selfAssign == ''){?>
+                                                          <span class="p-1 bg-success mr-2">Approved</span>
+                                                       <?php }else if($status ==0 && $selfAssign == ''){ ?>
+                                                        <span class="p-1 bg-warning mr-2">Pending</span>
+                                                       <?php } ?>
                                                     </td>
-                                                      <?php $i++; } ?>
+                                                <?php $i++; }?>  
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                   </div>
                                 </fieldset>
-                                </form>
                               </div>
                             </div></div></div></div>
                           </div>
@@ -475,11 +436,6 @@ span.tsby {
                             // Add more columns if needed
                         ]
                     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-                    // $('#self_assign').on('click', function() {
-                    //     $(this).hide();
-                    //     window.location.href = '<?= base_url(); ?>Menu/selfAssign/<?= $tblId ?>/1/<?= $taskdate ?>';
-                    // });
                 });
                 </script>
 
@@ -494,10 +450,34 @@ span.tsby {
               $('#rejectid').val(id);
               }
 
-              $('#plandate').val($dt);
+              // function setSelectedDate(date) {
+              // document.getElementById('selected_date').value = date;
+              // }
+
               </script>
+
+            <!-- <script>
+                $(document).ready(function() {
+                    $('#plandate').on('change', function() {
+                        var selectedDate = $(this).val();
+                       alert(selectedDate); return false;
+                        $.ajax({
+                            url: '<?= base_url(); ?>Menu/UserTaskViewPage',
+                            type: 'POST',
+                            data: selectedDate,
+                            success: function(response) {
+                                // Handle the response from the server
+                                console.log('Data sent successfully');
+                                // You can also update your page content here based on the response
+                            },
+                            error: function(error) {
+                                // Handle any errors
+                                console.log('Error in sending data');
+                            }
+                        });
+                    });
+                });
+            </script> -->
+
             </body>
           </html>
-apps-fileview.texmex_20240808.01_p1
-CheckTaskDetailsByUser.php
-Displaying Menu.php.

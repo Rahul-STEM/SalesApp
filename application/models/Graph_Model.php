@@ -205,7 +205,7 @@ class Graph_Model extends CI_Model
         $this->db->where_in('clustermaster.id',$clusterID);
 
         $query = $this->db->get();
-
+        // echo $this->db->last_query();die;
         return $query->result();
 
     }
@@ -808,50 +808,7 @@ class Graph_Model extends CI_Model
         return $query->result();
     }
 
-    public function getCompanyWithSameStatusGraphDetails($uid,$userTypeid,$sdate,$edate,$status){
-
-        $subquery = $this->db->select('ic.id')
-                             ->from('init_call ic')
-                             ->join('user_details', 'user_details.user_id = ic.mainbd', 'left');
-        
-        if ($userTypeid == 2) {
-
-            $this->db->where('user_details.admin_id',$uid);
-        
-        }elseif ($userTypeid == 4) {
-            
-            $this->db->where_in('pst_co', $uid);
-
-        }elseif ($userTypeid == 9 || $userTypeid == 13) {
-
-            $this->db->where_in('aadmin', $uid);
-
-        }else{
-
-            $this->db->where('user_id', $uid);
-        }
-        
-        $subquery = $subquery->get_compiled_select();
-
-        $this->db->select("TIMESTAMPDIFF(DAY, MAX(tblcallevents.updateddate), NOW()) AS opensday");
-        $this->db->select("status.name");
-        $this->db->from('tblcallevents');
-        $this->db->join('init_call', 'init_call.id = tblcallevents.cid_id', 'LEFT');
-        $this->db->join('status', 'init_call.cstatus = status.id', 'LEFT');
-        
-        $this->db->where("tblcallevents.cid_id IN ($subquery)", NULL, FALSE);
-        $this->db->where('tblcallevents.nextCFID !=', '0');
-        $this->db->where_in('init_call.cstatus', $status);
-        $this->db->group_by('init_call.id');
-        
-        // Execute the query
-        $query = $this->db->get();
-        // echo $this->db->last_query();die;
-        return $query->result();
-    }
-
-
-    public function getCompanyWithSameStatusTableDetails($uid,$userTypeid,$sdate,$edate,$status){
+    public function getCompanyWithSameStatusTableDetails($uid,$userTypeid,$sdate,$edate,$SelectedStatus,$SelectedCluster,$SelectedCategory,$SelectedUsers){
 
         $subquery = $this->db->select('ic.id')
         ->from('init_call ic')
@@ -902,80 +859,76 @@ class Graph_Model extends CI_Model
         $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
         // $this->db->join('status', 'status.id = ic.cstatus', 'left');
         $this->db->join('user_details', 'user_details.user_id = ic1.mainbd', 'left');
-        // $this->db->select("status.name");
-        // $this->db->from('tblcallevents');
+
         $this->db->join('tblcallevents', 'ic1.id = tblcallevents.cid_id', 'LEFT');
         $this->db->join('status', 'ic1.cstatus = status.id', 'LEFT');
 
         $this->db->where("tblcallevents.cid_id IN ($subquery)", NULL, FALSE);
         $this->db->where('tblcallevents.nextCFID !=', '0');
-        $this->db->where_in('ic1.cstatus', $status);
+
+        if (!empty($SelectedStatus)) {
+
+            $this->db->where_in('ic1.cstatus', $SelectedStatus);
+        }
+
+        if (!empty($SelectedpartnerType)) {
+            
+            $this->db->where_in('company_master.partnerType_id', $SelectedpartnerType);
+        }
+
+        if (!empty($SelectedUsers)) {
+            
+            $this->db->where_in('user_details.aadmin', $SelectedUsers);
+        }
+
+        if (!empty($SelectedCategory)) {
+
+            $this->db->group_start();
+
+            foreach ($SelectedCategory as $singleCategory) {
+
+                if ($singleCategory == 'topspender') {
+
+                     $this->db->or_where('ic1.focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'focus_funnel') {
+
+                    $this->db->or_where('ic1.focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'upsell_client') {
+                    
+                    $this->db->or_where('ic1.upsell_client', 'yes');
+
+                }
+                if($singleCategory == 'keycompany') {
+                    
+                    $this->db->or_where('ic1.keycompany', 'yes');
+
+                }
+                if($singleCategory == 'pkclient ') {
+                    
+                    $this->db->or_where('ic1.pkclient', 'yes'); 
+                }
+                if($singleCategory == 'priorityc ') {
+                    
+                    $this->db->or_where('ic1.priorityc', 'yes');
+                }
+            }  
+
+            $this->db->group_end(); 
+        }
         
         $this->db->group_by('ic1.id');
 
-// Execute the query
         $query = $this->db->get();
-        echo $this->db->last_query();die;
+
         return $query->result();
 
-        // $this->db->select('ic.id ic_id');
-        // $this->db->select('ic.topspender topspender');
-        // $this->db->select('ic.focus_funnel focus_funnel');
-        // $this->db->select('ic.upsell_client upsell_client');
-        // $this->db->select('ic.keycompany keycompany');
-        // $this->db->select('ic.pkclient pkclient');
-        // $this->db->select('ic.priorityc priorityc');
-        // $this->db->select('status.clr stclr');
-        // $this->db->select('status.id stid');
-        // $this->db->select('status.name stname');
-        // $this->db->select('company_master.compname company_name');
-        // $this->db->select('company_master.address company_address');
-        // $this->db->select('city.city city');
-        // $this->db->select('states.state state');
-        // $this->db->select('partner_master.name partner_typeName');
-        // $this->db->select('partner_master.id partner_typeID');
-        // $this->db->select('partner_master.clr PartnerMasterclr');
-        // $this->db->from('init_call ic');
-        // $this->db->join('company_master', 'company_master.id = ic.cmpid_id', 'left');
-        // $this->db->join('city', 'city.id = company_master.city', 'left');
-        // $this->db->join('states', 'states.id = company_master.state', 'left');
-        // $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
-        // $this->db->join('status', 'status.id = ic.cstatus', 'left');
-        // $this->db->join('user_details', 'user_details.user_id = ic.mainbd', 'left');
-        
-        
-        // if ($userTypeid == 2) {
-
-        //     $this->db->where('user_details.admin_id',$uid);
-            
-        // }elseif ($userTypeid == 4) {
-            
-        //     $this->db->where_in('pst_co', $uid);
-
-        // }elseif ($userTypeid == 9 || $userTypeid == 13) {
-            
-        //     $this->db->where_in('aadmin', $uid);
-        // }else{
-        //     $this->db->where('user_id', $uid);
-        // }
-
-        // if ($status != '') {
-
-        //     $this->db->where_in('status.id', $status);
-        // }
-
-        // $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
-        // $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
-
-
-        $query = $this->db->get();
-        
-        echo $this->db->last_query();die;
-
-        return $query->result();
     }
 
-    public function SameStatusTillDateByStatus($uid,$userTypeid,$sdate,$edate,$status){
+    public function SameStatusTillDateByStatus($uid,$userTypeid,$sdate,$edate,$status,$SelectedCluster,$SelectedCategory,$SelectedUsers,$SelectedpartnerType){
 
         $subquery = $this->db->select('ic.id')
         ->from('init_call ic')
@@ -1007,11 +960,61 @@ class Graph_Model extends CI_Model
         $this->db->from('tblcallevents');
         $this->db->join('init_call', 'init_call.id = tblcallevents.cid_id', 'LEFT');
         $this->db->join('status', 'init_call.cstatus = status.id', 'LEFT');
-
+        $this->db->join('company_master', 'init_call.cmpid_id = company_master.id', 'LEFT');
+        $this->db->join('user_details ud', 'ud.user_id = init_call.mainbd', 'left');
         $this->db->where("tblcallevents.cid_id IN ($subquery)", NULL, FALSE);
         $this->db->where('tblcallevents.nextCFID !=', '0');
         $this->db->where('init_call.cstatus', $status);
         
+        if (!empty($SelectedpartnerType)) {
+            
+            $this->db->where_in('company_master.partnerType_id', $SelectedpartnerType);
+        }
+
+        if (!empty($SelectedUsers)) {
+            
+            $this->db->where_in('ud.aadmin', $SelectedUsers);
+        }
+
+        if (!empty($SelectedCategory)) {
+
+            $this->db->group_start();
+
+            foreach ($SelectedCategory as $singleCategory) {
+
+                if ($singleCategory == 'topspender') {
+
+                     $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'focus_funnel') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'upsell_client') {
+                    
+                    $this->db->or_where('upsell_client', 'yes');
+
+                }
+                if($singleCategory == 'keycompany') {
+                    
+                    $this->db->or_where('keycompany', 'yes');
+
+                }
+                if($singleCategory == 'pkclient ') {
+                    
+                    $this->db->or_where('pkclient', 'yes'); 
+                }
+                if($singleCategory == 'priorityc ') {
+                    
+                    $this->db->or_where('priorityc', 'yes');
+                }
+            }  
+
+            $this->db->group_end(); 
+        }
+
         $this->db->group_by('init_call.id');
 
 // Execute the query
@@ -1019,5 +1022,87 @@ class Graph_Model extends CI_Model
         // echo $this->db->last_query();die;
         return $query->result();
 
+    }
+
+
+    public function getStageWiseFunnelGraphDetails($uid,$userTypeid,$sdate,$edate,$status,$SelectedCluster,$SelectedCategory,$SelectedUsers,$SelectedpartnerType){
+
+        $this->db->select("
+            SUM(CASE WHEN init_call.cstatus = '1' THEN 1 ELSE 0 END) +
+            SUM(CASE WHEN init_call.cstatus = '8' THEN 1 ELSE 0 END) +
+            SUM(CASE WHEN init_call.cstatus = '2' THEN 1 ELSE 0 END) +
+            SUM(CASE WHEN init_call.cstatus = '10' THEN 1 ELSE 0 END) +
+            SUM(CASE WHEN init_call.cstatus = '11' THEN 1 ELSE 0 END) AS stage1, 
+            SUM(CASE WHEN init_call.cstatus = '3' THEN 1 ELSE 0 END) AS stage2,
+            SUM(CASE WHEN init_call.cstatus = '6' THEN 1 ELSE 0 END) +
+            SUM(CASE WHEN init_call.cstatus = '9' THEN 1 ELSE 0 END) +
+            SUM(CASE WHEN init_call.cstatus = '12' THEN 1 ELSE 0 END) +
+            SUM(CASE WHEN init_call.cstatus = '13' THEN 1 ELSE 0 END) AS stage3,
+            SUM(CASE WHEN init_call.cstatus = '7' THEN 1 ELSE 0 END) AS stage4
+        ");
+
+        //stage 1 -> Open,Reachout,OPEN RPEM,TTD-Reachout,WNO-Reachout
+        //stage 2 -> tentative
+        //stage 3 -> positive
+        //stage 4 -> Closuer
+
+        $this->db->from('init_call');
+        $this->db->join('user_details', 'user_details.user_id = init_call.mainbd', 'left');
+        $this->db->join('status', 'status.id = init_call.cstatus');
+
+        if ($userTypeid == 2) {
+
+            $this->db->where('user_details.admin_id',$uid);
+
+        }elseif ($userTypeid == 4) {
+
+            $this->db->where_in('pst_co', $uid);
+
+        }elseif ($userTypeid == 9 || $userTypeid == 13) {
+
+            $this->db->where_in('aadmin', $uid);
+
+        }else{
+
+            $this->db->where('user_id', $uid);
+        }
+
+        $query = $this->db->get();
+
+        return $query->result();
+
+    }
+
+    public function getFunnelDetails($uid,$userTypeid,$sdate,$edate,$status,$SelectedCluster,$SelectedCategory,$SelectedUsers,$SelectedpartnerType,$statusArray){
+
+        $this->db->select('status.name statusName');
+        $this->db->select('COUNT(*) cont');
+
+        $this->db->from('init_call');
+        $this->db->join('user_details', 'user_details.user_id = init_call.mainbd', 'left');
+        $this->db->join('status', 'status.id = init_call.cstatus', 'left');
+
+        if ($userTypeid == 2) {
+
+            $this->db->where('user_details.admin_id',$uid);
+
+        }elseif ($userTypeid == 4) {
+
+            $this->db->where_in('pst_co', $uid);
+
+        }elseif ($userTypeid == 9 || $userTypeid == 13) {
+
+            $this->db->where_in('aadmin', $uid);
+
+        }else{
+
+            $this->db->where('user_id', $uid);
+        }
+        
+        $this->db->where_in('init_call.cstatus', $statusArray);
+        $this->db->group_by('statusName');
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+        return $query->result();
     }
 }

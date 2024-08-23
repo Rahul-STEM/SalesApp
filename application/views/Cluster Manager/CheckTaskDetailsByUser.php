@@ -329,9 +329,14 @@ span.tsby {
                                                       if($approver ==''){ ?>
                                                          <span class="p-1 bg-warning mr-2">Pending</span>
                                                       <?php }else{
-                                                      $userData = $this->Menu_model->get_userbyid($approver);
-                                                      $name = $userData[0]->name;
-                                                      echo $name;
+                                                        if($approver == 'System'){ ?>
+                                                         <span class="p-1 bg-success mr-2"><?= $approver ?></span>
+                                                       <?php }else{
+                                                          $userData = $this->Menu_model->get_userbyid($approver);
+                                                          $name = $userData[0]->name;
+                                                          echo $name;
+                                                        }
+                                                      
                                                       }
                                                        ?></td>
                                                       <td>
@@ -351,9 +356,15 @@ span.tsby {
                                                           <span class="p-1 bg-success mr-2">Task&nbsp;successfully&nbsp;assigned&nbsp;by&nbsp;admin!</span>
                                                             <?php }else if($self_assign == 3){ ?>
                                                               <span class="p-1 bg-success mr-2">Task&nbsp;successfully&nbsp;assigned&nbsp;by&nbsp;user!</span>
+                                                           <?php }else if($self_assign == 4){ ?>
+                                                              <span class="p-1 bg-success mr-2">Task&nbsp;Approved&nbsp;&nbsp;by&nbsp;System!</span>
                                                            <?php }?>
                                                         <?php }elseif($status == 1){ ?>
-                                                          <span class="p-1 bg-success mr-2">Approved</span> 
+                                                          <?php if($self_assign == 4){ ?>
+                                                            <span class="p-1 bg-success mr-2">Task&nbsp;Approved&nbsp;&nbsp;by&nbsp;System!</span>
+                                                          <?php }else{ ?>
+                                                            <span class="p-1 bg-success mr-2">Approved</span> 
+                                                         <?php }  ?>
                                                        <?php }?>
                                                     </td>
                                                       <?php $i++; } ?>

@@ -231,6 +231,15 @@ if($type_id == 3){
               </button>
             </div>
             <?php endif; ?>
+            <?php
+              if ($this->session->flashdata('error_message_plan')): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong> <?php echo $this->session->flashdata('error_message_plan'); ?></strong>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <?php endif; ?>
             <div class="row mb-2">
               <div class="col-sm-6">
                 <h1 class="m-0"></h1>
@@ -250,19 +259,34 @@ if($type_id == 3){
         <!-- /.content-header -->
         <!-- Main content -->
         <style>
-          #plandate{
-          width:300px;
-          }
-          .setpaldate{
-          display:flex;
-          }
+          #plandate{width:300px;}.setpaldate{display:flex;}.planerdflex{align-items: center; justify-content: center; display: flex;}
         </style>
         <div class="container-fluid">
           <div class="card p-2 bg-primary">
             <div class="row">
-              <div class="col-md-8"></div>
+              <div class="col-md-4 planerdflex">
+                <?php
+                  $aptime = $this->Menu_model->GetTodaysAutoTaskANDPlanningTime($uid,date("Y-m-d"));
+                  $aptimecnt = sizeof($aptime);
+                  if($aptimecnt > 0){
+                    $start_tttpft = $aptime[0]->start_tttpft;
+                    $end_tttpft = $aptime[0]->end_tttpft;
+                    $timeArray = explode(':', $start_tttpft);
+                    // Assign the components to variables
+                    $phours = $timeArray[0];
+                    $pminutes = $timeArray[1];
+                    $pseconds = $timeArray[2];
+                    ?>
+                    <div class="mt-3">
+                    <p><b> <span id="yndpt">Your Next Day Plan Time is :</span> <?=$start_tttpft; ?></b></p> 
+                    </div>
+                 <?php } ?>
+              </div>
+              <div class="col-md-4 planerdflex">
+              <!-- <p id="planertime">edwd</p> -->
+              </div>
               <div class="col-md-4">
-                <form class="setpaldate" action="<?=base_url();?>Menu/TaskPlanner/<?=$adate ?>" method="post">
+                <form class="setpaldate" action="<?=base_url();?>Menu/TaskPlanner2/<?=$adate ?>" method="post">
                   <?php $next_date = date('Y-m-d', strtotime('+1 day', strtotime($adate))); ?>
                   <input type="date" class="form-control m-2" name="adate" value="<?=$adate?>" required="" id="plandate"  min="<?= date('Y-m-d') ?>" max="<?= $next_date ?>">
                   <input type="submit" class="btn btn-warning m-2" value="Set Date">
@@ -291,6 +315,9 @@ if($type_id == 3){
               <div class="card-body" id="mainboxAutoTask1">
                 <h5><i>First Set Auto Task Time </i></h5>
                 <hr/>
+                <marquee class="p-2 mt-1" width="100%"  onMouseOver="this.stop()" onMouseOut="this.start()" behavior="left" bgcolor="pink">
+                  <h6> Auto task time should be between 4:00 PM to 7:00 PM and maximum duration of 90 minutes. </h6>
+                </marquee>
                 <form method="post" action="<?=base_url();?>Menu/updateAtotaskTime">
                   <div class="was-validated">
                     <input type="hidden" id="userid" value="<?=$uid?>" name="bdid" required="">
@@ -306,7 +333,21 @@ if($type_id == 3){
                         <label for="end-time">Enter End Time</label>
                         <input type="time" id="end-time" name="endautotasktime" class="form-control" required>
                       </div>
-                      <button class="btn btn-primary m-3" type="submit" >Submit</button>
+                      <hr>
+                      <marquee class="p-2 mt-1" width="100%"  onMouseOver="this.stop()" onMouseOut="this.start()" behavior="left" bgcolor="pink">
+                  <h6> Todays is the Time to plan for tomorrow. Its maximum of 1 hour. After Auto Task</h6>
+                </marquee>
+                      <div class="form-group">
+                        <label for="end-time">Today is the start time to plan for tomorrow.</label>
+                        <input type="time" readonly id="start_tttpft" name="start_tttpft" class="form-control" required>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="end-time">Today is the end time to plan for tomorrow.</label>
+                        <input type="time" readonly id="end_tttpft" name="end_tttpft" class="form-control" required>
+                      </div>
+
+                      <button class="btn btn-primary m-3" type="submit" id="autoplan_submit">Submit</button>
                     </div>
                 </form>
                 </div>
@@ -1968,6 +2009,7 @@ if($type_id == 3){
                         </div>
                         <center>
                           <button class="btn btn-info" id="printPage">Print Page</button> <br><br>
+                          <p> <b> <span id="rtsyndp">Remaining Time to Start Your Next Days Planing:</span> <span  id="planertime"></span></b></p>
                         </center>
                       </div>
                     </div>
@@ -1988,6 +2030,10 @@ if($type_id == 3){
       </div>
 
       <input type="hidden" value="<?=$adate?>" id = "uplanedate">
+      
+      <input type="hidden" value="<?=$phours?>" id = "phours">
+      <input type="hidden" value="<?=$pminutes?>" id = "pminutes">
+      <input type="hidden" value="<?=$pseconds?>" id = "pseconds">
 
 
       <!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> -->
@@ -4978,6 +5024,79 @@ $(document).ready(function(){
             $("#printPage").click(function() {
         window.print();
     });
+
+
+    $('#end-time').on('change', function() {
+        let endTime = $(this).val();
+
+        if (endTime) {
+            // Convert endTime to a Date object
+            let endDateTime = new Date('1970-01-01T' + endTime + ':00');
+
+            // Increment by 1 minute for start_tttpft
+            // let startDateTime = new Date(endDateTime.getTime() + 1 * 60000);
+            let startDateTime = new Date(endDateTime.getTime() + 0 * 60000);
+            let startHours = ('0' + startDateTime.getHours()).slice(-2);
+            let startMinutes = ('0' + startDateTime.getMinutes()).slice(-2);
+            $('#start_tttpft').val(startHours + ':' + startMinutes);
+
+            // Increment by 1 hour for end_tttpft
+            let endTttPftDateTime = new Date(endDateTime.getTime() + 1 * 3600000);
+            let endTttPftHours = ('0' + endTttPftDateTime.getHours()).slice(-2);
+            let endTttPftMinutes = ('0' + endTttPftDateTime.getMinutes()).slice(-2);
+            $('#end_tttpft').val(endTttPftHours + ':' + endTttPftMinutes);
+        }
+    });
+
+    $('#autoplan_submit').click(function(event) {
+            var endTime = $('#end_tttpft').val();
+            var time = new Date('1970-01-01T' + endTime + 'Z');
+            var limitTime = new Date('1970-01-01T19:00:00Z');
+            // Compare the times
+            if (time > limitTime) {
+                event.preventDefault();
+                // Show an alert
+                alert('The time cannot be later than 7 PM.');
+                $('#end_tttpft').css('border', '2px solid red');
+                // $('#end-time').val('');
+            }else{
+              $('#end_tttpft').css('border', '');
+            }
+        });
+
+
+        function updateCountdown() {
+                var now = new Date();
+                var targetTime = new Date();
+                
+                var phours  = $("#phours").val();
+                var pminutes = $("#pminutes").val();
+                var pseconds = $("#pseconds").val();
+
+                targetTime.setHours(phours);
+                targetTime.setMinutes(pminutes);
+                targetTime.setSeconds(pseconds);
+                
+                var timeDifference = targetTime - now;
+                
+                if (timeDifference <= 0) {
+                    $('#planertime').text('Now Start Your Next Day Planning');
+                    $('#yndpt').text('Now Plan Your Next Day Task : ');
+                    $('#rtsyndp').hide();
+                    clearInterval(countdownInterval);
+                    return;
+                }
+                
+                var hours = Math.floor(timeDifference / (1000 * 60 * 60));
+                var minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+                
+                $('#planertime').text(hours + "h " + minutes + "m " + seconds + "s ");
+            }
+            
+            // Update the countdown every second
+            var countdownInterval = setInterval(updateCountdown, 1000);
+
 
 });
 </script>

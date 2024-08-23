@@ -4610,6 +4610,7 @@ class Menu extends CI_Controller {
 
 
     public function TaskPlanner2($adate){
+
         if(isset($_POST['adate'])){
             $adate = $_POST['adate'];
         }else{
@@ -4653,6 +4654,8 @@ class Menu extends CI_Controller {
             // redirect("Menu/TaskPlanner2/".$adate);
         }   
        
+        $this->CheckPlannerTimeisReadyorNot($uid,$adate);
+     
         $planbutnotinitedcnt = sizeof($planbutnotinited);
         $getreqData  =  $this->db->query("SELECT * FROM `task_plan_for_today` WHERE user_id =$uid and date='$adate'");
         $getreqData =  $getreqData->result();
@@ -4665,14 +4668,7 @@ class Menu extends CI_Controller {
         $getPendingTask =  $getPendingAutoTask->result();
         $pcount = sizeof($getPendingTask);
 
-    $getPendingTimeTask  =  $this->db->query("SELECT *
-    FROM `tblcallevents`
-    WHERE user_id = $uid
-      AND (nextCFID = 0
-           AND lastCFID = 0
-           AND plan = 1
-           AND autotask = 1
-           AND auto_plan = 0)");
+    $getPendingTimeTask  =  $this->db->query("SELECT * FROM `tblcallevents` WHERE user_id = $uid  AND (nextCFID = 0 AND lastCFID = 0 AND plan = 1 AND autotask = 1 AND auto_plan = 0)");
 
     $getPendingTimeTask =  $getPendingTimeTask->result();
 
@@ -4696,7 +4692,32 @@ class Menu extends CI_Controller {
         }
     }
 
+    public function CheckPlannerTimeisReadyorNot($uid,$adate){
+        
+        $this->load->model('Menu_model');
+        $this->load->library('session');
+        if($adate !== date("Y-m-d")){
+            $aptime = $this->Menu_model->GetTodaysAutoTaskANDPlanningTime($uid,date("Y-m-d"));
+            $aptimecnt = sizeof($aptime);
+            if($aptime > 0){
+                $start_tttpft = $aptime[0]->start_tttpft;
+                $end_tttpft = $aptime[0]->end_tttpft;
 
+                $current_time = date("H:i:s");
+                $current_date = date("Y-m-d");
+    
+                $start_time = new DateTime($start_tttpft);
+                $current_time_obj = new DateTime($current_time);
+                $interval = $current_time_obj->diff($start_time);
+                if ($current_time >= $start_tttpft) {
+                    // echo "The time has already passed.";
+                } else {
+                    $this->session->set_flashdata('error_message_plan',"Time remaining to plan your next day:" . $interval->format('%H hours, %I minutes, and %S seconds'));
+                    redirect("Menu/TaskPlanner2/".$current_date); 
+                }  
+            }
+        }
+    }
 
 
 
@@ -17364,6 +17385,8 @@ class Menu extends CI_Controller {
         //     )
         // ";
 
+        $start_tttpft = $_POST['start_tttpft'];
+        $end_tttpft = $_POST['end_tttpft'];
 
         if($getplanrecord == 0){
 
@@ -17375,7 +17398,7 @@ class Menu extends CI_Controller {
                 $this->session->set_flashdata('success_message',' AutoTask Time is Less Than 90 Minute only !!');
                 redirect('Menu/TaskPlanner/'.date("Y-m-d"));
             }else{
-                $this->db->query("INSERT INTO `autotask_time`(`user_id`, `date`, `stime`, `etime`) VALUES ('$uid','$plandatet','$startautotasktime','$endautotasktime')");
+                $this->db->query("INSERT INTO `autotask_time`(`user_id`, `date`, `stime`, `etime`, `start_tttpft`, `end_tttpft`) VALUES ('$uid','$plandatet','$startautotasktime','$endautotasktime','$start_tttpft','$end_tttpft')");
                 $inid = $this->db->insert_id();
             }
             $this->session->set_flashdata('success_message',' Nice job! You Have Planned For Time For Doing AutoTask');

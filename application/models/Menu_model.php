@@ -4417,10 +4417,10 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
     }
 
     public function get_totaltPendingAutoTaskdetails($uid){
-        $query=$this->db->query("SELECT tblcallevents.*,status.name,action.name aname,status.color,status.clr,init_call.cstatus cstatus,(SELECT name from status WHERE id=cstatus) csname, (select init_call.cmpid_id from init_call WHERE id=tblcallevents.cid_id) as cmpid_id,(select company_master.compname from company_master WHERE id=cmpid_id) as compname, (select company_master.id from company_master WHERE id=cmpid_id) as cid FROM tblcallevents left JOIN action ON action.id=tblcallevents.actiontype_id left JOIN init_call ON init_call.id=tblcallevents.cid_id left JOIN status ON status.id=init_call.cstatus WHERE user_id='$uid' AND actiontype_id = '2' AND nextCFID = 0 and autotask=1 and plan =1 AND DATE(appointmentdatetime) < CURDATE()");
-        // echo $this->db->last_query(); exit();
+        $query=$this->db->query("SELECT tblcallevents.*,status.name,action.name aname,status.color,status.clr,init_call.cstatus cstatus,(SELECT name from status WHERE id=cstatus) csname, (select init_call.cmpid_id from init_call WHERE id=tblcallevents.cid_id) as cmpid_id,(select company_master.compname from company_master WHERE id=cmpid_id) as compname, (select company_master.id from company_master WHERE id=cmpid_id) as cid FROM tblcallevents left JOIN action ON action.id=tblcallevents.actiontype_id left JOIN init_call ON init_call.id=tblcallevents.cid_id left JOIN status ON status.id=init_call.cstatus WHERE user_id='$uid' AND nextCFID = 0 and autotask=1 and plan =1 AND DATE(appointmentdatetime) < CURDATE()");
         return $query->result();
     }
+
 
 
     public function get_totaltdetailsDatewise($uid,$tdate){
@@ -4475,15 +4475,16 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
     }
     public function get_ttbytimeAutotask($uid,$tdate,$t1,$t2){
 
-        $utype = $this->Menu_model->get_userbyid($uid);
-        $utype = $utype[0]->type_id;
-        if($utype == 3){
-            $apr_status = "and approved_status = 1";
-        }else{
-            $apr_status = '';
-        }
+        // $utype = $this->Menu_model->get_userbyid($uid);
+        // $utype = $utype[0]->type_id;
+        // if($utype == 3){
+        //     $apr_status = "and approved_status = 1";
+        // }else{
+        //     $apr_status = '';
+        // }
 
-        $query=$this->db->query("SELECT tblcallevents.*,status.name,status.color,(select init_call.cmpid_id from init_call WHERE id=tblcallevents.cid_id) as cmpid_id,(select company_master.compname from company_master WHERE id=cmpid_id) as compname, (select company_master.id from company_master WHERE id=cmpid_id) as cid FROM tblcallevents JOIN status ON status.id=tblcallevents.status_id WHERE assignedto_id='$uid' and cast(appointmentdatetime AS DATE)='$tdate' and autotask=1 and auto_plan=1 and nextCFID=0 and plan=1 and cast(appointmentdatetime AS TIME) BETWEEN '$t1' and '$t2' $apr_status ORDER BY tblcallevents.appointmentdatetime ASC");
+        $query=$this->db->query("SELECT tblcallevents.*,status.name,status.color,(select init_call.cmpid_id from init_call WHERE id=tblcallevents.cid_id) as cmpid_id,(select company_master.compname from company_master WHERE id=cmpid_id) as compname, (select company_master.id from company_master WHERE id=cmpid_id) as cid FROM tblcallevents JOIN status ON status.id=tblcallevents.status_id WHERE assignedto_id='$uid' and cast(appointmentdatetime AS DATE)='$tdate' and autotask=1 and nextCFID=0 and plan=1 and cast(appointmentdatetime AS TIME) BETWEEN '$t1' and '$t2' ORDER BY tblcallevents.appointmentdatetime ASC");
+        
         return $query->result();
     }
 
@@ -4496,7 +4497,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
     
         // $query=$this->db->query("SELECT tblcallevents.*,status.name,status.color,(select init_call.cmpid_id from init_call WHERE id=tblcallevents.cid_id) as cmpid_id,(select company_master.compname from company_master WHERE id=cmpid_id) as compname, (select company_master.id from company_master WHERE id=cmpid_id) as cid FROM tblcallevents JOIN status ON status.id=tblcallevents.status_id WHERE assignedto_id='$uid' and cast(updateddate AS DATE)='$tdate' and nextCFID!=0 and plan=1 and autotask=1 and auto_plan=1 and cast(updateddate AS TIME) BETWEEN '$t1' and '$t2' ORDER BY tblcallevents.appointmentdatetime ASC");
 
-        $query=$this->db->query("SELECT tblcallevents.*,status.name,status.color,(select init_call.cmpid_id from init_call WHERE id=tblcallevents.cid_id) as cmpid_id,(select company_master.compname from company_master WHERE id=cmpid_id) as compname, (select company_master.id from company_master WHERE id=cmpid_id) as cid FROM tblcallevents JOIN status ON status.id=tblcallevents.status_id WHERE assignedto_id='$uid' and cast(updateddate AS DATE)='$tdate' and nextCFID!=0 and plan=1 and autotask=1 and auto_plan=1 ORDER BY tblcallevents.appointmentdatetime ASC");
+        $query=$this->db->query("SELECT tblcallevents.*,status.name,status.color,(select init_call.cmpid_id from init_call WHERE id=tblcallevents.cid_id) as cmpid_id,(select company_master.compname from company_master WHERE id=cmpid_id) as compname, (select company_master.id from company_master WHERE id=cmpid_id) as cid FROM tblcallevents JOIN status ON status.id=tblcallevents.status_id WHERE assignedto_id='$uid' and cast(updateddate AS DATE)='$tdate' and nextCFID!=0 and plan=1 and autotask=1 ORDER BY tblcallevents.appointmentdatetime ASC");
         return $query->result();
     }
     public function get_ttbytimecAutotask($uid,$tdate,$t1,$t2){
@@ -4924,17 +4925,33 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
     }
     public function get_ttbytimedAutotask($uid,$tdate,$t1,$t2){
 
-        $utype = $this->Menu_model->get_userbyid($uid);
-        $utype = $utype[0]->type_id;
-        if($utype ==3){
-            $apr_status = "and approved_status = 1";
-        }else{
-            $apr_status = '';
-        }
+        // $utype = $this->Menu_model->get_userbyid($uid);
+        // $utype = $utype[0]->type_id;
+        // if($utype ==3){
+        //     $apr_status = "and approved_status = 1";
+        // }else{
+        //     $apr_status = '';
+        // }
 
-        $query=$this->db->query("SELECT COUNT(*) AS ab, COUNT(CASE WHEN actiontype_id = 1 THEN 1 END) AS a, COUNT(CASE WHEN actiontype_id = 2 THEN 1 END) AS b, COUNT(CASE WHEN actiontype_id = 3 THEN 1 END) AS c, COUNT(CASE WHEN actiontype_id = 4 THEN 1 END) AS d, COUNT(CASE WHEN actiontype_id = 5 THEN 1 END) AS e, COUNT(CASE WHEN actiontype_id = 6 THEN 1 END) AS f, COUNT(CASE WHEN actiontype_id = 7 THEN 1 END) AS g, COUNT(CASE WHEN actiontype_id = 8 THEN 1 END) AS h, COUNT(CASE WHEN actiontype_id = 9 THEN 1 END) AS i, COUNT(CASE WHEN actiontype_id = 10 THEN 1 END) AS j, COUNT(CASE WHEN actiontype_id = 11 THEN 1 END) AS k, COUNT(CASE WHEN actiontype_id = 12 THEN 1 END) AS l, COUNT(CASE WHEN actiontype_id = 13 THEN 1 END) AS m FROM tblcallevents WHERE assignedto_id = '$uid' AND CAST(appointmentdatetime AS DATE) = '$tdate' AND autotask = 1 AND auto_plan = 1 AND nextCFID = 0 AND plan = 1 $apr_status AND CAST(appointmentdatetime AS TIME) BETWEEN '$t1' AND '$t2'");
+        $query=$this->db->query("SELECT COUNT(*) AS ab, COUNT(CASE WHEN actiontype_id = 1 THEN 1 END) AS a, COUNT(CASE WHEN actiontype_id = 2 THEN 1 END) AS b, COUNT(CASE WHEN actiontype_id = 3 THEN 1 END) AS c, COUNT(CASE WHEN actiontype_id = 4 THEN 1 END) AS d, COUNT(CASE WHEN actiontype_id = 5 THEN 1 END) AS e, COUNT(CASE WHEN actiontype_id = 6 THEN 1 END) AS f, COUNT(CASE WHEN actiontype_id = 7 THEN 1 END) AS g, COUNT(CASE WHEN actiontype_id = 8 THEN 1 END) AS h, COUNT(CASE WHEN actiontype_id = 9 THEN 1 END) AS i, COUNT(CASE WHEN actiontype_id = 10 THEN 1 END) AS j, COUNT(CASE WHEN actiontype_id = 11 THEN 1 END) AS k, COUNT(CASE WHEN actiontype_id = 12 THEN 1 END) AS l, COUNT(CASE WHEN actiontype_id = 13 THEN 1 END) AS m FROM tblcallevents WHERE assignedto_id = '$uid' AND CAST(appointmentdatetime AS DATE) = '$tdate' AND autotask = 1 AND nextCFID = 0 AND plan = 1 AND CAST(appointmentdatetime AS TIME) BETWEEN '$t1' AND '$t2'");
         return $query->result();
     }
+
+
+    public function get_ttbytimedAutotaskCount($uid){
+
+        $query=$this->db->query("SELECT COUNT(*) AS ab, COUNT(CASE WHEN actiontype_id = 1 THEN 1 END) AS a, COUNT(CASE WHEN actiontype_id = 2 THEN 1 END) AS b, COUNT(CASE WHEN actiontype_id = 3 THEN 1 END) AS c, COUNT(CASE WHEN actiontype_id = 4 THEN 1 END) AS d, COUNT(CASE WHEN actiontype_id = 5 THEN 1 END) AS e, COUNT(CASE WHEN actiontype_id = 6 THEN 1 END) AS f, COUNT(CASE WHEN actiontype_id = 7 THEN 1 END) AS g, COUNT(CASE WHEN actiontype_id = 8 THEN 1 END) AS h, COUNT(CASE WHEN actiontype_id = 9 THEN 1 END) AS i, COUNT(CASE WHEN actiontype_id = 10 THEN 1 END) AS j, COUNT(CASE WHEN actiontype_id = 11 THEN 1 END) AS k, COUNT(CASE WHEN actiontype_id = 12 THEN 1 END) AS l, COUNT(CASE WHEN actiontype_id = 13 THEN 1 END) AS m FROM tblcallevents WHERE assignedto_id = '$uid' AND autotask = 1 AND nextCFID = 0 AND plan = 1 AND DATE(appointmentdatetime) < CURDATE()");
+        return $query->result();
+    }
+
+
+     public function get_ttbytimeAutotaskData($uid){
+
+        $query=$this->db->query("SELECT tblcallevents.*,status.name,status.color,(select init_call.cmpid_id from init_call WHERE id=tblcallevents.cid_id) as cmpid_id,(select company_master.compname from company_master WHERE id=cmpid_id) as compname, (select company_master.id from company_master WHERE id=cmpid_id) as cid FROM tblcallevents JOIN status ON status.id=tblcallevents.status_id WHERE assignedto_id='$uid' and autotask=1 and nextCFID=0 and plan=1 and DATE(appointmentdatetime) < CURDATE()");
+        
+        return $query->result();
+    }
+
 
 
 
@@ -4976,9 +4993,12 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
 
     public function get_ttbytimedcAutotask($uid,$tdate,$t1,$t2){
         // $query=$this->db->query("SELECT count(*) ab,COUNT(CASE WHEN actiontype_id=1 THEN actiontype_id END) a,COUNT(CASE WHEN actiontype_id=2 THEN actiontype_id END) b,COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) c,COUNT(CASE WHEN actiontype_id=4 THEN actiontype_id END) d,COUNT(CASE WHEN actiontype_id=5 THEN actiontype_id END) e,COUNT(CASE WHEN actiontype_id=6 THEN actiontype_id END) f,COUNT(CASE WHEN actiontype_id=7 THEN actiontype_id END) g,COUNT(CASE WHEN actiontype_id=8 THEN actiontype_id END) h,COUNT(CASE WHEN actiontype_id=9 THEN actiontype_id END) i,COUNT(CASE WHEN actiontype_id=10 THEN actiontype_id END) j,COUNT(CASE WHEN actiontype_id=11 THEN actiontype_id END) k,COUNT(CASE WHEN actiontype_id=12 THEN actiontype_id END) l,COUNT(CASE WHEN actiontype_id=13 THEN actiontype_id END) m from tblcallevents WHERE assignedto_id='$uid' and cast(updateddate AS DATE)='$tdate' and nextCFID!=0 and plan=1 and autotask=1 and auto_plan=1 and cast(updateddate AS TIME) BETWEEN '$t1' and '$t2'");
-        $query=$this->db->query("SELECT count(*) ab,COUNT(CASE WHEN actiontype_id=1 THEN actiontype_id END) a,COUNT(CASE WHEN actiontype_id=2 THEN actiontype_id END) b,COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) c,COUNT(CASE WHEN actiontype_id=4 THEN actiontype_id END) d,COUNT(CASE WHEN actiontype_id=5 THEN actiontype_id END) e,COUNT(CASE WHEN actiontype_id=6 THEN actiontype_id END) f,COUNT(CASE WHEN actiontype_id=7 THEN actiontype_id END) g,COUNT(CASE WHEN actiontype_id=8 THEN actiontype_id END) h,COUNT(CASE WHEN actiontype_id=9 THEN actiontype_id END) i,COUNT(CASE WHEN actiontype_id=10 THEN actiontype_id END) j,COUNT(CASE WHEN actiontype_id=11 THEN actiontype_id END) k,COUNT(CASE WHEN actiontype_id=12 THEN actiontype_id END) l,COUNT(CASE WHEN actiontype_id=13 THEN actiontype_id END) m from tblcallevents WHERE assignedto_id='$uid' and cast(updateddate AS DATE)='$tdate' and nextCFID!=0 and plan=1 and autotask=1 and auto_plan=1");
+        $query=$this->db->query("SELECT count(*) ab,COUNT(CASE WHEN actiontype_id=1 THEN actiontype_id END) a,COUNT(CASE WHEN actiontype_id=2 THEN actiontype_id END) b,COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) c,COUNT(CASE WHEN actiontype_id=4 THEN actiontype_id END) d,COUNT(CASE WHEN actiontype_id=5 THEN actiontype_id END) e,COUNT(CASE WHEN actiontype_id=6 THEN actiontype_id END) f,COUNT(CASE WHEN actiontype_id=7 THEN actiontype_id END) g,COUNT(CASE WHEN actiontype_id=8 THEN actiontype_id END) h,COUNT(CASE WHEN actiontype_id=9 THEN actiontype_id END) i,COUNT(CASE WHEN actiontype_id=10 THEN actiontype_id END) j,COUNT(CASE WHEN actiontype_id=11 THEN actiontype_id END) k,COUNT(CASE WHEN actiontype_id=12 THEN actiontype_id END) l,COUNT(CASE WHEN actiontype_id=13 THEN actiontype_id END) m from tblcallevents WHERE assignedto_id='$uid' and cast(updateddate AS DATE)='$tdate' and nextCFID!=0 and plan=1 and autotask=1");
         return $query->result();
     }
+   
+    
+    
 
     public function autotasktimenew($uid,$date){
         $getplandateindata  =  $this->db->query("SELECT * FROM `autotask_time` where user_id='$uid' AND date ='$date'");
@@ -6695,6 +6715,45 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         $state = $this->Menu_model->get_statebyid($state);
         $country = $this->Menu_model->get_countrybyid($country);
 
+        $getplandateindata  =  $this->db->query("SELECT * FROM `autotask_time` where user_id='$uid' AND date ='$cdate'");
+        $getplandateindata =  $getplandateindata->result();
+        
+        if(sizeof($getplandateindata) > 0 ){
+
+            $atid = $getplandateindata[0]->id;
+            $taskdate = $getplandateindata[0]->date;
+            $taskstime = $getplandateindata[0]->stime;
+            $tasketime = $getplandateindata[0]->etime;
+            $taskplanmincount = $getplandateindata[0]->planmincount;
+            $taskAssigntime = $taskdate.' '.$taskstime;
+
+            $datetime1 = new DateTime($taskstime);
+            $datetime2 = new DateTime($tasketime);
+            $interval = $datetime1->diff($datetime2);
+            $minutes = ($interval->h * 60) + $interval->i;
+            if ($interval->invert) {
+                $minutes = -$minutes;
+            }
+                    
+            if($taskplanmincount == ''){
+                $taskplanmincount = 0;
+            }
+
+            if($next_action_id ==6){
+                $taskplanmincount = $taskplanmincount+10;
+                $modifystr = "+$taskplanmincount minutes";
+            }else{
+                $new_datetime = $date;
+            }
+
+            $newdate = new DateTime($taskAssigntime);
+            $modifystr = "+$taskplanmincount minutes";
+            $newdate->modify($modifystr);
+            $new_datetime = $newdate->format('Y-m-d H:i:s');
+            $date =  $new_datetime;
+        
+        }
+
        $this->db->query("update company_master set compname='$compname', draft='$draft', budget='$budget', address='$address', website='$website', createddate='$cdate', city='$city', country='$country', partnerType_id='$ctype', state='$state' where id='$cid'");
        $cid = $this->db->insert_id();
 
@@ -6703,8 +6762,11 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
 
        $this->db->query("update init_call set draft='$draft', createDate='$cdate', topspender='$top_spender', creator_id='$uid',upsell_client='$upsell_client',focus_funnel='$focus_funnel',mainbd='$uid',cstatus='$status',pkclient='$key_client',potential='$potential_company',cluster_id='$cluster_id' where id='$inid'");
 
-       $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type,plan,autotask) VALUES ('$tid', '0', '$draft', '', '$date', 'no', '$next_action', 'NA','NA','no','$date','$next_action_id','$assign_to','$inid','$purpose','$remark_msg','$status','$assign_to','$date','$date','updated','1','1')");
+
+       $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type,plan,autotask,approved_status,approved_by,self_assign) VALUES ('$tid', '0', '$draft', '', '$date', 'no', '$next_action', 'NA','NA','no','$date','$next_action_id','$assign_to','$inid','$purpose','$remark_msg','$status','$assign_to','$date','$date','updated','1','1','1','System','4')");
        $tblid = $this->db->insert_id();
+
+
        $query=$this->db->query("update tblcallevents set nextCFID='$tblid' WHERE id='$tid'");
 
         $remark_msg = 'RP Meeting done';
@@ -6712,7 +6774,16 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         $next_action_id = 2;
         $next_action = 'Write Thanks Mail';
 
-       $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type,plan,autotask) VALUES ('$tblid', '0', '$draft', '', '$date', 'no', '$next_action', 'NA','NA','no','$date','$next_action_id','$assign_to','$inid','$purpose','$remark_msg','$status','$assign_to','$date','$date','updated','1','1')");
+        if(sizeof($getplandateindata) > 0 ){
+        $taskplanmincount = $taskplanmincount+10;
+        $newdate = new DateTime($taskAssigntime);
+        $modifystr = "+$taskplanmincount minutes";
+        $newdate->modify($modifystr);
+        $new_datetime = $newdate->format('Y-m-d H:i:s');
+        $date =  $new_datetime;
+        }
+
+       $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type,plan,autotask,approved_status,approved_by,self_assign) VALUES ('$tblid', '0', '$draft', '', '$date', 'no', '$next_action', 'NA','NA','no','$date','$next_action_id','$assign_to','$inid','$purpose','$remark_msg','$status','$assign_to','$date','$date','updated','1','1','1','System','4')");
        $tblid = $this->db->insert_id();
 
        $query=$this->db->query("update barginmeeting set status='Close' WHERE id='$bmid'");
@@ -6825,18 +6896,20 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                     if ($interval->invert) {
                         $minutes = -$minutes;
                     }
-
+                    
+                
                     if($taskplanmincount == ''){
                         $taskplanmincount = 0;
                     }
 
                     $getremningtime = $minutes - $taskplanmincount;
+                
 
-                    if($getremningtime < 1){
-                        $this->load->library('session');
-                        $this->session->set_flashdata('success_message','Your auto Task time is up');
-                        redirect("Menu/TaskPlanner/".date('Y-m-d'));
-                    }
+                    // if($getremningtime < 1){
+                    //     $this->load->library('session');
+                    //     $this->session->set_flashdata('success_message','Your auto Task time is up');
+                    //     redirect("Menu/TaskPlanner/".date('Y-m-d'));
+                    // }
 
                     
                     $fwd_date = date('Y-m-d H:i:s');
@@ -6853,7 +6926,10 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                             'purpose_id'=>$queryData[0]->purpose_id,
                             'autotask' =>'1',
                             'status_id'=>$queryData[0]->status_id,
-                            'remarks'=>$remark
+                            'remarks'=>$remark,
+                            'approved_status'=>1,
+                            'approved_by'=>'System',
+                            'self_assign'=>'4'
                         ];
                        $this->db->insert('tblcallevents',$data);
 
@@ -6862,7 +6938,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
 
                         $this->db->query("UPDATE tblcallevents SET remarks='$remark',nextCFID='$ntid',updateddate='$date',status_id='$cs',nstatus_id='$cs',actontaken='no',purpose_achieved='no',updation_data_type='update' WHERE id='$tid'");
 
-
+                        
 
                         }else{
 
@@ -6878,7 +6954,10 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                                 'purpose_id'=>$queryData[0]->purpose_id,
                                 'autotask' =>'1',
                                 'status_id'=>$queryData[0]->status_id,
-                                'remarks'=>$remark
+                                'remarks'=>$remark,
+                                'approved_status'=>1,
+                                'approved_by'=>'System',
+                                'self_assign'=>'4'
                             ];
                             $this->db->insert('tblcallevents',$data1);
                             // $this->db->query("INSERT INTO tblcallevents (fwd_date,actiontype_id,assignedto_id,cid_id,purpose_id,status_id,user_id,lastCFID,nextCFID,autotask,'auto_plan') SELECT '$date',actiontype_id,'$uid',cid_id,purpose_id,status_id,'$uid','0','0','1','1' FROM tblcallevents WHERE id='$tid'");
@@ -6887,7 +6966,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                             $this->db->query("UPDATE tblcallevents SET remarks='$remark',nextCFID='$ntid',updateddate='$date',status_id='$cs',nstatus_id='$cs',actontaken='no',purpose_achieved='no',updation_data_type='updated'  WHERE id='$tid'");
                         }
 
-                        if($actiontype_id ==1 || $actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==10 || $actiontype_id ==15){
+                        if($actiontype_id ==1 || $actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==10 || $actiontype_id ==15 || $actiontype_id ==18 || $actiontype_id ==19){
                             $taskplanmincount = $taskplanmincount+5;
                             $modifystr = "+$taskplanmincount minutes";
                         }else if($actiontype_id ==2 || $actiontype_id ==6){
@@ -6902,7 +6981,8 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                         }else if($actiontype_id ==11 || $actiontype_id ==13 || $actiontype_id ==14){
                             $taskplanmincount = $taskplanmincount+2;
                             $modifystr = "+$taskplanmincount minutes";
-                        }else{
+                        }
+                        else{
                             $new_datetime = $date;
                         }
 
@@ -6911,6 +6991,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                         $newdate->modify($modifystr);
                         $new_datetime = $newdate->format('Y-m-d H:i:s');
 
+            
                         $this->db->query("UPDATE autotask_time SET planmincount = '$taskplanmincount' where id= $atid");
                          $query=$this->db->query("UPDATE tblcallevents SET appointmentdatetime='$new_datetime',autotask=1,auto_plan=1,plan=1 WHERE id='$ntid'");
                         return $ntid;
@@ -6984,7 +7065,10 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                                     'purpose_id'=>$queryData[0]->purpose_id,
                                     'autotask' =>'1',
                                     'status_id'=>$queryData[0]->status_id,
-                                    'remarks'=>$remark
+                                    'remarks'=>$remark,
+                                    'approved_status'=>1,
+                                    'approved_by'=>'System',
+                                    'self_assign'=>'4'
                                 ];
 
                                $this->db->insert('tblcallevents',$data);
@@ -7009,7 +7093,10 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                                         'purpose_id'=>$queryData[0]->purpose_id,
                                         'autotask' =>'1',
                                         'status_id'=>$queryData[0]->status_id,
-                                        'remarks'=>$remark
+                                        'remarks'=>$remark,
+                                        'approved_status'=>1,
+                                        'approved_by'=>'System',
+                                        'self_assign'=>'4'
                                     ];
                                     $this->db->insert('tblcallevents',$data2);
 
@@ -7017,11 +7104,9 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                                     $this->db->query("UPDATE tblcallevents SET remarks='$remark',nextCFID='$ntid',updateddate='$date',status_id='$cs',nstatus_id='$cs',actontaken='$actontaken',purpose_achieved='$purpose',updation_data_type='update', autotask='1'  WHERE id='$tid'");
                                 }
 
-                                if($actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==10 || $actiontype_id ==15){
-
+                                if($actiontype_id ==1 || $actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==10 || $actiontype_id ==15 || $actiontype_id ==18 || $actiontype_id ==19){
                                     $taskplanmincount = $taskplanmincount+5;
                                     $modifystr = "+$taskplanmincount minutes";
-
                                 }else if($actiontype_id ==2 || $actiontype_id ==6){
                                     $taskplanmincount = $taskplanmincount+10;
                                     $modifystr = "+$taskplanmincount minutes";
@@ -7043,8 +7128,6 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                                 $newdate->modify($modifystr);
                                 $new_datetime = $newdate->format('Y-m-d H:i:s');
 
-                               
-
                                 $this->db->query("UPDATE autotask_time SET planmincount = '$taskplanmincount' where id= $atid");
                                  $query=$this->db->query("UPDATE tblcallevents SET appointmentdatetime='$new_datetime',auto_plan=1,plan=1 WHERE id='$ntid'");
 
@@ -7055,9 +7138,6 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                             $this->session->set_flashdata('success_message',' You Need to First Set Your Auto Task Time');
                             redirect("Menu/TaskPlanner/".date('Y-m-d'));
                         }
-
-
-
                    }
                    else{    
                   
@@ -9550,7 +9630,7 @@ WHERE plan = '1'  and nextCFID='0' and actiontype_id='$aid' and status_id='$stid
 
     public function get_PendingAutoTask($uid){
 
-        $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND nextCFID = 0 and autotask=1 and actiontype_id = 2 and plan =1 AND DATE(appointmentdatetime) < CURDATE()");
+        $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND nextCFID = 0 and autotask=1 and plan =1 AND DATE(appointmentdatetime) < CURDATE()");
 
         return $query->result();
     }
@@ -12403,6 +12483,13 @@ public function GetDayCloseRequestData($uid,$adate,$uyid){
 public function getUserDayStartDetails($uid,$tdate){
 
     $query=$this->db->query("SELECT * FROM user_day WHERE user_id='$uid' and cast(sdatet as DATE)='$tdate'");
+    return $query->result();
+
+}
+
+public function GetTodaysAutoTaskANDPlanningTime($uid,$tdate){
+    $curdate = date("Y-m-d");
+    $query  =  $this->db->query("SELECT * FROM `autotask_time` where user_id='$uid' AND date ='$curdate'");
     return $query->result();
 
 }

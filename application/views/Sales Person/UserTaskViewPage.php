@@ -292,17 +292,20 @@ span.tsby {
                                                           <?= ($status == 1) ? 'Approved' : (($status == '') ? 'Pending' : 'Rejected'); ?>
                                                           </span>
                                                       </td>
-                                                      <td>
-                                                      <?php
+                                                      <td><?php
                                                       if($approver ==''){ ?>
                                                          <span class="p-1 bg-warning mr-2">Pending</span>
                                                       <?php }else{
-                                                      $userData = $this->Menu_model->get_userbyid($approver);
-                                                      $name = $userData[0]->name;
-                                                      echo $name;
+                                                        if($approver == 'System'){ ?>
+                                                         <span class="p-1 bg-success mr-2"><?= $approver ?></span>
+                                                       <?php }else{
+                                                          $userData = $this->Menu_model->get_userbyid($approver);
+                                                          $name = $userData[0]->name;
+                                                          echo $name;
+                                                        }
+                                                      
                                                       }
-                                                       ?>
-                                                       </td>
+                                                       ?></td>
                                                       <td>
                                                       <?php if($selfAssign == 1){?>
                                                           <div>                                                         
@@ -312,6 +315,8 @@ span.tsby {
                                                           <span class="p-1 bg-success mr-2">Task&nbsp;successfully&nbsp;assigned&nbsp;by&nbsp;admin!</span>
                                                        <?php }else if($selfAssign == 3){ ?>
                                                           <span class="p-1 bg-success mr-2">User&nbsp;Assigned&nbsp;Task&nbsp;via&nbsp;Admin&nbsp;Request</span>
+                                                       <?php }else if($status ==1 && $selfAssign == 4){?>
+                                                        <span class="p-1 bg-success mr-2">Task&nbsp;Approved&nbsp;&nbsp;by&nbsp;System!</span>
                                                        <?php }else if($status ==1 && $selfAssign == ''){?>
                                                           <span class="p-1 bg-success mr-2">Approved</span>
                                                        <?php }else if($status ==0 && $selfAssign == ''){ ?>

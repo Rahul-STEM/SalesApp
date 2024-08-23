@@ -11511,10 +11511,9 @@ public function getTasks($id,$date){
     $this->db->from('tblcallevents tce');
     $this->db->join('init_call', 'init_call.id = tce.cid_id', 'left');
     $this->db->join('company_master', 'company_master.id = init_call.cmpid_id', 'left');
-    $this->db->join('ACTION action_name', 'action_name.id = tce.actiontype_id', 'left');
-    $this->db->join('STATUS s1', 's1.id = tce.status_id', 'left');
-    $this->db->join('STATUS s2', 's2.id = tce.nstatus_id', 'left');
-    // $this->db->join('STATUS s3', 's3.id = tce.nstatus_id', 'left');
+    $this->db->join('action action_name', 'action_name.id = tce.actiontype_id', 'left');
+    $this->db->join('status s1', 's1.id = tce.status_id', 'left');
+    $this->db->join('status s2', 's2.id = tce.nstatus_id', 'left');
     $this->db->where('user_id', $id);
     $this->db->where('CAST(updateddate AS DATE) =', "'$date'", FALSE);
     $this->db->where('rremark IS NULL', NULL, FALSE);
@@ -11584,7 +11583,7 @@ public function getActionDetails($id) {
     $this->db->select('tce.*');
     $this->db->select('action_name.name action_name');
     $this->db->from('tblcallevents tce');
-    $this->db->join('ACTION action_name', 'action_name.id = tce.actiontype_id', 'left');
+    $this->db->join('action action_name', 'action_name.id = tce.actiontype_id', 'left');
     $this->db->where('tce.id', $id);
 // echo $this->db->last_query();die;
     $query = $this->db->get();
@@ -11796,8 +11795,7 @@ public function getTeamDeatilsByDate($uid,$tdate){
                 FROM
                     user_details
                 WHERE
-                STATUS
-                    = 'active' $subQuery 
+                   status = 'active' $subQuery 
             ) TotalTeamMembers,
             COUNT(*) TotalTeamMembersPresent,
             COUNT(CASE WHEN wffo = 1 THEN wffo

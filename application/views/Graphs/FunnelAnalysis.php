@@ -297,7 +297,7 @@
                                                             $formId = 'hiddenForm_' . htmlspecialchars($FunnelDataSingle->stid);
                                                         ?>
                                                         
-                                                        <form id="<?= $formId; ?>" action="<?= base_url(); ?>GraphNew/StatusWiseFunnelData/<?=$FunnelDataSingle->stid?>" method="POST" style="display: none;">
+                                                        <form id="<?= $formId; ?>" action="<?= base_url(); ?>GraphNew/StatusWiseFunnelData/<?=$FunnelDataSingle->stid?>" method="POST" style="display: none;" target="_blank">
                                                             <input type="hidden" name="selected_partnerType" value="<?= htmlspecialchars($arrayselected_partnerType); ?>">
 
                                                             <input type="hidden" name="arrayselected_cluster" value="<?= htmlspecialchars($arrayselected_cluster)?>">
@@ -312,7 +312,7 @@
                                                         <div class="col-md-3 mb-2" >
                                                             <div class="card card p-3 col-sm m-auto bg-light">
                                                                 <strong>
-                                                                    <a href="#" onclick="document.getElementById('<?= $formId; ?>').submit();" style="color:<?=$FunnelDataSingle->stclr?>">
+                                                                    <a href="javascript:void(0);" onclick="document.getElementById('<?= $formId; ?>').submit();" style="color:<?=$FunnelDataSingle->stclr?>">
                                                                         <?=$FunnelDataSingle->stname?> - <?=$FunnelDataSingle->cont?>
                                                                     </a>
                                                                     
@@ -341,6 +341,7 @@
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 </script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Get all category cards
@@ -379,27 +380,39 @@ document.addEventListener('DOMContentLoaded', function() {
     function drawChart() {
 
         const chartData = <?php echo json_encode($FunnelData); ?>;
-        // const code = <?php //echo ($code); ?>;
         var sdate = <?php echo json_encode($sdate); ?>;
         var edate = <?php echo json_encode($edate); ?>;
-        var selected_partnerType = <?php echo json_encode($selected_partnerType); ?>;
         var selected_category = <?php echo json_encode($selected_category); ?>;
+        var selected_partnerType = <?php echo json_encode($selected_partnerType); ?>;
+        var selected_userType = <?php echo json_encode($userType); ?>;
+        var selected_cluster = <?php echo json_encode($cluster); ?>;
+        var selected_users = <?php echo json_encode($selected_users); ?>;
+        var uid = <?php echo json_encode($uid); ?>;
+        
 
-        // console.log(sdate);
+        var selectedPartnerTypeString = JSON.stringify(selected_partnerType);
+        var selected_categoryString = JSON.stringify(selected_category);
+        var selected_clusterString = JSON.stringify(selected_cluster);
+        var selected_usersString = JSON.stringify(selected_users);
+        var selected_userTypeString = JSON.stringify(selected_userType);
+        // var uid = JSON.stringify(uid);
+
+        // console.log(selectedPartnerTypeString);
         const code = '';
+        const filteredData = chartData.filter(item => item.stname && item.cont && item.stid);
         // console.log(chartData);
-        const filteredData = chartData.filter(item => item.stname && item.cont);
 
                 // Map labels and values
         const labels = filteredData.map(item => item.stname);
         const dataValues = filteredData.map(item => Number(item.cont));
+        const stid = filteredData.map(item => Number(item.stid));
 
         const dataArray = [
-            ['Status', 'Count']  // Adjust column names as needed
+            ['Status', 'Count','StatusID']  // Adjust column names as needed
         ];
 
         for (let i = 0; i < labels.length; i++) {
-            dataArray.push([labels[i], dataValues[i]]);
+            dataArray.push([labels[i], dataValues[i], stid[i]]);
         }
 
         const data = google.visualization.arrayToDataTable(dataArray);
@@ -410,9 +423,89 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const chart = new google.visualization.PieChart(document.getElementById('StatusWisePieChart'));
 
+        google.visualization.events.addListener(chart, 'select', function() {
+            var selection = chart.getSelection()[0];
+            if (selection) {
+
+
+                var stid = data.getValue(selection.row, 2);
+                // var sdate = encodeURIComponent(sdate);
+                // var edate = encodeURIComponent(edate);
+                // var selected_partnerType = encodeURIComponent(selected_partnerType);
+
+                // Create a hidden form
+                var form = document.createElement('form');
+                form.method = 'POST'; // Use POST method
+                form.action = '<?=base_url();?>GraphNew/StatusWiseFunnelGraphData';
+                form.target = '_blank';
+
+                // Create hidden input fields
+                var inputStid = document.createElement('input');
+                inputStid.type = 'hidden';
+                inputStid.name = 'stid';
+                inputStid.value = stid;
+                form.appendChild(inputStid);
+
+                var inputSdate = document.createElement('input');
+                inputSdate.type = 'hidden';
+                inputSdate.name = 'sdate';
+                inputSdate.value = sdate;
+                form.appendChild(inputSdate);
+
+                var inputEdate = document.createElement('input');
+                inputEdate.type = 'hidden';
+                inputEdate.name = 'edate';
+                inputEdate.value = edate;
+                form.appendChild(inputEdate);
+
+                var inputuid = document.createElement('input');
+                inputuid.type = 'hidden';
+                inputuid.name = 'uid';
+                inputuid.value = uid;
+                form.appendChild(inputuid);
+                
+
+                var inputSelectedPartnerType = document.createElement('input');
+                inputSelectedPartnerType.type = 'hidden';
+                inputSelectedPartnerType.name = 'selected_partnerType';
+                inputSelectedPartnerType.value = selectedPartnerTypeString;
+                form.appendChild(inputSelectedPartnerType);
+
+                var inputselected_userType = document.createElement('input');
+                inputselected_userType.type = 'hidden';
+                inputselected_userType.name = 'selected_userType';
+                inputselected_userType.value = selected_userTypeString;
+                form.appendChild(inputselected_userType);
+
+                var inputselected_cluster = document.createElement('input');
+                inputselected_cluster.type = 'hidden';
+                inputselected_cluster.name = 'selected_cluster';
+                inputselected_cluster.value = selected_clusterString;
+                form.appendChild(inputselected_cluster);
+
+                var inputselected_users = document.createElement('input');
+                inputselected_users.type = 'hidden';
+                inputselected_users.name = 'selected_users';
+                inputselected_users.value = selected_usersString;
+                form.appendChild(inputselected_users);
+
+                var inputselected_category = document.createElement('input');
+                inputselected_category.type = 'hidden';
+                inputselected_category.name = 'selected_category';
+                inputselected_category.value = selected_categoryString;
+                form.appendChild(inputselected_category);
+                // Append the form to the body and submit
+                
+                document.body.appendChild(form);
+                form.submit();
+
+            }
+        });
+
         chart.draw(data, options);
     }
 </script>
+
 <script>
     // Function to handle radio button change
     function handleRadioChange() {
@@ -443,6 +536,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 </script>
+
 <script>
     $(document).ready(function() {
         

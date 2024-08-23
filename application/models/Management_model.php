@@ -14,7 +14,7 @@ class Management_model  extends Menu_model {
 
 
     public function CheckingDayManage($uid,$cdate){
-        $cdate = '2024-07-20';
+        // $cdate = '2024-07-20';
         $utype = $this->Menu_model->get_userbyid($uid);
         $utype = $utype[0]->type_id;
         if($utype ==15){
@@ -44,6 +44,7 @@ class Management_model  extends Menu_model {
         $date->modify('-1 day');
         $pdate =  $date->format('Y-m-d');
         $query=$this->db->query("SELECT COUNT(*) AS plan, COUNT(CASE WHEN autotask = 1 THEN autotask END) AS autotask, COUNT(CASE WHEN nextCFID != 0 THEN 1 END) AS done, COUNT(CASE WHEN nextCFID = 0 AND lastCFID = 0 THEN 1 END) AS pending FROM tblcallevents WHERE assignedto_id = $uid AND CAST(appointmentdatetime AS DATE) = '$pdate'");
+        // echo $this->db->last_query();
 
         return $query->result();
        

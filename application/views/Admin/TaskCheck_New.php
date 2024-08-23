@@ -149,16 +149,6 @@
     <section class="content">
       <div class="container-fluid">
       <div class="alert alert-success" id="success-message" style="display: none;">Thank you for your rating!</div>
-        <!-- <?php if ($this->session->flashdata('success_message')): ?>
-            <hr>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong> <?php echo $this->session->flashdata('success_message'); ?></strong>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                <hr>
-        <?php endif; ?> -->
        <div class="row p-3">
            <div class="col-sm col-md-12 col-lg-12 m-auto">
               	<div class="card card-success card-outline">
@@ -190,8 +180,6 @@
                             <nav>
                                 <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                                     <a class="nav-item nav-link active" id="nav_Planner" data-toggle="tab" href="#Planner" role="tab" aria-controls="Planner" aria-selected="true">Planner Rating</a>
-                                    <!-- <a class="nav-item nav-link" id="nav_Status" data-toggle="tab" href="#Status" role="tab" aria-controls="YesterdayEvening" aria-selected="false">Status Rating</a>
-                                    <a class="nav-item nav-link" id="nav_Action" data-toggle="tab" href="#Action" role="tab" aria-controls="YesterdayTask" aria-selected="false">Action Rating</a> -->
                                 </div>
                             </nav>
                             <div class="tab-content" id="nav-tabContent">
@@ -202,16 +190,12 @@
                                                 <th>#</th>
                                                 <th>Company Name</th>
                                                 <th>Action</th>
-                                                <!-- <th>Filter Used</th> -->
                                                 <th>Action And Purpose </th>
                                                 <th>Planned Date-time</th>
                                                 <th>Initiated Date-time</th>
                                                 <th>Update Date-time</th>
-                                                <!-- <th>Time Taken to Complete Task</th> -->
-                                                <!-- <th>Action Performed Time</th> -->
                                                 <th>Status</th>
                                                 <th>Last Task Planned Date</th>
-                                                <!-- <th>Same Status Since</th> -->
                                                 <th>Remark</th>
                                                 <th>Next Action Planned</th>
                                             </tr>
@@ -244,14 +228,9 @@
                                                 
                                                 ?>
                                             <tr>
-
                                                 <td><?= $i; ?></td>
                                                 <td><a href="#"><?= $task->compname; ?></a></td>
                                                 <td><?= $task->action_name; ?></td>
-                                                <!-- <td data-question="was correct filters were used" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>"><?= $task->filter_used; ?>
-                                                    <br><br><hr>
-                                                    <p class="question">Was Correct filters were used..??</p>
-                                                </td> -->
                                                 <td>Action Taken - <b><?= $task->actontaken; ?></b>  <br> <hr> Purpose Achieved - <b> <?= $task->purpose_achieved; ?></b> </td>
                                                 <td data-question="Was Task Planned on time" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>"><?= $task->plan_date; ?>
                                                     <br><br><hr>
@@ -375,51 +354,6 @@
                                                     }  ?>
 
                                                 </td>
-                                                <!-- <td data-question="time taken to complete task was correct" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>">
-                                                    
-                                                    Time taken from planning to initiate : <b> <?= $task->time_diff1; ?></b>
-                                                    <br>
-                                                    <br>
-                                                    Time taken from initiating to update : <b> <?= $task->time_diff; ?></b>
-                                                    
-                                                    <br><hr>
-
-                                                    <p class="question">Time Taken to complete task was correct..??</p>
-                                                    <?php 
-
-                                                    $chkStarRating = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($task->user_id,'time taken to complete task was correct',$task->tid);
-
-                                                    
-                                                    if(sizeof($chkStarRating) == 0){ ?> 
-                                                        <div class="rating">
-                                                            <input type="radio" name="rat4_<?= $task->user_id; ?>" value="5" id="20_<?= $task->user_id; ?>"><label for="20_<?= $task->user_id; ?>">☆</label>
-                                                            <input type="radio" name="rat4_<?= $task->user_id; ?>" value="4" id="19_<?= $task->user_id; ?>"><label for="19_<?= $task->user_id; ?>">☆</label>
-                                                            <input type="radio" name="rat4_<?= $task->user_id; ?>" value="3" id="18_<?= $task->user_id; ?>"><label for="18_<?= $task->user_id; ?>">☆</label>
-                                                            <input type="radio" name="rat4_<?= $task->user_id; ?>" value="2" id="17_<?= $task->user_id; ?>"><label for="17_<?= $task->user_id; ?>">☆</label>
-                                                            <input type="radio" name="rat4_<?= $task->user_id; ?>" value="1" id="16_<?= $task->user_id; ?>"><label for="16_<?= $task->user_id; ?>">☆</label>
-                                                        </div> 
-                                                        <?php }else{
-
-                                                            foreach($chkStarRating as $star){
-                                                                // var_dump($chkStarRating);die;
-                                                                $starRating = $star->star;
-                                                                $starRemark = $star->remarks;
-                                                                
-                                                            }
-                                                            echo "<hr>";
-                                                            echo "<span class='text-dark font-weight-normal'><b>Total Star Given</b> :</span>";
-                                                            echo "<div class='star-rating'>";
-                                                            $totalStars = 5;
-                                                            for ($i = 0; $i < $starRating; $i++) {
-                                                                echo "<i class='fas fa-star'></i>"; // filled star
-                                                            }
-                                                            for ($i = $starRating; $i < $totalStars; $i++) {
-                                                                echo "<i class='far fa-star'></i>"; // empty star
-                                                            }
-                                                            echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
-                                                        }  ?>
-                                                </td> -->
-                                                <!-- <td></td> -->
                                                 <td data-question="status change was correct" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>"><?=$task->old_status?> to <?=$task->new_status?>
                                                     <br><hr>
 
@@ -456,7 +390,6 @@
                                                                 echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
                                                             }  ?>
                                                 </td>
-                                                
                                                 <td><?=$lastActionDate;?></td>
                                                 <td data-question="correct remark entered" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>"><?= $task->remarks; ?>
                                                     <br><hr>

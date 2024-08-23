@@ -91,7 +91,7 @@
                                         <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                                             <a class="nav-item nav-link active" id="nav_GridView" data-toggle="tab" href="#GridView" role="tab" aria-controls="GridView" aria-selected="true">Grid View</a>
                                             <a class="nav-item nav-link" id="nav_TableView" data-toggle="tab" href="#TableView" role="tab" aria-controls="TableView" aria-selected="false">XLS View</a>
-                                            <a class="nav-item nav-link" id="nav_TabView" data-toggle="tab" href="#TabView" role="tab" aria-controls="TabView" aria-selected="false">Tab View</a>
+                                            <!-- <a class="nav-item nav-link" id="nav_TabView" data-toggle="tab" href="#TabView" role="tab" aria-controls="TabView" aria-selected="false">Tab View</a> -->
                                         </div>
                                     </nav>
                                     <div class="tab-content">
@@ -199,7 +199,7 @@
                                             </div>
                                            
                                         </div>
-                                        <div class="tab-pane fade" id="TabView" role="tabpanel" aria-labelledby="nav_TabView">
+                                        <!-- <div class="tab-pane fade" id="TabView" role="tabpanel" aria-labelledby="nav_TabView">
                                             <div class="card-body">
                                                 <div class="row">
                                                 <?php foreach ($TableData as $TableDataGrid) { ?>
@@ -214,7 +214,7 @@
                                                     <?php } ?>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get all category cards
     const categoryCards = document.querySelectorAll('.card');
 
-    console.log(categoryCards);
+    // console.log(categoryCards);
     // Get all filter items
     const filterItems = document.querySelectorAll('.filter-item');
 
@@ -273,24 +273,22 @@ document.addEventListener('DOMContentLoaded', function() {
     function drawChart() {
 
         const GraphData = <?php echo json_encode($GraphData); ?>;
-        // const code = <?php //echo ($code); ?>;
+        var sdate = <?php echo json_encode($sdate); ?>;
+        var edate = <?php echo json_encode($edate); ?>;
 
-
-        // console.log(sdate);
-        const code = '';
-        // console.log(chartData);
-        const filteredData = GraphData.filter(item => item.city && item.cont);
+        const filteredData = GraphData.filter(item => item.city && item.cont && item.cityid);
 
                 // Map labels and values
         const labels = filteredData.map(item => item.city);
         const dataValues = filteredData.map(item => Number(item.cont));
+        const CityID = filteredData.map(item => Number(item.cityid));
 
         const dataArray = [
-            ['City', 'Count']  // Adjust column names as needed
+            ['City', 'Count','CityID']  // Adjust column names as needed
         ];
 
         for (let i = 0; i < labels.length; i++) {
-            dataArray.push([labels[i], dataValues[i]]);
+            dataArray.push([labels[i], dataValues[i] ,CityID[i]]);
         }
 
         const data = google.visualization.arrayToDataTable(dataArray);
@@ -300,6 +298,20 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         const chart = new google.visualization.PieChart(document.getElementById('CityWisePieChart'));
+
+        google.visualization.events.addListener(chart, 'select', function() {
+
+            var selection = chart.getSelection()[0];
+            if (selection) {
+
+                var cityid = data.getValue(selection.row, 2);
+
+              // Redirect to another URL with stid and uuid as parameters
+                // window.location.href = '<?=base_url();?>GraphNew/CityWiseFunnelGraphData/' + cityid + '/' + sdate + '/' + edate ;
+                var url = '<?=base_url();?>GraphNew/CityWiseFunnelGraphData/' + cityid + '/' + sdate + '/' + edate;
+                window.open(url, '_blank');
+            }
+        });
 
         chart.draw(data, options);
     }

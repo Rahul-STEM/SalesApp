@@ -8853,9 +8853,9 @@ class Menu extends CI_Controller {
         $dt=$this->Menu_model->get_utype($uyid);
         $userList = $this->Menu_model->get_userForTask($uid,$uyid);
         $dep_name = $dt[0]->name;
-        $tdate=date('Y-m-d H:i:s');
+        $tdate=date('Y-m-d');
         $taskList = array();
-
+        // $tdate = '2024-07-19';
         if(isset($_POST['userId'])){
 
             $userId = $_POST['userId'];
@@ -8875,24 +8875,24 @@ class Menu extends CI_Controller {
 
     public function getTaskByUser(){
 
-        $user = $this->session->userdata('user');
-        $data['user'] = $user;
-        $uid = $user['user_id'];
-        $uyid =  $user['type_id'];
-        $this->load->model('Menu_model');
-        $dt=$this->Menu_model->get_utype($uyid);
-        $dep_name = $dt[0]->name;
+        // $user = $this->session->userdata('user');
+        // $data['user'] = $user;
+        // $uid = $user['user_id'];
+        // $uyid =  $user['type_id'];
+        // $this->load->model('Menu_model');
+        // $dt=$this->Menu_model->get_utype($uyid);
+        // $dep_name = $dt[0]->name;
 
-        $userId = '100192';
-        $tdate = '2024-07-20';
-        // var_dump($_POST);die;
-        $getTasks = $this->Menu_model->getTasks($userId,$tdate);
-        print_r($getTasks);die;
-        if(!empty($user)){
-            $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'tasks'=>$getTasks]);
-        }else{
-            redirect('Menu/main');
-        }
+        // $userId = '100192';
+        // $tdate = '2024-07-20';
+        // // var_dump($_POST);die;
+        // $getTasks = $this->Menu_model->getTasks($userId,$tdate);
+        // print_r($getTasks);die;
+        // if(!empty($user)){
+        //     $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'tasks'=>$getTasks]);
+        // }else{
+        //     redirect('Menu/main');
+        // }
     }
 
 

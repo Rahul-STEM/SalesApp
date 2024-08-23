@@ -286,20 +286,24 @@ document.addEventListener('DOMContentLoaded', function() {
     function drawChart() {
 
         const GraphData = <?php echo json_encode($GraphData); ?>;
+        var sdate = <?php echo json_encode($sdate); ?>;
+        var edate = <?php echo json_encode($edate); ?>;
+
 
         const code = '';
         // console.log(chartData);
-        const filteredData = GraphData.filter(item => item.PartnerMasterName && item.cont);
+        const filteredData = GraphData.filter(item => item.PartnerMasterName && item.cont && item.PartnerMasterID);
 
         const labels = filteredData.map(item => item.PartnerMasterName);
         const dataValues = filteredData.map(item => Number(item.cont));
+        const PartnerMasterID = filteredData.map(item => Number(item.PartnerMasterID));
 
         const dataArray = [
-            ['Partners', 'Count']  // Adjust column names as needed
+            ['Partners', 'Count','PartnerTypeId']  // Adjust column names as needed
         ];
 
         for (let i = 0; i < labels.length; i++) {
-            dataArray.push([labels[i], dataValues[i]]);
+            dataArray.push([labels[i],dataValues[i],PartnerMasterID[i]]);
         }
 
         const data = google.visualization.arrayToDataTable(dataArray);
@@ -309,6 +313,20 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         const chart = new google.visualization.PieChart(document.getElementById('PartnerWisePieChart'));
+
+        google.visualization.events.addListener(chart, 'select', function() {
+
+            var selection = chart.getSelection()[0];
+            if (selection) {
+
+                var PartnerMasterID = data.getValue(selection.row, 2);
+
+            // Redirect to another URL with stid and uuid as parameters
+                // window.location.href = '<?=base_url();?>GraphNew/CityWiseFunnelGraphData/' + cityid + '/' + sdate + '/' + edate ;
+                var url = '<?=base_url();?>GraphNew/PartnerWiseFunnelGraphData/' + PartnerMasterID + '/' + sdate + '/' + edate;
+                window.open(url, '_blank');
+            }
+        });
 
         chart.draw(data, options);
     }

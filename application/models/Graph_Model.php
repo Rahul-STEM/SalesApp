@@ -274,30 +274,47 @@ class Graph_Model extends CI_Model
 
         if ($category != '') {
             // var_dump($category);die;
+            $this->db->group_start();
+
             foreach ($category as $singleCategory) {
-                // var_dump($singleCategory);die;
-                if ($singleCategory == 'upsell_client') {
-                    $this->db->where('ic.upsell_client', 'yes');
+
+                if ($singleCategory == 'topspender') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+
                 }
-                if ($singleCategory == 'focus_funnel') {
-                    $this->db->where('ic.focus_funnel', 'yes');
+                if($singleCategory == 'focus_funnel') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+
                 }
-                if ($singleCategory == 'keycompany') {
-                    $this->db->where('ic.keycompany', 'yes');
+                if($singleCategory == 'upsell_client') {
+                    
+                    $this->db->or_where('upsell_client', 'yes');
+
                 }
-                if ($singleCategory == 'pkclient') {
-                    $this->db->where('ic.pkclient', 'yes');
+                if($singleCategory == 'keycompany') {
+                    
+                    $this->db->or_where('keycompany', 'yes');
+
                 }
-                if ($singleCategory == 'priorityc') {
-                    $this->db->where('ic.priorityc', 'yes');
+                if($singleCategory == 'pkclient ') {
+                    
+                    $this->db->or_where('pkclient', 'yes'); 
                 }
-            }
+                if($singleCategory == 'priorityc ') {
+                    
+                    $this->db->or_where('priorityc', 'yes');
+                }
+            }  
+
+            $this->db->group_end(); 
         }
 
         // var_dump($cluster);die;
         // if cluster is selected
         if (!empty($cluster)) {
-
+            // echo 'hii';die;
             $this->db->where_in('aadmin', $users);
 
         }
@@ -305,22 +322,23 @@ class Graph_Model extends CI_Model
 
         // if userType is selected
         if (!empty($userType)) {
-
-            // $users = implode(',', ($users));
-
+            $this->db->group_start();
             foreach ($userType as $singleuserType) {
                 if ($singleuserType == 4) {
-                    $this->db->where_in('pst_co', $users);
-                } elseif($singleuserType == 9 || $singleuserType == 13) {
-                    $this->db->where_in('aadmin', $users);
+                    $this->db->or_where_in('pst_co', $users);
+                } 
+                if($singleuserType == 9 || $singleuserType == 13) {
+                    $this->db->or_where_in('aadmin', $users);
                 }
-                else{
+                // else{
 
-                    $this->db->where_in('user_id', $users);
-                }
-            }  
+                //     $this->db->where_in('user_id', $users);
+                // }
+            } 
+            $this->db->group_end();  
         }
 
+        // echo $userTypeid;die;
         if ($userTypeid == 2) {
             //if admin is loggedin
             $this->db->where('admin_id', $uid);
@@ -380,21 +398,61 @@ class Graph_Model extends CI_Model
             $this->db->where_in('company_master.partnerType_id', $partnerType);
         }
 
+        if ($category != '') {
+            // var_dump($category);die;
+            $this->db->group_start();
+
+            foreach ($category as $singleCategory) {
+
+                if ($singleCategory == 'topspender') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'focus_funnel') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'upsell_client') {
+                    
+                    $this->db->or_where('upsell_client', 'yes');
+
+                }
+                if($singleCategory == 'keycompany') {
+                    
+                    $this->db->or_where('keycompany', 'yes');
+
+                }
+                if($singleCategory == 'pkclient ') {
+                    
+                    $this->db->or_where('pkclient', 'yes'); 
+                }
+                if($singleCategory == 'priorityc ') {
+                    
+                    $this->db->or_where('priorityc', 'yes');
+                }
+            }  
+
+            $this->db->group_end(); 
+        }
 
         //if user type is selected
         if (!empty($userType)) {
-
+            $this->db->group_start();
             foreach ($userType as $singleuserType) {
                 if ($singleuserType == 4) {
-                    $this->db->where_in('pst_co', $users);
-                } elseif($singleuserType == 9 || $singleuserType == 13) {
-                    $this->db->where_in('aadmin', $users);
+                    $this->db->or_where_in('pst_co', $users);
+                } 
+                if($singleuserType == 9 || $singleuserType == 13) {
+                    $this->db->or_where_in('aadmin', $users);
                 }
-                else{
+                // else{
 
-                    $this->db->where_in('user_id', $users);
-                }
-            }  
+                //     $this->db->where_in('user_id', $users);
+                // }
+            } 
+            $this->db->group_end();  
         }else{
             $this->db->where_in('admin_id', $uid);
         }
@@ -404,6 +462,153 @@ class Graph_Model extends CI_Model
             // var_dump($cluster);die;
             $this->db->where_in('aadmin', $users);
         }
+        if ($userTypeid == 2) {
+            //if admin is loggedin
+            $this->db->where('admin_id', $uid);
+
+        } elseif ($userTypeid == 4) {
+            //if PST is loggedin
+            $this->db->where('pst_co', $uid);
+
+        } elseif ($userTypeid == 9) {
+            //if BDPST is loggedin
+            $this->db->where('aadmin', $uid);
+
+        } elseif ($userTypeid == 13) {
+            //if CLM is loggedin
+            $this->db->where('admin_id', $uid);
+
+        } else {
+            //if BD is loggedin
+            $this->db->where('mainbd', $uid);
+        }
+
+        $this->db->where('user_details.status', 'active');
+
+        $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
+        $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
+        // $this->db->where('tblcallevents.remarks !=', '');
+        $this->db->group_by('ic.cmpid_id');
+        // $this->db->group_by('stname');
+        $query = $this->db->get();
+
+        //    echo $this->db->last_query();die;
+        return $query->result();
+    }
+
+    public function getTableDataByStatus($uid,$userTypeid,$stid,$sdate,$edate,$selected_partnerType,$selected_category,$selected_userType,$selected_users,$selected_cluster)
+    {   
+        // print_r($selected_partnerType[0]);die;
+        $this->db->select('ic.id ic_id');
+        $this->db->select('ic.focus_funnel focus_funnel');
+        $this->db->select('ic.upsell_client upsell_client');
+        $this->db->select('ic.keycompany keycompany');
+        $this->db->select('ic.pkclient pkclient');
+        $this->db->select('ic.priorityc priorityc');
+        $this->db->select('status.clr stclr');
+        $this->db->select('status.id stid');
+        $this->db->select('status.name stname');
+        $this->db->select('company_master.compname company_name');
+        $this->db->select('company_master.address company_address');
+        $this->db->select('city.city city');
+        $this->db->select('states.state state');
+        $this->db->select('partner_master.name partner_type');
+        $this->db->from('init_call ic');
+        $this->db->join('company_master', 'company_master.id = ic.cmpid_id', 'left');
+        $this->db->join('city', 'city.id = company_master.city', 'left');
+        $this->db->join('states', 'states.id = company_master.state', 'left');
+        $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
+        $this->db->join('status', 'status.id = ic.cstatus', 'left');
+        $this->db->join('user_details', 'user_details.user_id = ic.mainbd', 'left');
+
+        if (!empty($selected_partnerType)) {
+            
+            $this->db->where_in('company_master.partnerType_id', $selected_partnerType);
+        }
+
+        if (!empty($selected_category)) {
+            // var_dump($category);die;
+            $this->db->group_start();
+
+            foreach ($selected_category as $singleCategory) {
+
+                if ($singleCategory == 'topspender') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'focus_funnel') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'upsell_client') {
+                    
+                    $this->db->or_where('upsell_client', 'yes');
+
+                }
+                if($singleCategory == 'keycompany') {
+                    
+                    $this->db->or_where('keycompany', 'yes');
+
+                }
+                if($singleCategory == 'pkclient ') {
+                    
+                    $this->db->or_where('pkclient', 'yes'); 
+                }
+                if($singleCategory == 'priorityc ') {
+                    
+                    $this->db->or_where('priorityc', 'yes');
+                }
+            }  
+
+            $this->db->group_end(); 
+        }
+
+        //if user type is selected
+        if (!empty($selected_userType)) {
+            $this->db->group_start();
+            foreach ($selected_userType as $singleuserType) {
+                if ($singleuserType == 4) {
+                    $this->db->or_where_in('pst_co', $selected_users);
+                } 
+                if($singleuserType == 9 || $singleuserType == 13) {
+                    $this->db->or_where_in('aadmin', $selected_users);
+                }
+            } 
+            $this->db->group_end();  
+        }else{
+            $this->db->where_in('admin_id', $uid);
+        }
+
+        // if cluster is selected
+        if (!empty($selected_cluster)) {
+            // var_dump($cluster);die;
+            $this->db->where_in('aadmin', $selected_users);
+        }
+        if ($userTypeid == 2) {
+            //if admin is loggedin
+            $this->db->where('admin_id', $uid);
+
+        } elseif ($userTypeid == 4) {
+            //if PST is loggedin
+            $this->db->where('pst_co', $uid);
+
+        } elseif ($userTypeid == 9) {
+            //if BDPST is loggedin
+            $this->db->where('aadmin', $uid);
+
+        } elseif ($userTypeid == 13) {
+            //if CLM is loggedin
+            $this->db->where('admin_id', $uid);
+
+        } else {
+            //if BD is loggedin
+            $this->db->where('mainbd', $uid);
+        }
+
+        $this->db->where('user_details.status', 'active');
+        $this->db->where('status.id', $stid );
 
         $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
         $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
@@ -543,6 +748,128 @@ class Graph_Model extends CI_Model
 
         return $query->result();
     }
+    
+    public function getTableDataByCity($uid,$userTypeid,$cityId,$sdate,$edate)
+    {   
+        // print_r($selected_partnerType[0]);die;
+        $this->db->select('ic.id ic_id');
+        $this->db->select('ic.focus_funnel focus_funnel');
+        $this->db->select('ic.upsell_client upsell_client');
+        $this->db->select('ic.keycompany keycompany');
+        $this->db->select('ic.pkclient pkclient');
+        $this->db->select('ic.priorityc priorityc');
+        $this->db->select('status.clr stclr');
+        $this->db->select('status.id stid');
+        $this->db->select('status.name stname');
+        $this->db->select('company_master.compname company_name');
+        $this->db->select('company_master.address company_address');
+        $this->db->select('city.city city');
+        $this->db->select('states.state state');
+        $this->db->select('partner_master.name partner_type');
+        $this->db->from('init_call ic');
+        $this->db->join('company_master', 'company_master.id = ic.cmpid_id', 'left');
+        $this->db->join('city', 'city.id = company_master.city', 'left');
+        $this->db->join('states', 'states.id = company_master.state', 'left');
+        $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
+        $this->db->join('status', 'status.id = ic.cstatus', 'left');
+        $this->db->join('user_details', 'user_details.user_id = ic.mainbd', 'left');
+
+        // if (!empty($selected_partnerType)) {
+            
+        //     $this->db->where_in('company_master.partnerType_id', $selected_partnerType);
+        // }
+
+        // if (!empty($selected_category)) {
+        //     // var_dump($category);die;
+        //     $this->db->group_start();
+
+        //     foreach ($selected_category as $singleCategory) {
+
+        //         if ($singleCategory == 'topspender') {
+
+        //             $this->db->or_where('focus_funnel', 'yes');
+
+        //         }
+        //         if($singleCategory == 'focus_funnel') {
+
+        //             $this->db->or_where('focus_funnel', 'yes');
+
+        //         }
+        //         if($singleCategory == 'upsell_client') {
+                    
+        //             $this->db->or_where('upsell_client', 'yes');
+
+        //         }
+        //         if($singleCategory == 'keycompany') {
+                    
+        //             $this->db->or_where('keycompany', 'yes');
+
+        //         }
+        //         if($singleCategory == 'pkclient ') {
+                    
+        //             $this->db->or_where('pkclient', 'yes'); 
+        //         }
+        //         if($singleCategory == 'priorityc ') {
+                    
+        //             $this->db->or_where('priorityc', 'yes');
+        //         }
+        //     }  
+
+        //     $this->db->group_end(); 
+        // }
+
+        //if user type is selected
+        // if (!empty($selected_userType)) {
+        //     $this->db->group_start();
+        //     foreach ($selected_userType as $singleuserType) {
+        //         if ($singleuserType == 4) {
+        //             $this->db->or_where_in('pst_co', $selected_users);
+        //         } 
+        //         if($singleuserType == 9 || $singleuserType == 13) {
+        //             $this->db->or_where_in('aadmin', $selected_users);
+        //         }
+        //     } 
+        //     $this->db->group_end();  
+        // }else{
+        //     $this->db->where_in('admin_id', $uid);
+        // }
+
+        // if cluster is selected
+        
+        
+        if ($userTypeid == 2) {
+            //if admin is loggedin
+            $this->db->where('admin_id', $uid);
+
+        } elseif ($userTypeid == 4) {
+            //if PST is loggedin
+            $this->db->where('pst_co', $uid);
+
+        } elseif ($userTypeid == 9) {
+            //if BDPST is loggedin
+            $this->db->where('aadmin', $uid);
+
+        } elseif ($userTypeid == 13) {
+            //if CLM is loggedin
+            $this->db->where('admin_id', $uid);
+
+        } else {
+            //if BD is loggedin
+            $this->db->where('mainbd', $uid);
+        }
+
+        $this->db->where('user_details.status', 'active');
+        $this->db->where('company_master.city', $cityId );
+
+        $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
+        $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
+        // $this->db->where('tblcallevents.remarks !=', '');
+        $this->db->group_by('ic.cmpid_id');
+        // $this->db->group_by('stname');
+        $query = $this->db->get();
+
+        return $query->result();
+    }
 
     public function getPartnerWiseGraphDetails($uid,$userTypeid,$sdate,$edate,$partnerType){
 
@@ -628,7 +955,7 @@ class Graph_Model extends CI_Model
 
         if ($partnerType != '') {
 
-            $this->db->where_in('company_master.partnerType_id', $partnerType);
+            $this->db->where('company_master.partnerType_id', $partnerType);
         }
     
         $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
@@ -641,6 +968,127 @@ class Graph_Model extends CI_Model
     
     }
 
+    public function getTableDataByPartnerType($uid,$userTypeid,$PartnerMasterID,$sdate,$edate)
+    {   
+        // print_r($selected_partnerType[0]);die;
+        $this->db->select('ic.id ic_id');
+        $this->db->select('ic.focus_funnel focus_funnel');
+        $this->db->select('ic.upsell_client upsell_client');
+        $this->db->select('ic.keycompany keycompany');
+        $this->db->select('ic.pkclient pkclient');
+        $this->db->select('ic.priorityc priorityc');
+        $this->db->select('status.clr stclr');
+        $this->db->select('status.id stid');
+        $this->db->select('status.name stname');
+        $this->db->select('company_master.compname company_name');
+        $this->db->select('company_master.address company_address');
+        $this->db->select('city.city city');
+        $this->db->select('states.state state');
+        $this->db->select('partner_master.name partner_type');
+        $this->db->from('init_call ic');
+        $this->db->join('company_master', 'company_master.id = ic.cmpid_id', 'left');
+        $this->db->join('city', 'city.id = company_master.city', 'left');
+        $this->db->join('states', 'states.id = company_master.state', 'left');
+        $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
+        $this->db->join('status', 'status.id = ic.cstatus', 'left');
+        $this->db->join('user_details', 'user_details.user_id = ic.mainbd', 'left');
+
+        if (!empty($selected_partnerType)) {
+            
+            $this->db->where_in('company_master.partnerType_id', $selected_partnerType);
+        }
+
+        // if (!empty($selected_category)) {
+        //     // var_dump($category);die;
+        //     $this->db->group_start();
+
+        //     foreach ($selected_category as $singleCategory) {
+
+        //         if ($singleCategory == 'topspender') {
+
+        //             $this->db->or_where('focus_funnel', 'yes');
+
+        //         }
+        //         if($singleCategory == 'focus_funnel') {
+
+        //             $this->db->or_where('focus_funnel', 'yes');
+
+        //         }
+        //         if($singleCategory == 'upsell_client') {
+                    
+        //             $this->db->or_where('upsell_client', 'yes');
+
+        //         }
+        //         if($singleCategory == 'keycompany') {
+                    
+        //             $this->db->or_where('keycompany', 'yes');
+
+        //         }
+        //         if($singleCategory == 'pkclient ') {
+                    
+        //             $this->db->or_where('pkclient', 'yes'); 
+        //         }
+        //         if($singleCategory == 'priorityc ') {
+                    
+        //             $this->db->or_where('priorityc', 'yes');
+        //         }
+        //     }  
+
+        //     $this->db->group_end(); 
+        // }
+
+        //if user type is selected
+        // if (!empty($selected_userType)) {
+        //     $this->db->group_start();
+        //     foreach ($selected_userType as $singleuserType) {
+        //         if ($singleuserType == 4) {
+        //             $this->db->or_where_in('pst_co', $selected_users);
+        //         } 
+        //         if($singleuserType == 9 || $singleuserType == 13) {
+        //             $this->db->or_where_in('aadmin', $selected_users);
+        //         }
+        //     } 
+        //     $this->db->group_end();  
+        // }else{
+        //     $this->db->where_in('admin_id', $uid);
+        // }
+
+        // if cluster is selected
+        
+        
+        if ($userTypeid == 2) {
+            //if admin is loggedin
+            $this->db->where('admin_id', $uid);
+
+        } elseif ($userTypeid == 4) {
+            //if PST is loggedin
+            $this->db->where('pst_co', $uid);
+
+        } elseif ($userTypeid == 9) {
+            //if BDPST is loggedin
+            $this->db->where('aadmin', $uid);
+
+        } elseif ($userTypeid == 13) {
+            //if CLM is loggedin
+            $this->db->where('admin_id', $uid);
+
+        } else {
+            //if BD is loggedin
+            $this->db->where('mainbd', $uid);
+        }
+
+        $this->db->where('user_details.status', 'active');
+        $this->db->where('company_master.partnerType_id', $PartnerMasterID );
+
+        $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
+        $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
+        // $this->db->where('tblcallevents.remarks !=', '');
+        $this->db->group_by('ic.cmpid_id');
+        // $this->db->group_by('stname');
+        $query = $this->db->get();
+
+        return $query->result();
+    }
     public function getCategoryWiseGraphDetails($uid,$userTypeid,$sdate,$edate,$category){
 
         // print_r($category);die;
@@ -676,6 +1124,8 @@ class Graph_Model extends CI_Model
 
         if ($category != '') {
 
+            $this->db->group_start();
+
             foreach ($category as $singleCategory) {
 
                 if ($singleCategory == 'topspender') {
@@ -708,6 +1158,8 @@ class Graph_Model extends CI_Model
                 }
             }  
 
+            $this->db->group_end(); 
+
         }
 
 
@@ -716,7 +1168,6 @@ class Graph_Model extends CI_Model
 
         $query = $this->db->get();
 
-        // echo $this->db->last_query();die;
         return $query->result();
     }
 
@@ -804,6 +1255,159 @@ class Graph_Model extends CI_Model
 
         $query = $this->db->get();
         // echo $this->db->last_query();die;
+
+        return $query->result();
+    }
+
+    public function getTableDataByCategory($uid,$userTypeid,$Category,$sdate,$edate)
+    {   
+        // print_r($selected_partnerType[0]);die;
+        $this->db->select('ic.id ic_id');
+        $this->db->select('ic.focus_funnel focus_funnel');
+        $this->db->select('ic.upsell_client upsell_client');
+        $this->db->select('ic.keycompany keycompany');
+        $this->db->select('ic.pkclient pkclient');
+        $this->db->select('ic.priorityc priorityc');
+        $this->db->select('status.clr stclr');
+        $this->db->select('status.id stid');
+        $this->db->select('status.name stname');
+        $this->db->select('company_master.compname company_name');
+        $this->db->select('company_master.address company_address');
+        $this->db->select('city.city city');
+        $this->db->select('states.state state');
+        $this->db->select('partner_master.name partner_type');
+        $this->db->from('init_call ic');
+        $this->db->join('company_master', 'company_master.id = ic.cmpid_id', 'left');
+        $this->db->join('city', 'city.id = company_master.city', 'left');
+        $this->db->join('states', 'states.id = company_master.state', 'left');
+        $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
+        $this->db->join('status', 'status.id = ic.cstatus', 'left');
+        $this->db->join('user_details', 'user_details.user_id = ic.mainbd', 'left');
+
+        // if (!empty($selected_partnerType)) {
+            
+        //     $this->db->where_in('company_master.partnerType_id', $selected_partnerType);
+        // }
+
+        // if (!empty($selected_category)) {
+        //     // var_dump($category);die;
+        //     $this->db->group_start();
+
+        //     foreach ($selected_category as $singleCategory) {
+
+        //         if ($singleCategory == 'topspender') {
+
+        //             $this->db->or_where('focus_funnel', 'yes');
+
+        //         }
+        //         if($singleCategory == 'focus_funnel') {
+
+        //             $this->db->or_where('focus_funnel', 'yes');
+
+        //         }
+        //         if($singleCategory == 'upsell_client') {
+                    
+        //             $this->db->or_where('upsell_client', 'yes');
+
+        //         }
+        //         if($singleCategory == 'keycompany') {
+                    
+        //             $this->db->or_where('keycompany', 'yes');
+
+        //         }
+        //         if($singleCategory == 'pkclient ') {
+                    
+        //             $this->db->or_where('pkclient', 'yes'); 
+        //         }
+        //         if($singleCategory == 'priorityc ') {
+                    
+        //             $this->db->or_where('priorityc', 'yes');
+        //         }
+        //     }  
+
+        //     $this->db->group_end(); 
+        // }
+
+        //if user type is selected
+        // if (!empty($selected_userType)) {
+        //     $this->db->group_start();
+        //     foreach ($selected_userType as $singleuserType) {
+        //         if ($singleuserType == 4) {
+        //             $this->db->or_where_in('pst_co', $selected_users);
+        //         } 
+        //         if($singleuserType == 9 || $singleuserType == 13) {
+        //             $this->db->or_where_in('aadmin', $selected_users);
+        //         }
+        //     } 
+        //     $this->db->group_end();  
+        // }else{
+        //     $this->db->where_in('admin_id', $uid);
+        // }
+
+        // if cluster is selected
+        
+        if ($Category == 'focus_funnel') {
+            
+            $this->db->where('ic.focus_funnel', 'yes');
+
+        }
+        elseif ($Category == 'upsell_client') {
+            
+            $this->db->where('ic.upsell_client', 'yes');
+
+        }
+        elseif ($Category == 'keycompany') {
+            
+            $this->db->where('ic.keycompany', 'yes');
+
+        }
+        elseif ($Category == 'pkclient') {
+            
+            $this->db->where('ic.pkclient', 'yes');
+
+        }
+        elseif ($Category == 'topspender') {
+            
+            $this->db->where('ic.topspender', 'yes');
+
+        }
+        elseif ($Category == 'priorityc') {
+            
+            $this->db->where('ic.priorityc', 'yes');
+
+        }
+        
+
+        if ($userTypeid == 2) {
+            //if admin is loggedin
+            $this->db->where('admin_id', $uid);
+
+        } elseif ($userTypeid == 4) {
+            //if PST is loggedin
+            $this->db->where('pst_co', $uid);
+
+        } elseif ($userTypeid == 9) {
+            //if BDPST is loggedin
+            $this->db->where('aadmin', $uid);
+
+        } elseif ($userTypeid == 13) {
+            //if CLM is loggedin
+            $this->db->where('admin_id', $uid);
+
+        } else {
+            //if BD is loggedin
+            $this->db->where('mainbd', $uid);
+        }
+
+        $this->db->where('user_details.status', 'active');
+        // $this->db->where('company_master.partnerType_id', $PartnerMasterID );
+
+        $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
+        $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
+        // $this->db->where('tblcallevents.remarks !=', '');
+        $this->db->group_by('ic.cmpid_id');
+        // $this->db->group_by('stname');
+        $query = $this->db->get();
 
         return $query->result();
     }
@@ -1024,8 +1628,130 @@ class Graph_Model extends CI_Model
 
     }
 
+    public function getTableDataOfCompanyWithSameStatus($uid,$userTypeid,$selectedStatus,$sdate,$edate,$selected_partnerType,$selected_category,$selected_userType,$selected_users,$selected_cluster){
+
+        $subquery = $this->db->select('ic.id')
+        ->from('init_call ic')
+        ->join('user_details', 'user_details.user_id = ic.mainbd', 'left')
+        ->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE)
+        ->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
+
+        if ($userTypeid == 2) {
+
+            $this->db->where('user_details.admin_id',$uid);
+
+        }elseif ($userTypeid == 4) {
+
+            $this->db->where_in('pst_co', $uid);
+
+        }elseif ($userTypeid == 9 || $userTypeid == 13) {
+
+            $this->db->where_in('aadmin', $uid);
+
+        }else{
+
+            $this->db->where('user_id', $uid);
+        }
+        
+        $subquery = $subquery->get_compiled_select();
+
+        $this->db->select('ic1.id ic_id');
+        $this->db->select('ic1.topspender topspender');
+        $this->db->select('ic1.focus_funnel focus_funnel');
+        $this->db->select('ic1.upsell_client upsell_client');
+        $this->db->select('ic1.keycompany keycompany');
+        $this->db->select('ic1.pkclient pkclient');
+        $this->db->select('ic1.priorityc priorityc');
+        $this->db->select('status.clr stclr');
+        $this->db->select('status.id stid');
+        $this->db->select('status.name stname');
+        $this->db->select('company_master.compname company_name');
+        $this->db->select('company_master.address company_address');
+        $this->db->select('city.city city');
+        $this->db->select('states.state state');
+        $this->db->select('partner_master.name partner_typeName');
+        $this->db->select('partner_master.id partner_typeID');
+        $this->db->select('partner_master.clr PartnerMasterclr');
+        $this->db->from('init_call ic1');
+        $this->db->join('company_master', 'company_master.id = ic1.cmpid_id', 'left');
+        $this->db->join('city', 'city.id = company_master.city', 'left');
+        $this->db->join('states', 'states.id = company_master.state', 'left');
+        $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
+        // $this->db->join('status', 'status.id = ic.cstatus', 'left');
+        $this->db->join('user_details', 'user_details.user_id = ic1.mainbd', 'left');
+
+        $this->db->join('tblcallevents', 'ic1.id = tblcallevents.cid_id', 'LEFT');
+        $this->db->join('status', 'ic1.cstatus = status.id', 'LEFT');
+
+        $this->db->where("tblcallevents.cid_id IN ($subquery)", NULL, FALSE);
+        $this->db->where('tblcallevents.nextCFID !=', '0');
+        // $this->db->where('ic1.cstatus', $selectedStatus);
+
+        if (!empty($selectedStatus)) {
+
+            $this->db->where('ic1.cstatus', $selectedStatus);
+        }
+
+        if (!empty($selected_partnerType)) {
+            
+            $this->db->where_in('company_master.partnerType_id', $selected_partnerType);
+        }
+
+        if (!empty($selected_users)) {
+            
+            $this->db->where_in('user_details.aadmin', $selected_users);
+        }
+
+        if (!empty($selected_category)) {
+
+            $this->db->group_start();
+
+            foreach ($selected_category as $singleCategory) {
+
+                if ($singleCategory == 'topspender') {
+
+                     $this->db->or_where('ic1.focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'focus_funnel') {
+
+                    $this->db->or_where('ic1.focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'upsell_client') {
+                    
+                    $this->db->or_where('ic1.upsell_client', 'yes');
+
+                }
+                if($singleCategory == 'keycompany') {
+                    
+                    $this->db->or_where('ic1.keycompany', 'yes');
+
+                }
+                if($singleCategory == 'pkclient ') {
+                    
+                    $this->db->or_where('ic1.pkclient', 'yes'); 
+                }
+                if($singleCategory == 'priorityc ') {
+                    
+                    $this->db->or_where('ic1.priorityc', 'yes');
+                }
+            }  
+
+            $this->db->group_end(); 
+        }
+        
+        $this->db->group_by('ic1.id');
+
+        $query = $this->db->get();
+
+        // echo $this->db->last_query();die;
+        return $query->result();
+    }
 
     public function getStageWiseFunnelGraphDetails($uid,$userTypeid,$sdate,$edate,$status,$SelectedCluster,$SelectedCategory,$SelectedUsers,$SelectedpartnerType){
+
+        // var_dump($SelectedCluster);die;
 
         $this->db->select("
             SUM(CASE WHEN init_call.cstatus = '1' THEN 1 ELSE 0 END) +
@@ -1047,8 +1773,53 @@ class Graph_Model extends CI_Model
         //stage 4 -> Closuer
 
         $this->db->from('init_call');
-        $this->db->join('user_details', 'user_details.user_id = init_call.mainbd', 'left');
-        $this->db->join('status', 'status.id = init_call.cstatus');
+        $this->db->join('user_details', 'user_details.user_id = init_call.mainbd', 'LEFT');
+        $this->db->join('status', 'status.id = init_call.cstatus','LEFT');
+        $this->db->join('company_master', 'init_call.cmpid_id = company_master.id', 'LEFT');
+
+        if (!empty($SelectedCategory)) {
+
+            $this->db->group_start();
+
+            foreach ($SelectedCategory as $singleCategory) {
+
+                if ($singleCategory == 'topspender') {
+
+                     $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'focus_funnel') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'upsell_client') {
+                    
+                    $this->db->or_where('upsell_client', 'yes');
+
+                }
+                if($singleCategory == 'keycompany') {
+                    
+                    $this->db->or_where('keycompany', 'yes');
+
+                }
+                if($singleCategory == 'pkclient ') {
+                    
+                    $this->db->or_where('pkclient', 'yes'); 
+                }
+                if($singleCategory == 'priorityc ') {
+                    
+                    $this->db->or_where('priorityc', 'yes');
+                }
+            }  
+
+            $this->db->group_end(); 
+        }
+
+        if (!empty($SelectedpartnerType)) {
+            
+            $this->db->where_in('company_master.partnerType_id', $SelectedpartnerType);
+        }
 
         if ($userTypeid == 2) {
 
@@ -1067,8 +1838,16 @@ class Graph_Model extends CI_Model
             $this->db->where('user_id', $uid);
         }
 
+        if (!empty($SelectedUsers)) {
+            
+            $this->db->where_in('user_details.aadmin', $SelectedUsers);
+        }
+
+        $this->db->where('CAST(init_call.createDate AS DATE) >=', "'$sdate'", FALSE);
+        $this->db->where('CAST(init_call.createDate AS DATE) <=', "'$edate'", FALSE);
         $query = $this->db->get();
 
+        // echo $this->db->last_query();die;
         return $query->result();
 
     }
@@ -1076,11 +1855,58 @@ class Graph_Model extends CI_Model
     public function getFunnelDetails($uid,$userTypeid,$sdate,$edate,$status,$SelectedCluster,$SelectedCategory,$SelectedUsers,$SelectedpartnerType,$statusArray){
 
         $this->db->select('status.name statusName');
+        $this->db->select('status.id statusId');
         $this->db->select('COUNT(*) cont');
 
         $this->db->from('init_call');
         $this->db->join('user_details', 'user_details.user_id = init_call.mainbd', 'left');
         $this->db->join('status', 'status.id = init_call.cstatus', 'left');
+        $this->db->join('company_master', 'init_call.cmpid_id = company_master.id', 'LEFT');
+
+
+        if (!empty($SelectedCategory)) {
+
+            $this->db->group_start();
+
+            foreach ($SelectedCategory as $singleCategory) {
+
+                if ($singleCategory == 'topspender') {
+
+                     $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'focus_funnel') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'upsell_client') {
+                    
+                    $this->db->or_where('upsell_client', 'yes');
+
+                }
+                if($singleCategory == 'keycompany') {
+                    
+                    $this->db->or_where('keycompany', 'yes');
+
+                }
+                if($singleCategory == 'pkclient ') {
+                    
+                    $this->db->or_where('pkclient', 'yes'); 
+                }
+                if($singleCategory == 'priorityc ') {
+                    
+                    $this->db->or_where('priorityc', 'yes');
+                }
+            }  
+
+            $this->db->group_end(); 
+        }
+
+        if (!empty($SelectedpartnerType)) {
+            
+            $this->db->where_in('company_master.partnerType_id', $SelectedpartnerType);
+        }
 
         if ($userTypeid == 2) {
 
@@ -1098,9 +1924,220 @@ class Graph_Model extends CI_Model
 
             $this->db->where('user_id', $uid);
         }
+
+        if (!empty($SelectedUsers)) {
+            
+            $this->db->where_in('user_details.aadmin', $SelectedUsers);
+        }
+
         
         $this->db->where_in('init_call.cstatus', $statusArray);
+        $this->db->where('CAST(init_call.createDate AS DATE) >=', "'$sdate'", FALSE);
+         $this->db->where('CAST(init_call.createDate AS DATE) <=', "'$edate'", FALSE);
         $this->db->group_by('statusName');
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+        return $query->result();
+    }
+
+    public function getStageWiseFunnelTableDetails($uid,$userTypeid,$sdate,$edate,$SelectedStatus,$SelectedCluster,$SelectedCategory,$SelectedUsers,$SelectedpartnerType){
+
+        $this->db->select('ic.id ic_id');
+        $this->db->select('ic.topspender topspender');
+        $this->db->select('ic.focus_funnel focus_funnel');
+        $this->db->select('ic.upsell_client upsell_client');
+        $this->db->select('ic.keycompany keycompany');
+        $this->db->select('ic.pkclient pkclient');
+        $this->db->select('ic.priorityc priorityc');
+        $this->db->select('status.clr stclr');
+        $this->db->select('status.id stid');
+        $this->db->select('status.name stname');
+        $this->db->select('company_master.compname company_name');
+        $this->db->select('company_master.address company_address');
+        $this->db->select('city.city city');
+        $this->db->select('states.state state');
+        $this->db->select('partner_master.name partner_typeName');
+        $this->db->select('partner_master.id partner_typeID');
+        $this->db->select('partner_master.clr PartnerMasterclr');
+        $this->db->from('init_call ic');
+        $this->db->join('company_master', 'company_master.id = ic.cmpid_id', 'left');
+        $this->db->join('city', 'city.id = company_master.city', 'left');
+        $this->db->join('states', 'states.id = company_master.state', 'left');
+        $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
+        $this->db->join('status', 'status.id = ic.cstatus', 'left');
+        $this->db->join('user_details', 'user_details.user_id = ic.mainbd', 'left');
+        
+        if (!empty($SelectedCategory)) {
+
+            $this->db->group_start();
+
+            foreach ($SelectedCategory as $singleCategory) {
+
+                if ($singleCategory == 'topspender') {
+
+                     $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'focus_funnel') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'upsell_client') {
+                    
+                    $this->db->or_where('upsell_client', 'yes');
+
+                }
+                if($singleCategory == 'keycompany') {
+                    
+                    $this->db->or_where('keycompany', 'yes');
+
+                }
+                if($singleCategory == 'pkclient ') {
+                    
+                    $this->db->or_where('pkclient', 'yes'); 
+                }
+                if($singleCategory == 'priorityc ') {
+                    
+                    $this->db->or_where('priorityc', 'yes');
+                }
+            }  
+
+            $this->db->group_end(); 
+        }
+
+        if (!empty($SelectedpartnerType)) {
+            
+            $this->db->where_in('company_master.partnerType_id', $SelectedpartnerType);
+        }
+        
+
+        if ($userTypeid == 2) {
+
+            $this->db->where('user_details.admin_id',$uid);
+            
+        }elseif ($userTypeid == 4) {
+            
+            $this->db->where_in('pst_co', $uid);
+
+        }elseif ($userTypeid == 9 || $userTypeid == 13) {
+            
+            $this->db->where_in('aadmin', $uid);
+        }else{
+            $this->db->where('user_id', $uid);
+        }
+
+        if (!empty($SelectedUsers)) {
+            
+            $this->db->where_in('user_details.aadmin', $SelectedUsers);
+        }
+       
+
+        $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
+        $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
+
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+        return $query->result();
+    }
+
+    public function getTableDataStageWiseFunnel($uid,$userTypeid,$selectedStatus,$sdate,$edate,$selected_partnerType,$selected_category,$selected_users,$selected_cluster){
+
+        $this->db->select('ic.id ic_id');
+        $this->db->select('ic.topspender topspender');
+        $this->db->select('ic.focus_funnel focus_funnel');
+        $this->db->select('ic.upsell_client upsell_client');
+        $this->db->select('ic.keycompany keycompany');
+        $this->db->select('ic.pkclient pkclient');
+        $this->db->select('ic.priorityc priorityc');
+        $this->db->select('status.clr stclr');
+        $this->db->select('status.id stid');
+        $this->db->select('status.name stname');
+        $this->db->select('company_master.compname company_name');
+        $this->db->select('company_master.address company_address');
+        $this->db->select('city.city city');
+        $this->db->select('states.state state');
+        $this->db->select('partner_master.name partner_typeName');
+        $this->db->select('partner_master.id partner_typeID');
+        $this->db->select('partner_master.clr PartnerMasterclr');
+        $this->db->from('init_call ic');
+        $this->db->join('company_master', 'company_master.id = ic.cmpid_id', 'left');
+        $this->db->join('city', 'city.id = company_master.city', 'left');
+        $this->db->join('states', 'states.id = company_master.state', 'left');
+        $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
+        $this->db->join('status', 'status.id = ic.cstatus', 'left');
+        $this->db->join('user_details', 'user_details.user_id = ic.mainbd', 'left');
+        
+        if (!empty($selected_category)) {
+
+            $this->db->group_start();
+
+            foreach ($selected_category as $singleCategory) {
+
+                if ($singleCategory == 'topspender') {
+
+                     $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'focus_funnel') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+
+                }
+                if($singleCategory == 'upsell_client') {
+                    
+                    $this->db->or_where('upsell_client', 'yes');
+
+                }
+                if($singleCategory == 'keycompany') {
+                    
+                    $this->db->or_where('keycompany', 'yes');
+
+                }
+                if($singleCategory == 'pkclient ') {
+                    
+                    $this->db->or_where('pkclient', 'yes'); 
+                }
+                if($singleCategory == 'priorityc ') {
+                    
+                    $this->db->or_where('priorityc', 'yes');
+                }
+            }  
+
+            $this->db->group_end(); 
+        }
+
+        if (!empty($selected_partnerType)) {
+            
+            $this->db->where_in('company_master.partnerType_id', $selected_partnerType);
+        }
+        
+        $this->db->where_in('ic.cstatus', $selectedStatus);
+
+        if ($userTypeid == 2) {
+
+            $this->db->where('user_details.admin_id',$uid);
+            
+        }elseif ($userTypeid == 4) {
+            
+            $this->db->where_in('pst_co', $uid);
+
+        }elseif ($userTypeid == 9 || $userTypeid == 13) {
+            
+            $this->db->where_in('aadmin', $uid);
+        }else{
+            $this->db->where('user_id', $uid);
+        }
+
+        if (!empty($selected_users)) {
+            
+            $this->db->where_in('user_details.aadmin', $selected_users);
+        }
+       
+
+        $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
+        $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
+
         $query = $this->db->get();
         // echo $this->db->last_query();die;
         return $query->result();

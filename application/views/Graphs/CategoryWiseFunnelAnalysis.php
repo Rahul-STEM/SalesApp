@@ -285,11 +285,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function drawChart() {
 
+        var sdate = <?php echo json_encode($sdate); ?>;
+        var edate = <?php echo json_encode($edate); ?>;
+
         var data = google.visualization.arrayToDataTable([
 
             ['Category', 'No of Compnay','',''],
 
-            ["No Category (<?=$GraphData[0]->nocat?>)", <?=$GraphData[0]->nocat?>,"0","<?=$uid?>"],
+            // ["No Category (<?=$GraphData[0]->nocat?>)", <?=$GraphData[0]->nocat?>,"0","<?=$uid?>"],
 
             ["Top Spender (<?=$GraphData[0]->topspender?>)", <?=$GraphData[0]->topspender?>,"upsell_client","<?=$uid?>"],
 
@@ -297,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             ["Upsell Client (<?=$GraphData[0]->upsell_client?>)", <?=$GraphData[0]->upsell_client?>,"upsell_client","<?=$uid?>"],
 
-            ["Key Client (<?=$GraphData[0]->keycompany?>)", <?=$GraphData[0]->keycompany?>,"keycompany","<?=$uid?>"],
+            ["Key Company (<?=$GraphData[0]->keycompany?>)", <?=$GraphData[0]->keycompany?>,"keycompany","<?=$uid?>"],
 
             ["Positive Key Client (<?=$GraphData[0]->pkclient?>)", <?=$GraphData[0]->pkclient?>,"pkclient","<?=$uid?>"],
 
@@ -311,6 +314,20 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         const chart = new google.visualization.PieChart(document.getElementById('CategoryWisePieChart'));
+
+        google.visualization.events.addListener(chart, 'select', function() {
+
+            var selection = chart.getSelection()[0];
+            if (selection) {
+
+                var Category = data.getValue(selection.row, 2);
+                // console.log(Category);
+            // Redirect to another URL with stid and uuid as parameters
+                // window.location.href = '<?=base_url();?>GraphNew/CityWiseFunnelGraphData/' + cityid + '/' + sdate + '/' + edate ;
+                var url = '<?=base_url();?>GraphNew/CategoryWiseFunnelGraphData/' + Category + '/' + sdate + '/' + edate;
+                window.open(url, '_blank');
+            }
+        });
 
         chart.draw(data, options);
     }

@@ -65,7 +65,7 @@
                                             </select>
                                         </div>
                                     </div> -->
-                                    <!-- <div class="col-md-3">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Select Partner Type</label>
                                             <select class="custom-select rounded-0" name="partnerType[]"
@@ -78,8 +78,8 @@
                                                 <?php } ?>
                                             </select>
                                         </div>
-                                    </div> -->
-                                    <!-- <div class="col-md-3">
+                                    </div>
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Select Category</label>
                                             <select class="custom-select rounded-0" name="category[]" id="category"
@@ -93,9 +93,9 @@
                                                 <option value="priorityc" <?= in_array('priorityc', $SelectedCategory) ? 'selected' : '' ?>>Priority Client</option>
                                             </select>
                                         </div>
-                                    </div> -->
+                                    </div>
                                     <!-- Cluster -->
-                                    <!-- <div class="col-md-3">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Select Cluster</label>
                                             <select class="custom-select rounded-0" name="cluster[]" id="cluster"
@@ -108,9 +108,9 @@
                                                 <?php } ?>
                                             </select>
                                         </div>
-                                    </div> -->
+                                    </div>
                                     <!--Cluster Users -->
-                                    <!-- <div class="col-md-3">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Select User</label>
                                             <select id="user" class="custom-select rounded-0" name="user[]"
@@ -118,7 +118,7 @@
 
                                             </select>
                                         </div>
-                                    </div> -->
+                                    </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <br>
                                         <button type="submit" name="submit" class="btn btn-primary"> Filter</button>
@@ -167,6 +167,116 @@
 
                                         </div>
                                     </nav>
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade show active" id="GridView" role="tabpanel" aria-labelledby="nav_GridView">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <!-- <?php foreach ($FunnelData as $FunnelDataSingle) { ?>
+                                                        <div class="col-md-2 mb-2" >
+                                                            <div class="card card p-2 col-sm m-auto bg-light" data-category="<?= htmlspecialchars($FunnelDataSingle->stname) ?>">
+                                                                <strong>
+                                                                    <a href="#" style="color:<?=$FunnelDataSingle->stclr?>">
+                                                                        <?=$FunnelDataSingle->stname?> - <?=$FunnelDataSingle->cont?>
+                                                                    </a>
+                                                                </strong>
+                                                            </div>
+                                                        </div>
+                                                    <?php  } ?> -->
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <?php foreach ($TableData as $TableDataGrid) {
+                                                            $tblc = $this->Graph_Model->get_tblbyidwithremark($TableDataGrid->ic_id);
+                                                            if (sizeof($tblc) != 0) {
+                                                                $remark = $tblc[0]->remarks;
+                                                                $lastUpdateDate = $tblc[0]->updateddate;
+                                                                $currentDate = new DateTime();
+                                                                // var_dump($currentDate);die;
+                                                                $NoUpdateSince = date_diff_format($lastUpdateDate, $currentDate->format('Y-m-d H:i:s'));
+                                                            } else {
+                                                                $remark = "";
+                                                                $lastUpdateDate = "";
+                                                                $NoUpdateSince = "";
+                                                            }
+                                                        ?>
+                                                        <div class="col-md-4 mb-4 filter-item" data-partnerType1="<?= htmlspecialchars($TableDataGrid->partner_typeName) ?>">
+                                                            <div class="card-body p-3 border rounded border-success hover-div d-flex flex-column align-items-stretch h-100 text-dark">
+                                                                Current Status : <br>
+                                                                <strong><?= $TableDataGrid->stname ?></strong>
+                                                                <hr>
+                                                                Company Name : <br>
+                                                                <strong><?= $TableDataGrid->company_name ?></strong>
+                                                                <hr>
+                                                                Partner Type : <br>
+                                                                <strong
+                                                                    style="color:<?= $TableDataGrid->PartnerMasterclr ?>"><?= $TableDataGrid->partner_typeName ?></strong>
+                                                                <hr>
+                                                                Current Remark<br><b style=""><?= $remark ?></b>
+                                                                <hr>
+                                                                Last Action Date<br><b><?= $lastUpdateDate ?></b>
+                                                                <hr>
+                                                                Same Status Since<br><b><?= $NoUpdateSince ?></b>
+                                                                <hr>
+                                                                <div class="rounded-circle bg-danger"
+                                                                    style="position: absolute;bottom: -10px; left: 40%; transform: translateX(-50%); width: 20px; height: 20px;">
+                                                                </div>
+                                                                <div class="rounded-circle bg-danger"
+                                                                    style="position: absolute;bottom: -10px; left: 60%; transform: translateX(-50%); width: 20px; height: 20px;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <?php } ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="TableView" role="tabpanel" aria-labelledby="nav_TableView">
+                                            <div class="card card-body">
+                                            <div class="table-responsive" id="tbdata">
+                                                <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                                    <thead>
+                                                        <!-- <th>City</th> -->
+                                                        <th>Current Status</th>
+                                                        <th>Company Name</th>
+                                                        <th>Partner Type</th>
+                                                        <th>Current Remark</th>
+                                                        <th>Last Action Date</th>
+                                                        <th>Same Status Since</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php 
+
+                                                            $i=1;
+                                                            foreach($TableData as $TableRow){ 
+                                                                $tblc=$this->Graph_Model->get_tblbyidwithremark($TableRow->ic_id);
+                                                                    if (sizeof($tblc) != 0) {
+                                                                        $remark=$tblc[0]->remarks;
+                                                                        $lastUpdateDate = $tblc[0]->updateddate;
+                                                                        $currentDate = new DateTime();
+                                                                        // var_dump($currentDate);die;
+                                                                    $NoUpdateSince = date_diff_format($lastUpdateDate, $currentDate->format('Y-m-d H:i:s'));
+                                                                    }else{
+                                                                        $remark= "";
+                                                                        $lastUpdateDate = "";
+                                                                        $NoUpdateSince = "";
+                                                                    }   
+                                                                ?> 
+                                                                <tr>
+                                                                    <!-- <td><?= $TableRow->city ?></td> -->
+                                                                    <td><?= $TableRow->stname ?></td>
+                                                                    <td><?= $TableRow->company_name ?></td>
+                                                                    <td style="color:<?=$TableRow->PartnerMasterclr?>"><?= $TableRow->partner_typeName ?></td>
+                                                                    <td><?= $remark ?></td>
+                                                                    <td><?= $lastUpdateDate ?></td>
+                                                                    <td><?= $NoUpdateSince ?></td>
+                                                                </tr>
+                                                            <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -241,12 +351,29 @@
         google.charts.setOnLoadCallback(drawChart1);
 
         function drawChart1() {
+
+            var sdate = <?php echo json_encode($sdate); ?>;
+            var edate = <?php echo json_encode($edate); ?>;
+            var selected_category = <?php echo json_encode($SelectedCategory); ?>;
+            var selected_partnerType = <?php echo json_encode($SelectedpartnerType); ?>;
+            
+            var selected_cluster = <?php echo json_encode($SelectedCluster); ?>;
+            var selected_users = <?php echo json_encode($SelectedUsers); ?>;
+            var uid = <?php echo json_encode($uid); ?>;
+            
+            var selectedPartnerTypeString = JSON.stringify(selected_partnerType);
+            var selected_categoryString = JSON.stringify(selected_category);
+            var selected_clusterString = JSON.stringify(selected_cluster);
+            var selected_usersString = JSON.stringify(selected_users);
+
+
             var data = google.visualization.arrayToDataTable([
                 ['Stage', 'Count', { role: 'style' }, { role: 'tooltip' }, { role: 'annotation' }],
                 
                 <?php 
                     $statusArray = [1, 8, 2, 10, 11];
                     $colors = ['#b87333', '#ff6f61', '#6b8e23', '#4682b4', '#d2691e'];
+
                     $mdata = getFunnelDetails($uid, $userTypeid, $sdate, $edate, $status, $SelectedCluster, $SelectedCategory, $SelectedUsers, $SelectedpartnerType, $statusArray);
 
                     $dataStrings = [];
@@ -254,11 +381,14 @@
                     foreach ($mdata as $dt) {
                         // Escape and format data for JavaScript
                         $statusName = json_encode($dt->statusName);
+                        $statusID = json_encode($dt->statusId);
+                        // $SelectedpartnerType = json_encode($SelectedpartnerType);
                         $cont = intval($dt->cont);
                         $color = $colors[$colorIndex % count($colors)];
-                        $dataStrings[] = "[$statusName, $cont, '$color', '$uid', '1']";
+                        $dataStrings[] = "[$statusName, $cont, '$color', '$uid', '$statusID']";
                         $colorIndex++;
                     }
+
                     echo implode(",\n", $dataStrings);
                 ?>
             ]);
@@ -276,15 +406,104 @@
 
             var chart = new google.visualization.ColumnChart(document.getElementById('Stage_1'));
 
+
+            google.visualization.events.addListener(chart, 'select', function () {
+
+                var selection = chart.getSelection();
+                if (selection.length > 0) {
+                    var rowIndex = selection[0].row;
+                    var selectedStatus = data.getValue(rowIndex, 4); // Extract the status from the last column
+                    // console.log(selectedStatus);
+                    // Create a hidden form
+                var form = document.createElement('form');
+                form.method = 'POST'; // Use POST method
+                form.action = '<?=base_url();?>GraphNew/StageWiseFunnelData';
+                form.target = '_blank';
+
+                // Create hidden input fields
+                var inputStid = document.createElement('input');
+                inputStid.type = 'hidden';
+                inputStid.name = 'selectedStatus';
+                inputStid.value = selectedStatus;
+                form.appendChild(inputStid);
+
+                var inputSdate = document.createElement('input');
+                inputSdate.type = 'hidden';
+                inputSdate.name = 'sdate';
+                inputSdate.value = sdate;
+                form.appendChild(inputSdate);
+
+                var inputEdate = document.createElement('input');
+                inputEdate.type = 'hidden';
+                inputEdate.name = 'edate';
+                inputEdate.value = edate;
+                form.appendChild(inputEdate);
+
+                var inputuid = document.createElement('input');
+                inputuid.type = 'hidden';
+                inputuid.name = 'uid';
+                inputuid.value = uid;
+                form.appendChild(inputuid);
+
+                var inputSelectedPartnerType = document.createElement('input');
+                inputSelectedPartnerType.type = 'hidden';
+                inputSelectedPartnerType.name = 'selected_partnerType';
+                inputSelectedPartnerType.value = selectedPartnerTypeString;
+                form.appendChild(inputSelectedPartnerType);
+
+                var inputselected_cluster = document.createElement('input');
+                inputselected_cluster.type = 'hidden';
+                inputselected_cluster.name = 'selected_cluster';
+                inputselected_cluster.value = selected_clusterString;
+                form.appendChild(inputselected_cluster);
+
+                var inputselected_users = document.createElement('input');
+                inputselected_users.type = 'hidden';
+                inputselected_users.name = 'selected_users';
+                inputselected_users.value = selected_usersString;
+                form.appendChild(inputselected_users);
+
+                var inputselected_category = document.createElement('input');
+                inputselected_category.type = 'hidden';
+                inputselected_category.name = 'selected_category';
+                inputselected_category.value = selected_categoryString;
+                form.appendChild(inputselected_category);
+                // Append the form to the body and submit
+
+                document.body.appendChild(form);
+                form.submit();
+                    // Redirect to a new tab with the status
+                    // window.open('your_data_page.php?status=' + encodeURIComponent(selectedStatus), '_blank');
+                }
+            });
+
             chart.draw(view, options);
+
+            
         }
     </script>
 
     <script>
         google.charts.load("current", { packages: ['corechart'] });
-        google.charts.setOnLoadCallback(drawChart1);
+        google.charts.setOnLoadCallback(drawChart2);
 
-        function drawChart1() {
+        function drawChart2() {
+
+            var sdate = <?php echo json_encode($sdate); ?>;
+            var edate = <?php echo json_encode($edate); ?>;
+            var selected_category = <?php echo json_encode($SelectedCategory); ?>;
+            var selected_partnerType = <?php echo json_encode($SelectedpartnerType); ?>;
+            
+            var selected_cluster = <?php echo json_encode($SelectedCluster); ?>;
+            var selected_users = <?php echo json_encode($SelectedUsers); ?>;
+            var uid = <?php echo json_encode($uid); ?>;
+            
+            var selectedPartnerTypeString = JSON.stringify(selected_partnerType);
+            var selected_categoryString = JSON.stringify(selected_category);
+            var selected_clusterString = JSON.stringify(selected_cluster);
+            var selected_usersString = JSON.stringify(selected_users);
+
+
             var data = google.visualization.arrayToDataTable([
                 ['Stage', 'Count', { role: 'style' }, { role: 'tooltip' }, { role: 'annotation' }],
                 
@@ -300,7 +519,7 @@
                         $statusName = json_encode($dt->statusName);
                         $cont = intval($dt->cont);
                         $color = $colors[$colorIndex % count($colors)];
-                        $dataStrings[] = "[$statusName, $cont, '$color' , '$uid', '1']";
+                        $dataStrings[] = "[$statusName, $cont, '$color', '$uid', '$statusID']";
                         $colorIndex++;
                     }
                     echo implode(",\n", $dataStrings);
@@ -312,15 +531,86 @@
 
             var options = {
                 title: "Proposal : Positive, Positive NAP, Very Positive, Very Positive NAP",
-                // width: 600,
-                // height: 400,
                 bar: { groupWidth: "95%" },
                 legend: { position: "none" },
             };
 
             var chart = new google.visualization.ColumnChart(document.getElementById('Stage_2'));
 
+            // google.visualization.events.addListener(chart, 'select', chartClickHandler);
+
             chart.draw(view, options);
+
+            google.visualization.events.addListener(chart, 'select', function () {
+
+                var selection = chart.getSelection();
+                if (selection.length > 0) {
+                    var rowIndex = selection[0].row;
+                    var selectedStatus = data.getValue(rowIndex, 4); // Extract the status from the last column
+                    // console.log(selectedStatus);
+                    // Create a hidden form
+                var form = document.createElement('form');
+                form.method = 'POST'; // Use POST method
+                form.action = '<?=base_url();?>GraphNew/StageWiseFunnelData';
+                form.target = '_blank';
+
+                // Create hidden input fields
+                var inputStid = document.createElement('input');
+                inputStid.type = 'hidden';
+                inputStid.name = 'selectedStatus';
+                inputStid.value = selectedStatus;
+                form.appendChild(inputStid);
+
+                var inputSdate = document.createElement('input');
+                inputSdate.type = 'hidden';
+                inputSdate.name = 'sdate';
+                inputSdate.value = sdate;
+                form.appendChild(inputSdate);
+
+                var inputEdate = document.createElement('input');
+                inputEdate.type = 'hidden';
+                inputEdate.name = 'edate';
+                inputEdate.value = edate;
+                form.appendChild(inputEdate);
+
+                var inputuid = document.createElement('input');
+                inputuid.type = 'hidden';
+                inputuid.name = 'uid';
+                inputuid.value = uid;
+                form.appendChild(inputuid);
+
+                var inputSelectedPartnerType = document.createElement('input');
+                inputSelectedPartnerType.type = 'hidden';
+                inputSelectedPartnerType.name = 'selected_partnerType';
+                inputSelectedPartnerType.value = selectedPartnerTypeString;
+                form.appendChild(inputSelectedPartnerType);
+
+                var inputselected_cluster = document.createElement('input');
+                inputselected_cluster.type = 'hidden';
+                inputselected_cluster.name = 'selected_cluster';
+                inputselected_cluster.value = selected_clusterString;
+                form.appendChild(inputselected_cluster);
+
+                var inputselected_users = document.createElement('input');
+                inputselected_users.type = 'hidden';
+                inputselected_users.name = 'selected_users';
+                inputselected_users.value = selected_usersString;
+                form.appendChild(inputselected_users);
+
+                var inputselected_category = document.createElement('input');
+                inputselected_category.type = 'hidden';
+                inputselected_category.name = 'selected_category';
+                inputselected_category.value = selected_categoryString;
+                form.appendChild(inputselected_category);
+                // Append the form to the body and submit
+
+                document.body.appendChild(form);
+                form.submit();
+                    // Redirect to a new tab with the status
+                    // window.open('your_data_page.php?status=' + encodeURIComponent(selectedStatus), '_blank');
+                }
+                });
+            
         }
     </script>
 
@@ -329,6 +619,22 @@
         google.charts.setOnLoadCallback(drawChart3);
 
         function drawChart3() {
+
+            var sdate = <?php echo json_encode($sdate); ?>;
+            var edate = <?php echo json_encode($edate); ?>;
+            var selected_category = <?php echo json_encode($SelectedCategory); ?>;
+            var selected_partnerType = <?php echo json_encode($SelectedpartnerType); ?>;
+            
+            var selected_cluster = <?php echo json_encode($SelectedCluster); ?>;
+            var selected_users = <?php echo json_encode($SelectedUsers); ?>;
+            var uid = <?php echo json_encode($uid); ?>;
+            
+            var selectedPartnerTypeString = JSON.stringify(selected_partnerType);
+            var selected_categoryString = JSON.stringify(selected_category);
+            var selected_clusterString = JSON.stringify(selected_cluster);
+            var selected_usersString = JSON.stringify(selected_users);
+
+
             var data = google.visualization.arrayToDataTable([
                 ['Stage', 'Count', { role: 'style' }, { role: 'tooltip' }, { role: 'annotation' }],
                 
@@ -364,6 +670,76 @@
 
             var chart = new google.visualization.ColumnChart(document.getElementById('Stage_3'));
 
+            google.visualization.events.addListener(chart, 'select', function () {
+
+                var selection = chart.getSelection();
+                if (selection.length > 0) {
+                    var rowIndex = selection[0].row;
+                    var selectedStatus = data.getValue(rowIndex, 4); // Extract the status from the last column
+                    // console.log(selectedStatus);
+                    // Create a hidden form
+                var form = document.createElement('form');
+                form.method = 'POST'; // Use POST method
+                form.action = '<?=base_url();?>GraphNew/StageWiseFunnelData';
+                form.target = '_blank';
+
+                // Create hidden input fields
+                var inputStid = document.createElement('input');
+                inputStid.type = 'hidden';
+                inputStid.name = 'selectedStatus';
+                inputStid.value = selectedStatus;
+                form.appendChild(inputStid);
+
+                var inputSdate = document.createElement('input');
+                inputSdate.type = 'hidden';
+                inputSdate.name = 'sdate';
+                inputSdate.value = sdate;
+                form.appendChild(inputSdate);
+
+                var inputEdate = document.createElement('input');
+                inputEdate.type = 'hidden';
+                inputEdate.name = 'edate';
+                inputEdate.value = edate;
+                form.appendChild(inputEdate);
+
+                var inputuid = document.createElement('input');
+                inputuid.type = 'hidden';
+                inputuid.name = 'uid';
+                inputuid.value = uid;
+                form.appendChild(inputuid);
+
+                var inputSelectedPartnerType = document.createElement('input');
+                inputSelectedPartnerType.type = 'hidden';
+                inputSelectedPartnerType.name = 'selected_partnerType';
+                inputSelectedPartnerType.value = selectedPartnerTypeString;
+                form.appendChild(inputSelectedPartnerType);
+
+                var inputselected_cluster = document.createElement('input');
+                inputselected_cluster.type = 'hidden';
+                inputselected_cluster.name = 'selected_cluster';
+                inputselected_cluster.value = selected_clusterString;
+                form.appendChild(inputselected_cluster);
+
+                var inputselected_users = document.createElement('input');
+                inputselected_users.type = 'hidden';
+                inputselected_users.name = 'selected_users';
+                inputselected_users.value = selected_usersString;
+                form.appendChild(inputselected_users);
+
+                var inputselected_category = document.createElement('input');
+                inputselected_category.type = 'hidden';
+                inputselected_category.name = 'selected_category';
+                inputselected_category.value = selected_categoryString;
+                form.appendChild(inputselected_category);
+                // Append the form to the body and submit
+
+                document.body.appendChild(form);
+                form.submit();
+                    // Redirect to a new tab with the status
+                    // window.open('your_data_page.php?status=' + encodeURIComponent(selectedStatus), '_blank');
+                }
+                });
+
             chart.draw(view, options);
         }
     </script>
@@ -373,6 +749,21 @@
         google.charts.setOnLoadCallback(drawChart4);
 
         function drawChart4() {
+
+            var sdate = <?php echo json_encode($sdate); ?>;
+            var edate = <?php echo json_encode($edate); ?>;
+            var selected_category = <?php echo json_encode($SelectedCategory); ?>;
+            var selected_partnerType = <?php echo json_encode($SelectedpartnerType); ?>;
+            var selected_cluster = <?php echo json_encode($SelectedCluster); ?>;
+            var selected_users = <?php echo json_encode($SelectedUsers); ?>;
+            var uid = <?php echo json_encode($uid); ?>;
+            
+            var selectedPartnerTypeString = JSON.stringify(selected_partnerType);
+            var selected_categoryString = JSON.stringify(selected_category);
+            var selected_clusterString = JSON.stringify(selected_cluster);
+            var selected_usersString = JSON.stringify(selected_users);
+
+
             var data = google.visualization.arrayToDataTable([
                 ['Stage', 'Count', { role: 'style' }, { role: 'tooltip' }, { role: 'annotation' }],
                 
@@ -407,6 +798,76 @@
             };
 
             var chart = new google.visualization.ColumnChart(document.getElementById('Stage_4'));
+
+            google.visualization.events.addListener(chart, 'select', function () {
+
+                var selection = chart.getSelection();
+                if (selection.length > 0) {
+                    var rowIndex = selection[0].row;
+                    var selectedStatus = data.getValue(rowIndex, 4); // Extract the status from the last column
+                    // console.log(selectedStatus);
+                    // Create a hidden form
+                var form = document.createElement('form');
+                form.method = 'POST'; // Use POST method
+                form.action = '<?=base_url();?>GraphNew/StageWiseFunnelData';
+                form.target = '_blank';
+
+                // Create hidden input fields
+                var inputStid = document.createElement('input');
+                inputStid.type = 'hidden';
+                inputStid.name = 'selectedStatus';
+                inputStid.value = selectedStatus;
+                form.appendChild(inputStid);
+
+                var inputSdate = document.createElement('input');
+                inputSdate.type = 'hidden';
+                inputSdate.name = 'sdate';
+                inputSdate.value = sdate;
+                form.appendChild(inputSdate);
+
+                var inputEdate = document.createElement('input');
+                inputEdate.type = 'hidden';
+                inputEdate.name = 'edate';
+                inputEdate.value = edate;
+                form.appendChild(inputEdate);
+
+                var inputuid = document.createElement('input');
+                inputuid.type = 'hidden';
+                inputuid.name = 'uid';
+                inputuid.value = uid;
+                form.appendChild(inputuid);
+
+                var inputSelectedPartnerType = document.createElement('input');
+                inputSelectedPartnerType.type = 'hidden';
+                inputSelectedPartnerType.name = 'selected_partnerType';
+                inputSelectedPartnerType.value = selectedPartnerTypeString;
+                form.appendChild(inputSelectedPartnerType);
+
+                var inputselected_cluster = document.createElement('input');
+                inputselected_cluster.type = 'hidden';
+                inputselected_cluster.name = 'selected_cluster';
+                inputselected_cluster.value = selected_clusterString;
+                form.appendChild(inputselected_cluster);
+
+                var inputselected_users = document.createElement('input');
+                inputselected_users.type = 'hidden';
+                inputselected_users.name = 'selected_users';
+                inputselected_users.value = selected_usersString;
+                form.appendChild(inputselected_users);
+
+                var inputselected_category = document.createElement('input');
+                inputselected_category.type = 'hidden';
+                inputselected_category.name = 'selected_category';
+                inputselected_category.value = selected_categoryString;
+                form.appendChild(inputselected_category);
+                // Append the form to the body and submit
+
+                document.body.appendChild(form);
+                form.submit();
+                    // Redirect to a new tab with the status
+                    // window.open('your_data_page.php?status=' + encodeURIComponent(selectedStatus), '_blank');
+                }
+                });
 
             chart.draw(view, options);
         }

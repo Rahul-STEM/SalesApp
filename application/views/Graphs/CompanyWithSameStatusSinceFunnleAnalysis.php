@@ -277,7 +277,25 @@
 
         google.charts.setOnLoadCallback(drawStackedColumnChart);
 
+
         function drawStackedColumnChart() {
+
+            var sdate = <?php echo json_encode($sdate); ?>;
+            var edate = <?php echo json_encode($edate); ?>;
+            var selected_category = <?php echo json_encode($SelectedCategory); ?>;
+            var selected_partnerType = <?php echo json_encode($SelectedpartnerType); ?>;
+            var selected_userType = <?php echo json_encode($userTypeid); ?>;
+            var selected_cluster = <?php echo json_encode($SelectedCluster); ?>;
+            var selected_users = <?php echo json_encode($SelectedUsers); ?>;
+            var uid = <?php echo json_encode($uid); ?>;
+            
+
+            var selectedPartnerTypeString = JSON.stringify(selected_partnerType);
+            var selected_categoryString = JSON.stringify(selected_category);
+            var selected_clusterString = JSON.stringify(selected_cluster);
+            var selected_usersString = JSON.stringify(selected_users);
+            var selected_userTypeString = JSON.stringify(selected_userType);
+
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Status');
             data.addColumn('number', '0-10');
@@ -373,6 +391,83 @@
             var chart = new google.visualization.ColumnChart(document.getElementById('CompanyWithSameStatusChart'));
 
             chart.draw(data, options);
+
+            google.visualization.events.addListener(chart, 'select', function () {
+
+                var selection = chart.getSelection();
+                if (selection.length > 0) {
+                    var rowIndex = selection[0].row;
+                    var selectedStatus = data.getValue(rowIndex, 9); // Extract the status from the last column
+                    // console.log(selectedStatus);
+                    // Create a hidden form
+                var form = document.createElement('form');
+                form.method = 'POST'; // Use POST method
+                form.action = '<?=base_url();?>GraphNew/SameStatusSinceFunnelGraphData';
+                form.target = '_blank';
+
+                // Create hidden input fields
+                var inputStid = document.createElement('input');
+                inputStid.type = 'hidden';
+                inputStid.name = 'selectedStatus';
+                inputStid.value = selectedStatus;
+                form.appendChild(inputStid);
+
+                var inputSdate = document.createElement('input');
+                inputSdate.type = 'hidden';
+                inputSdate.name = 'sdate';
+                inputSdate.value = sdate;
+                form.appendChild(inputSdate);
+
+                var inputEdate = document.createElement('input');
+                inputEdate.type = 'hidden';
+                inputEdate.name = 'edate';
+                inputEdate.value = edate;
+                form.appendChild(inputEdate);
+
+                var inputuid = document.createElement('input');
+                inputuid.type = 'hidden';
+                inputuid.name = 'uid';
+                inputuid.value = uid;
+                form.appendChild(inputuid);
+                
+                var inputSelectedPartnerType = document.createElement('input');
+                inputSelectedPartnerType.type = 'hidden';
+                inputSelectedPartnerType.name = 'selected_partnerType';
+                inputSelectedPartnerType.value = selectedPartnerTypeString;
+                form.appendChild(inputSelectedPartnerType);
+
+                var inputselected_userType = document.createElement('input');
+                inputselected_userType.type = 'hidden';
+                inputselected_userType.name = 'selected_userType';
+                inputselected_userType.value = selected_userTypeString;
+                form.appendChild(inputselected_userType);
+
+                var inputselected_cluster = document.createElement('input');
+                inputselected_cluster.type = 'hidden';
+                inputselected_cluster.name = 'selected_cluster';
+                inputselected_cluster.value = selected_clusterString;
+                form.appendChild(inputselected_cluster);
+
+                var inputselected_users = document.createElement('input');
+                inputselected_users.type = 'hidden';
+                inputselected_users.name = 'selected_users';
+                inputselected_users.value = selected_usersString;
+                form.appendChild(inputselected_users);
+
+                var inputselected_category = document.createElement('input');
+                inputselected_category.type = 'hidden';
+                inputselected_category.name = 'selected_category';
+                inputselected_category.value = selected_categoryString;
+                form.appendChild(inputselected_category);
+                // Append the form to the body and submit
+                
+                document.body.appendChild(form);
+                form.submit();
+                    // Redirect to a new tab with the status
+                    // window.open('your_data_page.php?status=' + encodeURIComponent(selectedStatus), '_blank');
+                }
+            });
+
         }
     </script>
 

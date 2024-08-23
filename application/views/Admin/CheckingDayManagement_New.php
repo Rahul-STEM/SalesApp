@@ -91,8 +91,8 @@
         $bd = $this->Menu_model->get_alluserbyaid($uid);
         // dd($bd);
         //for testing
-        $previousDate = '2024-07-19';
-        $cdate = '2024-07-20';
+        // $previousDate = '2024-07-19';
+        // $cdate = '2024-07-20';
          ?>
         <section class="content">
           <div class="container-fluid">

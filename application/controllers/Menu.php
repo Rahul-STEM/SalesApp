@@ -4132,7 +4132,7 @@ class Menu extends CI_Controller {
             }
         }
 
-     
+  
         $id = $this->Menu_model->submit_task1($tid,$uid,$cmpid,$actontaken,$action_id,$status,$remark,$rpmmom,$purpose,$flink,$flink1,$flink2,$partner,$noofsc,$pbudgetme,$LinkedIn,$Facebook,$YouTube,$Instagram,$OtherSocial,$nadate);
       
         
@@ -5138,11 +5138,21 @@ class Menu extends CI_Controller {
         $uyid =  $user['type_id'];
         $myid = $uid;
 
+        $this->load->model('Menu_model');
+        $this->load->library('session');;
+
+        if($uyid == 3 || $uyid == 4 || $uyid == 5 || $uyid == 7 || $uyid == 8 || $uyid == 9 || $uyid == 11 || $uyid == 12 || $uyid == 13 || $uyid == 15){
+            $user_day = $this->Menu_model->get_daydetail($uid,date("Y-m-d"));
+            if(sizeof($user_day) == 0){
+                $this->session->set_flashdata('error_message','* Please Start Your Day');
+                redirect('Menu/DayManagement');
+            } 
+        }
 
         if($uid=='100103'){$uid=45;}
         if($uid=='100149'){$uid=45;}
         if($uid=='100142'){$uid=2;}
-        $this->load->model('Menu_model');
+       
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         $fr=$this->Menu_model->get_freport($uid);
@@ -5219,6 +5229,8 @@ class Menu extends CI_Controller {
         else{
             $tdate = date('Y-m-d');
         }
+        $this->load->model('Menu_model');
+        $this->load->library('session');
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -5226,10 +5238,18 @@ class Menu extends CI_Controller {
         $myid = $uid;
 
 
+        if($uyid == 3 || $uyid == 4 || $uyid == 5 || $uyid == 7 || $uyid == 8 || $uyid == 9 || $uyid == 11 || $uyid == 12 || $uyid == 13 || $uyid == 15){
+            $user_day = $this->Menu_model->get_daydetail($uid,date("Y-m-d"));
+            if(sizeof($user_day) == 0){
+                $this->session->set_flashdata('error_message','* Please Start Your Day');
+                redirect('Menu/DayManagement');
+            } 
+        }
+       
         if($uid=='100103'){$uid=45;}
         if($uid=='100149'){$uid=45;}
         if($uid=='100142'){$uid=2;}
-        $this->load->model('Menu_model');
+       
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         $fr=$this->Menu_model->get_freport($uid);
@@ -8773,8 +8793,19 @@ class Menu extends CI_Controller {
             if($ct!=''){$do=2;}
         }else{$do=0;}
 
+
+        // $yesterday_date = date("Y-m-d", strtotime("-1 day"));
+        $currentDate = date("Y-m-d");
+        $tomorrowDate = date("Y-m-d", strtotime($currentDate . ' +1 day'));
+
+        $query  =  $this->db->query("SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$tomorrowDate'");
+        $gettoAutoTaskTime = $query->result();
+
+        $query1  =  $this->db->query("SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$currentDate'");
+        $gecurAutoTaskTime = $query1->result();
+           
         if(!empty($user)){
-            $this->load->view($dep_name.'/DayManagement',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'tdate'=>$tdate,'uid'=>$uid,'do'=>$do,'yestdata'=>$yestdata]);
+            $this->load->view($dep_name.'/DayManagement',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'tdate'=>$tdate,'uid'=>$uid,'do'=>$do,'yestdata'=>$yestdata,'gettoAutoTaskTime'=>$gettoAutoTaskTime,'uyid'=>$uyid,'gecurAutoTaskTime'=>$gecurAutoTaskTime]);
         }else{
             redirect('Menu/main');
         }
@@ -18188,6 +18219,7 @@ public function addplantask12(){
         }
      }
 
+
     $taskAssigntime = $pdate.' '.$ptime;
    
     foreach($selectcompanybyuser as $tid){
@@ -18242,7 +18274,7 @@ public function addplantask12(){
         }else if($selectby == 'Plan When MOM Approved'){
 
             $sact_type = $this->Menu_model->SelectTaskBYTid($tid);
-        
+          
              $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
              $currentdatetime = date("Y-m-d H:i:s");
              $query =  $this->db->query("UPDATE `auto_assign_task` SET `status`='1',`updated_at`='$currentdatetime' WHERE call_tid = $tid");
@@ -19052,8 +19084,20 @@ public function dayscRequest(){
     $req_id           = $_POST['req_id'];
     $req_answer       = $_POST['would_you_want'];
     $message          = $_POST['requestForTodaysTaskPlan'];
-    $planbutnotinited = $this->Menu_model->CreateCloseDayRequest($uid,$req_id,$req_answer,$message);
 
+    $startautotasktime  = $_POST['startautotasktime'];
+    $endautotasktime    = $_POST['endautotasktime'];
+    $start_tttpft       = $_POST['start_tttpft'];
+    $end_tttpft         = $_POST['end_tttpft'];
+
+    $autotasktimeisset  = $_POST['autotasktimeisset'];
+
+    if($autotasktimeisset != 0){
+        $planbutnotinited = $this->Menu_model->CreateCloseDayRequest($uid,$req_id,$req_answer,$message,$autotasktimeisset);
+    }else{
+        $planbutnotinited = $this->Menu_model->CreateCloseDayRequestWithAutoTaskTime($uid,$req_id,$req_answer,$message,$startautotasktime,$endautotasktime,$start_tttpft,$end_tttpft,$autotasktimeisset);
+    }
+   
     $this->session->set_flashdata('success_message','* Day Close Request Send SuccessFully !');
     redirect('Menu/DayManagement');
     
@@ -19128,11 +19172,35 @@ public function YesterdayCloseRequestApprove($id,$type){
         $reamrks    = "Approved By ".$user['name'];
         $apdate     =  date("Y-m-d H:i:s");
         
+        $queryslct =  $this->db->query("SELECT * FROM `close_your_day_request` WHERE id = '$id'");
+        $data = $queryslct->result();
+
+        $autotasktimeisset  = $data[0]->autotasktimeisset;
+
+        if($autotasktimeisset == 0 ){
+
+            $startautotasktime  = $data[0]->startautotasktime;
+            $endautotasktime    = $data[0]->endautotasktime;
+            $start_tttpft       = $data[0]->start_tttpft;
+            $end_tttpft         = $data[0]->end_tttpft;
+            $suser_id           = $data[0]->user_id;
+            $req_date           = $data[0]->req_date;
+            $date_only          = date("Y-m-d", strtotime($req_date));
+            $dataslct = array(
+                'user_id'      => $suser_id,
+                'date'         => $date_only,
+                'stime'        => $startautotasktime,
+                'etime'        => $endautotasktime,
+                'start_tttpft' => $start_tttpft,
+                'end_tttpft'   => $end_tttpft
+            );
+            $this->db->insert('autotask_time', $dataslct);
+        }
+
         $query =  $this->db->query("UPDATE `close_your_day_request` SET `approved_status`='$status',`approved_remarks`='$reamrks',`approved_date`='$apdate', `approved_by`='$uid' WHERE id = $id");
 
         $this->session->set_flashdata('success_message','* Request Approved Successfully !');
         redirect("Menu/YesterDayDaysCloseRequest");
-
     }else{
         redirect('Menu/main');
     }
@@ -19777,10 +19845,42 @@ public function getUserDayStartStatus(){
     
     echo $user_day_wffo;
 
-
-
-
 }
+
+
+
+public function AddSpecialCommentOnTask(){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+
+    $tasks = $this->Menu_model->GetTommarowPlanTask($uid);
+
+    $this->load->view($dep_name.'/AddSpecialCommentOnTask',['user'=>$user,'uid'=>$uid,'tasks'=>$tasks]);
+}
+
+public function AddTaskComments(){
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+    $uyid           =  $user['type_id'];
+
+    $this->load->model('Menu_model');
+    $this->load->library('session');
+
+    $commentsid         = $this->input->post('commentsid');
+    $comments           = $this->input->post('comments');
+    $encode_comments    = base64_encode($comments);
+    $query  = $this->db->query("UPDATE `tblcallevents` SET`comment_by`='$uid',`comments`='$encode_comments' WHERE id ='$commentsid'");
+
+    $this->session->set_flashdata('success_message','Task Comments Added Successfully !');
+    redirect('Menu/AddSpecialCommentOnTask');
+}
+
 
 
 

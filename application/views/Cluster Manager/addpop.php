@@ -18,7 +18,8 @@ date_default_timezone_set("Asia/Kolkata");
               <div class="card-body">
                 Current Task : <lable id="ctname"></lable><br>
                 Last Status :  <lable id="clsname"></lable><br>
-                Last Task Remark : <lable id="cremarks"></lable>
+                Last Task Remark : <lable id="cremarks"></lable><br>
+                Task Comments : <lable id="taskcomments"></lable>
               </div>
             </div>
           </div>
@@ -1242,6 +1243,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 data: {tid: tid},
                                 dataType: 'json',
                                 success: function(response){
+               
                                 var len = response.length;
                                 $('#cname,#ctname').text('');
                                 // console.log(response);
@@ -1264,6 +1266,27 @@ date_default_timezone_set("Asia/Kolkata");
                                 var cmpid = response[0].cid_id;
                                 var tidd = response[0].id;
                                 var cmid = response[0].cmid;
+                                var comment_by = response[0].comment_by;
+                                var comments = response[0].comments;
+          
+                                var commentss = base64DecodeUnicode(comments);
+                                 $("#taskcomments").html(commentss);
+                                 
+                                 function base64DecodeUnicode(str) {
+                                // Convert Base64 to binary string
+                                let binaryString = atob(str);
+                                // Convert binary string to an array of characters
+                                let charArray = [];
+                                for (let i = 0; i < binaryString.length; i++) {
+                                    charArray.push('%' + ('00' + binaryString.charCodeAt(i).toString(16)).slice(-2));
+                                }
+                                // Decode the array into a Unicode string
+                                return decodeURIComponent(charArray.join(''));
+                            }
+
+
+                                 
+
 
                                 var cpurpose_name = '';
                                 if(cpurpose !==''){
@@ -1637,6 +1660,12 @@ date_default_timezone_set("Asia/Kolkata");
             $('#identify_school_select').trigger('change');
             $('#client_int_school_select').trigger('change');
             $('#permission_letter_select').trigger('change');
+
+
+            
+
+
+
         });
     </script>
     <script>

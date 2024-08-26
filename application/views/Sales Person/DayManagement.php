@@ -50,6 +50,35 @@
       box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
       }
     </style>
+
+<script>
+      function validateTimeInputAuto(event) {
+          const input = event.target;
+          const timeValue = input.value;
+          const minTime = "16:00";
+          const maxTime = "19:00";
+      
+          if (timeValue < minTime || timeValue > maxTime) {
+              alert("Please enter a time between 04:00 PM and 7:00 PM.");
+              input.value = "";
+          }
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+          const timeInput = document.getElementById('start-time');
+          timeInput.setAttribute('min', '16:00');
+          timeInput.setAttribute('max', '19:00');
+          timeInput.addEventListener('change', validateTimeInputAuto);
+      });
+      document.addEventListener('DOMContentLoaded', function() {
+          const timeInput = document.getElementById('end-time');
+          timeInput.setAttribute('min', '16:00');
+          timeInput.setAttribute('max', '19:00');
+          timeInput.addEventListener('change', validateTimeInputAuto);
+      });
+</script>
+
+
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -76,6 +105,10 @@
       </div>
       <!-- /.container-fluid -->
     </div>
+    <?php
+    $tom_autotask_time = sizeof($gettoAutoTaskTime);
+   
+    ?>
     <section class="content">
       <div class="container-fluid">
         <?php
@@ -152,18 +185,25 @@
                 <?php          
                   $getDayCloseRequest = $this->Menu_model->GetDayCloseRequest($uid,$tdate);
                   $getDayCloseRequescnt = sizeof($getDayCloseRequest);
+
                   if($getDayCloseRequescnt  == 0){ ?>
                 <form action="<?=base_url();?>Menu/dayscRequest" method="post" enctype="multipart/form-data">
                   <center>
                     <div class="row">
                       <div class="col">
+
+                      <?php    
+                    $gecurAutoTaskTime = sizeof($gecurAutoTaskTime);
+                    $message = ($gecurAutoTaskTime) ? "selected" : "disabled";
+                    ?>
+
                         <label for="validationServer04" class="form-label">
                         * Why did you not close your day yesterday?
                         </label>
                         <input type="hidden" value="<?= $uystart_id ?>" name="req_id">
                         <select class="form-control is-invalid" id="validationServer04" aria-describedby="validationServer04Feedback" name="would_you_want" required style="width:500px;" >
                           <option selected disabled value="">Choose...</option>
-                          <option value="I was caught up with an urgent task and lost track of time.">I was caught up with an urgent task and lost track of time.</option>
+                          <option <?=$message?> value="I was caught up with an urgent task and lost track of time.">I was caught up with an urgent task and lost track of time.</option>
                           <option value="I encountered unexpected issues that took longer to resolve than planned.">I encountered unexpected issues that took longer to resolve than planned.</option>
                           <option value="I had a personal emergency that required my immediate attention.">I had a personal emergency that required my immediate attention.</option>
                           <option value="I forgot to update the system at the end of the day.">I forgot to update the system at the end of the day.</option>
@@ -171,12 +211,62 @@
                           <option value="I had a backlog of work and wasn't able to finish everything on time.">I had a backlog of work and wasn't able to finish everything on time.</option>
                           <option value="I was working late on a high-priority project and didn't get a chance to update the records.">I was working late on a high-priority project and didn't get a chance to update the records.</option>
                           <option value="I was out of the office and unable to complete the update remotely.">I was out of the office and unable to complete the update remotely.</option>
+                          <option value="We forgot to set our next day planner.">We forgot to set our next day planner</option>
                         </select>
                         <div id="validationServer04Feedback" class="invalid-feedback">
                           * Please select a valid state.
                         </div>
                       </div>
                     </div>
+
+                   
+                    <input type="hidden" name="autotasktimeisset" value="<?=$gecurAutoTaskTime?>">
+                    <?php
+                    if($gecurAutoTaskTime == 0){  ?>
+                      <hr class="hrclass" style="width: 600px;"/>
+                    <div class="card">
+              <div class="card-body" id="mainboxAutoTask1">
+                <h5><i>Your Auto Task And Plan Time </i></h5>
+                <hr/>
+               
+                <div class="row">
+                  
+                <div class="col-sm-6 col-sm mt-3">
+                <marquee class="p-2 mt-1" width="100%"  onMouseOver="this.stop()" onMouseOut="this.start()" behavior="left" bgcolor="pink">
+                  <h6> Auto task time should be between 4:00 PM to 7:00 PM and maximum duration of 90 minutes. </h6>
+                </marquee>
+
+                  <div class="form-group">
+                    <label for="start-time">Enter Start Time</label>
+                    <input type="time" id="start-time" name="startautotasktime" class="form-control is-invalid" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="end-time">Enter End Time</label>
+                    <input type="time" id="end-time" name="endautotasktime" class="form-control is-invalid" required>
+                  </div>
+                  </div>
+                  <div class="col-sm-6 col-sm mt-3">
+                  <marquee class="p-2 mt-1" width="100%"  onMouseOver="this.stop()" onMouseOut="this.start()" behavior="left" bgcolor="pink">
+                  <h6> Todays is the Time to plan for tomorrow. Its maximum of 1 hour. After Auto Task</h6>
+                </marquee>
+                      <div class="form-group">
+                        <label for="end-time">Today is the start time to plan for tomorrow.</label>
+                        <input type="time" readonly id="start_tttpft" name="start_tttpft" class="form-control is-invalid" required>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="end-time">Today is the end time to plan for tomorrow.</label>
+                        <input type="time" readonly id="end_tttpft" name="end_tttpft" class="form-control is-invalid" required>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+    <?php } ?>
+
+
+
                     <hr class="hrclass" style="width: 600px;"/>
                     <div class="mb-3">
                       <label for="requestForTodaysTaskPlan" class="form-label">* Please specify the reason : </label>
@@ -339,6 +429,10 @@
     <div class="row p-3">
     <div class="col-sm col-md-6 col-lg-6 m-auto">
     <div class="card card-primary card-outline">
+
+    <?php 
+    if($tom_autotask_time !== 0 ){
+    ?>
     <div class="card-body box-profile">
     <h3 class="text-center">Close Your Day</h3>
     <hr>
@@ -381,6 +475,10 @@
       // } else{echo "<center><h5 class='text-danger'>Make sure to schedule at least 7 hours of tasks for the next day.<h5></center>";}     
       ?>
     </div>
+
+    <?php  } else{  ?>
+      <h4 class="p-2 text-center" >First Set Your Next Days Planner,Only after that you can close your day</h4>
+<?php  }?>
     </div>
     </div>   
     </div>     
@@ -447,6 +545,55 @@
                   return false;
               }
           });
+
+
+
+          $('#end-time').on('change', function() {
+              var startTime = $('#start-time').val();
+              if (startTime === '') {
+                  alert("Please Enter Start Time");
+                  $('#end-time').val('');
+              } else {
+                  var endTime = $(this).val();
+                  var startTimeMinutes = convertTimeToMinutes(startTime);
+                  var endTimeMinutes = convertTimeToMinutes(endTime);
+                  // Check if the difference is more than 90 minutes
+                  if ((endTimeMinutes - startTimeMinutes) > 90) {
+                      alert('Auto Task Max Time is Only 90 Minutes');
+                      $('#end-time').val('');
+                  }
+              }
+          });
+
+          function convertTimeToMinutes(time) {
+                          var timeParts = time.split(':');
+                          var hours = parseInt(timeParts[0], 10);
+                          var minutes = parseInt(timeParts[1], 10);
+                          return (hours * 60) + minutes;
+                      }
+
+                      $('#end-time').on('change', function() {
+        let endTime = $(this).val();
+
+        if (endTime) {
+            // Convert endTime to a Date object
+            let endDateTime = new Date('1970-01-01T' + endTime + ':00');
+
+            // Increment by 1 minute for start_tttpft
+            // let startDateTime = new Date(endDateTime.getTime() + 1 * 60000);
+            let startDateTime = new Date(endDateTime.getTime() + 0 * 60000);
+            let startHours = ('0' + startDateTime.getHours()).slice(-2);
+            let startMinutes = ('0' + startDateTime.getMinutes()).slice(-2);
+            $('#start_tttpft').val(startHours + ':' + startMinutes);
+
+            // Increment by 1 hour for end_tttpft
+            let endTttPftDateTime = new Date(endDateTime.getTime() + 1 * 3600000);
+            let endTttPftHours = ('0' + endTttPftDateTime.getHours()).slice(-2);
+            let endTttPftMinutes = ('0' + endTttPftDateTime.getMinutes()).slice(-2);
+            $('#end_tttpft').val(endTttPftHours + ':' + endTttPftMinutes);
+        }
+    });
+
       });
     </script>
     <!-- /.row (main row) -->

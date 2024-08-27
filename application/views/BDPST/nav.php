@@ -338,6 +338,17 @@
             </a>
 
           </li>
+          <li class="nav-item">
+
+            <a href="<?=base_url();?>Menu/AddSpecialCommentOnTask" class="nav-link">
+
+              <i class="far fa-circle nav-icon"></i>
+
+              <p>Add Special Comment On Task</p>
+
+            </a>
+
+          </li>
 
           
 

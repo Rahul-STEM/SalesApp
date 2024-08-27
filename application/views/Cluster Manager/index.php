@@ -941,6 +941,119 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                   </div>
                                 </div>
                               </div>
+
+
+                              <?php
+                              // print_r(sizeof($autotasktimenew));
+                              // die;
+                              $pentask = sizeof($autotasktimenew);
+                              if($pentask > 0){
+                               $ast1=$autotasktimenew[0]->stime;
+                               $aet2=$autotasktimenew[0]->etime;
+                              ?>
+                              <div class="card">
+                                <div class="card-header bg-primary" id="headingThree33" data-toggle="collapse" data-target="#collapse91912" aria-expanded="false" aria-controls="collapse9121">
+
+                                    <?php 
+                                    $ttbytimedata = $this->Menu_model->get_ttbytimeAutotask($uid,$tdate,$ast1,$aet2);
+                                    $curentDatwv = date("Y-m-d");
+                                    $ted = $this->Menu_model->get_ttbytimedAutotask($uid, $curentDatwv,$ast1,$aet2);
+                                      ?>
+                                      <b>Auto Task - <?= $ast1 ?> to <?= $aet2 ?></b><br>
+                                      Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) | MOM(<?=$ted[0]->f?>) | Proposal(<?=$ted[0]->g?>)
+                                </div>
+                                <div id="collapse91912" class="collapse" aria-labelledby="headingThree33" data-parent="#accordion">
+                                  <div class="card-body">
+                                    <?php
+                                      $atai = 0;
+                                      foreach($ttbytimedata as $ttdata){
+                                      $taid = $ttdata->actiontype_id;
+                                      $taid=$this->Menu_model->get_actionbyid($taid);
+                                      $time = $ttdata->appointmentdatetime;
+                                      $reminder = $ttdata->reminder;
+                                      $time = date('h:i a', strtotime($time));
+                              
+                                    if($ttdata->autotask == 1){
+                                      $style = 'background: antiquewhite;'; 
+                                      $titletask = 'Auto Task';
+                                    }else{
+                                      $style =''; 
+                                      $titletask='';
+                                    }
+                                    
+                                  ?>
+                                  <?php if($ttdata->actiontype_id=='2'){ ?>
+                                    <div class="list-group-item list-group-item-action">
+                                    <button id="add_act<?=$atai?>" value="<?=$ttdata->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                                       <span class="mr-3 align-items-center">
+                                          <i class="fa-solid fa-circle"></i>
+                                       </span>
+                                       <span class="flex"><?=$taid[0]->name?> |
+                                           <strong class="text-secondary mr-1"><?=$ttdata->compname?></strong><br>
+                                           <small class="text-muted">Task Time:- <?=$time?></small>
+                                        </span>
+                                        <span class="p-3" style="color:<?=$ttdata->color?>;"><?=$ttdata->name?>
+                                        </span>
+                                        <span class="text-right">
+                                            <i class="fa-solid fa-forward"></i>
+                                        </span>
+                                        <b><?php if($reminder>0){echo 'Reminder for This Task';}?></b>
+                                        </button>
+                                    </div>
+                                    <?php $atai++; } ?>
+
+                                    <?php if($ttdata->actiontype_id=='6'){ ?>
+                                    <div class="list-group-item list-group-item-action">
+                                    <button id="add_act<?=$atai?>" value="<?=$ttdata->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                                       <span class="mr-3 align-items-center">
+                                          <i class="fa-solid fa-circle"></i>
+                                       </span>
+                                       <span class="flex"><?=$taid[0]->name?> |
+                                           <strong class="text-secondary mr-1"><?=$ttdata->compname?></strong><br>
+                                           <small class="text-muted">Task Time:- <?=$time?></small>
+                                        </span>
+                                        <span class="p-3" style="color:<?=$ttdata->color?>;"><?=$ttdata->name?>
+                                        </span>
+                                        <span class="text-right">
+                                            <i class="fa-solid fa-forward"></i>
+                                        </span>
+                                        <b><?php if($reminder>0){echo 'Reminder for This Task';}?></b>
+                                        </button>
+                                    </div>
+                                    <?php $atai++; }elseif($ttdata->actiontype_id=='1'){ ?>
+                                      <div class="list-group-item list-group-item-action">
+                                    <button id="add_act<?=$atai?>" value="<?=$ttdata->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                                       <span class="mr-3 align-items-center">
+                                          <i class="fa-solid fa-circle"></i>
+                                       </span>
+                                       <span class="flex"><?=$taid[0]->name?> |
+                                           <strong class="text-secondary mr-1"><?=$ttdata->compname?></strong><br>
+                                           <small class="text-muted">Task Time:- <?=$time?></small>
+                                        </span>
+                                        <span class="p-3" style="color:<?=$ttdata->color?>;"><?=$ttdata->name?>
+                                        </span>
+                                        <span class="text-right">
+                                            <i class="fa-solid fa-forward"></i>
+                                        </span>
+                                        <b><?php if($reminder>0){echo 'Reminder for This Task';}?></b>
+                                        </button>
+                                    </div>
+                                    <?php } ?>
+
+
+
+
+
+                                  <?php } ?>
+                                  </div>
+                                </div>
+                              </div>
+                            <?php } ?>
+
+
+
+
+
                             </div>
                   </div>
                   <div class="tab-pane fade" id="custom-tabs-four-call" role="tabpanel" aria-labelledby="custom-tabs-four-call-tab">
@@ -1129,6 +1242,10 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                     </div></a>
                             <?php }} ?>
                         </div>
+
+                        
+
+
                   </div>
                 </div>
             </div>
@@ -1399,6 +1516,56 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                   </div>
                                 </div>
                               </div>
+
+
+                              <?php
+                              $pentask = sizeof($autotasktimenew);
+                              if($pentask > 0){
+                               $ast1=$autotasktimenew[0]->stime;
+                               $aet2=$autotasktimenew[0]->etime;
+                              ?>
+                              <div class="card">
+                                <div class="card-header bg-primary" id="headingThree31" data-toggle="collapse" data-target="#collapse9191" aria-expanded="false" aria-controls="collapse9121">
+
+                                    <?php 
+                                    $curddate = date("Y-m-d");
+                                    $ttbytime = $this->Menu_model->get_ttbytimecAutotask1($uid,$tdate,$ast1,$aet2);
+                                    $ted = $this->Menu_model->get_ttbytimedcAutotask($uid,$curddate,$ast1,$aet2);
+                                      ?>
+                                      <b>Auto Task - <?= $ast1 ?> to <?= $aet2 ?></b><br>
+                                      Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) | MOM(<?=$ted[0]->f?>) | Proposal(<?=$ted[0]->g?>)
+                                </div>
+                                <div id="collapse9191" class="collapse" aria-labelledby="headingThree31" data-parent="#accordion">
+                                  <div class="card-body">
+                                   <?php
+                                      foreach($ttbytime as $tt){
+                                      $taid = $tt->actiontype_id;
+                                      $taid=$this->Menu_model->get_actionbyid($taid);
+                                      $time = $tt->appointmentdatetime;
+                                      $time = date('h:i a', strtotime($time));
+                                   ?>
+                                    <div class="list-group-item list-group-item-action">
+                                       <span class="mr-3 align-items-center">
+                                          <i class="fa-solid fa-circle"></i>
+                                       </span>
+                                       <span class="flex"><?=$taid[0]->name?> |
+                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                           <small class="text-muted">Task Time:- <?=$time?></small>
+                                        </span>
+                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                        </span>
+                                        <span class="text-right">
+                                            <i class="fa-solid fa-forward"></i>
+                                        </span>
+                                    </div>
+                                  <?php } ?>
+                                  </div>
+                                </div>
+                              </div>
+<?php } ?>
+
+
+
                             </div>
                   </div>
                   <div class="tab-pane fade" id="custom-tabs-four-call" role="tabpanel" aria-labelledby="custom-tabs-four-call-tab">

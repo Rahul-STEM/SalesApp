@@ -202,7 +202,12 @@
             </a>
           </li>
           
-          
+          <li class="nav-item">
+            <a href="<?=base_url();?>Menu/SpecialRequestForLeaveSomeTimeData" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Team Special Request For Leave Some Time </p>
+            </a>
+        </li>
           <!--<li class="nav-item">
             <a href="<?=base_url();?>Menu/MeetingCheck" class="nav-link">
               <i class="far fa-circle nav-icon"></i>

@@ -79,18 +79,17 @@ date_default_timezone_set("Asia/Kolkata");
                     <textarea type="text" class="form-control" placeholder="Remark" required></textarea>
                   </div>
                   <div class="p-3 write_mom_section" id="test6" style="display: none;">
-                 
                   <div class="text-center momhbox">
                     <div> <label> <i>MINUTES OF MEETING (MoM)</i> </label>
                     <!-- <hr style="width:200px;"> -->
                   </div>
                   </div>
-
-
-                  <label>Meeting done with Initiator or infulencer or discision maker of the company</label>
+                  
+                  <label>Meeting done with Initiator or influencer and decision maker of the company</label>
                     <select class="form-control" name="meetingdonewinitiator">
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
+                        <option value="Initiator">Initiator</option>
+                        <option value="Influencer">Influencer</option>
+                        <option value="Decision maker">Decision maker</option>
                     </select>
                     <hr>
                     <label>Presentation and pitching is done for which offering :</label>
@@ -101,7 +100,8 @@ date_default_timezone_set("Asia/Kolkata");
                         <option value="Astronomy">Astronomy</option>
                         <option value="DIY">DIY</option>
                         <option value="NSP">NSP</option>
-                        <option value="DIY">Science Lab</option>
+                        <option value="Science Lab">Science Lab</option>
+                        <option value="Smart Class">Smart Class</option>
                     </select>
                     <hr>
                     <input type="hidden" name="momdata" value="momdata">
@@ -125,13 +125,13 @@ date_default_timezone_set("Asia/Kolkata");
                         <option value="yes">Yes</option>
                       </select>
                       <br>
-                      <textarea type="text" class="form-control" name="client_has_adopted" placeholder="Please Specify details of client has adopted any schools"  id="client_has_adoptedText" rows="3"></textarea> 
+                      <textarea type="text" class="form-control" name="client_has_adopted" placeholder="Please specify details of the schools that client has adopted"  id="client_has_adoptedText" rows="3"></textarea> 
                     </div>
 
                     <hr>
                     <div>
                       <label>Who are the approving autorities of the proposal ?</label>
-                      <input type="text" required class="form-control" name="approving_autorities" placeholder="Please Type Name of the officer approving the proposal">
+                      <textarea required class="form-control" name="approving_autorities" placeholder="Please type name and designation of the officer approving the proposal"></textarea>
                     </div>
 
                     <hr>
@@ -142,8 +142,8 @@ date_default_timezone_set("Asia/Kolkata");
 
                     <hr>
                     <div>
-                      <label>what is the fund sanstion limit at their level ?</label>
-                      <input type="number" required class="form-control" name="fund_sanstion_limit" placeholder="Please Type fund sanstion limit at their level">
+                      <label>what is the fund sanction limit at their level ?</label>
+                      <input type="number" required class="form-control" name="fund_sanstion_limit" placeholder="Please Type fund sanction limit at their level">
                     </div>
 
                     <hr>
@@ -164,8 +164,9 @@ date_default_timezone_set("Asia/Kolkata");
                     <small class="text-danger" id="smallProposaltext" > <i>* Proposal should be submitted through NGO/STEM/Govt Body (No of Schools/Location/Budget)</i></small> -->
 
                     <div id="submit_proposal_file" class="identify_school_box">
-                    <input type="text" required class="form-control"name="proposal_no_of_school" placeholder="Number of school for Proposal"> <br>
-                    <input type="text" required class="form-control"name="proposal_of_budget" placeholder="Budget of Proposal"><br>
+                    <input type="text" required class="form-control"name="proposal_no_of_school" placeholder="Proposed number of schools"> <br>
+                    <input type="text" required class="form-control"name="proposal_of_budget" placeholder="Proposed budget"><br>
+                    <input type="text" required class="form-control"name="proposal_of_location" placeholder="Proposed location"><br>
                  
                     </div>
 
@@ -178,12 +179,18 @@ date_default_timezone_set("Asia/Kolkata");
                         <option value="no">No</option>
                         <option value="yes">Yes</option>
                     </select>
+                    
                     <br>
                     <div id="identify_school_box" class="identify_school_box">
-                    <input type="text" required class="form-control"name="identify_school_state" placeholder="Enter Name of State"> <br>
-                    <input type="text" required class="form-control"name="identify_school_district" placeholder="Enter Name of District"><br>
-                    <input type="text" required class="form-control"name="no_of_school" placeholder="Enter No of School">
+                      <div class="text-right mb-2">
+                      <span id="add_field" class="p-2 bg-primary" >+</span>
+                      </div>
+                    <input type="text" required class="form-control"name="identify_school_state[]" placeholder="Enter Name of State"> <br>
+                    <input type="text" required class="form-control"name="identify_school_district[]" placeholder="Enter Name of District"><br>
+                    <input type="text" required class="form-control"name="no_of_school[]" placeholder="Enter No of School">
+                   
                     </div>
+                    
                     </div>
          
                     <hr>
@@ -202,12 +209,12 @@ date_default_timezone_set("Asia/Kolkata");
                     <label>Letter should be address to whom in the organization, along with Name and designation and Location</label>
 
                     <select class="form-control" required name="permission_letter_rech" >
-                        <option value="Through District Administrator"> Through District Administrator</option>
-                        <option value="Directly from School">Directly from School</option>
+                        <option value="NGO">NGO</option>
+                        <option value="STEM">STEM</option>
                     </select>
                     <br>
 
-                    <input type="text" required class="form-control"name="Letter_organization_name" placeholder="Enter Name"> <br>
+                    <input type="text" required class="form-control"name="Letter_organization_name" placeholder="Add Concern person name"> <br>
                     <input type="text" required class="form-control"name="Letter_organization_designation" placeholder="Enter Name of Designation"><br>
                     <input type="text" required class="form-control"name="Letter_organization_location" placeholder="Enter Location">
                     </div>  
@@ -216,12 +223,26 @@ date_default_timezone_set("Asia/Kolkata");
                     <hr>
                     <div>
                     <label>Client is interested for School Visit ?</label>
-                    <select class="form-control" required name="client_int_school_visit" id="client_int_school_select" >
+                    <select class="form-control" required name="client_int_school_visit" id="client_int_school_select">
                         <option value="no">No</option>
                         <option value="yes">Yes</option>
                     </select>
                     <br>
                     <div id="client_int_school_box" class="identify_school_box">
+
+                    <!-- <input type="text" required class="form-control"name="client_int_type_project" placeholder="Add type of project"> -->
+                    <select class="form-control" name="client_int_type_project">
+                      <option selected disabled>Select Type of project</option>
+                      <option value="MSC">MSC</option>
+                      <option value="Tinkering">Tinkering</option>
+                      <option value="Bala">Bala</option>
+                      <option value="Astronomy">Astronomy</option>
+                      <option value="DIY">DIY</option>
+                      <option value="NSP">NSP</option>
+                      <option value="Science Lab">Science Lab</option>
+                      <option value="Smart Class">Smart Class</option>
+                    </select>
+                    <br>
                     <input type="date" required class="form-control"name="client_int_school_date" placeholder="Select Date"> <br>
                     <input type="text" required class="form-control"name="client_int_school_state" placeholder="Enter State"> <br>
                     <input type="text" required class="form-control"name="client_int_school_district" placeholder="Enter Name of District"><br>
@@ -242,7 +263,9 @@ date_default_timezone_set("Asia/Kolkata");
                     <hr>
                     <label>Write Short MOM Remarks</label>
                       <textarea type="text" class="form-control" id="rpmmom" name="rpmmom" rows="3" required></textarea> 
-                  </div>
+                  
+                 
+                    </div>
                   
 
                   </div>
@@ -1266,27 +1289,15 @@ date_default_timezone_set("Asia/Kolkata");
                                 var cmpid = response[0].cid_id;
                                 var tidd = response[0].id;
                                 var cmid = response[0].cmid;
-                                var comment_by = response[0].comment_by;
-                                var comments = response[0].comments;
-          
-                                var commentss = base64DecodeUnicode(comments);
-                                 $("#taskcomments").html(commentss);
-                                 
-                                 function base64DecodeUnicode(str) {
-                                // Convert Base64 to binary string
-                                let binaryString = atob(str);
-                                // Convert binary string to an array of characters
-                                let charArray = [];
-                                for (let i = 0; i < binaryString.length; i++) {
-                                    charArray.push('%' + ('00' + binaryString.charCodeAt(i).toString(16)).slice(-2));
-                                }
-                                // Decode the array into a Unicode string
-                                return decodeURIComponent(charArray.join(''));
-                            }
 
-
-                                 
-
+                                $.ajax({
+                                    url: '<?=base_url();?>Menu/GetTaskComments',
+                                    type: 'POST',
+                                    data: { taskid: tidd},
+                                    success: function(comments_message) {
+                                        $("#taskcomments").html(comments_message);
+                                    }
+                                });
 
                                 var cpurpose_name = '';
                                 if(cpurpose !==''){

@@ -206,20 +206,6 @@
 
     <div class="sidebar">
 
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
       <nav class="mt-2">
 
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -252,7 +238,18 @@
 
           </li>
 
-          
+          <?php 
+          $current_date = date("Y-m-d");
+          $days = $this->Menu_model->get_daydetail($uid,$current_date); 
+          if($days){ ?>
+          <li class="nav-item">
+            <a href="<?=base_url();?>Menu/TaskPlanner2/<?=$current_date?>" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Task Planner</p>
+            </a>
+          </li>
+          <?php } ?>
+
 
            <li class="nav-item">
 
@@ -395,27 +392,14 @@
               <p>Add Special Comment On Task</p>
             </a>
           </li>
-
-          <?php 
-
-          $days = $this->Menu_model->get_daydetail($uid,$tdate); if($days){
-
-          ?>
-
           <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/SpecialRequestForLeaveSomeTime" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Our Special Request For Leave Some Time </p>
+                    </a>
+                </li>
 
-            <a href="<?=base_url();?>Menu/TaskPlanner/<?=$tdate?>" class="nav-link">
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Task Planner</p>
-
-            </a>
-
-          </li>
-
-          <?php } ?>
-
+        
           
 
           

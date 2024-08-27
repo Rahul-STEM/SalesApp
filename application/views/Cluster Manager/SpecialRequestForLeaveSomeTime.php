@@ -48,7 +48,7 @@ overflow-x: auto;
 <div class="container-fluid">
 <div class="row mb-2">
 <div class="col-sm-6">
-<h1 class="m-0">Special Request For Plan Change</h1>
+<h1 class="m-0">Our Special Request For Plan Change</h1>
 </div><!-- /.col -->
 <div class="col-sm-6">
 <ol class="breadcrumb float-sm-right">
@@ -70,7 +70,7 @@ overflow-x: auto;
 </div>
 <!-- /.card-header -->
 <div class="card-body">
-    <div class="container body-content">
+    <div class="body-content">
         <div class="page-header">
             <div class="form-group">
                 <fieldset>

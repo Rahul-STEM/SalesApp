@@ -18,7 +18,8 @@ date_default_timezone_set("Asia/Kolkata");
               <div class="card-body">
                 Current Task : <lable id="ctname"></lable><br>
                 Last Status :  <lable id="clsname"></lable><br>
-                Last Task Remark : <lable id="cremarks"></lable>
+                Last Task Remark : <lable id="cremarks"></lable><br>
+                Task Comments : <lable id="taskcomments"></lable>
               </div>
             </div>
           </div>
@@ -270,7 +271,8 @@ date_default_timezone_set("Asia/Kolkata");
                     <hr>
                     <label>Write Short MOM Remarks</label>
                       <textarea type="text" class="form-control" id="rpmmom" name="rpmmom" rows="3" required></textarea> 
-                  </div>
+                  
+                    </div>
                   <!-- End Meeting Form -->
 
                   </div>
@@ -1336,7 +1338,14 @@ date_default_timezone_set("Asia/Kolkata");
                                 var cmpid = response[0].cid_id;
                                 var tidd = response[0].id;
                                 var cmid = response[0].cmid;
-
+                                $.ajax({
+                                  url: '<?=base_url();?>Menu/GetTaskComments',
+                                  type: 'POST',
+                                  data: { taskid: tidd},
+                                  success: function(comments_message) {
+                                      $("#taskcomments").html(comments_message);
+                                  }
+                              });
                                 var cpurpose_name = '';
                                 if(cpurpose !==''){
                                     $.ajax({

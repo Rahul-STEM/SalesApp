@@ -97,7 +97,7 @@
                     
                     ?>
                   <div class="card-body">
-                    <div class="container body-content">
+                    <div class="body-content">
                       <div class="page-header">
                         <div class="form-group">
                           <fieldset>

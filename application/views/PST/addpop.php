@@ -17,7 +17,8 @@
                                     <div class="card-body">
                                         Current Task : <lable id="ctname"></lable><br>
                                         Last Status :  <lable id="clsname"></lable><br>
-                                        Last Task Remark : <lable id="cremarks"></lable>
+                                        Last Task Remark : <lable id="cremarks"></lable><br>
+                                        Task Comments : <lable id="taskcomments"></lable>
                                     </div>
                                   </div>
                                 </div>
@@ -803,7 +804,14 @@ $('[id^="add_act"]').on('click', function() {
              var tidd = response[0].id;
              var bdname = response[0].bdname;
              var mmom = response[0].mmom;
-
+             $.ajax({
+              url: '<?=base_url();?>Menu/GetTaskComments',
+              type: 'POST',
+              data: { taskid: tidd},
+              success: function(comments_message) {
+                  $("#taskcomments").html(comments_message);
+              }
+          });
 
              var cpurpose_name = '';
             if(cpurpose !==''){

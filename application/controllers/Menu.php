@@ -19466,10 +19466,15 @@ public function getPendingTeamMoM(){
     $uyid           =   $user['type_id'];
 
     $this->load->model('Menu_model');
-    $uid        = $this->input->post('uid');
+    $uid            = $this->input->post('uid');
+    if($uyid == 13 ){
+        $users      = $this->Menu_model->get_userbyaaid($uid);
+    }elseif($uyid == 4){
+        $users      = $this->Menu_model->Get_PSTCLM($uid);
+    }else{
+        $users      = $this->Menu_model->get_userbyaaid($uid);
+    }
 
-    $users      = $this->Menu_model->get_userbyaaid($uid);
- 
     $user_id    = array_map(function($item) {
         return $item->user_id;
     }, $users);
@@ -19758,12 +19763,10 @@ public function AdminAcceptSpecialRequest(){
                 }
 
                 $query  = $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$newDateTime' WHERE id='$task_id'");
-
-                $query  = $this->db->query("UPDATE `special_request_for_leave` SET `approve_by`='$uid',`approve_status`='$status',`approve_date`='$current_datetime',`approve_remarks`='$remarks' WHERE id = '$req_id'");
-               
                 $i++;
             }
         }
+        $query  = $this->db->query("UPDATE `special_request_for_leave` SET `approve_by`='$uid',`approve_status`='$status',`approve_date`='$current_datetime',`approve_remarks`='$remarks' WHERE id = '$req_id'");
     }
     if($status == 'Reject'){
         $message_variable = 'reject_message';
@@ -19874,11 +19877,32 @@ public function AddTaskComments(){
 
     $commentsid         = $this->input->post('commentsid');
     $comments           = $this->input->post('comments');
+    $comments           = strip_tags($comments);
     $encode_comments    = base64_encode($comments);
     $query  = $this->db->query("UPDATE `tblcallevents` SET`comment_by`='$uid',`comments`='$encode_comments' WHERE id ='$commentsid'");
 
     $this->session->set_flashdata('success_message','Task Comments Added Successfully !');
     redirect('Menu/AddSpecialCommentOnTask');
+}
+public function GetTaskComments(){
+  
+    $this->load->model('Menu_model');
+
+    $taskid             = $this->input->post('taskid');
+    $tasksData          = $this->Menu_model->get_lasttask($taskid);
+
+    $comment_by         = $tasksData[0]->comment_by;
+    $comments           = $tasksData[0]->comments;
+
+    if($comment_by !== '' && $comment_by !== NULL){
+        $decode_comments    = base64_decode($comments);
+        $udetail            = $this->Menu_model->get_userbyid($comment_by);
+        $uname              = $udetail[0]->name;
+        $message = $decode_comments.' - <b>'.$uname.'</b>';
+        echo $message;
+    }else{
+        echo $message = '';
+    }
 }
 
 

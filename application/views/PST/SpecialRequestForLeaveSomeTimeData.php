@@ -47,7 +47,7 @@
           <div class="container-fluid">
             <div class="row mb-2">
               <div class="col-sm-12 card bg-primary p-2 text-center">
-                <h1 class="m-0">All Special Request For Plan Change</h1>
+                <h1 class="m-0">Team Special Request For Plan Change</h1>
               </div>
               <!-- /.col -->
               <div class="col-sm-6">
@@ -97,7 +97,7 @@
                     
                     ?>
                   <div class="card-body">
-                    <div class="container body-content">
+                    <div class="body-content">
                       <div class="page-header">
                         <div class="form-group">
                           <fieldset>

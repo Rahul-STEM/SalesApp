@@ -895,6 +895,114 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
                                     <?php } ?>
                                 </div>
                             </div>
+
+                            <hr>
+                            <?php
+                                
+                              $pentask = sizeof($autotasktimenew);
+                              if($pentask > 0){
+                               $ast1=$autotasktimenew[0]->stime;
+                               $aet2=$autotasktimenew[0]->etime;
+                              ?>
+                              <div class="card">
+                                <div class="card-header bg-primary" id="headingThree33" data-toggle="collapse" data-target="#collapse91912" aria-expanded="false" aria-controls="collapse9121">
+
+                                    <?php 
+                                    $ttbytimedata = $this->Menu_model->get_ttbytimeAutotask($uid,$tdate,$ast1,$aet2);
+                                    $curentDatwv = date("Y-m-d");
+                                    $ted = $this->Menu_model->get_ttbytimedAutotask($uid, $curentDatwv,$ast1,$aet2);
+                                      ?>
+                                      <b>Auto Task - <?= $ast1 ?> to <?= $aet2 ?></b><br>
+                                      Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) | MOM(<?=$ted[0]->f?>) | Proposal(<?=$ted[0]->g?>)
+                                </div>
+                                <div id="collapse91912" class="collapse" aria-labelledby="headingThree33" data-parent="#accordion">
+                                  <div class="card-body">
+                                    <?php
+                                      $atai = 0;
+                                      foreach($ttbytimedata as $ttdata){
+                                      $taid = $ttdata->actiontype_id;
+                                      $taid=$this->Menu_model->get_actionbyid($taid);
+                                      $time = $ttdata->appointmentdatetime;
+                                      $reminder = $ttdata->reminder;
+                                      $time = date('h:i a', strtotime($time));
+                              
+                                    if($ttdata->autotask == 1){
+                                      $style = 'background: antiquewhite;'; 
+                                      $titletask = 'Auto Task';
+                                    }else{
+                                      $style =''; 
+                                      $titletask='';
+                                    }
+                                    
+                                  ?>
+                                  <?php if($ttdata->actiontype_id=='2'){ ?>
+                                    <div class="list-group-item list-group-item-action">
+                                    <button id="add_act<?=$atai?>" value="<?=$ttdata->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                                       <span class="mr-3 align-items-center">
+                                          <i class="fa-solid fa-circle"></i>
+                                       </span>
+                                       <span class="flex"><?=$taid[0]->name?> |
+                                           <strong class="text-secondary mr-1"><?=$ttdata->compname?></strong><br>
+                                           <small class="text-muted">Task Time:- <?=$time?></small>
+                                        </span>
+                                        <span class="p-3" style="color:<?=$ttdata->color?>;"><?=$ttdata->name?>
+                                        </span>
+                                        <span class="text-right">
+                                            <i class="fa-solid fa-forward"></i>
+                                        </span>
+                                        <b><?php if($reminder>0){echo 'Reminder for This Task';}?></b>
+                                        </button>
+                                    </div>
+                                    <?php $atai++; } ?>
+
+                                    <?php if($ttdata->actiontype_id=='6'){ ?>
+                                    <div class="list-group-item list-group-item-action">
+                                    <button id="add_act<?=$atai?>" value="<?=$ttdata->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                                       <span class="mr-3 align-items-center">
+                                          <i class="fa-solid fa-circle"></i>
+                                       </span>
+                                       <span class="flex"><?=$taid[0]->name?> |
+                                           <strong class="text-secondary mr-1"><?=$ttdata->compname?></strong><br>
+                                           <small class="text-muted">Task Time:- <?=$time?></small>
+                                        </span>
+                                        <span class="p-3" style="color:<?=$ttdata->color?>;"><?=$ttdata->name?>
+                                        </span>
+                                        <span class="text-right">
+                                            <i class="fa-solid fa-forward"></i>
+                                        </span>
+                                        <b><?php if($reminder>0){echo 'Reminder for This Task';}?></b>
+                                        </button>
+                                    </div>
+                                    <?php $atai++; }elseif($ttdata->actiontype_id=='1'){ ?>
+                                      <div class="list-group-item list-group-item-action">
+                                    <button id="add_act<?=$atai?>" value="<?=$ttdata->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                                       <span class="mr-3 align-items-center">
+                                          <i class="fa-solid fa-circle"></i>
+                                       </span>
+                                       <span class="flex"><?=$taid[0]->name?> |
+                                           <strong class="text-secondary mr-1"><?=$ttdata->compname?></strong><br>
+                                           <small class="text-muted">Task Time:- <?=$time?></small>
+                                        </span>
+                                        <span class="p-3" style="color:<?=$ttdata->color?>;"><?=$ttdata->name?>
+                                        </span>
+                                        <span class="text-right">
+                                            <i class="fa-solid fa-forward"></i>
+                                        </span>
+                                        <b><?php if($reminder>0){echo 'Reminder for This Task';}?></b>
+                                        </button>
+                                    </div>
+                                    <?php } ?>
+                                  <?php } ?>
+                                  </div>
+                                </div>
+                              </div>
+                            <?php } ?>
+
+
+
+
+
+
                         </div>
                         
                         <div class="card">
@@ -1351,6 +1459,54 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
                                     </div>
                                 </div>
                             </div>
+
+                            <?php
+                              $pentask = sizeof($autotasktimenew);
+                              if($pentask > 0){
+                               $ast1=$autotasktimenew[0]->stime;
+                               $aet2=$autotasktimenew[0]->etime;
+                              ?>
+                              <div class="card">
+                                <div class="card-header bg-primary" id="headingThree31" data-toggle="collapse" data-target="#collapse9191" aria-expanded="false" aria-controls="collapse9121">
+
+                                    <?php 
+                                    $curddate = date("Y-m-d");
+                                    $ttbytime = $this->Menu_model->get_ttbytimecAutotask1($uid,$tdate,$ast1,$aet2);
+                                    $ted = $this->Menu_model->get_ttbytimedcAutotask($uid,$curddate,$ast1,$aet2);
+                                      ?>
+                                      <b>Auto Task - <?= $ast1 ?> to <?= $aet2 ?></b><br>
+                                      Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) | MOM(<?=$ted[0]->f?>) | Proposal(<?=$ted[0]->g?>)
+                                </div>
+                                <div id="collapse9191" class="collapse" aria-labelledby="headingThree31" data-parent="#accordion">
+                                  <div class="card-body">
+                                   <?php
+                                      foreach($ttbytime as $tt){
+                                      $taid = $tt->actiontype_id;
+                                      $taid=$this->Menu_model->get_actionbyid($taid);
+                                      $time = $tt->appointmentdatetime;
+                                      $time = date('h:i a', strtotime($time));
+                                   ?>
+                                    <div class="list-group-item list-group-item-action">
+                                       <span class="mr-3 align-items-center">
+                                          <i class="fa-solid fa-circle"></i>
+                                       </span>
+                                       <span class="flex"><?=$taid[0]->name?> |
+                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                           <small class="text-muted">Task Time:- <?=$time?></small>
+                                        </span>
+                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                        </span>
+                                        <span class="text-right">
+                                            <i class="fa-solid fa-forward"></i>
+                                        </span>
+                                    </div>
+                                  <?php } ?>
+                                  </div>
+                                </div>
+                              </div>
+<?php } ?>
+
+
                         </div>
                     </div>
                     <div class="tab-pane fade" id="custom-tabs-four-calla" role="tabpanel" aria-labelledby="custom-tabs-four-calla-tab">
@@ -1478,39 +1634,76 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
                 </div>
             </div>
             
-            
-            <!-- <div class="card card-primary card-outline card-outline-tabs">
-                <?php
-                // $patd = $this->Menu_model->get_atptd($uid,$tdate);
-                //       $patsd = $this->Menu_model->get_atptsd($uid,$tdate);
-                ?>
-                <div class="card-header text-center bg-info"><b>Auto Pending Task to be Schedule</b></div>
-                <div class="card-header text-center bg-light"><b>
-                    Total Task <?=$patd[0]->ab?> | Call(<?=$patd[0]->a?>) | Email(<?=$patd[0]->b?>) | Whatsapp(<?=$patd[0]->e?>) | Meeting(<?=$patd[0]->c+$patd[0]->d?>) | MOM(<?=$patd[0]->f?>) | Proposal(<?=$patd[0]->g?>)
-                </b></div>
-                <div class="card-header text-center bg-light"><b>
-                    Open(<?=$patsd[0]->a?>) | Open RPEM(<?=$patsd[0]->b?>) | Rechaout(<?=$patsd[0]->c?>) | Tentative(<?=$patsd[0]->d?>) | WDL(<?=$patsd[0]->e?>) | NI(<?=$patsd[0]->f?>) | TTD(<?=$patsd[0]->g?>) | WNO(<?=$patsd[0]->h?>) | Positive(<?=$patsd[0]->i?>) | Very Positive(<?=$patsd[0]->j?>) | Closure(<?=$patsd[0]->k?>)
-                </b></div>
-                <div class="card-body">
-                    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
-                    <ul id="myUL">
-                        <?php
-                        // $ai=0;foreach($totalt as $tt){if($tt->plan==0){if($tt->autotask==0){
-                        ?>
-                        <li><a>
-                            <?=$tt->aname?> |
-                            <strong class="text-secondary"><?=$tt->compname?> | <b style="color:<?=$tt->color?>"><?=$tt->csname?></b></strong>
-                            <button id="add_plan<?=$ai?>" value="<?=$tt->id?>">Plan</button>
-                        </a>
-                        
-                    </li><?php
-                    
-                    // $ai++;}}}
-                    
-                    ?>
-                </ul>
+            <div class="card-header text-center bg-light" style="border-radius:unset" >
+            <p>
+              <?php 
+              $gettodaysmom = $this->Menu_model->geTodaysMOMCheckTask($uid,$tdate);
+              $groupedByActionTypes = [];
+              foreach ( $gettodaysmom as $objects) {
+                  $actionTypeId = $objects->actiontype_id;
+                  if (!isset($groupedByActionTypes[$actionTypeId])) {
+                      $groupedByActionTypes[$actionTypeId] = [];
+                  }
+                  $groupedByActionTypes[$actionTypeId][] = $objects;
+              }
+
+            foreach ( $groupedByActionTypes as $key => $getchk){
+                  $taid=$this->Menu_model->get_actionbyid($key);
+                  $checkname = $taid[0]->name;
+                  $getSize = sizeof($getchk); ?>
+                <a class="btn btn-primary checkingreport" data-toggle="collapse" href="#collapseCheck<?=$key?>" role="button" aria-expanded="false" aria-controls="collapseCheck<?=$key?>">
+                  <?= $checkname.'('.$getSize.')'; ?>
+                </a>
+          <?php } ?>
+          <?php
+             foreach ($groupedByActionTypes as $key => $checkTasks) { ?> 
+              <div class="collapse multi-collapse"  id="collapseCheck<?=$key?>">
+              <div class="card card-body">
+              <?php 
+              foreach ($checkTasks as $checkTask) {
+                  $ce_tskid = $checkTask->id;
+                  $tskid = $checkTask->actiontype_id;
+                  $reviewtype = $checkTask->reviewtype;
+                  $taid=$this->Menu_model->get_actionbyid($tskid);
+
+                  $time = $checkTask->appointmentdatetime;
+                  $time = date('h:i a', strtotime($time));
+                 
+                  if($tskid == 18){
+                    $reqmom = $this->Menu_model->getRequestMOMBYID($reviewtype);
+                    $reqmom_user = $reqmom[0]->user_id;
+                    $reqmom_uname = $this->Menu_model->get_userbyid($reqmom_user)[0]->name;
+                  }
+                  if($tskid == 19){
+                    $reqmom_uname = '';
+                  }
+              ?>
+              <a href="<?=base_url();?>Management/MomDataCheck/<?=$reviewtype?>/<?=$ce_tskid?>">
+                  <div class="list-group-item list-group-item-action checkrepoData">
+                      <span class="flex">
+                          <strong class="text-secondary mr-1"><?=$checkTask->compname?></strong><br>
+                          <small class="text-secondary mr-1"> Request Name - <?=$reqmom_uname?></small><br>
+                          <small class="text-muted">Check Time:- <?=$time?></small>
+                      </span>
+                  </div>
+              </a>
+               <?php  } ?>
+               </div>
+              </div>
+              <?php }  ?>
             </div>
-        </div> -->
+            <hr>
+            <style>
+              .checkingreport{
+                margin: 4px;
+              }
+              .checkrepoData{
+                margin: 4px;
+                background: beige;
+                color: white !important;
+              }
+            </style>  
+       
         
     </div>
 </div>

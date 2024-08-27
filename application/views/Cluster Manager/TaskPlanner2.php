@@ -655,7 +655,7 @@ if($type_id == 3){
                         ?>
                         <div class="form-check" id="actionNotPlannedNeed_filter">
                         <label>
-                        <input type="radio" class="form-check-input" name="optradio" value="actionNotPlannedNeed" > <span class="<?=$cssc?>"> Action Not Planned  <?php if($notworkedcnt > 0){echo '('.$notworkedcnt.')';}?></span>
+                        <input type="radio" class="form-check-input" name="optradio" value="actionNotPlannedNeed" > <span class="<?=$cssc?>"> No Work Days  <?php if($notworkedcnt > 0){echo '('.$notworkedcnt.')';}?></span>
                         </label>
                         </div>
 
@@ -679,6 +679,13 @@ if($type_id == 3){
                           </label>
                         </div>
                          <?php } ?> 
+                         <?php if($type_id ==13 || $type_id ==4){ ?>
+                        <div class="form-check" id="self_assign_filter" >
+                          <label class="form-check-label custom-radio-label">
+                          <input type="radio" class="form-check-input" name="optradio" value="Self Assign" >Self Assign
+                          </label>
+                        </div>
+                        <?php } ?>
                         <div class="form-check" id="company_name_filter">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Compnay Name" >Company Name
@@ -733,13 +740,6 @@ if($type_id == 3){
                           <input type="radio" class="form-check-input" name="optradio" value="PST Assign" >Other Assign
                           </label>
                         </div>
-                        <?php if($type_id ==13 || $type_id ==4){ ?>
-                        <div class="form-check" id="self_assign_filter" >
-                          <label class="form-check-label custom-radio-label">
-                          <input type="radio" class="form-check-input" name="optradio" value="Self Assign" >Self Assign
-                          </label>
-                        </div>
-                        <?php } ?>
                         <div class="form-check" id="review_target_date_filter">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Review Target Date" > Review Target Date
@@ -4415,8 +4415,10 @@ if($type_id == 3){
                             },
                             cache: false,
                             success: function a(result){
+                              
                               $("#slct_auto_assign_task_type").show();
                               $("#slct_auto_assign_task_type").html(result);
+                              
                             }
                             });
                             $('#slct_auto_assign_task_type').on('change', function() {
@@ -4432,7 +4434,7 @@ if($type_id == 3){
                             },
                             cache: false,
                             success: function a(result){
-                              // console.log(result);
+                            $("#taskplanningimg").hide();
                             $("#maintaskcard").show();
                             $("#selectcompany").show();
                             $("#selectcompanybyuser").html(result);
@@ -4465,6 +4467,7 @@ if($type_id == 3){
                                 cache: false,
                                 success: function a(result){
                                   if(result >0){
+                                    $("#taskplanningimg").hide();
                                     $("#maintaskcard").show();
                                     $("#selectcompany").hide();
                                     $("#selectcompanybyuser").hide();

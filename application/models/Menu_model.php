@@ -6558,11 +6558,11 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
 
 
          }else{
-             
+           
             if($jsonData == '[]'){
-                $jsonData = '{"Plan_BY":"'.$selectby.'"}';
+                $jsonData = "{'Plan_BY':'".$selectby."'}";
             }
-            
+
             $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type,plan,tptype,tptime,selectby,filter_by)
             VALUES ('0', '0', '', '', '$date', 'no', '$ntaction', 'NA','NA','no','$date','$ntaction','$uid','$inid','$ntppose','','$ntstatus','$uid','$date','$date','updated','1','$ttype','$tptime','$selectby','$jsonData')");
             
@@ -12321,14 +12321,26 @@ public function get_ccdby_cid($cid){
 
 public function CreateTaskForMOMCheck($bdid,$bmdate){
 
-    $users      = $this->Menu_model->get_userbyaaid($bdid);
+    $utype = $this->Menu_model->get_userbyid($bdid);
+    $utype = $utype[0]->type_id;
+
+    if($utype == 13){
+        $users      = $this->Menu_model->get_userbyaaid($bdid);
+    }elseif($utype == 4){
+        $users      = $this->Menu_model->Get_PSTCLM($bdid);
+    }else{
+        $users      = $this->Menu_model->get_userbyaaid($bdid);
+    }
+
     $user_id    = array_map(function($item) {
         return $item->user_id;
     }, $users);
     
     $user_ids = implode(', ', $user_id);
+   
     $query=$this->db->query("SELECT * FROM `mom_data` WHERE mom_data.`user_id` IN ($user_ids) AND `approved_status` IS NULL AND NOT EXISTS (SELECT 1 FROM `tblcallevents` WHERE `mom_data`.`id` = `tblcallevents`.`reviewtype`)");
     $mdata =  $query->result();
+
     $i=1;
     foreach($mdata as $data){
         $init_cmpid = $data->init_cmpid;
@@ -12455,16 +12467,10 @@ public function NeedYourAttentions($days,$status){
     $user_id    = $user_data['user_id'];
     $uyid       =  $user_data['type_id'];
     if($uyid == 3){
-
-        // $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus, DATEDIFF(CURDATE(), tblcallevents.appointmentdatetime) AS days FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE init_call.mainbd = '$uid' AND init_call.cstatus IN ($status) AND (tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE()) AND ((SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id) = 1)");
-
         $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus, DATEDIFF(CURDATE(), tblcallevents.appointmentdatetime) AS days FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE init_call.mainbd = '$user_id' AND init_call.cstatus IN ($status) AND tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE() AND (SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id) = 1 HAVING days > $days");
 
     }else if($uyid == 13){
  
-        // $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, user_details.name AS bdname, partner_master.name AS pname, init_call.cstatus, DATEDIFF(CURDATE(), tblcallevents.appointmentdatetime) AS days FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id LEFT JOIN user_details ON user_details.user_id = init_call.mainbd WHERE user_details.aadmin = '$user_id' AND user_details.status = 'active' AND user_details.type_id = 3 AND init_call.cstatus IN ($status) AND (tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE()) AND ((SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id) = 1) AND NOT EXISTS ( SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND tce.user_id = user_details.user_id AND DATE(tce.appointmentdatetime) = CURDATE() ) HAVING days > $days");
-
-        // $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, user_details.name AS bdname, partner_master.name AS pname, init_call.cstatus, DATEDIFF(CURDATE(), tblcallevents.appointmentdatetime) AS days FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id LEFT JOIN user_details ON user_details.user_id = init_call.mainbd WHERE user_details.aadmin = '$user_id' AND user_details.status = 'active' AND user_details.type_id = 3 AND init_call.cstatus IN ($status) AND tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE() AND ( SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id ) = 1 AND NOT EXISTS ( SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND DATE(tce.appointmentdatetime) = CURDATE() ) HAVING days > $days");
         $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, user_details.name AS bdname, partner_master.name AS pname, init_call.cstatus, DATEDIFF(CURDATE(), tblcallevents.appointmentdatetime) AS days FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id LEFT JOIN user_details ON user_details.user_id = init_call.mainbd WHERE (user_details.aadmin = '$user_id' OR user_details.user_id = '$user_id') AND user_details.status = 'active' AND init_call.cstatus IN ($status) AND tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE() AND ( SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id ) = 1 AND NOT EXISTS ( SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND DATE(tce.appointmentdatetime) = CURDATE()) HAVING days > $days");
 
     }else if($uyid == 4){
@@ -12510,16 +12516,38 @@ public function GetTodaysAutoTaskANDPlanningTime($uid,$tdate){
 public function GetTommarowPlanTask($uid){
 
         $curdate = date("Y-m-d");
+        $tomorrow = date("Y-m-d", strtotime($curdate . ' +1 day'));
 
-        $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE `init_call`.`mainbd` = '$uid' AND tblcallevents.user_id != '$uid' AND actontaken = 'no' AND purpose_achieved = 'no' and nextCFID = 0");
+        $utype = $this->Menu_model->get_userbyid($uid);
+        $utype = $utype[0]->type_id;
+
+        if($utype   ==  3){
+            $text = "`init_call`.`mainbd` = '$uid'";
+        }elseif($utype == 13){
+            $text = "(`init_call`.`mainbd` = '$uid')";
+        }elseif($utype == 4){
+            $text = "`init_call`.`apst` = '$uid'";
+        }else{
+            $text = "`init_call`.`mainbd` = '$uid'";
+        }
+
+        // $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text AND tblcallevents.user_id != '$uid' AND actontaken = 'no' AND and nextCFID = 0 and cast(appointmentdatetime as Date) = '$tomorrow'");
+
+        $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text AND tblcallevents.user_id != '$uid' AND tblcallevents.actontaken = 'no' and tblcallevents.nextCFID = 0");
 
         //  $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE `init_call`.`mainbd` = '$uid' AND tblcallevents.user_id != '$uid' AND actontaken = 'no' AND purpose_achieved = 'no'");
-
 
     return $query->result();
 
 }
 
 
+
+public function Get_PSTCLM($uid){
+
+        $query=$this->db->query("SELECT * FROM user_details where pst_co='$uid' and status='active' and type_id=13");
+    
+    return $query->result();
+}
 
 }

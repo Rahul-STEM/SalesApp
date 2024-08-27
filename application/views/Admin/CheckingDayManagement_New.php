@@ -1030,7 +1030,6 @@
                                                         }
                                                           ?>
 
-                                                        <!--  -->
                                                     </td>
                                                     <!-- <td>
                                                         When planner was planned on - 

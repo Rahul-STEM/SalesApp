@@ -26,6 +26,10 @@
                 <div class="card text-left">
                     <?php //var_dump($StatusWiseFunnelData);die;?>
                   <!-- <img class="card-img-top" src="holder.js/100px180/" alt=""> -->
+                   <?php 
+
+                    // var_dump($StatusWiseFunnelData);die;
+                   ?>
                   <div class="card-header text-center"><h3><?=$StatusWiseFunnelData[0]->stname;?>(<?=sizeof($StatusWiseFunnelData)?>)</h3></div>
                   <div class="card-body">
                     <div id="StatusWisePieChart1">
@@ -33,7 +37,7 @@
                             <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                                 <a class="nav-item nav-link active ml-2" id="nav_GridView" data-toggle="tab" href="#GridView" role="tab" aria-controls="GridView" aria-selected="true">Grid View</a>
                                 <a class="nav-item nav-link ml-2" id="nav_XLSView" data-toggle="tab" href="#XLSView" role="tab" aria-controls="TableView" aria-selected="false">XLS View</a>
-                                <a class="nav-item nav-link ml-2" id="nav_TabView" data-toggle="tab" href="#TabView" role="tab" aria-controls="TabView" aria-selected="false">Tab View</a>
+                                <!-- <a class="nav-item nav-link ml-2" id="nav_TabView" data-toggle="tab" href="#TabView" role="tab" aria-controls="TabView" aria-selected="false">Tab View</a> -->
                             </div>
                         </nav>
                         <br>

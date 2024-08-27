@@ -37,15 +37,12 @@
                                         <th>PST Name</th> -->
                                         <th>Current Status</th>
                                         <th>Company Name</th>
-                                        <!-- <th>Address</th>
-                                        <th>City</th>
-                                        <th>State</th> -->
+
                                         <th>Partner Type</th>
                                         <th>Category</th>
-                                        <!-- <th>Current Remark</th> -->
-                                        <!-- <th>Total Logs on Same Status</th> -->
-                                        <!-- <th>Current Status of from whitch date</th> -->
-                                        <!-- <th>Same Status from Current Time</th> -->
+                                        <th>Current Remark</th>
+                                        <th>Current Status of from whitch date</th>
+                                        <th>Same Status from Current Time</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -53,6 +50,21 @@
 
                                         $i=1;
                                         foreach($TableData as $TableRow){
+
+                                            $lastRemark = getLastRemark($TableRow->ic_id);
+                                            if (sizeof($lastRemark) != 0) {
+
+                                                $remark=$lastRemark[0]->remarks;
+                                                $lastUpdateDate = $lastRemark[0]->updateddate;
+                                                $currentDate = new DateTime();
+                                                $NoUpdateSince = date_diff_format($lastUpdateDate, $currentDate->format('Y-m-d H:i:s'));
+
+                                            }else{
+
+                                                $remark= "";
+                                                $lastUpdateDate = "";
+                                                $NoUpdateSince = "";
+                                            }
                                     ?>
                                     <tr>
                                         <td><?= $i++?></td>
@@ -60,8 +72,11 @@
                                         <td><?= $TableRow->stname?></td>
                                         <td><?= $TableRow->company_name?></td>
                                         
-                                        <td><?= $TableRow->partner_type?></td>
+                                        <td><?= $TableRow->partner_typeName?></td>
                                         <td><?php if($TableRow->focus_funnel=='yes'){echo 'Focus Funnel, ';} if($TableRow->upsell_client=='yes'){echo 'Upsell Client, ';} if($TableRow->keycompany=='yes'){echo 'Key Company';}?></td>
+                                        <td><?= $remark ?></td>
+                                        <td><?= $lastUpdateDate ?></td>
+                                        <td><?= $NoUpdateSince ?></td>
                                     </tr>
                                     <?php } ?>
                                 

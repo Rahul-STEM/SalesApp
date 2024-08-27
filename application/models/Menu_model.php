@@ -5569,8 +5569,22 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
 
 
     public function get_ccitblall($id){
-        $query=$this->db->query("SELECT *,action.name current_action_type FROM tblcallevents left JOIN action ON action.id=tblcallevents.actiontype_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE tblcallevents.id='$id'");
-        return $query->result();
+        // $query=$this->db->query("SELECT *,`action`.name current_action_type FROM tblcallevents left JOIN `action` ON `action`.id=`tblcallevents`.actiontype_id LEFT JOIN init_call on `init_call`.id=`tblcallevents`.cid_id LEFT JOIN `company_master` ON `company_master`.id=`init_call`.cmpid_id WHERE `tblcallevents`.id='$id'");
+
+        $this->db->select('tblcallevents.*, `action`.name AS current_action_type');
+        $this->db->select('company_master.*');
+        $this->db->from('tblcallevents');
+        $this->db->join('action', 'action.id = tblcallevents.actiontype_id', 'left');
+        $this->db->join('init_call', 'init_call.id = tblcallevents.cid_id', 'left');
+        $this->db->join('company_master', 'company_master.id = init_call.cmpid_id', 'left');
+        $this->db->where('tblcallevents.id', $id);
+
+        // Execute the query and get the result
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+        $result = $query->result();
+
+        return $result;
     }
 
     public function get_alltaskdbyad($code,$atid,$uid,$tdate,$ab){
@@ -7654,7 +7668,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         // $query=$this->db->query("SELECT TIMESTAMPDIFF(DAY,MAX(updateddate),now()) opensday FROM tblcallevents LEFT JOIN init_call ON init_call.id=tblcallevents.cid_id WHERE init_call.cstatus=tblcallevents.nstatus_id and cast(tblcallevents.updateddate as DATE) Between '2023-04-01' and '2024-03-31' and tblcallevents.cid_id IN (Select id from init_call WHERE init_call.mainbd='$uid') and tblcallevents.nextCFID!='0' and init_call.cstatus='$sid' GROUP BY init_call.id");
 
         $query=$this->db->query("SELECT TIMESTAMPDIFF(DAY,MAX(updateddate),now()) opensday FROM tblcallevents LEFT JOIN init_call ON init_call.id=tblcallevents.cid_id WHERE init_call.cstatus=tblcallevents.nstatus_id and tblcallevents.cid_id IN (Select id from init_call WHERE init_call.mainbd='$uid') and tblcallevents.nextCFID!='0' and init_call.cstatus='$sid' GROUP BY init_call.id");
-        echo $this->db->last_query();die;
+        // echo $this->db->last_query();die;
         return $query->result();
     }
 
@@ -11489,10 +11503,14 @@ public function get_userForTask($uid,$uyid){
 public function getTasks($id,$date){
 
     $this->db->select('tce.id tid');
+    $this->db->select('tce.cid_id cid_id');
+    $this->db->select('tce.autotask autotask');
     $this->db->select('tce.lastCFID lastCFID');
     $this->db->select('tce.nextCFID nextCFID');
     $this->db->select('tce.user_id user_id');
     $this->db->select('tce.actontaken actontaken');
+    $this->db->select('tce.selectby selectby');
+    $this->db->select('tce.filter_by filter_by');
     $this->db->select('tce.purpose_achieved purpose_achieved');
     $this->db->select('s1.name old_status');
     $this->db->select('s2.name new_status');
@@ -11500,8 +11518,8 @@ public function getTasks($id,$date){
     $this->db->select('company_master.compname');
     $this->db->select('action_name.name action_name');
     $this->db->select('tce.appointmentdatetime plan_date');
-    $this->db->select('TIME(tce.initiateddt) start_time', FALSE);
-    $this->db->select('TIME(tce.updateddate) end_time', FALSE);
+    $this->db->select('(tce.initiateddt) start_time', FALSE);
+    $this->db->select('(tce.updateddate) end_time', FALSE);
     $this->db->select('TIMEDIFF(tce.updateddate, tce.initiateddt) time_diff', FALSE);
     $this->db->select('TIMEDIFF(tce.initiateddt, tce.appointmentdatetime) time_diff1', FALSE);
     $this->db->select('tce.remarks remarks');
@@ -11552,10 +11570,8 @@ public function InsertTaskRating($rating,$question,$userId,$taskid,$cdate,$uid){
         'question' => $question,
         'star' => $rating,
         'feedback_by' => $uid
-        // 'star' => $rating,
     );
 
-    // var_dump($data);die;
     $this->db->insert('taskcheck_star_rating', $data);
     // echo $this->db->last_query();die;
     // Redirect or load a view
@@ -11589,6 +11605,56 @@ public function getActionDetails($id) {
     $query = $this->db->get();
     return $query->row();
     // return 'Success..!!';
+}
+
+public function getLastActionDetails($id,$userID,$cdate) {
+
+        $this->db->select('tblcallevents.id');
+        $this->db->select('remarks');
+        $this->db->select('updateddate');
+        $this->db->select('user_details.name last_updated_by');
+        $this->db->from('tblcallevents');
+        $this->db->join('user_details', 'user_details.user_id = tblcallevents.user_id', 'left');
+
+        $this->db->where('tblcallevents.id', $id);
+        $this->db->where('tblcallevents.user_id', $userID);
+        $this->db->where('CAST(updateddate AS DATE) =', $cdate);
+        $this->db->order_by('tblcallevents.updateddate DESC');
+        $this->db->limit('1');
+
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+        return $query->row();
+    // return 'Success..!!';
+}
+
+public function get_CompanyStatus($company_id,$id) {
+
+        // echo $id;die;
+        $this->db->select('name');
+        $this->db->from('status');
+        $this->db->where('id', $id);
+
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+        return $query->row();
+}
+
+public function getSameStatusSince($id,$date) {
+
+    $this->db->select('t1.cid_id, DATEDIFF(t2.appointmentdatetime, t1.appointmentdatetime) AS days_difference');
+    $this->db->from('tblcallevents t1');
+    $this->db->join('tblcallevents t2', 't1.cid_id = t2.cid_id AND t1.status_id != t2.nstatus_id AND t1.appointmentdatetime < t2.appointmentdatetime', 'inner');
+    $this->db->where('t1.id', $id);
+    $this->db->where('CAST(t1.updateddate AS DATE) =', $date);
+    $this->db->group_by('t1.cid_id');
+    $this->db->order_by('t1.cid_id');
+    $this->db->order_by('t1.appointmentdatetime', 'DESC');
+    
+    // Get the query result
+    $query = $this->db->get();
+    // echo $this->db->last_query();die;
+    return $query->row();
 }
 
 // New TaskCheck function <======================== END ==============================>

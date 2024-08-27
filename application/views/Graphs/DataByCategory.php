@@ -78,7 +78,7 @@
                                         <!-- <td><?= $TableRow->city?></td>
                                         <td><?= $TableRow->state?></td> -->
                                         <td><?= $TableRow->partner_type?></td>
-                                        <td><?php if($TableRow->focus_funnel=='yes'){echo 'Focus Funnel, ';} if($TableRow->upsell_client=='yes'){echo 'Upsell Client, ';} if($TableRow->keycompany=='yes'){echo 'Key Company';}?></td>
+                                        <td><?php if($TableRow->focus_funnel=='yes'){echo 'Focus Funnel, ';} if($TableRow->upsell_client=='yes'){echo 'Upsell Client, ';} if($TableRow->keycompany=='yes'){echo 'Key Company , ';}if($TableRow->topspender=='yes'){echo 'Top Sepnder';}?></td>
                                         <td><?= $remark ?></td>
                                         <td><?= $lastUpdateDate ?></td>
                                         <td><?= $NoUpdateSince ?></td>

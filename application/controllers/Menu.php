@@ -8,6 +8,7 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $this->load->model('Graph_model');
         $this->load->view('index');
+        $this->load->helper('SameStatusTillDate_helper');
 
     }
 

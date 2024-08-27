@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // ["No Category (<?=$GraphData[0]->nocat?>)", <?=$GraphData[0]->nocat?>,"0","<?=$uid?>"],
 
-            ["Top Spender (<?=$GraphData[0]->topspender?>)", <?=$GraphData[0]->topspender?>,"upsell_client","<?=$uid?>"],
+            ["Top Spender (<?=$GraphData[0]->topspender?>)", <?=$GraphData[0]->topspender?>,"topspender","<?=$uid?>"],
 
             ["Focus Funnel (<?=$GraphData[0]->focus_funnel?>)", <?=$GraphData[0]->focus_funnel?>,"focus_funnel","<?=$uid?>"],
 

@@ -207,7 +207,7 @@
                                                     $formId = 'hiddenForm_' . htmlspecialchars($GraphDataGrid->PartnerMasterID);
                                                     
                                                     ?>
-                                                    <form id="<?= $formId; ?>" action="<?= base_url(); ?>GraphNew/SinglePartnerWiseData/<?=$GraphDataGrid->PartnerMasterID?>" method="POST" style="display: none;">
+                                                    <form id="<?= $formId; ?>" action="<?= base_url(); ?>GraphNew/PartnerWiseFunnelGraphData/<?=$GraphDataGrid->PartnerMasterID?>" method="POST" style="display: none;" target="_blank">
 
                                                         <input type="hidden" name="partnetType_id" value="<?= htmlspecialchars($GraphDataGrid->PartnerMasterID); ?>">
                                                         <input type="hidden" name="sdate" value="<?= htmlspecialchars($sdate); ?>">

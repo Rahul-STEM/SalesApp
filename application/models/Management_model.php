@@ -43,6 +43,7 @@ class Management_model  extends Menu_model {
         $date = new DateTime();
         $date->modify('-1 day');
         $pdate =  $date->format('Y-m-d');
+        $pdate = '2024-07-19';
         $query=$this->db->query("SELECT COUNT(*) AS plan, COUNT(CASE WHEN autotask = 1 THEN autotask END) AS autotask, COUNT(CASE WHEN nextCFID != 0 THEN 1 END) AS done, COUNT(CASE WHEN nextCFID = 0 AND lastCFID = 0 THEN 1 END) AS pending FROM tblcallevents WHERE assignedto_id = $uid AND CAST(appointmentdatetime AS DATE) = '$pdate'");
         // echo $this->db->last_query();
 
@@ -63,7 +64,7 @@ class Management_model  extends Menu_model {
         if($type == 'done'){
             $query=$this->db->query("SELECT * FROM `tblcallevents` WHERE nextCFID != 0 AND assignedto_id = $uid and cast(appointmentdatetime as DATE)='$sdate'");
         }
-        // echo $str = $this->db->last_query(); 
+        // echo $str = $this->db->last_query(); die;
         return $query->result();
     }
 
@@ -80,7 +81,7 @@ class Management_model  extends Menu_model {
 
     public function CheckingYesterDayConsumeTime($uid,$date) {
         $query=$this->db->query("SELECT * FROM `user_day` WHERE user_id = $uid and cast(sdatet as DATE)='$date'");
-        // echo $this->db->last_query();die;
+        // echo $this->db->last_query();
         return $query->result();
     }
 

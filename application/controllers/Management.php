@@ -140,7 +140,7 @@ class Management extends Menu {
         $sdate = new DateTime($cdate);
         $sdate->modify('-1 day');
         $previousDate = $sdate->format('Y-m-d');
-
+        $cdate = '2024-07-20';
         $dayData = $this->Management_model->CheckingDayManage($this->uid,$cdate);
         // var_dump($dayData);die;
         if(!empty($this->user)){

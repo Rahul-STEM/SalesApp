@@ -93,9 +93,9 @@
                                       <th>Completed Time</th>
                                       <th>Plan and Completed Time Diff</th>
                                       <th>Initiated and Completed Time Diff</th>
-                                      <th>Last_Task Date</th>
-                                      <th>Current_Task Date</th>
-                                      <th>Current task planned after time difference</th>
+                                      <!-- <th>Last_Task Date</th>
+                                      <th>Current_Task Date</th> -->
+                                      <!-- <th>Current task planned after time difference</th> -->
                                       <th>Last_Task_Activity</th>
                                       <th>Current_Task_Activity</th>
                                       <th>Last_Task_Remarks</th>
@@ -109,51 +109,54 @@
                                   </thead>
                                   <tbody>
                                     <?php 
-                                      $i=1;$ab==0;
+                                      $i=1;$ab=0;
                                       
                                      
                                       
-                                      foreach($dayData as $md){
+                                        foreach($dayData as $md){
+                                            
+                                            // var_dump($md);die;
+                                            $bd = $md->user_id;
                                       
-                                          $bd = $md->user_id;
+                                            $bdname = $this->Menu_model->get_userbyid($bd);
                                       
-                                          $bdname = $this->Menu_model->get_userbyid($bd);
+                                            $tid = $md->id;
                                       
-                                          $tid = $md->id;
+                                            $ltid = $md->lastCFID;
+                                            // echo $ltid;die;
+                                            // $ltid = '';
                                       
-                                          $ltid = $md->ltid;
+                                            $inid  = $md->cid_id;
                                       
-                                          $inid  = $md->cid_id;
+                                            $inid = $this->Menu_model->get_initbyid($inid);
                                       
-                                          $inid = $this->Menu_model->get_initbyid($inid);
+                                            $mtd = $this->Menu_model->get_ccitblall($tid);
+                                            // var_dump($mtd);die;
+                                            $lsid = $mtd[0]->status_id;
                                       
-                                          $mtd = $this->Menu_model->get_ccitblall($tid);
+                                            $csid = $mtd[0]->nstatus_id;
                                       
-                                          $lsid = $mtd[0]->status_id;
+                                            $s1 = $this->Menu_model->get_statusbyid($lsid);
                                       
-                                          $csid = $mtd[0]->nstatus_id;
+                                            if($s1){$s1=$s1[0]->name;}else{$s1='';}
                                       
-                                          $s1 = $this->Menu_model->get_statusbyid($lsid);
+                                            $s2 = $this->Menu_model->get_statusbyid($csid);
                                       
-                                          if($s1){$s1=$s1[0]->name;}else{$s1='';}
+                                            if($s2){$s2=$s2[0]->name;}else{$s2='';}
                                       
-                                          $s2 = $this->Menu_model->get_statusbyid($csid);
+                                            if($ltid!= 0){  
                                       
-                                          if($s2){$s2=$s2[0]->name;}else{$s2='';}
+                                                // var_dump($ltid);die;
+                                            $mltd = $this->Menu_model->get_ccitblall($ltid);
+                                            $ltime = $mltd[0]->updateddate;
                                       
-                                          if($ltid!=''){  
-                                      
-                                          $mltd = $this->Menu_model->get_ccitblall($ltid);
-                                      
-                                          $ltime = $mltd[0]->updateddate;
-                                      
-                                          $ctime = $mtd[0]->updateddate;
-                                      
-                                          $nltime = date('d-m-Y  h:i A', strtotime($ltime));
-                                      
-                                          $nctime = date('d-m-Y  h:i A', strtotime($ctime));
-                                      
-                                          }else{$mltd='';$nltime='';$nctime='';$ltime='';$ctime='';}
+                                            $ctime = $mtd[0]->updateddate;
+                                        
+                                            $nltime = date('d-m-Y  h:i A', strtotime($ltime));
+                                        
+                                            $nctime = date('d-m-Y  h:i A', strtotime($ctime));
+                                        
+                                            }else{$mltd='';$nltime='';$nctime='';$ltime='';$ctime='';}
                                       
                                       ?>
                                     <tr>
@@ -166,9 +169,9 @@
                                       <td><?=date('d-m-Y h:i A', strtotime($uptime = $md->updateddate));?></td>
                                       <td><?=$this->Menu_model->timediff($pltime,$uptime)?></td>
                                       <td><?=$this->Menu_model->timediff($intime,$uptime)?></td>
-                                      <td><?=$nltime?></td>
-                                      <td><?=$nctime?></td>
-                                      <td><?php if($ctime!=''){echo $this->Menu_model->timediff($ltime,$ctime);}?></td>
+                                      <!-- <td><?=$nltime?></td>
+                                      <td><?=$nctime?></td> -->
+                                      <!-- <td><?php if($ctime!=''){echo $this->Menu_model->timediff($ltime,$ctime);}?></td> -->
                                       <td><?php if($mltd!=''){echo $mltd[0]->current_action_type;}?></td>
                                       <td><?=$mtd[0]->current_action_type?></td>
                                       <td><?php if($mltd!=''){echo $mltd[0]->remarks;}?></td>

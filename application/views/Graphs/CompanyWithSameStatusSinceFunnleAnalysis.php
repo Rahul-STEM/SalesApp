@@ -329,16 +329,11 @@
                 // $status = $this->Menu_model->get_status();
                 
                 foreach ($SelectedStatus as $SelectedSingleStatus) {
-                    // SelectedStatus
-                    // $SingleStatus = $SingleStatus->id;
                 
                     if ($SelectedSingleStatus != '14') {
 
-                        // $opensday = $this->Menu_model->get_opensday($uid,$stid,$sd,$ed);
                         $opensday = SameStatusTillDate($uid, $userTypeid, $sdate, $edate, $SelectedSingleStatus, $SelectedCluster, $SelectedCategory, $SelectedUsers, $SelectedpartnerType);
 
-                        // echo "<pre>";
-                        // var_dump($opensday);die;
                         $countLessThan10 = 0;
                         $countLessThan20 = 0;
                         $countLessThan30 = 0;

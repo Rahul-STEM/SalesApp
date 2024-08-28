@@ -145,6 +145,31 @@ class Management extends Menu {
                 redirect('Menu/main');
             }
     }
+    public function OurMoMApprovedStatus(){
+
+        if(isset($_POST['sdate'])){
+            $cdate = $_POST['sdate'];
+           
+        }else{
+            $cdate = date("Y-m-d");
+        }
+        if(isset($_POST['edate'])){
+            $edate = $_POST['edate'];
+        }else{
+            $edate = date("Y-m-d");
+        }
+
+        $sdate = new DateTime($cdate);
+        $sdate->modify('-1 day');
+
+        $previousDate = $sdate->format('Y-m-d');
+    
+        if(!empty($this->user)){
+                $this->load->view($this->dep_name.'/OurMoMApprovedStatus',['uid'=>$this->uid,'user'=>$this->user,'cdate'=>$cdate,'edate'=>$edate,'previousDate'=>$previousDate]);
+            }else{
+                redirect('Menu/main');
+            }
+    }
 
     public function MomData($suid,$tdate){
 
@@ -156,6 +181,20 @@ class Management extends Menu {
 
         if(!empty($this->user)){
                 $this->load->view($this->dep_name.'/MomData',['uid'=>$this->uid,'user'=>$this->user,'cdate'=>$cdate,'previousDate'=>$previousDate,'suid'=>$suid,'momdata'=>$momdata,'tardate'=>$tdate]);
+            }else{
+                redirect('Menu/main');
+            }
+    }
+    public function OurPendingMomData($suid,$tdate){
+
+        $cdate = date("Y-m-d");
+        $sdate = new DateTime($cdate);
+        $sdate->modify('-1 day');
+        $previousDate = $sdate->format('Y-m-d');
+        $momdata = $this->Management_model->getBDMoMData($suid,$tdate);
+
+        if(!empty($this->user)){
+                $this->load->view($this->dep_name.'/OurPendingMomData',['uid'=>$this->uid,'user'=>$this->user,'cdate'=>$cdate,'previousDate'=>$previousDate,'suid'=>$suid,'momdata'=>$momdata,'tardate'=>$tdate]);
             }else{
                 redirect('Menu/main');
             }
@@ -200,6 +239,21 @@ class Management extends Menu {
 
         if(!empty($this->user)){
                 $this->load->view($this->dep_name.'/MomDataReject',['uid'=>$this->uid,'user'=>$this->user,'cdate'=>$cdate,'previousDate'=>$previousDate,'suid'=>$suid,'momdata'=>$momdata,'tardate'=>$tdate]);
+            }else{
+                redirect('Menu/main');
+            }
+    }
+
+    public function OurMomDataReject($suid,$tdate){
+
+        $cdate = date("Y-m-d");
+        $sdate = new DateTime($cdate);
+        $sdate->modify('-1 day');
+        $previousDate = $sdate->format('Y-m-d');
+        $momdata = $this->Management_model->getBDMoMData($suid,$tdate);
+
+        if(!empty($this->user)){
+                $this->load->view($this->dep_name.'/OurMomDataReject',['uid'=>$this->uid,'user'=>$this->user,'cdate'=>$cdate,'previousDate'=>$previousDate,'suid'=>$suid,'momdata'=>$momdata,'tardate'=>$tdate]);
             }else{
                 redirect('Menu/main');
             }
@@ -269,9 +323,6 @@ class Management extends Menu {
         $autotask = 1;
         $auto_plan = 1;
 
-        // dd($_POST);
-        // die;
-
         $this->Management_model->MomApprovedByUserAdminInsert($approved_status,$id,$approvedreamrk,$approvedtDate,$this->uid,$finalRemarks);
 
         $task_remarks = "Task Create After MOM Approved";
@@ -282,7 +333,14 @@ class Management extends Menu {
       
         $cudetail = $this->Menu_model->get_userbyid($mom_user_id);
         $get_pst_co = $cudetail[0]->pst_co;
-        $clm_aadmin = $cudetail[0]->aadmin;
+        $get_utype_id    = $cudetail[0]->type_id;
+
+        if($get_utype_id == 13){
+            $clm_aadmin = $cudetail[0]->user_id;
+        }else{
+            $clm_aadmin = $cudetail[0]->aadmin;
+        }
+        
         
         $this->Management_model->AssignPSTAfterMomApproved($init_cmpid,$get_pst_co);
         $this->Management_model->AssignCLMAfterMomApproved($init_cmpid,$clm_aadmin);
@@ -335,6 +393,8 @@ class Management extends Menu {
             }
 
     }
+
+    
     public function UpdateEditMomData(){
 
     $tbl_id = $this->input->post('id');
@@ -654,9 +714,16 @@ public function MomApprovedByUserAdminAfterCheck(){
    
     $this->Management_model->CreateTaskForAutoAssign($ass_user_id,$ass_user_id,$ccstatus,$init_id,$insert_id,$actiontype_id,$id,$task_remarks);
   
-    $cudetail = $this->Menu_model->get_userbyid($mom_user_id);
-    $get_pst_co = $cudetail[0]->pst_co;
-    $clm_aadmin = $cudetail[0]->aadmin;
+    $cudetail       = $this->Menu_model->get_userbyid($mom_user_id);
+    $get_pst_co     = $cudetail[0]->pst_co;
+    $get_utype_id    = $cudetail[0]->type_id;
+
+    if($get_utype_id == 13){
+        $clm_aadmin = $cudetail[0]->user_id;
+    }else{
+        $clm_aadmin = $cudetail[0]->aadmin;
+    }
+    
     
     $this->Management_model->AssignPSTAfterMomApproved($init_cmpid,$get_pst_co);
     $this->Management_model->AssignCLMAfterMomApproved($init_cmpid,$clm_aadmin);

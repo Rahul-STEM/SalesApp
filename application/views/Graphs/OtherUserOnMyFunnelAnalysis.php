@@ -29,7 +29,7 @@
                     <div class="card">
                         <div class="card-header">
                             <center>
-                                <h5>Status Wise Task Analysis</h5>
+                                <h5>Other User On My Funnel Analysis</h5>
                             </center>
                         </div>
                         <div class="card-body FilterSection">
@@ -157,26 +157,9 @@
                                     <div class="tab-content">
                                         <div class="tab-pane fade show active" id="GridView" role="tabpanel" aria-labelledby="nav_GridView">
                                             <div class="card">
-                                                <!-- <div class="card-header">
-                                                    <div class="row">
-                                                        <?php foreach ($FunnelData as $FunnelDataSingle) { ?>
-                                                            <div class="col-md-2 mb-2" >
-                                                                <div class="card card p-2 col-sm m-auto bg-light" data-category="<?= htmlspecialchars($FunnelDataSingle->stname) ?>">
-                                                                    <strong>
-                                                                        <a href="#" style="color:<?=$FunnelDataSingle->stclr?>">
-                                                                            <?=$FunnelDataSingle->stname?> - <?=$FunnelDataSingle->cont?>
-                                                                        </a>
-                                                                    </strong>
-                                                                </div>
-                                                            </div>
-                                                        <?php    }?>
-                                                    </div>
-                                                </div> -->
                                                 <div class="card-body">
                                                     <div class="row">
                                                     <?php foreach($TableData as $TableDataGrid){ 
-                                                            // echo "<pre>";
-                                                            // print_r($TableDataGrid);die;
 
                                                             $oldd = '';
                                                             $newd='';
@@ -187,25 +170,6 @@
                                                             } 
 
                                                             $newd = $TableDataGrid->updateddate;
-                                                            // $diff = date_diff_format($oldd, $newd);
-                                                            // $tblc=$this->Graph_Model->get_tblbyidwithremark($TableDataGrid->ic_id);
-
-                                                            // if(!empty($tblc[0]->updateddate) ){
-
-                                                            //     $updatedDate = $tblc[0]->updateddate;
-                                                            //     $currentDate = new DateTime();
-                                                            //     $updatedDateObj = new DateTime($updatedDate);
-                                                            //     $interval = $currentDate->diff($updatedDateObj);
-                                                            //     $diffInDays = $interval->days;
-                                                            //     $diffInHours = $interval->h;
-                                                            //     $diffInMinutes = $interval->i;
-
-                                                            // // Create a single string variable
-                                                            //     $diffString = sprintf('%d days, %d hours, %d minutes', $diffInDays, $diffInHours, $diffInMinutes);
-                                                            // }else{
-                                                            //     $updatedDate = 'NA';
-                                                            //     $diffString ='NA';
-                                                            // }
 
                                                         ?>
                                                         <div class="col-md-4 mb-4 filter-item" data-category="">

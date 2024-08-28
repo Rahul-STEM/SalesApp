@@ -29,7 +29,7 @@
                     <div class="card">
                         <div class="card-header">
                             <center>
-                                <h5>Status Wise Task Analysis</h5>
+                                <h5>Month Wise Funnel Analysis</h5>
                             </center>
                         </div>
                         <div class="card-body FilterSection">
@@ -446,7 +446,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 $stname = $singleStatus->name;
 
 
-                $StatusWiseTask = getStatusWiseTask($uid,$sdate,$edate,$selected_category,$selected_partnerType,$Selected_userType,$selected_cluster,$selected_users,$stid,$userTypeid);
+                $StatusWiseTask = getMonthWiseFunnel($uid,$sdate,$edate,$selected_category,$selected_partnerType,$Selected_userType,$selected_cluster,$selected_users,$stid,$userTypeid);
 
                 foreach($StatusWiseTask as $sw){
                     // var_dump($sw);die;

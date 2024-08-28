@@ -146,15 +146,22 @@
                 <div class="row text-center" id="grid-view">
                     
                    <?php
-                            $oldd = "";$newd="";
+                            $oldd = "";
+                            $newd="";
                             $gdata = $this->Menu_model->get_usertask($uid);
-                            foreach ($gdata as $gd) { if($oldd==''){$oldd = $gd->updateddate;} $newd = $gd->updateddate;?>
+                            foreach ($gdata as $gd) { if($oldd==''){$oldd = $gd->updateddate;} $newd = $gd->updateddate;
+
+                            // echo 'olde_date-'.$oldd;
+                            // echo 'new_date-'.$newd;
                             
+                            ?>
+                                        
                             
                                         <div class="col-sm-12 col-md-4 col-lg-4 mb-4">
                                         <div class="card p-3 border rounded border-success hover-div d-flex flex-column align-items-stretch h-100">
                                             <div class="custom-border-card">
                                             <span class="custom-border-text"><h5>Time Diff Between to Task : <?=$this->Menu_model->timediff($oldd, $newd);?></h5></span>
+                                            
                                             <div class="card-body">
                                             
                                             Action<br><b style="color:<?=$gd->aclr?>"><?=$gd->acname?></b><hr>

@@ -7702,6 +7702,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         COUNT(case when actiontype_id=10 then 1 end) as j,
         COUNT(case when actiontype_id=11 then 1 end) as k
         FROM tblcallevents  WHERE tblcallevents.cid_id IN (Select id from init_call WHERE init_call.mainbd='$uid') and nextCFID!='0' and Month(updateddate)='$m' and Year(updateddate)='$y'");
+        // echo $this->db->last_query();die;
         return $query->result();
     }
     public function get_monthwnewlead($uid,$m,$y){
@@ -7765,6 +7766,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
 
     public function get_taskolsna($uid,$st,$ac,$sd,$ed){
         $query=$this->db->query("SELECT COUNT(*) cont,action.name name, COUNT(CASE WHEN initiateddt>updateddate THEN 1 END) a, COUNT(CASE WHEN initiateddt<updateddate THEN 1 END) b FROM tblcallevents  LEFT JOIN action on action.id=tblcallevents.actiontype_id WHERE tblcallevents.cid_id IN (Select id from init_call WHERE init_call.mainbd='$uid' and init_call.cstatus='$st') and actiontype_id='$ac' and nextCFID!='0' and cast(updateddate as DATE) BETWEEN '$sd' and '$ed'");
+        // echo $this->db->last_query();die;
         return $query->result();
     }
 

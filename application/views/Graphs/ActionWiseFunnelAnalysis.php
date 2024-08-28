@@ -29,22 +29,24 @@
                     <div class="card">
                         <div class="card-header">
                             <center>
-                                <h5>Status Wise Task Analysis</h5>
+                                <h5>Action Wise Funnel Analysis</h5>
                             </center>
                         </div>
                         <div class="card-body FilterSection">
-                            <form method="POST" action="<?=base_url();?>GraphNew/StatusWiseTaskAnalysis/<?php ?>">
+                            <form method="POST" action="<?=base_url();?>GraphNew/ActionWiseFunnelAnalysis/<?php ?>">
                                 <div class="row">
-                                    <div class="col-lg-3 col-sm-6">
+                                    <div class="col-lg-2 col-sm-6">
                                         <label for="startDate">Start Date</label>
                                         <input id="startDate" name="startDate" class="form-control" type="date" value="<?=$sdate ?>"/>
                                         
                                     </div>
-                                    <div class="col-lg-3 col-sm-6">
+                                    <div class="col-lg-2 col-sm-6">
                                         <label for="endDate">End Date</label>
                                         <input id="endDate" class="form-control" name="endDate" type="date" value="<?=$edate ?>"/>
                                     </div>
-                                    <div class="col-lg-3 col-sm-6">
+                                </div>
+                                <div class="row">
+                                    <!-- <div class="col-lg-3 col-sm-6">
                                         <label for="endDate">Select User Filter</label>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="radioFilter" id="filterByRole" onchange="handleRadioChange()">
@@ -58,12 +60,12 @@
                                                     Filter By Cluster
                                                 </label>
                                             </div>
-                                    </div>
+                                    </div> -->
                                     <!-- User Role -->
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Select Role</label>
-                                            <select class="custom-select rounded-0" name="userType[]" id="userType" multiple disabled>
+                                            <select class="custom-select rounded-0" name="userType[]" id="userType" multiple>
                                                 <option value="select_all">Select All</option>
                                                 <?php foreach($roles as $r) {
                                                 ?>
@@ -74,7 +76,7 @@
                                     </div>
                                     
                                     <!-- Cluster -->
-                                    <div class="col-md-3">
+                                    <!-- <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Select Cluster</label>
                                             <select class="custom-select rounded-0" name="cluster[]" id="cluster" multiple disabled>
@@ -85,14 +87,28 @@
                                                 <?php } ?>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <!-- Users -->
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Select User</label>
-                                            <select id="user" class="custom-select rounded-0" name="user[]" data-live-search="true" multiple>
+                                            <select id="user" class="custom-select rounded-0" name="user[]" data-live-search="true" multiple >
                                                 
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Select Action -->
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Select Action</label>
+                                            <select id="action" class="custom-select rounded-0" name="action[]" data-live-search="true" >
+                                                <option value="select_all">Select All</option>
+                                                <?php foreach($get_action as $action) {
+                                                ?>
+                                                <option value="<?= $action->id ?>" <?= in_array($action->id, $Selected_action) ? 'selected' : '' ?>><?= $action->name ?></option>
+                                                <?php } ?>
 
                                             </select>
                                         </div>
@@ -126,7 +142,9 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-sm-6">
+                                    <div class="col-lg-3 col-sm-6" style="margin-top: 32px;">
+                                    <label></label>
+
                                        <button type="submit" name="submit" class="btn btn-primary"> Filter</button>
                                     </div>
                                 </div>
@@ -142,11 +160,11 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card card-body">
-                                <div id="StatusWiseTaskChart" style="width: 100%; height: 800px;"></div>
+                                <div id="ActionWiseTaskChart" style="width: 100%; height: 800px;"></div>
 
                                 <hr>
 
-                                <div id="StatusWisePieChart1">
+                                <div id="ActionWiseTaskChart">
                                     <nav>
                                         <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                                             <a class="nav-item nav-link active" id="nav_GridView" data-toggle="tab" href="#GridView" role="tab" aria-controls="GridView" aria-selected="true">Grid View</a>
@@ -157,80 +175,48 @@
                                     <div class="tab-content">
                                         <div class="tab-pane fade show active" id="GridView" role="tabpanel" aria-labelledby="nav_GridView">
                                             <div class="card">
-                                                <!-- <div class="card-header">
-                                                    <div class="row">
-                                                        <?php foreach ($FunnelData as $FunnelDataSingle) { ?>
-                                                            <div class="col-md-2 mb-2" >
-                                                                <div class="card card p-2 col-sm m-auto bg-light" data-category="<?= htmlspecialchars($FunnelDataSingle->stname) ?>">
-                                                                    <strong>
-                                                                        <a href="#" style="color:<?=$FunnelDataSingle->stclr?>">
-                                                                            <?=$FunnelDataSingle->stname?> - <?=$FunnelDataSingle->cont?>
-                                                                        </a>
-                                                                    </strong>
-                                                                </div>
-                                                            </div>
-                                                        <?php    }?>
-                                                    </div>
-                                                </div> -->
                                                 <div class="card-body">
                                                     <div class="row">
-                                                    <?php foreach($TableData as $TableDataGrid){ 
+                                                    <?php 
+
+                                                        $oldd = '';
+                                                        $newd='';
+                                                    
+                                                    foreach($TableData as $TableDataGrid){ 
                                                             // echo "<pre>";
                                                             // print_r($TableDataGrid);die;
-
-                                                            $oldd = '';
-                                                            $newd='';
-
                                                             if($oldd==''){
-
+                                                                
                                                                 $oldd = $TableDataGrid->updateddate;
                                                             } 
-
+                                                            
                                                             $newd = $TableDataGrid->updateddate;
-                                                            // $diff = date_diff_format($oldd, $newd);
-                                                            // $tblc=$this->Graph_Model->get_tblbyidwithremark($TableDataGrid->ic_id);
-
-                                                            // if(!empty($tblc[0]->updateddate) ){
-
-                                                            //     $updatedDate = $tblc[0]->updateddate;
-                                                            //     $currentDate = new DateTime();
-                                                            //     $updatedDateObj = new DateTime($updatedDate);
-                                                            //     $interval = $currentDate->diff($updatedDateObj);
-                                                            //     $diffInDays = $interval->days;
-                                                            //     $diffInHours = $interval->h;
-                                                            //     $diffInMinutes = $interval->i;
-
-                                                            // // Create a single string variable
-                                                            //     $diffString = sprintf('%d days, %d hours, %d minutes', $diffInDays, $diffInHours, $diffInMinutes);
-                                                            // }else{
-                                                            //     $updatedDate = 'NA';
-                                                            //     $diffString ='NA';
-                                                            // }
 
                                                         ?>
                                                         <div class="col-md-4 mb-4 filter-item" data-category="">
                                                             <div class="card p-3 border rounded border-success hover-div d-flex flex-column align-items-stretch h-100 text-center">
                                                                 <div class="custom-border-card">
-                                                                <span class="custom-border-text"><h5>Time Diff Between to Task : <?=date_diff_format($oldd, $newd);?></h5></span>
-                                                                <div class="card-body">
-                                                                
-                                                                Action<br><b style="color:<?=$TableDataGrid->aclr?>"><?=$TableDataGrid->acname?></b><hr>
-                                                                Befour Status<br><b style="color:<?=$TableDataGrid->bsclr?>"><?=$TableDataGrid->bstatus?></b><hr>
-                                                                After Status<br><b style="color:<?=$TableDataGrid->asclr?>"><?=$TableDataGrid->astatus?></b><hr>
-                                                                Company Name<br><a href="<?=base_url();?>Menu/CompanyDetails/<?=$TableDataGrid->cid?>"><b style="color:<?=$TableDataGrid->pclr?>"><?=$TableDataGrid->compname?><a></a><br>(<?=$TableDataGrid->pname?>)</b><hr>
-                                                                Task By<br><b><?=$TableDataGrid->uname?></b><hr>
-                                                                Task Plan<br><b><?=$this->Menu_model->get_dformat($TableDataGrid->appointmentdatetime)?></b><hr>
-                                                                Task Inistaed<br><b><?=$this->Menu_model->get_dformat($TableDataGrid->initiateddt)?></b><br>
-                                                                Time Diff : <?=date_diff_format($TableDataGrid->appointmentdatetime,$TableDataGrid->initiateddt);?><hr>
-                                                                Task Updated<br><b><?=$this->Menu_model->get_dformat($TableDataGrid->updateddate)?></b><br>
-                                                                Time Diff : <?=date_diff_format($TableDataGrid->initiateddt,$TableDataGrid->updateddate);?><hr>
-                                                                Remark/MOM <br><b><?=$TableDataGrid->remarks?><?=$TableDataGrid->mom?></b><hr>
-                                                                <div class="rounded-circle bg-danger" style="position: absolute;
-                                                                    bottom: -10px; left: 40%; transform: translateX(-50%); width: 20px; height: 20px;"></div>
-                                                                <div class="rounded-circle bg-danger" style="position: absolute;
-                                                                    bottom: -10px; left: 60%; transform: translateX(-50%); width: 20px; height: 20px;"></div>
-                                                                    
-                                                            </div>
+                                                                    <span class="custom-border-text"><h5>Time Diff Between to Task : <?=$this->Menu_model->timediff($oldd, $newd);?></h5>
+                                                                </span>
+                                                                    <div class="card-body">
+                                                                        Action<br><b style="color:<?=$TableDataGrid->aclr?>"><?=$TableDataGrid->acname?></b><hr>
+                                                                        Befour Status<br><b style="color:<?=$TableDataGrid->bsclr?>"><?=$TableDataGrid->bstatus?></b><hr>
+                                                                        After Status<br><b style="color:<?=$TableDataGrid->asclr?>"><?=$TableDataGrid->astatus?></b><hr>
+                                                                        Company Name<br><a href="<?=base_url();?>Menu/CompanyDetails/<?=$TableDataGrid->cid?>"><b style="color:<?=$TableDataGrid->pclr?>"><?=$TableDataGrid->compname?><a></a><br>(<?=$TableDataGrid->pname?>)</b><hr>
+                                                                        Task By<br><b><?=$TableDataGrid->uname?></b><hr>
+                                                                        Task Plan<br><b><?=$this->Menu_model->get_dformat($TableDataGrid->appointmentdatetime)?></b><hr>
+                                                                        Task Inistaed<br><b><?=$this->Menu_model->get_dformat($TableDataGrid->initiateddt)?></b><br>
+                                                                        Time Diff : <?=date_diff_format($TableDataGrid->appointmentdatetime,$TableDataGrid->initiateddt);?><hr>
+                                                                        Task Updated<br><b><?=$this->Menu_model->get_dformat($TableDataGrid->updateddate)?></b><br>
+                                                                        Time Diff : <?=date_diff_format($TableDataGrid->initiateddt,$TableDataGrid->updateddate);?><hr>
+                                                                        Remark/MOM <br><b><?=$TableDataGrid->remarks?><?=$TableDataGrid->mom?></b><hr>
+                                                                        <div class="rounded-circle bg-danger" style="position: absolute;
+                                                                            bottom: -10px; left: 40%; transform: translateX(-50%); width: 20px; height: 20px;">
+                                                                        </div>
+                                                                        <div class="rounded-circle bg-danger" style="position: absolute;
+                                                                            bottom: -10px; left: 60%; transform: translateX(-50%); width: 20px; height: 20px;">
+                                                                        </div> 
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -291,57 +277,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div class="tab-pane fade" id="TabView" role="tabpanel" aria-labelledby="nav_TabView">
-                                            <div class="card card-body">
-                                                <div class="row">
-                                                    <?php
-
-                                                        $arrayselected_partnerType = json_encode($selected_partnerType);
-                                                        $arrayselected_cluster = json_encode($selected_cluster);
-                                                        $arrayselected_user = json_encode($selected_users);
-                                                        $arrayselected_category = json_encode($selected_category);
-                                                        $arrayselected_userType = json_encode($userType);
-           
-                                                    ?>
-                                                    <?php foreach ($FunnelData as $FunnelDataSingle) { 
-
-                                                            $formId = 'hiddenForm_' . htmlspecialchars($FunnelDataSingle->stid);
-                                                        ?>
-                                                        
-                                                        <form id="<?= $formId; ?>" action="<?= base_url(); ?>GraphNew/StatusWiseFunnelData/<?=$FunnelDataSingle->stid?>" method="POST" style="display: none;" target="_blank">
-                                                            <input type="hidden" name="selected_partnerType" value="<?= htmlspecialchars($arrayselected_partnerType); ?>">
-
-                                                            <input type="hidden" name="arrayselected_cluster" value="<?= htmlspecialchars($arrayselected_cluster)?>">
-
-                                                            <input type="hidden" name="arrayselected_user" value="<?=htmlspecialchars($arrayselected_user) ?>">
-
-                                                            <input type="hidden" name="arrayselected_userType" value="<?=htmlspecialchars($arrayselected_userType) ?>">
-
-                                                            <input type="hidden" name="arrayselected_category" value="<?=htmlspecialchars($arrayselected_category) ?>">
-
-                                                            <input type="hidden" name="stid" value="<?= htmlspecialchars($FunnelDataSingle->stid); ?>">
-
-                                                            <input type="hidden" name="sdate" value="<?= htmlspecialchars($sdate); ?>">
-                                                            <input type="hidden" name="edate" value="<?= htmlspecialchars($edate); ?>">
-                                                        </form>
-                                                        <div class="col-md-3 mb-2" >
-                                                            <div class="card card p-3 col-sm m-auto bg-light">
-                                                                <strong>
-                                                                    <a href="javascript:void(0);" onclick="document.getElementById('<?= $formId; ?>').submit();" style="color:<?=$FunnelDataSingle->stclr?>">
-                                                                        <?=$FunnelDataSingle->stname?> - <?=$FunnelDataSingle->cont?>
-                                                                    </a>
-                                                                    
-                                                                </strong>
-                                                            </div>
-                                                        </div>
-                                                    <?php } ?>
-                                                </div>
-                                            </div> 
-                                        </div> -->
                                     </div>
                                 </div>
                             </div>
-                            
                         </div>
                     </div>
                 </div> 
@@ -350,6 +288,71 @@
     </div>
 
 <script src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+    google.charts.load("current", { packages: ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart42);
+        function drawChart42() {
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', 'Action');
+          data.addColumn('number', 'Ontime');
+          data.addColumn({type: 'string', role: 'annotation'});
+          data.addColumn('number', 'Late');
+          data.addColumn({type: 'string', role: 'annotation'});
+        
+          <?php
+            // $status = $this->Menu_model->get_status();
+            foreach($getStatus as $status){ 
+            $stid = $status->id;
+                foreach ($Selected_action as $action) {
+                    # code...
+                    // var_dump($action);die;
+                $swtc = getActionWiseFunnel($uid,$sdate,$edate,$selected_category,$selected_partnerType,$Selected_userType,$selected_cluster,$selected_users,$stid,$userTypeid,$action);
+                    foreach($swtc as $sw){ //$url="https://stemapp.in/Menu"; 
+                        // print_r($sw);die;
+                    ?>
+                        data.addRow(['<?=$status->name?>',
+                            <?=$sw->a?>, '<?php if($sw->a == 0){echo "";}else{ echo $sw->a;}?>',
+                            <?=$sw->b?>, '<?php if($sw->b == 0){echo "";}else{ echo $sw->b;}?>']);
+                    <?php }
+                
+                }
+            }?>
+        
+          var options_fullStacked = {
+            isStacked: 'percent',
+            height: 600,
+            legend: {position: 'top', maxLines: 3},
+            vAxis: {
+              minValue: 0,
+              ticks: [0, 0.3, 0.6, 0.9, 1]
+            },
+            annotations: {
+              alwaysOutside: false,
+              textStyle: {
+                fontSize: 10,
+              },
+            },
+          };
+        
+          var chart = new google.visualization.ColumnChart(document.getElementById('ActionWiseTaskChart'));
+          google.visualization.events.addListener(chart, 'select', function() {
+            var selection = chart.getSelection();
+            if (selection.length > 0) {
+              var rowIndex = selection[0].row;
+              var hyperlink = data.getValue(rowIndex, 23);
+              if (hyperlink) {
+                window.location.href = hyperlink;
+              }
+            }
+          });
+        
+          chart.draw(data, options_fullStacked);
+        }
+    
+    
+  </script>
+
 <script>
     $("#example1").DataTable({
       "responsive": false, "lengthChange": false, "autoWidth": false,
@@ -388,185 +391,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script> -->
 
-<script>
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
-    
-    function drawChart() {
 
-        const chartData = <?php echo json_encode($FunnelData); ?>;
-        var sdate = <?php echo json_encode($sdate); ?>;
-        var edate = <?php echo json_encode($edate); ?>;
-        var selected_category = <?php echo json_encode($selected_category); ?>;
-        var selected_partnerType = <?php echo json_encode($selected_partnerType); ?>;
-        var selected_userType = <?php echo json_encode($Selected_userType); ?>;
-        var selected_cluster = <?php echo json_encode($selected_cluster); ?>;
-        var selected_users = <?php echo json_encode($selected_users); ?>;
-        var uid = <?php echo json_encode($uid); ?>;
-        
-
-        var selectedPartnerTypeString = JSON.stringify(selected_partnerType);
-        var selected_categoryString = JSON.stringify(selected_category);
-        var selected_clusterString = JSON.stringify(selected_cluster);
-        var selected_usersString = JSON.stringify(selected_users);
-        var selected_userTypeString = JSON.stringify(selected_userType);
-
-        var data = new google.visualization.DataTable();
-
-            data.addColumn('string', 'All Action');
-            data.addColumn('number', 'Call');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Email');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Scheduled Meeting');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Barg in Meeting');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Whatsapp Activity');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Write MOM');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Write Proposal');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Research');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Mail Check');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Social Networking');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Social Activity');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn({type: 'string', role: 'annotationText'});
-
-
-            <?php
-            foreach($getStatus as $singleStatus){ 
-                
-                $stid = $singleStatus->id;
-                $stname = $singleStatus->name;
-
-
-                $StatusWiseTask = getStatusWiseTask($uid,$sdate,$edate,$selected_category,$selected_partnerType,$Selected_userType,$selected_cluster,$selected_users,$stid,$userTypeid);
-
-                foreach($StatusWiseTask as $sw){
-                    // var_dump($sw);die;
-                    $url="https://stemapp.in/Menu";
-                    ?>
-                    data.addRow(['<?=$stname?> ( <?=$sw->cont?>)',
-
-                    <?=$sw->a?>, '<?php if($sw->a == 0){echo "";}else{ echo $sw->a;}?>',
-                    <?=$sw->b?>, '<?php if($sw->b == 0){echo "";}else{ echo $sw->b;}?>',
-                    <?=$sw->c?>, '<?php if($sw->c == 0){echo "";}else{ echo $sw->c;}?>',
-                    <?=$sw->d?>, '<?php if($sw->d == 0){echo "";}else{ echo $sw->d;}?>',
-                    <?=$sw->e?>, '<?php if($sw->e == 0){echo "";}else{ echo $sw->e;}?>',
-                    <?=$sw->f?>, '<?php if($sw->f == 0){echo "";}else{ echo $sw->f;}?>',
-                    <?=$sw->g?>, '<?php if($sw->g == 0){echo "";}else{ echo $sw->g;}?>',
-                    <?=$sw->h?>, '<?php if($sw->h == 0){echo "";}else{ echo $sw->h;}?>',
-                    <?=$sw->i?>, '<?php if($sw->i == 0){echo "";}else{ echo $sw->i;}?>',
-                    <?=$sw->j?>, '<?php if($sw->j == 0){echo "";}else{ echo $sw->j;}?>',
-                    <?=$sw->k?>, '<?php if($sw->k == 0){echo "";}else{ echo $sw->k;}?>','<?=$sw->nstatus_id?>']);
-                    <?php
-                }
-            }
-            
-            ?>
-
-            var options_fullStacked = {
-                isStacked: 'percent',
-                // height: 600,
-                legend: {position: 'top', maxLines: 3},
-                vAxis: {
-                minValue: 0,
-                ticks: [0, 0.3, 0.6, 0.9, 1]
-                },
-                annotations: {
-                alwaysOutside: false,
-                textStyle: {
-                    fontSize: 10,
-                },
-                },
-            };
-        const chart = new google.visualization.ColumnChart(document.getElementById('StatusWiseTaskChart'));
-        
-        // var chart = new google.visualization.ColumnChart(document.getElementById('chart_div2'));
-        google.visualization.events.addListener(chart, 'select', function() {
-            var selection = chart.getSelection()[0];
-            if (selection) {
-
-                var stid = data.getValue(selection.row, 23);
-
-                // Create a hidden form
-                var form = document.createElement('form');
-                form.method = 'POST'; // Use POST method
-                form.action = '<?=base_url();?>GraphNew/StatusWiseTaskFunnelGraphData';
-                form.target = '_blank';
-
-                // Create hidden input fields
-                var inputStid = document.createElement('input');
-                inputStid.type = 'hidden';
-                inputStid.name = 'stid';
-                inputStid.value = stid;
-                form.appendChild(inputStid);
-
-                var inputSdate = document.createElement('input');
-                inputSdate.type = 'hidden';
-                inputSdate.name = 'sdate';
-                inputSdate.value = sdate;
-                form.appendChild(inputSdate);
-
-                var inputEdate = document.createElement('input');
-                inputEdate.type = 'hidden';
-                inputEdate.name = 'edate';
-                inputEdate.value = edate;
-                form.appendChild(inputEdate);
-
-                var inputuid = document.createElement('input');
-                inputuid.type = 'hidden';
-                inputuid.name = 'uid';
-                inputuid.value = uid;
-                form.appendChild(inputuid);
-                
-
-                var inputSelectedPartnerType = document.createElement('input');
-                inputSelectedPartnerType.type = 'hidden';
-                inputSelectedPartnerType.name = 'selected_partnerType';
-                inputSelectedPartnerType.value = selectedPartnerTypeString;
-                form.appendChild(inputSelectedPartnerType);
-
-                var inputselected_userType = document.createElement('input');
-                inputselected_userType.type = 'hidden';
-                inputselected_userType.name = 'selected_userType';
-                inputselected_userType.value = selected_userTypeString;
-                form.appendChild(inputselected_userType);
-
-                var inputselected_cluster = document.createElement('input');
-                inputselected_cluster.type = 'hidden';
-                inputselected_cluster.name = 'selected_cluster';
-                inputselected_cluster.value = selected_clusterString;
-                form.appendChild(inputselected_cluster);
-
-                var inputselected_users = document.createElement('input');
-                inputselected_users.type = 'hidden';
-                inputselected_users.name = 'selected_users';
-                inputselected_users.value = selected_usersString;
-                form.appendChild(inputselected_users);
-
-                var inputselected_category = document.createElement('input');
-                inputselected_category.type = 'hidden';
-                inputselected_category.name = 'selected_category';
-                inputselected_category.value = selected_categoryString;
-                form.appendChild(inputselected_category);
-                // Append the form to the body and submit
-                
-                document.body.appendChild(form);
-                form.submit();
-
-            }
-        });
-
-        chart.draw(data, options_fullStacked);
-    }
-</script>
 
 <script>
     // Function to handle radio button change
@@ -651,6 +476,23 @@ document.addEventListener('DOMContentLoaded', function() {
             // var selectedValues = $("#userType").val(); // Get selected values
         });
 
+        // $("#action").change(function(){
+
+        //     var selectedAction = $(this).val(); 
+        //     if (selectedAction.includes('select_all')) {
+        //     // Select all options
+        //         $('#action option').prop('selected', true);
+        //         // Remove 'select_all' from the selected values
+        //         selectedAction = $('#action option').map(function() {
+        //             return this.value !== 'select_all' ? this.value : null;
+        //         }).get();
+
+        //         selectedAction = selectedAction.filter(function(value) {
+        //             return value !== null;
+        //         });
+        //     }
+        //     // var selectedValues = $("#userType").val(); // Get selected values
+        // });
 
         $("#cluster").change(function(){
 

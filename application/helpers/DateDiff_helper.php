@@ -19,18 +19,18 @@ if ( ! function_exists('date_diff_format'))
         $interval = $datetime1->diff($datetime2);
 
         // Build the formatted difference string
-        $result = '';
+        // $result = '';
 
-        if ($interval->days > 0) {
-            $result .= $interval->days . ' days ';
-        }
-        if ($interval->h > 0) {
-            $result .= $interval->h . ' hours ';
-        }
-        if ($interval->i > 0) {
-            $result .= $interval->i . ' mins';
-        }
+        // if ($interval->days > 0) {
+        //     $result .= $interval->days . ' days ';
+        // }
+        // if ($interval->h > 0) {
+        //     $result .= $interval->h . ' hours ';
+        // }
+        // if ($interval->i > 0) {
+        //     $result .= $interval->i . ' mins';
+        // }
 
-        return trim($result);
+        return trim($interval);
     }
 }

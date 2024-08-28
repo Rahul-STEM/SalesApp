@@ -83,4 +83,27 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	    }
 	}
 
+	if (!function_exists('getMonthWiseFunnel')) {
+	    function getMonthWiseFunnel($uid,$userTypeid,$sdate,$edate,$status,$SelectedCluster,$SelectedCategory,$SelectedUsers,$SelectedpartnerType){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Graph_model');
+	        $DataSet = $CI->Graph_model->getMonthWiseFunnel($uid,$userTypeid,$sdate,$edate,$status,$SelectedCluster,$SelectedCategory,$SelectedUsers,$SelectedpartnerType);
+            
+	        return $DataSet;
+	    }
+	}
+
+	if (!function_exists('getActionWiseFunnel')) {
+	    function getActionWiseFunnel($uid,$sdate,$edate,$selected_category,$selected_partnerType,$Selected_userType,$selected_cluster,$selected_users,$stid,$userTypeid,$action){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Graph_model');
+	        $DataSet = $CI->Graph_model->getActionWiseFunnel($uid,$sdate,$edate,$selected_category,$selected_partnerType,$Selected_userType,$selected_cluster,$selected_users,$stid,$userTypeid,$action);
+            
+	        return $DataSet;
+	    }
+	}
+
+
 ?>

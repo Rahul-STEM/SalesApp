@@ -6560,14 +6560,14 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
          }else{
            
             if($jsonData == '[]'){
-                $jsonData = "{'Plan_BY':'".$selectby."'}";
+                $jsonData = '{"Plan_BY":"'.$selectby.'"}';
             }
-
+    
             $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type,plan,tptype,tptime,selectby,filter_by)
             VALUES ('0', '0', '', '', '$date', 'no', '$ntaction', 'NA','NA','no','$date','$ntaction','$uid','$inid','$ntppose','','$ntstatus','$uid','$date','$date','updated','1','$ttype','$tptime','$selectby','$jsonData')");
-            
+           
             $tblid = $this->db->insert_id();
-          
+    
          //    if($cs!='1' and $ntaction=='1'){ $this->db->query("INSERT INTO tblcallevents (fwd_date,appointmentdatetime,actiontype_id,assignedto_id,cid_id,purpose_id,status_id,user_id,plan,lastCFID,nextCFID) value('$date','$date',2,'$uid',$inid,22,$ntstatus,'$uid','1','0','0')");}
  
          }
@@ -6997,7 +6997,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
 
 
             } else{
-          
+           
                    if($purpose=='no'){
                     // echo "dsfs".$actontaken;
                     // echo $purpose;
@@ -7148,10 +7148,10 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                         $status=$cs;
                     }
 
-                
                        if($action_id=='5'){$status=$cs;}
                        if($action_id=='7'){
                            $status=$cs;
+                   
                            $this->db->query("INSERT INTO proposal(user_id, proattach, tid, main, partner, noofsc, pbudgetme)VALUES ('$uid','$flink','$tid','1','$partner','$noofsc','$pbudgetme')");
                            $remark='Will be Upload Proposal for Approval';
                        }
@@ -7159,12 +7159,6 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                        if($action_id=='13'){$status=$cs;}
                        if($action_id=='14'){$status=$cs;}
 
-                    //      echo $remark;
-                    //    if($uid == 100194){
-                    //         die;
-                    //     }
-                       
-   
                        $this->db->query("UPDATE tblcallevents SET remarks='$remark',nextCFID='$tid',updateddate='$date',status_id='$cs',nstatus_id='$status',actontaken='yes',purpose_achieved='yes',updation_data_type='update' WHERE id='$tid'");
                        $this->db->query("UPDATE init_call SET lstatus=cstatus,cstatus='$status'  WHERE id='$inid'");
                        return $tid;
@@ -7333,22 +7327,19 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         $query=$this->db->query("SELECT tid FROM proposal where id='$aprid'");
         $data = $query->result();
         $tid = $data[0]->tid;
-
-
         $query=$this->db->query("update proposal set apr='$apr',aprdatet='$date',remark='$remark' where id='$aprid'");
+        $remark = base64_encode($remark);
         if($apr=='2'){
-            $this->db->query("INSERT INTO tblcallevents(draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, status_id, user_id, date, updateddate, updation_data_type) select draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, status_id, user_id, date, updateddate, updation_data_type from tblcallevents where id='$tid'");
+            $this->db->query("INSERT INTO tblcallevents(draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, status_id, user_id, date, updateddate, updation_data_type,is_new,approved_status,approved_by,self_assign) select draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, status_id, user_id, date, updateddate, updation_data_type,is_new,approved_status,approved_by,self_assign from tblcallevents where id='$tid'");
             $nextid = $this->db->insert_id();
-            $this->db->query("update tblcallevents set lastCFID='$tid',nextCFID=0,actontaken='no', purpose_achieved='no', plan=0, appointmentdatetime='$date',fwd_date='$date',date='$date', updateddate='$date' where id='$nextid'");
+            $this->db->query("update tblcallevents set lastCFID='$tid',nextCFID=0,actontaken='no', purpose_achieved='no', plan=1, appointmentdatetime='$date',fwd_date='$date',date='$date', updateddate='$date',comment_by= '$adid',comments = '$remark',autotask=1 where id='$nextid'");
         }
 
         if($apr=='1'){
-            $this->db->query("INSERT INTO tblcallevents(draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, status_id, user_id, date, updateddate, updation_data_type) select draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, status_id, user_id, date, updateddate, updation_data_type from tblcallevents where id='$tid'");
+            $this->db->query("INSERT INTO tblcallevents(draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, status_id, user_id, date, updateddate, updation_data_type,is_new,approved_status,approved_by,self_assign) select draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, status_id, user_id, date, updateddate, updation_data_type,is_new,approved_status,approved_by,self_assign from tblcallevents where id='$tid'");
             $nextid = $this->db->insert_id();
-            $this->db->query("update tblcallevents set lastCFID='$tid',nextCFID=0,actontaken='no', purpose_achieved='no',plan=0, appointmentdatetime='$date',fwd_date='$date',date='$date', updateddate='$date', actiontype_id=2,purpose_id=26 where id='$nextid'");
+            $this->db->query("update tblcallevents set lastCFID='$tid',nextCFID=0,actontaken='no', purpose_achieved='no',plan=1, appointmentdatetime='$date',fwd_date='$date',date='$date', updateddate='$date', actiontype_id=2,purpose_id=26,comment_by = '$adid',comments= '$remark',autotask =1 where id='$nextid'");
         }
-
-
     }
 
 

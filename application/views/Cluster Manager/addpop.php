@@ -1141,7 +1141,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 $("#ifno").hide();
                                 var cstatus = document.getElementById("cstatus").value;
                                 $.ajax({
-                                url:'<?=base_url();?>Menu/getstatusbd',
+                                url:'<?=base_url();?>Menu/getstatusadmin',
                                 type: "POST",
                                 data: {
                                 cstatus: cstatus

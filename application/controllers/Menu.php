@@ -3749,10 +3749,14 @@ class Menu extends CI_Controller {
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
 
+        // if($cstatus==12){
+        // foreach($result as $d){if($d->id==9 || $d->id==13){
+        //    echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
+        // }}}
         if($cstatus==12){
-        foreach($result as $d){if($d->id==9 || $d->id==13){
-           echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
-        }}}
+            foreach($result as $d){if($d->id==6 || $d->id==13){
+               echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
+            }}}
 
         if($cstatus==13){
         foreach($result as $d){if($d->id==13){
@@ -4807,8 +4811,9 @@ class Menu extends CI_Controller {
         }
 
          $getreqData  =  $this->db->query("SELECT * FROM `task_plan_for_today` WHERE admin_id = $uid and date='$adate'");
+         
          $getreqData =  $getreqData->result();
-
+    
          if(!empty($user)){
             $this->load->view($dep_name.'/TodaysTaskApprovelRequest',['uid'=>$uid,'user'=>$user,'adate'=>$adate,'getreqData'=>$getreqData]);
         }else{
@@ -18317,7 +18322,7 @@ public function addplantask12(){
         // Start Check Active Task Planner Restrication Set BY Admin 
         $rstData = $this->Management_model->SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$ntaction,$ntppose,$selectby,$pdate,$selectcompanybyuser);     
         // End Check Active Task Planner Restrication Set BY Admin 
-     
+   
             $id = $this->Menu_model->add_plan2($pdate,$uid,$ptime,$inid,$ntaction,$ntstatus,$ntppose,$ttype,$tptime,$new_datetime,$selectby,$jsonData);
       
         }
@@ -19091,6 +19096,10 @@ public function dayscRequest(){
     $end_tttpft         = $_POST['end_tttpft'];
 
     $autotasktimeisset  = $_POST['autotasktimeisset'];
+    if($uyid ==15){
+        $autotasktimeisset = 1;
+    }
+
 
     if($autotasktimeisset != 0){
         $planbutnotinited = $this->Menu_model->CreateCloseDayRequest($uid,$req_id,$req_answer,$message,$autotasktimeisset);

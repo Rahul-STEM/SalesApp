@@ -214,6 +214,12 @@
                     <p>Our Special Request For Leave Some Time </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?=base_url();?>Management/OurMoMApprovedStatus" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Our MoM Status </p>
+                    </a>
+                </li>
             
                 
                 <li class="nav-item">

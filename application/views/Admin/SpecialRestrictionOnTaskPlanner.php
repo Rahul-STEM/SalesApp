@@ -67,6 +67,8 @@ overflow-x: auto;
     background: cadetblue;
     color: white;
 }
+.form-control.is-invalid, .was-validated .form-control:invalid {background-image: none !important;}
+ .form-control.is-valid, .was-validated .form-control:valid {background-image: none !important;} 
 </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -199,7 +201,7 @@ overflow-x: auto;
     <div class="col card m-1 coladjust">
     <div>
     <lable>End Date : </lable>
-      <input type="date" class="form-control" min="<?= date('Y-m-d') ?>" name="edate" placeholder="End Date" required >
+      <input type="date" class="form-control" min="<?= date('Y-m-d') ?>" max="<?= date('Y-m-d', strtotime('+3 days')) ?>" name="edate" placeholder="End Date" required >
       </div>
     </div>
     <div class="col card coladjust m-1">

@@ -534,7 +534,7 @@ $mytaskd = $this->Menu_model->get_admintteamtd($myid,$tdate);
               <div class="row">
                   <div class="col-lg-12 col-sm">
             <div class="card card-primary card-outline card-outline-tabs">
-                <h4 class="p-3">Today's Task Planned</h4>
+                <h4 class="p-3">Today's Task Calendar</h4>
               <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                   <li class="nav-item">

@@ -570,7 +570,7 @@ $dataPoints2 = array(
               <div class="row">
                   <div class="col-lg-12 col-sm">
             <div class="card card-primary card-outline card-outline-tabs">
-                <h4 class="p-3">Today's Task Planned</h4>
+                <h4 class="p-3">Today's Task Calendar </h4>
               <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                   <li class="nav-item">
@@ -1699,9 +1699,17 @@ $dataPoints2 = array(
          
                 </div>
 
-
+                <?php 
+                $plannertime = $this->Menu_model->autotasktimenew($uid,$tdate);
+                $plannertimecnt = sizeof($plannertime);
+                if($plannertimecnt > 0){
+                  $start_tttpft =  $plannertime[0]->start_tttpft;
+                  $end_tttpft   =  $plannertime[0]->end_tttpft; ?>
+                  <div class="card p-2 text-center bg-success text-white">
+                    <span> <b>Planner Time : <?=$start_tttpft;?> to <?=$end_tttpft;?></b> </span>
+                  </div>
+                <?php  } ?> 
          
-
           </div>
         </div>
 </div>

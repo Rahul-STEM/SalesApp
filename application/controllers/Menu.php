@@ -18216,12 +18216,12 @@ public function addplantask12(){
         $totalAssignTime = 540;
         $remaingtime = $totalAssignTime - $autominutes;
     
-        if($cosumeTime > $remaingtime){
-            $this->session->set_flashdata('success_message_plan','* Nice Job !! You have Successfully Achive Your Target Time.');
-            redirect('Menu/TaskPlanner2/'.$pdate);
-        }else{
-            $rrtime = $remaingtime - $cosumeTime;
-        }
+        // if($cosumeTime > $remaingtime){
+        //     $this->session->set_flashdata('success_message_plan','* Nice Job !! You have Successfully Achive Your Target Time.');
+        //     redirect('Menu/TaskPlanner2/'.$pdate);
+        // }else{
+        //     $rrtime = $remaingtime - $cosumeTime;
+        // }
      }
 
 

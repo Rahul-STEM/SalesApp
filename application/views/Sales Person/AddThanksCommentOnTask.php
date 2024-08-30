@@ -86,7 +86,7 @@
                 <div class="card">
                   <div class="card-header bg-info">
                     <h3 class="text-center">
-                      <center><b>Add Special Comments On Task</b></center>
+                      <center><b>Add Thanks  Comments On Task</b></center>
                     </h3>
                   </div>
                   <!-- /.card-header -->
@@ -107,7 +107,6 @@
                                       <th>Initiated Time</th>
                                       <th>Completed Time</th>
                                       <th>Plan and Completed Time Diff</th>
-                                   
                                       <th>Last Task Date</th>
                                       <th>Current Task Date</th>
                                       <th>Current task planned after time difference</th>
@@ -120,7 +119,8 @@
                                       <th>Action Taken</th>
                                       <th>Purpose Achieved</th>
                                       <th>Comment BY</th>
-                                      <th>Comments</th>
+                                      <th>Our Comments</th>
+                                      <th>Add Thanks Comments</th>
              
                                     </tr>
                                   </thead>
@@ -197,7 +197,15 @@
                                       <?php if($md->comments !== '' && $md->comments !== NULL){
                                             echo base64_decode($md->comments);
                                         }else{ ?>
-                                            <p><button type="button" class="btn btn-primary"  onclick="AddComments(<?= $i ?>,<?= $md->id?>,'Comments')">AddComments</button></p>
+                                            <span class="p-2 bg-warning">No&nbsp;Comments</span>
+                                       <?php }?>
+                                    </td>
+                                      <td>
+                                     
+                                      <?php if($md->thnkscomments !== '' && $md->thnkscomments !== NULL){
+                                            echo base64_decode($md->thnkscomments);
+                                        }else{ ?>
+                                            <p><button type="button" class="btn btn-primary"  onclick="AddComments(<?= $i ?>,<?= $md->id?>,'Comments')">Add Thanks Comments</button></p>
                                        <?php }?>
                                     </td>
                                       <?php $i++;} ?>
@@ -233,7 +241,7 @@
                             </button>
                           </div>
                           <div class="modal-body">
-                            <form action="<?=base_url();?>Menu/AddTaskComments" method="post" >
+                            <form action="<?=base_url();?>Menu/AddTaskthanksCommentsbyUser" method="post" >
                               <input type="hidden" id="commentsid" value="" name="commentsid">
                               <div class="mb-3 mt-3 commentbox">
                                 <textarea id="mytextarea" name="comments"></textarea>

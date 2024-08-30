@@ -336,12 +336,12 @@ date_default_timezone_set("Asia/Kolkata");
                       <div class="invalid-feedback">.</div>
                       <div class="valid-feedback">Looks good!</div>
                     </div>
-                    <div class="col-12 col-md-12 mb-12">
+                    <!-- <div class="col-12 col-md-12 mb-12">
                       <label>Next Action Date</label>
                       <input type="date" class="form-control" name='nadate' required>
                       <div class="invalid-feedback">.</div>
                       <div class="valid-feedback">Looks good!</div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>

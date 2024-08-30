@@ -195,12 +195,25 @@
                         <p>Planner Task Approvel</p>
                     </a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a href="<?=base_url();?>Menu/AddSpecialCommentOnTask" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Add Special Comment On Task</p>
                     </a>
-                </li>
+                </li> -->
+
+                <li class="nav-item">
+            <a href="<?=base_url();?>Menu/AddSpecialCommentOnTask" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Add Special Comment On Task (Pending)</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?=base_url();?>Menu/AddThanksCommentOnTask" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Add Thanks Comment On Task (Complete)</p>
+            </a>
+          </li>
 
                 <li class="nav-item">
                     <a href="<?=base_url();?>Menu/SpecialRequestForLeaveSomeTimeData" class="nav-link">

@@ -125,13 +125,28 @@
                                   </div>
                                   <div class="col-4">
                                       <div class="form-group">
+                                        <?php  
+                                        $user_day = $this->Menu_model->getUserDayStartDetails($uid,date("Y-m-d"));
+                                        $user_daycnt =  sizeof($user_day);
+                                        if($user_daycnt > 0){
+                                            $user_daywfo = $user_day[0]->wffo;
+                                            $disabled = ($user_daywfo == 2) ? 'disabled' : '';
+                                        }
+                                        ?>
                                           <label>Task/Action</label>
                                           <select id="task_action" class="form-control" name="task_action">
                                               <option value="">Select Task</option>
-                                              <?php $action = $this->Menu_model->get_action(); foreach($action as $a) { ?>
-                                              <option value="<?=$a->id?>"><?=$a->name?></option>
-                                              <?php } ?>
-                                          </select>
+                                              <?php 
+                                              $action = $this->Menu_model->get_action(); 
+                                            foreach ($action as $a) {
+                                            if ($user_daywfo == 2 && ($a->id == 3 || $a->id == 4)) {
+                                                echo '<option value="' . $a->id . '">' . $a->name . '</option>';
+                                            } elseif ($user_daywfo != 2) {
+                                                echo '<option value="' . $a->id . '">' . $a->name . '</option>';
+                                            }
+                                        }
+                                    ?>
+                                </select>
                                       </div>
                                   </div>
 

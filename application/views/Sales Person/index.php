@@ -1340,6 +1340,7 @@ $dataPoints2 = array(
                                 <div class="card-header bg-info" id="headingOne" data-toggle="collapse" data-target="#collapse0911" aria-expanded="true" aria-controls="collapse0911">
                                       <?php $ttbytime = $this->Menu_model->get_ttbytimec($uid,$tdate,'09:00:00','11:00:00');
                                         $ted = $this->Menu_model->get_ttbytimedc($uid,$tdate,'09:00:00','11:00:00');
+                                      
                                       ?>
                                       <b>9:00 AM to 11:00 AM</b><br>
                                       Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) | MOM(<?=$ted[0]->f?>) | Proposal(<?=$ted[0]->g?>)
@@ -1358,14 +1359,37 @@ $dataPoints2 = array(
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
                                        <span class="flex"><?=$taid[0]->name?> |
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
-                                        </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
+                                        <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span>Task Time : <?=$time?></span>
+                                        </span> |
+                                        Status : <span style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                        </span> |
                                         <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
+                                        Action : <?= $tt->actontaken; ?>
+                                        </span> |
+                                        <span class="text-right">
+                                        Purpose  : <?= $tt->purpose_achieved; ?>
+                                        </span> |
+                                        <span class="text-right">
+                                        Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
+                                        </span> |
+                                        <span class="text-right">
+                                            Comments  : 
+                                            <?php 
+                                             $comment_by = $tt->comment_by;
+                                             if($comment_by !== '' && $comment_by !== NULL){
+                                                  $decode_comments    = base64_decode($tt->comments);
+                                                  $decode_thnkscomments    = base64_decode($tt->thnkscomments);
+                                                  $udetail            = $this->Menu_model->get_userbyid($comment_by);
+                                                  $uname              = $udetail[0]->name;
+                                                  $message = $decode_comments.' - <b>'.$uname.'</b>';
+                                                  echo $message;
+                                              }else{
+                                                  echo $message = '';
+                                              }
+                                            ?>
+                                            </span>
                                     </div>
                                   <?php } ?>
 
@@ -1389,19 +1413,42 @@ $dataPoints2 = array(
                                       $time = $tt->appointmentdatetime;
                                       $time = date('h:i a', strtotime($time));
                                   ?>
-                                    <div class="list-group-item list-group-item-action">
+                                  <div class="list-group-item list-group-item-action">
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
                                        <span class="flex"><?=$taid[0]->name?> |
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
-                                        </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
+                                        <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span>Task Time : <?=$time?></span>
+                                        </span> |
+                                        Status : <span style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                        </span> |
                                         <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
+                                        Action : <?= $tt->actontaken; ?>
+                                        </span> |
+                                        <span class="text-right">
+                                        Purpose  : <?= $tt->purpose_achieved; ?>
+                                        </span> |
+                                        <span class="text-right">
+                                        Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
+                                        </span> |
+                                        <span class="text-right">
+                                            Comments  : 
+                                            <?php 
+                                             $comment_by = $tt->comment_by;
+                                             if($comment_by !== '' && $comment_by !== NULL){
+                                                  $decode_comments    = base64_decode($tt->comments);
+                                                  $decode_thnkscomments    = base64_decode($tt->thnkscomments);
+                                                  $udetail            = $this->Menu_model->get_userbyid($comment_by);
+                                                  $uname              = $udetail[0]->name;
+                                                  $message = $decode_comments.' - <b>'.$uname.'</b>';
+                                                  echo $message;
+                                              }else{
+                                                  echo $message = '';
+                                              }
+                                            ?>
+                                            </span>
                                     </div>
                                   <?php } ?>
                                   </div>
@@ -1424,19 +1471,42 @@ $dataPoints2 = array(
                                       $time = $tt->appointmentdatetime;
                                       $time = date('h:i a', strtotime($time));
                                   ?>
-                                    <div class="list-group-item list-group-item-action">
+                                  <div class="list-group-item list-group-item-action">
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
                                        <span class="flex"><?=$taid[0]->name?> |
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
-                                        </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
+                                        <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span>Task Time : <?=$time?></span>
+                                        </span> |
+                                        Status : <span style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                        </span> |
                                         <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
+                                        Action : <?= $tt->actontaken; ?>
+                                        </span> |
+                                        <span class="text-right">
+                                        Purpose  : <?= $tt->purpose_achieved; ?>
+                                        </span> |
+                                        <span class="text-right">
+                                        Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
+                                        </span> |
+                                        <span class="text-right">
+                                            Comments  : 
+                                            <?php 
+                                             $comment_by = $tt->comment_by;
+                                             if($comment_by !== '' && $comment_by !== NULL){
+                                                  $decode_comments    = base64_decode($tt->comments);
+                                                  $decode_thnkscomments    = base64_decode($tt->thnkscomments);
+                                                  $udetail            = $this->Menu_model->get_userbyid($comment_by);
+                                                  $uname              = $udetail[0]->name;
+                                                  $message = $decode_comments.' - <b>'.$uname.'</b>';
+                                                  echo $message;
+                                              }else{
+                                                  echo $message = '';
+                                              }
+                                            ?>
+                                            </span>
                                     </div>
                                   <?php } ?>
                                   </div>
@@ -1459,19 +1529,42 @@ $dataPoints2 = array(
                                       $time = $tt->appointmentdatetime;
                                       $time = date('h:i a', strtotime($time));
                                   ?>
-                                    <div class="list-group-item list-group-item-action">
+                                  <div class="list-group-item list-group-item-action">
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
                                        <span class="flex"><?=$taid[0]->name?> |
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
-                                        </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
+                                        <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span>Task Time : <?=$time?></span>
+                                        </span> |
+                                        Status : <span style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                        </span> |
                                         <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
+                                        Action : <?= $tt->actontaken; ?>
+                                        </span> |
+                                        <span class="text-right">
+                                        Purpose  : <?= $tt->purpose_achieved; ?>
+                                        </span> |
+                                        <span class="text-right">
+                                        Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
+                                        </span> |
+                                        <span class="text-right">
+                                            Comments  : 
+                                            <?php 
+                                             $comment_by = $tt->comment_by;
+                                             if($comment_by !== '' && $comment_by !== NULL){
+                                                  $decode_comments    = base64_decode($tt->comments);
+                                                  $decode_thnkscomments    = base64_decode($tt->thnkscomments);
+                                                  $udetail            = $this->Menu_model->get_userbyid($comment_by);
+                                                  $uname              = $udetail[0]->name;
+                                                  $message = $decode_comments.' - <b>'.$uname.'</b>';
+                                                  echo $message;
+                                              }else{
+                                                  echo $message = '';
+                                              }
+                                            ?>
+                                            </span>
                                     </div>
                                   <?php } ?>
                                   </div>
@@ -1499,14 +1592,37 @@ $dataPoints2 = array(
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
                                        <span class="flex"><?=$taid[0]->name?> |
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
-                                        </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
+                                        <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span>Task Time : <?=$time?></span>
+                                        </span> |
+                                        Status : <span style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                        </span> |
                                         <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
+                                        Action : <?= $tt->actontaken; ?>
+                                        </span> |
+                                        <span class="text-right">
+                                        Purpose  : <?= $tt->purpose_achieved; ?>
+                                        </span> |
+                                        <span class="text-right">
+                                        Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
+                                        </span> |
+                                        <span class="text-right">
+                                            Comments  : 
+                                            <?php 
+                                             $comment_by = $tt->comment_by;
+                                             if($comment_by !== '' && $comment_by !== NULL){
+                                                  $decode_comments    = base64_decode($tt->comments);
+                                                  $decode_thnkscomments    = base64_decode($tt->thnkscomments);
+                                                  $udetail            = $this->Menu_model->get_userbyid($comment_by);
+                                                  $uname              = $udetail[0]->name;
+                                                  $message = $decode_comments.' - <b>'.$uname.'</b>';
+                                                  echo $message;
+                                              }else{
+                                                  echo $message = '';
+                                              }
+                                            ?>
+                                            </span>
                                     </div>
                                   <?php } ?>
                                   </div>
@@ -1531,19 +1647,42 @@ $dataPoints2 = array(
                                       $time = $tt->appointmentdatetime;
                                       $time = date('h:i a', strtotime($time));
                                    ?>
-                                    <div class="list-group-item list-group-item-action">
+                                   <div class="list-group-item list-group-item-action">
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
                                        <span class="flex"><?=$taid[0]->name?> |
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
-                                        </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
+                                        <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span>Task Time : <?=$time?></span>
+                                        </span> |
+                                        Status : <span style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                        </span> |
                                         <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
+                                        Action : <?= $tt->actontaken; ?>
+                                        </span> |
+                                        <span class="text-right">
+                                        Purpose  : <?= $tt->purpose_achieved; ?>
+                                        </span> |
+                                        <span class="text-right">
+                                        Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
+                                        </span> |
+                                        <span class="text-right">
+                                            Comments  : 
+                                            <?php 
+                                             $comment_by = $tt->comment_by;
+                                             if($comment_by !== '' && $comment_by !== NULL){
+                                                  $decode_comments    = base64_decode($tt->comments);
+                                                  $decode_thnkscomments    = base64_decode($tt->thnkscomments);
+                                                  $udetail            = $this->Menu_model->get_userbyid($comment_by);
+                                                  $uname              = $udetail[0]->name;
+                                                  $message = $decode_comments.' - <b>'.$uname.'</b>';
+                                                  echo $message;
+                                              }else{
+                                                  echo $message = '';
+                                              }
+                                            ?>
+                                            </span>
                                     </div>
                                   <?php } ?>
                                   </div>
@@ -1575,19 +1714,42 @@ $dataPoints2 = array(
                                       $time = $tt->appointmentdatetime;
                                       $time = date('h:i a', strtotime($time));
                                    ?>
-                                    <div class="list-group-item list-group-item-action">
+                                   <div class="list-group-item list-group-item-action">
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
                                        <span class="flex"><?=$taid[0]->name?> |
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
-                                        </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
+                                        <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span>Task Time : <?=$time?></span>
+                                        </span> |
+                                        Status : <span style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                        </span> |
                                         <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
+                                        Action : <?= $tt->actontaken; ?>
+                                        </span> |
+                                        <span class="text-right">
+                                        Purpose  : <?= $tt->purpose_achieved; ?>
+                                        </span> |
+                                        <span class="text-right">
+                                        Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
+                                        </span> |
+                                        <span class="text-right">
+                                            Comments  : 
+                                            <?php 
+                                             $comment_by = $tt->comment_by;
+                                             if($comment_by !== '' && $comment_by !== NULL){
+                                                  $decode_comments    = base64_decode($tt->comments);
+                                                  $decode_thnkscomments    = base64_decode($tt->thnkscomments);
+                                                  $udetail            = $this->Menu_model->get_userbyid($comment_by);
+                                                  $uname              = $udetail[0]->name;
+                                                  $message = $decode_comments.' - <b>'.$uname.'</b>';
+                                                  echo $message;
+                                              }else{
+                                                  echo $message = '';
+                                              }
+                                            ?>
+                                            </span>
                                     </div>
                                   <?php } ?>
                                   </div>
@@ -1686,6 +1848,19 @@ $dataPoints2 = array(
             </div>
               </div></div></div>
             <div class="col-lg-4 col-sm">
+
+            <?php 
+                $plannertime = $this->Menu_model->autotasktimenew($uid,$tdate);
+                $plannertimecnt = sizeof($plannertime);
+                if($plannertimecnt > 0){
+                  $start_tttpft =  $plannertime[0]->start_tttpft;
+                  $end_tttpft   =  $plannertime[0]->end_tttpft; ?>
+                  <div class="card p-4 text-center bg-success text-white">
+                    <span> <b>Todays Planner Time : <?=$start_tttpft;?> to <?=$end_tttpft;?></b> </span>
+                  </div>
+                <?php  } ?> 
+
+
             <div class="card card-primary card-outline card-outline-tabs">
                 <?php $ptd = $this->Menu_model->get_tptd($uid,$tdate);
                 $ptsd = $this->Menu_model->get_tptsd($uid,$tdate);?>
@@ -1699,16 +1874,7 @@ $dataPoints2 = array(
          
                 </div>
 
-                <?php 
-                $plannertime = $this->Menu_model->autotasktimenew($uid,$tdate);
-                $plannertimecnt = sizeof($plannertime);
-                if($plannertimecnt > 0){
-                  $start_tttpft =  $plannertime[0]->start_tttpft;
-                  $end_tttpft   =  $plannertime[0]->end_tttpft; ?>
-                  <div class="card p-2 text-center bg-success text-white">
-                    <span> <b>Planner Time : <?=$start_tttpft;?> to <?=$end_tttpft;?></b> </span>
-                  </div>
-                <?php  } ?> 
+               
          
           </div>
         </div>

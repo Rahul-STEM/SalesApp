@@ -659,7 +659,13 @@
           <li class="nav-item">
                     <a href="<?=base_url();?>Menu/YesterDayDaysCloseRequest" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Yesterday Day Close Request</p>
+                        <p>Day Close Request</p>
+                    </a>
+                </li>
+          <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/NeedYourAttentionsInAdmin" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Need Your Attentions </p>
                     </a>
                 </li>
 

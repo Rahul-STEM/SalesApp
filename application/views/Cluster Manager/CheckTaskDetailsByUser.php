@@ -122,13 +122,14 @@ span.tsby {
                             <div class="page-header">
                             <?php 
                       
-                                        $totalttaskdata =$this->Menu_model->getTotalUserTaskDetails($tuser_uid,$taskdate);
+                                        $totalttaskdata =$this->Menu_model->getTotalUserTaskDetailsOnPlanner($tuser_uid,$taskdate);
                                         
                                         $taskplanmincount = 0;
                                         $new_datetimemin = '';
                                         foreach($totalttaskdata as $taskdata){ 
                                             $actiontype_id = $taskdata->actiontype_id;
-
+                                            $status = $taskdata->approved_status;
+                                            // if($status !=0){
                                             if($actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==1 || $actiontype_id ==10 || $actiontype_id ==15){
                                                 $taskplanmincount += 5;
                                             }else if($actiontype_id ==2 || $actiontype_id ==6){
@@ -140,7 +141,9 @@ span.tsby {
                                             }else if($actiontype_id ==11 || $actiontype_id ==13 || $actiontype_id ==14){
                                                 $taskplanmincount += 2;
                                             }
+                                          // }
                                         }
+                                        
                  
                                         $lunchtime      = 30;      // Lunch Time 45 Miniute
                                         $autoTasktime   = 90;  // 90 Minutes For Auto Task
@@ -266,6 +269,7 @@ span.tsby {
                                                     <th>Task Time</th>
                                                     <th>Task Appointment date time</th>
                                                     <th>Plan By</th>
+                                                    <th>Filter Used</th>
                                                     <th>Filter By</th>
                                                     <th>Task Work Status</th>
                                                     <th>Action Status</th>
@@ -278,8 +282,8 @@ span.tsby {
                                                 $i = 1;
                                                 
                                                 //echo $dt;
-                                                $totalttask =$this->Menu_model->getTotalUserTaskDetails($tuser_uid, $dt);
-
+                                                $totalttask =$this->Menu_model->getTotalUserTaskDetailsOnPlanner($tuser_uid, $dt);
+                                                
                                                 foreach ($totalttask as $taskdata) { 
                                                     $taid = $taskdata->actiontype_id;
                                                     $tblId = $taskdata->id;
@@ -288,6 +292,7 @@ span.tsby {
                                                     $reminder = $taskdata->reminder;
                                                     $rimby = $taskdata->reminderby;
                                                     $rimat = $taskdata->reminderat;
+                                                    $assignedto_id = $taskdata->assignedto_id;
                                                     $status = $taskdata->approved_status;
                                                     $self_assign = $taskdata->self_assign;
                                                     $approver = $taskdata->approved_by;
@@ -295,6 +300,10 @@ span.tsby {
                                                     $selectby = $taskdata->selectby;
                                                     $rimbyname = $this->Menu_model->get_userbyid($rimby);
                                                     $time = date('h:i a', strtotime($time));
+
+                                                    $taskuser = $this->Menu_model->get_userbyid($assignedto_id);
+                                                    $taskuname = $taskuser[0]->name;
+                
                                                 ?>
                                                 <tr>
                                                     <td><?= $i; ?></td>
@@ -303,13 +312,55 @@ span.tsby {
                                                     <td><span class="p-3" style="color:<?= $taskdata->color ?>;"><?= $taskdata->name ?></span></td>
                                                     <td><?= $time ?></td>
                                                     <td><?= $taskdata->appointmentdatetime ?></td>
-                                                    <td><?= $selectby ?></td>
+                                                    <td><?= $taskuname ?></td>
+                                                    <td><?php 
+                                                    foreach ($filter_by as $key => $value) :
+                                                      if($key == 'Plan_BY'){
+                                                        echo $value."<br/>";
+                                                      }elseif($key == 'Filter_By'){
+                                                        echo $value."<br/>";
+                                                      }else{
+                                                      if($key == 'comp_status'){
+                                                        $tstatus = $this->Menu_model->get_statusbyid($value);
+                                                        $tstatusname = $tstatus[0]->name;
+                                                        echo "<span class='p-1'>Status&nbsp;:&nbsp;".$tstatusname."</span><br/>";
+                                                      }elseif($key == 'task'){
+                                                        $taction = $this->Menu_model->get_actionbyid($value);
+                                                        $tactionname = $taction[0]->name;
+                                                        echo "<span class='p-1'>Task&nbsp;:&nbsp;".$tactionname."</span><br/>";
+                                                      }elseif($key == 'taskActionbyuser'){
+                                                        echo "<span class='p-1'>Action&nbsp;Taken:&nbsp;".$value."</span><br/>";
+                                                      }else{
+                                                          echo $selectby;
+                                                        }
+                                                      }
+                                                    endforeach;
+                                                    ?></td>
                                                     <td>
                                                         <?php 
+
                                                         if (is_array($filter_by)) : ?>
-                                                            <?php foreach ($filter_by as $key => $value) : ?>
-                                                                <?= $key ?> - <?= $value ?><br>
-                                                            <?php endforeach; ?>
+                                                            <?php foreach ($filter_by as $key => $value) :
+
+                                                               if($key == 'Plan_BY'){
+                                                                echo $value."<br/>";
+                                                              }elseif($key == 'Filter_By'){
+                                                                echo $value."<br/>";
+                                                              }elseif($key == 'comp_status'){
+                                                                $tstatus = $this->Menu_model->get_statusbyid($value);
+                                                                $tstatusname = $tstatus[0]->name;
+                                                                echo "<span class='p-1'>Status&nbsp;:&nbsp;".$tstatusname."</span><br/>";
+                                                              }elseif($key == 'task'){
+                                                                $taction = $this->Menu_model->get_actionbyid($value);
+                                                                $tactionname = $taction[0]->name;
+                                                                echo "<span class='p-1'>Task&nbsp;:&nbsp;".$tactionname."</span><br/>";
+                                                              }elseif($key == 'taskActionbyuser'){
+                                                                echo "<span class='p-1'>Action&nbsp;Taken:&nbsp;".$value."</span><br/>";
+                                                              }else{
+                                                                echo $key."<br/>";
+                                                                echo $value;
+                                                              }
+                                                             endforeach; ?>
                                                         <?php endif; ?>
                                                     </td>
                                                     <td>

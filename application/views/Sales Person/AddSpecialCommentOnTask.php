@@ -73,7 +73,10 @@
             <?php endif; ?>
           </div>
         </div>
+<?php 
+ date_default_timezone_set("Asia/Calcutta"); 
 
+?>
         
 
         <section class="content">
@@ -83,7 +86,7 @@
                 <div class="card">
                   <div class="card-header bg-info">
                     <h3 class="text-center">
-                      <center><b>Add Special Comment On Task</b></center>
+                      <center><b>Add Special Comments On Task</b></center>
                     </h3>
                   </div>
                   <!-- /.card-header -->
@@ -102,10 +105,9 @@
                                       <th>Company Name</th>
                                       <th>Plan Time</th>
                                       <th>Initiated Time</th>
-                                      <th>Plan and Initiated Time Diff</th>
                                       <th>Completed Time</th>
                                       <th>Plan and Completed Time Diff</th>
-                                      <th>Initiated and Completed Time Diff</th>
+                                   
                                       <th>Last Task Date</th>
                                       <th>Current Task Date</th>
                                       <th>Current task planned after time difference</th>
@@ -119,6 +121,7 @@
                                       <th>Purpose Achieved</th>
                                       <th>Comment BY</th>
                                       <th>Comments</th>
+             
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -130,7 +133,6 @@
                                           $bdname = $this->Menu_model->get_userbyid($bd);
                                           $tid = $md->id;
                                           $ltid = $md->ltid;
-                                        //   echo "okay". $ltid;
                                           $inid  = $md->cid_id;
                                           $inid = $this->Menu_model->get_initbyid($inid);
                                           $mtd = $this->Menu_model->get_ccitblall($tid);
@@ -155,11 +157,23 @@
                                       <td><?=$bdname[0]->name?></td>
                                       <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$inid[0]->cmpid_id?>"><?=$mtd[0]->compname?></a></td>
                                       <td><?=date('d-m-Y h:i A', strtotime($pltime = $md->appointmentdatetime));?></td>
-                                      <td><?=date('d-m-Y h:i A', strtotime($intime = $md->initiateddt));?></td>
-                                      <td><?=$this->Menu_model->timediff($pltime,$intime)?></td>
+                                      <td><?php 
+                                      if($md->initiateddt ==''){
+                                        $dateString = $md->updateddate; 
+                                        $format = 'd-m-Y h:i A'; 
+                                        $timestamp = strtotime($dateString);
+                                        $timestamp -= 5;
+                                        $updatedDateString = date($format, $timestamp);
+                                        echo $updatedDateString;
+                                      }else{
+                                        echo $md->initiateddt;
+                                      } 
+                                      
+                                      ?></td>
+                    
                                       <td><?=date('d-m-Y h:i A', strtotime($uptime = $md->updateddate));?></td>
                                       <td><?=$this->Menu_model->timediff($pltime,$uptime)?></td>
-                                      <td><?=$this->Menu_model->timediff($intime,$uptime)?></td>
+                                     
                                       <td><?=$nltime?></td>
                                       <td><?=$nctime?></td>
                                       <td><?php if($ctime!=''){echo $this->Menu_model->timediff($ltime,$ctime);}?></td>

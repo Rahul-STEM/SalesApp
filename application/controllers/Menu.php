@@ -11745,6 +11745,7 @@ class Menu extends CI_Controller {
 
 
      public function pcompanies($code){
+   
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -18501,7 +18502,7 @@ public function selfAssign($tableId, $selfAssign, $taskdate){
         $cmpDataq       =  $this->db->query("SELECT * FROM `company_contact_master` WHERE company_id = '$cmpid_id'");
         $cmpData        = $cmpDataq->result();
         $ccid           = $cmpData[0]->id;
-
+ 
         $cmp_data = $this->Menu_model->get_cmpbyinid($inid);
         $cmp_name = $cmp_data[0]->compname;
         
@@ -18579,7 +18580,8 @@ public function selfAssign($tableId, $selfAssign, $taskdate){
         }
  
     $data = array(
-        'self_assign' => 2
+        'self_assign' => 2,
+        'nextCFID' => $eventId,
     );
         // Updating the database
         $this->db->where('id', $eventId);
@@ -18742,8 +18744,10 @@ public function getcmpbyStatus(){
     }
 
     $data = array(
-        'self_assign' => 3
+        'self_assign' => 3,
+        'nextCFID' => $eventId,
     );
+
     // Updating the database
     $this->db->where('id', $eventId);
     $this->db->update('tblcallevents', $data);
@@ -19687,19 +19691,22 @@ public function NeedYourAttentionInCompany(){
     $nya_data  = $this->Menu_model->NeedYourAttentions($days,$sid);
 
     echo '<option value="">Select Company</option>';
-    foreach($nya_data as $cmp){ ?>
-        <option style="color: #d90d2b;" title="<?= $cmp->days ?> Days - <?=$cmp->compname?> (<?= $cmp->bdname ?>)" value="<?=$cmp->inid?>">
+    foreach($nya_data as $cmp){
+        if($cmp->days <= 20){
+            $color = '#D70040';
+        }else if($cmp->days >= 20 && $cmp->days <= 40){
+            $color = '#D2042D';
+        }elseif($cmp->days >= 40){
+            $color = '#FF0000';
+        }
+        ?>
+        <option style="color:<?=$color;?>" title="<?= $cmp->days ?> Days - <?=$cmp->compname?> (<?= $cmp->bdname ?>)" value="<?=$cmp->inid?>">
         <?= $cmp->days ?> Days - <?=$cmp->compname?> (<?= $cmp->bdname ?> )
         </option>
-            <?php
+
+        <?php
 
             }
-
-    // if(!empty($user)){
-    //     $this->load->view($dep_name.'/NeedYourAttention',['user'=>$user,'team'=>$allteam,'status'=>$status,'action'=>$action,'states'=>$states,'partner'=>$partner,'uid'=>$uid]);
-    // }else{
-    //     redirect('Menu/main');
-    // }
 }
 
 
@@ -19875,6 +19882,24 @@ public function AddSpecialCommentOnTask(){
     $this->load->view($dep_name.'/AddSpecialCommentOnTask',['user'=>$user,'uid'=>$uid,'tasks'=>$tasks]);
 }
 
+public function AddThanksCommentOnTask(){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+
+    $tasks = $this->Menu_model->GetYesterDaysPlanTask($uid);
+
+    if(!empty($user)){
+        $this->load->view($dep_name.'/AddThanksCommentOnTask',['user'=>$user,'uid'=>$uid,'tasks'=>$tasks]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+
 public function AddTaskComments(){
     $user           = $this->session->userdata('user');
     $data['user']   = $user;
@@ -19893,6 +19918,27 @@ public function AddTaskComments(){
     $this->session->set_flashdata('success_message','Task Comments Added Successfully !');
     redirect('Menu/AddSpecialCommentOnTask');
 }
+
+public function AddTaskthanksCommentsbyUser(){
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+    $uyid           =  $user['type_id'];
+
+    $this->load->model('Menu_model');
+    $this->load->library('session');
+
+    $commentsid         = $this->input->post('commentsid');
+    $comments           = $this->input->post('comments');
+    $comments           = strip_tags($comments);
+    $encode_comments    = base64_encode($comments);
+    $query  = $this->db->query("UPDATE `tblcallevents` SET`comment_by`='$uid',`thnkscomments`='$encode_comments' WHERE id ='$commentsid'");
+
+    $this->session->set_flashdata('success_message','Thanks Comments Added Successfully !');
+    redirect('Menu/AddThanksCommentOnTask');
+}
+
+
 public function GetTaskComments(){
   
     $this->load->model('Menu_model');
@@ -19914,7 +19960,23 @@ public function GetTaskComments(){
     }
 }
 
+public function NeedYourAttentionsInAdmin(){
+   
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $needdata = $this->Menu_model->NeedYourAttentions(15,'1,2,8,3,6,9,12,13');
 
+    if(!empty($user)){
+        $this->load->view($dep_name.'/NeedYourAttentionsInAdmin',['uid'=>$uid,'user'=>$user,'needdata'=>$needdata]);
+    }else{
+        redirect('Menu/main');
+    }
+}
 
 
 }

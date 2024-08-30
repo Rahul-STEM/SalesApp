@@ -4416,6 +4416,11 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         return $query->result();
     }
 
+      public function getTotalUserTaskDetailsOnPlanner($uid,$tdate){
+        $query=$this->db->query("SELECT tblcallevents.*,status.name,action.name aname,status.color,status.clr,init_call.cstatus cstatus,(SELECT name from status WHERE id=cstatus) csname, (select init_call.cmpid_id from init_call WHERE id=tblcallevents.cid_id) as cmpid_id,(select company_master.compname from company_master WHERE id=cmpid_id) as compname, (select company_master.id from company_master WHERE id=cmpid_id) as cid FROM tblcallevents left JOIN action ON action.id=tblcallevents.actiontype_id left JOIN init_call ON init_call.id=tblcallevents.cid_id left JOIN status ON status.id=init_call.cstatus WHERE user_id='$uid' and cast(appointmentdatetime AS DATE)='$tdate' and plan=1 and autotask =0");
+        return $query->result();
+    }
+
     public function get_totaltPendingAutoTaskdetails($uid){
         $query=$this->db->query("SELECT tblcallevents.*,status.name,action.name aname,status.color,status.clr,init_call.cstatus cstatus,(SELECT name from status WHERE id=cstatus) csname, (select init_call.cmpid_id from init_call WHERE id=tblcallevents.cid_id) as cmpid_id,(select company_master.compname from company_master WHERE id=cmpid_id) as compname, (select company_master.id from company_master WHERE id=cmpid_id) as cid FROM tblcallevents left JOIN action ON action.id=tblcallevents.actiontype_id left JOIN init_call ON init_call.id=tblcallevents.cid_id left JOIN status ON status.id=init_call.cstatus WHERE user_id='$uid' AND nextCFID = 0 and autotask=1 and plan =1 AND DATE(appointmentdatetime) < CURDATE() AND appointmentdatetime != '0000-00-00 00:00:00'");
         return $query->result();
@@ -6560,7 +6565,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
          }else{
            
             if($jsonData == '[]'){
-                $jsonData = '{"Plan_BY":"'.$selectby.'"}';
+                $jsonData = '{"Filter_By":"'.$selectby.'"}';
             }
     
             $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type,plan,tptype,tptime,selectby,filter_by)
@@ -12466,6 +12471,8 @@ public function NeedYourAttentions($days,$status){
 
     }else if($uyid == 4){
         $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, user_details.name AS bdname, partner_master.name AS pname, init_call.cstatus, DATEDIFF(CURDATE(), tblcallevents.appointmentdatetime) AS days FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id LEFT JOIN user_details ON user_details.user_id = init_call.mainbd WHERE user_details.pst_co = '$user_id' AND user_details.status = 'active' AND user_details.type_id in (3,13) AND init_call.cstatus IN ($status) AND tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE() AND ( SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id ) = 1 AND NOT EXISTS ( SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND DATE(tce.appointmentdatetime) = CURDATE() ) HAVING days > $days");
+    }else if($uyid == 2){
+        $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, user_details.name AS bdname, partner_master.name AS pname, init_call.cstatus, DATEDIFF(CURDATE(), tblcallevents.appointmentdatetime) AS days, (SELECT COUNT(*) FROM tblcallevents te WHERE te.cid_id = init_call.id AND DATE(te.appointmentdatetime) < CURDATE() - INTERVAL $days DAY ) AS events_before_30_days FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id LEFT JOIN user_details ON user_details.user_id = init_call.mainbd WHERE user_details.admin_id = '$user_id' AND user_details.status = 'active' AND user_details.type_id IN (3,4,13) AND init_call.cstatus IN ($status) AND tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE() AND (SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id ) = 1 AND NOT EXISTS (SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND DATE(tce.appointmentdatetime) = CURDATE() ) HAVING days > $days");
     }
    
     return $query->result();
@@ -12533,6 +12540,29 @@ public function GetTommarowPlanTask($uid){
 }
 
 
+public function GetYesterDaysPlanTask($uid){
+
+    $curdate = date("Y-m-d");
+    $yest_date = date("Y-m-d", strtotime($curdate . ' -1 day'));
+   
+    $utype = $this->Menu_model->get_userbyid($uid);
+    $utype = $utype[0]->type_id;
+
+    if($utype   ==  3){
+        $text = "`init_call`.`mainbd` = '$uid'";
+    }elseif($utype == 13){
+        $text = "(`init_call`.`mainbd` = '$uid')";
+    }elseif($utype == 4){
+        $text = "`init_call`.`apst` = '$uid'";
+    }else{
+        $text = "`init_call`.`mainbd` = '$uid'";
+    }
+
+    $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text AND tblcallevents.user_id != '$uid' AND tblcallevents.actontaken != '' and tblcallevents.nextCFID != 0");
+
+return $query->result();
+
+}
 
 public function Get_PSTCLM($uid){
 

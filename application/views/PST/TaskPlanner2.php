@@ -278,7 +278,7 @@ if($type_id == 3){
                     $pseconds = $timeArray[2];
                     ?>
                     <div class="mt-3">
-                    <p><b> <span id="yndpt">Your Next Day Plan Time is :</span> <?=$start_tttpft; ?></b></p> 
+                    <p><b> <span id="yndpt">Todays Planner Time is :</span> <?=$start_tttpft; ?></b></p> 
                     </div>
                  <?php } ?>
               </div>
@@ -735,11 +735,11 @@ if($type_id == 3){
                           </label>
                         </div>
                         
-                        <div class="form-check" id="other_assign_filter">
+                        <!-- <div class="form-check" id="other_assign_filter">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="PST Assign" >Other Assign
                           </label>
-                        </div>
+                        </div> -->
                         <div class="form-check" id="review_target_date_filter">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Review Target Date" > Review Target Date
@@ -2944,11 +2944,24 @@ if($type_id == 3){
                 }
                 });
         
-        
                 $('#clusterNameLocaction').on('change', function() {
                     var uid = $("#curuserid").val();
                     $("#selectcompanybyuser").html('');
                     var clusterid= $(this).val();
+
+                    var allowedValues = ['1', '2'];
+                    if ($(this).val() === '') {
+                      $('#ntactionnew').find('option').prop('disabled', false);
+                        } else {
+                            $('#ntactionnew').find('option').each(function() {
+                                var option = $(this);
+                                if (allowedValues.includes(option.val())) {
+                                    option.prop('disabled', false);
+                                } else {
+                                    option.prop('disabled', true);
+                                }
+                            });
+                        }
                     $.ajax({
                     url:'<?=base_url();?>Menu/getcmpbyClusterLocationid',
                     type: "POST",
@@ -5182,8 +5195,6 @@ $("#example4").DataTable({
 "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 10,
 "buttons": ["excel", "pdf"]
 }).buttons().container().appendTo('#example4_wrapper .col-md-6:eq(0)');
-
-// https://stemapp.in//assets/image/planning1.jpg
 
     </script>
   </body>

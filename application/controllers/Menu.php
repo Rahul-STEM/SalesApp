@@ -3691,8 +3691,17 @@ class Menu extends CI_Controller {
 
 
     public function getstatusadmin(){
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+
+
         $cstatus= $this->input->post('cstatus');
         $this->load->model('Menu_model');
+
+
         $result=$this->Menu_model->get_status();
 
         if($cstatus==1){
@@ -3725,10 +3734,23 @@ class Menu extends CI_Controller {
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
 
+        if($cstatus==11){
+            foreach($result as $d){if($d->id==11 || $d->id==3){
+               echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
+            }}}
+
+        if($uyid == 13){
         if($cstatus==6){
         foreach($result as $d){if($d->id==6){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
+        }
+        if($uyid == 4){
+            if($cstatus==6){
+            foreach($result as $d){if($d->id==6 || $d->id==12 || $d->id==13){
+               echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
+            }}}
+            }
 
         if($cstatus==7){
         foreach($result as $d){if($d->id==7 || $d->id==4  || $d->id==5 || $d->id==9 || $d->id==10 || $d->id==11 || $d->id==13){
@@ -3741,9 +3763,10 @@ class Menu extends CI_Controller {
         }}}
 
         if($cstatus==10){
-        foreach($result as $d){if($d->id==10){
+        foreach($result as $d){if($d->id==10 || $d->id==3){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
+
         if($cstatus==11){
         foreach($result as $d){if($d->id==11){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
@@ -3753,15 +3776,27 @@ class Menu extends CI_Controller {
         // foreach($result as $d){if($d->id==9 || $d->id==13){
         //    echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         // }}}
+        // $uyid
+      
         if($cstatus==12){
-            foreach($result as $d){if($d->id==6 || $d->id==13){
+            foreach($result as $d){if($d->id==6){
                echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
             }}}
+            
 
-        if($cstatus==13){
-        foreach($result as $d){if($d->id==13){
-           echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
-        }}}
+        if($uyid == 13){
+            if($cstatus==13){
+                foreach($result as $d){if($d->id==13){
+                   echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
+                }}}
+        }
+        if($uyid == 4){
+            if($cstatus==13){
+                foreach($result as $d){if($d->id==13 || $d->id==6){
+                   echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
+             }}}
+        }
+
 
         if($cstatus==14){
         foreach($result as $d){if($d->id==14){
@@ -4729,7 +4764,7 @@ class Menu extends CI_Controller {
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
-        
+
         $userData  =  $this->db->query("SELECT * FROM `user_details` WHERE user_id = $uid");
         $userData =  $userData->result();
 
@@ -4740,9 +4775,8 @@ class Menu extends CI_Controller {
             if($inside == 1 || $type_id == 4){
                 $auid = $userData[0]->admin_id;
             }else{
-                $auid = $userData[0]->aadmin;
+                 $auid = $userData[0]->aadmin;
             }
-
         }else{
             $auid = $userData[0]->aadmin;
         }
@@ -4751,6 +4785,10 @@ class Menu extends CI_Controller {
             $auid = 100024;
         }
 
+        if($type_id == 13){
+            $auid = $userData[0]->pst_co;
+        }
+ 
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
@@ -7059,28 +7097,42 @@ class Menu extends CI_Controller {
         $this->load->library('session');
 
         $priority="";$closem="";$caddress="";$cpname="";$cpdes="";$cpno="";$cpemail="";
-        $uid = $_POST['uid'];
-        $cmid = $_POST['cmid'];
-        $bmcid = $_POST['bmcid'];
+        $uid    = $_POST['uid'];
+        $cmid   = $_POST['cmid'];
+        $bmcid  = $_POST['bmcid'];
         $bmccid = $_POST['bmccid'];
         $bminid = $_POST['bminid'];
-        $bmtid = $_POST['bmtid'];
+        $bmtid  = $_POST['bmtid'];
         if(isset($_POST['priority'])){$priority = $_POST['priority'];}
         $closem = $_POST['closem'];
-        $type = $_POST['type'];
-            $caddress = $_POST['caddress'];
-            $cpname = $_POST['cpname'];
-            $cpdes = $_POST['cpdes'];
-            $cpno = $_POST['cpno'];
-            $cpemail = $_POST['cpemail'];
-        $lat = $_POST['lat'];
-        $lng = $_POST['lng'];
+        $type   = $_POST['type'];
+        $caddress = $_POST['caddress'];
+        $cpname = $_POST['cpname'];
+        $cpdes  = $_POST['cpdes'];
+        $cpno   = $_POST['cpno'];
+        $cpemail = $_POST['cpemail'];
+        $lat    = $_POST['lat'];
+        $lng    = $_POST['lng'];
         $letmeetingsremarks = $_POST['letmeetingsremarks'];
 
         $updateStatus = $_POST['updateCompanyStatus'];
-        $company_as = $_POST['company_as'];
-        if($company_as == 'other'){$company_descri = $_POST['company_descri'];}else{$company_descri = '';}
-        $potentional_client = $_POST['potentional_client'];
+        if(isset($_POST['company_as'])){
+            $company_as = $_POST['company_as'];
+        }else{
+            $company_as = '';
+        }
+        if(isset($_POST['company_descri'])){
+            $company_descri = $_POST['company_descri'];
+        }else{
+            $company_descri = '';
+        }
+        if(isset($_POST['potentional_client'])){
+            $potentional_client = $_POST['potentional_client'];
+        }else{
+            $potentional_client = '';
+        }
+        
+       
 
         $cbmid = $this->Menu_model->close_rpm($uid,$closem,$caddress,$cpname,$cpdes,$cpno,$cpemail,$lat,$lng,$type,$priority,$cmid,$bmcid,$bmccid,$bminid,$bmtid,$letmeetingsremarks,$updateStatus,$company_as,$company_descri,$potentional_client);
 
@@ -14170,7 +14222,7 @@ class Menu extends CI_Controller {
 
         $this->load->model('Menu_model');
 
-
+     
         // $id=$this->Menu_model->submit_bmcompany($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$cid,$ccid,$inid,$tid,$bmid);
 
         $id=$this->Menu_model->submit_bmcompany($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$cid,$ccid,$inid,$tid,$bmid,$key_client,$potential_company,$cluster_id);
@@ -19977,6 +20029,27 @@ public function NeedYourAttentionsInAdmin(){
         redirect('Menu/main');
     }
 }
+
+
+
+public function GetMeetCompanyInfo(){
+    
+    $user   = $this->session->userdata('user');
+    $uid    = $user['user_id'];
+    $uyid   =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $mid    = $this->input->post('mid');
+    
+    $mitinfo = $this->Menu_model->getMeetinfoByid($mid);
+    $mitinfocnt = sizeof($mitinfo);
+    if($mitinfocnt > 0){
+        $mitinfojson = json_encode($mitinfo);
+        echo $mitinfojson;
+    }
+}
+
+
+
 
 
 }

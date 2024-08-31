@@ -795,6 +795,16 @@ date_default_timezone_set("Asia/Kolkata");
                                               </select>
                                               <hr>
                                               
+                                            
+
+                                             <div class="form-group p-3">
+                                              <label>Potentional Client:</label><br>
+                                              <input type="radio" id="yes" name="potentional_client" value="yes" required>
+                                              <label for="male">YES</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                              <input type="radio" id="no" name="potentional_client" value="no" required>
+                                              <label for="no">No</label>
+                                          </div>
+                                            </div>
                                             <select id="company_as" class="form-control" name="company_as" required>
                                                 <option value="">Select About Company</option>
                                                 <option value="Good Company">Good Company</option>
@@ -805,21 +815,8 @@ date_default_timezone_set("Asia/Kolkata");
                                              <div id="aboutCompany">
                                                 <hr><textarea name="company_descri" id="company_descri" class="form-control" placeholder="Write about the company"></textarea><hr>
                                              </div>
-                                            
                                              <hr>
-
-                                             <div class="form-group p-3">
-                                              <label>Potentional Client:</label><br>
-                                              <input type="radio" id="yes" name="potentional_client" value="yes" required>
-                                              <label for="male">YES</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                              <input type="radio" id="no" name="potentional_client" value="no" required>
-                                              <label for="no">No</label>
-                                          </div>
-
-
-
-                                            </div>
-                                            <hr>
+                                           
                                             <lable id="letmeetingsremarks">
                                               <span class="text-danger">* Please provide details as to why it took you more than 30 minutes.</span>
                                               <input type="text" id="remarksInput" placeholder="* Please provide details as to why it took you more than 30 minutes." name="letmeetingsremarks" class="form-control p-3 mt-2">
@@ -909,7 +906,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 <script type="text/javascript">
                                 $(document).ready(function() {
                                 // $('.select2').select2();
-                                $('#aboutCompany').hide();
+                                // $('#aboutCompany').hide();
                                 $('#bcname').select2();
                                 });
                                 document.querySelector('#button').disabled = true;
@@ -1157,7 +1154,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 $('#RPMorN').on('change', function b() {
                                 var a =this.value;
                                 if(a=='RP' || a=='Only Got Detail'){$("#RPMbox").show();}
-                                else{$("#RPMbox").hide();}
+                                else{$("#RPMbox").hide();  }
                                 });
                                 $('#mbolocation').on('change', function b() {
                                 var a =this.value;
@@ -1560,11 +1557,11 @@ date_default_timezone_set("Asia/Kolkata");
                                 // Start About Company
                                 $('#company_as').on('change', function b() {
                                   var company_as =this.value;
-                                  if( company_as == 'other'){
-                                    $("#aboutCompany").show();
-                                  }else{
-                                    $("#aboutCompany").hide();
-                                  }
+                                  // if(company_as == 'other'){
+                                  //   $("#aboutCompany").show();
+                                  // }else{
+                                  //   $("#aboutCompany").hide();
+                                  // }
                                 });
                                 // End About Company 
 

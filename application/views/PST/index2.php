@@ -237,7 +237,15 @@
                               Proposal<span class="badge badge-success"><?=$ttbyd[0]->g?></span>
                               </a>
                             </li>
-                        
+                            <li class="nav-item">
+                              <a class="nav-link" id="custom-tabs-four-taskcheck-tab" data-toggle="pill" href="#custom-tabs-four-taskcheck" role="tab" aria-controls="custom-tabs-taskcheck" aria-selected="false">
+                                <?php 
+                                $gettodaysmom = $this->Menu_model->geTodaysMOMCheckTask($uid,$tdate);
+                                $gettodaysmomcnt = sizeof($gettodaysmom);
+                                ?>
+                              Task Check <span class="badge badge-success"><?=$gettodaysmomcnt;?></span>
+                              </a>
+                            </li>
                           </ul>
                         </div>
 
@@ -508,6 +516,81 @@
                         </div>
                       <?php $aai++;}}} ?>
                   </div>
+
+
+                  <div class="tab-pane fade" id="custom-tabs-four-taskcheck" role="tabpanel" aria-labelledby="custom-tabs-four-taskcheck-tab">
+                  <div class="card-header text-center bg-light" style="border-radius:unset" >
+            <p>
+              <?php 
+            
+              $groupedByActionTypes = [];
+              foreach ( $gettodaysmom as $objects) {
+                  $actionTypeId = $objects->actiontype_id;
+                  if (!isset($groupedByActionTypes[$actionTypeId])) {
+                      $groupedByActionTypes[$actionTypeId] = [];
+                  }
+                  $groupedByActionTypes[$actionTypeId][] = $objects;
+              }
+
+            foreach ($groupedByActionTypes as $key => $getchk){
+                  $taid=$this->Menu_model->get_actionbyid($key);
+                  $checkname = $taid[0]->name;
+                  $getSize = sizeof($getchk); ?>
+                <a class="btn btn-primary checkingreport" data-toggle="collapse" href="#collapseCheck<?=$key?>" role="button" aria-expanded="false" aria-controls="collapseCheck<?=$key?>">
+                  <?= $checkname.' ('.$getSize.')'; ?>
+                </a>
+          <?php } ?>
+          <?php
+             foreach ($groupedByActionTypes as $key => $checkTasks) { ?> 
+              <div class="collapse multi-collapse"  id="collapseCheck<?=$key?>">
+              <div class="card card-body">
+              <?php 
+              foreach ($checkTasks as $checkTask) {
+                  $ce_tskid = $checkTask->id;
+                  $tskid = $checkTask->actiontype_id;
+                  $reviewtype = $checkTask->reviewtype;
+                  $taid=$this->Menu_model->get_actionbyid($tskid);
+
+                  $time = $checkTask->appointmentdatetime;
+                  $time = date('h:i a', strtotime($time));
+                 
+                  if($tskid == 18){
+                    $reqmom = $this->Menu_model->getRequestMOMBYID($reviewtype);
+                    $reqmom_user = $reqmom[0]->user_id;
+                    $reqmom_uname = $this->Menu_model->get_userbyid($reqmom_user)[0]->name;
+                  }
+                  if($tskid == 19){
+                    $reqmom_uname = '';
+                  }
+              ?>
+              <a href="<?=base_url();?>Management/MomDataCheck/<?=$reviewtype?>/<?=$ce_tskid?>">
+                  <div class="list-group-item list-group-item-action checkrepoData">
+                      <span class="flex-wrap">
+                          <strong class="text-secondary mr-1" style="font-size: 14px;" ><?=$checkTask->compname?> - ( <?= $checkname; ?> )</strong><br>
+                          <small class="text-secondary mr-1"> Request Name - <?=$reqmom_uname?></small><br>
+                          <small class="text-muted">Check Time:- <?=$time?></small>
+                      </span>
+                  </div>
+              </a>
+               <?php  } ?>
+               </div>
+              </div>
+              <?php }  ?>
+            </div>
+            <hr>
+            <style>
+              .checkingreport{
+                margin: 4px;
+              }
+              .checkrepoData{
+                margin: 4px;
+                background: beige;
+                color: white !important;
+              }
+            </style>
+                  </div>
+
+
 
                   <div class="tab-pane fade" id="custom-tabs-four-barg" role="tabpanel" aria-labelledby="custom-tabs-four-barg-tab">
 

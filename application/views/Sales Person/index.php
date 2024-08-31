@@ -1855,7 +1855,7 @@ $dataPoints2 = array(
                 if($plannertimecnt > 0){
                   $start_tttpft =  $plannertime[0]->start_tttpft;
                   $end_tttpft   =  $plannertime[0]->end_tttpft; ?>
-                  <div class="card p-4 text-center bg-success text-white">
+                  <div class="card p-2 text-center bg-success text-white">
                     <span> <b>Todays Planner Time : <?=$start_tttpft;?> to <?=$end_tttpft;?></b> </span>
                   </div>
                 <?php  } ?> 

@@ -113,8 +113,26 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body box-profile p-5">
-              <!-- form start -->
-            <form method="post" action="<?=base_url();?>Menu/addbmcompany">
+
+              <div class="col-12 col-md-12 mb-12">
+                        <label for="validationSample03">Select Contact Person</label>
+                        <select type="text" class="form-control" id="selectPerson" name="selectPerson">
+                            <option value="Same Person" selected>Select Contact Person</option>
+                            <option value="Same Person">Same Person</option>
+                            <option value="Other Person">Other Person</option>
+                        </select>
+                        <div class="invalid-feedback">Please provide a valid city.</div>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+                  <hr>
+
+
+
+            <form method="post" id="myUpdateForm" action="<?=base_url();?>Menu/addbmcompany">
+
+                
+
+
                 <input type="hidden" name="uid" value="<?=$uid?>">
                 <input type="hidden" name="bmid" value="<?=$bmid?>">
                    <input type="hidden" name="cid" value="<?=$bmdata[0]->cid?>">
@@ -196,12 +214,6 @@
                             <div class="invalid-feedback">Please add a valid cluster.</div>
                             <div class="valid-feedback">Looks good!</div>
                     </div>
-
-                
-
-
-
-
               </div>
               <div class="col-sm-12 col-lg-6 p-3">
                 <div class="was-validated">
@@ -496,8 +508,25 @@ function replaceBudget(){
 }
 var id_partnerType=document.getElementById('id_partnerType');
 id_partnerType.addEventListener("change", replaceBudget);
-
-
+</script>
+<script>
+$(document).ready(function() {
+    $('#myUpdateForm').find('input[type="text"], textarea,input[type="email"]').prop('readonly', true);
+    $('#myUpdateForm').find('input[type="radio"], select').prop('disabled', true);
+    $('#selectPerson').change(function() {
+        var selectedValue = $(this).val();
+        if (selectedValue === 'Same Person') {
+            $('#myUpdateForm').find('input[type="text"], textarea,input[type="email"]').prop('readonly', true);
+            $('#myUpdateForm').find('input[type="radio"], select').prop('disabled', true);
+        } else if (selectedValue === 'Other Person') {
+          $('#myUpdateForm').find('input[type="text"], textarea,input[type="email"]').prop('readonly', false);
+          $('#myUpdateForm').find('input[type="radio"],select').prop('disabled', false);
+        }
+    });
+    $('#myUpdateForm').submit(function(event) {
+        $('#myUpdateForm').find(':disabled').prop('disabled', false);
+    });
+});
 </script>
           
         <!-- /.row (main row) -->

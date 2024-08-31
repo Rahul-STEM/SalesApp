@@ -712,6 +712,15 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
                         Visit Meeting <span class="badge badge-success"><?=$ttbyd[0]->d?></span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-taskcheck-tab" data-toggle="pill" href="#custom-tabs-four-taskcheck" role="tab" aria-controls="custom-tabs-taskcheck" aria-selected="false">
+                      <?php 
+                      $gettodaysmom = $this->Menu_model->geTodaysMOMCheckTask($uid,$tdate);
+                      $gettodaysmomcnt = sizeof($gettodaysmom);
+                       ?>
+                    Task Check <span class="badge badge-success"><?=$gettodaysmomcnt;?></span>
+                    </a>
+                  </li>
                 
             </ul>
             
@@ -1152,6 +1161,80 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
                     <?php $aai++;}}} ?>
                 </div>
                 
+                <div class="tab-pane fade" id="custom-tabs-four-taskcheck" role="tabpanel" aria-labelledby="custom-tabs-four-taskcheck-tab">
+                  <div class="card-header text-center bg-light" style="border-radius:unset" >
+            <p>
+              <?php 
+            
+              $groupedByActionTypes = [];
+              foreach ( $gettodaysmom as $objects) {
+                  $actionTypeId = $objects->actiontype_id;
+                  if (!isset($groupedByActionTypes[$actionTypeId])) {
+                      $groupedByActionTypes[$actionTypeId] = [];
+                  }
+                  $groupedByActionTypes[$actionTypeId][] = $objects;
+              }
+
+            foreach ($groupedByActionTypes as $key => $getchk){
+                  $taid=$this->Menu_model->get_actionbyid($key);
+                  $checkname = $taid[0]->name;
+                  $getSize = sizeof($getchk); ?>
+                <a class="btn btn-primary checkingreport" data-toggle="collapse" href="#collapseCheck<?=$key?>" role="button" aria-expanded="false" aria-controls="collapseCheck<?=$key?>">
+                  <?= $checkname.' ('.$getSize.')'; ?>
+                </a>
+          <?php } ?>
+          <?php
+             foreach ($groupedByActionTypes as $key => $checkTasks) { ?> 
+              <div class="collapse multi-collapse"  id="collapseCheck<?=$key?>">
+              <div class="card card-body">
+              <?php 
+              foreach ($checkTasks as $checkTask) {
+                  $ce_tskid = $checkTask->id;
+                  $tskid = $checkTask->actiontype_id;
+                  $reviewtype = $checkTask->reviewtype;
+                  $taid=$this->Menu_model->get_actionbyid($tskid);
+
+                  $time = $checkTask->appointmentdatetime;
+                  $time = date('h:i a', strtotime($time));
+                 
+                  if($tskid == 18){
+                    $reqmom = $this->Menu_model->getRequestMOMBYID($reviewtype);
+                    $reqmom_user = $reqmom[0]->user_id;
+                    $reqmom_uname = $this->Menu_model->get_userbyid($reqmom_user)[0]->name;
+                  }
+                  if($tskid == 19){
+                    $reqmom_uname = '';
+                  }
+              ?>
+              <a href="<?=base_url();?>Management/MomDataCheck/<?=$reviewtype?>/<?=$ce_tskid?>">
+                  <div class="list-group-item list-group-item-action checkrepoData">
+                      <span class="flex-wrap">
+                          <strong class="text-secondary mr-1" style="font-size: 14px;" ><?=$checkTask->compname?> - ( <?= $checkname; ?> )</strong><br>
+                          <small class="text-secondary mr-1"> Request Name - <?=$reqmom_uname?></small><br>
+                          <small class="text-muted">Check Time:- <?=$time?></small>
+                      </span>
+                  </div>
+              </a>
+               <?php  } ?>
+               </div>
+              </div>
+              <?php }  ?>
+            </div>
+            <hr>
+            <style>
+              .checkingreport{
+                margin: 4px;
+              }
+              .checkrepoData{
+                margin: 4px;
+                background: beige;
+                color: white !important;
+              }
+            </style>
+                  </div>
+
+
+
                 <div class="tab-pane fade" id="custom-tabs-four-review" role="tabpanel" aria-labelledby="custom-tabs-four-review-tab">
                     <?php $pr = $this->Menu_model->get_pstreview($uid);
                     foreach($pr as $pr){?>
@@ -1176,11 +1259,16 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
                     <div class="list-group-item list-group-item-action">
                         <?php
                         foreach($barg as $brg){
-                        $bs = $brg->status;?>
+                        $bs = $brg->status;
+                        $bscid = $brg->cid;
+                        
+                        $bscidd = $this->Menu_model->get_cdbyid($bscid);
+                        $mitinfoname = $bscidd[0]->compname;
+                        ?>
                         <?php if($bs=='Pending'){?>
-                        <button type="button" value="<?=$brg->id?>" class="btn btn-success" id="startm">Start Meeting</button>
+                        <button type="button" value="<?=$brg->id?>" class="btn btn-success" id="startm"><?= $mitinfoname ?>- Start Meeting</button> <hr>
                         <?php }if($bs=='Start'){?>
-                        <button type="button" value="<?=$brg->id?>" class="btn btn-info" id="closem">Close Meeting</button>
+                        <button type="button" value="<?=$brg->id?>" class="btn btn-info" id="closem"><?= $mitinfoname ?>- Close Meeting</button><hr>
                         <?php }} ?>
                     </div>
                     <div class="list-group-item list-group-item-action">
@@ -1769,7 +1857,7 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
                 if($plannertimecnt > 0){
                   $start_tttpft =  $plannertime[0]->start_tttpft;
                   $end_tttpft   =  $plannertime[0]->end_tttpft; ?>
-                  <div class="card p-4 text-center bg-success text-white">
+                  <div class="card p-2 text-center bg-success text-white">
                     <span> <b>Todays Planner Time : <?=$start_tttpft;?> to <?=$end_tttpft;?></b> </span>
                   </div>
                 <?php  } ?> 
@@ -1806,75 +1894,7 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
                 </div>
             </div>
             
-            <div class="card-header text-center bg-light" style="border-radius:unset" >
-            <p>
-              <?php 
-              $gettodaysmom = $this->Menu_model->geTodaysMOMCheckTask($uid,$tdate);
-              $groupedByActionTypes = [];
-              foreach ( $gettodaysmom as $objects) {
-                  $actionTypeId = $objects->actiontype_id;
-                  if (!isset($groupedByActionTypes[$actionTypeId])) {
-                      $groupedByActionTypes[$actionTypeId] = [];
-                  }
-                  $groupedByActionTypes[$actionTypeId][] = $objects;
-              }
-
-            foreach ( $groupedByActionTypes as $key => $getchk){
-                  $taid=$this->Menu_model->get_actionbyid($key);
-                  $checkname = $taid[0]->name;
-                  $getSize = sizeof($getchk); ?>
-                <a class="btn btn-primary checkingreport" data-toggle="collapse" href="#collapseCheck<?=$key?>" role="button" aria-expanded="false" aria-controls="collapseCheck<?=$key?>">
-                  <?= $checkname.'('.$getSize.')'; ?>
-                </a>
-          <?php } ?>
-          <?php
-             foreach ($groupedByActionTypes as $key => $checkTasks) { ?> 
-              <div class="collapse multi-collapse"  id="collapseCheck<?=$key?>">
-              <div class="card card-body">
-              <?php 
-              foreach ($checkTasks as $checkTask) {
-                  $ce_tskid = $checkTask->id;
-                  $tskid = $checkTask->actiontype_id;
-                  $reviewtype = $checkTask->reviewtype;
-                  $taid=$this->Menu_model->get_actionbyid($tskid);
-
-                  $time = $checkTask->appointmentdatetime;
-                  $time = date('h:i a', strtotime($time));
-                 
-                  if($tskid == 18){
-                    $reqmom = $this->Menu_model->getRequestMOMBYID($reviewtype);
-                    $reqmom_user = $reqmom[0]->user_id;
-                    $reqmom_uname = $this->Menu_model->get_userbyid($reqmom_user)[0]->name;
-                  }
-                  if($tskid == 19){
-                    $reqmom_uname = '';
-                  }
-              ?>
-              <a href="<?=base_url();?>Management/MomDataCheck/<?=$reviewtype?>/<?=$ce_tskid?>">
-                  <div class="list-group-item list-group-item-action checkrepoData">
-                      <span class="flex">
-                          <strong class="text-secondary mr-1"><?=$checkTask->compname?></strong><br>
-                          <small class="text-secondary mr-1"> Request Name - <?=$reqmom_uname?></small><br>
-                          <small class="text-muted">Check Time:- <?=$time?></small>
-                      </span>
-                  </div>
-              </a>
-               <?php  } ?>
-               </div>
-              </div>
-              <?php }  ?>
-            </div>
-            <hr>
-            <style>
-              .checkingreport{
-                margin: 4px;
-              }
-              .checkrepoData{
-                margin: 4px;
-                background: beige;
-                color: white !important;
-              }
-            </style>  
+        
        
         
     </div>

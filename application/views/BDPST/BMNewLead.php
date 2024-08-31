@@ -43,7 +43,9 @@
 
   <!-- Navbar -->
   <?php require('nav.php');?>
-  <?php require('addlog.php');?>
+  <?php 
+  // require('addlog.php');
+  ?>
   <!-- /.navbar -->
 
   
@@ -70,7 +72,39 @@
     <!-- Main content -->
    <section class="content">
       <div class="container-fluid">
-        <!-- Small boxes (Stat box) -->
+     
+      <?php  
+
+      $inid       = $bmdata[0]->inid;
+      $cmpid_id       = $bmdata[0]->cid;
+      $intData    = $this->Menu_model->get_initcallby_id($inid);
+      
+      $cluster_id = $intData[0]->cluster_id;
+      $topspender   = $intData[0]->topspender;
+      $upsell_client   = $intData[0]->upsell_client;
+      $focus_funnel   = $intData[0]->focus_funnel;
+      $pkclient   = $intData[0]->pkclient;
+      $potential   = $intData[0]->potential;
+      $interventions   = $intData[0]->interventions;
+      $support   = $intData[0]->support;
+      
+      $cmpData    = $this->Menu_model->get_cdbyid($cmpid_id);
+ 
+      $compname   = $cmpData[0]->compname;
+      $address    = $cmpData[0]->address;
+      $website    = $cmpData[0]->website;
+      $country    = $cmpData[0]->country;
+      $state      = $cmpData[0]->state;
+      $city       = $cmpData[0]->city;
+      $draft       = $cmpData[0]->draft;
+
+      $partnerType_id = $cmpData[0]->partnerType_id;
+      $country        = $cmpData[0]->country;
+      $budget        = $cmpData[0]->budget;
+
+      ?>
+
+
         <div class="row">
           <div class="col-lg-12 col-md-12 col-12 m-auto">
             <!-- Default box -->
@@ -79,8 +113,26 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body box-profile p-5">
-              <!-- form start -->
-            <form method="post" action="<?=base_url();?>Menu/addbmcompany">
+
+              <div class="col-12 col-md-12 mb-12">
+                        <label for="validationSample03">Select Contact Person</label>
+                        <select type="text" class="form-control" id="selectPerson" name="selectPerson">
+                            <option value="Same Person" selected>Select Contact Person</option>
+                            <option value="Same Person">Same Person</option>
+                            <option value="Other Person">Other Person</option>
+                        </select>
+                        <div class="invalid-feedback">Please provide a valid city.</div>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+                  <hr>
+
+
+
+            <form method="post" id="myUpdateForm" action="<?=base_url();?>Menu/addbmcompany">
+
+                
+
+
                 <input type="hidden" name="uid" value="<?=$uid?>">
                 <input type="hidden" name="bmid" value="<?=$bmid?>">
                    <input type="hidden" name="cid" value="<?=$bmdata[0]->cid?>">
@@ -93,13 +145,13 @@
                     <div class="form-row">
                         <div class="col-12 col-md-12">
                             <label for="validationSample01">Company Name</label>
-                            <input type="text" class="form-control"  placeholder="Company Name" value="<?=$bmdata[0]->compname?>" required=""  id="compname" name="compname" >
+                            <input type="text" class="form-control"  placeholder="Company Name" value="<?=$compname?>" required=""  id="compname" name="compname" >
                             <div class="invalid-feedback">Please provide a Company name.</div>
                             <div class="valid-feedback">Looks good!</div>
                         </div>
                         <div class="col-12 col-md-12 mb-12">
                             <label for="validationSample02">Website Link</label>
-                            <input type="text" class="form-control" id="website" placeholder="Website Link" name="website"  required="">
+                            <input type="text" class="form-control" id="website" value="<?=$website ?>" placeholder="Website Link" name="website"  required="">
                             <div class="invalid-feedback">Please provide a company's website.</div>
                             <div class="valid-feedback">Looks good!</div>
                         </div>
@@ -119,7 +171,7 @@
                             <select name="state" id="id_state" required class="form-control">
                                 <option value="">Select State</option>
                                 <?php foreach($states as $st){?>
-                                    <option value="<?=$st->id?>"><?=$st->state?></option>
+                                    <option><?=$st->state?></option>
                                 <?php }?>
                             </select>
                             <div class="invalid-feedback">Please provide a valid state.</div>
@@ -138,14 +190,29 @@
                 <div class="form-row">
                         <div class="col-12 col-md-12">
                             <label for="validationSample01">Draft <sup>optional</sup></label>
-                            <textarea type="text" name="draft" id="draft" class="form-control"  placeholder="Draft" ></textarea>
+                            <textarea type="text" name="draft" id="draft" class="form-control"  placeholder="Draft" ><?= $draft ?></textarea>
                         </div>
                         <div class="col-12 col-md-12 mb-12">
                             <label for="validationSample02">Address</label>
-                            <textarea class="form-control" name="address" id="address" placeholder="Full Address" value="<?=$bmdata[0]->address?>" required=""></textarea>
+                            <textarea class="form-control" name="address" id="address" placeholder="Full Address" required=""><?=$address?></textarea>
                             <div class="invalid-feedback">Please provide a company's address.</div>
                             <div class="valid-feedback">Looks good!</div>
                         </div>
+                    </div>
+
+                    <div class="col-12 col-md-12 mb-12">
+                            <label for="validationSample04">Add Cluster</label>
+                            <?php $clusterData = $this->Menu_model->getClusterByUserId($uid);  ?>
+                            <select id="cluster" class="form-control" name="cluster" required>
+                                <option selected disabled>Select Cluster</option>   
+                                <?php foreach($clusterData as $cdata):
+                                  if($cluster_id == $cdata->id){$selected = 'selected';}else{$selected = '';}
+                                  ?>
+                                <option <?= $selected ?> value="<?=$cdata->id?>"><?=$cdata->clustername ?></option>
+                                <?php endforeach; ?>
+                          </select>
+                            <div class="invalid-feedback">Please add a valid cluster.</div>
+                            <div class="valid-feedback">Looks good!</div>
                     </div>
               </div>
               <div class="col-sm-12 col-lg-6 p-3">
@@ -155,8 +222,11 @@
                         <label for="validationSample02">Company Type</label>
                         <select id="ctype" name="ctype" class="form-control" required>
                             <option value="">Select Partner Type</option>
-                            <?php foreach($partner as $p){?>
-                                <option value="<?=$p->id?>"><?=$p->name?></option>
+                            <?php foreach($partner as $p){
+                              
+                              if($partnerType_id === $p->id){$selected = 'selected';}else{$selected = '';}
+                              ?>
+                                <option <?=$selected ?> value="<?=$p->id?>"><?=$p->name?></option>
                             <?php }?>
                         </select>
                         <div class="invalid-feedback">Please provide a valid Company Type.</div>
@@ -164,7 +234,7 @@
                     </div>
                      <div class="col-12 col-md-12" id="budgetdiv">
                         <label for="validationSample01">Budget</label>
-                            <input type="text" name="budget" class="form-control" id="budget" placeholder="Budget" value="" required=""  >
+                            <input type="text" name="budget" class="form-control" id="budget" placeholder="Budget" value="<?=$budget ?>" required=""  >
                         <div class="invalid-feedback">Please provide a Company's budget.</div>
                         <div class="valid-feedback">Looks good!</div>
                     </div>
@@ -192,9 +262,10 @@
                         </div>
                     </div>
                     <div class="form-row">
+                      
                         <div class="col-12 col-md-12 mb-12">
                             <label for="validationSample03">Mobile Number</label>
-                            <input type="number" minlength="10" maxlength="10"  class="form-control" id="phoneno" value="<?=$bmdata[0]->phoneno?>" name="phoneno" placeholder="Mobile Number" required="">
+                            <input type="text" minlength="10" maxlength="10"  class="form-control" id="phoneno" value="<?= $bmdata[0]->phoneno ?>" name="phoneno" placeholder="Mobile Number" required="">
                             <div class="invalid-feedback">Please provide a valid number.</div>
                             <div class="valid-feedback">Looks good!</div>
                         </div>
@@ -204,11 +275,15 @@
                 <div class="form-row">
                 <div class="col-12 col-md-12">
                 <label for="validationSample01">Top Spender</label> &nbsp;
+                <?php 
+                $yesChecked = $topspender === "yes" ? "checked" : "";
+                $noChecked = $topspender === "no" ? "checked" : "";
+                ?>
                 <input
                   type="radio"
                   name="top_spender"
                   value="yes"
-                  required=""
+                  <?php echo $yesChecked; ?>
                 />
                YES
                 <input
@@ -216,7 +291,7 @@
                   name="top_spender"
                   value="no"
                   required=""
-                  checked
+                  <?php echo $noChecked; ?>
                 />
                 &nbsp;NO &nbsp;
                 <div class="invalid-feedback">
@@ -228,11 +303,16 @@
               <div class="form-row">
                 <div class="col-12 col-md-12" style="margin-top: 10px">
                 <label for="validationSample01">Upsell Client</label> &nbsp;
+                <?php 
+                $yesChecked = $upsell_client === "yes" ? "checked" : "";
+                $noChecked = $upsell_client === "no" ? "checked" : "";
+                ?>
                 <input
                   type="radio"
                   name="upsell_client"
                   value="yes"
                   required=""
+                  <?php echo $yesChecked; ?>
                 />
                 YES 
                 <input
@@ -240,7 +320,7 @@
                   name="upsell_client"
                   value="no"
                   required=""
-                  checked
+                  <?php echo $noChecked; ?>
                 />
                 &nbsp;NO &nbsp;
                 <div class="invalid-feedback">
@@ -252,11 +332,18 @@
               <div class="form-row">
                 <div class="col-12 col-md-12" style="margin-top: 10px">
                 <label for="validationSample01">Focus Funnel</label> &nbsp;
+
+                <?php 
+                $yesChecked = $focus_funnel === "yes" ? "checked" : "";
+                $noChecked = $focus_funnel === "no" ? "checked" : "";
+                ?>
+
                 <input
                   type="radio"
                   name="focus_funnel"
                   value="yes"
                   required=""
+                  <?php echo $yesChecked; ?>
                 />
                 YES
                 <input
@@ -264,7 +351,7 @@
                   name="focus_funnel"
                   value="no"
                   required=""
-                  checked
+                  <?php echo $noChecked; ?>
                 />
                 &nbsp;NO &nbsp;
                 <div class="invalid-feedback">
@@ -272,11 +359,69 @@
                 </div>
                 <div class="valid-feedback">Looks good!</div>
               </div>
-              
-              
-              
             </div>
             
+            <div class="form-row">
+              <div class="col-12 col-md-12" style="margin-top: 10px">
+                  <label for="validationSample01">Key Client</label> &nbsp;&nbsp;
+                  &nbsp;&nbsp;
+                  <?php 
+                $yesChecked = $pkclient === "yes" ? "checked" : "";
+                $noChecked = $pkclient === "no" ? "checked" : "";
+                ?>
+                  <input
+                  type="radio"
+                  name="key_client"
+                  value="yes"
+                  required=""
+                  <?php echo $yesChecked; ?>
+                  />
+                  &nbsp;YES &nbsp;
+                  <input
+                  type="radio"
+                  name="key_client"
+                  value="no"
+                  required=""
+                  <?php echo $noChecked; ?>
+                  />
+                  &nbsp;&nbsp;NO &nbsp;&nbsp;
+                  <div class="invalid-feedback">
+                      Select value for Key Company
+                  </div>
+                  <div class="valid-feedback">Looks good!</div>
+              </div>
+          </div>
+        <div class="form-row">
+            <div class="col-12 col-md-12" style="margin-top: 10px">
+                <label for="validationSample01">Potential Client</label> &nbsp;&nbsp;
+                &nbsp;&nbsp;
+                <?php 
+                $yesChecked = $potential === "yes" ? "checked" : "";
+                $noChecked = $potential === "no" ? "checked" : "";
+                ?>
+                <input
+                type="radio"
+                name="potential_company"
+                value="yes"
+                required=""
+                <?php echo $yesChecked; ?>
+                />
+                &nbsp;YES &nbsp;
+                <input
+                type="radio"
+                name="potential_company"
+                value="no"
+                required=""
+                <?php echo $noChecked; ?>
+                />
+                &nbsp;&nbsp;NO &nbsp;&nbsp;
+                <div class="invalid-feedback">
+                    Please provide a Company's budget.
+                </div>
+                <div class="valid-feedback">Looks good!</div>
+            </div>
+        </div>
+
           </div>
           <button class="btn btn-primary" type="submit">Submit</button>
         </form>
@@ -342,7 +487,7 @@ $("#next_action").html(result);
 $('#id_state').on('change', function b() {
 var stid = document.getElementById("id_state").value;
 $.ajax({
-url:'<?=base_url();?>Menu/getcity',
+url:'<?=base_url();?>Menu/getcitybystate',
 type: "POST",
 data: {
 stid: stid
@@ -363,8 +508,25 @@ function replaceBudget(){
 }
 var id_partnerType=document.getElementById('id_partnerType');
 id_partnerType.addEventListener("change", replaceBudget);
-
-
+</script>
+<script>
+$(document).ready(function() {
+    $('#myUpdateForm').find('input[type="text"], textarea,input[type="email"]').prop('readonly', true);
+    $('#myUpdateForm').find('input[type="radio"], select').prop('disabled', true);
+    $('#selectPerson').change(function() {
+        var selectedValue = $(this).val();
+        if (selectedValue === 'Same Person') {
+            $('#myUpdateForm').find('input[type="text"], textarea,input[type="email"]').prop('readonly', true);
+            $('#myUpdateForm').find('input[type="radio"], select').prop('disabled', true);
+        } else if (selectedValue === 'Other Person') {
+          $('#myUpdateForm').find('input[type="text"], textarea,input[type="email"]').prop('readonly', false);
+          $('#myUpdateForm').find('input[type="radio"],select').prop('disabled', false);
+        }
+    });
+    $('#myUpdateForm').submit(function(event) {
+        $('#myUpdateForm').find(':disabled').prop('disabled', false);
+    });
+});
 </script>
           
         <!-- /.row (main row) -->

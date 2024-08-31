@@ -784,19 +784,6 @@ date_default_timezone_set("Asia/Kolkata");
                                                 <option value="no">Non Priority (Will not give business)</option>
                                                 <option value="yes">Priority (Definitely Will give business)</option>
                                               </select>
-                                              <hr>
-                                              
-                                            <select id="company_as" class="form-control" name="company_as" required>
-                                                <option value="">Select About Company</option>
-                                                <option value="Good Company">Good Company</option>
-                                                <option value="Not a Big Company">Not a Big Company</option>
-                                                <option value="other">Other</option>
-                                            </select>
-
-                                             <div id="aboutCompany">
-                                                <hr><textarea name="company_descri" id="company_descri" class="form-control" placeholder="Write about the company"></textarea><hr>
-                                             </div>
-                                            
                                              <hr>
 
                                              <div class="form-group p-3">
@@ -806,10 +793,16 @@ date_default_timezone_set("Asia/Kolkata");
                                               <input type="radio" id="no" name="potentional_client" value="no" required>
                                               <label for="no">No</label>
                                           </div>
-
-
-
                                             </div>
+                                            <select id="company_as" class="form-control" name="company_as" required>
+                                                  <option value="">Select About Company</option>
+                                                  <option value="Good Company">Good Company</option>
+                                                  <option value="Not a Big Company">Not a Big Company</option>
+                                                  <option value="other">Other</option>
+                                            </select>
+                                               <div id="aboutCompany">
+                                                  <hr><textarea name="company_descri" id="company_descri" class="form-control" placeholder="Write about the company"></textarea><hr>
+                                               </div>
                                             <hr>
                                             <lable id="letmeetingsremarks">
                                               <span class="text-danger">* Please provide details as to why it took you more than 30 minutes.</span>
@@ -859,7 +852,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 <script type="text/javascript">
                                 $(document).ready(function() {
                                 // $('.select2').select2();
-                                $('#aboutCompany').hide();
+                                // $('#aboutCompany').hide();
                                 $('#bcname').select2();
                                 });
                                 document.querySelector('#button').disabled = true;
@@ -1392,6 +1385,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 });
                                 $('[id^="closem"]').on('click', function() {
                                 $('#add_closem').modal('show');
+                                
                                 var id = this.value;
                                 document.getElementById("closemid").value=id;
                                 $.ajax({
@@ -1485,11 +1479,11 @@ date_default_timezone_set("Asia/Kolkata");
                                 // Start About Company
                                 $('#company_as').on('change', function b() {
                                   var company_as =this.value;
-                                  if( company_as == 'other'){
-                                    $("#aboutCompany").show();
-                                  }else{
-                                    $("#aboutCompany").hide();
-                                  }
+                                  // if( company_as == 'other'){
+                                  //   $("#aboutCompany").show();
+                                  // }else{
+                                  //   $("#aboutCompany").hide();
+                                  // }
                                 });
                                 // End About Company 
 

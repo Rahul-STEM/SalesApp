@@ -809,7 +809,8 @@ class GraphNew extends CI_Controller
         }
     }
 
-    public function StatusWiseTaskAnalysis(){
+    public function StatusWiseTaskAnalysis()
+    {
 
 
         if (isset($_POST['startDate']) && isset($_POST['endDate'])) {
@@ -910,19 +911,19 @@ class GraphNew extends CI_Controller
 
             $this->load->view('include/header');
             $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);
-            $this->load->view('Graphs/StatusWiseTaskAnalysis', ['uid' => $uid, 'user' => $user, 'sdate' => $sdate, 'edate' => $edate, 'TableData' => $TableData,'userTypeid'=>$userTypeid ,'roles' => $roles, 'partner_type' => $partner_type, 'clusters' => $get_cluster, 'FunnelData' => $FunnelData, 'selected_partnerType' => $partnerType, 'selected_category' => $category, 'selected_cluster' => $cluster, 'selected_users' => $users, 'Selected_userType' => $userType,'getStatus'=>$get_status]);
+            $this->load->view('Graphs/StatusWiseTaskAnalysis', ['uid' => $uid, 'user' => $user, 'sdate' => $sdate, 'edate' => $edate, 'TableData' => $TableData, 'userTypeid' => $userTypeid, 'roles' => $roles, 'partner_type' => $partner_type, 'clusters' => $get_cluster, 'FunnelData' => $FunnelData, 'selected_partnerType' => $partnerType, 'selected_category' => $category, 'selected_cluster' => $cluster, 'selected_users' => $users, 'Selected_userType' => $userType, 'getStatus' => $get_status]);
             $this->load->view('include/footer');
-
         } else {
 
             redirect('Menu/main');
         }
     }
 
-    public function StatusWiseTaskFunnelGraphData(){
+    public function StatusWiseTaskFunnelGraphData()
+    {
 
-        var_dump($_POST);die;
-
+        var_dump($_POST);
+        die;
     }
 
     // public function MonthWiseFunnelAnalysis(){
@@ -1037,8 +1038,9 @@ class GraphNew extends CI_Controller
 
 
 
-    public function ActionWiseFunnelAnalysis(){
-        
+    public function ActionWiseFunnelAnalysis()
+    {
+
         if (isset($_POST['startDate']) && isset($_POST['endDate'])) {
 
             $sdate = $_POST['startDate'];
@@ -1142,7 +1144,7 @@ class GraphNew extends CI_Controller
 
         $get_action = $this->Graph_Model->getAction();
 
-        $TableData = $this->Graph_Model->ActionWiseTableDetails($uid,$sdate, $edate, $category, $partnerType,$userType, $cluster,$users,  $userTypeid,$action);
+        $TableData = $this->Graph_Model->ActionWiseTableDetails($uid, $sdate, $edate, $category, $partnerType, $userType, $cluster, $users,  $userTypeid, $action);
 
         // public function ActionWiseTableDetails($uid,$sdate,$edate,$selected_category,$selected_partnerType,$selected_userType,$selected_cluster,$selected_users,$userTypeid,$action)
         // $FunnelData = $this->Graph_Model->getGraphDetails($uid, $userTypeid, $sdate, $edate, $userType, $cluster, $partnerType, $category, $users);
@@ -1153,9 +1155,125 @@ class GraphNew extends CI_Controller
 
             $this->load->view('include/header');
             $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);
-            $this->load->view('Graphs/ActionWiseFunnelAnalysis', ['uid' => $uid, 'user' => $user, 'sdate' => $sdate, 'edate' => $edate, 'TableData' => $TableData,'userTypeid'=>$userTypeid ,'roles' => $roles, 'partner_type' => $partner_type, 'clusters' => $get_cluster, 'get_action' => $get_action, 'FunnelData' => $FunnelData, 'selected_partnerType' => $partnerType, 'selected_category' => $category, 'selected_cluster' => $cluster,'Selected_action' => $action, 'selected_users' => $users, 'Selected_userType' => $userType,'getStatus'=>$get_status]);
+            $this->load->view('Graphs/ActionWiseFunnelAnalysis', ['uid' => $uid, 'user' => $user, 'sdate' => $sdate, 'edate' => $edate, 'TableData' => $TableData, 'userTypeid' => $userTypeid, 'roles' => $roles, 'partner_type' => $partner_type, 'clusters' => $get_cluster, 'get_action' => $get_action, 'FunnelData' => $FunnelData, 'selected_partnerType' => $partnerType, 'selected_category' => $category, 'selected_cluster' => $cluster, 'Selected_action' => $action, 'selected_users' => $users, 'Selected_userType' => $userType, 'getStatus' => $get_status]);
             $this->load->view('include/footer');
+        } else {
 
+            redirect('Menu/main');
+        }
+    }
+
+    public function OtherUserOnFunnelAnalysis()
+    {   
+        // var_dump($_POST);die;
+
+        if (isset($_POST['startDate']) && isset($_POST['endDate'])) {
+
+            $sdate = $_POST['startDate'];
+            $edate = $_POST['endDate'];
+        } else {
+            $sdate = date('Y-m-d');
+            $edate = date('Y-m-d');
+        }
+
+        if (isset($_POST['userType'])) {
+
+            $userType = array_filter($_POST['userType'], function ($value) {
+                return $value !== 'select_all';
+            });
+
+            // $userType = implode(',', ($userType));
+
+        } else {
+
+            $userType = [];
+        }
+
+        if (isset($_POST['cluster'])) {
+
+            $cluster = array_filter($_POST['cluster'], function ($value) {
+                return $value !== 'select_all';
+            });
+
+            $cluster = implode(',', ($cluster));
+        } else {
+
+            $cluster = [];
+        }
+
+        if (isset($_POST['user'])) {
+
+            $users = array_filter($_POST['user'], function ($value) {
+                return $value !== 'select_all';
+            });
+
+            // $users = implode(',', ($users));
+        } else {
+
+            $users = [];
+        }
+
+
+        if (isset($_POST['partnerType'])) {
+
+            $partnerType = array_filter($_POST['partnerType'], function ($value) {
+                return $value !== 'select_all';
+            });
+            // $partnerType = implode(',', ($partnerType));
+
+        } else {
+
+            $partnerType = [];
+        }
+
+        if (isset($_POST['category'])) {
+
+            $category = array_filter($_POST['category'], function ($value) {
+                return $value !== 'select_all';
+            });
+            // $category = implode(',', ($category));
+
+        } else {
+
+            $category = [];
+        }
+
+        $actionType = isset($_POST['action']) ? $_POST['action'] : null;
+        $purposeType = isset($_POST['purpose']) ? $_POST['purpose'] : 'no';
+        
+        // $actionType = $this->input->post('action');
+        // $purposeType = $this->input->post('purpose');
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $userTypeid = $user['type_id'];
+        $dt = $this->Graph_Model->get_utype($userTypeid);
+        $dep_name = $dt[0]->name;
+
+        $roles = $this->Graph_Model->getRoles($dt[0]->id);
+
+        $partner_type = $this->Graph_Model->getPartnerType();
+
+        $get_cluster = $this->Graph_Model->get_clusters();
+
+        $get_status = $this->Graph_Model->getStatus();
+
+        $get_action = $this->Graph_Model->getAction();
+
+        // $TableData = $this->Graph_Model->ActionWiseTableDetails($uid, $sdate, $edate, $category, $partnerType, $userType, $cluster, $users,  $userTypeid, $action);
+
+        // public function ActionWiseTableDetails($uid,$sdate,$edate,$selected_category,$selected_partnerType,$selected_userType,$selected_cluster,$selected_users,$userTypeid,$action)
+        // $FunnelData = $this->Graph_Model->getGraphDetails($uid, $userTypeid, $sdate, $edate, $userType, $cluster, $partnerType, $category, $users);
+        // var_dump($TableData);die;
+
+        $FunnelData = '';$TableData='';
+        if (!empty($user)) {
+
+            $this->load->view('include/header');
+            $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);
+            $this->load->view('Graphs/OtherUserOnMyFunnelAnalysis', ['uid' => $uid, 'user' => $user, 'sdate' => $sdate, 'edate' => $edate, 'TableData' => $TableData, 'userTypeid' => $userTypeid, 'roles' => $roles, 'partner_type' => $partner_type, 'clusters' => $get_cluster, 'get_action' => $get_action, 'FunnelData' => $FunnelData, 'selected_partnerType' => $partnerType, 'selected_category' => $category, 'selected_cluster' => $cluster, 'Selected_action' => $actionType, 'Selected_purpose' => $purposeType, 'selected_users' => $users, 'Selected_userType' => $userType, 'getStatus' => $get_status]);
+            $this->load->view('include/footer');
         } else {
 
             redirect('Menu/main');

@@ -7727,6 +7727,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         COUNT(case when actiontype_id=10 then 1 end) as j,
         COUNT(case when actiontype_id=11 then 1 end) as k
         FROM tblcallevents  WHERE tblcallevents.user_id!='$uid' and actontaken='yes' and purpose_achieved='yes' and tblcallevents.cid_id IN (Select id from init_call WHERE init_call.mainbd='$uid') and nextCFID!='0' and Month(updateddate)='$m' and Year(updateddate)='$y'");
+        echo $this->db->last_query();die;
         return $query->result();
     }
 
@@ -11483,6 +11484,7 @@ public function get_userForTask($uid,$uyid){
     if($uyid == 2){
 
         $this->db->where('admin_id',$uid);
+
     }elseif ($uyid == 15 ) {
         
         $this->db->where('sales_co',$uid);
@@ -11505,6 +11507,7 @@ public function get_userForTask($uid,$uyid){
 public function getTasks($id,$date){
 
     $this->db->select('tce.id tid');
+    $this->db->select('tce.actiontype_id actiontype_id');
     $this->db->select('tce.cid_id cid_id');
     $this->db->select('tce.autotask autotask');
     $this->db->select('tce.lastCFID lastCFID');
@@ -11522,8 +11525,8 @@ public function getTasks($id,$date){
     $this->db->select('tce.appointmentdatetime plan_date');
     $this->db->select('(tce.initiateddt) start_time', FALSE);
     $this->db->select('(tce.updateddate) end_time', FALSE);
-    $this->db->select('TIMEDIFF(tce.updateddate, tce.initiateddt) time_diff', FALSE);
-    $this->db->select('TIMEDIFF(tce.initiateddt, tce.appointmentdatetime) time_diff1', FALSE);
+    $this->db->select('TIMEDIFF(tce.initiateddt, tce.appointmentdatetime) time_diff_updateVsInitiat', FALSE);
+    $this->db->select('TIMEDIFF(tce.updateddate, tce.initiateddt) time_diff_InitiatVsClose', FALSE);
     $this->db->select('tce.remarks remarks');
     $this->db->select('tce.rremark remark');
     $this->db->select('tce.filter_by filter_used');
@@ -11536,7 +11539,7 @@ public function getTasks($id,$date){
     $this->db->join('status s2', 's2.id = tce.nstatus_id', 'left');
     $this->db->where('user_id', $id);
     $this->db->where('CAST(updateddate AS DATE) =', "'$date'", FALSE);
-    $this->db->where('rremark IS NULL', NULL, FALSE);
+    // $this->db->where('rremark IS NULL', NULL, FALSE);
 
     $query = $this->db->get();
         // echo  $this->db->last_query(); die;
@@ -11644,7 +11647,8 @@ public function get_CompanyStatus($company_id,$id) {
 
 public function getSameStatusSince($id,$date) {
 
-    $this->db->select('t1.cid_id, DATEDIFF(t2.appointmentdatetime, t1.appointmentdatetime) AS days_difference');
+    //COUNT(t1.id) AS Taskcount,
+    $this->db->select('COUNT(t1.id) AS Taskcount, t1.cid_id, DATEDIFF(t2.appointmentdatetime, t1.appointmentdatetime) AS days_difference');
     $this->db->from('tblcallevents t1');
     $this->db->join('tblcallevents t2', 't1.cid_id = t2.cid_id AND t1.status_id != t2.nstatus_id AND t1.appointmentdatetime < t2.appointmentdatetime', 'inner');
     $this->db->where('t1.id', $id);
@@ -11655,7 +11659,36 @@ public function getSameStatusSince($id,$date) {
     
     // Get the query result
     $query = $this->db->get();
-    // echo $this->db->last_query();die;
+    // echo $this->db->last_query();
+    return $query->row();
+}
+
+
+public function getMoMData($id) {
+
+    // echo $id;die;
+    // $this->db->select('md.*');
+    $this->db->select('bm.cphoto');
+    $this->db->select('bm.startm start_time');
+    $this->db->select('bm.slatitude start_lat');
+    $this->db->select('bm.slongitude start_long');
+    $this->db->select('bm.closem end_time');
+    $this->db->select('bm.clatitude end_lat');
+    $this->db->select('bm.clongitude end_long');
+    $this->db->select('tce.mtype momType');
+    $this->db->select('md.partner mompartner');
+    $this->db->select('md.rpmmom momremark');
+    // $this->db->from('bm.cphoto');
+    
+
+    $this->db->from('mom_data md');
+    $this->db->where('md.tid', $id);
+
+    $this->db->join('tblcallevents tce', 'md.tid = tce.id', 'left');
+    $this->db->join('barginmeeting bm', 'bm.tid = tce.lastCFID', 'left');
+    $query = $this->db->get();
+
+    // echo $this->db->last_query();
     return $query->row();
 }
 

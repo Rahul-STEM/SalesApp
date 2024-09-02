@@ -141,13 +141,85 @@ class Management extends Menu {
         $sdate->modify('-1 day');
         $previousDate = $sdate->format('Y-m-d');
         $cdate = '2024-07-20';
-        $dayData = $this->Management_model->CheckingDayManage($this->uid,$cdate);
+        $dayData = $this->Management_model->CheckingDayManage_New($this->uid,$cdate);
+
         // var_dump($dayData);die;
+        $RequestApprovals = $this->Management_model->RequestApprovals($this->uid,$cdate);
+
+        $ApprovedRequests = $this->Management_model->ApprovedRequests($this->uid,$cdate);
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $typeID =  (int) $user['type_id'];
+        $currentHour = (int) (new DateTime())->format('H:mm');
+        // var_dump($RequestApprovals);die;
+        // $currentHour = 10;
         if(!empty($this->user)){
-            $this->load->view($this->dep_name.'/CheckingDayManagement_New',['uid'=>$this->uid,'user'=>$this->user,'dayData'=>$dayData,'cdate'=>$cdate,'previousDate'=>$previousDate]);
+            // && $typeID != 2
+            // var_dump($currentHour,$typeID);die;
+            if($currentHour >= 11 && $typeID != 2) {
+
+                if (sizeof($ApprovedRequests) > 0) {
+                    
+                    $this->load->view($this->dep_name.'/CheckingDayManagement_New',['uid'=>$this->uid,'user'=>$this->user,'dayData'=>$dayData,'cdate'=>$cdate,'previousDate'=>$previousDate]);
+
+                }else{
+
+                    $this->load->view($this->dep_name.'/RequestForDayCheckApproval',['uid'=>$this->uid,'user'=>$this->user,'cdate'=>$cdate,'RequestApprovals'=>$RequestApprovals]);
+                }
+            }else{
+
+                $this->load->view($this->dep_name.'/CheckingDayManagement_New',['uid'=>$this->uid,'user'=>$this->user,'dayData'=>$dayData,'cdate'=>$cdate,'previousDate'=>$previousDate]);
+            }
         }else{
             redirect('Menu/main');
         }
+    }
+
+
+    public function RequestForDayManagementApproval(){
+
+        $request = $this->input->post('remark');
+
+        $dayData = $this->Management_model->RequestForDayManagementApproval_Model($this->uid,$request);
+
+    }
+
+
+    public function ApproveDayCheckRequest(){
+
+
+        $getRequests = $this->Management_model->getRequests($this->uid);
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $typeID =  $user['type_id'];
+        // var_dump($getRequests);die;
+        if(!empty($this->user)){
+
+            $this->load->view($this->dep_name.'/ApproveDayCheckRequest',['uid'=>$this->uid,'user'=>$this->user,'getRequests'=>$getRequests]);
+
+        }else{
+
+            redirect('Menu/main');
+        }
+    }
+
+    public function ApproveRequest() {
+
+        $id = $_POST['id'];
+        $action = $_POST['action'];
+
+        if ($action == 'approve') {
+            $action = 'Approved';
+        }
+        if ($action == 'reject') {
+            $action = 'Rejected';
+        }
+
+        $result = $this->Management_model->ApproveRequest($id,$action,$this->uid);
     }
 
     public function checkdayswithStarNew(){

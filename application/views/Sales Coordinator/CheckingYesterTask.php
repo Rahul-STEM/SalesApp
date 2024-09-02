@@ -109,51 +109,52 @@
                                   </thead>
                                   <tbody>
                                     <?php 
-                                      $i=1;$ab==0;
+                                      $i=1;
                                       
                                      
                                       
-                                      foreach($dayData as $md){
-                                      
-                                          $bd = $md->user_id;
-                                      
-                                          $bdname = $this->Menu_model->get_userbyid($bd);
-                                      
-                                          $tid = $md->id;
-                                      
-                                          $ltid = $md->ltid;
-                                      
-                                          $inid  = $md->cid_id;
-                                      
-                                          $inid = $this->Menu_model->get_initbyid($inid);
-                                      
-                                          $mtd = $this->Menu_model->get_ccitblall($tid);
-                                      
-                                          $lsid = $mtd[0]->status_id;
-                                      
-                                          $csid = $mtd[0]->nstatus_id;
-                                      
-                                          $s1 = $this->Menu_model->get_statusbyid($lsid);
-                                      
-                                          if($s1){$s1=$s1[0]->name;}else{$s1='';}
-                                      
-                                          $s2 = $this->Menu_model->get_statusbyid($csid);
-                                      
-                                          if($s2){$s2=$s2[0]->name;}else{$s2='';}
-                                      
-                                          if($ltid!=''){  
-                                      
-                                          $mltd = $this->Menu_model->get_ccitblall($ltid);
-                                      
-                                          $ltime = $mltd[0]->updateddate;
-                                      
-                                          $ctime = $mtd[0]->updateddate;
-                                      
-                                          $nltime = date('d-m-Y  h:i A', strtotime($ltime));
-                                      
-                                          $nctime = date('d-m-Y  h:i A', strtotime($ctime));
-                                      
-                                          }else{$mltd='';$nltime='';$nctime='';$ltime='';$ctime='';}
+                                    foreach($dayData as $md){
+                                        
+                                        // var_dump($md);die;
+                                        $bd = $md->user_id;
+                                    
+                                        $bdname = $this->Menu_model->get_userbyid($bd);
+                                    
+                                        $tid = $md->id;
+                                    
+                                        $ltid = $md->ltid;
+                                    
+                                        $inid  = $md->cid_id;
+                                    
+                                        $inid = $this->Menu_model->get_initbyid($inid);
+                                    
+                                        $mtd = $this->Menu_model->get_ccitblall($tid);
+                                    
+                                        $lsid = $mtd[0]->status_id;
+                                    
+                                        $csid = $mtd[0]->nstatus_id;
+                                    
+                                        $s1 = $this->Menu_model->get_statusbyid($lsid);
+                                    
+                                        if($s1){$s1=$s1[0]->name;}else{$s1='';}
+                                    
+                                        $s2 = $this->Menu_model->get_statusbyid($csid);
+                                    
+                                        if($s2){$s2=$s2[0]->name;}else{$s2='';}
+                                    
+                                        if($ltid!=''){  
+                                    
+                                        $mltd = $this->Menu_model->get_ccitblall($ltid);
+                                    
+                                        $ltime = $mltd[0]->updateddate;
+                                    
+                                        $ctime = $mtd[0]->updateddate;
+                                    
+                                        $nltime = date('d-m-Y  h:i A', strtotime($ltime));
+                                    
+                                        $nctime = date('d-m-Y  h:i A', strtotime($ctime));
+                                    
+                                        }else{$mltd='';$nltime='';$nctime='';$ltime='';$ctime='';}
                                       
                                       ?>
                                     <tr>

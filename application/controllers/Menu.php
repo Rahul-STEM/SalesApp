@@ -8856,7 +8856,7 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $tdate=date('Y-m-d');
         $taskList = array();
-        // $tdate = '2024-07-19';
+        $tdate = '2024-07-19';
         if(isset($_POST['userId'])){
 
             $userId = $_POST['userId'];
@@ -8867,6 +8867,7 @@ class Menu extends CI_Controller {
             $userId = '';
         }
 
+        // var_dump($taskList);die;
         if(!empty($user)){
             $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId]);
         }else{
@@ -8937,6 +8938,16 @@ class Menu extends CI_Controller {
         $result = $this->Menu_model->updateTaskCheckRemark($remark,$starID);
     }
 
+    public function getMoMData(){
+
+        $taskID = $this->input->post('taskID');
+        $this->load->model('Menu_model');   
+        // var_dump($taskID);die;
+        $result = $this->Menu_model->getMoMData($taskID);
+
+        echo json_encode($result);
+
+    }
     // New TaskCheck <=========================================== END ==================================>
 
     // New Dashboard Changes <======= START =======>

@@ -105,5 +105,17 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	    }
 	}
 
+	if (!function_exists('get_OtherUserOnMyFunnelGraph')) {
+	    function get_OtherUserOnMyFunnelGraph($uid,$month,$financialYear,$sdate,$edate,$selected_category,$selected_partnerType,$Selected_userType,$selected_cluster,$selected_users,$userTypeid,$Selected_action,$Selected_purpose){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Graph_model');
+	        $DataSet = $CI->Graph_model->get_OtherUserOnMyFunnelGraph($uid,$month,$financialYear,$sdate,$edate,$selected_category,$selected_partnerType,$Selected_userType,$selected_cluster,$selected_users,$userTypeid,$Selected_action,$Selected_purpose);
+            
+	        return $DataSet;
+	    }
+	}
+	
+
 
 ?>

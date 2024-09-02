@@ -112,6 +112,40 @@
             font-size:20px;
     }
     .rate{border-bottom-right-radius: 12px;border-bottom-left-radius: 12px;}.rating {display: flex;flex-direction: row-reverse;justify-content: left }.rating>input {display: none }.rating>label {position: relative;width: 1em;font-size: 30px;font-weight: 300;color: #f39c12;cursor: pointer }.rating>label::before {content: "\2605";position: absolute;opacity: 0 }.rating>label:hover:before, .rating>label:hover~label:before {opacity: 1 !important }.rating>input:checked~label:before {opacity: 1 }.rating:hover>input:checked~label:before {opacity: 0.4 }
+    /* Star Rating CSS */
+.star-rating {
+    display: flex;
+    direction: row-reverse;
+    font-size: 1.5em;
+    justify-content: center;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    color: #ddd;
+    cursor: pointer;
+    margin: 0;
+}
+
+.star-rating input:checked ~ label {
+    color: #f5b301;
+}
+
+.star-rating label:before {
+    content: '★';
+    display: inline-block;
+}
+
+.star-rating input:checked ~ label:before {
+    content: '★';
+}
+
+.star-rating input:checked ~ label ~ label:before {
+    content: '☆';
+}
 
 </style>
 
@@ -190,9 +224,10 @@
                                         <th>Update Date-time</th>
                                         <th>Status</th>
                                         <th>Same Status Since</th>
-                                        <!-- <th>No of Task Since Status Change</th> -->
+                                        <th>No of Task Since Status Change</th>
                                         <th>Remark</th>
                                         <th>Next Action Planned</th>
+                                        <!-- <th>MoM Details</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -206,13 +241,13 @@
                                         if (!empty($getSameStatusSince)) {
 
                                             $SameStatusSince_1 = $getSameStatusSince->days_difference;
-                                            // $NoOfTaskSinceStatusChange = $getSameStatusSince->count;
-
+                                            $NoOfTaskSinceStatusChange = $getSameStatusSince->Taskcount;
                                         }else{
+
                                             $SameStatusSince_1 = '0';
-                                            // $NoOfTaskSinceStatusChange = '0';
+                                            $NoOfTaskSinceStatusChange = '0';
                                         }
-                                        
+
                                         if ($task->nextCFID != 0) {
                                             
                                             $getNextActionDetails= $this->Menu_model->getActionDetails($task->nextCFID);
@@ -261,13 +296,98 @@
                                     <tr>
                                         <!-- <td><?= $i; ?></td> -->
                                         <td><?= $task->compname; ?></td>
-                                        <td><?= $SinglefilterUsedFinal; ?></td>
+                                        <td><?= $SinglefilterUsedFinal; ?>
+                                            <br><hr>
+                                            <p class="question">Was Correct filters used..??</p>
+
+                                            <?php 
+
+                                                $chkStarRating = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($task->user_id,'Was Correct filters used',$task->tid);
+                                                // var_dump($chkStarRating);die;
+                                                if(sizeof($chkStarRating) == 0){ ?>
+
+                                                    <div class="rating" data-question="Was Correct filters used" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>" >
+                                                        <input type="radio" name="rat8_<?= $task->user_id; ?>" value="5" id="40_<?= $task->tid; ?>"><label for="40_<?= $task->tid; ?>">☆</label>
+                                                        <input type="radio" name="rat8_<?= $task->user_id; ?>" value="4" id="39_<?= $task->tid; ?>"><label for="39_<?= $task->tid; ?>">☆</label>
+                                                        <input type="radio" name="rat8_<?= $task->user_id; ?>" value="3" id="38_<?= $task->tid; ?>"><label for="38_<?= $task->tid; ?>">☆</label>
+                                                        <input type="radio" name="rat8_<?= $task->user_id; ?>" value="2" id="37_<?= $task->tid; ?>"><label for="37_<?= $task->tid; ?>">☆</label>
+                                                        <input type="radio" name="rat8_<?= $task->user_id; ?>" value="1" id="36_<?= $task->tid; ?>"><label for="36_<?= $task->tid; ?>">☆</label>
+                                                    </div>
+
+                                            <?php }else{
+                                                foreach($chkStarRating as $star){
+                                                    // var_dump($chkStarRating);die;
+                                                    $starRating = $star->star;
+                                                    $starRemark = $star->remarks;
+                                                    
+                                                }
+                                                echo "<hr>";
+                                                echo "<span class='text-dark font-weight-normal'><b>Total Star Given</b> :</span>";
+                                                echo "<div class='star-rating'>";
+                                                $totalStars = 5;
+                                                for ($i = 0; $i < $starRating; $i++) {
+                                                    echo "<i class='fas fa-star'></i>"; // filled star
+                                                }
+                                                for ($i = $starRating; $i < $totalStars; $i++) {
+                                                    echo "<i class='far fa-star'></i>"; // empty star
+                                                }
+                                                echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
+                                            }  ?>
+                                        </td>
                                         <td><?= $task->action_name; ?>
                                             <!-- <br> -->
-                                            <b><?= $OGTaskType; ?></b>
+                                            <b><?= $OGTaskType; ?></b> <hr>
+
+                                            <?php
+                                            
+                                                if ($task->actiontype_id == 6 ) { ?>
+                                                    
+                                                    <button type="button" class="btn btn-primary" onclick="OpenModal(<?=$task->tid?>)">View MoM Details</button>
+                                                
+                                        <?php   }  ?>
                                         </td>
-                                        <td>Action Taken - <b><?= $task->actontaken; ?></b>  <br> <hr> Purpose Achieved - <b> <?= $task->purpose_achieved; ?></b> </td>
-                                        <td data-question="Was Task Planned on time" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>"><?= $task->plan_date; ?>
+                                        <td >
+                                            Action Taken - <b><?= $task->actontaken; ?></b>  <br> <hr> Purpose Achieved - <b> <?= $task->purpose_achieved; ?></b> 
+                                            
+                                            <br><hr>
+                                            <p class="question">Was purpose achieved for the task..??</p>
+
+                                            <?php 
+
+                                                $chkStarRating = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($task->user_id,'Was purpose achieved for the task',$task->tid);
+                                                // var_dump($chkStarRating);die;
+                                                if(sizeof($chkStarRating) == 0){ ?>
+
+                                                    <div class="rating" data-question="Was purpose achieved for the task" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>">
+                                                        <input type="radio" name="rat9_<?= $task->user_id; ?>" value="5" id="45_<?= $task->tid;?>"><label for="45_<?= $task->tid; ?>">☆</label>
+                                                        <input type="radio" name="rat9_<?= $task->user_id; ?>" value="4" id="44_<?= $task->tid;?>"><label for="44_<?= $task->tid; ?>">☆</label>
+                                                        <input type="radio" name="rat9_<?= $task->user_id; ?>" value="3" id="43_<?= $task->tid;?>"><label for="43_<?= $task->tid;?>">☆</label>
+                                                        <input type="radio" name="rat9_<?= $task->user_id; ?>" value="2" id="42_<?= $task->tid;?>"><label for="42_<?= $task->tid; ?>">☆</label>
+                                                        <input type="radio" name="rat9_<?= $task->user_id; ?>" value="1" id="41_<?= $task->tid;?>"><label for="41_<?= $task->tid;?>">☆</label>
+                                                    </div>
+
+                                            <?php }else{
+                                                foreach($chkStarRating as $star){
+                                                    // var_dump($chkStarRating);die;
+                                                    $starRating = $star->star;
+                                                    $starRemark = $star->remarks;
+                                                    
+                                                }
+                                                echo "<hr>";
+                                                echo "<span class='text-dark font-weight-normal'><b>Total Star Given</b> :</span>";
+                                                echo "<div class='star-rating'>";
+                                                $totalStars = 5;
+                                                for ($i = 0; $i < $starRating; $i++) {
+                                                    echo "<i class='fas fa-star'></i>"; // filled star
+                                                }
+                                                for ($i = $starRating; $i < $totalStars; $i++) {
+                                                    echo "<i class='far fa-star'></i>"; // empty star
+                                                }
+                                                echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
+                                            }  ?>
+                                        
+                                        </td>
+                                        <td ><?= $task->plan_date; ?>
                                             <br><br><hr>
                                             <p class="question">Was Task Planned on time..??</p>
                                             <?php 
@@ -276,12 +396,12 @@
                                                 // var_dump($chkStarRating);die;
                                                 if(sizeof($chkStarRating) == 0){ ?>
 
-                                                    <div class="rating">
-                                                        <input type="radio" name="rat1_<?= $task->user_id; ?>" value="5" id="5_<?= $task->user_id; ?>"><label for="5_<?= $task->user_id; ?>">☆</label>
-                                                        <input type="radio" name="rat1_<?= $task->user_id; ?>" value="4" id="4_<?= $task->user_id; ?>"><label for="4_<?= $task->user_id; ?>">☆</label>
-                                                        <input type="radio" name="rat1_<?= $task->user_id; ?>" value="3" id="3_<?= $task->user_id; ?>"><label for="3_<?= $task->user_id; ?>">☆</label>
-                                                        <input type="radio" name="rat1_<?= $task->user_id; ?>" value="2" id="2_<?= $task->user_id; ?>"><label for="2_<?= $task->user_id; ?>">☆</label>
-                                                        <input type="radio" name="rat1_<?= $task->user_id; ?>" value="1" id="1_<?= $task->user_id; ?>"><label for="1_<?= $task->user_id; ?>">☆</label>
+                                                    <div class="rating" data-question="Was Task Planned on time" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>">
+                                                        <input type="radio" name="rat1_<?= $task->user_id; ?>" value="5" id="5_<?= $task->tid; ?>"><label for="5_<?= $task->tid; ?>">☆</label>
+                                                        <input type="radio" name="rat1_<?= $task->user_id; ?>" value="4" id="4_<?= $task->tid; ?>"><label for="4_<?= $task->tid; ?>">☆</label>
+                                                        <input type="radio" name="rat1_<?= $task->user_id; ?>" value="3" id="3_<?= $task->tid; ?>"><label for="3_<?= $task->tid;?>">☆</label>
+                                                        <input type="radio" name="rat1_<?= $task->user_id; ?>" value="2" id="2_<?= $task->tid; ?>"><label for="2_<?= $task->tid; ?>">☆</label>
+                                                        <input type="radio" name="rat1_<?= $task->user_id; ?>" value="1" id="1_<?= $task->tid; ?>"><label for="1_<?= $task->tid; ?>">☆</label>
                                                     </div>
 
                                             <?php }else{
@@ -306,9 +426,9 @@
                                             
                                             <?php ?>
                                         </td>
-                                        <td data-question="Was Task Initiated on time" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>"><?= $task->start_time; ?>
+                                        <td ><?= $task->start_time; ?>
                                             <br><br>
-                                            Time taken from planning to initiate : <b> <?= $task->time_diff_InitiatVsClose; ?></b>
+                                            Time taken from planning to initiate : <b> <?= $task->time_diff_updateVsInitiat; ?></b>
                                         <br><br><hr>
                                             <p class="question">Was Task Initiated on time..??</p>
                                         <?php 
@@ -316,12 +436,12 @@
                                             // var_dump($chkStarRating);die;
                                             if(sizeof($chkStarRating) == 0){ ?>
 
-                                                <div class="rating">
-                                                    <input type="radio" name="rat2_" value="5" id="10_<?= $task->user_id; ?>"><label for="10_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat2_" value="4" id="9_<?= $task->user_id; ?>"><label for="9_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat2_" value="3" id="8_<?= $task->user_id; ?>"><label for="8_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat2_" value="2" id="7_<?= $task->user_id; ?>"><label for="7_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat2_" value="1" id="6_<?= $task->user_id; ?>"><label for="6_<?= $task->user_id; ?>">☆</label>
+                                                <div class="rating" data-question="Was Task Initiated on time" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>">
+                                                    <input type="radio" name="rat2_" value="5" id="10_<?=$task->tid; ?>"><label for="10_<?= $task->tid; ?>">☆</label>
+                                                    <input type="radio" name="rat2_" value="4" id="9_<?= $task->tid; ?>"><label for="9_<?= $task->tid; ?>">☆</label>
+                                                    <input type="radio" name="rat2_" value="3" id="8_<?= $task->tid; ?>"><label for="8_<?= $task->tid; ?>">☆</label>
+                                                    <input type="radio" name="rat2_" value="2" id="7_<?= $task->tid;?>"><label for="7_<?= $task->tid; ?>">☆</label>
+                                                    <input type="radio" name="rat2_" value="1" id="6_<?= $task->tid; ?>"><label for="6_<?= $task->tid;?>">☆</label>
                                                 </div>
 
                                         <?php }else{
@@ -344,9 +464,9 @@
                                             echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
                                         }  ?>
                                         </td>
-                                        <td data-question="Was Task Updated on time" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>"><?= $task->end_time; ?>
+                                        <td ><?= $task->end_time; ?>
                                         <br><br>
-                                            Time taken from initiating to update : <b> <?= $task->time_diff_updateVsInitiat; ?></b>
+                                            Time taken from initiating to update : <b> <?= $task->time_diff_InitiatVsClose; ?></b>
                                             
                                             <br><hr>
 
@@ -357,12 +477,12 @@
                                             $chkStarRating = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($task->user_id,'Was Task Updated on time',$task->tid);
 
                                             if(sizeof($chkStarRating) == 0){ ?> 
-                                                <div class="rating">
-                                                    <input type="radio" name="rat3_<?= $task->user_id; ?>" value="5" id="15_<?= $task->user_id; ?>"><label for="15_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat3_<?= $task->user_id; ?>" value="4" id="14_<?= $task->user_id; ?>"><label for="14_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat3_<?= $task->user_id; ?>" value="3" id="13_<?= $task->user_id; ?>"><label for="13_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat3_<?= $task->user_id; ?>" value="2" id="12_<?= $task->user_id; ?>"><label for="12_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat3_<?= $task->user_id; ?>" value="1" id="11_<?= $task->user_id; ?>"><label for="11_<?= $task->user_id; ?>">☆</label>
+                                                <div class="rating" data-question="Was Task Updated on time" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>">
+                                                    <input type="radio" name="rat3_<?= $task->user_id; ?>" value="5" id="15_<?=$task->tid; ?>"><label for="15_<?=  $task->tid; ?>">☆</label>
+                                                    <input type="radio" name="rat3_<?= $task->user_id; ?>" value="4" id="14_<?=$task->tid; ?>"><label for="14_<?=  $task->tid; ?>">☆</label>
+                                                    <input type="radio" name="rat3_<?= $task->user_id; ?>" value="3" id="13_<?=$task->tid; ?>"><label for="13_<?=  $task->tid; ?>">☆</label>
+                                                    <input type="radio" name="rat3_<?= $task->user_id; ?>" value="2" id="12_<?=$task->tid; ?>"><label for="12_<?=  $task->tid; ?>">☆</label>
+                                                    <input type="radio" name="rat3_<?= $task->user_id; ?>" value="1" id="11_<?=$task->tid; ?>"><label for="11_<?=  $task->tid; ?>">☆</label>
                                                 </div> 
                                             <?php }else{
 
@@ -386,7 +506,7 @@
                                             }  ?>
 
                                         </td>
-                                        <td data-question="status change was correct" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>"><?=$task->old_status?> to <?=$task->new_status?>
+                                        <td ><?=$task->old_status?> to <?=$task->new_status?>
                                             <br><hr>
 
                                             <p class="question">Status change was correct..??</p>
@@ -395,12 +515,12 @@
                                             $chkStarRating = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($task->user_id,'status change was correct',$task->tid);
 
                                             if(sizeof($chkStarRating) == 0){ ?> 
-                                                <div class="rating">
-                                                    <input type="radio" name="rat5_<?= $task->user_id; ?>" value="5" id="25_<?= $task->user_id; ?>"><label for="25_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat5_<?= $task->user_id; ?>" value="4" id="24_<?= $task->user_id; ?>"><label for="24_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat5_<?= $task->user_id; ?>" value="3" id="23_<?= $task->user_id; ?>"><label for="23_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat5_<?= $task->user_id; ?>" value="2" id="22_<?= $task->user_id; ?>"><label for="22_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat5_<?= $task->user_id; ?>" value="1" id="21_<?= $task->user_id; ?>"><label for="21_<?= $task->user_id; ?>">☆</label>
+                                                <div class="rating" data-question="status change was correct" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>">
+                                                    <input type="radio" name="rat5_<?= $task->user_id; ?>" value="5" id="25_<?= $task->tid; ?>"><label for="25_<?= $task->tid;  ?>">☆</label>
+                                                    <input type="radio" name="rat5_<?= $task->user_id; ?>" value="4" id="24_<?= $task->tid; ?>"><label for="24_<?= $task->tid;  ?>">☆</label>
+                                                    <input type="radio" name="rat5_<?= $task->user_id; ?>" value="3" id="23_<?= $task->tid; ?>"><label for="23_<?= $task->tid;  ?>">☆</label>
+                                                    <input type="radio" name="rat5_<?= $task->user_id; ?>" value="2" id="22_<?= $task->tid;  ?>"><label for="22_<?= $task->tid; ?>">☆</label>
+                                                    <input type="radio" name="rat5_<?= $task->user_id; ?>" value="1" id="21_<?= $task->tid; ?>"><label for="21_<?=$task->tid; ?>">☆</label>
                                                 </div>
                                                 <?php }else{
                                                         foreach($chkStarRating as $star){
@@ -423,8 +543,8 @@
                                                     }  ?>
                                         </td>
                                         <td><?=$SameStatusSince_1 .' Days';?></td>
-                                        <!-- <td><?=$NoOfTaskSinceStatusChange ;?></td> -->
-                                        <td data-question="correct remark entered" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>"><?= $task->remarks; ?>
+                                        <td><?=$NoOfTaskSinceStatusChange ;?></td>
+                                        <td ><?= $task->remarks; ?>
                                             <br><hr>
 
                                             <p class="question">Was correct remark entered..??</p>
@@ -432,12 +552,12 @@
                                             <?php 
                                             $chkStarRating = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($task->user_id,'status change was correct',$task->tid);
                                             if(sizeof($chkStarRating) == 0){ ?> 
-                                                <div class="rating">
-                                                    <input type="radio" name="rat6_<?= $task->user_id; ?>" value="5" id="30_<?= $task->user_id; ?>"><label for="30_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat6_<?= $task->user_id; ?>" value="4" id="29_<?= $task->user_id; ?>"><label for="29_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat6_<?= $task->user_id; ?>" value="3" id="28_<?= $task->user_id; ?>"><label for="28_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat6_<?= $task->user_id; ?>" value="2" id="27_<?= $task->user_id; ?>"><label for="27_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat6_<?= $task->user_id; ?>" value="1" id="26_<?= $task->user_id; ?>"><label for="26_<?= $task->user_id; ?>">☆</label>
+                                                <div class="rating" data-question="correct remark entered" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>">
+                                                    <input type="radio" name="rat6_<?= $task->user_id; ?>" value="5" id="30_<?= $task->tid; ?>"><label for="30_<?= $task->tid;  ?>">☆</label>
+                                                    <input type="radio" name="rat6_<?= $task->user_id; ?>" value="4" id="29_<?= $task->tid;  ?>"><label for="29_<?= $task->tid;  ?>">☆</label>
+                                                    <input type="radio" name="rat6_<?= $task->user_id; ?>" value="3" id="28_<?= $task->tid;  ?>"><label for="28_<?= $task->tid;  ?>">☆</label>
+                                                    <input type="radio" name="rat6_<?= $task->user_id; ?>" value="2" id="27_<?= $task->tid;  ?>"><label for="27_<?= $task->tid;  ?>">☆</label>
+                                                    <input type="radio" name="rat6_<?= $task->user_id; ?>" value="1" id="26_<?= $task->tid;  ?>"><label for="26_<?= $task->tid; ?>">☆</label>
                                                 </div>
                                                 <?php }else{
                                                         foreach($chkStarRating as $star){
@@ -459,7 +579,7 @@
                                                         echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
                                                     }  ?>
                                         </td>
-                                        <td data-question="correct action created" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>">
+                                        <td>
                                             <?=$nextAction;?> <b><?=$TaskType;?></b>
 
                                             <br><hr>
@@ -468,10 +588,10 @@
                                             <?php 
                                             $chkStarRating = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($task->user_id,'correct action created',$task->tid);
                                             if(sizeof($chkStarRating) == 0){ ?> 
-                                                <div class="rating">
-                                                    <input type="radio" name="rat7_<?= $task->user_id; ?>" value="5" id="35_<?= $task->user_id; ?>"><label for="35_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat7_<?= $task->user_id; ?>" value="4" id="34_<?= $task->user_id; ?>"><label for="34_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat7_<?= $task->user_id; ?>" value="3" id="33_<?= $task->user_id; ?>"><label for="33_<?= $task->user_id; ?>">☆</label>
+                                                <div class="rating" data-question="correct action created" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>">
+                                                    <input type="radio" name="rat7_<?= $task->user_id; ?>" value="5" id="35_<?= $task->tid; ?>"><label for="35_<?= $task->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat7_<?= $task->user_id; ?>" value="4" id="34_<?= $task->tid; ?>"><label for="34_<?= $task->user_id; ?>">☆</label>
+                                                    <input type="radio" name="rat7_<?= $task->user_id; ?>" value="3" id="33_<?= $task->tid; ?>"><label for="33_<?= $task->user_id; ?>">☆</label>
                                                     <input type="radio" name="rat7_<?= $task->user_id; ?>" value="2" id="32_<?= $task->user_id; ?>"><label for="32_<?= $task->user_id; ?>">☆</label>
                                                     <input type="radio" name="rat7_<?= $task->user_id; ?>" value="1" id="31_<?= $task->user_id; ?>"><label for="31_<?= $task->user_id; ?>">☆</label>
                                                 </div>
@@ -495,6 +615,7 @@
                                                         echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
                                                     }  ?>
                                         </td>
+                                        <!-- <td></td> -->
                                     </tr>
                                 <?php $i++; } ?>
                                     
@@ -522,6 +643,86 @@
                     <form >
                         <input type="hidden" name="starID" id="starID">
                         <textarea class="form-control" name="remark" id="remark" placeholder="Remark" required="true"></textarea>
+                    </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="submitReview()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="MoMModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title">MoM Details</h5>
+                    </div>
+                    <div class="modal-body">
+                    <form>
+                        <hr>
+                        <input type="hidden" name="taskID" id="taskID" value="">
+                        
+                        <p><strong>Start Time:</strong> <span id="modalStartTime"></span></p>
+
+                        <p><b> Did the meeting started on right time..??</b></p>
+                        <hr>
+                        <strong>Start Location:</strong> 
+                        <div class="img-thumbnail" style="height: 150px">
+                            <iframe id="startMap" width="150px"  height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
+                        </div>
+                        <p><b>Was meeting start location correct..??</b> </p>  
+                        <hr>
+                        <!-- <br> -->
+                        <p>
+                            <strong>End Time:</strong> 
+                            <span id="modalEndTime"></span>
+
+                        </p>
+                        <p><b>Was meeting start location correct..??</b> </p>  
+                        <hr>
+                        <strong>End Location:</strong> 
+                        <div class="img-thumbnail" style="height: 150px">
+                            <iframe id="endMap"  width="150px"  height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
+                        </div>
+
+                        <p><b>Was meeting end location correct..??</b> </p>  
+                        <hr>
+
+                        <p>
+                            <strong>Photo:</strong> 
+                            <img id="modalPhoto" src="" alt="Photo" class="img-fluid">
+                        </p>
+
+                        <p><b>Was company photo is right..??</b> </p>
+                        <hr>
+                        <p><strong>Type:</strong> <span id="modalMomType"></span></p>
+                        
+                        <p><b>..??</b> </p>
+                        <hr>
+                        <p><strong>Partner Type:</strong> <span id="modalPartnerType"></span></p>
+                        
+                        <p><b>Was partner type correct..??</b> </p>
+                        <hr>
+                        <p><strong>BD Potential:</strong> <span id=""></span></p>
+                        
+                        <p><b>BD potential marked correctly..??</b> </p>
+                        <!-- <hr> -->
+                        <p><strong>Rating:</strong></p>
+                            <div class="star-rating">
+                                <input type="radio" id="star5" name="rating" value="5" />
+                                <label for="star5" title="5 stars"></label>
+                                <input type="radio" id="star4" name="rating" value="4" />
+                                <label for="star4" title="4 stars"></label>
+                                <input type="radio" id="star3" name="rating" value="3" />
+                                <label for="star3" title="3 stars"></label>
+                                <input type="radio" id="star2" name="rating" value="2" />
+                                <label for="star2" title="2 stars"></label>
+                                <input type="radio" id="star1" name="rating" value="1" />
+                                <label for="star1" title="1 star"></label>
+                            </div>
+                            <!-- <hr> -->
                     </form>
                     </div>
                     <div class="modal-footer">
@@ -640,17 +841,26 @@ $('[id^="giveRating"]').on('click', function() {
 <script>
     $(document).ready(function(){
 
-        $(".rating input").on("change", function(){
+        $(".rating input").on("click", function() {
 
-            var $td = $(this).closest('td');
+            var $rating = $(this);
+            var inputId = $rating.attr('id');
 
-            $(this).parent().hide();
+            // Extract the number after the underscore in the ID (e.g., "100087" from "7_100087")
+            var extractedId = inputId.split('_')[1];
 
-            var ratingId = $(this).attr('id');
-            var ratingValue = $(this).val();
-            var question = $td.data('question');
-            var userId = $td.data('userid');
-            var taskId = $td.data('taskid');
+            // Get other data attributes
+            var taskId = $rating.closest('.rating').data('taskid');
+            var userId = $rating.closest('.rating').data('userid');
+            var question = $rating.closest('.rating').data('question');
+            var ratingValue = $rating.val();
+
+            // Display the extracted ID (100087 in this case)
+            // console.log("Extracted ID: " + extractedId);
+            // alert("Task ID: " + taskId + "\nUser ID: " + userId + "\nExtracted ID: " + extractedId + "\nRating Value: " + ratingValue);
+            
+            // Prevent the default action
+            // return false;
 
             $.ajax({
             url: '<?=base_url();?>Menu/TaskCheckStarNew',
@@ -694,6 +904,52 @@ $('[id^="giveRating"]').on('click', function() {
     });
 </script>
 <script>
+    function OpenModal(id){
+
+        document.getElementById('taskID').value = id;
+
+        $.ajax({
+            url: '<?=base_url();?>Menu/getMoMData',
+            type: 'POST',
+            data: {
+                taskID: id,
+                },
+                success: function(response) {
+
+                    // console.log('Response:', response); 
+                    var data = JSON.parse(response);
+
+        // Update modal content
+                    document.getElementById('modalPhoto').src = data.cphoto; // Set image source
+                    document.getElementById('modalStartTime').textContent = data.start_time;
+                    document.getElementById('modalEndTime').textContent = data.end_time;
+                    document.getElementById('modalMomType').textContent = data.momType || 'N/A';
+                    document.getElementById('modalEndTime').textContent = data.end_time;
+                    document.getElementById('modalPartnerType').textContent = data.mompartner;
+                    
+
+                    var startLat = data.start_lat;
+                    var startLong = data.start_long;
+                    var endLat = data.end_lat;
+                    var endLong = data.end_long;
+
+                    document.getElementById('startMap').src = `https://maps.google.com/?q=${startLat},${startLong}&t=k&z=13&ie=UTF8&iwloc=&output=embed`;
+                    
+
+                    // Update the end location map and link
+
+                    document.getElementById('endMap').src = `https://maps.google.com/?q=${endLat},${endLong}&t=k&z=13&ie=UTF8&iwloc=&output=embed`;
+
+                    $('#MoMModal').modal('show');
+                },
+                error: function() {
+                    alert("There was an error submitting the rating.");
+                }
+            });
+
+    }
+</script>
+<script>
     function submitReview(){
 
         var remark = document.getElementById("remark").value;
@@ -730,5 +986,60 @@ $('[id^="giveRating"]').on('click', function() {
 
     }
 </script>
+<script>
+$(document).ready(function() {
+    // Handle star click
+    $('.star').on('click', function() {
+        var value = $(this).data('value');
+        var container = $(this).closest('.star-rating');
+
+        container.find('.star').removeClass('rated');
+        container.find('.star').each(function() {
+            if ($(this).data('value') <= value) {
+                $(this).addClass('rated');
+            }
+        });
+
+        // Set the value of the hidden input
+        var hiddenInput = container.siblings('input[type="hidden"]');
+        hiddenInput.val(value);
+    });
+
+    // Optional: Add hover effect
+    $('.star').on('mouseover', function() {
+        var value = $(this).data('value');
+        var container = $(this).closest('.star-rating');
+
+        container.find('.star').each(function() {
+            if ($(this).data('value') <= value) {
+                $(this).addClass('rated');
+            } else {
+                $(this).removeClass('rated');
+            }
+        });
+    }).on('mouseout', function() {
+        $(this).closest('.star-rating').find('.star').removeClass('rated');
+    });
+
+    // Function to handle form submission
+    window.submitReview = function() {
+        $.ajax({
+            url: 'path/to/your_controller/save', // Update with your controller method URL
+            type: 'POST',
+            data: $('#ratingForm').serialize(), // Serialize form data
+            success: function(response) {
+                // Handle success response
+                alert('Rating submitted successfully!');
+                $('#MoMModal').modal('hide'); // Hide the modal
+            },
+            error: function(xhr, status, error) {
+                // Handle error response
+                alert('An error occurred while submitting the rating.');
+            }
+        });
+    };
+});
+</script>
+
 </body>
 </html>

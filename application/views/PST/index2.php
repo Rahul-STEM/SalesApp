@@ -240,7 +240,7 @@
                             <li class="nav-item">
                               <a class="nav-link" id="custom-tabs-four-taskcheck-tab" data-toggle="pill" href="#custom-tabs-four-taskcheck" role="tab" aria-controls="custom-tabs-taskcheck" aria-selected="false">
                                 <?php 
-                                $gettodaysmom = $this->Menu_model->geTodaysMOMCheckTask($uid,$tdate);
+                                $gettodaysmom = $this->Menu_model->gePendingMOMCheckTask($uid,$tdate);
                                 $gettodaysmomcnt = sizeof($gettodaysmom);
                                 ?>
                               Task Check <span class="badge badge-success"><?=$gettodaysmomcnt;?></span>
@@ -263,6 +263,7 @@
                             $time = $tt->appointmentdatetime;
                             $reminder = $tt->reminder;
                             $time = date('h:i a', strtotime($time));
+                            if($tt->actiontype_id != 18){
                             ?>
                           <button id="add_act<?=$atai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;width: fit-content; padding: 10px;">
                                   <span class="mr-3 align-items-center">
@@ -279,7 +280,7 @@
                                   </span>
                             <b><?php if($reminder>0){echo 'Reminder for This Task';}?></b>
                             </button>
-                            <?php $atai++; }?>
+                            <?php } $atai++; }?>
                       </div>
                   </div>
                 </div>

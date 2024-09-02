@@ -17419,6 +17419,12 @@ class Menu extends CI_Controller {
         $plandate = $_POST['pdate'];
         $plandatet = $_POST['pdate'];
 
+        if(isset($_POST['userworkfrom'])){
+            $userworkfrom = $_POST['userworkfrom'];
+        }else{
+            $userworkfrom = '';
+        }
+
         $this->load->library('session');
 
         $date = date('Y-m-d H:i:s');
@@ -17444,36 +17450,6 @@ class Menu extends CI_Controller {
 
         $datetime = new DateTime($plandate);
 
-        // $getPendingAutoTask  =  $this->db->query("SELECT * FROM `tblcallevents`
-        // WHERE autotask = 1 AND user_id IN (100194) AND (
-        //     (auto_plan = 0) AND
-        //     (plan = 1 AND purpose_achieved = 'no') OR
-        //     (plan = 1 AND lastCFID != '') OR
-        //     (plan = 1 AND purpose_achieved = '')
-        // )");
-
-        // $getPendingAutoTask  =  $this->db->query("SELECT * FROM `tblcallevents` WHERE user_id = $uid AND ( ( (plan = 1 AND autotask = 1 AND auto_plan = 0 AND purpose_achieved = 'no') OR (purpose_achieved = 'no') OR (purpose_achieved = '')))");
-
-        // $getPendingAutoTask  =  $this->db->query("SELECT * FROM `tblcallevents` WHERE user_id = $uid AND (nextCFID = 0 AND lastCFID = 0 AND plan = 1 AND autotask = 1 AND auto_plan = 0");
-
-        // $getPendingAutoTask  =  $this->db->query("SELECT * FROM `tblcallevents` WHERE user_id = $uid AND (lastCFID='0' AND nextCFID = '0' AND autotask = 1 AND auto_plan = 0)");
-
-        // echo "SELECT * FROM `tblcallevents` WHERE user_id = $uid AND (lastCFID='0' AND nextCFID = '0' AND autotask = 1 AND auto_plan = 0)";
-        // die;
-
-        // $today = date('Y-m-d');
-        // $query = "
-        //     SELECT *
-        //     FROM `tblcallevents`
-        //     WHERE autotask = 1
-        //     AND user_id IN ($uid)
-        //     AND (
-        //         auto_plan = 1
-        //         AND purpose_achieved = 'no'
-        //         AND DATE(appointmentdatetime) != '$today'
-        //     )
-        // ";
-
         $start_tttpft = $_POST['start_tttpft'];
         $end_tttpft = $_POST['end_tttpft'];
 
@@ -17487,11 +17463,16 @@ class Menu extends CI_Controller {
                 $this->session->set_flashdata('success_message',' AutoTask Time is Less Than 90 Minute only !!');
                 redirect('Menu/TaskPlanner/'.date("Y-m-d"));
             }else{
-                $this->db->query("INSERT INTO `autotask_time`(`user_id`, `date`, `stime`, `etime`, `start_tttpft`, `end_tttpft`) VALUES ('$uid','$plandatet','$startautotasktime','$endautotasktime','$start_tttpft','$end_tttpft')");
+                $this->db->query("INSERT INTO `autotask_time`(`user_id`, `date`, `stime`, `etime`, `start_tttpft`, `end_tttpft`,`userworkfrom`) VALUES ('$uid','$plandatet','$startautotasktime','$endautotasktime','$start_tttpft','$end_tttpft','$userworkfrom')");
                 $inid = $this->db->insert_id();
             }
             $this->session->set_flashdata('success_message',' Nice job! You Have Planned For Time For Doing AutoTask');
-            redirect('Menu/TaskPlanner/'.date("Y-m-d"));
+            
+            if($plandatet == date("Y-m-d")){
+                redirect('Menu/TaskPlanner/'.date("Y-m-d"));
+            }else{
+                redirect('Menu/TaskPlanner/'.$plandatet);
+            }
 
         }else{
             $this->session->set_flashdata('success_message',' You are Allready Planned');
@@ -20045,6 +20026,148 @@ public function GetMeetCompanyInfo(){
     if($mitinfocnt > 0){
         $mitinfojson = json_encode($mitinfo);
         echo $mitinfojson;
+    }
+}
+
+
+public function GetCompanyLastStatus(){
+    
+    $user   = $this->session->userdata('user');
+    $uid    = $user['user_id'];
+    $uyid   =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $mom_id = $this->input->post('mom_id');
+    $momdata = $this->Menu_model->getRequestMOMBYID($mom_id);
+    $init_cmpid = $momdata[0]->init_cmpid;
+    $initdata = $this->Menu_model->get_cmpbyinid($init_cmpid);
+    $lstatus = $initdata[0]->lstatus;
+    
+    $lstatusdata = $this->Menu_model->get_statusbyid($lstatus);
+    echo "<option value='".$lstatus."'>".$lstatusdata[0]->name."</option>";
+   
+}
+
+
+public function ConfirmReminder($id){
+    
+    $user   = $this->session->userdata('user');
+    $uid    = $user['user_id'];
+    $uyid   =  $user['type_id'];
+    $this->load->model('Menu_model');
+
+    $message    = 'Reminder was successfully accepted.';
+    $remdata    = $this->Menu_model->getReminderData($id);
+    $rem_type   = $remdata[0]->type;
+
+    $this->Menu_model->ConfirmRemindertoUser($id,$uid,$message);
+
+    $this->load->library('session');
+    $this->session->set_flashdata('success_message',$message);
+
+    if($rem_type == 1){
+        redirect('Menu/YesterDayDaysCloseRequest');
+    }elseif($rem_type == 2){
+        redirect('Menu/TodaysTaskApprovelRequest');
+    }elseif($rem_type == 3){
+        redirect('Menu/SpecialRequestForLeaveSomeTimeData');
+    }elseif($rem_type == 4){
+        redirect('Menu/PlannerTaskApprovelPage');
+    }else{
+        redirect('Menu/dashboard');
+    }
+}
+
+
+public function CheckuserDayAccardingPlanner(){
+    
+    $user   = $this->session->userdata('user');
+    $uid    = $user['user_id'];
+    $uyid   =  $user['type_id'];
+    $this->load->model('Menu_model');
+    
+    $wffo = $this->input->post('wffo');
+
+    $usdata1 = $this->Menu_model->userworkfrombyid($wffo);
+    $wffomsg = $usdata1[0]->TYPE;
+
+    $cdate = date("Y-m-d");
+
+    $uime =$this->db->select('*') ->from('autotask_time') ->where('date', $cdate) ->where('user_id', $uid) ->order_by('id', 'DESC') ->get() ->result();
+    $uimecnt = sizeof($uime);
+    if($uimecnt > 0){
+        $userworkfrom = $uime[0]->userworkfrom;
+        if($wffo !== $userworkfrom){
+    
+            $usdata = $this->Menu_model->userworkfrombyid($userworkfrom);
+            $usdatamsg = $usdata[0]->TYPE;
+            echo $usdatamsg;
+        }
+    }
+}
+
+public function SendRequestForDayStartChnage(){
+    
+    $user   = $this->session->userdata('user');
+    $uid    = $user['user_id'];
+    $uyid   =  $user['type_id'];
+    $this->load->model('Menu_model');
+
+    $message            = $this->input->post('message');
+    $user_want_start    = $this->input->post('user_want_start');
+
+    $data = array(
+        'user_id'     => $uid,
+        'date'        => date("Y-m-d H:i:s"),
+        'message'     => $message,
+        'user_want_start' => $user_want_start
+    );
+    
+    $this->db->insert('change_user_day_request', $data);
+
+    $this->load->library('session');
+
+    $this->session->set_flashdata('success_message','Request to change the start your Days Sended Successfully !');
+    redirect('Menu/DayManagement');
+}
+
+
+public function GetTodaysTeamDayChnageRequestData(){
+   
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $daychangedata = $this->Menu_model->GetTodaysTeamDayChnageRequest($uid);
+
+    if(!empty($user)){
+        $this->load->view($dep_name.'/GetTodaysTeamDayChnageRequestData',['uid'=>$uid,'user'=>$user,'daychangedata'=>$daychangedata]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+
+
+
+public function TodayDayStartapprove($id,$type){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    if($type == 'Approve'){
+        $status = 1;
+        $reamrks = "Approved By ".$user['name'];
+
+        $query =  $this->db->query("UPDATE `change_user_day_request` SET `apr_status`='$status',`apr_by`='$uid',`amessage`='$reamrks' WHERE id = $id");
+
+        $this->load->library('session');
+        $this->session->set_flashdata('success_message','Request to change the start your Days Approved  Successfully !');
+
+        redirect("Menu/GetTodaysTeamDayChnageRequestData");
+
+    }else{
+        redirect('Menu/main');
     }
 }
 

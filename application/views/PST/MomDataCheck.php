@@ -409,7 +409,32 @@
                   </div>
 
 
+                  <div class="modal fade" id="exampleModalCenterdataNoRP" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header bg-info text-center">
+                          <h5 class="modal-title" id="exampleModalLongTitle">Change RP to No RP Meeting</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form action="<?=base_url();?>Management/Change_RP_To_No_RP_ACHECKNew" method="post" >
+                            <input type="hidden" id="mom_id_norp" value="" name="mom_id">
+                            <input type="hidden" value="" id="ntid_norp" name="ntid">
+                            <input type="hidden" value="" id="tid_norp" name="tid">
+                           <lable>Status Change : </lable>
+                            <select class="form-control" id="changestatus" name="changestatus">
+                              </select>
 
+                            <div class="form-group text-center">
+                              <button type="submit" class="btn btn-success mt-2">RP to No RP Convert</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
 
 
@@ -508,27 +533,32 @@
 function RPtoNoRPConvert(nid,id,mom_id,val){
 
               let text = "Do You Want to Change RP to No RP Meeting.";
+             
                 if (confirm(text) == true) {
                   text = "You pressed OK!";
-      
                   var hideval = "#rPtoNoRPConvert";
+
+                  $('#exampleModalCenterdataNoRP').modal('show');
+                  
+                  $('#mom_id_norp').val(mom_id);
+                  $('#ntid_norp').val(nid);
+                  $('#tid_norp').val(id);
+
                   $.ajax({
-                    url:'<?=base_url();?>Management/Change_RP_To_No_RP_ACHECK',
+                    url:'<?=base_url();?>Management/GetCompanyLastStatus',
                     type: "POST",
                     data: {
-                    ntid: nid,
-                    tid: id,
                     mom_id: mom_id
                     },
                     cache: false,
                     success: function a(result){
-                      console.log(result);
-                      if(result ==1){
-                        $(hideval).hide();
-                        window.location.href = "<?=base_url();?>Menu/Dashboard";
-                      }else{
-                        alert('Something Wrong !');
-                      }
+                      $('#changestatus').html(result);
+                      // if(result ==1){
+                      //   $(hideval).hide();
+                      //   window.location.href = "<?=base_url();?>Menu/Dashboard";
+                      // }else{
+                      //   alert('Something Wrong !');
+                      // }
                     }
                     });
                 } else {

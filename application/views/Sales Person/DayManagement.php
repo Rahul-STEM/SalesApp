@@ -376,7 +376,7 @@
         <?php }else{ ?>
         <?php if($do==0){?>
         <div class="row p-3">
-          <div class="col-sm col-md-6 col-lg-6 m-auto">
+          <div class="col-sm col-md-12 col-lg-12 m-auto">
             <div class="card card-primary card-outline">
               <div class="card-body box-profile">
                 <h3 class="text-center">Start Your Day</h3>
@@ -390,10 +390,12 @@
                     <input type="hidden" name="ustart" value="<?=date('Y-d-m H:i:s')?>">
                     <p>You Are Starting Day at <b><?=date('H:i:s');?></b><br><br>
                     <div class="mb-4">
-                      <select class="form-control" name="wffo" style="width:400px" >
-                        <option value="1">Work From Office</option>
-                        <option value="2">Work From Field</option>
-                        <option value="3">Work From Field+Office</option>
+                      <select class="form-control" name="wffo" id="wffo" style="width:400px">
+                      <option value="">Start Your Days</option>
+                        <?php $userdfrom = $this->Menu_model->userworkfrom() ?>
+                            <?php foreach($userdfrom as $udfrom){ ?>
+                            <option value="<?= $udfrom->ID; ?>"><?= $udfrom->TYPE; ?></option>
+                            <?php } ?>
                       </select>
                     </div>
                     <div class="mb-4 d-flex justify-content-center">
@@ -414,14 +416,123 @@
                       <iframe style="width:100%;height:200px;" id="mylocation" src="" frameborder="0" style="border:0" allowfullscreen></iframe>
                     </div>
                   </div>
-                  <div class="form-group text-center">
+                  <p class="form-group text-center">
                     <button type="submit" class="btn btn-success" id="submitButton" >Start Your Day</button>
+                   <center>
+                   <p id="goodmessage" class="text-success"></p>
+                   </center>
                   </div>
                 </form>
+
+
+                <?php 
+                $geturdata = $this->Menu_model->change_user_day_request($uid);
+                $geturdatacnt = sizeof($geturdata);
+                if($geturdatacnt > 0){ ?>
+<hr>
+<div class="card p-5">
+<h5 class="bg-info p-2 text-center">Your Request to change the start your Days</h5>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Want To Start</th>
+            <th>Message</th>
+            <th>Approved By</th>
+            <th>Approval Status</th>
+            <th>Admin Message</th>  
+        </tr>
+    </thead>
+    <tbody>
+        <?php 
+        $i=1;
+        foreach ($geturdata as $row): ?>
+        <tr>
+            <td><?php echo $i; ?></td>
+            <td><?php 
+             $udetail = $this->Menu_model->get_userbyid($row->user_id);
+             $username = $udetail[0]->name;
+             echo $username;
+            ?></td>
+            <td><?php echo $row->date; ?></td>
+            <td><?php 
+            echo $this->Menu_model->userworkfrombyid($row->user_want_start)[0]->TYPE;
+           ?></td>
+            <td><?php echo $row->message; ?></td>
+            <td><?php 
+            if($row->apr_by == 0){
+              echo "<span class='p-1 bg-warning'>Pending</span>";
+            }else{
+              $udetail = $this->Menu_model->get_userbyid($row->apr_by);
+              $admidname = $udetail[0]->name;
+              echo $admidname;
+            }
+            ?></td>
+            <td><?php 
+             if($row->apr_status == 0){
+              echo "<span class='p-1 bg-warning'>Pending</span>";
+            }elseif($row->apr_status == 1){
+              echo "<span class='p-1 bg-success'>Approved</span>";
+            }elseif($row->apr_status == 2){
+              echo "<span class='p-1 bg-danger'>Reject</span>";
+            }
+            ?></td>
+            <td><?php 
+            if($row->amessage == ''){
+              echo "<span class='p-1 bg-warning'>Pending</span>";
+            }else{
+              echo $row->amessage; 
+            }
+            ?></td>
+        </tr>
+        <?php $i++; endforeach; ?>
+    </tbody>
+</table>
+</div>
+               <?php } ?>
+
+
               </div>
             </div>
           </div>
         </div>
+
+
+        <div class="modal fade" id="exampleModalReminder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header bg-info text-center">
+                <h5 class="modal-title" id="exampleModalLabel">Create a request to change the start your Days</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                <p id="changemessage" class="text-danger text-center" ></p>
+                <hr>
+                <form action="<?=base_url();?>Management/SendRequestForDayStartChnage" method="post">
+                <input type="hidden" id="user_want_start" name="user_want_start" class="form-control d-none" />
+                <div class="form-group">
+                <label>Write down why you want to change : </label>
+                <textarea class="form-control" name="message" rows="3"></textarea>
+                </div>
+                <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">Send Request</button>
+                </div>
+                </form>
+                </div>
+
+                </div>
+                </div>
+                </div>
+
+
+
+
     </section>
     <?php } if($do==1){?>
     <section class="content">
@@ -593,6 +704,52 @@
             $('#end_tttpft').val(endTttPftHours + ':' + endTttPftMinutes);
         }
     });
+
+    $('#wffo').on('change', function() {
+              var wffo = $('#wffo').val();
+       
+              $.ajax({
+                url:'<?=base_url();?>Menu/CheckuserDayAccardingPlanner',
+                type: "POST",
+                data: {
+                  wffo: wffo,
+                },
+                cache: false,
+                success: function a(result){
+                  if(result !==''){
+                    var recnt = <?= sizeof($geturdata); ?>;
+                    var recntapr = <?= empty($geturdata[0]->apr_status) ? 0 : $geturdata[0]->apr_status; ?>;
+                   
+                    if(recnt == 0){
+                    var selectedText = $('#wffo option:selected').text();
+                    $("#user_want_start").val(wffo);
+                    var result ='You planed to start their day : <b>'+ result+'</b>';
+                    var selectedText = ' But You want to start : <b>'+selectedText+'</b>';
+                    var message = result+selectedText;
+                    $("#changemessage").html(message);
+                    $('#submitButton').prop('disabled', true);
+                    $('#exampleModalReminder').modal('show');
+                    }else{
+                      if(recntapr == 1){
+                        $('#submitButton').prop('disabled', false);
+                      }else{
+                        $('#submitButton').prop('disabled', true);
+                        alert("Please Wait !, While Your Request was Approved.");
+                      }
+                    }
+                  }else{
+                    // goodmessaget("Good Plan As Your Days");
+                    $('#goodmessage').text("* Good Plan As Your Days According to Planner");
+                    $('#submitButton').prop('disabled', false);
+                  }
+                }
+                });
+          });
+
+    // wffo
+
+
+
 
       });
     </script>

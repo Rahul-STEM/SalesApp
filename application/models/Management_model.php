@@ -1174,7 +1174,6 @@ public function UpdateMOMAterCheck_DataTo_NORP($mom_id,$uaid,$tid,$ntid) {
     $this->db->where('id', $ntid);
     $this->db->update('tblcallevents', $dataup);
     
-
     $data = [
         'approved_status' => $approved_status,
         'approved_by' => $uaid,
@@ -1195,6 +1194,17 @@ public function UpdateMOMAterCheck_DataTo_NORP($mom_id,$uaid,$tid,$ntid) {
     }
     
 }
+
+public function StoreReminder($rtype,$rmessage,$user_id){
+    $data = [
+        'type' => $rtype,
+        'message' => $rmessage,
+        'user_id' => $user_id
+    ];
+    $this->db->insert('reminder', $data);
+}
+
+
 
 
 }

@@ -7237,24 +7237,24 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
             $this->db->query("INSERT INTO user_day(user_id, ustart, usimg, slatitude, slongitude,wffo) VALUES ('$user_id','$date','$flink','$lat','$lng','$wffo')");
             $id =  $this->db->insert_id();
 
-            $this->db->query("UPDATE tblcallevents SET hmtplan=hmtplan + 1 initiateddt=null WHERE nextCFID=0 and cast(appointmentdatetime as DATE)<'$da' and remarks!='Company Created' and user_id='$user_id'");
+            // $this->db->query("UPDATE tblcallevents SET hmtplan=hmtplan + 1 initiateddt=null WHERE nextCFID=0 and cast(appointmentdatetime as DATE)<'$da' and remarks!='Company Created' and user_id='$user_id'");
 
             $this->db->query("INSERT INTO notify(uid,type,sms) VALUES ('$user_id','1','You Are Started Your Day at $date')");
 
-            $query=$this->db->query("SELECT * FROM barginmeeting where company_name='Unknown' and startm is null and user_id='$user_id' and cast(storedt as DATE)<'$da'");
-            $data = $query->result();
-            foreach($data as $da){
-                $did = $da->id;
-                $cid = $da->cid;
-                $ccid = $da->ccid;
-                $inid = $da->inid;
-                $tid = $da->tid;
-                $this->db->query("DELETE FROM tblcallevents WHERE id='$tid'");
-                $this->db->query("DELETE FROM init_call WHERE id='$inid'");
-                $this->db->query("DELETE FROM company_contact_master WHERE id='$ccid'");
-                $this->db->query("DELETE FROM company_master WHERE id='$cid'");
-                $this->db->query("DELETE FROM barginmeeting WHERE id='$did'");
-            }
+            // $query=$this->db->query("SELECT * FROM barginmeeting where company_name='Unknown' and startm is null and user_id='$user_id' and cast(storedt as DATE)<'$da'");
+            // $data = $query->result();
+            // foreach($data as $da){
+            //     $did = $da->id;
+            //     $cid = $da->cid;
+            //     $ccid = $da->ccid;
+            //     $inid = $da->inid;
+            //     $tid = $da->tid;
+            //     $this->db->query("DELETE FROM tblcallevents WHERE id='$tid'");
+            //     $this->db->query("DELETE FROM init_call WHERE id='$inid'");
+            //     $this->db->query("DELETE FROM company_contact_master WHERE id='$ccid'");
+            //     $this->db->query("DELETE FROM company_master WHERE id='$cid'");
+            //     $this->db->query("DELETE FROM barginmeeting WHERE id='$did'");
+            // }
             return $id;
         }
 
@@ -12412,6 +12412,10 @@ public function geTodaysMOMCheckTask($uid,$tdate){
     return $query->result();
 }
 
+public function gePendingMOMCheckTask($uid,$tdate){
+    $query=$this->db->query("SELECT tblcallevents.*,status.name,action.name aname,status.color,status.clr,init_call.cstatus cstatus,(SELECT name from status WHERE id=cstatus) csname, (select init_call.cmpid_id from init_call WHERE id=tblcallevents.cid_id) as cmpid_id,(select company_master.compname from company_master WHERE id=cmpid_id) as compname, (select company_master.id from company_master WHERE id=cmpid_id) as cid FROM tblcallevents left JOIN action ON action.id=tblcallevents.actiontype_id left JOIN init_call ON init_call.id=tblcallevents.cid_id left JOIN status ON status.id=init_call.cstatus WHERE user_id='$uid' and DATE(appointmentdatetime) < CURDATE() and nextCFID='0' and autotask =1 and plan=1 AND actiontype_id = 18 OR actiontype_id = 19");
+    return $query->result();
+}
 public function getRequestMOMBYID($id){
     $query=$this->db->query("SELECT * FROM `mom_data` WHERE `id` ='$id'");
     return $query->result();
@@ -12599,5 +12603,84 @@ public function getMeetinfoByid($mid){
     $query=$this->db->query("SELECT * FROM `barginmeeting` WHERE `id` ='$mid'");
     return $query->result();
 }
+
+public function GetTodaysOurReminder($uid){
+    $query=$this->db->query("SELECT * FROM `reminder` WHERE user_id ='$uid' AND DATE(created_at) = CURDATE() ORDER BY CAST(created_at AS time)");
+return $query->result();
+}
+
+
+
+
+
+public function GetTodaysTeamReminder($uid){
+
+    $utype = $this->Menu_model->get_userbyid($uid);
+    $utype = $utype[0]->type_id;
+    if($utype == 13){
+        $text = "user_details.aadmin = '$uid' and user_details.type_id=3";
+    }elseif($utype == 4){
+        $text = "user_details.pst_co = '$uid' and user_details.type_id=13";
+    }elseif($utype == 15){
+        $text = "user_details.sales_co = '$uid' and user_details.type_id= 4";
+    }else{
+        $text = "user_details.admin_id = '$uid'";
+    }
+
+    $query=$this->db->query("SELECT reminder.*,user_details.name FROM `reminder` LEFT JOIN `user_details` ON reminder.user_id = user_details.user_id WHERE $text AND DATE(reminder.created_at) = CURDATE() AND reminder.status = 0 ORDER BY CAST(reminder.created_at AS time)");
+return $query->result();
+}
+
+public function remindermessage(){
+    $query=$this->db->query("SELECT * FROM `reminder_message`");
+    return $query->result();
+}
+
+public function remindermessagebyid($id){
+    $query=$this->db->query("SELECT * FROM `reminder_message` where id = '$id'");
+    return $query->result();
+}
+
+public function getReminderData($id){
+    $query=$this->db->query("SELECT * FROM `reminder` where id ='$id'");
+    return $query->result();
+}
+public function userworkfrom(){
+    $query=$this->db->query("SELECT * FROM `userworkfrom`");
+    return $query->result();
+}
+
+public function userworkfrombyid($id){
+    $query=$this->db->query("SELECT * FROM `userworkfrom` where id ='$id'");
+    return $query->result();
+}
+
+public function change_user_day_request($uid){
+    $query=$this->db->query("SELECT * FROM `change_user_day_request` where user_id ='$uid' AND DATE(date) = CURDATE()");
+    return $query->result();
+}
+
+public function ConfirmRemindertoUser($id,$uid,$message){
+    $query=$this->db->query("UPDATE `reminder` SET `acknowledge_by`='$uid',`acknowledge_message`='$message',`status`='1' WHERE id = '$id'");
+}
+
+public function GetTodaysTeamDayChnageRequest($uid){
+
+    $utype = $this->Menu_model->get_userbyid($uid);
+    $utype = $utype[0]->type_id;
+    if($utype == 13){
+        $text = "user_details.aadmin = '$uid' and user_details.type_id=3";
+    }elseif($utype == 4){
+        $text = "user_details.pst_co = '$uid' and user_details.type_id=13";
+    }elseif($utype == 15){
+        $text = "user_details.sales_co = '$uid' and user_details.type_id= 4";
+    }else{
+        $text = "user_details.admin_id = '$uid'";
+    }
+
+    $query=$this->db->query("SELECT cudr.*, user_details.name FROM change_user_day_request AS cudr LEFT JOIN user_details ON cudr.user_id = user_details.user_id WHERE $text AND DATE(cudr.date) = CURDATE() ");
+    return $query->result();
+}
+
 
 }

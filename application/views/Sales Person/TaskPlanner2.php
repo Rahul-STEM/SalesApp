@@ -287,7 +287,9 @@ if($type_id == 3){
               </div>
               <div class="col-md-4">
                 <form class="setpaldate" action="<?=base_url();?>Menu/TaskPlanner2/<?=$adate ?>" method="post">
-                  <?php $next_date = date('Y-m-d', strtotime('+1 day', strtotime($adate))); ?>
+                  <?php 
+                  $adatess = date("Y-m-d");
+                  $next_date = date('Y-m-d', strtotime('+1 day', strtotime($adatess))); ?>
                   <input type="date" class="form-control m-2" name="adate" value="<?=$adate?>" required="" id="plandate"  min="<?= date('Y-m-d') ?>" max="<?= $next_date ?>">
                   <input type="submit" class="btn btn-warning m-2" value="Set Date">
                 </form>
@@ -325,6 +327,7 @@ if($type_id == 3){
                       <input type="hidden" class="form-control" id="ttype" name="ttype" Value="Auto Task" required="">
                       <input type="hidden" class="form-control" name="pdate" value="<?=$adate?>" required="">
                       <input type="hidden" name="ntuid" value="<?=$uid?>" required="">
+                     
                       <div class="form-group">
                         <label for="start-time">Enter Start Time</label>
                         <input type="time" id="start-time" name="startautotasktime" class="form-control" required>
@@ -333,6 +336,19 @@ if($type_id == 3){
                         <label for="end-time">Enter End Time</label>
                         <input type="time" id="end-time" name="endautotasktime" class="form-control" required>
                       </div>
+                      <hr>
+                      <?php 
+                      if($adate !== date("Y-m-d")){ 
+                       $userdfrom = $this->Menu_model->userworkfrom() ?>
+                        <div class="form-group">
+                          <label>Select Your Tomorrow  Day</label>
+                          <select name="userworkfrom" class="form-control">
+                              <?php foreach($userdfrom as $udfrom){ ?>
+                            <option value="<?= $udfrom->ID; ?>"><?= $udfrom->TYPE; ?></option>
+                            <?php } ?>
+                          </select>
+                        </div>
+                     <?php } ?>
                       <hr>
                       <marquee class="p-2 mt-1" width="100%"  onMouseOver="this.stop()" onMouseOut="this.start()" behavior="left" bgcolor="pink">
                   <h6> Todays is the Time to plan for tomorrow. Its maximum of 1 hour. After Auto Task</h6>
@@ -5195,6 +5211,7 @@ $("#example4").DataTable({
 "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 10,
 "buttons": ["excel", "pdf"]
 }).buttons().container().appendTo('#example4_wrapper .col-md-6:eq(0)');
+
 
     </script>
   </body>

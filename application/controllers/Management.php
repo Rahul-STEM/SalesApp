@@ -797,6 +797,28 @@ public function Change_RP_To_No_RP_ACHECK(){
 }
 
 
+public function Change_RP_To_No_RP_ACHECKNew(){
+    $mom_id = $this->input->post('mom_id');
+    $tid    = $this->input->post('tid');
+    $ntid   = $this->input->post('ntid');
+    $changestatus  = $this->input->post('changestatus');
+    $this->Menu_model->change_norp($tid);
+    $return = $this->Management_model->UpdateMOMAterCheck_DataTo_NORP($mom_id,$this->uid,$tid,$ntid);
+    $this->session->set_flashdata('success_message', 'MOM Convert RP to No RP Meeting Successfully');
+    redirect('Menu/Dashboard');
+}
+
+public function SendReminder(){
+  
+    $rtype       = $this->input->post('reminder_type');
+    $rmessage    = $this->input->post('reminder_message');
+
+    $this->Management_model->StoreReminder($rtype,$rmessage,$this->uid);
+
+    $this->session->set_flashdata('success_message', 'Reminder Send Successfully !');
+    redirect('Menu/Dashboard');
+}
+
 
 
 }

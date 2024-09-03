@@ -1887,7 +1887,11 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                   </div>
                 <?php  } ?> 
                 <div class="card p-3">
-
+                <div class="card p-3">
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenterspclchngreq">
+                      <b>Create a Special Request For Plan Change </b>
+                  </button>
+                </div>
               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalReminder">
                 Create A Reminder
               </button>
@@ -1986,6 +1990,46 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
     </div>
   </div>
 </div>
+
+   <!-- Modal -->
+   <div class="modal fade" id="exampleModalCenterspclchngreq" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                    <form method="post" action="<?=base_url();?>Menu/SpecialRequestForLeave">
+                    <div class="was-validated">
+                      <div class="modal-content">
+                        <div class="modal-header" styel="background: #fbff00;" >
+                          <h5 class="modal-title" id="exampleModalLongTitle">Special Request For Plan Change</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body" style="background: darkslategrey;color: white;" >
+                        <input type="hidden" id="pdate" value="<?=$tdate?>" name="pdate" required=""> 
+                          <lable>Todays Start Time : </lable>
+                        <input type="time" id="meetingtimerequest1" name="start_meeting_time" min="10:00" max="19:00" class="form-control" required=""> 
+                          
+                        <lable>Todays End Time : </lable>
+                        <input type="time" id="meetingtimerequest2" name="end_meeting_time" min="10:00" max="19:00" class="form-control" required=""> 
+                        <!-- <hr>
+                        <div id="taskcounttable">
+                        </div>
+                        <hr> 
+                         <lable>Tomorrow Start Time : </lable>
+                        <input type="time" id="meetingtimerequest3" name="start_tommorow_task_time" min="10:00" max="19:00" class="form-control" required=""> 
+                        <hr> -->
+                        <lable>Purpose For Plan Change : </lable>
+                          <textarea name="purpose" class="form-control" placeholder="Please Enter Purpose" required="" ></textarea>
+                        </div>
+                        <div class="modal-footer text-center" style="background: #2f4f4f;display: inline;" >
+                            <button class="btn btn-primary m-3" type="submit">Send Request For Approval</button>
+                        </div>
+                      </div>
+                      </div>
+                        </form>
+                    </div>
+                  </div>
+
+
                 
           </div>
         </div>

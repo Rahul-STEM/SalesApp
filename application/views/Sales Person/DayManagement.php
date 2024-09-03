@@ -49,6 +49,7 @@
       marquee.p-2.mt-1 {
       box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
       }
+      #goodmessage{color:green;}
     </style>
 
 <script>
@@ -419,7 +420,7 @@
                   <p class="form-group text-center">
                     <button type="submit" class="btn btn-success" id="submitButton" >Start Your Day</button>
                    <center>
-                   <p id="goodmessage" class="text-success"></p>
+                   <p id="goodmessage"></p>
                    </center>
                   </div>
                 </form>
@@ -707,7 +708,6 @@
 
     $('#wffo').on('change', function() {
               var wffo = $('#wffo').val();
-       
               $.ajax({
                 url:'<?=base_url();?>Menu/CheckuserDayAccardingPlanner',
                 type: "POST",
@@ -719,7 +719,6 @@
                   if(result !==''){
                     var recnt = <?= sizeof($geturdata); ?>;
                     var recntapr = <?= empty($geturdata[0]->apr_status) ? 0 : $geturdata[0]->apr_status; ?>;
-                   
                     if(recnt == 0){
                     var selectedText = $('#wffo option:selected').text();
                     $("#user_want_start").val(wffo);
@@ -730,27 +729,24 @@
                     $('#submitButton').prop('disabled', true);
                     $('#exampleModalReminder').modal('show');
                     }else{
-                      if(recntapr == 1){
-                        $('#submitButton').prop('disabled', false);
-                      }else{
+                      if(recntapr == 0 || recntapr ==''){
                         $('#submitButton').prop('disabled', true);
-                        alert("Please Wait !, While Your Request was Approved.");
+                        $('#goodmessage').text("* Please Wait !, While Your Request was Approved.").css('color', 'red');
+                      }else if(recntapr == 1){
+                        $('#goodmessage').text("* You are able to change your day because your manager has approved your day change request.").css('color', 'green');
+                        $('#submitButton').prop('disabled', false);
+                      }else if(recntapr == 2){
+                        $('#submitButton').prop('disabled', true);
+                        $('#goodmessage').text("* You are not able to change your day because your manager has reject your day change request.").css('color', 'red');
                       }
                     }
                   }else{
-                    // goodmessaget("Good Plan As Your Days");
-                    $('#goodmessage').text("* Good Plan As Your Days According to Planner");
+                    $('#goodmessage').text("* Good Plan As Your Days According to Planner.").css('color', 'green');
                     $('#submitButton').prop('disabled', false);
                   }
                 }
                 });
           });
-
-    // wffo
-
-
-
-
       });
     </script>
     <!-- /.row (main row) -->

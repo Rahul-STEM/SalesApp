@@ -9640,7 +9640,7 @@ WHERE plan = '1'  and nextCFID='0' and actiontype_id='$aid' and status_id='$stid
     }
     public function get_PendingTask($uid){
 
-        $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND nextCFID = 0 and plan =1 AND DATE(appointmentdatetime) = CURDATE() AND appointmentdatetime != '0000-00-00 00:00:00'");
+        $query=$this->db->query("SELECT * FROM tblcallevents WHERE assignedto_id = '$uid' AND actiontype_id != '' AND nextCFID = 0 and autotask =0 and plan =1 AND DATE(appointmentdatetime) = CURDATE() AND appointmentdatetime != '0000-00-00 00:00:00'");
 
         return $query->result();
     }
@@ -11874,8 +11874,8 @@ public function get_userbyids($uids){
      return $query->result();
 }
 
-public function add_SpecialRequestForLeave($uid,$pdate,$stime,$etime,$purpose,$sttt){
-    $this->db->query("INSERT INTO `special_request_for_leave`(`user_id`, `date`, `stime`, `etime`, `prupose`,`start_tommorow`) VALUES ('$uid','$pdate','$stime','$etime','$purpose','$sttt')");
+public function add_SpecialRequestForLeave($uid,$pdate,$stime,$etime,$purpose){
+    $this->db->query("INSERT INTO `special_request_for_leave`(`user_id`, `date`, `stime`, `etime`, `prupose`) VALUES ('$uid','$pdate','$stime','$etime','$purpose')");
 }
 
 public function get_SpecialRequestForLeave($uid){
@@ -11966,7 +11966,7 @@ public function TodaysTotalsPlannerSessioninMinute($uid){
 
 public function TotalTaskBetweenTime($uid,$tdate,$time1,$time2){
   
-    $query = $this->db->query("SELECT * FROM `tblcallevents` WHERE user_id = '$uid' AND (cast(appointmentdatetime as DATE) = '$tdate' AND DATE(updated_at) = '$tdate') AND actiontype_id != '' and nextCFID = 0 AND nextCFID = 0 AND plan = 1 AND TIME(updated_at) BETWEEN '$time1' AND '$time2'");
+    $query = $this->db->query("SELECT * FROM `tblcallevents` WHERE user_id = '$uid' AND (cast(appointmentdatetime as DATE) = '$tdate' AND DATE(updated_at) = '$tdate') AND actiontype_id != '' AND plan = 1 AND TIME(updated_at) BETWEEN '$time1' AND '$time2'");
 
     // $query = $this->db->query("SELECT * FROM `tblcallevents` WHERE user_id = '$uid' AND DATE(appointmentdatetime) = '$tdate' AND actiontype_id IS NOT NULL AND actiontype_id != '' AND nextCFID = 0 AND lastCFID = 0 AND plan = 1 AND TIME(appointmentdatetime) BETWEEN '$time1' AND '$time2'");
 
@@ -12237,6 +12237,23 @@ public function get_ccdby_cid($cid){
 
         $org_cid =  $getcmpinfo[0]->cmpid_id;
 
+        if($top_spender == 'yes'){
+            $udata  = $this->get_userbyid($uid);
+            $udatacnt = sizeof($udata);
+            if($udatacnt > 0){
+                $aadmin = $udata[0]->aadmin;
+                if($aadmin !==''){
+                    $uadata  = $this->get_userbyid($aadmin);
+                    $uatype  = $uadata[0]->type_id;
+                        if($uatype == 13){
+                            $clm_id = $aadmin;
+                        }else{
+                            $clm_id = '';
+                        }
+                }
+            }
+        }
+   
         $data = array(
             'draft' => $draft,
             'proposal' => $emailid,
@@ -12257,14 +12274,14 @@ public function get_ccdby_cid($cid){
             'positivenap' => $positivenap,
             'tentative' => $tentative,
             'closure' => $closure,
-            'cluster_id' => $clusterid
+            'cluster_id' => $clusterid,
+            'clm_id' => $clm_id
         );
         
         // Assuming you have a condition to identify which row to update
         $this->db->where('id', $init_id);
         $this->db->update('init_call', $data);
         
-
         $cmp_data = array(
             'compname' => $compname,
             'draft' => $draft,
@@ -12282,7 +12299,6 @@ public function get_ccdby_cid($cid){
         $this->db->where('id', $org_cid);
         $this->db->update('company_master', $cmp_data);
         
-
         $ccmp_data = array(
             'contactperson' => $compconname,
             'emailid' => $emailid,
@@ -12603,6 +12619,22 @@ public function getMeetinfoByid($mid){
     $query=$this->db->query("SELECT * FROM `barginmeeting` WHERE `id` ='$mid'");
     return $query->result();
 }
+public function getMeetinfoBytid($tid){
+    $query=$this->db->query("SELECT * FROM `barginmeeting` WHERE `tid` ='$tid'");
+    return $query->result();
+}
+
+public function GetTaskBecauseOfPlanChange($uid,$todate){
+    $query=$this->db->query("SELECT * from tblcallevents WHERE user_id='$uid' and cast(appointmentdatetime AS DATE)='$todate' and plan=1 AND nextCFID =0 And autotask=0 and cast(appointmentdatetime AS TIME) and plan_change =1");
+    return $query->result();
+}
+
+public function GetTaskBecauseOfPlanChangeWithAction($taskaction,$uid){
+    $current_date = date("Y-m-d");
+    $todate = date('Y-m-d', strtotime($current_date . ' +1 day'));
+    $query=$this->db->query("SELECT * from tblcallevents WHERE user_id='$uid' and cast(appointmentdatetime AS DATE)='$todate' and plan=1 AND nextCFID =0 And autotask=0 and cast(appointmentdatetime AS TIME) and actiontype_id='$taskaction' and plan_change =1");
+    return $query->result();
+}
 
 public function GetTodaysOurReminder($uid){
     $query=$this->db->query("SELECT * FROM `reminder` WHERE user_id ='$uid' AND DATE(created_at) = CURDATE() ORDER BY CAST(created_at AS time)");
@@ -12682,5 +12714,9 @@ public function GetTodaysTeamDayChnageRequest($uid){
     return $query->result();
 }
 
+
+public function updateBarginmeetingAfterPlanChnage($tid,$tdate){
+    $query = $this->db->query("UPDATE `barginmeeting` SET `storedt`='$tdate',`plan_change`='0' WHERE tid = '$tid'");
+}
 
 }

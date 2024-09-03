@@ -28,8 +28,9 @@
     <link rel="stylesheet" href="<?=base_url();?>assets/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="<?=base_url();?>assets/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="<?=base_url();?>assets/css/buttons.bootstrap4.min.css">
-    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" /> -->
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
+
     <script>
       function validateTimeInput(event) {
           const input = event.target;
@@ -160,7 +161,7 @@
       }
       ?>
     <style>
-.scrollme{overflow-x:auto;h1{font-size:36px;color:#333}p{font-size:24px;color:#666;margin:10px}.container{background-color:#fff;padding:20px;border-radius:10px;box-shadow:0 0 10px rgb(0 0 0 / .2)}}.custom-card{padding:20px;border:1px solid #e0e0e0;border-radius:5px}.custom-card-header{background-color:#007bff;color:#fff;padding:10px 20px;border-radius:5px 5px 0 0}.custom-radio-label{font-weight:700}.card.container-fluid{background-color:honeydew}p#totalcompany{font-size:12px;padding:10px;color:green;font-weight:700;font-family:sans-serif}label{font-size:12px!important}div#maintaskcard{background:antiquewhite}div#selectCategory{background:#fff6dd}div#actionnotplaned{background:#434630;color:#fff}.card.p-4.taskselectionarea,#companyLocationdatacard,#selectCategory{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff;}div#selectCategory{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}.modal-footer{justify-content:center!important}div#pstAssignCard,div#taskActionCard,div#partnertype,div#actionPlanned,div#review_planning_card,div#companyLocationdatacard,div#clusterLocactionFiltercard,div#sameStatusLastLimitDays,div#planbutnotinitiatedcard,div#actionnotplaned_NeedYour,div#planbutnotinitiatedcardold,div#auto_assign,div#compulsive_task_card,div#pendingAutotaskCard,div#need_your_attention,div#firstQuarter1,div#reviewTargetDate{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}div#maintaskcard{background:#bfbfbf}.card-header.custom-card-header{border-radius:43px;text-align:center;padding:2px}.custom-card{background:#efb2b2}span.alertmessagecmp{font-size:14px;padding:2px;color:red}div#plantimerBox{background:linear-gradient(to right,#a80077,#66ff00);border-radius: 56px;box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;}span#timer{font-size:38px;color:#fff}.stopbtntimer{align-items:center;justify-content:center;display:flex}button#stop{padding: 7px 12px;} table.dataTable>thead>tr>th:not(.sorting_disabled), table.dataTable>thead>tr>td:not(.sorting_disabled) {padding-right: 30px; background: #851241;color: white;}
+.scrollme{overflow-x:auto;h1{font-size:36px;color:#333}p{font-size:24px;color:#666;margin:10px}.container{background-color:#fff;padding:20px;border-radius:10px;box-shadow:0 0 10px rgb(0 0 0 / .2)}}.custom-card{padding:20px;border:1px solid #e0e0e0;border-radius:5px}.custom-card-header{background-color:#007bff;color:#fff;padding:10px 20px;border-radius:5px 5px 0 0}.custom-radio-label{font-weight:700}.card.container-fluid{background-color:honeydew}p#totalcompany{font-size:12px;padding:10px;color:green;font-weight:700;font-family:sans-serif}label{font-size:12px!important}div#maintaskcard{background:antiquewhite}div#selectCategory{background:#fff6dd}div#actionnotplaned{background:#434630;color:#fff}.card.p-4.taskselectionarea,#companyLocationdatacard,#selectCategory{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff;}div#selectCategory{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}.modal-footer{justify-content:center!important}div#pstAssignCard,div#taskActionCard,div#partnertype,div#actionPlanned,div#review_planning_card,div#companyLocationdatacard,div#clusterLocactionFiltercard,div#sameStatusLastLimitDays,div#becauseofplanchange,div#planbutnotinitiatedcard,div#actionnotplaned_NeedYour,div#planbutnotinitiatedcardold,div#auto_assign,div#compulsive_task_card,div#pendingAutotaskCard,div#need_your_attention,div#firstQuarter1,div#reviewTargetDate{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}div#maintaskcard{background:#bfbfbf}.card-header.custom-card-header{border-radius:43px;text-align:center;padding:2px}.custom-card{background:#efb2b2}span.alertmessagecmp{font-size:14px;padding:2px;color:red}div#plantimerBox{background:linear-gradient(to right,#a80077,#66ff00);border-radius: 56px;box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;}span#timer{font-size:38px;color:#fff}.stopbtntimer{align-items:center;justify-content:center;display:flex}button#stop{padding: 7px 12px;} table.dataTable>thead>tr>th:not(.sorting_disabled), table.dataTable>thead>tr>td:not(.sorting_disabled) {padding-right: 30px; background: #851241;color: white;}
 .hrclass{box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;}
  .bgresactive{background: #263b0d!important;}
  .form-control.is-invalid, .was-validated .form-control:invalid {background-image: none !important;}
@@ -170,9 +171,6 @@
     color: #666; /* Dark grey text */
     cursor: not-allowed; /* Change cursor to not-allowed */
 }
-/* body{
-
-} */
 
     </style>
   </head>
@@ -187,6 +185,10 @@
         <!-- Content Header (Page header) -->
         <div class="content-header">
           <div class="container-fluid">
+
+
+          
+  
 
           <?php 
 $action = $this->Menu_model->get_action();
@@ -600,10 +602,32 @@ if($type_id == 3){
                         <h5>Task Planner</h5>
                       </div>
                       <div class="card-body">
+
+                        <?php  
+                        $current_date = date("Y-m-d");
+                        $tomorrow_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
+                        if($adate == $tomorrow_date){
+                        
+                        $planchangetask = $this->Menu_model->GetTaskBecauseOfPlanChange($uid,$tomorrow_date);
+                        $planchangetaskcnt = sizeof($planchangetask);
+                        if($planchangetaskcnt > 0){
+                          $cssct = 'red';
+                          
+                        ?>
+                        <div class="form-check">
+                          <label class="form-check-label custom-radio-label">
+                          <input type="radio" class="form-check-input" name="optradio" value="Because of Plan Change" > 
+                           <span style="<?='color:'.$cssct?>" data-toggle="tooltip" data-placement="left" title="This filter is activated due to a change in a plan. Only those tasks will appear that are to be rescheduled within the specified time frame."> Because of Plan Change (<?=$planchangetaskcnt ?>) </span>
+                        
+                          </label>
+                        </div>
+
+                        <?php }} ?>
+
+
                       <?php 
                       
                       $getPendingTask = $this->Menu_model->get_PendingTask($uid);
-                      // echo $this->db->last_query();
                       $getoldPendingTask = $this->Menu_model->get_OLDPendingTask($uid);
 
                       $getmomTask = $this->Menu_model->getTaskAfterMomApproved($uid);
@@ -618,15 +642,16 @@ if($type_id == 3){
                       <div class="form-check">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Plan But Not Initiated" >
-                          <span style="color:red;">Today's Pending Task - Plan But Not Initiated (<?= $getpendSize; ?>)</span>
+                          <span style="color:red;" data-toggle="tooltip" data-placement="left" title="This filter is active due to If user have any Today's pending task (User Planned But Not Initiated) " >Today's Pending Task - Plan But Not Initiated (<?= $getpendSize; ?>)</span>
                         </label>
                         </div>
                         <?php } else{?>
+
                           <?php if($oldPendTaskcnt > 0){ ?>
                           <div class="form-check">
                           <label class="form-check-label custom-radio-label">
-                          <input type="radio" class="form-check-input" name="optradio" value="Plan But Not Initiated Old" >
-                          <span style="color:red;">Old Pending Task (<?= $getoldPendingTaskcnt; ?>)</span>
+                          <input type="radio" class="form-check-input" name="optradio" value="Plan But Not Initiated Old">
+                          <span style="color:red;" data-toggle="tooltip" data-placement="left" title="This filter is active due to If user have any old pending task (User Planned But Not Completed) ">Old Pending Task (<?= $getoldPendingTaskcnt; ?>)</span>
                         </label>
                         </div>
                         <?php }else{ ?>
@@ -653,8 +678,16 @@ if($type_id == 3){
                         ?>
 
                           <div class="form-check" id="compulsive_task_filter">
+                            <?php 
+                            if($type_id ==3){
+                              $tooltips = "This filter is active if the company status has not changed in the last 8 days for 'Open,' 'OPEN RPEM,' or 'Reachout' and in the last 15 days for 'Will do Later' or 'Not Interested.'";
+                              }else if($type_id ==13 || $type_id ==4){
+                                $tooltips = "This filter is active if the company status has not changed in the last 8 days for Tentative, Positive, Very Positive, Positive-NAP, Very Positive-NAP and in the last 30 days for 'Will do Later' or 'Not Interested.'";
+                                }
+                            ?>
                           <label>
-                            <input type="radio" class="form-check-input" name="optradio" value="Compulsive Task"> <span class="<?=$cssct?>"> Compulsive Task (<?=$status_nochangecnt ?>) </span>
+                            <input type="radio" class="form-check-input" name="optradio" value="Compulsive Task"> 
+                            <span data-toggle="tooltip" data-placement="left" title="<?=$tooltips;?>" class="<?=$cssct?>"> Compulsive Task (<?=$status_nochangecnt ?>) </span>
                           </label>
                         </div>
 
@@ -671,7 +704,19 @@ if($type_id == 3){
                         ?>
                         <div class="form-check" id="actionNotPlannedNeed_filter">
                         <label>
-                        <input type="radio" class="form-check-input" name="optradio" value="actionNotPlannedNeed" > <span class="<?=$cssc?>"> No Work Days  <?php if($notworkedcnt > 0){echo '('.$notworkedcnt.')';}?></span>
+                        <?php 
+                            if($type_id ==3){
+                             
+                              $tooltips = "This filter is active if the company is visible and no work has been done in the last 8 days for Open, OPEN RPEM, and Reachout tasks, or in the last 15 days for 'Will Do Later' or 'Not Interested' tasks.";
+
+                              }else if($type_id ==13 || $type_id ==4){
+
+                                $tooltips = "This filter is active if the company is visible and has not had any work done in the last 8 days for Tentative, Positive, Very Positive, Positive-NAP, and Very Positive-NAP status, or in the last 30 days for 'Will Do Later' or 'Not Interested' status.";
+                                }
+                            ?>
+
+                        <input type="radio" class="form-check-input" name="optradio" value="actionNotPlannedNeed" > 
+                        <span class="<?=$cssc?>" data-toggle="tooltip" data-placement="left" title="<?=$tooltips;?>" > No Work Days  <?php if($notworkedcnt > 0){echo '('.$notworkedcnt.')';}?></span>
                         </label>
                         </div>
 
@@ -688,10 +733,22 @@ if($type_id == 3){
                           if($need_your_attecnt > 0){$cssc = 'text-danger';}else{$cssc = '';}
                           ?>
                           <div class="form-check" id="need_your_attention_filter">
+
+                          <?php 
+                            if($type_id ==13){
+                             
+                              $tooltips = "When there is no change in company status for 8 days, this filter displays a list of companies along with the number of days and the BD name. This applies when BD activities are ongoing but the status remains as 'Open,' 'Reachout,' or 'Open RPEM.'";
+
+                              }else if($type_id ==4){
+
+                                $tooltips = "When there is no change in company status for 8 days, this filter displays a list of companies along with the number of days and the BD name. This applies when BD activities are ongoing but the status remains as Tentative, Positive, Very Positive, Positive NAP, Very Positive NAP";
+                                }
+                            ?>
+
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Need Your Attention" > 
                           
-                          <span class="<?=$cssc?>"> Need Your Attention  <?php if($need_your_attecnt > 0){echo '('.$need_your_attecnt.')';}?></span>
+                          <span class="<?=$cssc?>" data-toggle="tooltip" data-placement="left" title="<?=$tooltips;?>" > Need Your Attention  <?php if($need_your_attecnt > 0){echo '('.$need_your_attecnt.')';}?></span>
                           </label>
                         </div>
                          <?php } ?> 
@@ -766,17 +823,13 @@ if($type_id == 3){
                           <input type="radio" class="form-check-input" name="optradio" value="Review Planning">  Review Planning
                           </label>
                         </div>
-
-                       
-
-                       
                         <?php  } }?>
                         <hr>
                         <div class="card-header">
                           <b>Let's Start Creating Task for <span id="tasktype"></span></b> <hr>
-                          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                          <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
                           <b>Create a Special Request For Plan Change </b>
-                          </button>
+                          </button> -->
 
                         </div>
                       </div>
@@ -1311,6 +1364,33 @@ if($type_id == 3){
                         <p class="p-2 text-white" id="plancomp"></p>
                       </div>
 
+                      <div id="becauseofplanchange" class="card p-4" >
+                        <div class="form-group">
+                          <label>Task/Action</label>
+                          <select id="planChange_TaskData" class="form-control" name="task_action">
+                            <option value="">Select Task</option>
+                                <?php 
+                                $groupedByActionTypespc = [];
+                                foreach ($planchangetask as $planchange) {
+                                    $actionTypeId = $planchange->actiontype_id;
+                                    if (!isset($groupedByActionTypespc[$actionTypeId])) {
+                                        $groupedByActionTypespc[$actionTypeId] = [];
+                                    }
+                                    $groupedByActionTypespc[$actionTypeId][] = $planchange;
+                                }
+                                ?>
+                            <?php 
+                              foreach($groupedByActionTypespc as $key => $plan_change){
+                                $getaction_name = $this->Menu_model->get_actionbyid($key)[0]->name;
+                                $getaction_namecnts = sizeof($plan_change);
+                                echo "<option value='$key'>$getaction_name($getaction_namecnts)</options>";
+                              }
+                            ?>
+                          </select>
+                        </div>
+                        <p class="p-2 text-white" id="plancomp_planchange"></p>
+                      </div>
+
                       <div id="planbutnotinitiatedcardold" class="card p-4" >
                         <div class="form-group">
                           <label>Task/Action (Old Pending Task)</label>
@@ -1552,9 +1632,6 @@ if($type_id == 3){
                     </div>
                   </form>
                       </div>
-
-
-
                   </div>
 
                   <div class="card col-lg-4 col-sm-4 p-2" id="content">
@@ -2209,6 +2286,7 @@ if($type_id == 3){
                  $('#actionnotplaned_NeedYour').hide();
                  $("#review_planning_card").hide();
                  $("#need_your_attention").hide();
+                 $("#becauseofplanchange").hide();
                 });
         
                 $("#mainbox").hide();$("#ScheduledBox").hide();
@@ -4577,6 +4655,7 @@ if($type_id == 3){
                     if(val == 'actionNotPlannedNeed'){
                       $("#actionnotplaned_NeedYour").show();
                       $("#actionPlanned").hide();
+                      $(".taskselectionarea").hide();
                       $('#selectstatusbyusernotplanedCompany').on('change', function() {
                     var selectstatusbyusernotplaned = $(this).val();
                     $("#selectcompanybyuser").html('');
@@ -4671,13 +4750,72 @@ if($type_id == 3){
                         }
                         });
                     });
-}else{
-  $("#need_your_attention").hide();
-  // $('#ntactionnew option').prop('disabled', false);
-  // $("#selectcompany").show();
-  // $('#pendingdata_message').hide();
-}
+                  }else{
+                    $("#need_your_attention").hide();
+                  }
 
+              
+
+            if(val == 'Because of Plan Change'){
+
+                    $('#taskActionCard').show();
+                    $('#becauseofplanchange').show();
+
+                    var uid = $("#curuserid").val();
+
+                    $(".taskselectionarea").hide();
+                    $('#partnertype').hide();
+                    $('#maintaskcard').hide();
+                    $('#status_taskaction_card').hide();
+                    $('#taskaction_card_area').hide();
+                    $('#taskActionbyuserCard').hide();
+                    $('#taskPurposebyuserCard').hide();
+                    
+                    $('#planChange_TaskData').on('change', function() {
+                    var planChange_action = $(this).val();
+                    $("#selectcompanybyuser").html('');
+                    $("#totalcompany").text('');
+                    var uid = $("#curuserid").val();
+                        $.ajax({
+                        url:'<?=base_url();?>Menu/getcmp_becauseofplanchange',
+                        type: "POST",
+                        data: {
+                        taskaction: planChange_action,
+                        uid: uid
+                        },
+                        cache: false,
+                        success: function a(result){
+                        $("#maintaskcard").show();
+                        $("#selectcompanybyuser").html(result);
+                        $("#selectcompanybyuser").show();
+                        var optionCount = $('#selectcompanybyuser').find('option').length;
+                        if(optionCount == 0){
+                            optionCount = 0;
+                        }
+                        $("#totalcompany").text('Total Company :'+ optionCount);
+                        $("#tptime").show();
+                        $('#ntactionnew').show();
+                        $('#ntppose').show();
+                        $('#meeting-time').show();
+                        $('#planbtn1').show();
+                        $('#partnertype_cstatus').show();
+                        $('#ntactionnew').hide();
+                        $('#ntppose').hide();
+                        $("#taskplanningimg").hide();
+                        $('#planbtn1').click(function() {
+                                var newValue = '0';
+                                var newText = 'Pending Task Action';
+                                $('#ntactionnew').append(new Option(newText, newValue));
+                                $('#ntppose').append(new Option(newText, newValue));
+                                $('#ntactionnew').val(newValue);
+                                $('#ntppose').val(newValue);   
+                            });
+                        }
+                        });
+                    });
+                    }else{
+                      $('#becauseofplanchange').hide();
+                    }
 
 
                 });

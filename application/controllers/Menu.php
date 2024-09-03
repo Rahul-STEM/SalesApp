@@ -18094,10 +18094,8 @@ public function addplantask12(){
         $this->session->set_flashdata('success_message',' Task Plan Successfully !!');
         redirect('Menu/TaskPlanner2/'.$pdate);
      }
-    //  else{
-    //     echo "data";
-    //      dd($_POST);  
-    //  }
+   
+    
 
 // Abhishek Data Start
      $data = array(
@@ -18261,6 +18259,7 @@ public function addplantask12(){
 
     $taskAssigntime = $pdate.' '.$ptime;
    
+    $k=1;
     foreach($selectcompanybyuser as $tid){
        
         $cmp_Data = $this->Menu_model->getCompanyStatus($tid);
@@ -18294,11 +18293,12 @@ public function addplantask12(){
                 $new_datetime = date("y-m-d H:i:s");
             }
 
+        if($k==1){$taskplanmincount = 0;}
+
         $newdate = new DateTime($taskAssigntime);
         $modifystr = "+$taskplanmincount minutes";
         $newdate->modify($modifystr);
         $new_datetime = $newdate->format('Y-m-d H:i:s');
-
 
         if($selectby == 'Plan But Not Initiated'){
 
@@ -18317,6 +18317,16 @@ public function addplantask12(){
              $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
              $currentdatetime = date("Y-m-d H:i:s");
              $query =  $this->db->query("UPDATE `auto_assign_task` SET `status`='1',`updated_at`='$currentdatetime' WHERE call_tid = $tid");
+
+         }else if($selectby == 'Because of Plan Change'){
+
+                $sact_type = $this->Menu_model->SelectTaskBYTid($tid);
+                if($sact_type ==4 || $sact_type == 17 || $sact_type == 3){ 
+                    $this->Menu_model->updateBarginmeetingAfterPlanChnage($tid,$new_datetime);
+                   }
+             $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime',`plan_change`='0', `selectby`='$selectby' WHERE  id = $tid");
+
+             echo $this->db->last_query()."<br/>";
 
          } else if($selectby == 'Review Target Date'){
 
@@ -18360,9 +18370,10 @@ public function addplantask12(){
             $id = $this->Menu_model->add_plan2($pdate,$uid,$ptime,$inid,$ntaction,$ntstatus,$ntppose,$ttype,$tptime,$new_datetime,$selectby,$jsonData);
       
         }
-    }
-
-    $this->session->set_flashdata('success_message_plan',' Task Plan Successfully !! and Total Remaining Time For Task Plan '.$rrtime. ' Minutes');
+        $k++;
+     }
+     
+    $this->session->set_flashdata('success_message_plan',' Task Plan Successfully !!');
 
     redirect('Menu/TaskPlanner2/'.$pdate);
 }
@@ -19016,8 +19027,7 @@ public function SpecialRequestForLeave(){
     $stime      = $_POST['start_meeting_time'];
     $etime      = $_POST['end_meeting_time'];
     $purpose    = $_POST['purpose'];
-    $sttt       = $_POST['start_tommorow_task_time'];
-
+ 
     $user       = $this->session->userdata('user');
     $data['user'] = $user;
     $uid        = $user['user_id'];
@@ -19027,11 +19037,11 @@ public function SpecialRequestForLeave(){
     $dt         = $this->Menu_model->get_utype($uyid);
     $dep_name = $dt[0]->name;
 
-    $this->Menu_model->add_SpecialRequestForLeave($uid,$pdate,$stime,$etime,$purpose,$sttt);
+    $this->Menu_model->add_SpecialRequestForLeave($uid,$pdate,$stime,$etime,$purpose);
     
-    $this->session->set_flashdata('success_message_plan','Request For Plan Change Sended Successfully !');
+    $this->session->set_flashdata('success_message','Request For Plan Change Sended Successfully !');
 
-    redirect('Menu/TaskPlanner/'.$pdate);
+    redirect('Menu/dashboard');
 }
 
 
@@ -19754,7 +19764,6 @@ public function SpecialRequestForLeaveSomeTimeData(){
 
     $requests = $this->Menu_model->getSpecialRequestForLeaveData($uid,$uyid);
 
-    
     $this->load->view($dep_name.'/SpecialRequestForLeaveSomeTimeData',['user'=>$user,'uid'=>$uid,'requests'=>$requests]);
 }
 
@@ -19786,11 +19795,13 @@ public function AdminAcceptSpecialRequest(){
         $start_tommorow     =   $reqData[0]->start_tommorow;
         $current_date       = date("Y-m-d");
      
-        $tomorrow_date = date('Y-m-d', strtotime($req_date . ' +1 day'));
+        $tomorrow_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
        
-        $tostime = $start_tommorow;
+        // $tostime = $start_tommorow;
+        $tostime = '10:00:00';
 
         $tasks = $this->Menu_model->getTaskBetweenTime($req_user_id,$current_date,$req_stime,$req_etime);
+      
         $taskssize = sizeof($tasks);
  
         if($taskssize > 0){
@@ -19803,18 +19814,42 @@ public function AdminAcceptSpecialRequest(){
                 $yesttime = $act[0]->yest;
 
                 if($i == 1){
+
                     $newDateTime = $tomorrow_date . ' ' . $tostime;
+                    $query  = $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$newDateTime',`plan_change`='1' WHERE id='$task_id'");
+
+                    if($actiontype_id == 3 || $actiontype_id == 4 || $actiontype_id == 17){
+                        $mtdata = $this->Menu_model->getMeetinfoBytid($task_id);
+                        $mtdatacnt =sizeof($mtdata);
+                        if($mtdatacnt == 1){
+                            $query  = $this->db->query("UPDATE `barginmeeting` SET `storedt`='$newDateTime',`plan_change`='1' WHERE tid ='$task_id'");
+                        }
+                    }
+
+                    $start = new DateTime($newDateTime);
+                    $start->modify("+$yesttime minutes");
+                    $newDateTime = $start->format('Y-m-d H:i:s');
+
                 }else{
 
-                        $start = new DateTime($newDateTime);
-                        $start->modify("+$yesttime minutes");
-                        $newDateTime = $start->format('Y-m-d H:i:s');
-                }
+                    $start = new DateTime($newDateTime);
+                    $start->modify("+$yesttime minutes");
+                    $newDateTime = $start->format('Y-m-d H:i:s');
 
-                $query  = $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$newDateTime' WHERE id='$task_id'");
+                    $query  = $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$newDateTime',`plan_change`='1' WHERE id='$task_id'");
+
+                    if($actiontype_id == 3 || $actiontype_id == 4 || $actiontype_id == 17){
+                        $mtdata = $this->Menu_model->getMeetinfoBytid($task_id);
+                        $mtdatacnt =sizeof($mtdata);
+                        if($mtdatacnt == 1){
+                            $query  = $this->db->query("UPDATE `barginmeeting` SET `storedt`='$newDateTime',`plan_change`='1' WHERE tid ='$task_id'");
+                        }
+                    }
+                }
                 $i++;
             }
         }
+
         $query  = $this->db->query("UPDATE `special_request_for_leave` SET `approve_by`='$uid',`approve_status`='$status',`approve_date`='$current_datetime',`approve_remarks`='$remarks' WHERE id = '$req_id'");
     }
     if($status == 'Reject'){
@@ -20072,6 +20107,8 @@ public function ConfirmReminder($id){
         redirect('Menu/SpecialRequestForLeaveSomeTimeData');
     }elseif($rem_type == 4){
         redirect('Menu/PlannerTaskApprovelPage');
+    }elseif($rem_type == 5){
+        redirect('Menu/GetTodaysTeamDayChnageRequestData');
     }else{
         redirect('Menu/dashboard');
     }
@@ -20171,8 +20208,35 @@ public function TodayDayStartapprove($id,$type){
     }
 }
 
+public function TodaysDayChageReject(){
+    $rejectid = $_POST['reject'];
+    $rejectreamrk = $_POST['rejectreamrk'];
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $status = 2;
+    $query =  $this->db->query("UPDATE `change_user_day_request` SET `apr_by`='$uid',`apr_status`='$status',`amessage`='$rejectreamrk' WHERE id = $rejectid");
+    redirect("Menu/GetTodaysTeamDayChnageRequestData");
+}
 
 
+public function getcmp_becauseofplanchange(){
+    $taskaction= $this->input->post('taskaction');
+    $uid= $this->input->post('uid');
+    $this->load->model('Menu_model');
+
+    $cmp = $this->Menu_model->GetTaskBecauseOfPlanChangeWithAction($taskaction,$uid);
+   
+    $data = '';
+    $callsids = '';
+    foreach ($cmp as $c) {
+        $getcomp = $this->Menu_model->get_cmp_PlanPendingwork($c->cid_id);
+        foreach ($getcomp as $cmpData) {
+            $data .= '<option value="' . $c->id . '">' . $cmpData->compname.' ('.$cmpData->pname . ')</option>';
+        }
+    }
+   echo $data;
+}
 
 
 }

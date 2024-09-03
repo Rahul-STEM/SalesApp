@@ -47,7 +47,7 @@
           <div class="container-fluid">
             <div class="row mb-2">
               <div class="col-sm-12 card bg-primary p-2 text-center">
-                <h1 class="m-0">Team Special Request For Plan Change</h1>
+                <h1 class="m-0">All Special Request For Plan Change</h1>
               </div>
               <!-- /.col -->
               <div class="col-sm-6">
@@ -112,9 +112,8 @@
                                         <th>Date</th>
                                         <th>Start Time</th>
                                         <th>End Time</th>
-                                         <th>Task Between Time</th>
+                                         <!-- <th>Task Between Time</th> -->
                                         <th>Leave Purpose</th>
-                                        <th>Tommorow Task Start Time </th>
                                         <th>Approved By</th>
                                         <th>Approved Status</th>
                                         <th>Approved Date</th>
@@ -140,36 +139,37 @@
                                         <td><?=$req->date ?></td>
                                         <td><?=$req->stime ?></td>
                                         <td><?=$req->etime ?></td>
-                                        <td><?php 
-                                        $totoltime = '';
-                                        $totoltask = '';
-                                        echo "<div class='card p-2 mt-1'>";
-                                        foreach($tasks as $item){
-                                            $act = $this->Menu_model->get_actionbyid($item->aid);
-                                            $yesttime = $act[0]->yest;
-                                            $tasktime = $item->cont * $yesttime;
-                                            $totoltime +=$tasktime;
-                                            $totoltask +=$item->cont;
+                                        <!-- <td> -->
+                                          <?php 
+                                        // $totoltime = '';
+                                        // $totoltask = '';
+                                        // echo "<div class='card p-2 mt-1'>";
+                                        // foreach($tasks as $item){
+                                        //     $act = $this->Menu_model->get_actionbyid($item->aid);
+                                        //     $yesttime = $act[0]->yest;
+                                        //     $tasktime = $item->cont * $yesttime;
+                                        //     $totoltime +=$tasktime;
+                                        //     $totoltask +=$item->cont;
                                             
-                                            echo $item->acname." (".$item->cont.") - ".$tasktime." Minutes<hr/>";
-                                        }
-                                        echo "</div>";
-                                        $hours = floor($totoltime / 60);  // Get the number of full hours
-                                        $remainingMinutes = $totoltime % 60; // Get the remaining minutes
-                                        if($tasksize > 0){
-                                        echo "<div class='card p-2 mt-1'>";
-                                        echo "Total Task : $totoltask <br><hr/>"; 
-                                        echo "Total Time : $hours hours and $remainingMinutes minutes"; 
-                                        echo "</div>";
-                                        }else{
-                                            echo "<div class='card p-2 mt-1'>";
-                                            echo "Total Task : 0 <br>"; 
-                                            echo "</div>";
-                                        }
+                                        //     echo $item->acname." (".$item->cont.") - ".$tasktime." Minutes<hr/>";
+                                        // }
+                                        // echo "</div>";
+                                        // $hours = floor($totoltime / 60);  // Get the number of full hours
+                                        // $remainingMinutes = $totoltime % 60; // Get the remaining minutes
+                                        // if($tasksize > 0){
+                                        // echo "<div class='card p-2 mt-1'>";
+                                        // echo "Total Task : $totoltask <br><hr/>"; 
+                                        // echo "Total Time : $hours hours and $remainingMinutes minutes"; 
+                                        // echo "</div>";
+                                        // }else{
+                                        //     echo "<div class='card p-2 mt-1'>";
+                                        //     echo "Total Task : 0 <br>"; 
+                                        //     echo "</div>";
+                                        // }
 
-                                        ?></td>
+                                        ?>
+                                        <!-- </td> -->
                                         <td><?=$req->prupose ?></td>
-                                        <td><?=$req->start_tommorow ?></td>
                                         <td>
                                           <?php 
                                             if($req->approve_by ==''){

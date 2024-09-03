@@ -86,7 +86,6 @@ overflow-x: auto;
                                             <th>Start Time</th>
                                             <th>End Time</th>
                                             <th>Leave Purpose</th>
-                                            <th>Tommorow Task Start Time </th>
                                             <th>Approved By</th>
                                             <th>Approved Status</th>
                                             <th>Approved Date</th>
@@ -110,7 +109,6 @@ overflow-x: auto;
                                             <td><?=$req->stime ?></td>
                                             <td><?=$req->etime ?></td>
                                             <td><?=$req->prupose ?></td>
-                                            <td><?=$req->start_tommorow ?></td>
                                             <td>
                                             <?php 
                                             if($req->approve_by ==''){

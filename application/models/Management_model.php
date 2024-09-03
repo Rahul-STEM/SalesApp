@@ -41,19 +41,56 @@ class Management_model  extends Menu_model {
 
 
     public function CheckingYesterDayTaskStatus($uid){
+
         $date = new DateTime();
         $date->modify('-1 day');
         $pdate =  $date->format('Y-m-d');
-        // $pdate = '2024-07-19';
-        $query=$this->db->query("SELECT COUNT(*) AS plan, COUNT(CASE WHEN autotask = 1 THEN autotask END) AS autotask, COUNT(CASE WHEN nextCFID != 0 THEN 1 END) AS done, COUNT(CASE WHEN nextCFID = 0 AND lastCFID = 0 THEN 1 END) AS pending , COUNT(CASE WHEN reassign_type = 2 THEN 1 END) AS assignByOther FROM tblcallevents WHERE assignedto_id = $uid AND CAST(appointmentdatetime AS DATE) = '$pdate'");
-        // echo $this->db->last_query();
+        $pdate = '2024-07-19';
 
+        $uyid =  $uid;
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utypebyUserID($uyid);
+        $utype = $dt[0]->type_id;
+        // echo ($utype);
+        $utype = 13;
+        // $dep_name = $dt[0]->name;
+        // $query=$this->db->query("SELECT COUNT(*) AS plan, COUNT(CASE WHEN autotask = 1 THEN autotask END) AS autotask, COUNT(CASE WHEN nextCFID != 0 THEN 1 END) AS done, COUNT(CASE WHEN nextCFID = 0 AND lastCFID = 0 THEN 1 END) AS pending , COUNT(CASE WHEN reassign_type = 2 THEN 1 END) AS assignByOther FROM tblcallevents WHERE assignedto_id = $uid AND CAST(appointmentdatetime AS DATE) = '$pdate'");
+
+        // if ($utype == 13) {
+            
+        //     $this->db->select("COUNT(*) AS teamFunneltask");
+        // }
+
+        $this->db->select("COUNT(*) AS plan");
+        $this->db->select("COUNT(CASE WHEN autotask = 1 AND nextCFID != 0 THEN autotask END) AS Completedautotask");
+        $this->db->select("COUNT(CASE WHEN autotask = 1 THEN autotask END) AS autotask");
+        $this->db->select("COUNT(CASE WHEN nextCFID != 0 THEN 1 END) AS done");
+        $this->db->select("COUNT(CASE WHEN nextCFID = 0 AND lastCFID = 0 THEN 1 END) AS pending");
+        $this->db->select("COUNT(CASE WHEN reassign_type = 2 THEN 1 END) AS assignByOther");
+        $this->db->select("COUNT(CASE WHEN reassign_type = 2 AND nextCFID != 0 THEN 1 END) AS CompletedassignByOther");
+        $this->db->from('tblcallevents');
+
+        // if ($utype == 13) {
+
+        //     $this->db->join('init_call ic', 'ic.id = tblcallevents.cid_id', 'left');
+        //     $this->db->where('ic.clm_id', $uid);
+        // }
+        // else {
+            
+        // }
+        $this->db->where('assignedto_id', $uid);
+        $this->db->where('CAST(appointmentdatetime AS DATE) = ', $this->db->escape($pdate), FALSE);
+
+        $query = $this->db->get();
+
+        // echo $this->db->last_query();
         return $query->result();
        
     }
 
     public function CheckingTotalYestTask($uid,$sdate,$type){
         if($type == 'total'){
+            
             $query=$this->db->query("SELECT * FROM `tblcallevents` WHERE assignedto_id = $uid and cast(appointmentdatetime as DATE)='$sdate'");
         }
         if($type == 'Pending'){
@@ -252,7 +289,6 @@ class Management_model  extends Menu_model {
         return $query->result();
     }
 
-
     public function ApprovedRequests($uid,$cdate) {
         $cdate = date('Y-m-d');
         $this->db->select('REASON, CREATED_AT,APPROVED_AT');
@@ -305,6 +341,100 @@ class Management_model  extends Menu_model {
 
         return 'Success..!!';
     }
+
+    public function getFunnelTaskforCLM($id){
+        // echo $id;
+        $date = new DateTime();
+        $date->modify('-1 day');
+        $pdate =  $date->format('Y-m-d');
+        $pdate = '2024-07-19';
+
+        // $uyid =  $uid;
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utypebyUserID($id);
+        $utype = $dt[0]->type_id;
+        // echo ($utype);
+        $utype = 13;
+
+        // if ($utype == 13) {
+            
+        //     $this->db->select("COUNT(*) AS teamFunneltask");
+        // }
+        $this->db->select("user_id");
+        $this->db->from('user_details');
+        $this->db->where_IN('aadmin', $id);
+        $subquery = $this->db->get_compiled_select();
+
+        $this->db->select("COUNT(*) AS TotalTeamplan");
+        $this->db->select("COUNT(CASE WHEN autotask = 1 AND nextCFID != 0 THEN autotask END) AS TotalTeamCompletedautotask");
+        $this->db->select("COUNT(CASE WHEN autotask = 1 THEN autotask END) AS TotalTeamautotask");
+        $this->db->select("COUNT(CASE WHEN nextCFID != 0 THEN 1 END) AS TotalTeamdone");
+        $this->db->select("COUNT(CASE WHEN nextCFID = 0 AND lastCFID = 0 THEN 1 END) AS TotalTeampending");
+        $this->db->select("COUNT(CASE WHEN reassign_type = 2 THEN 1 END) AS TotalTeamassignByOther");
+        $this->db->select("COUNT(CASE WHEN reassign_type = 2 AND nextCFID != 0 THEN 1 END) AS TotalTeamCompletedassignByOther");
+        $this->db->from('tblcallevents');
+
+        $this->db->where_IN('assignedto_id', $subquery);
+        $this->db->where('CAST(appointmentdatetime AS DATE) = ', $this->db->escape($pdate), FALSE);
+
+        $query = $this->db->get();
+
+        // echo $this->db->last_query();
+        return $query->result();
+    }
+
+    public function getUsers($id,$typeID){
+        $this->db->select("user_id,name,type_id");
+        $this->db->from("user_details");
+
+        if($typeID == 2){
+
+            $this->db->where("admin_id",$id);
+
+        }elseif ($typeID == 15) {
+            
+            $this->db->where("sales_co",$id);
+
+        }elseif ($typeID == 4 || $typeID == 13 || $typeID == 9) {
+            
+            $this->db->where("aadmin_id",$id);
+
+        }else {
+            
+            $this->db->where("user_id",$id);
+
+        }
+
+        $query = $this->db->get();
+
+        // echo $this->db->last_query();
+        return $query->result();
+
+
+    }
+
+    public function getReportbyUser($id,$selected_user,$sdate,$edate){
+
+        // var_dump($selected_user);die;
+        $this->db->select('star_rating.*');
+        $this->db->select('ud1.name as userName');
+        $this->db->select('ud2.name as feedbackBy');
+
+        $this->db->from('star_rating');
+        $this->db->join('user_details ud1', 'ud1.user_id = star_rating.user_id', 'left');
+        $this->db->join('user_details ud2', 'ud2.user_id = star_rating.feedback_by', 'left');
+
+        $this->db->where_in('star_rating.user_id',$selected_user);
+        $this->db->where('CAST(date AS DATE) >=', "'$sdate'", FALSE);
+        $this->db->where('CAST(date AS DATE) <=', "'$edate'", FALSE);
+
+        $query = $this->db->get();
+
+        // echo $this->db->last_query();
+        return $query->result();
+    }
+
+
     // New Daymanagement changes <======== END =======>
 
 

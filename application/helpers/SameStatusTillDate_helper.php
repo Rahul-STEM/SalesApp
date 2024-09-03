@@ -45,4 +45,15 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	    }
 	}
 
+	if (!function_exists('getFunnelTaskforCLM')) {
+	    function getFunnelTaskforCLM($id){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Management_model');
+	        $DataSet = $CI->Management_model->getFunnelTaskforCLM($id);
+            
+	        return $DataSet;
+	    }
+	}
+
 ?>

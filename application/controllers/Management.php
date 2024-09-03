@@ -14,9 +14,11 @@ class Management extends Menu {
         parent::__construct();
         // Load common libraries, helpers, or models here
         $this->load->helper('url');
+        $this->load->helper('SameStatusTillDate_helper');
         $this->load->library('session');
         $this->load->model('Menu_model');
         $this->load->model('Management_model');
+        $this->load->model('Graph_model');
 
         $this->user = $this->session->userdata('user');
         $this->uid = $this->user['user_id'];
@@ -154,15 +156,14 @@ class Management extends Menu {
         $typeID =  (int) $user['type_id'];
         $currentHour = (int) (new DateTime())->format('H:mm');
         // var_dump($RequestApprovals);die;
-        // $currentHour = 10;
+
         if(!empty($this->user)){
-            // && $typeID != 2
-            // var_dump($currentHour,$typeID);die;
+
             if($currentHour >= 11 && $typeID != 2) {
 
                 if (sizeof($ApprovedRequests) > 0) {
                     
-                    $this->load->view($this->dep_name.'/CheckingDayManagement_New',['uid'=>$this->uid,'user'=>$this->user,'dayData'=>$dayData,'cdate'=>$cdate,'previousDate'=>$previousDate]);
+                    $this->load->view($this->dep_name.'/CheckingDayManagement_New',['uid'=>$this->uid,'user'=>$this->user,'typeID'=>$typeID,'dayData'=>$dayData,'cdate'=>$cdate,'previousDate'=>$previousDate]);
 
                 }else{
 
@@ -183,6 +184,8 @@ class Management extends Menu {
         $request = $this->input->post('remark');
 
         $dayData = $this->Management_model->RequestForDayManagementApproval_Model($this->uid,$request);
+
+        
 
     }
 
@@ -268,6 +271,54 @@ class Management extends Menu {
         $result = $this->Management_model->updateStarRemark($remark,$starID);
     }
     
+
+    public function DayManagementReport()
+    {
+
+        if (isset($_POST['startDate']) && isset($_POST['endDate'])) {
+
+            $sdate = $_POST['startDate'];
+            $edate = $_POST['endDate'];
+        } else {
+
+            $sdate = date('Y-m-d');
+            $edate = date('Y-m-d');
+        }
+
+        if (isset($_POST['user'])) {
+
+            $selected_user = array_filter($_POST['user'], function ($value) {
+                return $value !== 'select_all';
+            });
+        } else {
+
+            $selected_user = [];
+        }
+
+        // var_dump($_POST);die;
+        // $selected_user = [];
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $userTypeid = $user['type_id'];
+        $this->load->model('Graph_Model');
+        $dt = $this->Graph_Model->get_utype($userTypeid);
+        $dep_name = $dt[0]->name;
+
+        $getUsers = $this->Management_model->getUsers($uid,$userTypeid);
+
+        $getReportbyUser = $this->Management_model->getReportbyUser($uid,$selected_user,$sdate,$edate);
+
+        $data = '';
+        if (!empty($user)) {
+            $this->load->view('include/header');
+            // $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);
+            $this->load->view($this->dep_name.'/DayManagementReport',['uid'=>$this->uid,'user'=>$this->user,'sdate'=>$sdate,'edate'=>$edate,'users'=>$getUsers,'selected_user'=>$selected_user,'getReportbyUser'=>$getReportbyUser]);
+        } else {
+            redirect('Menu/main');
+        }
+    }
 
     // New Daymanagement changes <======== END =======>
 

@@ -112,40 +112,11 @@
             font-size:20px;
     }
     .rate{border-bottom-right-radius: 12px;border-bottom-left-radius: 12px;}.rating {display: flex;flex-direction: row-reverse;justify-content: left }.rating>input {display: none }.rating>label {position: relative;width: 1em;font-size: 30px;font-weight: 300;color: #f39c12;cursor: pointer }.rating>label::before {content: "\2605";position: absolute;opacity: 0 }.rating>label:hover:before, .rating>label:hover~label:before {opacity: 1 !important }.rating>input:checked~label:before {opacity: 1 }.rating:hover>input:checked~label:before {opacity: 0.4 }
+
+    .MoMrate{border-bottom-right-radius: 12px;border-bottom-left-radius: 12px;}.MoMrating {display: flex;flex-direction: row-reverse;justify-content: left }.MoMrating>input {display: none }.MoMrating>label {position: relative;width: 1em;font-size: 30px;font-weight: 300;color: #f39c12;cursor: pointer }.MoMrating>label::before {content: "\2605";position: absolute;opacity: 0 }.MoMrating>label:hover:before, .MoMrating>label:hover~label:before {opacity: 1 !important }.MoMrating>input:checked~label:before {opacity: 1 }.MoMrating:hover>input:checked~label:before {opacity: 0.4 }
+
+    
     /* Star Rating CSS */
-.star-rating {
-    display: flex;
-    direction: row-reverse;
-    font-size: 1.5em;
-    justify-content: center;
-}
-
-.star-rating input {
-    display: none;
-}
-
-.star-rating label {
-    color: #ddd;
-    cursor: pointer;
-    margin: 0;
-}
-
-.star-rating input:checked ~ label {
-    color: #f5b301;
-}
-
-.star-rating label:before {
-    content: '★';
-    display: inline-block;
-}
-
-.star-rating input:checked ~ label:before {
-    content: '★';
-}
-
-.star-rating input:checked ~ label ~ label:before {
-    content: '☆';
-}
 
 </style>
 
@@ -335,16 +306,11 @@
                                             }  ?>
                                         </td>
                                         <td><?= $task->action_name; ?>
-                                            <!-- <br> -->
                                             <b><?= $OGTaskType; ?></b> <hr>
-
                                             <?php
-                                            
                                                 if ($task->actiontype_id == 6 ) { ?>
-                                                    
                                                     <button type="button" class="btn btn-primary" onclick="OpenModal(<?=$task->tid?>)">View MoM Details</button>
-                                                
-                                        <?php   }  ?>
+                                            <?php   }  ?>
                                         </td>
                                         <td >
                                             Action Taken - <b><?= $task->actontaken; ?></b>  <br> <hr> Purpose Achieved - <b> <?= $task->purpose_achieved; ?></b> 
@@ -660,70 +626,126 @@
                         <h5 class="modal-title">MoM Details</h5>
                     </div>
                     <div class="modal-body">
-                    <form>
-                        <hr>
-                        <input type="hidden" name="taskID" id="taskID" value="">
-                        
-                        <p><strong>Start Time:</strong> <span id="modalStartTime"></span></p>
+                        <form>
+                            <hr>
+                            <input type="hidden" name="taskID" id="taskID" value="">
+                            
+                            <p><strong>Start Time:</strong> <span id="modalStartTime"></span></p>
 
-                        <p><b> Did the meeting started on right time..??</b></p>
-                        <hr>
-                        <strong>Start Location:</strong> 
-                        <div class="img-thumbnail" style="height: 150px">
-                            <iframe id="startMap" width="150px"  height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
-                        </div>
-                        <p><b>Was meeting start location correct..??</b> </p>  
-                        <hr>
-                        <!-- <br> -->
-                        <p>
-                            <strong>End Time:</strong> 
-                            <span id="modalEndTime"></span>
-
-                        </p>
-                        <p><b>Was meeting start location correct..??</b> </p>  
-                        <hr>
-                        <strong>End Location:</strong> 
-                        <div class="img-thumbnail" style="height: 150px">
-                            <iframe id="endMap"  width="150px"  height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
-                        </div>
-
-                        <p><b>Was meeting end location correct..??</b> </p>  
-                        <hr>
-
-                        <p>
-                            <strong>Photo:</strong> 
-                            <img id="modalPhoto" src="" alt="Photo" class="img-fluid">
-                        </p>
-
-                        <p><b>Was company photo is right..??</b> </p>
-                        <hr>
-                        <p><strong>Type:</strong> <span id="modalMomType"></span></p>
-                        
-                        <p><b>..??</b> </p>
-                        <hr>
-                        <p><strong>Partner Type:</strong> <span id="modalPartnerType"></span></p>
-                        
-                        <p><b>Was partner type correct..??</b> </p>
-                        <hr>
-                        <p><strong>BD Potential:</strong> <span id=""></span></p>
-                        
-                        <p><b>BD potential marked correctly..??</b> </p>
-                        <!-- <hr> -->
-                        <p><strong>Rating:</strong></p>
-                            <div class="star-rating">
-                                <input type="radio" id="star5" name="rating" value="5" />
-                                <label for="star5" title="5 stars"></label>
-                                <input type="radio" id="star4" name="rating" value="4" />
-                                <label for="star4" title="4 stars"></label>
-                                <input type="radio" id="star3" name="rating" value="3" />
-                                <label for="star3" title="3 stars"></label>
-                                <input type="radio" id="star2" name="rating" value="2" />
-                                <label for="star2" title="2 stars"></label>
-                                <input type="radio" id="star1" name="rating" value="1" />
-                                <label for="star1" title="1 star"></label>
+                            <p><b> Did the meeting started on right time..??</b></p>
+                            <div class="MoMrating" data-question="Did the meeting started on right time" data-userid="" data-taskid="">
+                                <input type="radio" name="momrat1_" value="5" id="10_rating_1"><label for="10_rating_1">☆</label>
+                                <input type="radio" name="momrat1_" value="4" id="9_rating_1"><label for="9_rating_1">☆</label>
+                                <input type="radio" name="momrat1_" value="3" id="8_rating_1"><label for="8_rating_1">☆</label>
+                                <input type="radio" name="momrat1_" value="2" id="7_rating_1"><label for="7_rating_1">☆</label>
+                                <input type="radio" name="momrat1_" value="1" id="6_rating_1"><label for="6_rating_1">☆</label>
                             </div>
-                            <!-- <hr> -->
-                    </form>
+                            <hr>
+                            <strong>Start Location:</strong> 
+                            <div class="img-thumbnail" style="height: 150px">
+                                <iframe id="startMap" width="150px"  height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
+                            </div>
+                            <p><b>Was meeting start location correct..??</b> </p>  
+
+                            <div class="MoMrating" data-question="Was meeting start location correct" data-userid="" data-taskid="">
+                                <input type="radio" name="momrat2_" value="5" id="10_rating_2"><label for="10_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="4" id="9_rating_2"><label for="9_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="3" id="8_rating_2"><label for="8_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="2" id="7_rating_2"><label for="7_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="1" id="6_rating_2"><label for="6_rating_2">☆</label>
+                            </div>
+                            <hr>
+                            <!-- <br> -->
+                            <p>
+                                <strong>End Time:</strong> 
+                                <span id="modalEndTime"></span>
+
+                            </p>
+                            <p><b> Did the meeting ended on right time..??</b></p>
+
+                            <div class="MoMrating" data-question="Did the meeting ended on right time" data-userid="" data-taskid="">
+                                <input type="radio" name="momrat2_" value="5" id="15_rating_2"><label for="15_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="4" id="14_rating_2"><label for="14_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="3" id="13_rating_2"><label for="13_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="2" id="12_rating_2"><label for="12_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="1" id="11_rating_2"><label for="11_rating_2">☆</label>
+                            </div>
+
+                            
+                            <hr>
+                            <strong>End Location:</strong> 
+                            <div class="img-thumbnail" style="height: 150px">
+                                <iframe id="endMap"  width="150px"  height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
+                            </div>
+
+                            <p><b>Was meeting end location correct..??</b> </p>  
+                            <div class="MoMrating" data-question="Was meeting end location correct" data-userid="" data-taskid="">
+                                <input type="radio" name="momrat2_" value="5" id="20_rating_2"><label for="20_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="4" id="19_rating_2"><label for="19_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="3" id="18_rating_2"><label for="18_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="2" id="17_rating_2"><label for="17_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="1" id="16_rating_2"><label for="16_rating_2">☆</label>
+                            </div>
+                            <hr>
+
+                            <p>
+                                <strong>Photo:</strong> 
+                                <img id="modalPhoto" src="" alt="Photo" class="img-fluid">
+                            </p>
+
+                            <p><b>Was company photo is right..??</b> </p>
+                            <div class="MoMrating" data-question="Was meeting end location correct" data-userid="" data-taskid="">
+                                <input type="radio" name="momrat2_" value="5" id="25_rating_2"><label for="25_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="4" id="24_rating_2"><label for="24_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="3" id="23_rating_2"><label for="23_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="2" id="22_rating_2"><label for="22_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="1" id="21_rating_2"><label for="21_rating_2">☆</label>
+                            </div>
+                            <hr>
+                            <p><strong>Type:</strong> <span id="modalMomType"></span></p>
+                            
+                            <p><b>..??</b> </p>
+                            <div class="MoMrating" data-question="Was meeting end location correct" data-userid="" data-taskid="">
+                                <input type="radio" name="momrat2_" value="5" id="25_rating_2"><label for="25_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="4" id="24_rating_2"><label for="24_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="3" id="23_rating_2"><label for="23_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="2" id="22_rating_2"><label for="22_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="1" id="21_rating_2"><label for="21_rating_2">☆</label>
+                            </div>
+                            <hr>
+                            <p><strong>Partner Type:</strong> <span id="modalPartnerType"></span></p>
+                            
+                            <p><b>Was partner type correct..??</b> </p>
+                            <div class="MoMrating" data-question="Was meeting end location correct" data-userid="" data-taskid="">
+                                <input type="radio" name="momrat2_" value="5" id="30_rating_2"><label for="30_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="4" id="29_rating_2"><label for="29_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="3" id="28_rating_2"><label for="28_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="2" id="27_rating_2"><label for="27_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="1" id="26_rating_2"><label for="26_rating_2">☆</label>
+                            </div>
+                            <hr>
+                            <p><strong>BD Potential:</strong> <span id=""></span></p>
+                            
+                            <p><b>BD potential marked correctly..??</b> </p>
+                            <div class="MoMrating" data-question="Was meeting end location correct" data-userid="" data-taskid="">
+                                <input type="radio" name="momrat2_" value="5" id="35_rating_2"><label for="35_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="4" id="34_rating_2"><label for="34_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="3" id="33_rating_2"><label for="33_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="2" id="32_rating_2"><label for="32_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="1" id="31_rating_2"><label for="31_rating_2">☆</label>
+                            </div>
+                            <hr>
+                            <p><strong>MoM Remark : </strong> <span id="momRemark"></span></p>
+                            
+                            <p><b>MoM remarks entered correctly..??</b> </p>
+                            <div class="MoMrating" data-question="Was meeting end location correct" data-userid="" data-taskid="">
+                                <input type="radio" name="momrat2_" value="5" id="35_rating_2"><label for="35_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="4" id="34_rating_2"><label for="34_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="3" id="33_rating_2"><label for="33_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="2" id="32_rating_2"><label for="32_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="1" id="31_rating_2"><label for="31_rating_2">☆</label>
+                            </div>
+                        </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -920,12 +942,13 @@ $('[id^="giveRating"]').on('click', function() {
                     var data = JSON.parse(response);
 
         // Update modal content
-                    document.getElementById('modalPhoto').src = data.cphoto; // Set image source
+                    document.getElementById('modalPhoto').src = data.cphoto; 
                     document.getElementById('modalStartTime').textContent = data.start_time;
                     document.getElementById('modalEndTime').textContent = data.end_time;
                     document.getElementById('modalMomType').textContent = data.momType || 'N/A';
                     document.getElementById('modalEndTime').textContent = data.end_time;
                     document.getElementById('modalPartnerType').textContent = data.mompartner;
+                    document.getElementById('momRemark').textContent = data.momremark;
                     
 
                     var startLat = data.start_lat;
@@ -935,7 +958,6 @@ $('[id^="giveRating"]').on('click', function() {
 
                     document.getElementById('startMap').src = `https://maps.google.com/?q=${startLat},${startLong}&t=k&z=13&ie=UTF8&iwloc=&output=embed`;
                     
-
                     // Update the end location map and link
 
                     document.getElementById('endMap').src = `https://maps.google.com/?q=${endLat},${endLong}&t=k&z=13&ie=UTF8&iwloc=&output=embed`;
@@ -987,59 +1009,22 @@ $('[id^="giveRating"]').on('click', function() {
     }
 </script>
 <script>
-$(document).ready(function() {
-    // Handle star click
-    $('.star').on('click', function() {
-        var value = $(this).data('value');
-        var container = $(this).closest('.star-rating');
+        function handleRatingClick(event) {
+            // Get the container of the clicked radio button
+            const container = event.currentTarget.closest('.MoMrating');
+            
+            // Disable all radio buttons within that container
+            const radios = container.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => {
+                radio.disabled = true;
+            });
+        }
 
-        container.find('.star').removeClass('rated');
-        container.find('.star').each(function() {
-            if ($(this).data('value') <= value) {
-                $(this).addClass('rated');
-            }
+        // Attach event listeners to all radio buttons in each MoMrating container
+        document.querySelectorAll('.MoMrating input[type="radio"]').forEach(radio => {
+            radio.addEventListener('click', handleRatingClick);
         });
-
-        // Set the value of the hidden input
-        var hiddenInput = container.siblings('input[type="hidden"]');
-        hiddenInput.val(value);
-    });
-
-    // Optional: Add hover effect
-    $('.star').on('mouseover', function() {
-        var value = $(this).data('value');
-        var container = $(this).closest('.star-rating');
-
-        container.find('.star').each(function() {
-            if ($(this).data('value') <= value) {
-                $(this).addClass('rated');
-            } else {
-                $(this).removeClass('rated');
-            }
-        });
-    }).on('mouseout', function() {
-        $(this).closest('.star-rating').find('.star').removeClass('rated');
-    });
-
-    // Function to handle form submission
-    window.submitReview = function() {
-        $.ajax({
-            url: 'path/to/your_controller/save', // Update with your controller method URL
-            type: 'POST',
-            data: $('#ratingForm').serialize(), // Serialize form data
-            success: function(response) {
-                // Handle success response
-                alert('Rating submitted successfully!');
-                $('#MoMModal').modal('hide'); // Hide the modal
-            },
-            error: function(xhr, status, error) {
-                // Handle error response
-                alert('An error occurred while submitting the rating.');
-            }
-        });
-    };
-});
-</script>
+    </script>
 
 </body>
 </html>

@@ -464,7 +464,7 @@
                                                     <th>Yesterday Close Image</th>
                                                     <th>Yesterday End Comment</th>
                                                     <th>Yesterday Close Google Map </th>
-                                                    <th>Yesterday Total Consume Time </th>
+                                                    <!-- <th>Yesterday Total Consume Time </th> -->
                                                     <!-- <th>Task Assign By Others</th> -->
                                                 </tr>
                                             </thead>
@@ -742,37 +742,7 @@
                                                                 echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :" . $starRemark . "</span>";
                                                             }  ?>
                                                         </td>
-                                                        <td>
-                                                            <?php
-
-                                                            date_default_timezone_set('Asia/Kolkata');
-                                                            $ustart = $data->user_start_time;
-                                                            $uclose = $data->user_close_time;
-                                                            $sst = (isset($ustart)) ? $ustart : 'Not Set';
-                                                            $eet = (isset($uclose)) ? $uclose : 'Pendings';
-                                                            echo '<b>Start Time : </b>' . $sst;
-                                                            echo "<hr>";
-                                                            if (!isset($uclose)) { ?>
-                                                                    <span class="bg-warning p-1"> <b>End&nbsp;Time&nbsp;:&nbsp;</b>&nbsp;&nbsp;Pending</span> <hr>
-                                                            <?php  } else {
-                                                                echo '<b>End Time : </b>' . $eet;
-                                                            } ?>
-                                                                <?php
-                                                                if ($eet == 'Pendings') {
-                                                                    $uclose = date("Y-m-d H:i:s");
-                                                                } 
-                                                                $start = new DateTime($ustart);
-                                                                $end = new DateTime($uclose);
-                                                                $interval = $start->diff($end);
-                                                                // var_dump($interval);
-                                                                $minutesd = ($interval->h * 60) + $interval->i;
-                                                                $hours = floor($minutesd / 60);
-                                                                // Calculate the remaining minutes
-                                                                $minutes = $minutesd % 60;
-                                                                echo "<b>Till now Consume Time : </b> ";
-                                                                echo "$hours hours and $minutes minutes.\n";
-                                                                ?>
-                                                        </td> 
+                                                        
                                                     </tr>
                                                 <?php $i++;
                                                 endforeach; ?>
@@ -805,8 +775,23 @@
                                                         <td><?= $data->name; ?></td>
                                                         <td data-question="Yesterday Total Plan Task is Good" data-userid="<?= $data->user_id; ?>" data-period="Yesterday Task" data-cdate="<?= $cdate; ?>">
                                                             <?php $dayData = $this->Management_model->CheckingYesterDayTaskStatus($teamuid); ?>
-                                                            <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/total/' . $teamuid . '/' . $cdate ?>"><?= $dayData[0]->plan ?></a>
+                                                            <b>Own funnel tasks : </b> 
+                                                            <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/total/' . $teamuid . '/' . $cdate ?>">
+                                                                <?= $dayData[0]->plan ?></a>
+                                                                <hr>
+                                                            <?php 
 
+                                                                $typeID = 13;
+                                                                if ($typeID == 13) { ?>
+
+                                                                    <?php $funnelData = getFunnelTaskforCLM($uid); ?>
+                                                                    <b>Team funnel tasks : </b> 
+                                                                    <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/Teamtotal/' . $uid . '/' . $cdate ?>">
+                                                                <?= ($funnelData[0]->TotalTeamplan); ?></a>
+
+                                                                    
+
+                                                            <?php  } ?>
                                                             <br>
                                                             <hr>
                                                             <p class="question">Yesterday Total Plan Task is Good?</p>
@@ -845,8 +830,14 @@
                                                             }  ?>
                                                         </td>
                                                         <td data-question="Yesterday Total Pending Task is Good" data-userid="<?= $data->user_id; ?>" data-period="Yesterday Task" data-cdate="<?= $cdate; ?>">
+                                                        <b>Own funnel pending tasks : </b> 
                                                             <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/Pending/' . $teamuid . '/' . $cdate ?>"><?= $dayData[0]->pending ?></a>
-
+                                                            <hr>
+                                                            <?php if ($typeID == 13) { ?>
+                                                            <b>Team funnel pending tasks : </b> 
+                                                                    <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/TotalTeampending/' . $uid . '/' . $cdate ?>">
+                                                                <?= ($funnelData[0]->TotalTeamplan); ?></a>
+                                                            <?php } ?>
                                                             <br>
                                                             <hr>
                                                             <p class="question">Yesterday Total Pending Task is Good?</p>
@@ -885,8 +876,14 @@
                                                             }  ?>
                                                         </td>
                                                         <td data-question="Yesterday Total Done Task is Good" data-userid="<?= $data->user_id; ?>" data-period="Yesterday Task" data-cdate="<?= $cdate; ?>">
+                                                        <b>Own funnel pending tasks : </b> 
                                                             <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/done/' . $teamuid . '/' . $cdate ?>"><?= $dayData[0]->done ?></a>
-
+                                                            <hr>
+                                                            <?php if ($typeID == 13) { ?>
+                                                            <b>Team funnel pending tasks : </b> 
+                                                                    <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/TotalTeamCompleted/' . $uid . '/' . $cdate ?>">
+                                                                <?= ($funnelData[0]->TotalTeamdone); ?></a>
+                                                            <?php } ?>
                                                             <br>
                                                             <hr>
                                                             <?php
@@ -925,8 +922,21 @@
                                                             }  ?>
                                                         </td>
                                                         <td data-question="Yesterday Total Autotask Task is Good" data-userid="<?= $data->user_id; ?>" data-period="Yesterday Task" data-cdate="<?= $cdate; ?>">
-                                                            <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/autotask/' .$teamuid. '/'. $cdate ?>"><?= $dayData[0]->autotask ?></a>
+                                                            <b>Own funnel Total Auto Task : </b>
+                                                                <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/autotask/' .$teamuid. '/'. $cdate ?>"><?= $dayData[0]->autotask ?></a>
+                                                                <br><br>
+                                                            <b>Own funnel Total Completed Auto Task : </b>
+                                                            <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/autotask/' .$teamuid. '/'. $cdate ?>"><?= $dayData[0]->Completedautotask ?></a>
+                                                            <hr>
+                                                            <?php if ($typeID == 13) { ?>
+                                                            <b>Team funnel autotask tasks : </b> 
+                                                                    <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/TotalTeamAutotaskPlan/' . $uid . '/' . $cdate ?>">
+                                                                <?= ($funnelData[0]->TotalTeamautotask); ?></a>
 
+                                                                <b>Team funnel autotask Completed : </b> 
+                                                                    <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/TotalTeamAutotaskComplete/' . $uid . '/' . $cdate ?>">
+                                                                <?= ($funnelData[0]->TotalTeamCompletedautotask); ?></a>
+                                                            <?php } ?>
                                                             <br><br>
                                                             <hr>
                                                             <p class="question">Yesterday Total Autotask Task is Good?</p>
@@ -965,8 +975,25 @@
                                                             }  ?>
                                                         </td>
                                                         <td data-question="Yesterday Total Task assign by other are completed" data-userid="<?= $data->user_id; ?>" data-period="Yesterday Task" data-cdate="<?= $cdate; ?>">
-                                                            <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/otherTaskAssign/' .$teamuid. '/'. $cdate ?>"><?= $dayData[0]->assignByOther ?></a>
+                                                            
+                                                            <b>Own funnel Total assigned by Other : </b>
+                                                                <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/otherTaskAssign/' .$teamuid. '/'. $cdate ?>">
+                                                                <?= $dayData[0]->assignByOther ?></a> <br><br>
 
+                                                            <b>Own funnel Total Completed task assigned by Other : </b>
+                                                                <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/otherTaskAssign/' .$teamuid. '/'. $cdate ?>">
+                                                                <?= $dayData[0]->CompletedassignByOther ?></a>
+                                                            
+                                                            <hr>
+                                                            <?php if ($typeID == 13) { ?>
+                                                            <b>Team total funnel tasks assigned by others: </b> 
+                                                                    <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/TotalTeamotherAssign/' . $uid . '/' . $cdate ?>">
+                                                                <?= ($funnelData[0]->TotalTeamassignByOther); ?></a>
+                                                                <hr>
+                                                                <b>Team total completed funnel tasks assigned by others: </b> 
+                                                                <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/TotalTeamotherAssignComplete/' . $uid . '/' . $cdate ?>">
+                                                                <?= ($funnelData[0]->TotalTeamCompletedassignByOther); ?></a>
+                                                            <?php } ?>
                                                             <br><br>
                                                             <hr>
                                                             <p class="question">Yesterday Total Task assign by other are completed?</p>
@@ -1086,12 +1113,11 @@
 <script type='text/javascript'>
 
     function feedBackButton(mid,id,val){
-    // alert(val); // MorningsfeedBack
+
         if(val == 'MorningsfeedBack'){
             $('#exampleModalCenter').modal('show');
             $('#selectedusermorning').val(id);
         }
-
         if(val == 'yesterdayEveningfeedBack'){
             // alert(val);
             $('#yesterDayeveningModalCenter').modal('show');
@@ -1102,7 +1128,6 @@
             $('#taskModalCenter').modal('show');
             $('#selecteduserytask').val(id);
         }
-
     }
 
 </script>
@@ -1195,8 +1220,8 @@
             $("#TodayMorningTable").DataTable({
                 "responsive": false,
                 "lengthChange": false,
-                "autoWidth": true
-                // "buttons": ["csv", "excel", "pdf", "print"]
+                "autoWidth": true,
+                "buttons": ["csv", "excel", "pdf", "print"]
             });
 
             $("#YesterdayTaskTable").DataTable({
@@ -1296,8 +1321,7 @@
                     error: function() {
                         alert("There was an error submitting the rating.");
                     }
-                });
-            
+            });   
         }
     </script>    
   </body>

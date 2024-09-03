@@ -70,8 +70,47 @@
                 <div class="card">
                   <div class="card-header">
                     <h3 class="text-center">
-                      <center><b>Task Detail <br>(<?= $previousDate?>)</b></center>
+                      <center><b>Day Check Management Report</b></center>
                     </h3>
+                    <div class="card-body FilterSection">
+                            <form method="POST"
+                                action="<?= base_url(); ?>Management/DayManagementReport/<?php ?>">
+                                <div class="row">
+                                    <div class="col-lg-3 col-sm-6">
+                                        <label for="startDate">Start Date</label>
+                                        <input id="startDate" name="startDate" class="form-control" type="date"
+                                            value="<?= $sdate ?>" />
+                                    </div>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <label for="endDate">End Date</label>
+                                        <input id="endDate" class="form-control" name="endDate" type="date"
+                                            value="<?= $edate ?>" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Select User</label>
+                                            <select class="custom-select rounded-0" name="user[]" id="user" required>
+                                                <option value="select_all">Select All</option>
+                                                <?php foreach ($users as $users) { ?>
+                                                    <option value="<?= $users->user_id ?>" <?= in_array($users->user_id, $selected_user) ? 'selected' : '' ?>>
+                                                        <?= htmlspecialchars($users->name) ?></option>
+                                                    <!-- <option value="<?= $users->user_id ?>"><?= $users->name ?></option> -->
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Partner Type -->                                    
+                                    <!-- Cluster -->
+                                    
+                                    <!--Cluster Users -->
+                                    
+                                    <div class="col-lg-3 col-sm-6">
+                                        <br>
+                                        <button type="submit" name="submit" class="btn btn-primary"> Filter</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                   </div>
                   <!-- /.card-header -->
                   <div class="card-body">
@@ -82,113 +121,48 @@
                             <div class="table-responsive">
                               <div class="pdf-viwer">
                                 <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                                  <thead>
-                                    <tr>
-                                      <th>S.No.</th>
-                                      <th>BD Name</th>
-                                      <th>Company Name</th>
-                                      <th>Plan Time</th>
-                                      <th>Initiated Time</th>
-                                      <th>Plan and Initiated Time Diff</th>
-                                      <th>Completed Time</th>
-                                      <th>Plan and Completed Time Diff</th>
-                                      <th>Initiated and Completed Time Diff</th>
-                                      <th>Last_Task Date</th>
-                                      <th>Current_Task Date</th>
-                                      <th>Current task planned after time difference</th>
-                                      <th>Last_Task_Activity</th>
-                                      <th>Current_Task_Activity</th>
-                                      <th>Last_Task_Remarks</th>
-                                      <th>Current_Task_Remarks</th>
-                                      <th>Last_Status</th>
-                                      <th>Current_Status</th>
-                                      <th>Action Taken</th>
-                                      <th>Purpose Achieved</th>
-                                      <th>Review Remark</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <?php 
-                                      $i=1;
-                                      
-                                     
-                                      
-                                    foreach($dayData as $md){
-                                        
-                                        // var_dump($md);die;
-                                        $bd = $md->user_id;
-                                    
-                                        $bdname = $this->Menu_model->get_userbyid($bd);
-                                    
-                                        $tid = $md->id;
-                                    
-                                        // $ltid = $md->ltid;
+                                    <thead>
+                                        <tr>
+                                            <th>S.No.</th>
+                                            <th>Name</th>
+                                            <th>Date</th>
+                                            <th>Period</th>
+                                            <th>Question</th>
+                                            <th>Rating</th>
+                                            <th>Remark</th>
+                                            <th>Feedback By</th>
 
-                                        $ltid = $md->lastCFID;
-                                    
-                                        $inid  = $md->cid_id;
-                                    
-                                        $inid = $this->Menu_model->get_initbyid($inid);
-                                    
-                                        $mtd = $this->Menu_model->get_ccitblall($tid);
-                                    
-                                        $lsid = $mtd[0]->status_id;
-                                    
-                                        $csid = $mtd[0]->nstatus_id;
-                                    
-                                        $s1 = $this->Menu_model->get_statusbyid($lsid);
-                                    
-                                        if($s1){$s1=$s1[0]->name;}else{$s1='';}
-                                    
-                                        $s2 = $this->Menu_model->get_statusbyid($csid);
-                                    
-                                        if($s2){$s2=$s2[0]->name;}else{$s2='';}
-                                    
-                                        if($ltid!=0){  
-                                    
-                                        $mltd = $this->Menu_model->get_ccitblall($ltid);
-                                        
-                                        
-                                        $ltime = $mltd[0]->updateddate;
-                                    
-                                        $ctime = $mtd[0]->updateddate;
-                                    
-                                        $nltime = date('d-m-Y  h:i A', strtotime($ltime));
-                                    
-                                        $nctime = date('d-m-Y  h:i A', strtotime($ctime));
-                                    
-                                        }else{$mltd='';$nltime='';$nctime='';$ltime='';$ctime='';}
-                                      
-                                      ?>
-                                    <tr>
-                                      <td><?=$i?></td>
-                                      <td><?=$bdname[0]->name?></td>
-                                      <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$inid[0]->cmpid_id?>"><?=$mtd[0]->compname?></a></td>
-                                      <td><?=date('d-m-Y h:i A', strtotime($pltime = $md->appointmentdatetime));?></td>
-                                      <td><?=date('d-m-Y h:i A', strtotime($intime = $md->initiateddt));?></td>
-                                      <td><?=$this->Menu_model->timediff($pltime,$intime)?></td>
-                                      <td><?=date('d-m-Y h:i A', strtotime($uptime = $md->updateddate));?></td>
-                                      <td><?=$this->Menu_model->timediff($pltime,$uptime)?></td>
-                                      <td><?=$this->Menu_model->timediff($intime,$uptime)?></td>
-                                      <td><?=$nltime?></td>
-                                      <td><?=$nctime?></td>
-                                      <td><?php if($ctime!=''){echo $this->Menu_model->timediff($ltime,$ctime);}?></td>
-                                      <td><?php if($mltd!=''){echo $mltd[0]->current_action_type;}?></td>
-                                      <td><?=$mtd[0]->current_action_type?></td>
-                                      <td><?php if($mltd!=''){echo $mltd[0]->remarks;}?></td>
-                                      <td><?=$md->remarks?><?=$md->mom?></td>
-                                      <td><?=$s1?></td>
-                                      <td><?=$s2?></td>
-                                      <td><?=$mtd[0]->actontaken?></td>
-                                      <td><?=$mtd[0]->purpose_achieved?></td>
-                                      <td>
-                                        <?=$md->rremark?>
-                                        <hr>
-                                        <?=$md->star?> Star
-                                      </td>
-                                      </tr>
-                                      <?php $i++;} ?>
-                                  </tbody>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php 
+                                      $i=1;                                      
+                                        foreach($getReportbyUser as $singleReport){ ?>
+
+                                            <td><?=$i?></td>
+                                            <td><?=$singleReport->userName?></td>
+                                            <td><?=$singleReport->date?></td>
+                                            <td><?=$singleReport->periods?></td>
+
+                                            <td><?=$singleReport->question?></td>
+                                            <td>
+                                            <?php   
+                                                $totalStars = 5;
+                                                for($j = 0; $j < $singleReport->star; $j++) {
+                                                    echo "<i class='fas fa-star' style='color:#f39c12;'></i>"; // filled star
+                                                }
+                                                for ($j = $singleReport->star; $j < $totalStars; $j++) {
+                                                    echo "<i class='far fa-star'></i>"; // empty star
+                                                } ?>
+                                            </td>
+                                            <!-- <td><?=$singleReport->star?></td> -->
+
+                                            <td><?=$singleReport->remarks?></td>
+
+                                            <td><?=$singleReport->feedbackBy?></td>
+
+                                        <?php $i++;} ?>
+                                    </tbody>
                                 </table>
                               </div>
                             </div>

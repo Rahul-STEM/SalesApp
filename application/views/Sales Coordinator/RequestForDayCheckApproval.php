@@ -83,7 +83,7 @@
                                 </div>
                             </div>
                             <div class="form-group text-center">
-                                <button type="submit" class="btn btn-success"  onclick="submitReview()">Submit Request</button>
+                                <button type="submit" class="btn btn-success"  onclick="submitReview()">Submit </button>
                             </div>
                         <!-- </div> -->
                     </form>
@@ -208,6 +208,8 @@
             var remark = document.getElementById("request").value;
             // var starID = document.getElementById("starID").value;
 
+            
+
             $.ajax({
                 url: '<?=base_url();?>Management/RequestForDayManagementApproval',
                 type: 'POST',
@@ -217,7 +219,6 @@
                     // starID: starID,
                     },
                     success: function(response) {
-                        // $('#ReviewModal').modal('hide');
 
                         $('#success-message').show();
 
@@ -235,7 +236,7 @@
                         alert("There was an error submitting the rating.");
                     }
                 });
-}
+        }
     </script>
 </body>
 </html>

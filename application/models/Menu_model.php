@@ -1565,7 +1565,10 @@ WHERE cid = '$cid'");
         return $query->result();
      }
 
-     
+     public function get_utypebyUserID($uid){
+        $query=$this->db->query("SELECT type_id FROM user_details WHERE user_id='$uid'");
+        return $query->result();
+     }
 
 
      public function get_client(){
@@ -11914,7 +11917,7 @@ public function getTeamDeatilsByDate($uid,$tdate){
 }
 
 public function getTeamTasks($uid,$tdate,$sDate=null,$eDate=null){
-    $tdate = '2024-07-01';
+    // $tdate = '2024-07-01';
     // $sDate = '2024-07-01';
     // $eDate = '2024-07-02';
     

@@ -413,7 +413,7 @@ class Management_model  extends Menu_model {
 
     }
 
-    public function getReportbyUser($id,$selected_user,$sdate,$edate){
+    public function getReportbyUser($selected_user,$sdate,$edate){
 
         // var_dump($selected_user);die;
         $this->db->select('star_rating.*');

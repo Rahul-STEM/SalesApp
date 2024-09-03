@@ -634,11 +634,11 @@
 
                             <p><b> Did the meeting started on right time..??</b></p>
                             <div class="MoMrating" data-question="Did the meeting started on right time" data-userid="" data-taskid="">
-                                <input type="radio" name="momrat1_" value="5" id="10_rating_1"><label for="10_rating_1">☆</label>
-                                <input type="radio" name="momrat1_" value="4" id="9_rating_1"><label for="9_rating_1">☆</label>
-                                <input type="radio" name="momrat1_" value="3" id="8_rating_1"><label for="8_rating_1">☆</label>
-                                <input type="radio" name="momrat1_" value="2" id="7_rating_1"><label for="7_rating_1">☆</label>
-                                <input type="radio" name="momrat1_" value="1" id="6_rating_1"><label for="6_rating_1">☆</label>
+                                <input type="radio" name="momrat1_" value="5" id="5_rating_1"><label for="5_rating_1">☆</label>
+                                <input type="radio" name="momrat1_" value="4" id="4_rating_1"><label for="4_rating_1">☆</label>
+                                <input type="radio" name="momrat1_" value="3" id="3_rating_1"><label for="3_rating_1">☆</label>
+                                <input type="radio" name="momrat1_" value="2" id="2_rating_1"><label for="2_rating_1">☆</label>
+                                <input type="radio" name="momrat1_" value="1" id="1_rating_1"><label for="1_rating_1">☆</label>
                             </div>
                             <hr>
                             <strong>Start Location:</strong> 
@@ -694,7 +694,7 @@
                             </p>
 
                             <p><b>Was company photo is right..??</b> </p>
-                            <div class="MoMrating" data-question="Was meeting end location correct" data-userid="" data-taskid="">
+                            <div class="MoMrating" data-question="Was company photo is right" data-userid="" data-taskid="">
                                 <input type="radio" name="momrat2_" value="5" id="25_rating_2"><label for="25_rating_2">☆</label>
                                 <input type="radio" name="momrat2_" value="4" id="24_rating_2"><label for="24_rating_2">☆</label>
                                 <input type="radio" name="momrat2_" value="3" id="23_rating_2"><label for="23_rating_2">☆</label>
@@ -704,19 +704,8 @@
                             <hr>
                             <p><strong>Type:</strong> <span id="modalMomType"></span></p>
                             
-                            <p><b>..??</b> </p>
-                            <div class="MoMrating" data-question="Was meeting end location correct" data-userid="" data-taskid="">
-                                <input type="radio" name="momrat2_" value="5" id="25_rating_2"><label for="25_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="4" id="24_rating_2"><label for="24_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="3" id="23_rating_2"><label for="23_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="2" id="22_rating_2"><label for="22_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="1" id="21_rating_2"><label for="21_rating_2">☆</label>
-                            </div>
-                            <hr>
-                            <p><strong>Partner Type:</strong> <span id="modalPartnerType"></span></p>
-                            
-                            <p><b>Was partner type correct..??</b> </p>
-                            <div class="MoMrating" data-question="Was meeting end location correct" data-userid="" data-taskid="">
+                            <p><b>MoM type is correct..??</b> </p>
+                            <div class="MoMrating" data-question="MoM type is correct" data-userid="" data-taskid="">
                                 <input type="radio" name="momrat2_" value="5" id="30_rating_2"><label for="30_rating_2">☆</label>
                                 <input type="radio" name="momrat2_" value="4" id="29_rating_2"><label for="29_rating_2">☆</label>
                                 <input type="radio" name="momrat2_" value="3" id="28_rating_2"><label for="28_rating_2">☆</label>
@@ -724,10 +713,10 @@
                                 <input type="radio" name="momrat2_" value="1" id="26_rating_2"><label for="26_rating_2">☆</label>
                             </div>
                             <hr>
-                            <p><strong>BD Potential:</strong> <span id=""></span></p>
+                            <p><strong>Partner Type:</strong> <span id="modalPartnerType"></span></p>
                             
-                            <p><b>BD potential marked correctly..??</b> </p>
-                            <div class="MoMrating" data-question="Was meeting end location correct" data-userid="" data-taskid="">
+                            <p><b>Was partner type correct..??</b> </p>
+                            <div class="MoMrating" data-question="Was partner type correct" data-userid="" data-taskid="">
                                 <input type="radio" name="momrat2_" value="5" id="35_rating_2"><label for="35_rating_2">☆</label>
                                 <input type="radio" name="momrat2_" value="4" id="34_rating_2"><label for="34_rating_2">☆</label>
                                 <input type="radio" name="momrat2_" value="3" id="33_rating_2"><label for="33_rating_2">☆</label>
@@ -735,15 +724,26 @@
                                 <input type="radio" name="momrat2_" value="1" id="31_rating_2"><label for="31_rating_2">☆</label>
                             </div>
                             <hr>
+                            <p><strong>BD Potential:</strong> <span id=""></span></p>
+                            
+                            <p><b>Potential marked correctly..??</b> </p>
+                            <div class="MoMrating" data-question="Potential marked correctly" data-userid="" data-taskid="">
+                                <input type="radio" name="momrat2_" value="5" id="40_rating_2"><label for="40_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="4" id="39_rating_2"><label for="39_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="3" id="38_rating_2"><label for="38_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="2" id="37_rating_2"><label for="37_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="1" id="36_rating_2"><label for="36_rating_2">☆</label>
+                            </div>
+                            <hr>
                             <p><strong>MoM Remark : </strong> <span id="momRemark"></span></p>
                             
                             <p><b>MoM remarks entered correctly..??</b> </p>
-                            <div class="MoMrating" data-question="Was meeting end location correct" data-userid="" data-taskid="">
-                                <input type="radio" name="momrat2_" value="5" id="35_rating_2"><label for="35_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="4" id="34_rating_2"><label for="34_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="3" id="33_rating_2"><label for="33_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="2" id="32_rating_2"><label for="32_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="1" id="31_rating_2"><label for="31_rating_2">☆</label>
+                            <div class="MoMrating" data-question="MoM remarks entered correctly" data-userid="" data-taskid="">
+                                <input type="radio" name="momrat2_" value="5" id="45_rating_2"><label for="45_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="4" id="44_rating_2"><label for="44_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="3" id="43_rating_2"><label for="43_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="2" id="42_rating_2"><label for="42_rating_2">☆</label>
+                                <input type="radio" name="momrat2_" value="1" id="41_rating_2"><label for="41_rating_2">☆</label>
                             </div>
                         </form>
                     </div>

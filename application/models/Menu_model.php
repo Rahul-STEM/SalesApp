@@ -11507,6 +11507,7 @@ public function get_userForTask($uid,$uyid){
     return $query->result();
 
 }
+
 public function getTasks($id,$date){
 
     $this->db->select('tce.id tid');
@@ -11666,7 +11667,6 @@ public function getSameStatusSince($id,$date) {
     return $query->row();
 }
 
-
 public function getMoMData($id) {
 
     // echo $id;die;
@@ -11693,6 +11693,33 @@ public function getMoMData($id) {
 
     // echo $this->db->last_query();
     return $query->row();
+}
+
+public function getReportbyUser($selected_user,$sdate,$edate){
+
+    // var_dump($sdate);die;
+    $this->db->select('tcsr.*');
+    $this->db->select('ud1.name as userName');
+    $this->db->select('ud2.name as feedbackBy');
+    $this->db->select('action.name as actionName');
+    $this->db->select('tblcallevents.appointmentdatetime as taskDate');
+    $this->db->from('taskcheck_star_rating tcsr');
+    $this->db->join('user_details ud1', 'ud1.user_id = tcsr.user_id', 'left');
+    $this->db->join('user_details ud2', 'ud2.user_id = tcsr.feedback_by', 'left');
+    $this->db->join('tblcallevents', 'tcsr.task_id = tblcallevents.id', 'left');
+    $this->db->join('action', 'tblcallevents.actiontype_id = action.id', 'left');
+
+    if(!empty($selected_user)){
+
+        $this->db->where_in('tcsr.user_id',$selected_user);
+    }
+    $this->db->where('CAST(tcsr.date AS DATE) >=', "'$sdate'", FALSE);
+    $this->db->where('CAST(tcsr.date AS DATE) <=', "'$edate'", FALSE);
+
+    $query = $this->db->get();
+
+    // echo $this->db->last_query();
+    return $query->result();
 }
 
 // New TaskCheck function <======================== END ==============================>

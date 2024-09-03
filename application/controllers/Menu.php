@@ -7,6 +7,8 @@ class Menu extends CI_Controller {
         $msg = '';
         $this->load->model('Menu_model');
         $this->load->model('Graph_model');
+        $this->load->model('Management_model');
+
         $this->load->view('index');
         $this->load->helper('SameStatusTillDate_helper');
 
@@ -8947,6 +8949,59 @@ class Menu extends CI_Controller {
 
         echo json_encode($result);
 
+    }
+
+    public function TaskCheck_NewReport()
+    {
+
+        if (isset($_POST['startDate']) && isset($_POST['endDate'])) {
+
+            $sdate = $_POST['startDate'];
+            $edate = $_POST['endDate'];
+        } else {
+
+            $sdate = date('Y-m-d');
+            $edate = date('Y-m-d');
+        }
+
+        if (isset($_POST['user'])) {
+
+            $selected_user = array_filter($_POST['user'], function ($value) {
+                return $value !== 'select_all';
+            });
+        } else {
+
+            $selected_user = [];
+        }
+
+        // var_dump($sdate);die;
+        // $selected_user = [];
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $userTypeid = $user['type_id'];
+        $this->load->model('Graph_Model');
+        $this->load->model('Management_model');
+        $this->load->model('Menu_model');   
+
+        $dt = $this->Graph_Model->get_utype($userTypeid);
+        $dep_name = $dt[0]->name;
+
+        $getUsers = $this->Management_model->getUsers($uid,$userTypeid);
+        // $sdate
+        // var_dump($sdate);die;
+        $getReportbyUser = $this->Menu_model->getReportbyUser($selected_user,$sdate,$edate);
+        // $getReportbyUser = '';
+
+        if (!empty($user)) {
+            $this->load->view('include/header');
+
+            $this->load->view($dep_name.'/TaskCheck_NewReport',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'users'=>$getUsers,'selected_user'=>$selected_user,'getReportbyUser'=>$getReportbyUser]);
+                                       
+        } else {
+            redirect('Menu/main');
+        }
     }
     // New TaskCheck <=========================================== END ==================================>
 

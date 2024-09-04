@@ -161,17 +161,17 @@
       }
       ?>
     <style>
-.scrollme{overflow-x:auto;h1{font-size:36px;color:#333}p{font-size:24px;color:#666;margin:10px}.container{background-color:#fff;padding:20px;border-radius:10px;box-shadow:0 0 10px rgb(0 0 0 / .2)}}.custom-card{padding:20px;border:1px solid #e0e0e0;border-radius:5px}.custom-card-header{background-color:#007bff;color:#fff;padding:10px 20px;border-radius:5px 5px 0 0}.custom-radio-label{font-weight:700}.card.container-fluid{background-color:honeydew}p#totalcompany{font-size:12px;padding:10px;color:green;font-weight:700;font-family:sans-serif}label{font-size:12px!important}div#maintaskcard{background:antiquewhite}div#selectCategory{background:#fff6dd}div#actionnotplaned{background:#434630;color:#fff}.card.p-4.taskselectionarea,#companyLocationdatacard,#selectCategory{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff;}div#selectCategory{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}.modal-footer{justify-content:center!important}div#pstAssignCard,div#taskActionCard,div#partnertype,div#actionPlanned,div#review_planning_card,div#companyLocationdatacard,div#clusterLocactionFiltercard,div#sameStatusLastLimitDays,div#becauseofplanchange,div#planbutnotinitiatedcard,div#actionnotplaned_NeedYour,div#planbutnotinitiatedcardold,div#auto_assign,div#compulsive_task_card,div#pendingAutotaskCard,div#need_your_attention,div#firstQuarter1,div#reviewTargetDate{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}div#maintaskcard{background:#bfbfbf}.card-header.custom-card-header{border-radius:43px;text-align:center;padding:2px}.custom-card{background:#efb2b2}span.alertmessagecmp{font-size:14px;padding:2px;color:red}div#plantimerBox{background:linear-gradient(to right,#a80077,#66ff00);border-radius: 56px;box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;}span#timer{font-size:38px;color:#fff}.stopbtntimer{align-items:center;justify-content:center;display:flex}button#stop{padding: 7px 12px;} table.dataTable>thead>tr>th:not(.sorting_disabled), table.dataTable>thead>tr>td:not(.sorting_disabled) {padding-right: 30px; background: #851241;color: white;}
+.scrollme{overflow-x:auto;h1{font-size:36px;color:#333}p{font-size:24px;color:#666;margin:10px}.container{background-color:#fff;padding:20px;border-radius:10px;box-shadow:0 0 10px rgb(0 0 0 / .2)}}.custom-card{padding:20px;border:1px solid #e0e0e0;border-radius:5px}.custom-card-header{background-color:#007bff;color:#fff;padding:10px 20px;border-radius:5px 5px 0 0}.custom-radio-label{font-weight:700}.card.container-fluid{background-color:honeydew}p#totalcompany{font-size:12px;padding:10px;color:green;font-weight:700;font-family:sans-serif}label{font-size:12px!important}div#maintaskcard{background:antiquewhite}div#selectCategory{background:#fff6dd}div#actionnotplaned{background:#434630;color:#fff}.card.p-4.taskselectionarea,#companyLocationdatacard,#selectCategory{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff;}div#selectCategory{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}.modal-footer{justify-content:center!important}div#pstAssignCard,div#taskActionCard,div#partnertype,div#actionPlanned,div#review_planning_card,div#companyLocationdatacard,div#clusterLocactionFiltercard,div#sameStatusLastLimitDays,div#becauseofplanchange,div#becauseof_topsender_pst_meet,div#planbutnotinitiatedcard,div#actionnotplaned_NeedYour,div#planbutnotinitiatedcardold,div#auto_assign,div#compulsive_task_card,div#pendingAutotaskCard,div#need_your_attention,div#firstQuarter1,div#reviewTargetDate{background:#4bb1ac;background-image:linear-gradient(-225deg,#FF057C 0%,#8D0B93 50%,#321575 100%);color:#fff}div#maintaskcard{background:#bfbfbf}.card-header.custom-card-header{border-radius:43px;text-align:center;padding:2px}.custom-card{background:#efb2b2}span.alertmessagecmp{font-size:14px;padding:2px;color:red}div#plantimerBox{background:linear-gradient(to right,#a80077,#66ff00);border-radius: 56px;box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;}span#timer{font-size:38px;color:#fff}.stopbtntimer{align-items:center;justify-content:center;display:flex}button#stop{padding: 7px 12px;} table.dataTable>thead>tr>th:not(.sorting_disabled), table.dataTable>thead>tr>td:not(.sorting_disabled) {padding-right: 30px; background: #851241;color: white;}
 .hrclass{box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;}
  .bgresactive{background: #263b0d!important;}
  .form-control.is-invalid, .was-validated .form-control:invalid {background-image: none !important;}
  .form-control.is-valid, .was-validated .form-control:valid {background-image: none !important;}   
- .select-readonly {
-    background-color: #f5f5f5; /* Light grey background */
-    color: #666; /* Dark grey text */
-    cursor: not-allowed; /* Change cursor to not-allowed */
+ .select-readonly { background-color: #f5f5f5; color: #666;cursor: not-allowed;}
+lable{
+    font-size: 14px!important;
+    font-weight: 500!important;
+    font-family: system-ui!important;
 }
-
     </style>
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -201,6 +201,7 @@ if($type_id == 3){
   }
   $action = array_values($action);
 }
+
 
           ?>
 
@@ -707,7 +708,7 @@ if($type_id == 3){
                         <?php 
                             if($type_id ==3){
                              
-                              $tooltips = "This filter is active if the company is visible and no work has been done in the last 8 days for Open, OPEN RPEM, and Reachout tasks, or in the last 15 days for 'Will Do Later' or 'Not Interested' tasks.";
+                              $tooltips = "This filter is active if the company is visible and no work has been done in the last 8 days for Open, OPEN RPEM, and Reachout status, or in the last 15 days for 'Will Do Later' or 'Not Interested' tasks.";
 
                               }else if($type_id ==13 || $type_id ==4){
 
@@ -752,13 +753,25 @@ if($type_id == 3){
                           </label>
                         </div>
                          <?php } ?> 
-                         <?php if($type_id ==13 || $type_id ==4){ ?>
+                         <?php if($type_id ==13 || $type_id ==4){ 
+
+                          if($type_id ==13){
+                           
+                            $tooltips = "This Filter are Self Assign , After MOM approval, user are automatically assigned a call task. These tasks are visible here. For MOM check, the user can plan the MOM check task when the team submits the MOM task.";
+
+                            }else if($type_id ==4){
+
+                              $tooltips = "This Filter are Self Assign , After MOM approval, user are automatically assigned a call task. These tasks are visible here. For MOM check, the user can plan the MOM check task when the team submits the MOM task.";
+                              }
+                          ?>
                         <div class="form-check" id="self_assign_filter" >
                           <label class="form-check-label custom-radio-label">
-                          <input type="radio" class="form-check-input" name="optradio" value="Self Assign" >Self Assign
+                          <input type="radio" class="form-check-input" name="optradio" value="Self Assign" > <span data-toggle="tooltip" data-placement="left" title="<?=$tooltips;?>">Self Assign</span>
                           </label>
                         </div>
                         <?php } ?>
+
+
                         <div class="form-check" id="company_name_filter">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Compnay Name" >Company Name
@@ -769,10 +782,20 @@ if($type_id == 3){
                           <input type="radio" class="form-check-input" name="optradio" value="Status" >Status
                           </label>
                         </div>
-                        
+                          <?php
+                              $tooltipstaskact = "This feature allows users to filter and plan tasks related to meetings and research within the company.\n";  
+                              $tooltipstaskact .= "Plan Scheduled Meeting Task: Users can plan and schedule specific meeting tasks.\n";  
+                              $tooltipstaskact .= "Plan Barg-in Meeting Task: Users can plan Barg meeting tasks, choosing from:\n";  
+                              $tooltipstaskact .= "Barg-in Meeting From Funnel: When selecting tasks from the funnel.\n";  
+                              $tooltipstaskact .= "Barg-in Meeting Other : When selecting tasks from other sources.\n";  
+                              $tooltipstaskact .= "Plan Research Task: Users can plan research tasks, choosing from:\n";  
+                              $tooltipstaskact .= "Research  From Funnel: When selecting tasks from the funnel.\n";  
+                              $tooltipstaskact .= "Research  Other : When selecting tasks from other sources.\n";  
+                              $tooltipstaskact .= "Add New Lead: Automatically creates a task to add a new lead.\n";  
+                            ?>
                         <div class="form-check">
                           <label class="form-check-label custom-radio-label">
-                          <input type="radio" class="form-check-input" name="optradio" value="Task Action" >Task Action
+                          <input type="radio" class="form-check-input" name="optradio" value="Task Action" > <span data-toggle="tooltip" data-placement="left" title="<?=$tooltipstaskact;?>" >Task Action</span>
                           </label>
                         </div>
                        
@@ -782,26 +805,39 @@ if($type_id == 3){
                           </label>
                         </div> -->
 
+                        <?php
+                        $tooltips_clulocations = "This feature allows users to filter out the company using Travel Cluster.";
+                      ?>
+
                         <div class="form-check" id="cluster_location_fiilter">
                           <label class="form-check-label custom-radio-label">
-                          <input type="radio" class="form-check-input" name="optradio" value="Cluster Location" >Cluster Location
+                          <input type="radio" class="form-check-input" name="optradio" value="Cluster Location" >
+                          <span data-toggle="tooltip" data-placement="left" title="<?=$tooltips_clulocations;?>">Cluster Location</span>
                           </label>
                         </div>
 
-                      
+                        <?php
+                        $tooltips_category = "This feature allows users to filter out the company using Category";
+                        ?>
 
                         <div class="form-check" id="company_category_filter">
                           <label class="form-check-label custom-radio-label">
-                          <input type="radio" class="form-check-input" name="optradio" value="Category" >Category
+                          <input type="radio" class="form-check-input" name="optradio" value="Category" >
+                          <span data-toggle="tooltip" data-placement="left" title="<?=$tooltips_category;?>">Category</span>
                           </label>
                         </div>
-
+                        <?php
+                        $tooltips_partner = "This feature allows users to filter out the company using Partner Type";
+                        ?>
                         <div class="form-check" id="partner_type_filter">
                           <label class="form-check-label custom-radio-label">
-                          <input type="radio" class="form-check-input" name="optradio" value="Partner Type" >Partner Type
+                          <input type="radio" class="form-check-input" name="optradio" value="Partner Type" >
+                          <span data-toggle="tooltip" data-placement="left" title="<?=$tooltips_partner;?>">Partner Type</span>
                           </label>
                         </div>
-                
+                        <?php
+                        $tooltips_partner = "This feature allows users to filter out the company using Days";
+                        ?>
                         <div class="form-check" id="ssllimit_days_filter">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Same Status Last Limit Days" >Same Status Last Limit Days 
@@ -893,9 +929,43 @@ if($type_id == 3){
                       </div>
                       <div id="actionPlanned" class ="card p-2">
 
+
+                      <div id="becauseof_topsender_pst_meet" class="p-2">
+                        
+                      <div class="form-group">
+                          <label>Planning for own / other  funnel</label>
+                          <select id="planning_funnel" class="form-control">
+                            <option value="">Select funnel</option> 
+                            <option value="Own funnel">own funnel</option> 
+                            <option value="Other funnel">Other funnel</option> 
+                          </select>
+                        </div>
+
+                      <div class="form-group" id="becauseofTPM_TaskDatacard">
+                          <label>Select On </label>
+                          <select id="becauseofTPM_TaskData" class="form-control">
+                            <option value="">Select On</option> 
+                            <option value="On BD">ON BD</option> 
+                            <option value="On PST">ON PST</option> 
+                            <option value="both">Both</option> 
+                          </select>
+                        </div>
+                      <div class="form-group" id="becauseofTPM_TaskDatacard_new">
+                          <label>Because Of </label>
+                          <select id="becauseofTPM_new" class="form-control">
+                          <option value="">Select Because Of</option>     
+                            <option value="Top Spender">Top Spender</option> 
+                            <option value="Meeting">Meeting</option> 
+                          </select>
+                        </div>
+
+                      </div>
                           
+
+
+
                           <div id="selectcompanyname" class="form-group">
-                          <lable>Enter Company Name Or CID</lable>  <hr>   
+                          <lable>Enter Company Name Or CID</lable>
                           <?php $allCmpData = $this->Menu_model->GetAllCompanyByUserID($uid); ?>
                           
                           <input type="search" class="form-control" class="search" id="search_company" placeholder="Search" list="data">
@@ -905,14 +975,13 @@ if($type_id == 3){
                                 <?php } ?>
                             </datalist>
                           </div>
-                            
+
                         <?php 
                           $allStatus = $this->Menu_model->get_status();
                           ?>
                         <input type="hidden" name="selectbyuser" id="selectbyuser" value="">
                         <div class="form-group" id="selectstatus" >
                           <lable class="text-left">Select Company Status : </lable>
-                          <hr>
                           <select class="form-control" id="selectstatusbyuser">
                             <option selected disabled>Select Status</option>
                             <option value="all">All</option>
@@ -1388,7 +1457,6 @@ if($type_id == 3){
                             ?>
                           </select>
                         </div>
-                        <p class="p-2 text-white" id="plancomp_planchange"></p>
                       </div>
 
                       <div id="planbutnotinitiatedcardold" class="card p-4" >
@@ -1657,9 +1725,9 @@ if($type_id == 3){
                             <p id="totalcompany"></p>
                           </div>
                           <div class="form-group">
-                            <select id="ntactionnew" name="ntaction" class="form-control" required="">
+                          <select id="ntactionnew" name="ntaction" class="form-control" required="">
                               <option value="">Select Action</option>
-                              <?php  foreach($action as $a){if($a->id!=3 && $a->id!=4 && $a->id!=6 && $a->id!=8 && $a->id!=9 && $a->id!=11 && $a->id!=17 && $a->id!=15){ ?>
+                              <?php  foreach($action as $a){if($a->id!=3 && $a->id!=4 && $a->id!=6 && $a->id!=8 && $a->id!=9 && $a->id!=11 && $a->id!=17 && $a->id!=15 && $a->id!=18 && $a->id!=10){ ?>
                               <option value="<?=$a->id;?>"><?=$a->name;?></option>
                               <?php }} ?>
                             </select>
@@ -1675,8 +1743,6 @@ if($type_id == 3){
                               <?php } ?>
                             </select>
                           </div>
-
-                     
 
                           <input type="hidden" id="hiddenSelectStatus" name="selectstatusbyuser">
                           <input type="hidden" id="hiddenTaskAction" name="tasktaction">
@@ -2287,6 +2353,9 @@ if($type_id == 3){
                  $("#review_planning_card").hide();
                  $("#need_your_attention").hide();
                  $("#becauseofplanchange").hide();
+                 $("#becauseof_topsender_pst_meet").hide();
+                 $("#becauseofTPM_TaskDatacard").hide();
+                 $("#becauseofTPM_TaskDatacard_new").hide();
                 });
         
                 $("#mainbox").hide();$("#ScheduledBox").hide();
@@ -2327,7 +2396,169 @@ if($type_id == 3){
                 $("#selectby").val(val);
 
                 if(val=='Compnay Name'){
-                   $('#selectcompanyname').show();
+                    var userslcttype = <?php echo $type_id; ?>;
+                    if(userslcttype == 13){
+                      $('#selectcompanyname').hide();
+                      $("#selectstatus").hide();
+
+                      $("#becauseof_topsender_pst_meet").show();
+                    
+                      $('#planning_funnel').on('change', function() {
+                          var planning_funnel = $(this).val();
+                          if(planning_funnel == 'Own funnel'){
+                            $('#becauseofTPM_TaskDatacard').hide();
+                            $('#becauseofTPM_TaskDatacard_new').hide();
+                            $('#selectcompanyname').show();
+                            $("#selectstatus").show();
+
+                        $("#selectcompanybyuser").html('');
+
+                          $.ajax({
+                          url:'<?=base_url();?>Menu/getownfunnel',
+                          type: "POST",
+                          data: {
+                          sid:'all',
+                          uid: uid
+                          },
+                          cache: false,
+                          success: function a(result){
+                          $("#maintaskcard").show();    
+                          $("#selectcompanybyuser").html(result);
+                          $("#selectcompanybyuser").show();
+                          var optionCount = $('#selectcompanybyuser').find('option').length;
+                          optionCount = optionCount-1;
+                          $("#totalcompany").text('Total Company :'+ optionCount);
+                          $("#tptime").val('');
+                          $("#tptime").show();
+                          $('#ntactionnew').show();
+                          $('#ntppose').show();
+                          $('#meeting-time').show();
+                          $('#planbtn1').show();
+                          $("#taskplanningimg").hide();
+                          }
+                          });
+                          }else if(planning_funnel == 'Other funnel'){
+                            $('#becauseofTPM_TaskDatacard').show();
+                            $('#selectcompanyname').hide();
+                            $("#selectstatus").hide();
+                            $("#tasktaction").hide();
+                            $("#taskActionbyuser").hide();
+                            $("#taskPurposebyuser").hide();
+                            $("#taskplanningimg").show();
+
+                            var becauseofTPM_TaskData_img = $("#becauseofTPM_TaskData").val();
+                            var becauseofTPM_new_img = $("#becauseofTPM_new").val();
+                            var planning_funnel_data = $("#planning_funnel").val();
+
+                            if(becauseofTPM_TaskData_img == ''){
+                              $("#taskplanningimg").show();
+                            }else{
+                              $("#taskplanningimg").hide();
+                            }
+                            
+                            if(becauseofTPM_new_img == ''){
+                              $("#taskplanningimg").show();
+                            }else{
+                              $("#taskplanningimg").hide();
+                            }
+                            
+                            if(planning_funnel_data == '' && becauseofTPM_TaskData_img !==''){
+                              $("#taskplanningimg").hide();
+                            }else{
+                              $("#taskplanningimg").hide();
+                            }
+
+                          }else if(planning_funnel == ''){
+                            $('#becauseofTPM_TaskDatacard').hide();
+                            $('#becauseofTPM_TaskDatacard_new').hide();
+                            $("#taskplanningimg").show();
+                            $('#selectcompanyname').hide();
+                            $("#selectstatus").hide();
+                            $("#maintaskcard").hide();
+
+                            $("#tasktaction").hide();
+                            $("#taskActionbyuser").hide();
+                            $("#taskPurposebyuser").hide();
+
+                          }
+                      });
+
+                    $('#becauseofTPM_TaskData').on('change', function() {
+                        
+                      var becauseofTPM = $(this).val();
+                      
+                      $('#becauseofTPM_TaskDatacard_new').show();
+
+                        $("#selectcompanybyuser").html('');
+                        $.ajax({
+                        url:'<?=base_url();?>Menu/getstatuscmp_becauseoftpm',
+                        type: "POST",
+                        data: {
+                        becauseofTPM: becauseofTPM,
+                        uid: uid
+                        },
+                        cache: false,
+                        success: function a(result){
+                        $("#maintaskcard").show();    
+                        $("#selectcompanybyuser").html(result);
+                        $("#selectcompanybyuser").show();
+                        var optionCount = $('#selectcompanybyuser').find('option').length;
+                        optionCount = optionCount-1;
+                        $("#totalcompany").text('Total Company :'+ optionCount);
+                        $("#tptime").val('');
+                        $("#tptime").show();
+                        $('#ntactionnew').show();
+                        $('#ntppose').show();
+                        $('#meeting-time').show();
+                        $('#planbtn1').show();
+                        $("#taskplanningimg").hide();
+                        }
+                        });
+                      });
+
+
+                      $('#becauseofTPM_new').on('change', function() {
+                        
+                        var usertypes = $('#becauseofTPM_TaskData').val();
+                        var becauseofTPM = $(this).val();
+
+                          $("#selectcompanybyuser").html('');
+
+                          $.ajax({
+                          url:'<?=base_url();?>Menu/get_becauseoftpm',
+                          type: "POST",
+                          data: {
+                          usertypes: usertypes,
+                          becauseofTPM: becauseofTPM,
+                          uid: uid
+                          },
+                          cache: false,
+                          success: function a(result){
+                          $("#maintaskcard").show();    
+                          $("#selectcompanybyuser").html(result);
+                          $("#selectcompanybyuser").show();
+                          var optionCount = $('#selectcompanybyuser').find('option').length;
+                          optionCount = optionCount-1;
+                          $("#totalcompany").text('Total Company :'+ optionCount);
+                          $("#tptime").val('');
+                          $("#tptime").show();
+                          $('#ntactionnew').show();
+                          $('#ntppose').show();
+                          $('#meeting-time').show();
+                          $('#planbtn1').show();
+                          $("#taskplanningimg").hide();
+                          }
+                          });
+                        });
+
+
+
+                    }else{
+                      $('#selectcompanyname').show();
+                      $("#selectstatus").show();
+                    }
+                  
+                   
                     $("#maintaskcard").hide();
                     $("#actionPlanned").show();
                     $("#actionnotplaned").hide();
@@ -2337,7 +2568,8 @@ if($type_id == 3){
                     $('#taskActionbyuser').hide();
                     $('#taskPurposebyuser').hide();
                     var uid = $("#curuserid").val();
-                    $("#selectstatus").show();
+                    
+
                     $('#search_company').on('input', function() {
                           var inputVal = $(this).val();
                           var options = $('#data').find('option').map(function() {
@@ -3679,6 +3911,11 @@ if($type_id == 3){
                     $("#selectcompanybyuser").html('');
                     $("#totalcompany").text('');
                     var uid = $("#curuserid").val();
+
+
+
+
+
                         $.ajax({
                         url:'<?=base_url();?>Menu/getcmp_partnertype',
                         type: "POST",
@@ -4816,6 +5053,7 @@ if($type_id == 3){
                     }else{
                       $('#becauseofplanchange').hide();
                     }
+
 
 
                 });

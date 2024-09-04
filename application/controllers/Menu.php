@@ -20239,4 +20239,72 @@ public function getcmp_becauseofplanchange(){
 }
 
 
+
+public function getownfunnel(){
+    $sid = $this->input->post('sid');
+    $uid= $this->input->post('uid');
+    $this->load->model('Menu_model');
+    $cmp = $this->Menu_model->get_statuscmp($sid,$uid);
+    echo '<option value="">Select Company</option>';
+    foreach($cmp as $cmp){ ?>
+    <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
+<?=$cmp->compname?> (<?=$cmp->pname?>)
+</option>
+
+    <?php
+
+    }
+}
+public function getstatuscmp_becauseoftpm(){
+
+    $becauseofTPM = $this->input->post('becauseofTPM');
+    $uid= $this->input->post('uid');
+    $this->load->model('Menu_model');
+    $cmp = $this->Menu_model->GetCompanyClusterWorkBecauseOf($uid,$becauseofTPM);
+
+    echo '<option value="">Select Company</option>';
+    foreach($cmp as $cmp){
+        $name = $cmp->name;
+        if($becauseofTPM == 'both'){  $apst = $cmp->apst; ?>
+        <option style="color: #d90d2b;" title="<?=$name;?> ( <?= $apst; ?>)" value="<?=$cmp->inid?>">
+            <?=$cmp->compname?> (<?=$cmp->pname?>)
+        </option>
+       <?php }else{ ?>
+        <option style="color: #d90d2b;" title="<?=$name;?>" value="<?=$cmp->inid?>">
+            <?=$cmp->compname?> (<?=$cmp->pname?>)
+        </option>
+       <?php } ?>
+        <?php
+        }
+}
+
+public function get_becauseoftpm(){
+
+    $usertypes = $this->input->post('usertypes');
+    $becauseofTPM = $this->input->post('becauseofTPM');
+    $uid= $this->input->post('uid');
+    $this->load->model('Menu_model');
+
+    $cmp = $this->Menu_model->GetCompanyClusterWorkBecauseOfUser($uid,$usertypes,$becauseofTPM);
+
+    echo '<option value="">Select Company</option>';
+    foreach($cmp as $cmp){
+        $name = $cmp->name;
+        if($becauseofTPM == 'both'){  $apst = $cmp->apst; ?>
+        <option style="color: #d90d2b;" title="<?=$name;?> ( <?= $apst; ?>)" value="<?=$cmp->inid?>">
+            <?=$cmp->compname?> (<?=$cmp->pname?>)
+        </option>
+       <?php }else{ ?>
+        <option style="color: #d90d2b;" title="<?=$name;?>" value="<?=$cmp->inid?>">
+            <?=$cmp->compname?> (<?=$cmp->pname?>)
+        </option>
+       <?php } ?>
+        <?php
+        }
+  
+}
+
+
+
+
 }

@@ -6947,8 +6947,6 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                             'self_assign'=>'4'
                         ];
                        $this->db->insert('tblcallevents',$data);
-
-                        // $str = $this->db->last_query();
                         $ntid = $this->db->insert_id();
 
                         $this->db->query("UPDATE tblcallevents SET remarks='$remark',nextCFID='$ntid',updateddate='$date',status_id='$cs',nstatus_id='$cs',actontaken='no',purpose_achieved='no',updation_data_type='update' WHERE id='$tid'");
@@ -7018,6 +7016,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
             } else{
            
                    if($purpose=='no'){
+                    
                     // echo "dsfs".$actontaken;
                     // echo $purpose;
                     // die;
@@ -7112,8 +7111,8 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                                         'self_assign'=>'4'
                                     ];
                                     $this->db->insert('tblcallevents',$data2);
-
                                     $ntid =  $this->db->insert_id();
+
                                     $this->db->query("UPDATE tblcallevents SET remarks='$remark',nextCFID='$ntid',updateddate='$date',status_id='$cs',nstatus_id='$cs',actontaken='$actontaken',purpose_achieved='$purpose',updation_data_type='update', autotask='1'  WHERE id='$tid'");
                                 }
 
@@ -7140,6 +7139,43 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                                 $modifystr = "+$taskplanmincount minutes";
                                 $newdate->modify($modifystr);
                                 $new_datetime = $newdate->format('Y-m-d H:i:s');
+
+
+                                   
+                                $ccompstatus = $queryData[0]->status_id;
+                                if($ccompstatus !=1 && $ccompstatus !=2){
+                                
+                                $getpurposeid = $this->GetPurposeByActionAndStatusID(5,$ccompstatus);
+                                if($getpurposeid == 0){
+                                    $getpurposeid = 70;
+                                }    
+                                $newdate_whatsapp = new DateTime($new_datetime);
+                                $modifystr_whats_task = "+5 minutes";
+                                $newdate_whatsapp->modify($modifystr_whats_task);
+                                $new_datetime_whatsapp = $newdate_whatsapp->format('Y-m-d H:i:s');
+
+                                $whatstask = [
+                                    'lastCFID' => 0,
+                                    'nextCFID' => 0,
+                                    'fwd_date' => $fwd_date,
+                                    'appointmentdatetime' => $new_datetime_whatsapp,
+                                    'actiontype_id' => 5,
+                                    'assignedto_id'=>$uid,
+                                    'cid_id'=>$queryData[0]->cid_id,
+                                    'user_id'=>$uid,
+                                    'purpose_id'=>$getpurposeid,
+                                    'autotask' =>1,
+                                    'auto_plan'=>1,
+                                    'plan'=>1,
+                                    'status_id'=>$ccompstatus,
+                                    'remarks'=>$remark,
+                                    'approved_status'=>1,
+                                    'approved_by'=>'System',
+                                    'self_assign'=>'4'
+                                ];
+                                $this->db->insert('tblcallevents',$whatstask);
+                                }
+
 
                                 $this->db->query("UPDATE autotask_time SET planmincount = '$taskplanmincount' where id= $atid");
                                  $query=$this->db->query("UPDATE tblcallevents SET appointmentdatetime='$new_datetime',auto_plan=1,plan=1 WHERE id='$ntid'");
@@ -12718,5 +12754,118 @@ public function GetTodaysTeamDayChnageRequest($uid){
 public function updateBarginmeetingAfterPlanChnage($tid,$tdate){
     $query = $this->db->query("UPDATE `barginmeeting` SET `storedt`='$tdate',`plan_change`='0' WHERE tid = '$tid'");
 }
+
+
+public function GetCompanyClusterWorkBecauseOf($uid,$stype){
+    
+    $mdata = $this->Menu_model->get_userbyaaid($uid);
+    $udata      = $this->Menu_model->get_userbyid($uid);
+    $pst_uid    = $udata[0]->pst_co;
+
+    if($stype == 'On PST'){
+         $query=$this->db->query("SELECT init_call.id AS inid, user_details.name, company_master.compname AS compname, partner_master.name AS pname FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN user_details ON user_details.user_id = init_call.apst WHERE init_call.apst = '$pst_uid' AND cstatus != ''");
+    }else if($stype == 'On BD'){
+
+        $users_id = '';
+        foreach($mdata as $users){
+            $users_id .= $users->user_id.',';
+        }
+        $users_id = rtrim($users_id, ',');
+
+        $query=$this->db->query("SELECT init_call.id AS inid, user_details.name, company_master.compname AS compname, partner_master.name AS pname FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN user_details ON user_details.user_id = init_call.mainbd WHERE init_call.mainbd IN ($users_id) AND cstatus != ''");
+      
+
+    }else if($stype == 'both'){
+
+        $users_id = '';
+        foreach($mdata as $users){
+            $users_id .= $users->user_id.',';
+        }
+        $users_id = rtrim($users_id, ',');
+
+        $query=$this->db->query("SELECT init_call.id AS inid, user_details.name AS name, apst_details.name AS apst, company_master.compname AS compname, partner_master.name AS pname FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN user_details ON user_details.user_id = init_call.mainbd LEFT JOIN user_details AS apst_details ON apst_details.user_id = init_call.apst WHERE init_call.mainbd IN ($users_id) AND init_call.apst = '$pst_uid' AND cstatus != ''");
+
+    }else{
+        $query=$this->db->query("SELECT init_call.id inid,company_master.compname compname,partner_master.name pname FROM init_call LEFT JOIN company_master ON company_master.id=init_call.cmpid_id LEFT join partner_master ON partner_master.id=company_master.partnerType_id WHERE init_call.mainbd='$uid' and cstatus!=''");
+    }
+
+    return $query->result();
+
+}
+
+
+public function GetCompanyClusterWorkBecauseOfUser($uid,$stype,$becauseofTPM){
+    
+    $mdata = $this->Menu_model->get_userbyaaid($uid);
+    $udata      = $this->Menu_model->get_userbyid($uid);
+    $pst_uid    = $udata[0]->pst_co;
+
+    if($stype == 'On PST'){
+
+        if($becauseofTPM == 'Top Spender'){
+
+            $query=$this->db->query("SELECT init_call.id AS inid, user_details.name, company_master.compname AS compname, partner_master.name AS pname FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN user_details ON user_details.user_id = init_call.apst WHERE init_call.apst = '$pst_uid' AND init_call.topspender = 'yes' AND cstatus != ''");
+
+        }else if($becauseofTPM == 'Meeting'){
+            $query=$this->db->query("SELECT init_call.id AS inid, user_details.name, company_master.compname AS compname, partner_master.name AS pname FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN user_details ON user_details.user_id = init_call.apst WHERE init_call.apst = '$pst_uid' AND init_call.mainbd != '' AND cstatus != ''");
+        }
+        
+    }else if($stype == 'On BD'){
+
+        $users_id = '';
+        foreach($mdata as $users){
+            $users_id .= $users->user_id.',';
+        }
+        $users_id = rtrim($users_id, ',');
+
+        if($becauseofTPM == 'Top Spender'){
+            $query=$this->db->query("SELECT init_call.id AS inid, user_details.name, company_master.compname AS compname, partner_master.name AS pname FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN user_details ON user_details.user_id = init_call.mainbd WHERE init_call.mainbd IN ($users_id) AND init_call.topspender = 'yes' AND cstatus != ''");
+        }else if($becauseofTPM == 'Meeting'){
+            $query=$this->db->query("SELECT init_call.id AS inid, user_details.name, company_master.compname AS compname, partner_master.name AS pname FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN user_details ON user_details.user_id = init_call.mainbd WHERE init_call.mainbd IN ($users_id) AND init_call.clm_id !='' AND cstatus != ''");
+        }
+       
+    }else if($stype == 'both'){
+
+        $users_id = '';
+        foreach($mdata as $users){
+            $users_id .= $users->user_id.',';
+        }
+        $users_id = rtrim($users_id, ',');
+
+        if($becauseofTPM == 'Top Spender'){
+        $query=$this->db->query("SELECT init_call.id AS inid, user_details.name AS name, apst_details.name AS apst, company_master.compname AS compname, partner_master.name AS pname FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN user_details ON user_details.user_id = init_call.mainbd LEFT JOIN user_details AS apst_details ON apst_details.user_id = init_call.apst WHERE init_call.mainbd IN ($users_id) AND init_call.topspender = 'yes' AND init_call.apst = '$pst_uid' AND cstatus != ''");
+        }else if($becauseofTPM == 'Meeting'){
+
+        $query=$this->db->query("SELECT init_call.id AS inid, user_details.name AS name, apst_details.name AS apst, company_master.compname AS compname, partner_master.name AS pname FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN user_details ON user_details.user_id = init_call.mainbd LEFT JOIN user_details AS apst_details ON apst_details.user_id = init_call.apst WHERE init_call.mainbd IN ($users_id) AND init_call.clm_id !='' AND init_call.apst = '$pst_uid' AND cstatus != ''");
+                    
+        }
+
+    }else{
+        $query=$this->db->query("SELECT init_call.id inid,company_master.compname compname,partner_master.name pname FROM init_call LEFT JOIN company_master ON company_master.id=init_call.cmpid_id LEFT join partner_master ON partner_master.id=company_master.partnerType_id WHERE init_call.mainbd='$uid' and cstatus!=''");
+    }
+
+    return $query->result();
+}
+
+
+
+public function GetPurposeByActionAndStatusID($action,$status_id){
+        $query=$this->db->query("SELECT * FROM purpose where action_id='$action' AND status_id ='$status_id'");
+        $data =  $query->result();
+        $datacnt = sizeof($data);
+        if($datacnt > 0){
+            $purposeid = $data[0]->id;
+            return $purposeid;
+        }else{
+            return 0;
+        }
+        
+    }
+
+
+
+
+
+
 
 }

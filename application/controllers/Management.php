@@ -142,7 +142,7 @@ class Management extends Menu {
         $sdate = new DateTime($cdate);
         $sdate->modify('-1 day');
         $previousDate = $sdate->format('Y-m-d');
-        $cdate = '2024-07-20';
+        // $cdate = '2024-07-20';
         $dayData = $this->Management_model->CheckingDayManage_New($this->uid,$cdate);
 
         // var_dump($dayData);die;
@@ -184,8 +184,6 @@ class Management extends Menu {
         $request = $this->input->post('remark');
 
         $dayData = $this->Management_model->RequestForDayManagementApproval_Model($this->uid,$request);
-
-        
 
     }
 
@@ -271,7 +269,6 @@ class Management extends Menu {
         $result = $this->Management_model->updateStarRemark($remark,$starID);
     }
     
-
     public function DayManagementReport()
     {
 

@@ -11678,20 +11678,28 @@ public function getMoMData($id) {
     $this->db->select('bm.closem end_time');
     $this->db->select('bm.clatitude end_lat');
     $this->db->select('bm.clongitude end_long');
+    // $this->db->select('bm.mtype end_long');
     $this->db->select('tce.mtype momType');
     $this->db->select('md.partner mompartner');
     $this->db->select('md.rpmmom momremark');
-    // $this->db->from('bm.cphoto');
+    $this->db->select('action.name actionName');
+    $this->db->select("CASE WHEN ic.mainbd = tce2.user_id THEN 'Own Funnel' ELSE 'Other Funnel' END AS funnel");
+    $this->db->select('status.name statusAtMeeting');
+    $this->db->select('ic.potential potentialOrNot');
     
-
     $this->db->from('mom_data md');
     $this->db->where('md.tid', $id);
-
     $this->db->join('tblcallevents tce', 'md.tid = tce.id', 'left');
     $this->db->join('barginmeeting bm', 'bm.tid = tce.lastCFID', 'left');
+    $this->db->join('tblcallevents tce2', 'tce.lastCFID = tce2.id', 'left');
+    $this->db->join('action', 'action.id = tce2.actiontype_id', 'left');
+    $this->db->join('init_call ic', 'ic.id = tce2.cid_id', 'left');
+    $this->db->join('status', 'ic.lstatus = status.id', 'left');
+
+
     $query = $this->db->get();
 
-    // echo $this->db->last_query();
+    // echo $this->db->last_query();die;
     return $query->row();
 }
 
@@ -11722,6 +11730,17 @@ public function getReportbyUser($selected_user,$sdate,$edate){
     return $query->result();
 }
 
+public function InsertMoMTaskRating($review){
+
+    return $this->db->insert('taskcheck_star_rating', $review);
+
+    // $this->db->insert('taskcheck_star_rating', $data);
+    // echo $this->db->last_query();die;
+    // Redirect or load a view
+    // $insert_id = $this->db->insert_id();
+    // return $insert_id;
+
+}
 // New TaskCheck function <======================== END ==============================>
 
 // New Dashboard functions <========== START ==========>

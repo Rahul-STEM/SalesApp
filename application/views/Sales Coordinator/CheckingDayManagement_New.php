@@ -136,11 +136,11 @@
                                             <thead>
                                                 <tr>
                                                     <th>Name</th>
+                                                    <th>Day Start From</th>
                                                     <th>Start Time</th>
                                                     <th>Start Image</th>
                                                     <th>Start Google Map </th>
-                                                    <!-- <th>Wfo</th> -->
-                                                    <th>Start Comment</th>
+                                                    <!-- <th>Start Comment</th> -->
                                                     <th>Todays AutoTask Time</th>
                                                     <th>Todays Task Plan Request</th>
 
@@ -154,6 +154,49 @@
                                                 <tr>
 
                                                     <td><?= $data->name; ?></td>
+                                                    <td data-question="Did he started his day as planned" data-userid="<?= $data->user_id; ?>" data-period="Mornings" data-cdate="<?= $cdate; ?>">
+                                                        <?= $data->userWorkFrom; ?>
+                                                        <br><br><hr>
+                                                        <p class="question">Did he started his day as planned..??</p>
+
+                                                        <?php 
+
+                                                            $chkStarRating = $this->Management_model->CheckStarRatingsExistorNot_New($teamuid,$cdate,'Did he started his day as planned','Mornings');
+
+                                                            if(sizeof($chkStarRating) == 0){ ?>
+
+                                                                <div class="rating" id="rating1">
+                                                                    <input type="radio" name="rat17_<?= $data->user_id; ?>" value="5" id="85_<?= $data->user_id; ?>"><label for="85_<?= $data->user_id; ?>">☆</label>
+                                                                    <input type="radio" name="rat17_<?= $data->user_id; ?>" value="4" id="84_<?= $data->user_id; ?>"><label for="84_<?= $data->user_id; ?>">☆</label>
+                                                                    <input type="radio" name="rat17_<?= $data->user_id; ?>" value="3" id="83_<?= $data->user_id; ?>"><label for="83_<?= $data->user_id; ?>">☆</label>
+                                                                    <input type="radio" name="rat17_<?= $data->user_id; ?>" value="2" id="82_<?= $data->user_id; ?>"><label for="82_<?= $data->user_id; ?>">☆</label>
+                                                                    <input type="radio" name="rat17_<?= $data->user_id; ?>" value="1" id="81_<?= $data->user_id; ?>"><label for="81_<?= $data->user_id; ?>">☆</label>
+                                                                </div>
+
+                                                            <?php }else{
+                                                                foreach($chkStarRating as $star){
+                                                                    // var_dump($chkStarRating);die;
+                                                                    $starRating = $star->star;
+                                                                    $starRemark = $star->remarks;
+                                                                    
+                                                                }
+                                                                echo "<hr>";
+                                                                echo "<span class='text-dark font-weight-normal'><b>Total Star Given</b> :</span>";
+                                                                echo "<div class='star-rating'>";
+                                                                $totalStars = 5;
+                                                                for ($i = 0; $i < $starRating; $i++) {
+                                                                    echo "<i class='fas fa-star'></i>"; // filled star
+                                                                }
+                                                                for ($i = $starRating; $i < $totalStars; $i++) {
+                                                                    echo "<i class='far fa-star'></i>"; // empty star
+                                                                }
+                                                                echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
+                                                            }  ?>
+                                                            
+                                                            <?php ?> 
+
+                                    
+                                                    </td>
                                                     <td data-question="Started at Good Time" data-userid="<?= $data->user_id; ?>" data-period="Mornings" data-cdate="<?= $cdate; ?>">
                                                         <b>Day Start Time : </b><?= $data->user_start_time; ?>
                                                         <hr>
@@ -287,13 +330,13 @@
                                                     <!--  -->
                                                     
                                                     <!-- Work FROM TD END -->
-                                                    <td>
+                                                    <!-- <td>
                                                         <?php if(isset($data->user_start_comment)){ ?>
                                                             <?= $data->user_start_comment ?>
                                                         <?php }else{ ?>
                                                             <span class="bg-danger p-1"> Not Set</span>
                                                         <?php }?>
-                                                    </td> 
+                                                    </td>  -->
                                                     <!-- <td>
                                                         <?php if(isset($data->user_start_comment)){ ?>
                                                             <?= $data->user_start_comment ?>
@@ -365,7 +408,9 @@
                                                             <b>Planner Approved by : </b> <?= $data->approver_Name ?>
 
                                                         <?php }else{
-                                                            echo "No Request";
+                                                            echo '<p class="font-weight-bold text-success">Planner Planned Yesterday..!!</p>';
+
+                                                            
                                                         }
                                                         ?>
                                                         <hr>
@@ -464,6 +509,8 @@
                                                     <th>Yesterday Close Image</th>
                                                     <th>Yesterday End Comment</th>
                                                     <th>Yesterday Close Google Map </th>
+                                                    <th>Total Time Taken to Plan Planner</th>
+                                                    <th>Special Request for change in planner</th>
                                                     <!-- <th>Yesterday Total Consume Time </th> -->
                                                     <!-- <th>Task Assign By Others</th> -->
                                                 </tr>
@@ -602,7 +649,7 @@
                                                                     <img class="uimage" height="100px" alt="image not found" src="<?= base_url() . '/' . $checkcloseday[0]->ucimg; ?>">
                                                                 </a>
                                                             <?php } else { ?>
-                                                                <span class="bg-danger p-1"> Not Set</span>
+                                                                <span class="text-danger p-1 font-weight-bold"> Not closed yet..!!</span>
                                                             <?php } ?>
                                                             <br><br>
                                                             <hr>
@@ -652,7 +699,7 @@
                                                                 <?= $data->close_day_approved_remarks ?>
                                                                 <hr>
                                                             <?php } else { ?>
-                                                                <span class="bg-danger p-1"> Not Set</span>
+                                                                <span class="text-danger p-1 font-weight-bold"> Not closed yet..!!</span>
                                                             <?php } ?>
                                                             <hr>
                                                             <p class="question">Was day ended on good time?</p>
@@ -703,7 +750,7 @@
                                                                     ?>
                                                                 </div>
                                                             <?php } else { ?>
-                                                                <span class="bg-danger p-1"> Not Set</span>
+                                                                <span class="text-danger p-1 font-weight-bold"> Not closed yet..!!</span>
                                                             <?php } ?>
                                                             <br><br>
                                                             <hr>
@@ -742,7 +789,95 @@
                                                                 echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :" . $starRemark . "</span>";
                                                             }  ?>
                                                         </td>
-                                                        
+                                                        <td data-question="total time taken to plan planner" data-userid="<?= $data->user_id; ?>" data-period="Yesterday Evening" data-cdate="<?= $cdate; ?>">
+                                                            
+                                                            <?= $data->total_timeTakeFor_planner ?>
+                                                            <hr>
+                                                            <p class="question">Time take to plan the planner.??</p>
+                                                            <?php
+                                                            $sdate = new DateTime($cdate);
+                                                            $sdate->modify('-1 day');
+                                                            $previousDate = $sdate->format('Y-m-d');
+
+                                                            $chkStarRating = $this->Management_model->CheckStarRatingsExistorNot_New($teamuid, $previousDate, 'Was day ended on good time', 'Yesterday Evening');
+
+                                                            if (sizeof($chkStarRating) == 0) { ?>
+                                                                <div class="rating">
+                                                                    <input type="radio" name="rat19_<?= $data->user_id; ?>" value="5" id="90_<?= $data->user_id; ?>"><label for="90_<?= $data->user_id; ?>">☆</label>
+                                                                    <input type="radio" name="rat19_<?= $data->user_id; ?>" value="4" id="89_<?= $data->user_id; ?>"><label for="89_<?= $data->user_id; ?>">☆</label>
+                                                                    <input type="radio" name="rat19_<?= $data->user_id; ?>" value="3" id="88_<?= $data->user_id; ?>"><label for="88_<?= $data->user_id; ?>">☆</label>
+                                                                    <input type="radio" name="rat19_<?= $data->user_id; ?>" value="2" id="87_<?= $data->user_id; ?>"><label for="87_<?= $data->user_id; ?>">☆</label>
+                                                                    <input type="radio" name="rat19_<?= $data->user_id; ?>" value="1" id="86_<?= $data->user_id; ?>"><label for="86_<?= $data->user_id; ?>">☆</label>
+                                                                </div>
+                                                            <?php } else {
+                                                                foreach ($chkStarRating as $star) {
+                                                                    // var_dump($chkStarRating);die;
+                                                                    $starRating = $star->star;
+                                                                    $starRemark = $star->remarks;
+                                                                }
+                                                                echo "<hr>";
+                                                                echo "<span class='text-dark font-weight-normal'><b>Total Star Given</b> :</span>";
+                                                                echo "<div class='star-rating'>";
+                                                                $totalStars = 5;
+                                                                for ($i = 0; $i < $starRating; $i++) {
+                                                                    echo "<i class='fas fa-star'></i>"; // filled star
+                                                                }
+                                                                for ($i = $starRating; $i < $totalStars; $i++) {
+                                                                    echo "<i class='far fa-star'></i>"; // empty star
+                                                                }
+                                                                echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :" . $starRemark . "</span>";
+                                                            }  ?>
+                                                        </td>
+                                                        <td data-question="was there any special request for chnage in planner" data-userid="<?= $data->user_id; ?>" data-period="Yesterday Evening" data-cdate="<?= $cdate; ?>">
+                                                            <?php
+                                                                if(!empty($data->reasonFor_Request)){ ?>
+
+                                                                <b> Reason For Request : </b> <?= $data->reasonFor_Request; ?>
+                                                                <b> Leave Start time : </b> <?= $data->leave_StartTime; ?>
+                                                                <b> Leave End Time : </b> <?= $data->leave_EndTime; ?>
+                                                            <?php    
+                                                            
+                                                            }else{
+                                                                echo '<p class="font-weight-bold text-success">No Special Request..!!</p>';
+                                                            }
+                                                            ?>
+
+                                                            <hr>
+                                                            <p class="question">Was there any special request for change in planner.??</p>
+                                                            <?php
+                                                            $sdate = new DateTime($cdate);
+                                                            $sdate->modify('-1 day');
+                                                            $previousDate = $sdate->format('Y-m-d');
+
+                                                            $chkStarRating = $this->Management_model->CheckStarRatingsExistorNot_New($teamuid, $previousDate, 'was there any special request for chnage in planner', 'Yesterday Evening');
+
+                                                            if (sizeof($chkStarRating) == 0) { ?>
+                                                                <div class="rating">
+                                                                    <input type="radio" name="rat20_<?= $data->user_id; ?>" value="5" id="95_<?= $data->user_id; ?>"><label for="95_<?= $data->user_id; ?>">☆</label>
+                                                                    <input type="radio" name="rat20_<?= $data->user_id; ?>" value="4" id="94_<?= $data->user_id; ?>"><label for="94_<?= $data->user_id; ?>">☆</label>
+                                                                    <input type="radio" name="rat20_<?= $data->user_id; ?>" value="3" id="93_<?= $data->user_id; ?>"><label for="93_<?= $data->user_id; ?>">☆</label>
+                                                                    <input type="radio" name="rat20_<?= $data->user_id; ?>" value="2" id="92_<?= $data->user_id; ?>"><label for="92_<?= $data->user_id; ?>">☆</label>
+                                                                    <input type="radio" name="rat20_<?= $data->user_id; ?>" value="1" id="91_<?= $data->user_id; ?>"><label for="91_<?= $data->user_id; ?>">☆</label>
+                                                                </div>
+                                                            <?php } else {
+                                                                foreach ($chkStarRating as $star) {
+                                                                    // var_dump($chkStarRating);die;
+                                                                    $starRating = $star->star;
+                                                                    $starRemark = $star->remarks;
+                                                                }
+                                                                echo "<hr>";
+                                                                echo "<span class='text-dark font-weight-normal'><b>Total Star Given</b> :</span>";
+                                                                echo "<div class='star-rating'>";
+                                                                $totalStars = 5;
+                                                                for ($i = 0; $i < $starRating; $i++) {
+                                                                    echo "<i class='fas fa-star'></i>"; // filled star
+                                                                }
+                                                                for ($i = $starRating; $i < $totalStars; $i++) {
+                                                                    echo "<i class='far fa-star'></i>"; // empty star
+                                                                }
+                                                                echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :" . $starRemark . "</span>";
+                                                            }  ?>
+                                                        </td>
                                                     </tr>
                                                 <?php $i++;
                                                 endforeach; ?>
@@ -762,7 +897,7 @@
                                                     <th>Yesterday Total Autotask Task</th>
                                                     <th>Task Assign By Others</th>
                                                     <th>Yesterday Total Consume Time</th>
-                                                    <!-- <th>Planner Remarks</th> -->
+                                                    <!-- <th>Special Request for change in planner</th> -->
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -781,8 +916,8 @@
                                                                 <hr>
                                                             <?php 
 
-                                                                $typeID = 13;
-                                                                if ($typeID == 13) { ?>
+                                                                // $typeID = 13;
+                                                                if ($data->type_id  == 13) { ?>
 
                                                                     <?php $funnelData = getFunnelTaskforCLM($uid); ?>
                                                                     <b>Team funnel tasks : </b> 
@@ -833,7 +968,7 @@
                                                         <b>Own funnel pending tasks : </b> 
                                                             <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/Pending/' . $teamuid . '/' . $cdate ?>"><?= $dayData[0]->pending ?></a>
                                                             <hr>
-                                                            <?php if ($typeID == 13) { ?>
+                                                            <?php if ($data->type_id  == 13) { ?>
                                                             <b>Team funnel pending tasks : </b> 
                                                                     <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/TotalTeampending/' . $uid . '/' . $cdate ?>">
                                                                 <?= ($funnelData[0]->TotalTeamplan); ?></a>
@@ -879,7 +1014,7 @@
                                                         <b>Own funnel pending tasks : </b> 
                                                             <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/done/' . $teamuid . '/' . $cdate ?>"><?= $dayData[0]->done ?></a>
                                                             <hr>
-                                                            <?php if ($typeID == 13) { ?>
+                                                            <?php if ($data->type_id  == 13) { ?>
                                                             <b>Team funnel pending tasks : </b> 
                                                                     <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/TotalTeamCompleted/' . $uid . '/' . $cdate ?>">
                                                                 <?= ($funnelData[0]->TotalTeamdone); ?></a>
@@ -928,7 +1063,7 @@
                                                             <b>Own funnel Total Completed Auto Task : </b>
                                                             <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/autotask/' .$teamuid. '/'. $cdate ?>"><?= $dayData[0]->Completedautotask ?></a>
                                                             <hr>
-                                                            <?php if ($typeID == 13) { ?>
+                                                            <?php if ($data->type_id  == 13) { ?>
                                                             <b>Team funnel autotask tasks : </b> 
                                                                     <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/TotalTeamAutotaskPlan/' . $uid . '/' . $cdate ?>">
                                                                 <?= ($funnelData[0]->TotalTeamautotask); ?></a>
@@ -985,7 +1120,7 @@
                                                                 <?= $dayData[0]->CompletedassignByOther ?></a>
                                                             
                                                             <hr>
-                                                            <?php if ($typeID == 13) { ?>
+                                                            <?php if ($data->type_id  == 13) { ?>
                                                             <b>Team total funnel tasks assigned by others: </b> 
                                                                     <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/TotalTeamotherAssign/' . $uid . '/' . $cdate ?>">
                                                                 <?= ($funnelData[0]->TotalTeamassignByOther); ?></a>
@@ -1062,7 +1197,9 @@
                                                             ?>
 
                                                         </td>
-                                                        
+                                                        <!-- <td>
+
+                                                        </td> -->
                                                     </tr>
                                                 <?php $i++;
                                                 endforeach; ?>

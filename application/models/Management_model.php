@@ -70,14 +70,6 @@ class Management_model  extends Menu_model {
         $this->db->select("COUNT(CASE WHEN reassign_type = 2 AND nextCFID != 0 THEN 1 END) AS CompletedassignByOther");
         $this->db->from('tblcallevents');
 
-        // if ($utype == 13) {
-
-        //     $this->db->join('init_call ic', 'ic.id = tblcallevents.cid_id', 'left');
-        //     $this->db->where('ic.clm_id', $uid);
-        // }
-        // else {
-            
-        // }
         $this->db->where('assignedto_id', $uid);
         $this->db->where('CAST(appointmentdatetime AS DATE) = ', $this->db->escape($pdate), FALSE);
 
@@ -197,7 +189,13 @@ class Management_model  extends Menu_model {
                 cydr.req_remarks AS close_day_req_remarks,
                 cydr.approved_status AS close_day_approved_status,
                 cydr.approved_remarks AS close_day_approved_remarks,
-                tce.appointmentdatetime AS task_start_time
+                tce.appointmentdatetime AS task_start_time,
+                SUM(spt.totaltime) AS total_timeTakeFor_planner,
+                uwf.TYPE AS userWorkFrom,
+                srfl.prupose AS reasonFor_Request,
+                srfl.stime AS leave_StartTime,
+                srfl.etime AS leave_EndTime
+
             '
             );
             
@@ -205,9 +203,10 @@ class Management_model  extends Menu_model {
             $this->db->join('user_details', 'user_details.user_id = user_day.user_id', 'left');
             $this->db->join('session_plan_time spt', 'spt.user_id = user_day.user_id', 'left');
             $this->db->join('autotask_time at', 'at.user_id = user_day.user_id', 'left');
-            // $this->db->join('userworkfrom uwf', 'uwf.ID = at.user_id', 'left');
+            $this->db->join('userworkfrom uwf', 'uwf.ID = at.user_id', 'left');
             $this->db->join('tblcallevents tce', 'tce.user_id = user_day.user_id AND DATE(tce.appointmentdatetime) = "'.$cdate.'"', 'left');
             $this->db->join('close_your_day_request cydr', 'user_details.user_id = cydr.user_id', 'left');
+            $this->db->join('special_request_for_leave srfl', 'user_details.user_id = srfl.user_id', 'left');
             $this->db->join('task_plan_for_today', 'task_plan_for_today.user_id = user_day.user_id AND DATE(task_plan_for_today.date) = DATE(sdatet)', 'left');
             $this->db->join('user_details ud1', 'ud1.user_id = task_plan_for_today.admin_id', 'left');
 

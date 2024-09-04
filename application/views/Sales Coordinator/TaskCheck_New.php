@@ -113,9 +113,26 @@
     }
     .rate{border-bottom-right-radius: 12px;border-bottom-left-radius: 12px;}.rating {display: flex;flex-direction: row-reverse;justify-content: left }.rating>input {display: none }.rating>label {position: relative;width: 1em;font-size: 30px;font-weight: 300;color: #f39c12;cursor: pointer }.rating>label::before {content: "\2605";position: absolute;opacity: 0 }.rating>label:hover:before, .rating>label:hover~label:before {opacity: 1 !important }.rating>input:checked~label:before {opacity: 1 }.rating:hover>input:checked~label:before {opacity: 0.4 }
 
-    .MoMrate{border-bottom-right-radius: 12px;border-bottom-left-radius: 12px;}.MoMrating {display: flex;flex-direction: row-reverse;justify-content: left }.MoMrating>input {display: none }.MoMrating>label {position: relative;width: 1em;font-size: 30px;font-weight: 300;color: #f39c12;cursor: pointer }.MoMrating>label::before {content: "\2605";position: absolute;opacity: 0 }.MoMrating>label:hover:before, .MoMrating>label:hover~label:before {opacity: 1 !important }.MoMrating>input:checked~label:before {opacity: 1 }.MoMrating:hover>input:checked~label:before {opacity: 0.4 }
+    .MoMrate{border-bottom-right-radius: 12px;border-bottom-left-radius: 12px;}.MoMrating {display: flex;flex-direction: row-reverse;justify-content: left }.MoMrating>input {display: none }.MoMrating>label {position: relative;width: 1em;font-size: 30px;font-weight: 300;color: #f39c12;cursor: pointer }.MoMrating>label::before {content: "\2605";position: absolute;opacity: 0 }.MoMrating>label:hover:before, .MoMrating>label:hover~label:before {opacity: 1 !important }.MoMrating>input:checked~label:before {opacity: 1 }.MoMrating:hover>input:checked~label:before {opacity: 1 }
 
-    
+    .remark-box {
+            /* display: hidden; Hidden by default */
+            visibility: hidden;
+            margin-top: 10px;
+        }
+
+        .remark-box textarea {
+            width: 100%;
+        }
+
+        .disabled-fieldset {
+            pointer-events: none; /* Disable interactions */
+            opacity: 1; /* Visually indicate disabled state */
+        }
+        
+        .remark-box.visible {
+            visibility: visible; /* Show the remark box */
+        }
     /* Star Rating CSS */
 
 </style>
@@ -188,16 +205,16 @@
                                         <!-- <th>#</th> -->
                                         <th>Company Name</th>
                                         <th>Filter Used</th>
-                                        <th>Action</th>
-                                        <th>Action And Purpose </th>
+                                        <th>Action Planned</th>
                                         <th>Planned Date-time</th>
                                         <th>Initiated Date-time</th>
                                         <th>Update Date-time</th>
+                                        <th>Action And Purpose </th>
                                         <th>Status</th>
+                                        <th>Remark</th>
                                         <th>Same Status Since</th>
                                         <th>No of Task Since Status Change</th>
-                                        <th>Remark</th>
-                                        <th>Next Action Planned</th>
+                                        <!-- <th>Auto task Details</th> -->
                                         <!-- <th>MoM Details</th> -->
                                     </tr>
                                 </thead>
@@ -309,50 +326,10 @@
                                             <b><?= $OGTaskType; ?></b> <hr>
                                             <?php
                                                 if ($task->actiontype_id == 6 ) { ?>
-                                                    <button type="button" class="btn btn-primary" onclick="OpenModal(<?=$task->tid?>)">View MoM Details</button>
+                                                    <button type="button" class="btn btn-primary" onclick="OpenModal(<?=$task->tid?>,<?=$task->user_id?>)">View Meeting Details</button>
                                             <?php   }  ?>
                                         </td>
-                                        <td >
-                                            Action Taken - <b><?= $task->actontaken; ?></b>  <br> <hr> Purpose Achieved - <b> <?= $task->purpose_achieved; ?></b> 
-                                            
-                                            <br><hr>
-                                            <p class="question">Was purpose achieved for the task..??</p>
-
-                                            <?php 
-
-                                                $chkStarRating = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($task->user_id,'Was purpose achieved for the task',$task->tid);
-                                                // var_dump($chkStarRating);die;
-                                                if(sizeof($chkStarRating) == 0){ ?>
-
-                                                    <div class="rating" data-question="Was purpose achieved for the task" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>">
-                                                        <input type="radio" name="rat9_<?= $task->user_id; ?>" value="5" id="45_<?= $task->tid;?>"><label for="45_<?= $task->tid; ?>">☆</label>
-                                                        <input type="radio" name="rat9_<?= $task->user_id; ?>" value="4" id="44_<?= $task->tid;?>"><label for="44_<?= $task->tid; ?>">☆</label>
-                                                        <input type="radio" name="rat9_<?= $task->user_id; ?>" value="3" id="43_<?= $task->tid;?>"><label for="43_<?= $task->tid;?>">☆</label>
-                                                        <input type="radio" name="rat9_<?= $task->user_id; ?>" value="2" id="42_<?= $task->tid;?>"><label for="42_<?= $task->tid; ?>">☆</label>
-                                                        <input type="radio" name="rat9_<?= $task->user_id; ?>" value="1" id="41_<?= $task->tid;?>"><label for="41_<?= $task->tid;?>">☆</label>
-                                                    </div>
-
-                                            <?php }else{
-                                                foreach($chkStarRating as $star){
-                                                    // var_dump($chkStarRating);die;
-                                                    $starRating = $star->star;
-                                                    $starRemark = $star->remarks;
-                                                    
-                                                }
-                                                echo "<hr>";
-                                                echo "<span class='text-dark font-weight-normal'><b>Total Star Given</b> :</span>";
-                                                echo "<div class='star-rating'>";
-                                                $totalStars = 5;
-                                                for ($i = 0; $i < $starRating; $i++) {
-                                                    echo "<i class='fas fa-star'></i>"; // filled star
-                                                }
-                                                for ($i = $starRating; $i < $totalStars; $i++) {
-                                                    echo "<i class='far fa-star'></i>"; // empty star
-                                                }
-                                                echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
-                                            }  ?>
                                         
-                                        </td>
                                         <td ><?= $task->plan_date; ?>
                                             <br><br><hr>
                                             <p class="question">Was Task Planned on time..??</p>
@@ -472,6 +449,47 @@
                                             }  ?>
 
                                         </td>
+                                        <td >
+                                            Action Taken - <b><?= $task->actontaken; ?></b>  <br> <hr> Purpose Achieved - <b> <?= $task->purpose_achieved; ?></b> 
+                                            
+                                            <br><hr>
+                                            <p class="question">Was purpose achieved for the task..??</p>
+
+                                            <?php 
+
+                                                $chkStarRating = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($task->user_id,'Was purpose achieved for the task',$task->tid);
+                                                // var_dump($chkStarRating);die;
+                                                if(sizeof($chkStarRating) == 0){ ?>
+
+                                                    <div class="rating" data-question="Was purpose achieved for the task" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>">
+                                                        <input type="radio" name="rat9_<?= $task->user_id; ?>" value="5" id="45_<?= $task->tid;?>"><label for="45_<?= $task->tid; ?>">☆</label>
+                                                        <input type="radio" name="rat9_<?= $task->user_id; ?>" value="4" id="44_<?= $task->tid;?>"><label for="44_<?= $task->tid; ?>">☆</label>
+                                                        <input type="radio" name="rat9_<?= $task->user_id; ?>" value="3" id="43_<?= $task->tid;?>"><label for="43_<?= $task->tid;?>">☆</label>
+                                                        <input type="radio" name="rat9_<?= $task->user_id; ?>" value="2" id="42_<?= $task->tid;?>"><label for="42_<?= $task->tid; ?>">☆</label>
+                                                        <input type="radio" name="rat9_<?= $task->user_id; ?>" value="1" id="41_<?= $task->tid;?>"><label for="41_<?= $task->tid;?>">☆</label>
+                                                    </div>
+
+                                            <?php }else{
+                                                foreach($chkStarRating as $star){
+                                                    // var_dump($chkStarRating);die;
+                                                    $starRating = $star->star;
+                                                    $starRemark = $star->remarks;
+                                                    
+                                                }
+                                                echo "<hr>";
+                                                echo "<span class='text-dark font-weight-normal'><b>Total Star Given</b> :</span>";
+                                                echo "<div class='star-rating'>";
+                                                $totalStars = 5;
+                                                for ($i = 0; $i < $starRating; $i++) {
+                                                    echo "<i class='fas fa-star'></i>"; // filled star
+                                                }
+                                                for ($i = $starRating; $i < $totalStars; $i++) {
+                                                    echo "<i class='far fa-star'></i>"; // empty star
+                                                }
+                                                echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
+                                            }  ?>
+                                        
+                                        </td>
                                         <td ><?=$task->old_status?> to <?=$task->new_status?>
                                             <br><hr>
 
@@ -508,8 +526,6 @@
                                                         echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
                                                     }  ?>
                                         </td>
-                                        <td><?=$SameStatusSince_1 .' Days';?></td>
-                                        <td><?=$NoOfTaskSinceStatusChange ;?></td>
                                         <td ><?= $task->remarks; ?>
                                             <br><hr>
 
@@ -545,42 +561,12 @@
                                                         echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
                                                     }  ?>
                                         </td>
-                                        <td>
-                                            <?=$nextAction;?> <b><?=$TaskType;?></b>
-
-                                            <br><hr>
-                                            <p class="question">Is correct action created..??</p>
-
-                                            <?php 
-                                            $chkStarRating = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($task->user_id,'correct action created',$task->tid);
-                                            if(sizeof($chkStarRating) == 0){ ?> 
-                                                <div class="rating" data-question="correct action created" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>">
-                                                    <input type="radio" name="rat7_<?= $task->user_id; ?>" value="5" id="35_<?= $task->tid; ?>"><label for="35_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat7_<?= $task->user_id; ?>" value="4" id="34_<?= $task->tid; ?>"><label for="34_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat7_<?= $task->user_id; ?>" value="3" id="33_<?= $task->tid; ?>"><label for="33_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat7_<?= $task->user_id; ?>" value="2" id="32_<?= $task->user_id; ?>"><label for="32_<?= $task->user_id; ?>">☆</label>
-                                                    <input type="radio" name="rat7_<?= $task->user_id; ?>" value="1" id="31_<?= $task->user_id; ?>"><label for="31_<?= $task->user_id; ?>">☆</label>
-                                                </div>
-                                                <?php }else{
-                                                        foreach($chkStarRating as $star){
-                                                            // var_dump($chkStarRating);die;
-                                                            $starRating = $star->star;
-                                                            $starRemark = $star->remarks;
-                                                            
-                                                        }
-                                                        echo "<hr>";
-                                                        echo "<span class='text-dark font-weight-normal'><b>Total Star Given</b> :</span>";
-                                                        echo "<div class='star-rating'>";
-                                                        $totalStars = 5;
-                                                        for ($i = 0; $i < $starRating; $i++) {
-                                                            echo "<i class='fas fa-star'></i>"; // filled star
-                                                        }
-                                                        for ($i = $starRating; $i < $totalStars; $i++) {
-                                                            echo "<i class='far fa-star'></i>"; // empty star
-                                                        }
-                                                        echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
-                                                    }  ?>
-                                        </td>
+                                        <td><?=$SameStatusSince_1 .' Days';?></td>
+                                        <td><?=$NoOfTaskSinceStatusChange ;?></td>
+                                        
+                                        <!-- <td>
+                                            
+                                        </td> -->
                                         <!-- <td></td> -->
                                     </tr>
                                 <?php $i++; } ?>
@@ -619,132 +605,227 @@
             </div>
         </div>
 
-        <div class="modal fade" id="MoMModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+        <div class="modal fade bd-example-modal-lg" id="MoMModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-primary">
-                        <h5 class="modal-title">MoM Details</h5>
+                        <h5 class="modal-title">Meeting Details</h5>
                     </div>
                     <div class="modal-body">
                         <form>
-                            <hr>
-                            <input type="hidden" name="taskID" id="taskID" value="">
+                            <!-- <hr> -->
+                            <input type="hidden" name="taskID" id="taskID" >
+                            <input type="hidden" name="userID" id="userID" >
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Meeting Type:</strong> <span id="meetingType"></span></p>
+                                    <hr>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Meeting From:</strong> <span id="meetingFrom"></span></p>
+                                    <hr>
+                                    
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>RP/No RP:</strong> <span id="modalMomType"></span></p>
+                                    <p><b> Was it RP or No RP..??</b></p>
+                                    <fieldset class="MoMrating" data-question="Was it RP or No RP" data-userid="" data-taskid="">
+  
+                                        <input type="radio" name="momrat2_1" value="5" id="5_rating_1"><label for="5_rating_1">☆</label>
+                                        <input type="radio" name="momrat2_1" value="4" id="4_rating_1"><label for="4_rating_1">☆</label>
+                                        <input type="radio" name="momrat2_1" value="3" id="3_rating_1"><label for="3_rating_1">☆</label>
+                                        <input type="radio" name="momrat2_1" value="2" id="2_rating_1"><label for="2_rating_1">☆</label>
+                                        <input type="radio" name="momrat2_1" value="1" id="1_rating_1"><label for="1_rating_1">☆</label>
+                                        <div class="remark-box">
+                                            <label for="remark_1">Please provide additional remarks:</label>
+                                            <textarea id="remark_1" rows="4" cols="50"></textarea>
+                                        </div>
+                                    </fieldset>
+                                
+                                    <hr>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Status at time of meeting:</strong> <span id="status"></span></p>
+                                
+                                    <hr>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Start Time:</strong> <span id="modalStartTime"></span></p>
+
+                                    <p><b> Did the meeting started on right time..??</b></p>
+                                    <fieldset class="MoMrating" data-question="Did the meeting started on right time" data-userid="" data-taskid="">
+                                        <input type="radio" name="momrat2_10" value="5" id="50_rating_10"><label for="50_rating_10">☆</label>
+                                        <input type="radio" name="momrat2_10" value="4" id="49_rating_10"><label for="49_rating_10">☆</label>
+                                        <input type="radio" name="momrat2_10" value="3" id="48_rating_10"><label for="48_rating_10">☆</label>
+                                        <input type="radio" name="momrat2_10" value="2" id="47_rating_10"><label for="47_rating_10">☆</label>
+                                        <input type="radio" name="momrat2_10" value="1" id="46_rating_10"><label for="46_rating_10">☆</label>
+                                        <div class="remark-box">
+                                            <label for="remark_10">Please provide additional remarks:</label>
+                                            <textarea id="remark_10" rows="4" cols="50"></textarea>
+                                        </div>
+                                    </fieldset>
+                                    <hr>
+                                </div>
+                                <div class="col-md-6">
+                                    <p> <strong>End Time:</strong> <span id="modalEndTime"></span></p>
+                                    <p><b> Did the meeting ended on right time..??</b></p>
+
+                                    <fieldset class="MoMrating" data-question="Did the meeting ended on right time" data-userid="" data-taskid="">
+                                        <input type="radio" name="momrat2_3" value="5" id="15_rating_2"><label for="15_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_3" value="4" id="14_rating_2"><label for="14_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_3" value="3" id="13_rating_2"><label for="13_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_3" value="2" id="12_rating_2"><label for="12_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_3" value="1" id="11_rating_2"><label for="11_rating_2">☆</label>
+                                        <div class="remark-box">
+                                            <label for="remark_3">Please provide additional remarks:</label>
+                                            <textarea id="remark_3" rows="4" cols="50"></textarea>
+                                        </div>
+                                    </fieldset>
+                                    <hr>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <strong>Start Location:</strong> 
+                                        <div class="img-thumbnail" style="height: 150px">
+                                            <iframe id="startMap" width="150px"  height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
+                                        </div>
+                                    <p><b>Was meeting start location correct..??</b> </p>  
+
+                                    <fieldset class="MoMrating" data-question="Was meeting start location correct" data-userid="" data-taskid="">
+                                        <input type="radio" name="momrat2_2" value="5" id="10_rating_2"><label for="10_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_2" value="4" id="9_rating_2"><label for="9_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_2" value="3" id="8_rating_2"><label for="8_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_2" value="2" id="7_rating_2"><label for="7_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_2" value="1" id="6_rating_2"><label for="6_rating_2">☆</label>
+                                        <div class="remark-box">
+                                            <label for="remark_2">Please provide additional remarks:</label>
+                                            <textarea id="remark_2" rows="4" cols="50"></textarea>
+                                        </div>
+                                    </fieldset>
+                                <hr>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <strong>End Location:</strong> 
+                                    <div class="img-thumbnail" style="height: 150px">
+                                        <iframe id="endMap"  width="150px"  height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
+                                    </div>
+
+                                    <p><b>Was meeting end location correct..??</b> </p>  
+                                    <fieldset class="MoMrating" data-question="Was meeting end location correct" data-userid="" data-taskid="">
+                                        <input type="radio" name="momrat2_4" value="5" id="20_rating_2"><label for="20_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_4" value="4" id="19_rating_2"><label for="19_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_4" value="3" id="18_rating_2"><label for="18_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_4" value="2" id="17_rating_2"><label for="17_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_4" value="1" id="16_rating_2"><label for="16_rating_2">☆</label>
+                                        <div class="remark-box">
+                                            <label for="remark_4">Please provide additional remarks:</label>
+                                            <textarea id="remark_4" rows="4" cols="50"></textarea>
+                                        </div>
+                                    </fieldset>
+                                    <hr>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <p> <strong>Photo:</strong> <img id="modalPhoto" src="" alt="Photo" class="img-fluid"> </p>
+
+                                    <p><b>Was company photo is right..??</b> </p>
+                                    <fieldset class="MoMrating" data-question="Was company photo is right" data-userid="" data-taskid="">
+                                        <input type="radio" name="momrat2_5" value="5" id="25_rating_2"><label for="25_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_5" value="4" id="24_rating_2"><label for="24_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_5" value="3" id="23_rating_2"><label for="23_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_5" value="2" id="22_rating_2"><label for="22_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_5" value="1" id="21_rating_2"><label for="21_rating_2">☆</label>
+                                        <div class="remark-box">
+                                            <label for="remark_5">Please provide additional remarks:</label>
+                                            <textarea id="remark_5" rows="4" cols="50"></textarea>
+                                        </div>
+                                    </fieldset>
+                                    <hr>
+                                </div>
+                                
+                                <!-- <div class="col-md-6">
+                                    <p><strong>Type:</strong> <span id="modalMomType"></span></p>
+                                    <p><b>MoM type is correct..??</b> </p>
+                                    <fieldset class="MoMrating" data-question="MoM type is correct" data-userid="" data-taskid="">
+                                        <input type="radio" name="momrat2_6" value="5" id="30_rating_2"><label for="30_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_6" value="4" id="29_rating_2"><label for="29_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_6" value="3" id="28_rating_2"><label for="28_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_6" value="2" id="27_rating_2"><label for="27_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_6" value="1" id="26_rating_2"><label for="26_rating_2">☆</label>
+                                    </fieldset>
+                                    <hr>
+                                </div> -->
+
+                                <div class="col-md-6">
+                                    <p><strong>Partner Type:</strong> <span id="modalPartnerType"></span></p>
+                                    <p><b>Was partner type correct..??</b> </p>
+                                    <fieldset class="MoMrating" data-question="Was partner type correct" data-userid="" data-taskid="">
+                                        <input type="radio" name="momrat2_7" value="5" id="35_rating_2"><label for="35_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_7" value="4" id="34_rating_2"><label for="34_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_7" value="3" id="33_rating_2"><label for="33_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_7" value="2" id="32_rating_2"><label for="32_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_7" value="1" id="31_rating_2"><label for="31_rating_2">☆</label>
+                                        <div class="remark-box">
+                                            <label for="remark_7">Please provide additional remarks:</label>
+                                            <textarea id="remark_7" rows="4" cols="50"></textarea>
+                                        </div>
+                                    </fieldset>
+                                    <hr>
+                                </div>
+                                
+                                <div class="col-md-6">
+
+                                    <p><strong>Is Potential?:</strong> <span id="potential"></span></p>
                             
-                            <p><strong>Start Time:</strong> <span id="modalStartTime"></span></p>
+                                    <p><b>Is Potential marked correctly..??</b> </p>
+                                    <fieldset class="MoMrating" data-question="Potential marked correctly" data-userid="" data-taskid="">
+                                        <input type="radio" name="momrat2_8" value="5" id="40_rating_2"><label for="40_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_8" value="4" id="39_rating_2"><label for="39_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_8" value="3" id="38_rating_2"><label for="38_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_8" value="2" id="37_rating_2"><label for="37_rating_2">☆</label>
+                                        <input type="radio" name="momrat2_8" value="1" id="36_rating_2"><label for="36_rating_2">☆</label>
+                                        <div class="remark-box">
+                                            <label for="remark_8">Please provide additional remarks:</label>
+                                            <textarea id="remark_8" rows="4" cols="50"></textarea>
+                                        </div>
+                                    </fieldset>
+                                    
+                                </div>
+                                
 
-                            <p><b> Did the meeting started on right time..??</b></p>
-                            <div class="MoMrating" data-question="Did the meeting started on right time" data-userid="" data-taskid="">
-                                <input type="radio" name="momrat1_" value="5" id="5_rating_1"><label for="5_rating_1">☆</label>
-                                <input type="radio" name="momrat1_" value="4" id="4_rating_1"><label for="4_rating_1">☆</label>
-                                <input type="radio" name="momrat1_" value="3" id="3_rating_1"><label for="3_rating_1">☆</label>
-                                <input type="radio" name="momrat1_" value="2" id="2_rating_1"><label for="2_rating_1">☆</label>
-                                <input type="radio" name="momrat1_" value="1" id="1_rating_1"><label for="1_rating_1">☆</label>
+                                <div class="col-md-6">
+                                    <p><strong>MoM Remark : </strong> <span id="momRemark"></span></p>
+                                    <p><b>MoM remarks entered correctly..??</b> </p>
+                                    
+                                        <fieldset class="MoMrating" data-question="MoM remarks entered correctly" data-userid="" data-taskid="">
+                                            <input type="radio" name="momrat2_9" value="5" id="45_rating_2"><label for="45_rating_2">☆</label>
+                                            <input type="radio" name="momrat2_9" value="4" id="44_rating_2"><label for="44_rating_2">☆</label>
+                                            <input type="radio" name="momrat2_9" value="3" id="43_rating_2"><label for="43_rating_2">☆</label>
+                                            <input type="radio" name="momrat2_9" value="2" id="42_rating_2"><label for="42_rating_2">☆</label>
+                                            <input type="radio" name="momrat2_9" value="1" id="41_rating_2"><label for="41_rating_2">☆</label>
+                                            <br>
+                                            <div class="remark-box">
+                                                <label for="remark_9">Please provide additional remarks:</label>
+                                                <textarea id="remark_9" rows="4" cols="50"></textarea>
+                                            </div>
+                                        </fieldset>
+                                   
+                                    
+
+                                </div>
+                                
+                                <!-- <div class="col-md-12">
+                                    <p><b>Add remark</b> </p>
+                                    <textarea class="form-control" id="additionalFeedback" rows="4" cols="50" placeholder="Enter your remarks here..."></textarea>
+                                </div> -->
+
                             </div>
-                            <hr>
-                            <strong>Start Location:</strong> 
-                            <div class="img-thumbnail" style="height: 150px">
-                                <iframe id="startMap" width="150px"  height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
-                            </div>
-                            <p><b>Was meeting start location correct..??</b> </p>  
-
-                            <div class="MoMrating" data-question="Was meeting start location correct" data-userid="" data-taskid="">
-                                <input type="radio" name="momrat2_" value="5" id="10_rating_2"><label for="10_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="4" id="9_rating_2"><label for="9_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="3" id="8_rating_2"><label for="8_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="2" id="7_rating_2"><label for="7_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="1" id="6_rating_2"><label for="6_rating_2">☆</label>
-                            </div>
-                            <hr>
-                            <!-- <br> -->
-                            <p>
-                                <strong>End Time:</strong> 
-                                <span id="modalEndTime"></span>
-
-                            </p>
-                            <p><b> Did the meeting ended on right time..??</b></p>
-
-                            <div class="MoMrating" data-question="Did the meeting ended on right time" data-userid="" data-taskid="">
-                                <input type="radio" name="momrat2_" value="5" id="15_rating_2"><label for="15_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="4" id="14_rating_2"><label for="14_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="3" id="13_rating_2"><label for="13_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="2" id="12_rating_2"><label for="12_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="1" id="11_rating_2"><label for="11_rating_2">☆</label>
-                            </div>
-
                             
-                            <hr>
-                            <strong>End Location:</strong> 
-                            <div class="img-thumbnail" style="height: 150px">
-                                <iframe id="endMap"  width="150px"  height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
-                            </div>
-
-                            <p><b>Was meeting end location correct..??</b> </p>  
-                            <div class="MoMrating" data-question="Was meeting end location correct" data-userid="" data-taskid="">
-                                <input type="radio" name="momrat2_" value="5" id="20_rating_2"><label for="20_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="4" id="19_rating_2"><label for="19_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="3" id="18_rating_2"><label for="18_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="2" id="17_rating_2"><label for="17_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="1" id="16_rating_2"><label for="16_rating_2">☆</label>
-                            </div>
-                            <hr>
-
-                            <p>
-                                <strong>Photo:</strong> 
-                                <img id="modalPhoto" src="" alt="Photo" class="img-fluid">
-                            </p>
-
-                            <p><b>Was company photo is right..??</b> </p>
-                            <div class="MoMrating" data-question="Was company photo is right" data-userid="" data-taskid="">
-                                <input type="radio" name="momrat2_" value="5" id="25_rating_2"><label for="25_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="4" id="24_rating_2"><label for="24_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="3" id="23_rating_2"><label for="23_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="2" id="22_rating_2"><label for="22_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="1" id="21_rating_2"><label for="21_rating_2">☆</label>
-                            </div>
-                            <hr>
-                            <p><strong>Type:</strong> <span id="modalMomType"></span></p>
                             
-                            <p><b>MoM type is correct..??</b> </p>
-                            <div class="MoMrating" data-question="MoM type is correct" data-userid="" data-taskid="">
-                                <input type="radio" name="momrat2_" value="5" id="30_rating_2"><label for="30_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="4" id="29_rating_2"><label for="29_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="3" id="28_rating_2"><label for="28_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="2" id="27_rating_2"><label for="27_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="1" id="26_rating_2"><label for="26_rating_2">☆</label>
-                            </div>
-                            <hr>
-                            <p><strong>Partner Type:</strong> <span id="modalPartnerType"></span></p>
                             
-                            <p><b>Was partner type correct..??</b> </p>
-                            <div class="MoMrating" data-question="Was partner type correct" data-userid="" data-taskid="">
-                                <input type="radio" name="momrat2_" value="5" id="35_rating_2"><label for="35_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="4" id="34_rating_2"><label for="34_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="3" id="33_rating_2"><label for="33_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="2" id="32_rating_2"><label for="32_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="1" id="31_rating_2"><label for="31_rating_2">☆</label>
-                            </div>
-                            <hr>
-                            <p><strong>BD Potential:</strong> <span id=""></span></p>
                             
-                            <p><b>Potential marked correctly..??</b> </p>
-                            <div class="MoMrating" data-question="Potential marked correctly" data-userid="" data-taskid="">
-                                <input type="radio" name="momrat2_" value="5" id="40_rating_2"><label for="40_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="4" id="39_rating_2"><label for="39_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="3" id="38_rating_2"><label for="38_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="2" id="37_rating_2"><label for="37_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="1" id="36_rating_2"><label for="36_rating_2">☆</label>
-                            </div>
-                            <hr>
-                            <p><strong>MoM Remark : </strong> <span id="momRemark"></span></p>
                             
-                            <p><b>MoM remarks entered correctly..??</b> </p>
-                            <div class="MoMrating" data-question="MoM remarks entered correctly" data-userid="" data-taskid="">
-                                <input type="radio" name="momrat2_" value="5" id="45_rating_2"><label for="45_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="4" id="44_rating_2"><label for="44_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="3" id="43_rating_2"><label for="43_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="2" id="42_rating_2"><label for="42_rating_2">☆</label>
-                                <input type="radio" name="momrat2_" value="1" id="41_rating_2"><label for="41_rating_2">☆</label>
-                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -754,6 +835,15 @@
                 </div>
             </div>
         </div>
+
+        <!-- <div id="warningPopup" class="popup" style="display: none;">
+            <div class="popup-content">
+                <span class="close-popup">&times;</span>
+                <p>You selected a low rating. Please provide additional feedback:</p>
+                <textarea id="additionalFeedback" rows="4" cols="50" placeholder="Enter your remarks here..."></textarea>
+                <button id="submitFeedback">Submit Feedback</button>
+            </div>
+        </div> -->
     </div>
 </div>
 
@@ -926,9 +1016,11 @@ $('[id^="giveRating"]').on('click', function() {
     });
 </script>
 <script>
-    function OpenModal(id){
+    function OpenModal(id,userID){
 
         document.getElementById('taskID').value = id;
+        document.getElementById('userID').value = userID;
+
 
         $.ajax({
             url: '<?=base_url();?>Menu/getMoMData',
@@ -940,16 +1032,19 @@ $('[id^="giveRating"]').on('click', function() {
 
                     // console.log('Response:', response); 
                     var data = JSON.parse(response);
-
+                    // alert(data.momType)
         // Update modal content
                     document.getElementById('modalPhoto').src = data.cphoto; 
                     document.getElementById('modalStartTime').textContent = data.start_time;
                     document.getElementById('modalEndTime').textContent = data.end_time;
-                    document.getElementById('modalMomType').textContent = data.momType || 'N/A';
+                    document.getElementById('modalMomType').textContent = data.momType || 'Not Updated';
                     document.getElementById('modalEndTime').textContent = data.end_time;
                     document.getElementById('modalPartnerType').textContent = data.mompartner;
                     document.getElementById('momRemark').textContent = data.momremark;
-                    
+                    document.getElementById('meetingType').textContent = data.actionName;
+                    document.getElementById('meetingFrom').textContent = data.funnel;
+                    document.getElementById('status').textContent = data.statusAtMeeting;
+                    document.getElementById('potential').textContent = data.potentialOrNot;
 
                     var startLat = data.start_lat;
                     var startLong = data.start_long;
@@ -971,6 +1066,7 @@ $('[id^="giveRating"]').on('click', function() {
 
     }
 </script>
+
 <script>
     function submitReview(){
 
@@ -1008,23 +1104,109 @@ $('[id^="giveRating"]').on('click', function() {
 
     }
 </script>
+
 <script>
-        function handleRatingClick(event) {
-            // Get the container of the clicked radio button
-            const container = event.currentTarget.closest('.MoMrating');
-            
-            // Disable all radio buttons within that container
-            const radios = container.querySelectorAll('input[type="radio"]');
-            radios.forEach(radio => {
-                radio.disabled = true;
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get all fieldsets within the modal
+            const fieldsets = document.querySelectorAll('.MoMrating');
+
+            fieldsets.forEach(fieldset => {
+                // Add event listener to each radio button in the fieldset
+                fieldset.addEventListener('change', (event) => {
+
+                    const selectedRadio = event.target;
+                    const remarkBox = fieldset.querySelector('.remark-box');
+
+                    console.log(selectedRadio.value)
+
+                    // Disable the entire fieldset once a radio button is selected
+                    // fieldset.classList.add('disabled-fieldset');
+
+                    if (selectedRadio.type === 'radio') {
+                        if (parseInt(selectedRadio.value, 10) <= 2) {
+                            // Show the remark box
+                            remarkBox.classList.add('visible'); 
+                            // remarkBox.classList.remove('disabled');
+                        } else {
+                            // Hide the remark box
+                            remarkBox.classList.remove('visible');
+                            // remarkBox.classList.remove('visible');
+                        }
+
+                        const radios = fieldset.querySelectorAll('input[type="radio"]');
+                        radios.forEach(radio => {
+                            radio.disabled = true;
+                        });
+                    }
+                });
             });
+
+
+        });
+
+        function submitReview() {
+            const form = document.getElementById('momForm');
+            const data = [];
+
+            // var taskID = document.getElementById('taskID');
+            var taskID = document.getElementById('taskID').value.trim();
+            var userID = document.getElementById('userID').value.trim();
+
+            // alert(taskID);
+
+            // Collect ratings and associated questions
+            document.querySelectorAll('.MoMrating').forEach(fieldset => {
+                const question = fieldset.getAttribute('data-question');
+                const selectedRating = fieldset.querySelector('input[type="radio"]:checked');
+                const ratingValue = selectedRating ? selectedRating.value : null;
+                const remarkBox = fieldset.querySelector('.remark-box');
+                const remarkTextarea = remarkBox ? remarkBox.querySelector('textarea') : null;
+                const remarkValue = remarkTextarea ? remarkTextarea.value.trim() : null;
+                
+                
+
+                if (question && ratingValue) {
+                // Push the formatted object into the data array
+                data.push({
+                    question: question,
+                    star: ratingValue,
+                    remarks: remarkValue,
+                    task_id: taskID,
+                    user_id : userID
+                });
+            }
+            });
+
+            // data['taskID'] = taskID;
+
+            // Convert data to JSON (or another format if needed)
+            const jsonData = JSON.stringify(data);
+
+            alert(jsonData);
+            // Log data for debugging
+            console.log('Submitted Data:', data);
+
+            // Example of sending data via fetch
+            $.ajax({
+            url: '<?=base_url();?>Menu/submitMoMRating',
+            method: 'POST',
+            contentType: 'application/json',
+            data: jsonData,
+            dataType: 'json',
+            success: function(result) {
+                console.log('Success:', result);
+                // Handle success (e.g., show a success message, close the modal, etc.)
+                $('#MoMModal').modal('hide');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                // Handle error (e.g., show an error message)
+            }
+        });
         }
 
-        // Attach event listeners to all radio buttons in each MoMrating container
-        document.querySelectorAll('.MoMrating input[type="radio"]').forEach(radio => {
-            radio.addEventListener('click', handleRatingClick);
-        });
-    </script>
+
+</script>
 
 </body>
 </html>

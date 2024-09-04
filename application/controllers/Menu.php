@@ -8858,7 +8858,7 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $tdate=date('Y-m-d');
         $taskList = array();
-        $tdate = '2024-07-19';
+        // $tdate = '2024-07-19';
         if(isset($_POST['userId'])){
 
             $userId = $_POST['userId'];
@@ -8951,6 +8951,23 @@ class Menu extends CI_Controller {
 
     }
 
+    public function submitMoMRating(){
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $jsonData = file_get_contents('php://input');
+        // Decode the JSON data
+        $data = json_decode($jsonData, true);
+        $this->load->model('Menu_model');
+        // var_dump($data);die;
+        foreach ($data as $review) {
+            // var_dump($review);die;
+            $review['date'] = date('Y-m-d');
+            $review['feedback_by'] = $uid;
+            $this->Menu_model->InsertMoMTaskRating($review);
+        }
+    }
     public function TaskCheck_NewReport()
     {
 

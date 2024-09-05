@@ -276,8 +276,6 @@
 
                                                     $SinglefilterUsedFinal = 'Company Status - '.$SinglefilterUsedFinal->name;
                                                 }
-                                                // if 
-    
                                             }
                                         }                                        
                                 ?>
@@ -830,7 +828,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="submitReview()">Submit</button>
+                        <button type="button" class="btn btn-primary" onclick="submitMoMReview()">Submit</button>
                     </div>
                 </div>
             </div>
@@ -1117,7 +1115,7 @@ $('[id^="giveRating"]').on('click', function() {
                     const selectedRadio = event.target;
                     const remarkBox = fieldset.querySelector('.remark-box');
 
-                    console.log(selectedRadio.value)
+                    // console.log(selectedRadio.value)
 
                     // Disable the entire fieldset once a radio button is selected
                     // fieldset.classList.add('disabled-fieldset');
@@ -1144,7 +1142,7 @@ $('[id^="giveRating"]').on('click', function() {
 
         });
 
-        function submitReview() {
+        function submitMoMReview() {
             const form = document.getElementById('momForm');
             const data = [];
 
@@ -1177,14 +1175,12 @@ $('[id^="giveRating"]').on('click', function() {
             }
             });
 
-            // data['taskID'] = taskID;
 
             // Convert data to JSON (or another format if needed)
             const jsonData = JSON.stringify(data);
 
-            alert(jsonData);
             // Log data for debugging
-            console.log('Submitted Data:', data);
+            // console.log('Submitted Data:', jsonData);
 
             // Example of sending data via fetch
             $.ajax({

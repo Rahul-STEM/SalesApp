@@ -305,11 +305,11 @@ class Management extends Menu {
 
         $getUsers = $this->Management_model->getUsers($uid,$userTypeid);
 
-        $getReportbyUser = $this->Management_model->getReportbyUser($uid,$selected_user,$sdate,$edate);
+        $getReportbyUser = $this->Management_model->getReportbyUser($selected_user,$sdate,$edate);
 
         $data = '';
         if (!empty($user)) {
-            $this->load->view('include/header');
+            // $this->load->view('include/header');
             // $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);
             $this->load->view($this->dep_name.'/DayManagementReport',['uid'=>$this->uid,'user'=>$this->user,'sdate'=>$sdate,'edate'=>$edate,'users'=>$getUsers,'selected_user'=>$selected_user,'getReportbyUser'=>$getReportbyUser]);
         } else {

@@ -618,6 +618,12 @@
                             <input type="hidden" name="userID" id="userID" >
                             <div class="row">
                                 <div class="col-md-6">
+                                <?php 
+
+// $taskID = $this->input->post('taskID');
+// var_dump($taskID); 
+
+?>
                                     <p><strong>Meeting Type:</strong> <span id="meetingType"></span></p>
                                     <hr>
                                 </div>
@@ -630,7 +636,10 @@
                                     <p><strong>RP/No RP:</strong> <span id="modalMomType"></span></p>
                                     <p><b> Was it RP or No RP..??</b></p>
                                     <fieldset class="MoMrating" data-question="Was it RP or No RP" data-userid="" data-taskid="">
-  
+                                    <?php 
+                                            // $chkStarRating = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($user_id,'Was it RP or No RP',$tid);
+                                            // if(sizeof($chkStarRating) == 0){ }
+                                            ?>
                                         <input type="radio" name="momrat2_1" value="5" id="5_rating_1"><label for="5_rating_1">☆</label>
                                         <input type="radio" name="momrat2_1" value="4" id="4_rating_1"><label for="4_rating_1">☆</label>
                                         <input type="radio" name="momrat2_1" value="3" id="3_rating_1"><label for="3_rating_1">☆</label>
@@ -1027,12 +1036,13 @@ $('[id^="giveRating"]').on('click', function() {
             type: 'POST',
             data: {
                 taskID: id,
+                userID: userID
                 },
                 success: function(response) {
 
-                    // console.log('Response:', response); 
+                    // console.log('Response:', JSON.parse(response)); 
                     var data = JSON.parse(response);
-                    // alert(data.momType)
+                    // alert(data)
         // Update modal content
                     document.getElementById('modalPhoto').src = data.cphoto; 
                     document.getElementById('modalStartTime').textContent = data.start_time;

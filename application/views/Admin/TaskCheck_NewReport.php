@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="wi$dth=device-wi$dth, initial-scale=1">
-    <title>STEM APP | WebAPP</title>
+    <title>TaskCheck Report | STEM APP | WebAPP</title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
     <!-- Font Awesome -->
@@ -74,7 +74,7 @@
                     </h3>
                     <div class="card-body FilterSection">
                             <form method="POST"
-                                action="<?= base_url(); ?>Management/DayManagementReport/<?php ?>">
+                                action="<?= base_url(); ?>Menu/TaskCheck_NewReport/<?php ?>">
                                 <div class="row">
                                     <div class="col-lg-3 col-sm-6">
                                         <label for="startDate">Start Date</label>
@@ -126,7 +126,7 @@
                                             <th>S.No.</th>
                                             <th>Name</th>
                                             <th>Date</th>
-                                            <th>Period</th>
+                                            <!-- <th>Period</th> -->
                                             <th>Question</th>
                                             <th>Rating</th>
                                             <th>Remark</th>
@@ -138,14 +138,15 @@
                                     <?php 
                                       $i=1;                                      
                                         foreach($getReportbyUser as $singleReport){ ?>
-
+                                        <tr>
                                             <td><?=$i?></td>
                                             <td><?=$singleReport->userName?></td>
                                             <td><?=$singleReport->date?></td>
-                                            <td><?=$singleReport->periods?></td>
+                                            <!-- <td><?=$singleReport->periods?></td> -->
 
                                             <td><?=$singleReport->question?></td>
                                             <td>
+                                            <?=$singleReport->star?>
                                             <?php   
                                                 $totalStars = 5;
                                                 for($j = 0; $j < $singleReport->star; $j++) {
@@ -160,7 +161,7 @@
                                             <td><?=$singleReport->remarks?></td>
 
                                             <td><?=$singleReport->feedbackBy?></td>
-
+                                        </tr>
                                         <?php $i++;} ?>
                                     </tbody>
                                 </table>

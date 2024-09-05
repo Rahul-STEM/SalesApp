@@ -11535,18 +11535,21 @@ public function getTasks($id,$date){
     $this->db->select('tce.rremark remark');
     $this->db->select('tce.filter_by filter_used');
     $this->db->select('company_master.id company_id');
+
     $this->db->from('tblcallevents tce');
+
     $this->db->join('init_call', 'init_call.id = tce.cid_id', 'left');
     $this->db->join('company_master', 'company_master.id = init_call.cmpid_id', 'left');
     $this->db->join('action action_name', 'action_name.id = tce.actiontype_id', 'left');
     $this->db->join('status s1', 's1.id = tce.status_id', 'left');
     $this->db->join('status s2', 's2.id = tce.nstatus_id', 'left');
+
     $this->db->where('user_id', $id);
     $this->db->where('CAST(updateddate AS DATE) =', "'$date'", FALSE);
     // $this->db->where('rremark IS NULL', NULL, FALSE);
 
     $query = $this->db->get();
-        // echo  $this->db->last_query(); die;
+        // echo  $this->db->last_query();
     return $query->result();
 }
 

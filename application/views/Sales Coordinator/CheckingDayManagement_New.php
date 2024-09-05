@@ -1370,6 +1370,7 @@
         });
 
     </script>
+    
     <script>
         $(document).ready(function(){
             $(".rating input").on("change", function(){

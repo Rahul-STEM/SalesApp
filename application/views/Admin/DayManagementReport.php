@@ -138,7 +138,7 @@
                                     <?php 
                                       $i=1;                                      
                                         foreach($getReportbyUser as $singleReport){ ?>
-
+                                          <tr>
                                             <td><?=$i?></td>
                                             <td><?=$singleReport->userName?></td>
                                             <td><?=$singleReport->date?></td>
@@ -160,7 +160,7 @@
                                             <td><?=$singleReport->remarks?></td>
 
                                             <td><?=$singleReport->feedbackBy?></td>
-
+                                            </tr>
                                         <?php $i++;} ?>
                                     </tbody>
                                 </table>

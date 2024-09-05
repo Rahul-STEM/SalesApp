@@ -253,8 +253,104 @@
             </a>
 
           </li>
-
           
+          <!-- <li class="nav-item dropdown">
+
+            <a href="" class="nav-link dropdown-toggle" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+            <i class="fas fa-chart-line nav-icon"></i>
+
+            <p></p>
+            Day Check Management
+            </a>
+
+            <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown1">
+
+                <a class="dropdown-item" href="<?= base_url(); ?>Management/CheckingDayManagement_New">Day Check Management</a>
+
+                <a class="dropdown-item" href="<?= base_url(); ?>Management/DayManagementReport">Day Check Report</a>
+
+            </div>
+
+          </li> -->
+
+          <!-- <li class="nav-item dropdown">
+
+            <a href="" class="nav-link dropdown-toggle" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+            <i class="fas fa-chart-bar nav-icon"></i>
+
+            <p></p>
+            TaskCheck Management
+            </a>
+
+            <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown2">
+
+              <a class="dropdown-item" href="<?= base_url(); ?>Menu/TaskCheck_New">Task Check Management</a>
+
+              <a class="dropdown-item" href="<?= base_url(); ?>Menu/TaskCheck_NewReport">Task Check Report</a>
+
+            </div>
+
+          </li> -->
+
+            <li class="nav-item">
+
+                <a class="nav-link" href="<?= base_url(); ?>Management/CheckingDayManagement_New">
+                    <i class="fas fa-chart-line nav-icon"></i>
+
+                    <!-- <p>Day Check Management</p> -->
+                    Day Check Management
+
+                </a>
+
+            </li>
+
+            <li class="nav-item">
+
+                <a class="nav-link" href="<?= base_url(); ?>Management/ApproveDayCheckRequest">
+                    <i class="fas fa-chart-line nav-icon"></i>
+
+                    <!-- <p>Day Check Report</p> -->
+                    Approve Day Check Request
+                </a>
+
+            </li>
+
+            <li class="nav-item">
+
+                <a class="nav-link" href="<?= base_url(); ?>Management/DayManagementReport">
+                    <i class="fas fa-chart-line nav-icon"></i>
+
+                    <!-- <p>Day Check Report</p> -->
+                    Day Check Report
+                </a>
+
+            </li>
+
+            <li class="nav-item">
+
+                <a class="nav-link" href="<?= base_url(); ?>Menu/TaskCheck_New">
+                    <i class="fas fa-chart-bar nav-icon"></i>
+
+                    <!-- <p>Task Check Management</p> -->
+                    Task Check Management
+
+                </a>
+
+            </li>
+
+            <li class="nav-item">
+
+                <a class="nav-link" href="<?= base_url(); ?>Menu/TaskCheck_NewReport">
+                    <i class="fas fa-chart-bar nav-icon"></i>
+
+                    <!-- <p>Task Check Report</p> -->
+                    Task Check Report
+
+                </a>
+
+            </li>
 
           <li class="nav-item">
 
@@ -263,6 +359,19 @@
               <i class="far fa-circle nav-icon"></i>
 
               <p>New Funnel Added</p>
+
+            </a>
+
+          </li>
+
+
+          <li class="nav-item">
+
+            <a class="nav-link" href="<?=base_url();?>Management/ApproveDayCheckRequest" >
+
+              <i class="far fa-circle nav-icon"></i>
+
+              <p>Approve Day Check Request</p>
 
             </a>
 

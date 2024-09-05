@@ -8856,9 +8856,17 @@ class Menu extends CI_Controller {
         $dt=$this->Menu_model->get_utype($uyid);
         $userList = $this->Menu_model->get_userForTask($uid,$uyid);
         $dep_name = $dt[0]->name;
-        $tdate=date('Y-m-d');
+        // $tdate=date('Y-m-d');
+
+        
+        $date = new DateTime();
+        $date->modify('-1 day');
+        $tdate =  $date->format('Y-m-d');
+        
+        // echo $tdate;die;
+        $tdate = '2024-07-19';
+
         $taskList = array();
-        // $tdate = '2024-07-19';
         if(isset($_POST['userId'])){
 
             $userId = $_POST['userId'];
@@ -8943,9 +8951,42 @@ class Menu extends CI_Controller {
     public function getMoMData(){
 
         $taskID = $this->input->post('taskID');
+        $user_id = $this->input->post('userID');
+
         $this->load->model('Menu_model');   
         // var_dump($taskID);die;
         $result = $this->Menu_model->getMoMData($taskID);
+
+        $questionArray = [
+
+            'MoM remarks entered correctly',
+            'Potential marked correctly',
+            'Was partner type correct',
+            'Was company photo is right',
+            'Was meeting end location correct',
+            'Was meeting start location correct',
+            'Did the meeting ended on right time',
+            'Did the meeting started on right time',
+            'Was it RP or No RP'
+        ];
+
+        $ratingsData = [];
+
+    // Loop through each question and fetch ratings
+        foreach ($questionArray as $question) {
+
+            $ratingsData[$question] = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($user_id, $question, $taskID);
+        }
+
+    // Attach the ratings data to the result
+        if (is_object($result)) {
+            $result = (array) $result;
+        }
+
+        // Attach the ratings data to the result
+        $result['ratings'] = $ratingsData;
+
+        // $this->Menu_model->CheckTaskStarRatingsExistorNot_New($user_id,$questionArray,$taskID);
 
         echo json_encode($result);
 

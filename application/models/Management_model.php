@@ -159,7 +159,7 @@ class Management_model  extends Menu_model {
 
 
     public function CheckingDayManage_New($uid,$cdate){
-        // $cdate = '2024-07-20';
+        // $cdate = '2024-07-01';
         $utype = $this->Menu_model->get_userbyid($uid);
         $utype = $utype[0]->type_id;
 
@@ -184,7 +184,6 @@ class Management_model  extends Menu_model {
                 task_plan_for_today.updated_at AS planner_approvel_time,
                 spt.psdatetime AS user_planner_start_time,
                 ud1.name AS approver_Name,
-
                 cydr.why_did_you AS close_day_request_Remark,  
                 cydr.req_remarks AS close_day_req_remarks,
                 cydr.approved_status AS close_day_approved_status,
@@ -346,22 +345,12 @@ class Management_model  extends Menu_model {
         $date = new DateTime();
         $date->modify('-1 day');
         $pdate =  $date->format('Y-m-d');
-        $pdate = '2024-07-19';
 
-        // $uyid =  $uid;
-        $this->load->model('Menu_model');
-        $dt=$this->Menu_model->get_utypebyUserID($id);
-        $utype = $dt[0]->type_id;
-        // echo ($utype);
-        $utype = 13;
-
-        // if ($utype == 13) {
-            
-        //     $this->db->select("COUNT(*) AS teamFunneltask");
-        // }
-        $this->db->select("user_id");
-        $this->db->from('user_details');
-        $this->db->where_IN('aadmin', $id);
+        $this->db->select("id");
+        $this->db->from('init_call');
+        $this->db->where('clm_id', $id);
+        $this->db->where('mainbd !=', $id);
+        // mainbd != '$uid'
         $subquery = $this->db->get_compiled_select();
 
         $this->db->select("COUNT(*) AS TotalTeamplan");
@@ -373,7 +362,8 @@ class Management_model  extends Menu_model {
         $this->db->select("COUNT(CASE WHEN reassign_type = 2 AND nextCFID != 0 THEN 1 END) AS TotalTeamCompletedassignByOther");
         $this->db->from('tblcallevents');
 
-        $this->db->where_IN('assignedto_id', $subquery);
+        $this->db->where_IN('cid_id', $subquery);
+
         $this->db->where('CAST(appointmentdatetime AS DATE) = ', $this->db->escape($pdate), FALSE);
 
         $query = $this->db->get();
@@ -383,6 +373,7 @@ class Management_model  extends Menu_model {
     }
 
     public function getUsers($id,$typeID){
+
         $this->db->select("user_id,name,type_id");
         $this->db->from("user_details");
 
@@ -404,6 +395,7 @@ class Management_model  extends Menu_model {
 
         }
 
+        $this->db->where("status",'active');
         $query = $this->db->get();
 
         // echo $this->db->last_query();
@@ -423,7 +415,10 @@ class Management_model  extends Menu_model {
         $this->db->join('user_details ud1', 'ud1.user_id = star_rating.user_id', 'left');
         $this->db->join('user_details ud2', 'ud2.user_id = star_rating.feedback_by', 'left');
 
-        $this->db->where_in('star_rating.user_id',$selected_user);
+        if(!empty($selected_user)){
+
+            $this->db->where_in('star_rating.user_id',$selected_user);
+        }
         $this->db->where('CAST(date AS DATE) >=', "'$sdate'", FALSE);
         $this->db->where('CAST(date AS DATE) <=', "'$edate'", FALSE);
 

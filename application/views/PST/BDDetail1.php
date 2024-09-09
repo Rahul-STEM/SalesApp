@@ -89,7 +89,6 @@
                                     <thead>
                                         <tr>
                                             <th>S.No</th>
-                                            <th>BD ID</th>
                                             <th>BD Name</th>
                                             <th>User Name</th>
                                             <th>Password</th>
@@ -106,7 +105,6 @@
                                         ?>
                                     <tr>
                                          <td><?=$i?></td>
-                                         <td><?=$dt->user_id?></td>
                                          <td><?=$dt->name?></td>
                                          <td><?=$dt->username?></td>
                                          <td><?=$dt->password?></td>

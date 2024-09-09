@@ -1,4 +1,4 @@
-<span?php $uid=$user['user_id'];
+<?php $uid=$user['user_id'];
 date_default_timezone_set("Asia/Kolkata");
 ?>
 <div id="add_note" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-standard-title" aria-hidden="true">
@@ -19,7 +19,7 @@ date_default_timezone_set("Asia/Kolkata");
                 Current Task : <lable id="ctname"></lable><br>
                 Last Status :  <lable id="clsname"></lable><br>
                 Last Task Remark : <lable id="cremarks"></lable><br>
-                Task Comments : <lable id="taskcomments"></lable>
+                Task Suggestions : <lable id="taskcomments"></lable>
               </div>
             </div>
           </div>

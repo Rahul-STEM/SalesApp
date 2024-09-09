@@ -18,7 +18,7 @@
                                         Current Task : <lable id="ctname"></lable><br>
                                         Last Status :  <lable id="clsname"></lable><br>
                                         Last Task Remark : <lable id="cremarks"></lable><br>
-                                        Task Comments : <lable id="taskcomments"></lable>
+                                        Task Suggestions : <lable id="taskcomments"></lable>
                                     </div>
                                   </div>
                                 </div>

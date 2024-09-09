@@ -84,9 +84,9 @@
             <div class="row">
               <div class="col-12">
                 <div class="card">
-                  <div class="card-header bg-info">
+                  <div class="card-header bg-success">
                     <h3 class="text-center">
-                      <center><b>Add Thanks  Comments On Task</b></center>
+                      <center><b>Add Thanks Comments On Task</b></center>
                     </h3>
                   </div>
                   <!-- /.card-header -->
@@ -104,22 +104,13 @@
                                       <th>BD Name</th>
                                       <th>Company Name</th>
                                       <th>Plan Time</th>
-                                      <th>Initiated Time</th>
-                                      <th>Completed Time</th>
-                                      <th>Plan and Completed Time Diff</th>
-                                      <th>Last Task Date</th>
-                                      <th>Current Task Date</th>
-                                      <th>Current task planned after time difference</th>
-                                      <th>Last Task Activity</th>
-                                      <th>Current Task Activity</th>
-                                      <th>Last Task Remarks</th>
-                                      <th>Current Task Remarks</th>
-                                      <th>Last Status</th>
+                                      <th>Task Activity</th>
                                       <th>Current Status</th>
                                       <th>Action Taken</th>
                                       <th>Purpose Achieved</th>
-                                      <th>Comment BY</th>
-                                      <th>Our Comments</th>
+                                      <th>Remarks</th>
+                                      <th>Suggestions BY</th>
+                                      <th>Suggestions</th>
                                       <th>Add Thanks Comments</th>
              
                                     </tr>
@@ -129,18 +120,21 @@
                                       $i=1;$ab==0;
                                      
                                       foreach($tasks as $md){
+                                       
                                           $bd = $md->user_id;
                                           $bdname = $this->Menu_model->get_userbyid($bd);
                                           $tid = $md->id;
                                           $ltid = $md->ltid;
                                           $inid  = $md->cid_id;
+                                          $remarks  = $md->remarks;
                                           $inid = $this->Menu_model->get_initbyid($inid);
                                           $mtd = $this->Menu_model->get_ccitblall($tid);
                                           $lsid = $mtd[0]->status_id;
                                           $csid = $mtd[0]->nstatus_id;
                                           $s1 = $this->Menu_model->get_statusbyid($lsid);
                                           if($s1){$s1=$s1[0]->name;}else{$s1='';}
-                                          $s2 = $this->Menu_model->get_statusbyid($csid);
+                                          $cstatus = $mtd[0]->cstatus;
+                                          $s2 = $this->Menu_model->get_statusbyid($cstatus);
                                           if($s2){$s2=$s2[0]->name;}else{$s2='';}
                                           if($ltid!=''){  
                                           $mltd = $this->Menu_model->get_ccitblall($ltid);
@@ -153,38 +147,15 @@
                                           }else{$mltd='';$nltime='';$nctime='';$ltime='';$ctime='';}
                                       ?>
                                     <tr>
-                                      <td><?=$i?></td>
+                                    <td><?=$i?></td>
                                       <td><?=$bdname[0]->name?></td>
                                       <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$inid[0]->cmpid_id?>"><?=$mtd[0]->compname?></a></td>
                                       <td><?=date('d-m-Y h:i A', strtotime($pltime = $md->appointmentdatetime));?></td>
-                                      <td><?php 
-                                      if($md->initiateddt ==''){
-                                        $dateString = $md->updateddate; 
-                                        $format = 'd-m-Y h:i A'; 
-                                        $timestamp = strtotime($dateString);
-                                        $timestamp -= 5;
-                                        $updatedDateString = date($format, $timestamp);
-                                        echo $updatedDateString;
-                                      }else{
-                                        echo $md->initiateddt;
-                                      } 
-                                      
-                                      ?></td>
-                    
-                                      <td><?=date('d-m-Y h:i A', strtotime($uptime = $md->updateddate));?></td>
-                                      <td><?=$this->Menu_model->timediff($pltime,$uptime)?></td>
-                                     
-                                      <td><?=$nltime?></td>
-                                      <td><?=$nctime?></td>
-                                      <td><?php if($ctime!=''){echo $this->Menu_model->timediff($ltime,$ctime);}?></td>
-                                      <td><?php if($mltd!=''){echo $mltd[0]->current_action_type;}?></td>
                                       <td><?=$mtd[0]->current_action_type?></td>
-                                      <td><?php if($mltd!=''){echo $mltd[0]->remarks;}?></td>
-                                      <td><?=$md->remarks?><?=$md->mom?></td>
-                                      <td><?=$s1?></td>
-                                      <td><?=$s2?></td>
+                                      <td><?=$s2;?></td>
                                       <td><?=$mtd[0]->actontaken?></td>
                                       <td><?=$mtd[0]->purpose_achieved?></td>
+                                      <td><?=$remarks; ?></td>
                                       <td>
                                         <?php if($md->comment_by !== '' && $md->comment_by !== NULL){
                                             echo $this->Menu_model->get_userbyid($md->comment_by)[0]->name;

@@ -12863,8 +12863,74 @@ public function GetPurposeByActionAndStatusID($action,$status_id){
     }
 
 
+public function InsertCashRequest($uid,$amount,$purpose){
+       
+    $data = array(
+    'user_id'    => $uid, 
+    'date'       => date('Y-m-d H:i:s'), 
+    'cash'     => $amount,
+    'purpose'    => $purpose
+);
+$this->db->insert('travel_advance', $data);
+
+    }
+    
+
+    public function GetOurCashRequest($uid){
+        $query=$this->db->query("SELECT travel_advance.*, user_details.name FROM travel_advance LEFT JOIN user_details ON user_details.user_id = travel_advance.user_id WHERE travel_advance.user_id = '$uid' order by travel_advance.id DESC");
+        return $query->result();
+    }
+
+    public function GetOurTeamCashRequest($uid){
+
+        $utype = $this->Menu_model->get_userbyid($uid);
+        $utype = $utype[0]->type_id;
+        if($utype == 13){
+            $text = "user_details.aadmin = '$uid' and user_details.type_id=3";
+        }elseif($utype == 4){
+            $text = "user_details.pst_co = '$uid' and user_details.type_id=13";
+        }elseif($utype == 15){
+            $text = "user_details.sales_co = '$uid' and user_details.type_id= 4";
+        }else{
+            $text = "user_details.admin_id = '$uid'";
+        }
+        $query=$this->db->query("SELECT travel_advance.*, user_details.name FROM travel_advance LEFT JOIN user_details ON user_details.user_id = travel_advance.user_id WHERE $text order by travel_advance.id DESC");
+        return $query->result();
+    }
+    
+
+public function RejectCashRequest($uid,$rejectid,$rejectreamrk){
+    $data = array(
+        'apr_status'  => 2,
+        'apr_by'      => $uid,
+        'mremarks'    => $rejectreamrk,
+    );
+    $this->db->where('id', $rejectid); 
+    $this->db->update('travel_advance', $data);
+}
+public function ApproveCashRequest($uid,$approveid,$approve_remarks){
+    $data = array(
+        'apr_status'  => 1,
+        'apr_by'      => $uid,
+        'mremarks'    => $approve_remarks,
+    );
+    $this->db->where('id', $approveid); 
+    $this->db->update('travel_advance', $data);
+}
 
 
+public function UpdateUserCashAmmount($apr_uid,$newCash){
+    $data = array(
+        'ucash'  => $newCash,
+    );
+    $this->db->where('user_id', $apr_uid); 
+    $this->db->update('user_details', $data);
+}
+
+public function GetTravelRequestById($id){
+    $query=$this->db->query("SELECT * FROM `travel_advance` WHERE id = $id");
+    return $query->result();
+}
 
 
 

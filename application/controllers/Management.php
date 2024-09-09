@@ -739,7 +739,8 @@ public function MomApprovedByUserAdminAfterCheck(){
         'updateddate' => $cur_date,
         'actontaken' => 'yes',
         'purpose_achieved' => 'yes',
-        'updation_data_type' => 'update'
+        'updation_data_type' => 'update',
+        'mtype' => 'RP'
     );
     
     $this->db->where('id', $ntid);
@@ -761,7 +762,6 @@ public function MomRejectByUserAdminAfterCheck(){
     $approved_status = 'Reject';
 
     $momdata = $this->Management_model->MomRejectByUserAdminInsert($approved_status,$rejectId,$rejectreamrk,$rejectDate,$this->uid);
-
 
     $remark = 'Reject RP For Reupdate';
     $cur_date = date("Y-m-d H:i:s");

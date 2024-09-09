@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="wi$dth=device-wi$dth, initial-scale=1">
-    <title>STEM APP | WebAPP</title>
+    <title>Our Travel Advance Request  | STEM APP | WebAPP</title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
     <!-- Font Awesome -->
@@ -77,8 +77,6 @@
  date_default_timezone_set("Asia/Calcutta"); 
 
 ?>
-        
-
         <section class="content">
           <div class="container-fluid">
             <div class="row">
@@ -86,7 +84,7 @@
                 <div class="card">
                   <div class="card-header bg-success">
                     <h3 class="text-center">
-                      <center><b>Add Special Suggestions On Task</b></center>
+                      <center><b>Our Travel Advance Request</b></center>
                     </h3>
                   </div>
                   <!-- /.card-header -->
@@ -101,69 +99,64 @@
                                   <thead>
                                     <tr>
                                       <th>S.No.</th>
-                                      <th>BD Name</th>
-                                      <th>Company Name</th>
-                                      <th>Plan Time</th>
-                                      <th>Task Activity</th>
-                                      <th>Current Status</th>
-                                      <th>Action Taken</th>
-                                      <th>Purpose Achieved</th>
-                                      <th>Suggestions BY</th>
-                                      <th>Suggestions</th>
-             
+                                      <th>Name</th>
+                                      <th>Ammount</th>
+                                      <th>Purpose</th>
+                                      <th>Request Date</th>
+                                      <th>Approved Status</th>
+                                      <th>Approved By</th>
+                                      <th>Approved Date</th>
+                                      <th>Manager Remarks</th>
                                     </tr>
                                   </thead>
                                   <tbody>
                                     <?php 
-                                      $i=1;$ab==0;
-                                     
-                                      foreach($tasks as $md){
-                               
-                                          $bd = $md->user_id;
-                                          $bdname = $this->Menu_model->get_userbyid($bd);
-                                          $tid = $md->id;
-                                          $ltid = $md->ltid;
-                                          $inid  = $md->cid_id;
-                                          $inid = $this->Menu_model->get_initbyid($inid);
-                                          $mtd = $this->Menu_model->get_ccitblall($tid);
-                                          $lsid = $mtd[0]->status_id;
-                                          $csid = $mtd[0]->nstatus_id;
-                                          $cstatus = $mtd[0]->cstatus;
-                                      
-                                          $s2 = $this->Menu_model->get_statusbyid($cstatus);
-                                          if($s2){$s2=$s2[0]->name;}else{$s2='';}
-                                          if($ltid!=''){  
-                                          $mltd = $this->Menu_model->get_ccitblall($ltid);
-                                          $ltime = $mltd[0]->updateddate;
-                                          $ctime = $mtd[0]->updateddate;
-                                          $nltime = date('d-m-Y  h:i A', strtotime($ltime));
-                                          $nctime = date('d-m-Y  h:i A', strtotime($ctime));
-                                          }else{$mltd='';$nltime='';$nctime='';$ltime='';$ctime='';}
-                                      ?>
+                                      $i=1; foreach($ocashreq as $cash){   ?>
                                     <tr>
-                                      <td><?=$i?></td>
-                                      <td><?=$bdname[0]->name?></td>
-                                      <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$inid[0]->cmpid_id?>"><?=$mtd[0]->compname?></a></td>
-                                      <td><?=date('d-m-Y h:i A', strtotime($pltime = $md->appointmentdatetime));?></td>
-                                      <td><?=$mtd[0]->current_action_type?></td>
-                                      <td><?=$s2;?></td>
-                                      <td><?=$mtd[0]->actontaken?></td>
-                                      <td><?=$mtd[0]->purpose_achieved?></td>
-                                      <td>
-                                        <?php if($md->comment_by !== '' && $md->comment_by !== NULL){
-                                            echo $this->Menu_model->get_userbyid($md->comment_by)[0]->name;
-                                        }else{
-                                            echo "<span class='bg-warning p-2'>Pending</span>";
-                                        }?>
+                                    <td><?=$i?></td>
+                                    <td><?= $cash->name;?></td>
+                                    <td><?= $cash->cash;?> ₹</td>
+                                    <td><?= $cash->purpose;?></td>
+                                    <td><?= $cash->date;?></td>
+                                    <td><?php 
+                                    
+                                    if($cash->apr_status == 0){
+                                        echo "<span class='bg-warning p-2'>Pending</span>";
+                                    }else if($cash->apr_status == 1){
+                                        echo "<span class='bg-success p-2'>Approved</span>";
+                                    }else if($cash->apr_status == 2){
+                                      echo "<span class='bg-danger p-2'>Rejected</span>";
+                                  }
+                                    
+                                    ?></td>
+                                    <td>
+                                    <?php 
+                                    if($cash->apr_by == 0){
+                                        echo "<span class='bg-warning p-2'>Pending</span>";
+                                    }else{
+                                        $udetail = $this->Menu_model->get_userbyid($cash->apr_by);
+                                        $apruname = $udetail[0]->name;
+                                        echo $apruname;
+                                    }
+                                    ?>
                                     </td>
-                                      <td>
-                                      <?php if($md->comments !== '' && $md->comments !== NULL){
-                                            echo base64_decode($md->comments);
-                                        }else{ ?>
-                                            <p><button type="button" class="btn btn-primary"  onclick="AddComments(<?= $i ?>,<?= $md->id?>,'Comments')">Add Suggestions</button></p>
-                                       <?php }?>
+                                    <td><?php
+                                     if($cash->apr_by != 0){
+                                        echo $cash->updated_at;
+                                     }else{
+                                        echo "<span class='bg-warning p-2'>Pending</span>";
+                                     }
+                                    ?></td>
+                                    <td>
+                                    <?php
+                                     if($cash->mremarks ==''){
+                                      echo "<span class='bg-warning p-2'>Pending</span>";
+                                     }else{
+                                        echo $cash->mremarks;;
+                                     }
+                                    ?>
                                     </td>
-                                      <?php $i++;} ?>
+                                    <?php $i++;} ?>
                                   </tbody>
                                 </table>
                               </div>
@@ -184,31 +177,6 @@
       </div>
       <!-- /.row -->
     </div>
-
-
-    <div class="modal fade" id="exampleModalCenterdata" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Add Suggestions</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                          </div>
-                          <div class="modal-body">
-                            <form action="<?=base_url();?>Menu/AddTaskComments" method="post" >
-                              <input type="hidden" id="commentsid" value="" name="commentsid">
-                              <div class="mb-3 mt-3 commentbox">
-                                <textarea id="mytextarea" name="comments"></textarea>
-                            </div>
-                              <div class="form-group text-center">
-                                <button type="submit" class="btn btn-success mt-2">Add Suggestions</button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
 
 
     </section>
@@ -277,19 +245,6 @@
         "responsive": false, "lengthChange": false, "autoWidth": false,
         "buttons": ["csv", "excel"]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-    function AddComments(mid,id,val){
-        $('#exampleModalCenterdata').modal('show');
-        $('#commentsid').val(id);
-    }
-    tinymce.init({
-    selector: "#mytextarea",
-    plugins: "emoticons autoresize",
-    toolbar: "emoticons",
-    toolbar_location: "bottom",
-    menubar: false,
-    statusbar: false
-    });
 
 </script>
 

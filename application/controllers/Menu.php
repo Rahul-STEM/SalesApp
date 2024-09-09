@@ -20304,7 +20304,151 @@ public function get_becauseoftpm(){
   
 }
 
+public function CheckCashRequest(){
+  
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+    $amount         = $this->input->post('amount');
+    $purpose        = $this->input->post('purpose');
 
+    $this->load->model('Menu_model');
+    
+    $this->Menu_model->InsertCashRequest($uid,$amount,$purpose);
+    $this->load->library('session');
+    $this->session->set_flashdata('success_message','Travel Advanced Request Sent SuccessFfully.');
+
+    redirect("Menu/dashboard");
+
+}
+public function TravelAdavancedReject(){
+  
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+ 
+    $rejectid         = $this->input->post('reject');
+    $rejectreamrk   = $this->input->post('rejectreamrk');
+
+    $this->load->model('Menu_model');
+    
+    $this->Menu_model->RejectCashRequest($uid,$rejectid,$rejectreamrk);
+    $this->load->library('session');
+    $this->session->set_flashdata('error_message','Travel Advanced Request Rejected SuccessFfully.');
+    redirect("Menu/OurTeamTravelAdvanceRequest");
+
+}
+
+
+public function OurTravelAdvanceRequest(){
+   
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+
+    $ocashreq = $this->Menu_model->GetOurCashRequest($uid);
+
+    if(!empty($user)){
+        $this->load->view($dep_name.'/OurTravelAdvanceRequest',['uid'=>$uid,'user'=>$user,'ocashreq'=>$ocashreq]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+
+
+public function OurTeamTravelAdvanceRequest(){
+   
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+
+    $ocashreq = $this->Menu_model->GetOurTeamCashRequest($uid);
+
+    if(!empty($user)){
+        $this->load->view($dep_name.'/OurTeamTravelAdvanceRequest',['uid'=>$uid,'user'=>$user,'ocashreq'=>$ocashreq]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+
+
+
+
+public function TravelAdavancedApprove(){
+  
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+
+    $approveid         = $this->input->post('approveid');
+    $approve_remarks   = $this->input->post('approve_remarks');
+
+    $this->load->model('Menu_model');
+    
+    $aprData            = $this->Menu_model->GetTravelRequestById($approveid);
+    $aprData_user_id    = $aprData[0]->user_id;
+    $aprData_date       = $aprData[0]->date;
+    $aprData_cash       = $aprData[0]->cash;
+    $aprData_purpose    = $aprData[0]->purpose;
+
+    $message  = '<h1>HTML message content</h1><p>This is a test email.</p>';
+
+    // die("stem");
+
+    $udetail    = $this->Menu_model->get_userbyid($aprData_user_id);
+    $apr_ucash  = $udetail[0]->ucash;
+    $new_cash = $apr_ucash + $aprData_cash;
+
+    $this->Menu_model->UpdateUserCashAmmount($aprData_user_id,$new_cash);
+    $this->Menu_model->ApproveCashRequest($uid,$approveid,$approve_remarks);
+
+    $this->load->library('session');
+    $this->session->set_flashdata('success_message','Travel Advanced Request Approved SuccessFfully.');
+    redirect("Menu/OurTeamTravelAdvanceRequest");
+
+}
+
+
+public function send_email($reciver_email,$message) {
+    // Load email library
+    $this->load->library('email');
+
+    // SMTP & email configuration
+    $config = array(
+        'protocol'  => 'smtp',
+        'smtp_host' => 'smtp.example.com',
+        'smtp_user' => 'your_email@example.com',
+        'smtp_pass' => 'your_password',
+        'smtp_port' => 587,
+        'mailtype'  => 'html',
+        'charset'   => 'utf-8',
+        'newline'   => "\r\n"
+    );
+
+    $this->email->initialize($config);
+
+    // Email content
+    $this->email->from('your_email@example.com', 'Your Name');
+    $this->email->to('recipient@example.com');
+    $this->email->subject('Email Test');
+    $this->email->message($message);
+
+    // Send email
+    if ($this->email->send()) {
+        echo 'Email sent successfully.';
+    } else {
+        echo 'Email sending failed.';
+        show_error($this->email->print_debugger());
+    }
+}
 
 
 }

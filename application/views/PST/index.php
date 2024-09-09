@@ -1373,7 +1373,7 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
                                         Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
                                         </span> |
                                         <span class="text-right">
-                                            Comments  : 
+                                        Suggestions  : 
                                             <?php 
                                              $comment_by = $tt->comment_by;
                                              if($comment_by !== '' && $comment_by !== NULL){
@@ -1432,7 +1432,7 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
                                         Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
                                         </span> |
                                         <span class="text-right">
-                                            Comments  : 
+                                        Suggestions  : 
                                             <?php 
                                              $comment_by = $tt->comment_by;
                                              if($comment_by !== '' && $comment_by !== NULL){
@@ -1490,7 +1490,7 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
                                         Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
                                         </span> |
                                         <span class="text-right">
-                                            Comments  : 
+                                        Suggestions  : 
                                             <?php 
                                              $comment_by = $tt->comment_by;
                                              if($comment_by !== '' && $comment_by !== NULL){
@@ -1548,7 +1548,7 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
                                         Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
                                         </span> |
                                         <span class="text-right">
-                                            Comments  : 
+                                        Suggestions  : 
                                             <?php 
                                              $comment_by = $tt->comment_by;
                                              if($comment_by !== '' && $comment_by !== NULL){
@@ -1606,7 +1606,7 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
                                         Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
                                         </span> |
                                         <span class="text-right">
-                                            Comments  : 
+                                        Suggestions  : 
                                             <?php 
                                              $comment_by = $tt->comment_by;
                                              if($comment_by !== '' && $comment_by !== NULL){
@@ -1665,7 +1665,7 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
                                         Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
                                         </span> |
                                         <span class="text-right">
-                                            Comments  : 
+                                        Suggestions  : 
                                             <?php 
                                              $comment_by = $tt->comment_by;
                                              if($comment_by !== '' && $comment_by !== NULL){
@@ -1733,7 +1733,7 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
                                         Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
                                         </span> |
                                         <span class="text-right">
-                                            Comments  : 
+                                        Suggestions  : 
                                             <?php 
                                              $comment_by = $tt->comment_by;
                                              if($comment_by !== '' && $comment_by !== NULL){

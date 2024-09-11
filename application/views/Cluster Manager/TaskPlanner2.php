@@ -168,8 +168,8 @@
  .form-control.is-valid, .was-validated .form-control:valid {background-image: none !important;}   
  .select-readonly { background-color: #f5f5f5; color: #666;cursor: not-allowed;}
 lable{font-size: 14px!important; font-weight: 500!important;font-family: system-ui!important;}
-.boxshadownew{box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;border-radius: 25px;}
-span#tasktype {color: green;}   
+.boxshadownew{box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;border-radius: 25px;}span#tasktype {color: green;}   
+.pllanerseesioncnt {align-items: center;justify-content: center;display: flex;}
     </style>
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -275,13 +275,20 @@ if($type_id == 3){
               </div>
               <div class="col-md-4 planerdflex">
               <!-- <p id="planertime">edwd</p> -->
+              <strong> Plan Date : <?=$adate ?></strong>
               </div>
               <div class="col-md-4">
                 <form class="setpaldate" action="<?=base_url();?>Menu/TaskPlanner2/<?=$adate ?>" method="post">
                   <?php 
                   $adatess = date("Y-m-d");
-                  $next_date = date('Y-m-d', strtotime('+1 day', strtotime($adatess))); ?>
-                  <input type="date" class="form-control m-2" name="adate" value="<?=$adate?>" required="" id="plandate"  min="<?= date('Y-m-d') ?>" max="<?= $next_date ?>">
+                  $next_date = date('Y-m-d', strtotime('+1 day', strtotime($adatess)));
+                  ?>
+
+                  <!-- <input type="date" class="form-control" name="adate" required="" id="plandate" min="<?= date('Y-m-d')?>" max="<?= $next_date ?>" >
+                  -->
+           
+                  <input placeholder="Select Date" class="form-control m-2" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" name="adate" required="" id="plandate"  min="<?= date('Y-m-d') ?>" max="<?= $next_date ?>" />
+
                   <input type="submit" class="btn btn-warning m-2" value="Set Date">
                 </form>
               </div>
@@ -358,7 +365,7 @@ if($type_id == 3){
               </div>
             </div>
             <?php }}else if($adate == date("Y-m-d") || $approvel_status == '' || $approvel_status =='Reject'){
-             
+          
             if($reqCount !== 1 && $adate == date("Y-m-d")){
 
                 $getPendingTaskreq = $this->Menu_model->GetUserRequestForPendingTask($uid,$adate);
@@ -401,7 +408,7 @@ if($type_id == 3){
                 <div class="invalid-feedback">* Invalid Message</div>
               </div>
               <div class="mb-3 text-center">
-                <input type="submit" class="btn btn-warning" value="Send Request">
+                <input type="submit" class="btn btn-warning" onclick="this.form.submit(); this.disabled = true;" value="Send Request">
               </div>
             </form>
 
@@ -495,6 +502,9 @@ if($type_id == 3){
 
                 <div class="col-md-12 plantimer text-center p-2 mb-2" id="plantimerBox">
                   <div class="row">
+                    <div class="col-md-2 pllanerseesioncnt">
+                    <h3 id="PlannerSessionStimer" class="text-white d-flex"></h3>
+                    </div>
                     <div class="col-md-8">
                     <span id="timer">00:00:00</span>
                     </div>
@@ -533,6 +543,7 @@ if($type_id == 3){
                       <?php 
                       $i =1;
                      $planSessionData  = $this->Menu_model->TodaysPlannerSession($uid);
+                      $planSessionDatacnt = sizeof($planSessionData);
                       foreach($planSessionData as $req){
                         $username =  $this->Menu_model->get_userbyid($req->user_id)[0]->name;
                       
@@ -739,7 +750,7 @@ if($type_id == 3){
                          $impcomp ['Compulsive Task']= 0;
                          $impcomp ['No Work Days']= 0;
                          $impcomp ['Need Your Attention']= 0;
-                         
+
                             $elementsGreaterThanOne = [];
 
                             foreach ($impcomp as $key => $value) {
@@ -1675,7 +1686,7 @@ if($type_id == 3){
                           <div class="form-group">
                           <select id="ntactionnew" name="ntaction" class="form-control" required="">
                               <option value="">Select Action</option>
-                              <?php  foreach($action as $a){if($a->id!=3 && $a->id!=4 && $a->id!=6 && $a->id!=8 && $a->id!=9 && $a->id!=11 && $a->id!=17 && $a->id!=15 && $a->id!=18 && $a->id!=10){ ?>
+                              <?php  foreach($action as $a){if($a->id!=3 && $a->id!=4 && $a->id!=6 && $a->id!=8 && $a->id!=9 && $a->id!=11 && $a->id!=17 && $a->id!=15 && $a->id!=18){ ?>
                               <option value="<?=$a->id;?>"><?=$a->name;?></option>
                               <?php }} ?>
                             </select>
@@ -4968,6 +4979,8 @@ if($type_id == 3){
                     $('#planningStart2').show();
                     $('#plantimerBox').show();
                     $('#planningStartbtn').hide();
+                    var plannersession = <?= $planSessionDatacnt; ?>;
+                    $("#PlannerSessionStimer").text('Session : ' + plannersession);
                 } else {
                    $('#planningStart1').hide();
                     $('#planningStart2').hide();
@@ -4991,7 +5004,9 @@ if($type_id == 3){
                     updateTimer();
                     toggleFormVisibility();
                     alert("Planner Timer started!");
-
+                    var plannersession = <?= $planSessionDatacnt; ?>;
+                        plannersession  = plannersession+1;
+                    $("#PlannerSessionStimer").text('Session :' + plannersession);
                     $.ajax({
                         url:'<?=base_url();?>Menu/session_plan_time_start',
                         type: "POST",
@@ -5025,7 +5040,7 @@ if($type_id == 3){
                 if (startTime) {
 
                   var timerval = $("#timer").text();
-
+                  
                     resetTimer();
                     alert("Planner Timer stopped and reset!");
                     $.ajax({
@@ -5381,6 +5396,7 @@ $(document).ready(function(){
 
 
 });
+
 </script>
 
 

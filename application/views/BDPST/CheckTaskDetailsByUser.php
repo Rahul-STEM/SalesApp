@@ -114,7 +114,7 @@ span.tsby {
                       <div class="col-12">
                       <div class="card">
                         <div class="card-header">
-                          <h3 class="card-title"></h3>
+                            
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -126,7 +126,32 @@ span.tsby {
                                         
                                         $taskplanmincount = 0;
                                         $new_datetimemin = '';
+                                       
+                                        $apprvtask = '';
+                                        $rejecttask ='';
+                                        $rejetbutnta ='';
+                                        $rejetbutnau ='';
+                                        $rejetbutnasd ='';
+
                                         foreach($totalttaskdata as $taskdata){ 
+
+                                        if($taskdata->approved_status == 1 ) {
+                                          $apprvtask +=1;
+                                        }
+                                        if($taskdata->approved_status == 0 && $taskdata->self_assign == '') {
+                                          $rejecttask +=1;
+                                        }
+                                        if($taskdata->approved_status == 0 && $taskdata->self_assign == 1) {
+                                          $rejetbutnau +=1;
+                                      }
+                                        if($taskdata->approved_status == 0 && $taskdata->self_assign == 2) {
+                                          $rejetbutnta +=1;
+                                      }
+                                        if($taskdata->approved_status == 0 && $taskdata->self_assign == 3) {
+                                          $rejetbutnasd +=1;
+                                      }
+                                        
+                                    
                                             $actiontype_id = $taskdata->actiontype_id;
                                             $status = $taskdata->approved_status;
                                             // if($status !=0){
@@ -187,20 +212,20 @@ span.tsby {
                                     } ?>
 
 
-                <?php if($taskplanmincount <= $userplanetime){  ?>         
-                <marquee class="p-2 mt-1 <?=$background?>"  onMouseOver="this.stop()" onMouseOut="this.start()" width="100%" behavior="left" bgcolor="pink">
-                  <h6> 
-                  <?php 
-                      $uprhours = floor( $plannerremTime / 60);
-                      $uprremainingMinutes =  $plannerremTime % 60;
-                    ?>
-                    <p><?=$uprhours?> hour <?=$uprremainingMinutes ?> Minute remaining for task plan to enable Task Approval Function.</p>
-                  </h6>
-                </marquee>
-                <?php }?> 
-                <marquee class="p-2 mt-1" width="100%"  onMouseOver="this.stop()" onMouseOut="this.start()" behavior="left" bgcolor="pink">
-                  <h6> Lunch Time : <?= $lunchtime ?>  Miniute || Auto Task Time : <?= $autoTasktime?> Minutes || Tommorow Planner Planning : <?=$topp ?>  Minutes || 9 hours Planning = 9* 60 = 540 Minutes || Total Time For (Lunch + Auto Task + Tommorow Planner) : <?=$texpense_time?>  Minutes || Task Planner Should be <?php echo 540 - $texpense_time;?> Minutes</h6>
-                </marquee>
+                                  <?php if($taskplanmincount <= $userplanetime){  ?>         
+                                  <marquee class="p-2 mt-1 <?=$background?>"  onMouseOver="this.stop()" onMouseOut="this.start()" width="100%" behavior="left" bgcolor="pink">
+                                    <h6> 
+                                    <?php 
+                                        $uprhours = floor( $plannerremTime / 60);
+                                        $uprremainingMinutes =  $plannerremTime % 60;
+                                      ?>
+                                      <p><?=$uprhours?> hour <?=$uprremainingMinutes ?> Minute remaining for task plan to enable Task Approval Function.</p>
+                                    </h6>
+                                  </marquee>
+                                  <?php }?> 
+                                  <marquee class="p-2 mt-1" width="100%"  onMouseOver="this.stop()" onMouseOut="this.start()" behavior="left" bgcolor="pink">
+                                    <h6> Lunch Time : <?= $lunchtime ?>  Miniute || Auto Task Time : <?= $autoTasktime?> Minutes || Tommorow Planner Planning : <?=$topp ?>  Minutes || 9 hours Planning = 9* 60 = 540 Minutes || Total Time For (Lunch + Auto Task + Tommorow Planner) : <?=$texpense_time?>  Minutes || Task Planner Should be <?php echo 540 - $texpense_time;?> Minutes</h6>
+                                  </marquee>
                                  <hr>
                                 
                                     <div class="text-center p-2 bg-info">
@@ -221,7 +246,58 @@ span.tsby {
                                         </b>
                                        </p>
                                     </div>
-                                    <hr>
+                                 
+
+                                    
+                                      <?php 
+                                      $planSessionData  = $this->Menu_model->TodaysPlannerSession($tuser_uid);
+                                      $planSessionmin  = $this->Menu_model->TodaysTotalsPlannerSessioninMinute($tuser_uid);
+                                      ?>
+                                      <div class="row mt-2 mb-2">
+                                        <?php 
+                                          // $apprvtask = '';
+                                          // $rejecttask ='';
+                                          // $rejetbutnta ='';
+                                          // $rejetbutnau ='';
+                                          // $rejetbutnasd ='';
+                                          // echo $rejecttask;
+                                        
+                                        ?>
+                                      <div class="col-md-6">
+                                        <div class="card p-2 bg-info m-1 flexitemscenter">
+                                            <div  class="text-center">
+                                            <h4>Planner Session </h4>
+                                            <h4><?= sizeof($planSessionData); ?></h4>
+                                            </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="card p-2 bg-info m-1 flexitemscenter">
+                                          <div class="text-center">
+                                          <h4>Time Consume on Planning</h4>
+                                          <h4><?= $planSessionmin; ?></h4>
+                                          </div>
+                                        
+                                        </div>
+                                      </div>
+                                      <!-- <div class="col-md-4">
+                                        <div class="card p-2 bg-info m-1 flexitemscenter">
+
+                                        </div>
+                                      </div> -->
+
+                                      </div>
+
+                                      <style>
+                                        .card.p-2.bg-info.m-1.flexitemscenter {
+                                          height: 90px;
+                                          align-items: center;
+                                          justify-content: center;
+                                          display: flex;
+                                      }
+                                      </style>
+
+
 
                                     <div class="card p-2 <?= $background?>">
                                         <div class="row">
@@ -285,6 +361,15 @@ span.tsby {
                                                 $totalttask =$this->Menu_model->getTotalUserTaskDetailsOnPlanner($tuser_uid, $dt);
                                                 
                                                 foreach ($totalttask as $taskdata) { 
+                                                  
+                                                  if($taskdata->approved_status == 1 ) {
+                                                        continue;
+                                                    }
+
+                                                    if($taskdata->approved_status == 0 && $taskdata->self_assign !=='') {
+                                                      continue;
+                                                  }
+
                                                     $taid = $taskdata->actiontype_id;
                                                     $tblId = $taskdata->id;
                                                     $taid = $this->Menu_model->get_actionbyid($taid);

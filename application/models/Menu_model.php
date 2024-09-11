@@ -10141,7 +10141,7 @@ WHERE plan = '1'  and nextCFID='0' and actiontype_id='$aid' and status_id='$stid
     public function get_statuscmpwithtasktaction($sid,$uid,$tasktaction){
         $utype = $this->Menu_model->get_userbyid($uid);
         $utype = $utype[0]->type_id;
-echo $tasktaction;
+// echo $tasktaction;
         $query = $this->db->select('init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, cast(tblcallevents.plandt as DATE) as pdate')
         ->from('init_call')
         ->join('tblcallevents', 'tblcallevents.cid_id = init_call.id')
@@ -10166,9 +10166,8 @@ echo $tasktaction;
             }
             $query = $query->get();
             // $str = $this->db->last_query();
-            echo $str;
+            // echo $str;
             return $query->result();
-
     }
     public function task_Action_YesorNobyUser($sid,$uid,$tasktaction,$taskActionbyuser){
         $utype = $this->Menu_model->get_userbyid($uid);
@@ -12863,6 +12862,8 @@ public function GetPurposeByActionAndStatusID($action,$status_id){
     }
 
 
+// Start Travel Adavance Query
+
 public function InsertCashRequest($uid,$amount,$purpose){
        
     $data = array(
@@ -12929,6 +12930,11 @@ public function UpdateUserCashAmmount($apr_uid,$newCash){
 
 public function GetTravelRequestById($id){
     $query=$this->db->query("SELECT * FROM `travel_advance` WHERE id = $id");
+    return $query->result();
+}
+
+public function GetTodaysComplteMeeting($uid,$cdate){
+    $query=$this->db->query("SELECT * FROM `barginmeeting` WHERE status = 'Close' AND user_id = '$uid' AND Cast(closem as Date) = '$cdate'");
     return $query->result();
 }
 

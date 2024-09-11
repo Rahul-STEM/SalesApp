@@ -736,7 +736,10 @@ if($type_id == 3){
 
                          <?php 
                          
-
+                         $impcomp ['Compulsive Task']= 0;
+                         $impcomp ['No Work Days']= 0;
+                         $impcomp ['Need Your Attention']= 0;
+                         
                             $elementsGreaterThanOne = [];
 
                             foreach ($impcomp as $key => $value) {

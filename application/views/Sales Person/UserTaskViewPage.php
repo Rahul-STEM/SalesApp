@@ -252,6 +252,15 @@ span.tsby {
                                                 $selectDate = isset($selected_date) ? $selected_date: $date;
                                                 $totalttaskdata = $this->Menu_model->getTotalUserTaskDetailsOnPlanner($uid, $selectDate);
                                                 foreach ($totalttaskdata as $taskdata) { 
+
+                                              if($taskdata->approved_status == 1) {
+                                                    continue;
+                                                }
+                                              
+                                              if($taskdata->approved_status == 0 && $taskdata->self_assign == 2 || $taskdata->self_assign == 3) {
+                                                  continue;
+                                              }
+                                           
                                                     $taid = $taskdata->actiontype_id;
                                                     $tblId = $taskdata->id;
                                                     $taid = $this->Menu_model->get_actionbyid($taid);

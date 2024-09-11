@@ -107,6 +107,7 @@
                                       <th>Approved By</th>
                                       <th>Approved Date</th>
                                       <th>Manager Remarks</th>
+                                      <th>Track</th>
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -155,6 +156,9 @@
                                         echo $cash->mremarks;;
                                      }
                                     ?>
+                                    </td>
+                                    <td>
+                                     <a href="<?=base_url();?>Menu/TravelExpenseTimeline/<?= $cash->id; ?>">Track</a>
                                     </td>
                                     <?php $i++;} ?>
                                   </tbody>

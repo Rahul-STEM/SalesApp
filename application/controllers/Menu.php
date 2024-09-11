@@ -4209,8 +4209,11 @@ class Menu extends CI_Controller {
         $filname = $_FILES['filname']['name'];
         $uploadPath = 'uploads/day/';
         $this->load->model('Menu_model');
-        $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
 
+        $cur_date = date("Y-m-d");
+        $getTodaysMeetinggs = $this->Menu_model->GetTodaysComplteMeeting($user_id,$cur_date);
+        // dd($getTodaysMeetinggs);
+        $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
         $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
         redirect('Menu/Dashboard');
     }
@@ -20304,6 +20307,9 @@ public function get_becauseoftpm(){
   
 }
 
+
+// Start Travel Adavance Functionality
+
 public function CheckCashRequest(){
   
     $user           = $this->session->userdata('user');
@@ -20339,7 +20345,6 @@ public function TravelAdavancedReject(){
 
 }
 
-
 public function OurTravelAdvanceRequest(){
    
     $user = $this->session->userdata('user');
@@ -20359,7 +20364,6 @@ public function OurTravelAdvanceRequest(){
     }
 }
 
-
 public function OurTeamTravelAdvanceRequest(){
    
     $user = $this->session->userdata('user');
@@ -20378,9 +20382,6 @@ public function OurTeamTravelAdvanceRequest(){
         redirect('Menu/main');
     }
 }
-
-
-
 
 public function TravelAdavancedApprove(){
   
@@ -20449,6 +20450,26 @@ public function send_email($reciver_email,$message) {
         show_error($this->email->print_debugger());
     }
 }
+
+
+public function TravelExpenseTimeline($rid){
+   
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $daychangedata = $this->Menu_model->GetTodaysTeamDayChnageRequest($uid);
+
+    if(!empty($user)){
+        $this->load->view($dep_name.'/TravelExpenseTimeline',['uid'=>$uid,'user'=>$user,'daychangedata'=>$daychangedata,'rid'=>$rid]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+
 
 
 }

@@ -227,7 +227,7 @@
                       <hr class="hrclass" style="width: 600px;"/>
                     <div class="card">
               <div class="card-body" id="mainboxAutoTask1">
-                <h5><i>Your Auto Task And Plan Time </i></h5>
+                <h5><i>Today's Auto Task and Planned Time</i></h5>
                 <hr/>
                
                 <div class="row">
@@ -252,12 +252,12 @@
                   <h6> Todays is the Time to plan for tomorrow. Its maximum of 1 hour. After Auto Task</h6>
                 </marquee>
                       <div class="form-group">
-                        <label for="end-time">Today is the start time to plan for tomorrow.</label>
+                        <label for="end-time">Today's Planner Time start.</label>
                         <input type="time" readonly id="start_tttpft" name="start_tttpft" class="form-control is-invalid" required>
                       </div>
 
                       <div class="form-group">
-                        <label for="end-time">Today is the end time to plan for tomorrow.</label>
+                        <label for="end-time">Today's Planner Time End.</label>
                         <input type="time" readonly id="end_tttpft" name="end_tttpft" class="form-control is-invalid" required>
                       </div>
                   </div>

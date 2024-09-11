@@ -12939,5 +12939,38 @@ public function GetTodaysComplteMeeting($uid,$cdate){
 }
 
 
+public function CheckTodaysTaskAvilableTime($uid,$time1,$time2){
+    $query=$this->db->query("SELECT actiontype_id, 
+       appointmentdatetime, 
+       CASE 
+         WHEN actiontype_id = 1 THEN DATE_ADD(appointmentdatetime, INTERVAL 5 MINUTE) 
+         WHEN actiontype_id = 2 THEN DATE_ADD(appointmentdatetime, INTERVAL 10 MINUTE)
+         WHEN actiontype_id = 3 THEN DATE_ADD(appointmentdatetime, INTERVAL 30 MINUTE) 
+         WHEN actiontype_id = 4 THEN DATE_ADD(appointmentdatetime, INTERVAL 30 MINUTE) 
+         WHEN actiontype_id = 5 THEN DATE_ADD(appointmentdatetime, INTERVAL 5 MINUTE) 
+         WHEN actiontype_id = 6 THEN DATE_ADD(appointmentdatetime, INTERVAL 10 MINUTE) 
+         WHEN actiontype_id = 8 THEN DATE_ADD(appointmentdatetime, INTERVAL 5 MINUTE) 
+         WHEN actiontype_id = 9 THEN DATE_ADD(appointmentdatetime, INTERVAL 5 MINUTE) 
+         WHEN actiontype_id = 10 THEN DATE_ADD(appointmentdatetime, INTERVAL 5 MINUTE) 
+         WHEN actiontype_id = 11 THEN DATE_ADD(appointmentdatetime, INTERVAL 2 MINUTE)
+         WHEN actiontype_id = 12 THEN DATE_ADD(appointmentdatetime, INTERVAL 30 MINUTE)
+         WHEN actiontype_id = 13 THEN DATE_ADD(appointmentdatetime, INTERVAL 2 MINUTE)
+         WHEN actiontype_id = 14 THEN DATE_ADD(appointmentdatetime, INTERVAL 2 MINUTE)
+         WHEN actiontype_id = 15 THEN DATE_ADD(appointmentdatetime, INTERVAL 5 MINUTE) 
+         WHEN actiontype_id = 17 THEN DATE_ADD(appointmentdatetime, INTERVAL 30 MINUTE)
+         WHEN actiontype_id = 18 THEN DATE_ADD(appointmentdatetime, INTERVAL 5 MINUTE)
+       END AS next_available_time 
+        FROM tblcallevents 
+        WHERE assignedto_id = '$uid' 
+        AND approved_status = '' 
+        AND plan = 1 
+        AND autotask != '' 
+        AND DATE(appointmentdatetime) < CURDATE()
+        AND CAST(appointmentdatetime AS TIME) BETWEEN '$time1' AND '$time2'
+        ORDER BY appointmentdatetime ASC");
+    return $query->result();
+}
+
+
 
 }

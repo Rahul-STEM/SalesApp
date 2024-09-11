@@ -142,6 +142,7 @@
                   if(result > 0){
                     alert("You have allready plan task for this time, please enter another time");
                     input.value = "";
+                    
                   }
                     // console.log(result);
                     }

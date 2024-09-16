@@ -3,6 +3,8 @@
 date_default_timezone_set("Asia/Calcutta");
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once('Menu_model.php');
+
+
 class Management_model  extends Menu_model {
 
     public function __construct() {
@@ -52,7 +54,7 @@ class Management_model  extends Menu_model {
         $dt=$this->Menu_model->get_utypebyUserID($uyid);
         $utype = $dt[0]->type_id;
         // echo ($utype);
-        $utype = 13;
+        // $utype = 13;
         // $dep_name = $dt[0]->name;
         // $query=$this->db->query("SELECT COUNT(*) AS plan, COUNT(CASE WHEN autotask = 1 THEN autotask END) AS autotask, COUNT(CASE WHEN nextCFID != 0 THEN 1 END) AS done, COUNT(CASE WHEN nextCFID = 0 AND lastCFID = 0 THEN 1 END) AS pending , COUNT(CASE WHEN reassign_type = 2 THEN 1 END) AS assignByOther FROM tblcallevents WHERE assignedto_id = $uid AND CAST(appointmentdatetime AS DATE) = '$pdate'");
 
@@ -61,13 +63,40 @@ class Management_model  extends Menu_model {
         //     $this->db->select("COUNT(*) AS teamFunneltask");
         // }
 
-        $this->db->select("COUNT(*) AS plan");
-        $this->db->select("COUNT(CASE WHEN autotask = 1 AND nextCFID != 0 THEN autotask END) AS Completedautotask");
-        $this->db->select("COUNT(CASE WHEN autotask = 1 THEN autotask END) AS autotask");
-        $this->db->select("COUNT(CASE WHEN nextCFID != 0 THEN 1 END) AS done");
-        $this->db->select("COUNT(CASE WHEN nextCFID = 0 AND lastCFID = 0 THEN 1 END) AS pending");
-        $this->db->select("COUNT(CASE WHEN reassign_type = 2 THEN 1 END) AS assignByOther");
-        $this->db->select("COUNT(CASE WHEN reassign_type = 2 AND nextCFID != 0 THEN 1 END) AS CompletedassignByOther");
+        // $this->db->select("COUNT(*) AS plan");
+        // $this->db->select("COUNT(CASE WHEN autotask = 1 AND nextCFID != 0 THEN autotask END) AS Completedautotask");
+        // $this->db->select("COUNT(CASE WHEN autotask = 1 THEN autotask END) AS autotask");
+        // $this->db->select("COUNT(CASE WHEN nextCFID != 0 THEN 1 END) AS done");
+        // $this->db->select("COUNT(CASE WHEN nextCFID != 0 AND actontaken = 'yes' AND purpose_achieved = 'yes' THEN 1 END) AS completedAYPY");
+        // $this->db->select("COUNT(CASE WHEN nextCFID != 0 AND actontaken = 'yes' AND purpose_achieved = 'no' THEN 1 END) AS completedAYPN");
+        // $this->db->select("COUNT(CASE WHEN nextCFID != 0 AND actontaken = 'no' AND purpose_achieved = 'no' THEN 1 END) AS completedANPN");
+        // $this->db->select("COUNT(CASE WHEN nextCFID = 0 AND lastCFID = 0 THEN 1 END) AS pending");
+        // $this->db->select("COUNT(CASE WHEN reassign_type = 2 THEN 1 END) AS assignByOther");
+        // $this->db->select("COUNT(CASE WHEN reassign_type = 2 AND nextCFID != 0 THEN 1 END) AS CompletedassignByOther");
+
+        $this->db->select('
+                COUNT(*) AS plan, 
+                COUNT(CASE WHEN autotask = 1 AND nextCFID != 0 THEN autotask END) AS Completedautotask, 
+                COUNT(CASE WHEN autotask = 1 THEN autotask END) AS autotask, 
+                COUNT(CASE WHEN nextCFID != 0 THEN 1 END) AS done, 
+                COUNT(CASE WHEN nextCFID != 0 `status_id` != `nstatus_id` THEN 1 END) AS StatusChangeByMyFunnelTask, 
+                COUNT(CASE WHEN nextCFID != 0 AND actontaken = "yes" AND purpose_achieved = "yes" THEN 1 END) AS completedAYPY, 
+                COUNT(CASE WHEN nextCFID != 0 AND actontaken = "yes" AND purpose_achieved = "no" THEN 1 END) AS completedAYPN, 
+                COUNT(CASE WHEN nextCFID != 0 AND actontaken = "no" AND purpose_achieved = "no" THEN 1 END) AS completedANPN, 
+                COUNT(CASE WHEN nextCFID = 0 AND lastCFID = 0 THEN 1 END) AS pending, 
+                COUNT(CASE WHEN reassign_type = 2 THEN 1 END) AS assignByOther, 
+                COUNT(CASE WHEN reassign_type = 2 AND nextCFID != 0 THEN 1 END) AS CompletedassignByOther,
+                SUM(CASE WHEN nextCFID != 0 THEN TIMESTAMPDIFF(MINUTE, initiateddt, updateddate) ELSE 0 END) AS totalMinutesDiff,
+                FLOOR(SUM(CASE WHEN nextCFID != 0 THEN TIMESTAMPDIFF(MINUTE, initiateddt, updateddate) ELSE 0 END) / 60) AS totalHours,
+                MOD(SUM(CASE WHEN nextCFID != 0 THEN TIMESTAMPDIFF(MINUTE, initiateddt, updateddate) ELSE 0 END), 60) AS totalMinutes
+');
+// $this->db->from('tblcallevents');
+// $this->db->where('assignedto_id', '100059');
+// $this->db->where('DATE(appointmentdatetime)', '2024-07-19');
+
+// $query = $this->db->get();
+// $result = $query->row_array(); // Fetch the result as an associative array
+
         $this->db->from('tblcallevents');
 
         $this->db->where('assignedto_id', $uid);
@@ -94,9 +123,24 @@ class Management_model  extends Menu_model {
         if($type == 'done'){
             $query=$this->db->query("SELECT * FROM `tblcallevents` WHERE nextCFID != 0 AND assignedto_id = $uid and cast(appointmentdatetime as DATE)='$sdate'");
         }
+        if($type == 'AYPY'){
+            $query=$this->db->query("SELECT * FROM `tblcallevents` WHERE nextCFID != 0 AND actontaken = 'yes' AND purpose_achieved = 'yes' AND  assignedto_id = $uid and cast(appointmentdatetime as DATE)='$sdate'");
+        }
+        if($type == 'AYPN'){
+            $query=$this->db->query("SELECT * FROM `tblcallevents` WHERE nextCFID != 0 AND actontaken = 'yes' AND purpose_achieved = 'no' AND assignedto_id = $uid and cast(appointmentdatetime as DATE)='$sdate'");
+        }
+        if($type == 'ANPN'){
+            $query=$this->db->query("SELECT * FROM `tblcallevents` WHERE nextCFID != 0 AND actontaken = 'no' AND purpose_achieved = 'no' AND assignedto_id = $uid and cast(appointmentdatetime as DATE)='$sdate'");
+        }
         if($type == 'otherTaskAssign'){
             $query=$this->db->query("SELECT * FROM `tblcallevents` WHERE reassign_type = 2 AND assignedto_id = $uid and cast(appointmentdatetime as DATE)='$sdate'");
         }
+        // if($type == 'StatusChangebyMyTask'){
+        //     $query=$this->db->query("SELECT * FROM `tblcallevents` WHERE reassign_type = 2 AND assignedto_id = $uid and cast(appointmentdatetime as DATE)='$sdate'");
+        // }
+        // if($type == 'StatusChangebyOthersTask'){
+        //     $query=$this->db->query("SELECT * FROM `tblcallevents` WHERE reassign_type = 2 AND assignedto_id = $uid and cast(appointmentdatetime as DATE)='$sdate'");
+        // }
         // echo $str = $this->db->last_query(); die;
         return $query->result();
     }
@@ -113,7 +157,23 @@ class Management_model  extends Menu_model {
     }
 
     public function CheckingYesterDayConsumeTime($uid,$date) {
-        $query=$this->db->query("SELECT * FROM `user_day` WHERE user_id = $uid and cast(sdatet as DATE)='$date'");
+        // $query=$this->db->query("SELECT * FROM `user_day` WHERE user_id = $uid and cast(sdatet as DATE)='$date'");
+        $this->db->select('
+            user_day.*,
+            SUM(CASE WHEN tblcallevents.nextCFID != 0 THEN TIMESTAMPDIFF(MINUTE, tblcallevents.initiateddt, tblcallevents.updateddate) ELSE 0 END) AS totalMinutesDiff,
+            FLOOR(SUM(CASE WHEN tblcallevents.nextCFID != 0 THEN TIMESTAMPDIFF(MINUTE, tblcallevents.initiateddt, tblcallevents.updateddate) ELSE 0 END) / 60) AS totalHours,
+            MOD(SUM(CASE WHEN tblcallevents.nextCFID != 0 THEN TIMESTAMPDIFF(MINUTE, tblcallevents.initiateddt, tblcallevents.updateddate) ELSE 0 END), 60) AS totalMinutes
+        ');
+        $this->db->from('user_day');
+        $this->db->join('tblcallevents', 'user_day.user_id = tblcallevents.assignedto_id', 'inner');
+        $this->db->where('user_day.user_id', $uid);
+        $this->db->where('DATE(user_day.sdatet)', $date);
+        $this->db->where('DATE(appointmentdatetime)', $date);
+
+        $this->db->group_by('user_id');
+
+        $query = $this->db->get();
+
         // echo $this->db->last_query();
         return $query->result();
     }
@@ -229,9 +289,8 @@ class Management_model  extends Menu_model {
 
 
     public function AddStarRatingNew($data){
-        // var_dump($data);die;
-        $this->db->insert('star_rating',$data);
-        
+
+        $this->db->insert('star_rating',$data);        
         // echo $this->db->last_query();die;
         $insert_id = $this->db->insert_id();
 
@@ -353,10 +412,14 @@ class Management_model  extends Menu_model {
         // mainbd != '$uid'
         $subquery = $this->db->get_compiled_select();
 
+
+        // 
+
         $this->db->select("COUNT(*) AS TotalTeamplan");
         $this->db->select("COUNT(CASE WHEN autotask = 1 AND nextCFID != 0 THEN autotask END) AS TotalTeamCompletedautotask");
         $this->db->select("COUNT(CASE WHEN autotask = 1 THEN autotask END) AS TotalTeamautotask");
         $this->db->select("COUNT(CASE WHEN nextCFID != 0 THEN 1 END) AS TotalTeamdone");
+        $this->db->select("COUNT(CASE WHEN nextCFID != 0 AND `status_id` != `nstatus_id` THEN 1 END) AS TotalStatusChangeByOtherFunnelTask ");
         $this->db->select("COUNT(CASE WHEN nextCFID = 0 AND lastCFID = 0 THEN 1 END) AS TotalTeampending");
         $this->db->select("COUNT(CASE WHEN reassign_type = 2 THEN 1 END) AS TotalTeamassignByOther");
         $this->db->select("COUNT(CASE WHEN reassign_type = 2 AND nextCFID != 0 THEN 1 END) AS TotalTeamCompletedassignByOther");
@@ -396,6 +459,7 @@ class Management_model  extends Menu_model {
         }
 
         $this->db->where("status",'active');
+        $this->db->order_by("name",'asc');
         $query = $this->db->get();
 
         // echo $this->db->last_query();
@@ -404,12 +468,33 @@ class Management_model  extends Menu_model {
 
     }
 
+    public function get_AvgTime($actionType){
+
+        // $datetime1 = new DateTime($date1);
+        // $datetime2 = new DateTime($date2);
+
+        // // Calculate the difference
+        // $interval = $datetime1->diff($datetime2);
+
+        $this->db->select("AVG(TIMESTAMPDIFF(MINUTE,initiateddt,updateddate)) AS avg_time");
+        $this->db->from('tblcallevents');
+        $this->db->where('actiontype_id', $actionType);
+        $query = $this->db->get();
+        
+        // echo $this->db->last_query();
+        // return $query->result();
+        $result = $query->row();
+        return $result->avg_time;
+    }
+
     public function getReportbyUser($selected_user,$sdate,$edate){
 
         // var_dump($selected_user);die;
         $this->db->select('star_rating.*');
         $this->db->select('ud1.name as userName');
         $this->db->select('ud2.name as feedbackBy');
+        $this->db->select('`star_rating`.`date`');
+        
 
         $this->db->from('star_rating');
         $this->db->join('user_details ud1', 'ud1.user_id = star_rating.user_id', 'left');
@@ -421,6 +506,9 @@ class Management_model  extends Menu_model {
         }
         $this->db->where('CAST(date AS DATE) >=', "'$sdate'", FALSE);
         $this->db->where('CAST(date AS DATE) <=', "'$edate'", FALSE);
+
+        $this->db->order_by('star_rating.date', 'ASC');
+        // $this->db->group_by('star_rating.periods, star_rating.id, ud1.name, ud2.name');
 
         $query = $this->db->get();
 

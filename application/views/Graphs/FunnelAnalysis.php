@@ -60,6 +60,9 @@
                                             </div>
                                     </div>
                                     <!-- User Role -->
+                                    <?php
+                                        // var_dump($userType);die;
+                                    ?>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Select Role</label>
@@ -67,7 +70,7 @@
                                                 <option value="select_all">Select All</option>
                                                 <?php foreach($roles as $r) {
                                                 ?>
-                                                <option value="<?= $r->id ?>"><?= $r->name ?></option>
+                                                <option value="<?= $r->id ?>" <?= in_array($r->id, $userType) ? 'selected' : '' ?>><?= $r->name ?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -81,7 +84,7 @@
                                                 <option value="select_all">Select All</option>
                                                 <?php foreach($clusters as $cluster) {
                                                 ?>
-                                                    <option value="<?= $cluster->id ?>"><?= $cluster->cluster_name ?></option>
+                                                    <option value="<?= $cluster->id ?> <?= in_array($cluster->id, $selected_cluster) ? 'selected' : '' ?>"><?= $cluster->cluster_name ?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -93,7 +96,6 @@
                                             <label>Select User</label>
                                             <select id="user" class="custom-select rounded-0" name="user[]" data-live-search="true" multiple>
                                                 
-
                                             </select>
                                         </div>
                                     </div>
@@ -106,7 +108,7 @@
                                                 <option value="select_all">Select All</option>
                                                 <?php foreach($partner_type as $pt) {
                                                 ?>
-                                                <option value="<?= $pt->id ?>"><?= $pt->name ?></option>
+                                                <option value="<?= $pt->id ?>"  <?= in_array($pt->id, $selected_partnerType) ? 'selected' : '' ?>><?= $pt->name ?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -117,14 +119,21 @@
                                             <label>Select Category</label>
                                             <select class="custom-select rounded-0" name="category[]" id="category" multiple>
                                                 <option value="select_all">Select All</option>
-                                                <option value="upsell_client">Upsell Client</option>
+                                                <!-- <option value="upsell_client">Upsell Client</option>
                                                 <option value="focus_funnel">Focus Funnel</option>
                                                 <option value="keycompany">Key Client</option>
                                                 <option value="pkclient">Positive Key Client</option>
-                                                <option value="priorityc">Priority Calling</option>
+                                                <option value="priorityc">Priority Calling</option> -->
+                                                <option value="topspender" <?= in_array('topspender', $selected_category) ? 'selected' : '' ?>>Top Spender</option>
+                                                <option value="focus_funnel" <?= in_array('focus_funnel', $selected_category) ? 'selected' : '' ?>>Focus Funnel</option>
+                                                <option value="upsell_client" <?= in_array('upsell_client', $selected_category) ? 'selected' : '' ?>>Upsell Client</option>
+                                                <option value="keycompany" <?= in_array('keycompany', $selected_category) ? 'selected' : '' ?>>Key Company</option>
+                                                <option value="pkclient" <?= in_array('pkclient', $selected_category) ? 'selected' : '' ?>>Key Client</option>
+                                                <option value="priorityc" <?= in_array('priorityc', $selected_category) ? 'selected' : '' ?>>Priority Client</option>
                                             </select>
                                         </div>
                                     </div>
+
                                     <div class="col-lg-3 col-sm-6">
                                        <button type="submit" name="submit" class="btn btn-primary"> Filter</button>
                                     </div>
@@ -390,10 +399,11 @@ document.addEventListener('DOMContentLoaded', function() {
         var selected_category = <?php echo json_encode($selected_category); ?>;
         var selected_partnerType = <?php echo json_encode($selected_partnerType); ?>;
         var selected_userType = <?php echo json_encode($userType); ?>;
-        var selected_cluster = <?php echo json_encode($cluster); ?>;
+        var selected_cluster = <?php echo json_encode($selected_cluster); ?>;
         var selected_users = <?php echo json_encode($selected_users); ?>;
         var uid = <?php echo json_encode($uid); ?>;
         
+        // console.log(selected_cluster);
 
         var selectedPartnerTypeString = JSON.stringify(selected_partnerType);
         var selected_categoryString = JSON.stringify(selected_category);

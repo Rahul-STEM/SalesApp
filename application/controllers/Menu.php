@@ -8,7 +8,7 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $this->load->model('Graph_model');
         $this->load->model('Management_model');
-
+        
         $this->load->view('index');
         $this->load->helper('SameStatusTillDate_helper');
 
@@ -8992,6 +8992,71 @@ class Menu extends CI_Controller {
 
     }
 
+    public function getReviewData(){
+
+        $taskID = $this->input->post('taskID');
+        $user_id = $this->input->post('userID');
+
+        $this->load->model('Menu_model');   
+
+        $result1 = $this->Menu_model->getNoOfReview($taskID);
+
+        // var_dump($result);die;
+        if (sizeof($result1) == 0) {    
+
+            // $result = $this->Menu_model->getReviewData($taskID);
+            
+            // $result->manyreview = 0;
+
+            $result = $this->Menu_model->getManyReviewData($taskID);
+            $result->manyreview = 1;
+
+        }else{
+
+            $result = $this->Menu_model->getManyReviewData($taskID);
+            $result->manyreview = 1;
+        }
+
+        
+    //     $questionArray = [
+
+    //         'MoM remarks entered correctly',
+    //         'Potential marked correctly',
+    //         'Was partner type correct',
+    //         'Was company photo is right',
+    //         'Was meeting end location correct',
+    //         'Was meeting start location correct',
+    //         'Did the meeting ended on right time',
+    //         'Did the meeting started on right time',
+    //         'Was it RP or No RP'
+    //     ];
+
+    //     $ratingsData = [];
+    // // Loop through each question and fetch ratings
+    //     foreach ($questionArray as $question) {
+
+    //         $ratingsData[$question] = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($user_id, $question, $taskID);
+    //     }
+
+    // // Attach the ratings data to the result
+    //     if (is_object($result)) {
+    //         $result = (array) $result;
+    //     }
+
+    //     // Attach the ratings data to the result
+    //     $result['ratings'] = $ratingsData;
+
+        // $this->Menu_model->CheckTaskStarRatingsExistorNot_New($user_id,$questionArray,$taskID);
+
+        
+        // var_dump($result);die;
+
+
+        // var_dump($result);die;
+        echo json_encode($result);
+
+    }
+
     public function submitMoMRating(){
 
         $user = $this->session->userdata('user');
@@ -9008,7 +9073,10 @@ class Menu extends CI_Controller {
             $review['feedback_by'] = $uid;
             $this->Menu_model->InsertMoMTaskRating($review);
         }
+
+        echo json_encode(['success' => 'Reviews submitted successfully']);
     }
+
     public function TaskCheck_NewReport()
     {
 
@@ -9214,7 +9282,7 @@ class Menu extends CI_Controller {
 
     public function ATaskDetail_New($code,$bdid,$atid,$sd,$ed){
         
-        // var_dump($atid);die;
+        // var_dump($ed);die;
         $startDate = '';
         $endDate = '';
         if(isset($_POST['FromDate']) && isset($_POST['EndDate'])){
@@ -9241,8 +9309,8 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
 
         $mtdata = $this->Menu_model->get_bwdalltaskdbyad_New($code,$atid,$bdid,$sd,$ed);
-        // var_dump($mtdata);die;
         // echo $this->db->last_query();die;
+
         $tdate = date('Y-m-d');
         $getCountData = $this->Menu_model->getTeamTasks($uid,$tdate,$sd,$ed);
 

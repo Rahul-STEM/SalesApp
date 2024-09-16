@@ -33,7 +33,7 @@
                             </center>
                         </div>
                         <div class="card-body FilterSection">
-                            <form method="POST" action="<?=base_url();?>GraphNew/PartnerWiseFunnelAnalysis/<?php ?>">
+                            <form method="POST" action="<?=base_url();?>GraphNew/PartnerWiseFunnelAnalysis/">
                                 <div class="row">
                                     <div class="col-lg-3 col-sm-6">
                                         <label for="startDate">Start Date</label>
@@ -52,7 +52,7 @@
                                             <select class="custom-select rounded-0" name="partnerType[]" id="partnerType" multiple>
                                                 <option value="select_all">Select All</option>
                                                 <?php foreach($partner_type as $partner) { ?>
-                                                    <option value="<?= $partner->id ?>"><?= $partner->name ?></option>
+                                                    <option value="<?= $partner->id ?>" <?= in_array($partner->id, $partnerType) ? 'selected' : '' ?>><?= $partner->name ?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -170,6 +170,7 @@
 
                                                                 $i=1;
                                                                 foreach($TableData as $TableRow){ 
+                                                                    // var_dump($TableRow);die;
                                                                     $tblc=$this->Graph_Model->get_tblbyidwithremark($TableRow->ic_id);
                                                                         if (sizeof($tblc) != 0) {
                                                                             $remark=$tblc[0]->remarks;
@@ -186,7 +187,7 @@
                                                                     <tr>
                                                                         <!-- <td><?= $TableRow->city ?></td> -->
                                                                         <td><?= $TableRow->stname ?></td>
-                                                                        <td><?= $TableRow->company_name ?></td>
+                                                                        <td><a href="<?=base_url();?>Menu/CompanyDetails/<?=$TableRow->company_id?>" target="_blank"> <?= $TableRow->company_name ?></a></td>
                                                                         <td style="color:<?=$TableRow->PartnerMasterclr?>"><?= $TableRow->partner_typeName ?></td>
                                                                         <td><?= $remark ?></td>
                                                                         <td><?= $lastUpdateDate ?></td>

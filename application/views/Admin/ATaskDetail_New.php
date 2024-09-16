@@ -155,7 +155,7 @@
                                                             <th>Current_Status</th>
                                                             <th>Action Taken</th>
                                                             <th>Purpose Achieved</th>
-                                                            <th>Review Remark</th>
+                                                            <!-- <th>Review Remark</th> -->
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -205,7 +205,8 @@
                                                         <td><?=$s2?></td>
                                                         <td><?=$mtd[0]->actontaken?></td>
                                                         <td><?=$mtd[0]->purpose_achieved?></td>
-                                                        <td><?=$md->rremark?><hr><?=$md->star?> Star</td>
+                                                        <!-- <td><?=$md->rremark?><hr><?=$md->star?> Star</td> -->
+                                                    </tr>
                                                     <?php $i++;} ?>
                                                 </tbody>
                                                 </table> 

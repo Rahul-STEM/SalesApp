@@ -159,7 +159,7 @@ class Graph_Model extends CI_Model
 
         $this->db->select('*');
         $this->db->from('user_type');
-        $this->db->where('Active_Flag', 0);
+        // $this->db->where('Active_Flag', 0);
         if ($type_id != 2) {
             $this->db->where('id', $type_id);
         }
@@ -275,40 +275,40 @@ class Graph_Model extends CI_Model
             $this->db->where_in('company_master.partnerType_id', $partnerType);
         }
 
-        if (!empty($category)) {
-            // var_dump($category);die;
-            $this->db->group_start();
+        // if (!empty($category)) {
+        //     // var_dump($category);die;
+        //     $this->db->group_start();
 
-            foreach ($category as $singleCategory) {
+        //     foreach ($category as $singleCategory) {
 
-                if ($singleCategory == 'topspender') {
+        //         if ($singleCategory == 'topspender') {
 
-                    $this->db->or_where('focus_funnel', 'yes');
-                }
-                if ($singleCategory == 'focus_funnel') {
+        //             $this->db->or_where('focus_funnel', 'yes');
+        //         }
+        //         if ($singleCategory == 'focus_funnel') {
 
-                    $this->db->or_where('focus_funnel', 'yes');
-                }
-                if ($singleCategory == 'upsell_client') {
+        //             $this->db->or_where('focus_funnel', 'yes');
+        //         }
+        //         if ($singleCategory == 'upsell_client') {
 
-                    $this->db->or_where('upsell_client', 'yes');
-                }
-                if ($singleCategory == 'keycompany') {
+        //             $this->db->or_where('upsell_client', 'yes');
+        //         }
+        //         if ($singleCategory == 'keycompany') {
 
-                    $this->db->or_where('keycompany', 'yes');
-                }
-                if ($singleCategory == 'pkclient ') {
+        //             $this->db->or_where('keycompany', 'yes');
+        //         }
+        //         if ($singleCategory == 'pkclient ') {
 
-                    $this->db->or_where('pkclient', 'yes');
-                }
-                if ($singleCategory == 'priorityc ') {
+        //             $this->db->or_where('pkclient', 'yes');
+        //         }
+        //         if ($singleCategory == 'priorityc ') {
 
-                    $this->db->or_where('priorityc', 'yes');
-                }
-            }
+        //             $this->db->or_where('priorityc', 'yes');
+        //         }
+        //     }
 
-            $this->db->group_end();
-        }
+        //     $this->db->group_end();
+        // }
 
         // var_dump($cluster);die;
         // if cluster is selected
@@ -328,10 +328,10 @@ class Graph_Model extends CI_Model
                 if ($singleuserType == 9 || $singleuserType == 13) {
                     $this->db->or_where_in('aadmin', $users);
                 }
-                // else{
+                else{
 
-                //     $this->db->where_in('user_id', $users);
-                // }
+                    $this->db->where_in('user_id', $users);
+                }
             }
             $this->db->group_end();
         }
@@ -356,8 +356,8 @@ class Graph_Model extends CI_Model
 
         $this->db->where('user_details.status', 'active');
 
-        $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
-        $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
+        // $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
+        // $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
         $this->db->group_by('status.name');
         $this->db->group_by('status.id');
         // $this->db->group_by('ic.cmpid_id ');
@@ -369,7 +369,7 @@ class Graph_Model extends CI_Model
 
     public function get_TableData($uid, $userTypeid, $sdate, $edate, $userType = null, $cluster = null, $partnerType = null, $category = null, $users = null)
     {
-
+        // var_dump($partnerType);die;
         $this->db->select('ic.id ic_id');
         $this->db->select('status.clr stclr');
         $this->db->select('status.id stid');
@@ -387,45 +387,44 @@ class Graph_Model extends CI_Model
         $this->db->join('status', 'status.id = ic.cstatus', 'left');
         $this->db->join('user_details', 'user_details.user_id = ic.mainbd', 'left');
 
-        if ($partnerType != '') {
+        if (!empty($partnerType)) {
 
             $this->db->where_in('company_master.partnerType_id', $partnerType);
         }
 
-        if ($category != '') {
-            // var_dump($category);die;
-            $this->db->group_start();
+        // if (!empty($category)) {
+        //     $this->db->group_start();
 
-            foreach ($category as $singleCategory) {
+        //     foreach ($category as $singleCategory) {
 
-                if ($singleCategory == 'topspender') {
+        //         if ($singleCategory == 'topspender') {
 
-                    $this->db->or_where('focus_funnel', 'yes');
-                }
-                if ($singleCategory == 'focus_funnel') {
+        //             $this->db->or_where('topspender', 'yes');
+        //         }
+        //         if ($singleCategory == 'focus_funnel') {
 
-                    $this->db->or_where('focus_funnel', 'yes');
-                }
-                if ($singleCategory == 'upsell_client') {
+        //             $this->db->or_where('focus_funnel', 'yes');
+        //         }
+        //         if ($singleCategory == 'upsell_client') {
 
-                    $this->db->or_where('upsell_client', 'yes');
-                }
-                if ($singleCategory == 'keycompany') {
+        //             $this->db->or_where('upsell_client', 'yes');
+        //         }
+        //         if ($singleCategory == 'keycompany') {
 
-                    $this->db->or_where('keycompany', 'yes');
-                }
-                if ($singleCategory == 'pkclient ') {
+        //             $this->db->or_where('keycompany', 'yes');
+        //         }
+        //         if ($singleCategory == 'pkclient ') {
 
-                    $this->db->or_where('pkclient', 'yes');
-                }
-                if ($singleCategory == 'priorityc ') {
+        //             $this->db->or_where('pkclient', 'yes');
+        //         }
+        //         if ($singleCategory == 'priorityc ') {
 
-                    $this->db->or_where('priorityc', 'yes');
-                }
-            }
+        //             $this->db->or_where('priorityc', 'yes');
+        //         }
+        //     }
 
-            $this->db->group_end();
-        }
+        //     $this->db->group_end();
+        // }
 
         //if user type is selected
         if (!empty($userType)) {
@@ -437,13 +436,13 @@ class Graph_Model extends CI_Model
                 if ($singleuserType == 9 || $singleuserType == 13) {
                     $this->db->or_where_in('aadmin', $users);
                 }
-                // else{
-
-                //     $this->db->where_in('user_id', $users);
-                // }
+                else{
+                    $this->db->where_in('user_id', $users);
+                }
             }
             $this->db->group_end();
-        } else {
+        } 
+        else {
             $this->db->where_in('admin_id', $uid);
         }
 
@@ -452,6 +451,8 @@ class Graph_Model extends CI_Model
             // var_dump($cluster);die;
             $this->db->where_in('aadmin', $users);
         }
+
+
         if ($userTypeid == 2) {
             //if admin is loggedin
             $this->db->where('admin_id', $uid);
@@ -471,20 +472,21 @@ class Graph_Model extends CI_Model
 
         $this->db->where('user_details.status', 'active');
 
-        $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
-        $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
+        // $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
+        // $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
         // $this->db->where('tblcallevents.remarks !=', '');
         $this->db->group_by('ic.cmpid_id');
         // $this->db->group_by('stname');
         $query = $this->db->get();
 
-        //    echo $this->db->last_query();die;
+        //    echo $this->db->last_query();
+        // die;
         return $query->result();
     }
 
     public function getTableDataByStatus($uid, $userTypeid, $stid, $sdate, $edate, $selected_partnerType, $selected_category, $selected_userType, $selected_users, $selected_cluster)
     {
-        // print_r($selected_partnerType[0]);die;
+        // print_r($selected_cluster);die;
         $this->db->select('ic.id ic_id');
         $this->db->select('ic.focus_funnel focus_funnel');
         $this->db->select('ic.upsell_client upsell_client');
@@ -520,7 +522,7 @@ class Graph_Model extends CI_Model
 
                 if ($singleCategory == 'topspender') {
 
-                    $this->db->or_where('focus_funnel', 'yes');
+                    $this->db->or_where('topspender', 'yes');
                 }
                 if ($singleCategory == 'focus_funnel') {
 
@@ -556,18 +558,27 @@ class Graph_Model extends CI_Model
                 }
                 if ($singleuserType == 9 || $singleuserType == 13) {
                     $this->db->or_where_in('aadmin', $selected_users);
+                }else{
+
+                    $this->db->where_in('user_id', $selected_users);
                 }
+                
             }
             $this->db->group_end();
-        } else {
-            $this->db->where_in('admin_id', $uid);
-        }
+        } 
+        // else {
+        //     $this->db->where_in('admin_id', $uid);
+        // }
 
         // if cluster is selected
+        // var_dump($selected_cluster);die;
         if (!empty($selected_cluster)) {
-            // var_dump($cluster);die;
-            $this->db->where_in('aadmin', $selected_users);
+            if ($selected_cluster[0] != null) {
+
+                $this->db->where_in('aadmin', $selected_users);
+            }
         }
+
         if ($userTypeid == 2) {
             //if admin is loggedin
             $this->db->where('admin_id', $uid);
@@ -678,10 +689,10 @@ class Graph_Model extends CI_Model
                 if ($singleuserType == 9 || $singleuserType == 13) {
                     $this->db->or_where_in('user_details.aadmin', $arrayselected_user);
                 }
-                // else{
+                else{
 
-                //     $this->db->where_in('user_id', $users);
-                // }
+                    $this->db->where_in('user_details.user_id', $arrayselected_user);
+                }
             }
             $this->db->group_end();
         }
@@ -952,6 +963,7 @@ class Graph_Model extends CI_Model
         $this->db->select('status.name stname');
         $this->db->select('company_master.compname company_name');
         $this->db->select('company_master.address company_address');
+        $this->db->select('company_master.id company_id');
         $this->db->select('city.city city');
         $this->db->select('states.state state');
         $this->db->select('partner_master.name partner_typeName');
@@ -1115,16 +1127,29 @@ class Graph_Model extends CI_Model
     public function getCategoryWiseGraphDetails($uid, $userTypeid, $sdate, $edate, $category)
     {
 
-        // print_r($category);die;
-        $this->db->select("
-                COUNT(CASE WHEN topspender != 'yes' AND focus_funnel != 'yes' AND upsell_client != 'yes' AND keycompany != 'yes' AND pkclient != 'yes' AND priorityc != 'yes' THEN 1 END) AS nocat,
-                COUNT(CASE WHEN topspender = 'yes' THEN 1 END) AS topspender,
-                COUNT(CASE WHEN focus_funnel = 'yes' THEN 1 END) AS focus_funnel,
-                COUNT(CASE WHEN upsell_client = 'yes' THEN 1 END) AS upsell_client,
-                COUNT(CASE WHEN keycompany = 'yes' THEN 1 END) AS keycompany,
-                COUNT(CASE WHEN pkclient = 'yes' THEN 1 END) AS pkclient,
-                COUNT(CASE WHEN priorityc = 'yes' THEN 1 END) AS priorityc
-            ");
+            // print_r($category);die;
+
+        // Initialize the base select part
+            $select = " COUNT(CASE WHEN topspender != 'yes' AND focus_funnel != 'yes' AND upsell_client != 'yes' AND keycompany != 'yes' AND pkclient != 'yes' AND priorityc != 'yes' THEN 1 END) AS nocat ";
+
+            // Add dynamic conditions based on the categories array
+            foreach ($category as $Singlecategory) {
+            $select .= ", COUNT(CASE WHEN $Singlecategory = 'yes' THEN 1 END) AS $Singlecategory";
+            }
+
+            // Set the select part of the query
+            $this->db->select($select);
+
+
+        // $this->db->select("
+        //         COUNT(CASE WHEN topspender != 'yes' AND focus_funnel != 'yes' AND upsell_client != 'yes' AND keycompany != 'yes' AND pkclient != 'yes' AND priorityc != 'yes' THEN 1 END) AS nocat,
+        //         COUNT(CASE WHEN topspender = 'yes' THEN 1 END) AS topspender,
+        //         COUNT(CASE WHEN focus_funnel = 'yes' THEN 1 END) AS focus_funnel,
+        //         COUNT(CASE WHEN upsell_client = 'yes' THEN 1 END) AS upsell_client,
+        //         COUNT(CASE WHEN keycompany = 'yes' THEN 1 END) AS keycompany,
+        //         COUNT(CASE WHEN pkclient = 'yes' THEN 1 END) AS pkclient,
+        //         COUNT(CASE WHEN priorityc = 'yes' THEN 1 END) AS priorityc
+        //     ");
 
 
         $this->db->from('init_call ic');
@@ -1230,13 +1255,16 @@ class Graph_Model extends CI_Model
             $this->db->where('user_id', $uid);
         }
 
-        if ($category != '') {
+        
+        if (!empty($category)) {
+
+            $this->db->group_start();
 
             foreach ($category as $singleCategory) {
 
                 if ($singleCategory == 'topspender') {
 
-                    $this->db->or_where('focus_funnel', 'yes');
+                    $this->db->or_where('topspender', 'yes');
                 }
                 if ($singleCategory == 'focus_funnel') {
 
@@ -1259,6 +1287,7 @@ class Graph_Model extends CI_Model
                     $this->db->or_where('priorityc', 'yes');
                 }
             }
+            $this->db->group_end();
         }
 
         $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
@@ -1729,8 +1758,6 @@ class Graph_Model extends CI_Model
     public function getStageWiseFunnelGraphDetails($uid, $userTypeid, $sdate, $edate, $status, $SelectedCluster, $SelectedCategory, $SelectedUsers, $SelectedpartnerType)
     {
 
-        // var_dump($SelectedCluster);die;
-
         $this->db->select("
             SUM(CASE WHEN init_call.cstatus = '1' THEN 1 ELSE 0 END) +
             SUM(CASE WHEN init_call.cstatus = '8' THEN 1 ELSE 0 END) +
@@ -1824,7 +1851,7 @@ class Graph_Model extends CI_Model
 
     public function getFunnelDetails($uid, $userTypeid, $sdate, $edate, $status, $SelectedCluster, $SelectedCategory, $SelectedUsers, $SelectedpartnerType, $statusArray)
     {
-
+        // var_dump($statusArray);die;
         $this->db->select('status.name statusName');
         $this->db->select('status.id statusId');
         $this->db->select('COUNT(*) cont');
@@ -1900,7 +1927,7 @@ class Graph_Model extends CI_Model
         $this->db->where('CAST(init_call.createDate AS DATE) <=', "'$edate'", FALSE);
         $this->db->group_by('statusName');
         $query = $this->db->get();
-        // echo $this->db->last_query();die;
+        // echo $this->db->last_query();
         return $query->result();
     }
 
@@ -2087,7 +2114,6 @@ class Graph_Model extends CI_Model
 
             $this->db->where_in('user_details.aadmin', $selected_users);
         }
-
 
         $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
         $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);

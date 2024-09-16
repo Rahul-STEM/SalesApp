@@ -53,7 +53,7 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
 
 /*
  *---------------------------------------------------------------
@@ -312,4 +312,13 @@ switch (ENVIRONMENT)
  *
  * And away we go...
  */
+
+ // autoloading the custom spreadsheet autoloader
+$path = __DIR__ . '/vendor/autoload.php';
+
+// var_dump($path);die;
+require_once __DIR__ . '/vendor/autoload.php';
+
 require_once BASEPATH.'core/CodeIgniter.php';
+
+

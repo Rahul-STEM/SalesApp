@@ -11546,6 +11546,7 @@ public function getTasks($id,$date){
 
     $this->db->where('user_id', $id);
     $this->db->where('CAST(updateddate AS DATE) =', "'$date'", FALSE);
+    $this->db->order_by('tce.appointmentdatetime', 'ASC');
     // $this->db->where('rremark IS NULL', NULL, FALSE);
 
     $query = $this->db->get();
@@ -11683,41 +11684,207 @@ public function getMoMData($id) {
     $this->db->select('bm.clongitude end_long');
     // $this->db->select('bm.mtype end_long');
     $this->db->select('tce.mtype momType');
-    $this->db->select('md.partner mompartner');
-    $this->db->select('md.rpmmom momremark');
+    // $this->db->select('md.partner mompartner');
+    // $this->db->select('md.rpmmom momremark');
     $this->db->select('action.name actionName');
     $this->db->select("CASE WHEN ic.mainbd = tce2.user_id THEN 'Own Funnel' ELSE 'Other Funnel' END AS funnel");
     $this->db->select('status.name statusAtMeeting');
     $this->db->select('ic.potential potentialOrNot');
     
-    $this->db->from('mom_data md');
-    $this->db->where('md.tid', $id);
-    $this->db->join('tblcallevents tce', 'md.tid = tce.id', 'left');
-    $this->db->join('barginmeeting bm', 'bm.tid = tce.lastCFID', 'left');
+    $this->db->from('barginmeeting bm');
+    
+    $this->db->where('bm.tid', $id);
+    
+
+    // $this->db->from('mom_data md');
+    // $this->db->where('md.tid', $id);
+
+    $this->db->join('tblcallevents tce', 'bm.tid = tce.id', 'left');
+    // $this->db->join('mom_data md', 'bm.tid = tce.lastCFID', 'left');
     $this->db->join('tblcallevents tce2', 'tce.lastCFID = tce2.id', 'left');
     $this->db->join('action', 'action.id = tce2.actiontype_id', 'left');
     $this->db->join('init_call ic', 'ic.id = tce2.cid_id', 'left');
     $this->db->join('status', 'ic.lstatus = status.id', 'left');
+    $query = $this->db->get();
 
+    // echo $this->db->last_query();
+    // die;
+    return $query->row();
+}
+
+public function getNoOfReview($id){
+
+    $this->db->select('mtr.id');
+
+    $this->db->from('many_time_review mtr');
+
+    $this->db->join('tblcallevents','tblcallevents.cid_id=mtr.inid');
+    // $this->db->join('user_details ud1','ud1.user_id=mtr.bdid');
+
+    $this->db->where('tblcallevents.id', $id);
 
     $query = $this->db->get();
 
     // echo $this->db->last_query();die;
+    // die;
+    // return $query->row();
+    return $query->result();
+    
+
+}
+public function getManyReviewData($id) {
+
+    $id = 35928;
+
+    $this->db->select('mtr.remark review_remark');
+    $this->db->select('mtr.how_many_task NoOfTask');
+    $this->db->select('mtr.frequency_of_the_task');
+
+    $this->db->select('mtr.type_of_task type_of_task');
+    $this->db->select('mtr.rp_meeting_done RPMeeting');
+    $this->db->select('mtr.mom_done mom_done');
+    $this->db->select('mtr.social_networking_done SN_done');
+    $this->db->select('mtr.category_right');
+    $this->db->select('mtr.slct_category selectedCategory');
+    $this->db->select('mtr.current_status_right currentStatus_right');
+    $this->db->select('mtr.many_times_barge_meeting');
+    $this->db->select('mtr.research_prospecting');
+    $this->db->select('mtr.base_or_travel_location');
+    $this->db->select('mtr.partner_type_right');
+    $this->db->select('mtr.partner_type');
+    $this->db->select('mtr.suppert');
+    $this->db->select('mtr.rtype reviewType');
+    
+    // $this->db->select('mtr.ex_status_id');
+    // $this->db->select('mtr.many_times_barge_meeting');
+    // $this->db->select('mtr.many_times_barge_meeting');
+
+    // $this->db->select('ard.ans1 callRemark');
+    // $this->db->select('ard.ans2 emailRemark');
+    // $this->db->select('ard.ans3 meetingRemark');
+
+    // $this->db->select('ar.plant reviewPlan_time');
+    // $this->db->select('ar.startt reviewStart_time');
+    // $this->db->select('ar.closet reviewEnd_time');
+    // $this->db->select('ar.reviewtype reviewType');
+    // $this->db->select('ar.fixdate fixdate');
+    $this->db->select('partner_master.name partnerType');
+    // $this->db->select('st1.name NewStatus');
+    
+
+    $this->db->select('ud.name userName');
+    $this->db->select('ud1.name BDName');
+
+
+    $this->db->from('many_time_review mtr');
+    // $this->db->join('allreview ar','ar.id=ard.rid');
+    $this->db->join('user_details ud','ud.user_id=mtr.user_id');
+    $this->db->join('user_details ud1','ud1.user_id=mtr.bdid');
+    $this->db->join('partner_master','partner_master.id=mtr.partner_type');
+    // $this->db->join('status st1','st1.id=mtr.current_status');
+
+    $this->db->where('mtr.ntid', $id);
+
+    $query = $this->db->get();
+
+    // echo $this->db->last_query();die;
+    // die;
     return $query->row();
 }
 
+
+public function getReviewData($id) {
+
+    $id = 40850;
+
+    $this->db->select('ard.remark remark');
+    $this->db->select('ard.taskupdate taskupdate');
+    $this->db->select('ard.ans1 call_remark');
+    $this->db->select('ard.ans2 email_remark');
+    $this->db->select('ard.ans3 meeting_remark');
+    $this->db->select('ard.ans3 meeting_remark');
+    $this->db->select('ard.requeststatus requeststatus');
+    $this->db->select('ard.nschool noOfSchool');
+    $this->db->select('ard.potential potential');
+    $this->db->select('ard.patnertype patnertype');
+    $this->db->select('ard.topspender topspender');
+    $this->db->select('ard.keyclient keyclient');
+    $this->db->select('ard.pkeyclient pkeyclient');
+    $this->db->select('ard.priorityclient priorityclient');
+    $this->db->select('ard.upsellclient upsellclient');
+    $this->db->select('ard.focusyclient focusyclient');
+    $this->db->select('st.name currentStatus');
+    $this->db->select('st1.name exStatus');
+    $this->db->select('st2.name requestStatus');
+
+
+    // $this->db->select('mtr.type_of_task type_of_task');
+    // $this->db->select('mtr.rp_meeting_done RPMeeting');
+    // $this->db->select('mtr.mom_done mom_done');
+    // $this->db->select('mtr.social_networking_done SN_done');
+    // $this->db->select('mtr.category_right');
+    // $this->db->select('mtr.slct_category selectedCategory');
+    // $this->db->select('mtr.current_status_right currentStatus_right');
+    // $this->db->select('mtr.many_times_barge_meeting');
+    // $this->db->select('mtr.research_prospecting');
+    // $this->db->select('mtr.base_or_travel_location');
+    // $this->db->select('mtr.partner_type_right');
+    // $this->db->select('mtr.partner_type');
+    // $this->db->select('mtr.suppert');
+    // $this->db->select('mtr.rtype reviewType');
+    // $this->db->select('mtr.ex_status_id');
+    // $this->db->select('mtr.many_times_barge_meeting');
+    // $this->db->select('mtr.many_times_barge_meeting');
+
+    // $this->db->select('ard.ans1 callRemark');
+    // $this->db->select('ard.ans2 emailRemark');
+    // $this->db->select('ard.ans3 meetingRemark');
+
+    // $this->db->select('ar.plant reviewPlan_time');
+    // $this->db->select('ar.startt reviewStart_time');
+    // $this->db->select('ar.closet reviewEnd_time');
+    // $this->db->select('ar.reviewtype reviewType');
+    // $this->db->select('ar.fixdate fixdate');
+    // $this->db->select('st.name ExistingStatus');
+    // $this->db->select('st1.name NewStatus');
+    
+
+    $this->db->select('ud.name userName');
+    $this->db->select('ud1.name BDName');
+
+
+    $this->db->from('allreviewdata ard');
+    // $this->db->join('allreview ar','ar.id=ard.rid');
+    $this->db->join('user_details ud','ud.user_id=ard.pst');
+    $this->db->join('user_details ud1','ud1.user_id=ard.bdid');
+    $this->db->join('status st','st.id=ard.csid');
+    $this->db->join('status st1','st1.id=ard.exsid');
+    $this->db->join('status st2','st2.id=ard.requeststatus');
+
+    $this->db->where('ard.ntid', $id);
+
+    $query = $this->db->get();
+
+    // echo $this->db->last_query();die;
+    // die;
+    return $query->row();
+}
 public function getReportbyUser($selected_user,$sdate,$edate){
 
     // var_dump($sdate);die;
     $this->db->select('tcsr.*');
     $this->db->select('ud1.name as userName');
     $this->db->select('ud2.name as feedbackBy');
+    $this->db->select('ud3.name as commentBy');
     $this->db->select('action.name as actionName');
     $this->db->select('tblcallevents.appointmentdatetime as taskDate');
+    $this->db->select('tblcallevents.comments as comments');
+    $this->db->select('tblcallevents.thnkscomments as thnkscomments');
     $this->db->from('taskcheck_star_rating tcsr');
     $this->db->join('user_details ud1', 'ud1.user_id = tcsr.user_id', 'left');
     $this->db->join('user_details ud2', 'ud2.user_id = tcsr.feedback_by', 'left');
     $this->db->join('tblcallevents', 'tcsr.task_id = tblcallevents.id', 'left');
+    $this->db->join('user_details ud3', 'ud3.user_id = tblcallevents.comment_by', 'left');
     $this->db->join('action', 'tblcallevents.actiontype_id = action.id', 'left');
 
     if(!empty($selected_user)){
@@ -11752,7 +11919,7 @@ public function getRoles($type_id){
 
     $this->db->select('*');
     $this->db->from('user_type');
-    $this->db->where('Active_Flag', 0);
+    // $this->db->where('Active_Flag', 0);
     if($type_id != 2){
         $this->db->where('id', $type_id);
     }
@@ -12040,8 +12207,11 @@ public function getTeamTasks($uid,$tdate,$sDate=null,$eDate=null){
 
 public function get_BDdaydbyadNew($uid,$startDate=null,$endDate=null,$code,$tdate,$userType=null,$users=null){
     // var_dump($userType);die;
-    $tdate = '2024-07-20';
-    if($uid=='100103' || $uid=='100149' || $uid=='100114' || $uid=='100115'){$uid='45';}
+    // $tdate = '2024-07-20';
+    if($uid=='100103' || $uid=='100149' || $uid=='100114' || $uid=='100115'){
+        $uid='45';
+    }
+
     $utype = $this->Menu_model->get_userbyid($uid);
     $utype = $utype[0]->type_id;
 
@@ -12066,12 +12236,12 @@ public function get_BDdaydbyadNew($uid,$startDate=null,$endDate=null,$code,$tdat
 
     if(!empty($userType)){
 
-        $addUserType = "AND user_details.type_id IN($userTypeString)";
+        $addUserType = "AND `user_details`.`type_id` IN($userTypeString)";
     }
     
     if(!empty($users)){
 
-        $addUsers = "AND user_details.user_id IN($userString)";
+        $addUsers = "AND `user_details`.`user_id` IN($userString)";
     }
     
     if($utype==2){$text = "user_details.admin_id='$uid' $addUserType $addUsers";}
@@ -12091,126 +12261,149 @@ public function get_BDdaydbyadNew($uid,$startDate=null,$endDate=null,$code,$tdat
     }
 
     if($code==1){
-    $query=$this->db->query("SELECT user_details.name bdname,cast(sdatet as Date) as sdate, cast(ustart as TIME) as start,cast(uclose as TIME) as close, user_day.* FROM user_day LEFT JOIN user_details ON user_details.user_id=user_day.user_id WHERE ".$subQuery." and $text   ORDER BY sdate ASC");
+
+        $query=$this->db->query("SELECT user_details.name bdname,cast(sdatet as Date) as sdate, cast(ustart as TIME) as start,cast(uclose as TIME) as close, user_day.* FROM user_day LEFT JOIN user_details ON user_details.user_id=user_day.user_id WHERE ".$subQuery." and $text   ORDER BY sdate ASC");
     // echo $this->db->last_query();die;
     }elseif($code==2){
-    $query=$this->db->query("SELECT user_details.name bdname,cast(sdatet as Date) as sdate, cast(ustart as TIME) as start,cast(uclose as TIME) as close, user_day.* FROM user_day LEFT JOIN user_details ON user_details.user_id=user_day.user_id WHERE cast(ustart as DATE)='$tdate' and $text and user_day.wffo=1 ORDER BY sdate ASC");
+
+        $query=$this->db->query("SELECT user_details.name bdname,cast(sdatet as Date) as sdate, cast(ustart as TIME) as start,cast(uclose as TIME) as close, user_day.* FROM user_day LEFT JOIN user_details ON user_details.user_id=user_day.user_id WHERE cast(ustart as DATE)='$tdate' and $text and user_day.wffo=1 ORDER BY sdate ASC");
+
     }elseif($code==3){
-    $query=$this->db->query("SELECT user_details.name bdname,cast(sdatet as Date) as sdate, cast(ustart as TIME) as start,cast(uclose as TIME) as close, user_day.* FROM user_day LEFT JOIN user_details ON user_details.user_id=user_day.user_id WHERE cast(ustart as DATE)='$tdate' and $text and user_day.wffo=2 ORDER BY sdate ASC");
+
+        $query=$this->db->query("SELECT user_details.name bdname,cast(sdatet as Date) as sdate, cast(ustart as TIME) as start,cast(uclose as TIME) as close, user_day.* FROM user_day LEFT JOIN user_details ON user_details.user_id=user_day.user_id WHERE cast(ustart as DATE)='$tdate' and $text and user_day.wffo=2 ORDER BY sdate ASC");
+
     }elseif($code==4){
-    $query=$this->db->query("SELECT user_details.name bdname,cast(sdatet as Date) as sdate, cast(ustart as TIME) as start,cast(uclose as TIME) as close, user_day.* FROM user_day LEFT JOIN user_details ON user_details.user_id=user_day.user_id WHERE cast(ustart as DATE)='$tdate' and $text and user_day.wffo=3 ORDER BY sdatet ASC");
+
+        $query=$this->db->query("SELECT user_details.name bdname,cast(sdatet as Date) as sdate, cast(ustart as TIME) as start,cast(uclose as TIME) as close, user_day.* FROM user_day LEFT JOIN user_details ON user_details.user_id=user_day.user_id WHERE cast(ustart as DATE)='$tdate' and $text and user_day.wffo=3 ORDER BY sdatet ASC");
+
     }else{
-    $query=$this->db->query("SELECT user_details.name bdname,cast(sdatet as Date) as sdate, cast(ustart as TIME) as start,cast(uclose as TIME) as close, user_day.* FROM user_day LEFT JOIN user_details ON user_details.user_id=user_day.user_id WHERE cast(ustart as DATE)='$tdate' and $text ORDER BY sdate ASC");
+
+        $query=$this->db->query("SELECT user_details.name bdname,cast(sdatet as Date) as sdate, cast(ustart as TIME) as start,cast(uclose as TIME) as close, user_day.* FROM user_day LEFT JOIN user_details ON user_details.user_id=user_day.user_id WHERE cast(ustart as DATE)='$tdate' and $text ORDER BY sdate ASC");
+
     }
     // echo $this->db->last_query(); exit;
     return $query->result();
 }
-public function getWorkLocationCount($uid,$startDate=null,$endDate=null,$tdate,$userType=null,$users=null){
-    $tdate = '2024-07-20';
+    public function getWorkLocationCount($uid,$startDate=null,$endDate=null,$tdate,$userType=null,$users=null){
+    // $tdate = '2024-07-20';
     // echo  $tdate;die;
 
-    $utype = $this->Menu_model->get_userbyid($uid);
-    $utype = $utype[0]->type_id;
-    $subQuery = ' ';
-    // echo $utype;die;
-    
-    $userType = array_filter($userType, function($value) {
-        return $value !== 'select_all';
-    });
-    
-    $users = array_filter($users, function($value) {
-        return $value !== 'select_all';
-    });
-    
-    // var_dump($userType);die;
-    // array_shift($userType);  
-    
-    // array_shift($users);
-
-    $userTypeString = implode(',', ($userType));
-    $userString = implode(',', ($users));
-
-    $this->db->select("CASE
-        WHEN wffo = 1 THEN 'Work from Office'
-        WHEN wffo = 2 THEN 'Work from Filed'
-        WHEN wffo = 3 THEN 'Work from Filed + Office'
-        END AS status_description", FALSE);
-    $this->db->select("COUNT(*) AS wffo_count");
-
-    $this->db->from('user_day');
-    $this->db->join('user_details', 'user_details.user_id=user_day.user_id', 'left');
-    // $this->db->where_in('wffo', [1, 2, 3]);
-    if(!empty($startDate) && !empty($endDate) ){
-
-        $this->db->where('CAST(sdatet AS DATE) BETWEEN "'.$startDate.'" AND "'.$endDate.'"', NULL, FALSE);
-        if($utype==2){
-            
-            //if logged in user is ADMIN
-            $this->db->where('user_details.admin_id', $uid);
-            $this->db->where_in('user_details.type_id', $userTypeString);
-            $this->db->where_in('user_details.user_id', $userString);
-    
-        }elseif ($utype==4) {
-            // var_dump($utype);die;
-            //if logged in user is PST
-            $this->db->where('user_details.pst_co', $uid);
-            $this->db->where_in('user_details.user_id', $userString);
-    
-        }elseif ($utype==9) {
-    
-            // if logged in user is BDPST
-            $this->db->where('user_details.aadmin', $uid);
-            $this->db->where_in('user_details.user_id', $userString);
-    
-        }
-
-    }else{
-        $this->db->where('CAST(sdatet AS DATE) =', $tdate);
+        $utype = $this->Menu_model->get_userbyid($uid);
+        $utype = $utype[0]->type_id;
+        $subQuery = ' ';
+        // echo $utype;die;
         
-        if($utype==2){
-            
-            //if logged in user is ADMIN
-            $this->db->where('user_details.admin_id', $uid);
-            $this->db->where_in('user_details.type_id', $userTypeString);
-            $this->db->where_in('user_details.user_id', $userString);
-    
-        }elseif ($utype==4) {
-            // var_dump($utype);die;
-            //if logged in user is PST
-            $this->db->where('user_details.pst_co', $uid);
-            $this->db->where_in('user_details.user_id', $userString);
-    
-        }elseif ($utype==9) {
-    
-            // if logged in user is BDPST
-            $this->db->where('user_details.aadmin', $uid);
-            $this->db->where_in('user_details.user_id', $userString);
-    
-        }
+        $userType = array_filter($userType, function($value) {
+            return $value !== 'select_all';
+        });
+        
+        $users = array_filter($users, function($value) {
+            return $value !== 'select_all';
+        });
+        
 
-        // $this->db->where('user_details.admin_id', $uid);
+        $userTypeString = implode(',', ($userType));
+        $userString = implode(',', ($users));
+
+        $this->db->select("CASE
+            WHEN wffo = 1 THEN 'Work from Office'
+            WHEN wffo = 2 THEN 'Work from Filed'
+            WHEN wffo = 3 THEN 'Work from Filed + Office'
+            END AS status_description", FALSE);
+
+        $this->db->select("COUNT(*) AS wffo_count");
+
+        $this->db->from('user_day');
+        $this->db->join('user_details', 'user_details.user_id=user_day.user_id', 'left');
+        // $this->db->where_in('wffo', [1, 2, 3]);
+        if(!empty($startDate) && !empty($endDate) ){
+
+            $this->db->where('CAST(sdatet AS DATE) BETWEEN "'.$startDate.'" AND "'.$endDate.'"', NULL, FALSE);
+            if($utype==2){
+                
+                //if logged in user is ADMIN
+                $this->db->where('user_details.admin_id', $uid);
+                $this->db->where_in('user_details.type_id', $userTypeString);
+                $this->db->where_in('user_details.user_id', $userString);
+        
+            }elseif ($utype==4) {
+                // var_dump($utype);die;
+                //if logged in user is PST
+                $this->db->where('user_details.pst_co', $uid);
+                $this->db->where_in('user_details.user_id', $userString);
+        
+            }elseif ($utype==9) {
+        
+                // if logged in user is BDPST
+                $this->db->where('user_details.aadmin', $uid);
+                $this->db->where_in('user_details.user_id', $userString);
+        
+            }
+
+        }else{
+            $this->db->where('CAST(sdatet AS DATE) =', $tdate);
+            
+            if($utype==2){
+                
+                //if logged in user is ADMIN
+                $this->db->where('user_details.admin_id', $uid);
+                $this->db->where_in('user_details.type_id', $userTypeString);
+                $this->db->where_in('user_details.user_id', $userString);
+        
+            }elseif ($utype==4) {
+                // var_dump($utype);die;
+                //if logged in user is PST
+                $this->db->where('user_details.pst_co', $uid);
+                $this->db->where_in('user_details.user_id', $userString);
+        
+            }elseif ($utype==9) {
+        
+                // if logged in user is BDPST
+                $this->db->where('user_details.aadmin', $uid);
+                $this->db->where_in('user_details.user_id', $userString);
+        
+            }
+
+            // $this->db->where('user_details.admin_id', $uid);
+        }
+        // LEFT JOIN  ON user_details.user_id=user_day.user_id
+        $this->db->group_by('wffo');
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+        return $query->result();
     }
-    // LEFT JOIN  ON user_details.user_id=user_day.user_id
-    $this->db->group_by('wffo');
-    $query = $this->db->get();
-    // echo $this->db->last_query();die;
-    return $query->result();
-}
 
 public function get_bwdalltaskdbyad_New($code,$atid,$uid,$sd,$ed){
+
+    // echo $sd;
+    // echo "<br>";
     $utype = $this->Menu_model->get_userbyid($uid);  
     $utype = $utype[0]->type_id;
-    if($utype==2){$text = "user_details.admin_id='$uid' and user_details.type_id='3' and user_details.status='active'";}
-    if($utype==3){$text = "user_details.user_id='$uid'";}
+    // echo $utype;die;
+    if($utype==2){
+        $text = "user_details.admin_id='$uid' and user_details.type_id='3' and user_details.status='active'";
+    }
+    if($utype==3){
+        $text = "user_details.user_id='$uid'";
+    }
 
-    if($utype==4){$text = "user_details.status='active' and ((user_details.pst_co='$uid' and user_details.type_id='3') or (user_details.pst_co='$uid' and user_details.type_id='13') or (user_details.user_id='$uid'))";}
+    if($utype==4){
+        $text = "user_details.status='active' and ((user_details.pst_co='$uid' and user_details.type_id='3') or (user_details.pst_co='$uid' and user_details.type_id='13') or (user_details.user_id='$uid'))";
+    }
 
-    if($utype==9){$text = "user_details.aadmin='$uid' and user_details.type_id='3' and user_details.status='active'";}
+    if($utype==9){
+        $text = "user_details.aadmin='$uid' and user_details.type_id='3' and user_details.status='active'";
+    }
 
-    if($utype==13){$text = "user_details.aadmin='$uid' and user_details.type_id='3' and user_details.status='active'";}
+    if($utype==13){
+        $text = "user_details.aadmin='$uid' and user_details.type_id='3' and user_details.status='active'";
+    }
 
-    if($utype==15){$text = "user_details.sales_co='$uid' and (user_details.type_id='3' or user_details.type_id='4' or user_details.type_id='13') and user_details.status='active'";}
+    if($utype==15){
+        $text = "user_details.sales_co='$uid' and (user_details.type_id='3' or user_details.type_id='4' or user_details.type_id='13') and user_details.status='active'";
+    }
 
+    // echo $text;die;
 
     if($code==4){
 
@@ -12249,7 +12442,8 @@ public function get_bwdalltaskdbyad_New($code,$atid,$uid,$sd,$ed){
   
     }
 
-    // echo $this->db->last_query();
+    // echo $query;die;
+    echo $this->db->last_query();die;
     return $query->result();
 
 

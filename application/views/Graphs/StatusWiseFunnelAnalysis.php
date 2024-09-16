@@ -35,14 +35,14 @@
                     <div id="StatusWisePieChart1">
                         <nav>
                             <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                                <a class="nav-item nav-link active ml-2" id="nav_GridView" data-toggle="tab" href="#GridView" role="tab" aria-controls="GridView" aria-selected="true">Grid View</a>
-                                <a class="nav-item nav-link ml-2" id="nav_XLSView" data-toggle="tab" href="#XLSView" role="tab" aria-controls="TableView" aria-selected="false">XLS View</a>
+                                <!-- <a class="nav-item nav-link active ml-2" id="nav_GridView" data-toggle="tab" href="#GridView" role="tab" aria-controls="GridView" aria-selected="true">Grid View</a> -->
+                                <a class="nav-item nav-link active ml-2" id="nav_XLSView" data-toggle="tab" href="#XLSView" role="tab" aria-controls="TableView" aria-selected="false">XLS View</a>
                                 <!-- <a class="nav-item nav-link ml-2" id="nav_TabView" data-toggle="tab" href="#TabView" role="tab" aria-controls="TabView" aria-selected="false">Tab View</a> -->
                             </div>
                         </nav>
                         <br>
                         <div class="tab-content">
-                            <div class="tab-pane fade show active" id="GridView" role="tabpanel" aria-labelledby="nav_GridView">
+                            <!-- <div class="tab-pane fade show active" id="GridView" role="tabpanel" aria-labelledby="nav_GridView">
                                 <div class="card card-body">
                                     <div class="row">
                                         <?php foreach($StatusWiseFunnelData as $TableDataGrid){ 
@@ -63,8 +63,8 @@
                                         <?php } ?>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="tab-pane fade" id="XLSView" role="tabpanel" aria-labelledby="nav_XLSView">
+                            </div> -->
+                            <div class="tab-pane fade show active" id="XLSView" role="tabpanel" aria-labelledby="nav_XLSView">
                                 <div class="table-responsive" id="tbdata">
                                     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                         <thead>

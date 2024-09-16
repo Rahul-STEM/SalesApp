@@ -56,4 +56,16 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	    }
 	}
 
+
+	if (!function_exists('get_AvgTime')) {
+	    function get_AvgTime($action_id){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Management_model');
+	        $DataSet = $CI->Management_model->get_AvgTime($action_id);
+            
+	        return $DataSet;
+	    }
+	}
+
 ?>

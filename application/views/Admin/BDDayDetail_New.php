@@ -137,13 +137,13 @@
                                                     <div class="col-md-3">
                                                         <div class="form-group">
                                                             <label>From Date</label>
-                                                            <input type="date" name="FromDate" id="FromDate" value="<?=$startDate?>">
+                                                            <input type="date" name="FromDate" id="FromDate" class="form-control"  value="<?=$startDate?>">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
                                                         <div class="form-group">
                                                             <label>To Date</label>
-                                                            <input type="date" name="ToDate" id="ToDate" value="<?=$endDate?>">
+                                                            <input type="date" name="ToDate" id="ToDate" class="form-control"  value="<?=$endDate?>">
                                                             
                                                         </div>
                                                     </div>
@@ -219,7 +219,7 @@
                                                                 <th>Started Day @</th>
                                                                 <th>Start selfie</th>
                                                                 <th>Start Location</th>
-                                                                <th>Start Review</th>
+                                                                <!-- <th>Start Review</th> -->
                                                                 <th>Close Day @</th>
                                                                 <th>Close selfie</th>
                                                                 <th>Close Location</th>
@@ -245,13 +245,13 @@
                                                                 <td>
                                                                     <img src="<?=base_url();?><?=$dt->usimg?>" alt="image not found" style="width:100px;" >
                                                                     <?php if($dt->usimg !== 'uploads/day/'){ ?>
-                                                                    <a href="<?=base_url();?><?=$dt->usimg?>">Download</a>
+                                                                    <!-- <a href="<?=base_url();?><?=$dt->usimg?>">Download</a> -->
                                                                     <?php } ?>
                                                                 </td>
                                                                 <td>
                                                                     <a href="https://www.google.com/maps?q=<?=$dt->slatitude?>,<?=$dt->slongitude?>"><i class="fas fa-map-marker-alt" style="font-size:36px" aria-hidden="true"></i></a>
                                                                 </td>
-                                                                <td><?=$dt->scomment?><hr><?=$dt->queans?></td>
+                                                                <!-- <td><?=$dt->scomment?><hr><?=$dt->queans?></td> -->
                                                                 <td><?=$dt->close?></td>
                                                                 <td>
                                                                     <img src="<?=base_url();?><?=$dt->ucimg?>" alt="image not found" style="width:100px;" >

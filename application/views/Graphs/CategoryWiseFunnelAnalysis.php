@@ -50,13 +50,20 @@
                                         <div class="form-group">
                                             <label>Select Category</label>
                                             <select class="custom-select rounded-0" name="category[]" id="category" multiple>
-                                                <option value="select_all">Select All</option>
+                                                <!-- <option value="select_all">Select All</option>
                                                 <option value="topspender">Top Spender</option>
                                                 <option value="focus_funnel">Focus Funnel</option>
                                                 <option value="upsell_client">Upsell Client</option>
                                                 <option value="keycompany">Key Company</option>
                                                 <option value="pkclient ">Key CLient</option>
-                                                <option value="priorityc ">Priority Client</option>
+                                                <option value="priorityc ">Priority Client</option> -->
+                                                <option value="select_all">Select All</option>
+                                                <option value="topspender" <?= in_array('topspender', $category) ? 'selected' : '' ?>>Top Spender</option>
+                                                <option value="focus_funnel" <?= in_array('focus_funnel', $category) ? 'selected' : '' ?>>Focus Funnel</option>
+                                                <option value="upsell_client" <?= in_array('upsell_client', $category) ? 'selected' : '' ?>>Upsell Client</option>
+                                                <option value="keycompany" <?= in_array('keycompany', $category) ? 'selected' : '' ?>>Key Company</option>
+                                                <option value="pkclient" <?= in_array('pkclient', $category) ? 'selected' : '' ?>>Key Client</option>
+                                                <option value="priorityc" <?= in_array('priorityc', $category) ? 'selected' : '' ?>>Priority Client</option>
                                             </select>
                                         </div>
                                     </div>
@@ -288,25 +295,42 @@ document.addEventListener('DOMContentLoaded', function() {
         var sdate = <?php echo json_encode($sdate); ?>;
         var edate = <?php echo json_encode($edate); ?>;
 
-        var data = google.visualization.arrayToDataTable([
+        var dataArray = [
+            ['Category', 'No of Company', '', ''] // Header row
+        ];
 
-            ['Category', 'No of Compnay','',''],
+        // var data = google.visualization.arrayToDataTable([
 
-            // ["No Category (<?=$GraphData[0]->nocat?>)", <?=$GraphData[0]->nocat?>,"0","<?=$uid?>"],
+        //     ['Category', 'No of Compnay','',''],
 
-            ["Top Spender (<?=$GraphData[0]->topspender?>)", <?=$GraphData[0]->topspender?>,"topspender","<?=$uid?>"],
+        //     // ["No Category (<?php //$GraphData[0]->nocat?>)", <?php //$GraphData[0]->nocat?>,"0","<?php //$uid?>"],
 
-            ["Focus Funnel (<?=$GraphData[0]->focus_funnel?>)", <?=$GraphData[0]->focus_funnel?>,"focus_funnel","<?=$uid?>"],
+        //     ["Top Spender (<?php //$GraphData[0]->topspender?>)", <?php //$GraphData[0]->topspender?>,"topspender","<?php //$uid?>"],
 
-            ["Upsell Client (<?=$GraphData[0]->upsell_client?>)", <?=$GraphData[0]->upsell_client?>,"upsell_client","<?=$uid?>"],
+        //     ["Focus Funnel (<?php //$GraphData[0]->focus_funnel?>)", <?php //$GraphData[0]->focus_funnel?>,"focus_funnel","<?php //$uid?>"],
 
-            ["Key Company (<?=$GraphData[0]->keycompany?>)", <?=$GraphData[0]->keycompany?>,"keycompany","<?=$uid?>"],
+        //     ["Upsell Client (<?php // $GraphData[0]->upsell_client?>)", <?php //$GraphData[0]->upsell_client?>,"upsell_client","<?php //$uid?>"],
 
-            ["Positive Key Client (<?=$GraphData[0]->pkclient?>)", <?=$GraphData[0]->pkclient?>,"pkclient","<?=$uid?>"],
+        //     ["Key Company (<?php //$GraphData[0]->keycompany?>)", <?php //$GraphData[0]->keycompany?>,"keycompany","<?php //$uid?>"],
 
-            ["Priority Client (<?=$GraphData[0]->priorityc?>)", <?=$GraphData[0]->priorityc?>,"priorityc","<?=$uid?>"],
-         
-        ]);
+        //     ["Positive Key Client (<?php //$GraphData[0]->pkclient?>)", <?php //$GraphData[0]->pkclient?>,"pkclient","<?php //$uid?>"],
+
+        //     ["Priority Client (<?php //$GraphData[0]->priorityc?>)", <?php //$GraphData[0]->priorityc?>,"priorityc","<?php //$uid?>"],
+ 
+        // ]);
+
+        <?php 
+        // Construct JavaScript array elements based on PHP data
+            foreach ($category as $Singlecategory) {
+                $value = $GraphData[0]->$Singlecategory; // Access the data dynamically
+                $categoryName = ucfirst(str_replace('_', ' ', $Singlecategory));
+                echo "dataArray.push([\"$categoryName ($value)\", $value, \"$Singlecategory\", \"$uid\"]);";
+            }
+        ?>
+// Convert the PHP array to a JSON string
+
+
+        var data = google.visualization.arrayToDataTable(dataArray);
 
         const options = {
             title:'Category Wise Funnel Graph',

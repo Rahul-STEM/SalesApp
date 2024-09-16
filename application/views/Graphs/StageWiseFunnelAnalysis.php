@@ -407,75 +407,75 @@
             var chart = new google.visualization.ColumnChart(document.getElementById('Stage_1'));
 
 
-            google.visualization.events.addListener(chart, 'select', function () {
+            // google.visualization.events.addListener(chart, 'select', function () {
 
-                var selection = chart.getSelection();
-                if (selection.length > 0) {
-                    var rowIndex = selection[0].row;
-                    var selectedStatus = data.getValue(rowIndex, 4); // Extract the status from the last column
-                    // console.log(selectedStatus);
-                    // Create a hidden form
-                var form = document.createElement('form');
-                form.method = 'POST'; // Use POST method
-                form.action = '<?=base_url();?>GraphNew/StageWiseFunnelData';
-                form.target = '_blank';
+            //     var selection = chart.getSelection();
+            //     if (selection.length > 0) {
+            //         var rowIndex = selection[0].row;
+            //         var selectedStatus = data.getValue(rowIndex, 4); // Extract the status from the last column
+            //         // console.log(selectedStatus);
+            //         // Create a hidden form
+            //     var form = document.createElement('form');
+            //     form.method = 'POST'; // Use POST method
+            //     form.action = '<?=base_url();?>GraphNew/StageWiseFunnelData';
+            //     form.target = '_blank';
 
-                // Create hidden input fields
-                var inputStid = document.createElement('input');
-                inputStid.type = 'hidden';
-                inputStid.name = 'selectedStatus';
-                inputStid.value = selectedStatus;
-                form.appendChild(inputStid);
+            //     // Create hidden input fields
+            //     var inputStid = document.createElement('input');
+            //     inputStid.type = 'hidden';
+            //     inputStid.name = 'selectedStatus';
+            //     inputStid.value = selectedStatus;
+            //     form.appendChild(inputStid);
 
-                var inputSdate = document.createElement('input');
-                inputSdate.type = 'hidden';
-                inputSdate.name = 'sdate';
-                inputSdate.value = sdate;
-                form.appendChild(inputSdate);
+            //     var inputSdate = document.createElement('input');
+            //     inputSdate.type = 'hidden';
+            //     inputSdate.name = 'sdate';
+            //     inputSdate.value = sdate;
+            //     form.appendChild(inputSdate);
 
-                var inputEdate = document.createElement('input');
-                inputEdate.type = 'hidden';
-                inputEdate.name = 'edate';
-                inputEdate.value = edate;
-                form.appendChild(inputEdate);
+            //     var inputEdate = document.createElement('input');
+            //     inputEdate.type = 'hidden';
+            //     inputEdate.name = 'edate';
+            //     inputEdate.value = edate;
+            //     form.appendChild(inputEdate);
 
-                var inputuid = document.createElement('input');
-                inputuid.type = 'hidden';
-                inputuid.name = 'uid';
-                inputuid.value = uid;
-                form.appendChild(inputuid);
+            //     var inputuid = document.createElement('input');
+            //     inputuid.type = 'hidden';
+            //     inputuid.name = 'uid';
+            //     inputuid.value = uid;
+            //     form.appendChild(inputuid);
 
-                var inputSelectedPartnerType = document.createElement('input');
-                inputSelectedPartnerType.type = 'hidden';
-                inputSelectedPartnerType.name = 'selected_partnerType';
-                inputSelectedPartnerType.value = selectedPartnerTypeString;
-                form.appendChild(inputSelectedPartnerType);
+            //     var inputSelectedPartnerType = document.createElement('input');
+            //     inputSelectedPartnerType.type = 'hidden';
+            //     inputSelectedPartnerType.name = 'selected_partnerType';
+            //     inputSelectedPartnerType.value = selectedPartnerTypeString;
+            //     form.appendChild(inputSelectedPartnerType);
 
-                var inputselected_cluster = document.createElement('input');
-                inputselected_cluster.type = 'hidden';
-                inputselected_cluster.name = 'selected_cluster';
-                inputselected_cluster.value = selected_clusterString;
-                form.appendChild(inputselected_cluster);
+            //     var inputselected_cluster = document.createElement('input');
+            //     inputselected_cluster.type = 'hidden';
+            //     inputselected_cluster.name = 'selected_cluster';
+            //     inputselected_cluster.value = selected_clusterString;
+            //     form.appendChild(inputselected_cluster);
 
-                var inputselected_users = document.createElement('input');
-                inputselected_users.type = 'hidden';
-                inputselected_users.name = 'selected_users';
-                inputselected_users.value = selected_usersString;
-                form.appendChild(inputselected_users);
+            //     var inputselected_users = document.createElement('input');
+            //     inputselected_users.type = 'hidden';
+            //     inputselected_users.name = 'selected_users';
+            //     inputselected_users.value = selected_usersString;
+            //     form.appendChild(inputselected_users);
 
-                var inputselected_category = document.createElement('input');
-                inputselected_category.type = 'hidden';
-                inputselected_category.name = 'selected_category';
-                inputselected_category.value = selected_categoryString;
-                form.appendChild(inputselected_category);
-                // Append the form to the body and submit
+            //     var inputselected_category = document.createElement('input');
+            //     inputselected_category.type = 'hidden';
+            //     inputselected_category.name = 'selected_category';
+            //     inputselected_category.value = selected_categoryString;
+            //     form.appendChild(inputselected_category);
+            //     // Append the form to the body and submit
 
-                document.body.appendChild(form);
-                form.submit();
-                    // Redirect to a new tab with the status
-                    // window.open('your_data_page.php?status=' + encodeURIComponent(selectedStatus), '_blank');
-                }
-            });
+            //     document.body.appendChild(form);
+            //     form.submit();
+            //         // Redirect to a new tab with the status
+            //         // window.open('your_data_page.php?status=' + encodeURIComponent(selectedStatus), '_blank');
+            //     }
+            // });
 
             chart.draw(view, options);
 
@@ -541,75 +541,75 @@
 
             chart.draw(view, options);
 
-            google.visualization.events.addListener(chart, 'select', function () {
+            // google.visualization.events.addListener(chart, 'select', function () {
 
-                var selection = chart.getSelection();
-                if (selection.length > 0) {
-                    var rowIndex = selection[0].row;
-                    var selectedStatus = data.getValue(rowIndex, 4); // Extract the status from the last column
-                    // console.log(selectedStatus);
-                    // Create a hidden form
-                var form = document.createElement('form');
-                form.method = 'POST'; // Use POST method
-                form.action = '<?=base_url();?>GraphNew/StageWiseFunnelData';
-                form.target = '_blank';
+            //     var selection = chart.getSelection();
+            //     if (selection.length > 0) {
+            //         var rowIndex = selection[0].row;
+            //         var selectedStatus = data.getValue(rowIndex, 4); // Extract the status from the last column
+            //         // console.log(selectedStatus);
+            //         // Create a hidden form
+            //     var form = document.createElement('form');
+            //     form.method = 'POST'; // Use POST method
+            //     form.action = '<?=base_url();?>GraphNew/StageWiseFunnelData';
+            //     form.target = '_blank';
 
-                // Create hidden input fields
-                var inputStid = document.createElement('input');
-                inputStid.type = 'hidden';
-                inputStid.name = 'selectedStatus';
-                inputStid.value = selectedStatus;
-                form.appendChild(inputStid);
+            //     // Create hidden input fields
+            //     var inputStid = document.createElement('input');
+            //     inputStid.type = 'hidden';
+            //     inputStid.name = 'selectedStatus';
+            //     inputStid.value = selectedStatus;
+            //     form.appendChild(inputStid);
 
-                var inputSdate = document.createElement('input');
-                inputSdate.type = 'hidden';
-                inputSdate.name = 'sdate';
-                inputSdate.value = sdate;
-                form.appendChild(inputSdate);
+            //     var inputSdate = document.createElement('input');
+            //     inputSdate.type = 'hidden';
+            //     inputSdate.name = 'sdate';
+            //     inputSdate.value = sdate;
+            //     form.appendChild(inputSdate);
 
-                var inputEdate = document.createElement('input');
-                inputEdate.type = 'hidden';
-                inputEdate.name = 'edate';
-                inputEdate.value = edate;
-                form.appendChild(inputEdate);
+            //     var inputEdate = document.createElement('input');
+            //     inputEdate.type = 'hidden';
+            //     inputEdate.name = 'edate';
+            //     inputEdate.value = edate;
+            //     form.appendChild(inputEdate);
 
-                var inputuid = document.createElement('input');
-                inputuid.type = 'hidden';
-                inputuid.name = 'uid';
-                inputuid.value = uid;
-                form.appendChild(inputuid);
+            //     var inputuid = document.createElement('input');
+            //     inputuid.type = 'hidden';
+            //     inputuid.name = 'uid';
+            //     inputuid.value = uid;
+            //     form.appendChild(inputuid);
 
-                var inputSelectedPartnerType = document.createElement('input');
-                inputSelectedPartnerType.type = 'hidden';
-                inputSelectedPartnerType.name = 'selected_partnerType';
-                inputSelectedPartnerType.value = selectedPartnerTypeString;
-                form.appendChild(inputSelectedPartnerType);
+            //     var inputSelectedPartnerType = document.createElement('input');
+            //     inputSelectedPartnerType.type = 'hidden';
+            //     inputSelectedPartnerType.name = 'selected_partnerType';
+            //     inputSelectedPartnerType.value = selectedPartnerTypeString;
+            //     form.appendChild(inputSelectedPartnerType);
 
-                var inputselected_cluster = document.createElement('input');
-                inputselected_cluster.type = 'hidden';
-                inputselected_cluster.name = 'selected_cluster';
-                inputselected_cluster.value = selected_clusterString;
-                form.appendChild(inputselected_cluster);
+            //     var inputselected_cluster = document.createElement('input');
+            //     inputselected_cluster.type = 'hidden';
+            //     inputselected_cluster.name = 'selected_cluster';
+            //     inputselected_cluster.value = selected_clusterString;
+            //     form.appendChild(inputselected_cluster);
 
-                var inputselected_users = document.createElement('input');
-                inputselected_users.type = 'hidden';
-                inputselected_users.name = 'selected_users';
-                inputselected_users.value = selected_usersString;
-                form.appendChild(inputselected_users);
+            //     var inputselected_users = document.createElement('input');
+            //     inputselected_users.type = 'hidden';
+            //     inputselected_users.name = 'selected_users';
+            //     inputselected_users.value = selected_usersString;
+            //     form.appendChild(inputselected_users);
 
-                var inputselected_category = document.createElement('input');
-                inputselected_category.type = 'hidden';
-                inputselected_category.name = 'selected_category';
-                inputselected_category.value = selected_categoryString;
-                form.appendChild(inputselected_category);
-                // Append the form to the body and submit
+            //     var inputselected_category = document.createElement('input');
+            //     inputselected_category.type = 'hidden';
+            //     inputselected_category.name = 'selected_category';
+            //     inputselected_category.value = selected_categoryString;
+            //     form.appendChild(inputselected_category);
+            //     // Append the form to the body and submit
 
-                document.body.appendChild(form);
-                form.submit();
-                    // Redirect to a new tab with the status
-                    // window.open('your_data_page.php?status=' + encodeURIComponent(selectedStatus), '_blank');
-                }
-                });
+            //     document.body.appendChild(form);
+            //     form.submit();
+            //         // Redirect to a new tab with the status
+            //         // window.open('your_data_page.php?status=' + encodeURIComponent(selectedStatus), '_blank');
+            //     }
+            //     });
             
         }
     </script>
@@ -670,75 +670,75 @@
 
             var chart = new google.visualization.ColumnChart(document.getElementById('Stage_3'));
 
-            google.visualization.events.addListener(chart, 'select', function () {
+            // google.visualization.events.addListener(chart, 'select', function () {
 
-                var selection = chart.getSelection();
-                if (selection.length > 0) {
-                    var rowIndex = selection[0].row;
-                    var selectedStatus = data.getValue(rowIndex, 4); // Extract the status from the last column
-                    // console.log(selectedStatus);
-                    // Create a hidden form
-                var form = document.createElement('form');
-                form.method = 'POST'; // Use POST method
-                form.action = '<?=base_url();?>GraphNew/StageWiseFunnelData';
-                form.target = '_blank';
+            //     var selection = chart.getSelection();
+            //     if (selection.length > 0) {
+            //         var rowIndex = selection[0].row;
+            //         var selectedStatus = data.getValue(rowIndex, 4); // Extract the status from the last column
+            //         // console.log(selectedStatus);
+            //         // Create a hidden form
+            //     var form = document.createElement('form');
+            //     form.method = 'POST'; // Use POST method
+            //     form.action = '<?=base_url();?>GraphNew/StageWiseFunnelData';
+            //     form.target = '_blank';
 
-                // Create hidden input fields
-                var inputStid = document.createElement('input');
-                inputStid.type = 'hidden';
-                inputStid.name = 'selectedStatus';
-                inputStid.value = selectedStatus;
-                form.appendChild(inputStid);
+            //     // Create hidden input fields
+            //     var inputStid = document.createElement('input');
+            //     inputStid.type = 'hidden';
+            //     inputStid.name = 'selectedStatus';
+            //     inputStid.value = selectedStatus;
+            //     form.appendChild(inputStid);
 
-                var inputSdate = document.createElement('input');
-                inputSdate.type = 'hidden';
-                inputSdate.name = 'sdate';
-                inputSdate.value = sdate;
-                form.appendChild(inputSdate);
+            //     var inputSdate = document.createElement('input');
+            //     inputSdate.type = 'hidden';
+            //     inputSdate.name = 'sdate';
+            //     inputSdate.value = sdate;
+            //     form.appendChild(inputSdate);
 
-                var inputEdate = document.createElement('input');
-                inputEdate.type = 'hidden';
-                inputEdate.name = 'edate';
-                inputEdate.value = edate;
-                form.appendChild(inputEdate);
+            //     var inputEdate = document.createElement('input');
+            //     inputEdate.type = 'hidden';
+            //     inputEdate.name = 'edate';
+            //     inputEdate.value = edate;
+            //     form.appendChild(inputEdate);
 
-                var inputuid = document.createElement('input');
-                inputuid.type = 'hidden';
-                inputuid.name = 'uid';
-                inputuid.value = uid;
-                form.appendChild(inputuid);
+            //     var inputuid = document.createElement('input');
+            //     inputuid.type = 'hidden';
+            //     inputuid.name = 'uid';
+            //     inputuid.value = uid;
+            //     form.appendChild(inputuid);
 
-                var inputSelectedPartnerType = document.createElement('input');
-                inputSelectedPartnerType.type = 'hidden';
-                inputSelectedPartnerType.name = 'selected_partnerType';
-                inputSelectedPartnerType.value = selectedPartnerTypeString;
-                form.appendChild(inputSelectedPartnerType);
+            //     var inputSelectedPartnerType = document.createElement('input');
+            //     inputSelectedPartnerType.type = 'hidden';
+            //     inputSelectedPartnerType.name = 'selected_partnerType';
+            //     inputSelectedPartnerType.value = selectedPartnerTypeString;
+            //     form.appendChild(inputSelectedPartnerType);
 
-                var inputselected_cluster = document.createElement('input');
-                inputselected_cluster.type = 'hidden';
-                inputselected_cluster.name = 'selected_cluster';
-                inputselected_cluster.value = selected_clusterString;
-                form.appendChild(inputselected_cluster);
+            //     var inputselected_cluster = document.createElement('input');
+            //     inputselected_cluster.type = 'hidden';
+            //     inputselected_cluster.name = 'selected_cluster';
+            //     inputselected_cluster.value = selected_clusterString;
+            //     form.appendChild(inputselected_cluster);
 
-                var inputselected_users = document.createElement('input');
-                inputselected_users.type = 'hidden';
-                inputselected_users.name = 'selected_users';
-                inputselected_users.value = selected_usersString;
-                form.appendChild(inputselected_users);
+            //     var inputselected_users = document.createElement('input');
+            //     inputselected_users.type = 'hidden';
+            //     inputselected_users.name = 'selected_users';
+            //     inputselected_users.value = selected_usersString;
+            //     form.appendChild(inputselected_users);
 
-                var inputselected_category = document.createElement('input');
-                inputselected_category.type = 'hidden';
-                inputselected_category.name = 'selected_category';
-                inputselected_category.value = selected_categoryString;
-                form.appendChild(inputselected_category);
-                // Append the form to the body and submit
+            //     var inputselected_category = document.createElement('input');
+            //     inputselected_category.type = 'hidden';
+            //     inputselected_category.name = 'selected_category';
+            //     inputselected_category.value = selected_categoryString;
+            //     form.appendChild(inputselected_category);
+            //     // Append the form to the body and submit
 
-                document.body.appendChild(form);
-                form.submit();
-                    // Redirect to a new tab with the status
-                    // window.open('your_data_page.php?status=' + encodeURIComponent(selectedStatus), '_blank');
-                }
-                });
+            //     document.body.appendChild(form);
+            //     form.submit();
+            //         // Redirect to a new tab with the status
+            //         // window.open('your_data_page.php?status=' + encodeURIComponent(selectedStatus), '_blank');
+            //     }
+            //     });
 
             chart.draw(view, options);
         }
@@ -799,75 +799,75 @@
 
             var chart = new google.visualization.ColumnChart(document.getElementById('Stage_4'));
 
-            google.visualization.events.addListener(chart, 'select', function () {
+            // google.visualization.events.addListener(chart, 'select', function () {
 
-                var selection = chart.getSelection();
-                if (selection.length > 0) {
-                    var rowIndex = selection[0].row;
-                    var selectedStatus = data.getValue(rowIndex, 4); // Extract the status from the last column
-                    // console.log(selectedStatus);
-                    // Create a hidden form
-                var form = document.createElement('form');
-                form.method = 'POST'; // Use POST method
-                form.action = '<?=base_url();?>GraphNew/StageWiseFunnelData';
-                form.target = '_blank';
+            //     var selection = chart.getSelection();
+            //     if (selection.length > 0) {
+            //         var rowIndex = selection[0].row;
+            //         var selectedStatus = data.getValue(rowIndex, 4); // Extract the status from the last column
+            //         // console.log(selectedStatus);
+            //         // Create a hidden form
+            //     var form = document.createElement('form');
+            //     form.method = 'POST'; // Use POST method
+            //     form.action = '<?=base_url();?>GraphNew/StageWiseFunnelData';
+            //     form.target = '_blank';
 
-                // Create hidden input fields
-                var inputStid = document.createElement('input');
-                inputStid.type = 'hidden';
-                inputStid.name = 'selectedStatus';
-                inputStid.value = selectedStatus;
-                form.appendChild(inputStid);
+            //     // Create hidden input fields
+            //     var inputStid = document.createElement('input');
+            //     inputStid.type = 'hidden';
+            //     inputStid.name = 'selectedStatus';
+            //     inputStid.value = selectedStatus;
+            //     form.appendChild(inputStid);
 
-                var inputSdate = document.createElement('input');
-                inputSdate.type = 'hidden';
-                inputSdate.name = 'sdate';
-                inputSdate.value = sdate;
-                form.appendChild(inputSdate);
+            //     var inputSdate = document.createElement('input');
+            //     inputSdate.type = 'hidden';
+            //     inputSdate.name = 'sdate';
+            //     inputSdate.value = sdate;
+            //     form.appendChild(inputSdate);
 
-                var inputEdate = document.createElement('input');
-                inputEdate.type = 'hidden';
-                inputEdate.name = 'edate';
-                inputEdate.value = edate;
-                form.appendChild(inputEdate);
+            //     var inputEdate = document.createElement('input');
+            //     inputEdate.type = 'hidden';
+            //     inputEdate.name = 'edate';
+            //     inputEdate.value = edate;
+            //     form.appendChild(inputEdate);
 
-                var inputuid = document.createElement('input');
-                inputuid.type = 'hidden';
-                inputuid.name = 'uid';
-                inputuid.value = uid;
-                form.appendChild(inputuid);
+            //     var inputuid = document.createElement('input');
+            //     inputuid.type = 'hidden';
+            //     inputuid.name = 'uid';
+            //     inputuid.value = uid;
+            //     form.appendChild(inputuid);
 
-                var inputSelectedPartnerType = document.createElement('input');
-                inputSelectedPartnerType.type = 'hidden';
-                inputSelectedPartnerType.name = 'selected_partnerType';
-                inputSelectedPartnerType.value = selectedPartnerTypeString;
-                form.appendChild(inputSelectedPartnerType);
+            //     var inputSelectedPartnerType = document.createElement('input');
+            //     inputSelectedPartnerType.type = 'hidden';
+            //     inputSelectedPartnerType.name = 'selected_partnerType';
+            //     inputSelectedPartnerType.value = selectedPartnerTypeString;
+            //     form.appendChild(inputSelectedPartnerType);
 
-                var inputselected_cluster = document.createElement('input');
-                inputselected_cluster.type = 'hidden';
-                inputselected_cluster.name = 'selected_cluster';
-                inputselected_cluster.value = selected_clusterString;
-                form.appendChild(inputselected_cluster);
+            //     var inputselected_cluster = document.createElement('input');
+            //     inputselected_cluster.type = 'hidden';
+            //     inputselected_cluster.name = 'selected_cluster';
+            //     inputselected_cluster.value = selected_clusterString;
+            //     form.appendChild(inputselected_cluster);
 
-                var inputselected_users = document.createElement('input');
-                inputselected_users.type = 'hidden';
-                inputselected_users.name = 'selected_users';
-                inputselected_users.value = selected_usersString;
-                form.appendChild(inputselected_users);
+            //     var inputselected_users = document.createElement('input');
+            //     inputselected_users.type = 'hidden';
+            //     inputselected_users.name = 'selected_users';
+            //     inputselected_users.value = selected_usersString;
+            //     form.appendChild(inputselected_users);
 
-                var inputselected_category = document.createElement('input');
-                inputselected_category.type = 'hidden';
-                inputselected_category.name = 'selected_category';
-                inputselected_category.value = selected_categoryString;
-                form.appendChild(inputselected_category);
-                // Append the form to the body and submit
+            //     var inputselected_category = document.createElement('input');
+            //     inputselected_category.type = 'hidden';
+            //     inputselected_category.name = 'selected_category';
+            //     inputselected_category.value = selected_categoryString;
+            //     form.appendChild(inputselected_category);
+            //     // Append the form to the body and submit
 
-                document.body.appendChild(form);
-                form.submit();
-                    // Redirect to a new tab with the status
-                    // window.open('your_data_page.php?status=' + encodeURIComponent(selectedStatus), '_blank');
-                }
-                });
+            //     document.body.appendChild(form);
+            //     form.submit();
+            //         // Redirect to a new tab with the status
+            //         // window.open('your_data_page.php?status=' + encodeURIComponent(selectedStatus), '_blank');
+            //     }
+            //     });
 
             chart.draw(view, options);
         }

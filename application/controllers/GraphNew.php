@@ -100,7 +100,7 @@ class GraphNew extends CI_Controller
 
         } else {
 
-            $userType = '';
+            $userType = [];
         }
 
         if (isset($_POST['cluster'])) {
@@ -112,7 +112,7 @@ class GraphNew extends CI_Controller
             $cluster = implode(',', ($cluster));
         } else {
 
-            $cluster = '';
+            $cluster = [];
         }
 
         if (isset($_POST['user'])) {
@@ -124,7 +124,7 @@ class GraphNew extends CI_Controller
             // $users = implode(',', ($users));
         } else {
 
-            $users = '';
+            $users = [];
         }
 
 
@@ -137,7 +137,7 @@ class GraphNew extends CI_Controller
 
         } else {
 
-            $partnerType = '';
+            $partnerType = [];
         }
 
         if (isset($_POST['category'])) {
@@ -149,7 +149,7 @@ class GraphNew extends CI_Controller
 
         } else {
 
-            $category = '';
+            $category = [];
         }
 
         // $sdate = '2024-03-01';
@@ -202,9 +202,9 @@ class GraphNew extends CI_Controller
         $selected_cluster = (array) json_decode($selected_cluster);
         $selected_users = (array) json_decode($selected_users);
         $selected_category = (array) json_decode($selected_category);
+        
+        // var_dump(($selected_cluster));die;
 
-
-        // var_dump(($selected_partnerType));die;
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -287,8 +287,6 @@ class GraphNew extends CI_Controller
     public function CityWiseFunnelAnalysis()
     {
 
-        // var_dump($_POST);die;
-
         if (isset($_POST['startDate']) && isset($_POST['endDate'])) {
 
             $sdate = $_POST['startDate'];
@@ -306,10 +304,9 @@ class GraphNew extends CI_Controller
                 return $value !== 'select_all';
             });
 
-            $cluster = implode(',', ($cluster));
         } else {
 
-            $cluster = '';
+            $cluster = [];
         }
 
         // $sdate = '2024-03-01';
@@ -372,7 +369,6 @@ class GraphNew extends CI_Controller
     public function PartnerWiseFunnelAnalysis()
     {
 
-        // var_dump($_POST);die;
         if (isset($_POST['startDate']) && isset($_POST['endDate'])) {
 
             $sdate = $_POST['startDate'];
@@ -390,14 +386,11 @@ class GraphNew extends CI_Controller
                 return $value !== 'select_all';
             });
 
-            // $partnerType = implode(',', ($partnerType));
-
         } else {
 
-            $partnerType = '';
+            $partnerType = [];
         }
 
-        // var_dump($partnerType);die;
         $partner_type = $this->Graph_Model->getPartnerType();
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -416,7 +409,7 @@ class GraphNew extends CI_Controller
         if (!empty($user)) {
             $this->load->view('include/header');
             $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);
-            $this->load->view('Graphs/PartnerWiseFunnelAnalysis', ['uid' => $uid, 'user' => $user, 'sdate' => $sdate, 'edate' => $edate, 'partner_type' => $partner_type, 'TableData' => $TableData, 'roles' => $roles, 'GraphData' => $GraphData]);
+            $this->load->view('Graphs/PartnerWiseFunnelAnalysis', ['uid' => $uid, 'user' => $user, 'sdate' => $sdate, 'edate' => $edate, 'partner_type' => $partner_type,'partnerType' => $partnerType, 'TableData' => $TableData, 'roles' => $roles, 'GraphData' => $GraphData]);
             $this->load->view('include/footer');
         } else {
             redirect('Menu/main');
@@ -508,7 +501,7 @@ class GraphNew extends CI_Controller
         if (!empty($user)) {
             $this->load->view('include/header');
             $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);
-            $this->load->view('Graphs/CategoryWiseFunnelAnalysis', ['uid' => $uid, 'user' => $user, 'sdate' => $sdate, 'edate' => $edate, 'TableData' => $TableData, 'roles' => $roles, 'GraphData' => $GraphData]);
+            $this->load->view('Graphs/CategoryWiseFunnelAnalysis', ['uid' => $uid, 'user' => $user, 'sdate' => $sdate, 'edate' => $edate, 'TableData' => $TableData, 'category' => $category, 'GraphData' => $GraphData]);
             $this->load->view('include/footer');
         } else {
             redirect('Menu/main');

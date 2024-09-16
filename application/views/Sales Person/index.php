@@ -1866,13 +1866,19 @@ $dataPoints2 = array(
                   </div>
                 <?php  } ?> 
 
+             
+                <div class="card p-2 text-center text-white">
+                <button type="button" class="btn btn-success" onclick="handleReminderCreation()">
+                Start Planner
+              </button>
+                  </div>
                 <div class="card p-3">
                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenterspclchngreq">
                       <b>Create a Special Request For Plan Change </b>
                   </button>
                 </div>
 
- <div class="card p-3">
+              <div class="card p-3">
 
                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalReminder">
                     Create A Reminder
@@ -2182,18 +2188,6 @@ function myFunction() {
     }
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
 <script>
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false
@@ -2202,6 +2196,37 @@ function myFunction() {
     $("#example2").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+
+    function handleReminderCreation() {
+      
+      $.ajax({
+      url:'<?=base_url();?>Menu/CheckTaskPlanningTime',
+      type: "POST",
+      data: {
+        'checkplantime': 'checkplantime'
+      },
+      cache: false,
+      success: function a(result){
+       
+        if(result =='false'){
+          var redURL = "<?=base_url();?>Menu/TaskPlanner2/<?= date("Y-m-d") ?>";
+          window.location.href = redURL;
+        }else if(result =='true'){
+        
+          <?php 
+          $todaydate = new DateTime();
+          $todaydate->modify('+1 day');
+          $tomorrowDate = $todaydate->format('Y-m-d');
+          ?>
+            var redURL = "<?=base_url();?>Menu/TaskPlanner2/<?= $tomorrowDate; ?>";
+            window.location.href = redURL;
+        }
+      }
+      });
+}
+
+
 </script>
 </body>
 </html>

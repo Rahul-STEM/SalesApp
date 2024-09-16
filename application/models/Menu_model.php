@@ -12194,7 +12194,7 @@ public function GetPurposeByActionAndStatusID($action,$status_id){
             return $data;
         }
         public function updateBarginmeeting($tid,$tdate){
-            $query = $this->db->query("UPDATE `barginmeeting` SET `storedt`='$tdate' WHERE tid = '$tid'");
+            $query = $this->db->query("UPDATE `barginmeeting` SET `storedt`='$tdate',`plan_change`='0' WHERE tid = '$tid' ");
         }
         public function get_SheduledMeetCmp($uid){
             $query=$this->db->query("SELECT init_call.id inid,company_master.compname compname,partner_master.name pname FROM init_call LEFT JOIN company_master ON company_master.id=init_call.cmpid_id LEFT join partner_master ON partner_master.id=company_master.partnerType_id WHERE init_call.mainbd='$uid' and cstatus NOT IN (1, 8)");

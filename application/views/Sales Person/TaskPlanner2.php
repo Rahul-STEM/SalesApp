@@ -304,13 +304,8 @@ if($type_id == 3){
                   $adatess = date("Y-m-d");
                   $next_date = date('Y-m-d', strtotime('+1 day', strtotime($adatess)));
                   ?>
-
-                  <!-- <input type="date" class="form-control" name="adate" required="" id="plandate" min="<?= date('Y-m-d')?>" max="<?= $next_date ?>" >
-                  -->
-           
-                  <input placeholder="Select Date" class="form-control m-2" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" name="adate" required="" id="plandate"  min="<?= date('Y-m-d') ?>" max="<?= $next_date ?>" />
-
-                  <input type="submit" class="btn btn-warning m-2" value="Set Date">
+                  <!-- <input placeholder="Select Date" class="form-control m-2" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" name="adate" required="" id="plandate"  min="<?= date('Y-m-d') ?>" max="<?= $next_date ?>" />
+                  <input type="submit" class="btn btn-warning m-2" value="Set Date"> -->
                 </form>
               </div>
             </div>
@@ -1794,11 +1789,20 @@ if($type_id == 3){
                       </form>
                     </div>
                   </div>
+
+                  <?php  
+                      $rstData = $this->Menu_model->GetActiveTaskPlannerRestrication($adate);
+                      foreach ($rstData as $obj) {
+                        if ($obj->user_types == $type_id && ($obj->user_ids === '' || $obj->user_ids == $uid)) {
+                            $found = true;
+                            break; // Exit the loop once a match is found
+                        }
+                    }
+                    if($found){
+                      ?>
                   <div class="card col-lg-12 col-sm-12">
                     <div class="table-responsive mt-2">
-                      <?php  
-                      $rstData = $this->Menu_model->GetActiveTaskPlannerRestrication($adate);
-                      ?>
+                     
                         <table id="example4" class="table table-striped table-bordered" cellspacing="0" width="100%">
                             <thead class="bg-danger">
                                 <tr>
@@ -1965,6 +1969,8 @@ if($type_id == 3){
                         </table>
                     </div>
                   </div>
+                  <?php } ?>
+
                   <div class="card col-lg-12 col-sm-12" id="content">
                     <br>
                     <center>

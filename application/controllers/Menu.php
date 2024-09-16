@@ -3701,7 +3701,7 @@ class Menu extends CI_Controller {
                 $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
                 $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
                 $this->session->set_flashdata('error_message','Please Set Todays Planner First');
-                redirect('Menu/TaskPlanner2/'.date("Y-m-d"));
+                redirect('Menu/Dashboard');
             }else{
                 $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
                 $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
@@ -4083,10 +4083,28 @@ class Menu extends CI_Controller {
         }
     }
     public function TaskPlanner2($adate){
+        
+        date_default_timezone_set("Asia/Calcutta");
+        
         if(isset($_POST['adate'])){
             $adate = $_POST['adate'];
         }else{
             $adate = $adate;
+        }
+
+        $tommrowdate =  date('Y-m-d', strtotime('tomorrow'));
+
+        $datetime1      = new DateTime($tommrowdate);
+        $datetime1_cur  = new DateTime(date("Y-m-d"));
+        $datetime2      = new DateTime($adate);
+        if ($datetime1 < $datetime2) {
+            $this->session->set_flashdata('error_message','* You Can Not Planned Task For This Date : '.$adate);
+            $adate = $tommrowdate;
+            redirect("Menu/TaskPlanner2/".$adate); 
+        }elseif ($datetime1_cur > $datetime2) {
+            $this->session->set_flashdata('error_message','* You Can Not Planned Task For This Date : '.$adate);
+            $adate = date("Y-m-d");
+            redirect("Menu/TaskPlanner2/".$adate);
         }
 
         $user = $this->session->userdata('user');
@@ -4099,6 +4117,21 @@ class Menu extends CI_Controller {
         $tptime=$this->Menu_model->get_tptime($uid);
         $tptime = $tptime[0]->tptime;
         $dep_name = $dt[0]->name;
+
+        if($adate == date("Y-m-d")){
+            $aptime         = $this->Menu_model->GetTodaysAutoTaskANDPlanningTime($uid,date("Y-m-d"));
+            $aptimecnt      = sizeof($aptime);
+            if($aptimecnt > 0){
+                $givenTime   = $aptime[0]->start_tttpft;
+                $currentTime = date("H:i:s");
+                $timestamp1  = strtotime($givenTime);
+                $timestamp2  = strtotime($currentTime);
+                if ($timestamp2 >= $timestamp1) {
+                    $this->session->set_flashdata('error_message',"* Today's time is up! Now plan your task for tomorrow.");
+                    redirect("Menu/TaskPlanner2/".$tommrowdate); 
+                }
+            }
+        }
 
         $planbutnotinited = $this->Menu_model->get_allcmp_planbutnotinited($uid);
         
@@ -4114,7 +4147,9 @@ class Menu extends CI_Controller {
         if($pendingautotaskcmpcnt > 0){
             $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask Before Going Task Planner Page');
             redirect('Menu/Dashboard2');
-        }   
+        }
+        
+
         $oldplanbutnotinited = $this->Menu_model->get_all_old_cmp_planbutnotinited($uid);
         $oldplanbutnotinitedcnt = sizeof($oldplanbutnotinited);
         if($oldplanbutnotinitedcnt > 0){
@@ -16014,7 +16049,7 @@ public function addplantask12(){
             $this->Menu_model->updateBarginmeeting($tid,$new_datetime);
            }
      
-            $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
+            $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `plan_change`='0', `selectby`='$selectby'  WHERE  id = $tid");
           
         }else if($selectby == 'Plan When MOM Approved'){
             $sact_type = $this->Menu_model->SelectTaskBYTid($tid);
@@ -16028,7 +16063,7 @@ public function addplantask12(){
                     $this->Menu_model->updateBarginmeetingAfterPlanChnage($tid,$new_datetime);
                    }
              $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime',`plan_change`='0', `selectby`='$selectby' WHERE  id = $tid");
-             echo $this->db->last_query()."<br/>";
+        
          } else if($selectby == 'Review Target Date'){
        if(date("Y-m-d") !== $pdate){
             if($pendingTodaysTaskcnt > 0){
@@ -18528,8 +18563,11 @@ public function UserVisitPage(){
     $action         = "Planning";
     $this->load->model('Menu_model');
 
-    $action = $_POST['action'] ?? '';
-   
+    if(isset($_POST['action'])){
+        $action = $_POST['action'];
+    }else{
+        $action = '';
+    }
         if ($action && $page) {
             if ($action === 'visit') {
                 $this->Menu_model->insert_visit($user_id, $page, $action);
@@ -18538,6 +18576,48 @@ public function UserVisitPage(){
                 echo  $this->db->last_query();
             }
     }   
+}
+
+
+public function CheckTaskPlanningTime(){
+    
+    date_default_timezone_set("Asia/Calcutta");
+    $user           = $this->session->userdata('user');
+    $uid            = $user['user_id'];
+    $aptime         = $this->Menu_model->GetTodaysAutoTaskANDPlanningTime($uid,date("Y-m-d"));
+    $aptimecnt      = sizeof($aptime);
+    $initedtime     = Date("Y-m-d H:i:s");
+    $tdate          = date("Y-m-d");
+    $user_day       = $this->Menu_model->get_daystarted($uid,date("Y-m-d"));
+
+      if(sizeof($user_day) > 0){
+        $pinitiate_time = $user_day[0]->planner_initiate_time;
+        if($pinitiate_time == ''){
+            $query =  $this->db->query("UPDATE `user_day` SET `planner_initiate_time`='$initedtime' WHERE user_id='$uid' and cast(ustart as DATE)='$tdate'");
+        }
+      }  
+
+    if($aptimecnt > 0){
+
+       $givenTime   = $aptime[0]->start_tttpft;
+       $currentTime = date("H:i:s");
+       $timestamp1  = strtotime($givenTime);
+       $timestamp2  = strtotime($currentTime);
+    
+       if ($givenTime >= $currentTime) {
+        echo "false";
+        $this->load->library('session');
+        $this->session->set_flashdata('success_message', 'You Can Plan Task For Todays!');
+       } else {
+        echo "true";
+        $this->load->library('session');
+        $this->session->set_flashdata('success_message', 'Now You Can Start Planning For Tomorrow ');
+       }
+    }else{
+        echo "false";
+        $this->load->library('session');
+        $this->session->set_flashdata('success_message', 'You Can Plan Task For Todays!');
+    }
 }
 
 

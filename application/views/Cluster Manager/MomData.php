@@ -76,7 +76,7 @@
                                       <th>RP MOM Remarks</th>
                                       <th>View</th>
                                       <th>Approved Status</th>
-                                      <th>Action</th>
+                                      <!-- <th>Action</th> -->
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -146,17 +146,17 @@
                                     <b>Remarks :</b> <?= $reject_remarks ?>
                                     <?php } ?>
                                 </td>
-                                <td>
+                                <?php /*?><td>
                                       <?php  
                                      
                                       if($dt->approved_by == ''){
                                          ?>
-                                        <div>
+                                        <!-- <div>
                           
                                             <p><button type="button" class="btn btn-success" onclick="MomApprove(<?= $i ?>,<?= $dt->id?>,'Approve')">Approve</button></p>
                                             <p><button type="button" class="btn btn-primary" onclick="Reject(<?= $i ?>,<?= $dt->id?>,'Reject')">Edit</button></p>
                                             <p><button type="button" class="btn btn-primary" id="rPtoNoRPConvert<?= $dt->tid?>" onclick="RPtoNoRPConvert(<?= $dt->tid?>,<?= $dt->id?>,'RPtoNoRPConvert')">RP to No RP Convert</button></p>
-                                        </div>
+                                        </div> -->
                                         <?php }else{ 
                                           if($approved_status =='Reject'){ ?>
                                               <span class="bg-danger p-2" >Reject</span>
@@ -164,8 +164,8 @@
                                              <span class="bg-success p-2" >Approved</span>
                                              <?php } ?>
                                       <?php  } ?>
-                                    </td>
-                                     
+                                    </td> <?php */ ?>
+                                    
                                     </tr>
                                     <?php $i++;} ?>
                                   </tbody>

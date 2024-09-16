@@ -8,12 +8,8 @@
         <a href="Dashboard" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block"> 
-        <button type="button" class="btn btn-primary" onclick="goBack()">Go Back</button>
-        <?php 
-        $udetail    = $this->Menu_model->get_userbyid($uid);
-        $ucash  = $udetail[0]->ucash;
-        ?>
-        <button type="button" class="btn btn-success"><span><b>Our Cash : <?=$ucash;?> ₹</b></span></button>
+<button type="button" class="btn btn-primary" onclick="goBack()">Go Back</button>
+<button type="button" class="btn btn-secondary" onclick="goForward()">Go Forward</button>
       </li>
     </ul>
     <!-- Right navbar links -->
@@ -207,10 +203,9 @@
           <li class="nav-item">
             <a href="<?=base_url();?>Menu/AddSpecialCommentOnTask" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
-              <p>Add Special Suggestions On Task (Pending)</p>
+              <p>Add Special Comment On Task (Pending)</p>
             </a>
           </li>
-       
           <li class="nav-item">
             <a href="<?=base_url();?>Menu/AddThanksCommentOnTask" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
@@ -218,11 +213,11 @@
             </a>
           </li>
           <li class="nav-item">
-              <a href="<?=base_url();?>Menu/SpecialRequestForLeaveSomeTime" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Our Special Request For Leave Some Time </p>
-              </a>
-          </li>
+                    <a href="<?=base_url();?>Menu/SpecialRequestForLeaveSomeTime" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Our Special Request For Leave Some Time </p>
+                    </a>
+                </li>
         
           
           
@@ -255,13 +250,6 @@
               <p>Add travel Cluster</p>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="<?=base_url();?>Menu/OurTravelAdvanceRequest" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Our Travel Advance Request</p>
-            </a>
-          </li>
-         
           <!--<li class="nav-item">-->
           <!--  <a class="nav-link" href="<?=base_url();?>Menu/AddSchoolDetails" >-->
           <!--    <i class="far fa-circle nav-icon"></i>-->
@@ -333,7 +321,17 @@
     </div>
     <!-- /.sidebar -->
   </aside>
-  
+  <?php 
+      if(!isset($daycheck)){
+        $current_uid    = $user['user_id'];
+      $user_type = $user['type_id'];
+      $user_day = $this->Menu_model->get_daydetail($current_uid,date("Y-m-d"));
+      if(sizeof($user_day) == 0){
+          $this->session->set_flashdata('error_message','* Please start your day first');
+          redirect('Menu/DayManagement');
+      }  
+      }    
+      ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script> 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />

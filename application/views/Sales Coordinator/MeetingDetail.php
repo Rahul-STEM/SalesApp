@@ -88,15 +88,20 @@
                                         $numberDays = intval($numberDays);
                                         
                                         
-                                        
-                                        
-                                        $bd = $this->Menu_model->get_userbyaSCid($admid);
+                                       
+                                            $bd = $this->Menu_model->get_userbyaSCid($uid);
+                                    //  print_r($bd);
                                         foreach($bd as $bd){
                                         $bdname = $bd->name;
                                         $bdid = $bd->user_id;
+                                      
                                         $mdata = $this->Menu_model->get_tbmd('1',$bdid,$bdid,$sd,$ed);
                                         $tt=0;$trp=0;$tfm=0;$trm=0;$pmom=0;$fmeet=0;$rmeet=0;$ymom=0;$nmom=0;$rpm=0;
+                                        //   if($bdid == '100212'){
+                                        //         echo "bdname".$bdname."\n";
+                                        //     }
                                         foreach($mdata as $dt){
+                                          
                                             $tt++;
                                             $cmpid = $dt->cmpid;
                                             $cid = $dt->cid;

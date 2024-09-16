@@ -80,7 +80,7 @@
                     <h3>Check Plan Task Between Times</h3>
                 </div>
               <div class="card-body">
-                  <div class="body-content">
+                  <div class="container body-content">
         <div class="page-header">
             <fieldset>
                         <div class="table-responsive">
@@ -90,14 +90,18 @@
                                     <thead>
                                         <tr>
                                             <th>S.No.</th>
-                                            <th>Name</th>
+                                            <th>BD Name</th>
                                             <th>Company Name</th>
-                                            <th>Task Date Time</th>
-                                            <th>Task Activity</th>
-                                            <th>Task Purpose</th>
-                                            <th>Status</th>
-                                            <th>Action Taken</th>
-                                            <th>Purpose Achieved</th>
+                                            <th>Current_Task Date</th>
+                                            <th>Current task planned after time difference</th>
+                                            <th>UpdateDate</th>
+                                            <th>Current_Task_Activity</th>
+                                            <th>Current_Task_Purpose</th>
+                                            <th>Current Purpose Achieved</th>
+                                      
+                                            <th>Current_Status</th>
+                                     
+                                            <th>Current_ActionTaken</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -126,12 +130,19 @@
                                         <td><?=$i?></td>
                                         <td><?=$bdname[0]->name?></td>
                                         <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$inid[0]->cmpid_id?>"><?=$mtd[0]->compname?></a></td>
-                                        <td><?=$mtd[0]->appointmentdatetime?></td>
+                                     
+                                        <td><?=$nctime?></td>
+                                     
+                                        <td><?=$this->Menu_model->timediff($ltime,$ctime)?></td>
+                                      
+                                        <td><?=$mtd[0]->fwd_date?></td>
+                                      
                                         <td><?=$mtd[0]->current_action_type?></td>
                                         <td><?=$this->Menu_model->get_purposeNameById($mtd[0]->purpose_id)?></td>
+                                        <td>NA</td>
                                         <td><?=$this->Menu_model->get_statusbyid($mtd[0]->cstatus)[0]->name?></td>
+                                 
                                         <td><?=$mtd[0]->actontaken?></td>
-                                        <td><?=$mtd[0]->purpose_achieved?></td>
                                     <?php $i++;} ?>
                                   </tbody>
                                 </table> 

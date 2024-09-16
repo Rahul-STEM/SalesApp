@@ -115,9 +115,9 @@
               <div class="card-body box-profile p-5">
 
               <div class="col-12 col-md-12 mb-12">
-                        <label for="validationSample03">Select Contact Person</label>
+                        <label for="validationSample03">Select Special Person Of Company</label>
                         <select type="text" class="form-control" id="selectPerson" name="selectPerson">
-                            <option value="Same Person" selected>Select Contact Person</option>
+                            <!-- <option value="Same Person" selected>Select Special Person Of Company</option> -->
                             <option value="Same Person">Same Person</option>
                             <option value="Other Person">Other Person</option>
                         </select>
@@ -290,7 +290,6 @@
                   type="radio"
                   name="top_spender"
                   value="no"
-                  required=""
                   <?php echo $noChecked; ?>
                 />
                 &nbsp;NO &nbsp;
@@ -311,7 +310,6 @@
                   type="radio"
                   name="upsell_client"
                   value="yes"
-                  required=""
                   <?php echo $yesChecked; ?>
                 />
                 YES 
@@ -319,7 +317,6 @@
                   type="radio"
                   name="upsell_client"
                   value="no"
-                  required=""
                   <?php echo $noChecked; ?>
                 />
                 &nbsp;NO &nbsp;
@@ -342,7 +339,6 @@
                   type="radio"
                   name="focus_funnel"
                   value="yes"
-                  required=""
                   <?php echo $yesChecked; ?>
                 />
                 YES
@@ -350,7 +346,6 @@
                   type="radio"
                   name="focus_funnel"
                   value="no"
-                  required=""
                   <?php echo $noChecked; ?>
                 />
                 &nbsp;NO &nbsp;
@@ -373,7 +368,6 @@
                   type="radio"
                   name="key_client"
                   value="yes"
-                  required=""
                   <?php echo $yesChecked; ?>
                   />
                   &nbsp;YES &nbsp;
@@ -381,7 +375,6 @@
                   type="radio"
                   name="key_client"
                   value="no"
-                  required=""
                   <?php echo $noChecked; ?>
                   />
                   &nbsp;&nbsp;NO &nbsp;&nbsp;
@@ -403,7 +396,6 @@
                 type="radio"
                 name="potential_company"
                 value="yes"
-                required=""
                 <?php echo $yesChecked; ?>
                 />
                 &nbsp;YES &nbsp;
@@ -411,7 +403,6 @@
                 type="radio"
                 name="potential_company"
                 value="no"
-                required=""
                 <?php echo $noChecked; ?>
                 />
                 &nbsp;&nbsp;NO &nbsp;&nbsp;
@@ -421,9 +412,30 @@
                 <div class="valid-feedback">Looks good!</div>
             </div>
         </div>
-
           </div>
-          <button class="btn btn-primary" type="submit">Submit</button>
+
+          <div class="row">
+            <div class="col-md-12 offset-2">
+            <div class="form-check">
+          <input class="form-check-input" type="radio" name="contact_type" id="exampleRadios1" value="primary" checked>
+          <label class="form-check-label" for="exampleRadios1">
+            Primary Contact
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="contact_type" id="exampleRadios2" value="alternate">
+          <label class="form-check-label" for="exampleRadios2">
+            Secondary Contact
+          </label>
+        </div>
+        <br>
+        <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+           
+        </div>
+       
+
+         
         </form>
               
               
@@ -521,6 +533,13 @@ $(document).ready(function() {
         } else if (selectedValue === 'Other Person') {
           $('#myUpdateForm').find('input[type="text"], textarea,input[type="email"]').prop('readonly', false);
           $('#myUpdateForm').find('input[type="radio"],select').prop('disabled', false);
+
+          $("input[name='top_spender']").prop('disabled', true);
+          $("input[name='upsell_client']").prop('disabled', true);
+          $("input[name='focus_funnel']").prop('disabled', true);
+          $("input[name='key_client']").prop('disabled', true);
+          $("input[name='potential_company']").prop('disabled', true);
+          
         }
     });
     $('#myUpdateForm').submit(function(event) {

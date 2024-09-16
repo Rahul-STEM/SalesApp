@@ -346,7 +346,7 @@ span.tsby {
                                                     <th>Task Appointment date time</th>
                                                     <th>Plan By</th>
                                                     <th>Filter Used</th>
-                                                    <th>Filter By</th>
+                                                    <!-- <th>Filter By</th> -->
                                                     <th>Task Work Status</th>
                                                     <th>Action Status</th>
                                                     <th>Approved By</th>
@@ -357,7 +357,6 @@ span.tsby {
                                                 <?php 
                                                 $i = 1;
                                                 
-                                                //echo $dt;
                                                 $totalttask =$this->Menu_model->getTotalUserTaskDetailsOnPlanner($tuser_uid, $dt);
                                                 
                                                 foreach ($totalttask as $taskdata) { 
@@ -421,6 +420,7 @@ span.tsby {
                                                       }
                                                     endforeach;
                                                     ?></td>
+                                                     <?php /*
                                                     <td>
                                                         <?php 
 
@@ -448,6 +448,7 @@ span.tsby {
                                                              endforeach; ?>
                                                         <?php endif; ?>
                                                     </td>
+                                                    <?php */ ?>
                                                     <td>
                                                     <?php 
                                                     if($taskdata->nextCFID == 0){?>

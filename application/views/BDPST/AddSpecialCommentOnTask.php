@@ -73,7 +73,10 @@
             <?php endif; ?>
           </div>
         </div>
+<?php 
+ date_default_timezone_set("Asia/Calcutta"); 
 
+?>
         
 
         <section class="content">
@@ -81,9 +84,9 @@
             <div class="row">
               <div class="col-12">
                 <div class="card">
-                  <div class="card-header bg-info">
+                  <div class="card-header bg-success">
                     <h3 class="text-center">
-                      <center><b>Add Special Comment On Task</b></center>
+                      <center><b>Add Special Suggestions On Task</b></center>
                     </h3>
                   </div>
                   <!-- /.card-header -->
@@ -101,24 +104,13 @@
                                       <th>BD Name</th>
                                       <th>Company Name</th>
                                       <th>Plan Time</th>
-                                      <th>Initiated Time</th>
-                                      <th>Plan and Initiated Time Diff</th>
-                                      <th>Completed Time</th>
-                                      <th>Plan and Completed Time Diff</th>
-                                      <th>Initiated and Completed Time Diff</th>
-                                      <th>Last Task Date</th>
-                                      <th>Current Task Date</th>
-                                      <th>Current task planned after time difference</th>
-                                      <th>Last Task Activity</th>
-                                      <th>Current Task Activity</th>
-                                      <th>Last Task Remarks</th>
-                                      <th>Current Task Remarks</th>
-                                      <th>Last Status</th>
+                                      <th>Task Activity</th>
                                       <th>Current Status</th>
                                       <th>Action Taken</th>
                                       <th>Purpose Achieved</th>
-                                      <th>Comment BY</th>
-                                      <th>Comments</th>
+                                      <th>Suggestions BY</th>
+                                      <th>Suggestions</th>
+             
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -126,24 +118,22 @@
                                       $i=1;$ab==0;
                                      
                                       foreach($tasks as $md){
+                               
                                           $bd = $md->user_id;
                                           $bdname = $this->Menu_model->get_userbyid($bd);
                                           $tid = $md->id;
                                           $ltid = $md->ltid;
-                                        //   echo "okay". $ltid;
                                           $inid  = $md->cid_id;
                                           $inid = $this->Menu_model->get_initbyid($inid);
                                           $mtd = $this->Menu_model->get_ccitblall($tid);
                                           $lsid = $mtd[0]->status_id;
                                           $csid = $mtd[0]->nstatus_id;
-                                          $s1 = $this->Menu_model->get_statusbyid($lsid);
-                                          if($s1){$s1=$s1[0]->name;}else{$s1='';}
-                                          $s2 = $this->Menu_model->get_statusbyid($csid);
+                                          $cstatus = $mtd[0]->cstatus;
+                                      
+                                          $s2 = $this->Menu_model->get_statusbyid($cstatus);
                                           if($s2){$s2=$s2[0]->name;}else{$s2='';}
                                           if($ltid!=''){  
                                           $mltd = $this->Menu_model->get_ccitblall($ltid);
-                                        
-                                        
                                           $ltime = $mltd[0]->updateddate;
                                           $ctime = $mtd[0]->updateddate;
                                           $nltime = date('d-m-Y  h:i A', strtotime($ltime));
@@ -155,20 +145,8 @@
                                       <td><?=$bdname[0]->name?></td>
                                       <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$inid[0]->cmpid_id?>"><?=$mtd[0]->compname?></a></td>
                                       <td><?=date('d-m-Y h:i A', strtotime($pltime = $md->appointmentdatetime));?></td>
-                                      <td><?=date('d-m-Y h:i A', strtotime($intime = $md->initiateddt));?></td>
-                                      <td><?=$this->Menu_model->timediff($pltime,$intime)?></td>
-                                      <td><?=date('d-m-Y h:i A', strtotime($uptime = $md->updateddate));?></td>
-                                      <td><?=$this->Menu_model->timediff($pltime,$uptime)?></td>
-                                      <td><?=$this->Menu_model->timediff($intime,$uptime)?></td>
-                                      <td><?=$nltime?></td>
-                                      <td><?=$nctime?></td>
-                                      <td><?php if($ctime!=''){echo $this->Menu_model->timediff($ltime,$ctime);}?></td>
-                                      <td><?php if($mltd!=''){echo $mltd[0]->current_action_type;}?></td>
                                       <td><?=$mtd[0]->current_action_type?></td>
-                                      <td><?php if($mltd!=''){echo $mltd[0]->remarks;}?></td>
-                                      <td><?=$md->remarks?><?=$md->mom?></td>
-                                      <td><?=$s1?></td>
-                                      <td><?=$s2?></td>
+                                      <td><?=$s2;?></td>
                                       <td><?=$mtd[0]->actontaken?></td>
                                       <td><?=$mtd[0]->purpose_achieved?></td>
                                       <td>
@@ -179,11 +157,10 @@
                                         }?>
                                     </td>
                                       <td>
-                                     
                                       <?php if($md->comments !== '' && $md->comments !== NULL){
                                             echo base64_decode($md->comments);
                                         }else{ ?>
-                                            <p><button type="button" class="btn btn-primary"  onclick="AddComments(<?= $i ?>,<?= $md->id?>,'Comments')">AddComments</button></p>
+                                            <p><button type="button" class="btn btn-primary"  onclick="AddComments(<?= $i ?>,<?= $md->id?>,'Comments')">Add Suggestions</button></p>
                                        <?php }?>
                                     </td>
                                       <?php $i++;} ?>
@@ -213,7 +190,7 @@
                       <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Add Comments</h5>
+                            <h5 class="modal-title" id="exampleModalLongTitle">Add Suggestions</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
@@ -225,7 +202,7 @@
                                 <textarea id="mytextarea" name="comments"></textarea>
                             </div>
                               <div class="form-group text-center">
-                                <button type="submit" class="btn btn-success mt-2">Add Comment</button>
+                                <button type="submit" class="btn btn-success mt-2">Add Suggestions</button>
                               </div>
                             </form>
                           </div>

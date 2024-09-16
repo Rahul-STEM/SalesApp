@@ -93,6 +93,7 @@ $bd = $this->Menu_model->get_userbyaid($uid);
                                     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
+                                            <th>CIN</th>
                                             <th>Company Name</th>
                                             <th>BD Name</th>
                                             <th>MOM Date</th>
@@ -108,7 +109,8 @@ $bd = $this->Menu_model->get_userbyaid($uid);
                                             
                                             ?>
                                     <tr>
-                                        <td><?=$momd->cname?></td>
+                                        <td><?=$momd->cmpid_id?></td>
+                                        <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$momd->cmpid_id?>"><?=$momd->cname?></td></td>
                                         <td><?=$momd->name?></td>
                                         <td><?=date('d-m-Y h:i A', strtotime($momd->updateddate));?></td>
                                         <td><?=$momd->mom?></td>

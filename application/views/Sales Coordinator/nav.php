@@ -97,14 +97,12 @@
       </li>
     </ul>
   </nav>
-
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <img src="https://stemlearning.in/wp-content/uploads/2020/07/stem-new-logo-2-1.png" width="80%" class="p-3">
     <center><h5 class="text-white"><b>STEM APP</b></h5></center>
     <hr>
-
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
@@ -116,8 +114,6 @@
           <a href="#" class="d-block">User Name</a>
         </div>
       </div>
-
-
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -226,7 +222,6 @@
               <p>BD Review Summary</p>
             </a>
           </li>
-   
           <li class="nav-item">
             <a class="nav-link" href="<?=base_url();?>/Management/CheckingDayManagement" >
               <i class="far fa-circle nav-icon"></i>
@@ -273,18 +268,24 @@
     </div>
     <!-- /.sidebar -->
   </aside>
-  
+  <?php 
+      if(!isset($daycheck)){
+        $current_uid    = $user['user_id'];
+      $user_type = $user['type_id'];
+      $user_day = $this->Menu_model->get_daydetail($current_uid,date("Y-m-d"));
+      if(sizeof($user_day) == 0){
+          $this->session->set_flashdata('error_message','* Please start your day first');
+          redirect('Menu/DayManagement');
+      }  
+      }    
+      ?>
   
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script> 
 <script> 
-
-
-
 $(document).ready(function() {
     trackLocation();
 });
-
 function handleGeolocationError() {
    const bodyElement = document.querySelector("body");
    bodyElement.style.display = "none";
@@ -305,9 +306,6 @@ function getLocation() {
     }
 }
 window.onload = getLocation;
-
-
-
 function startCamera() {
     navigator.mediaDevices.getUserMedia({ video: true })
         .then(function(stream) {
@@ -319,10 +317,6 @@ function startCamera() {
         });
 }
 startCamera();
-
-
-
-
 function trackLocation() {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -345,8 +339,6 @@ function trackLocation() {
     } 
     else {console.error("Geolocation is not supported by this browser.");} 
 }
-
-
 function goBack() { window.history.back(); }
 function goForward() { window.history.forward(); }
   

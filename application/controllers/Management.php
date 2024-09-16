@@ -17,6 +17,8 @@ class Management extends Menu {
         $this->load->library('session');
         $this->load->model('Menu_model');
         $this->load->model('Management_model');
+        $this->load->helper('samestatustilldate_helper');
+
 
         $this->user = $this->session->userdata('user');
         $this->uid = $this->user['user_id'];
@@ -483,7 +485,6 @@ class Management extends Menu {
     // Pass data to model to insert into the database
     $this->db->insert('mom_data', $data);
     $insert_id = $this->db->insert_id();
-    // echo $this->db->last_query();;
     $query =  $this->db->query("UPDATE `mom_data` SET `edit_cnt`='$insert_id' WHERE id = $tbl_id");
 
     redirect('Management/MomData/'.$user_id.'/'.$tardate);
@@ -609,7 +610,6 @@ public function AddTaskPlannerRestrication(){
     redirect('Management/SpecialRestrictionOnTaskPlanner');
 }
 public function ChangeStatusofRestrication(){
-    
     $res_id             = $_POST['res_id'];
     $active_diactive    = $_POST['active_diactive'];
     $start_date         = $_POST['start_date'];
@@ -648,8 +648,198 @@ public function getAllActiveUserInDepartment(){
             }
              echo $data;
  }
+    // New Daymanagement changes <======== START =======>
+   public function CheckingDayManagement_New(){
 
- public function Change_RP_To_No_RP(){
+        $cdate = date("Y-m-d");
+        $sdate = new DateTime($cdate);
+        $sdate->modify('-1 day');
+        $previousDate = $sdate->format('Y-m-d');
+        // $cdate = '2024-07-20';
+        // echo "test"; exit;
+        $dayData = $this->Management_model->CheckingDayManage_New($this->uid,$cdate);
+
+        //   var_dump($dayData);die;
+        $RequestApprovals = $this->Management_model->RequestApprovals($this->uid,$cdate);
+
+        $ApprovedRequests = $this->Management_model->ApprovedRequests($this->uid,$cdate);
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $typeID =  (int) $user['type_id'];
+        $currentHour = (int) (new DateTime())->format('H:mm');
+        //  var_dump($RequestApprovals);die;
+
+        if(!empty($this->user)){
+
+            if($currentHour >= 11 && $typeID != 2) {
+
+                if (sizeof($ApprovedRequests) > 0) {
+                    
+                    $this->load->view($this->dep_name.'/CheckingDayManagement_New',['uid'=>$this->uid,'user'=>$this->user,'typeID'=>$typeID,'dayData'=>$dayData,'cdate'=>$cdate,'previousDate'=>$previousDate]);
+
+                }else{
+
+                    $this->load->view($this->dep_name.'/RequestForDayCheckApproval',['uid'=>$this->uid,'user'=>$this->user,'cdate'=>$cdate,'RequestApprovals'=>$RequestApprovals]);
+                }
+            }else{
+
+                $this->load->view($this->dep_name.'/CheckingDayManagement_New',['uid'=>$this->uid,'user'=>$this->user,'dayData'=>$dayData,'cdate'=>$cdate,'previousDate'=>$previousDate]);
+            }
+        }else{
+            redirect('Menu/main');
+        }
+    }
+    public function checkdayswithStarNew(){
+        
+        // var_dump($_POST);die;
+        $cdate = $_POST['cdate'];
+        $sdate = new DateTime($cdate);
+        $sdate->modify('-1 day');
+        $previousDate = $sdate->format('Y-m-d');
+
+        $periods = $_POST['period'];
+        $userId = $_POST['userId'];
+        $rating = $_POST['rating'];
+        $question = $_POST['question'];
+
+        if($periods == 'Yesterday Evening' || $periods == 'Yesterday Task'){
+
+            $date = $previousDate;
+
+        }else{
+            $date = $cdate;
+        }
+        $data = [
+            'date' => $date,
+            'user_id' => $userId,
+            'periods' => $periods,
+            'question' => $question,
+            'star'=>$rating,
+            // 'previousDate'=>$previousDate,
+            'feedback_by'=>$this->uid,
+        ];
+
+        $result = $this->Management_model->AddStarRatingNew($data);
+        // var_dump($result);die;
+        echo json_encode($result);
+
+        // $this->session->set_flashdata('success_message', 'Star Rating Added Successfully');
+        // redirect('Management/CheckingDayManagement');
+    }
+
+    public function updateStarRemark() {
+        // var_dump($_POST);die;
+        $remark = $_POST['remark'];
+        $starID = $_POST['starID'];
+
+        $result = $this->Management_model->updateStarRemark($remark,$starID);
+    }
+      public function RequestForDayManagementApproval(){
+
+        $request = $this->input->post('remark');
+
+        $dayData = $this->Management_model->RequestForDayManagementApproval_Model($this->uid,$request);
+
+        
+
+    }
+    public function ApproveDayCheckRequest(){
+
+
+        $getRequests = $this->Management_model->getRequests($this->uid);
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $typeID =  $user['type_id'];
+        // var_dump($getRequests);die;
+        if(!empty($this->user)){
+
+            $this->load->view($this->dep_name.'/ApproveDayCheckRequest',['uid'=>$this->uid,'user'=>$this->user,'getRequests'=>$getRequests]);
+
+        }else{
+
+            redirect('Menu/main');
+        }
+    }
+
+    public function ApproveRequest() {
+
+        $id = $_POST['id'];
+        $action = $_POST['action'];
+
+        if ($action == 'approve') {
+            $action = 'Approved';
+        }
+        if ($action == 'reject') {
+            $action = 'Rejected';
+        }
+
+        $result = $this->Management_model->ApproveRequest($id,$action,$this->uid);
+    }
+
+public function DayManagementReport()
+    {
+
+        if (isset($_POST['startDate']) && isset($_POST['endDate'])) {
+
+            $sdate = $_POST['startDate'];
+            $edate = $_POST['endDate'];
+        } else {
+
+            $sdate = date('Y-m-d');
+            $edate = date('Y-m-d');
+        }
+
+        if (isset($_POST['user'])) {
+
+            $selected_user = array_filter($_POST['user'], function ($value) {
+                return $value !== 'select_all';
+            });
+        } else {
+
+            $selected_user = [];
+        }
+
+        // var_dump($_POST);die;
+        // $selected_user = [];
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $userTypeid = $user['type_id'];
+        $this->load->model('Menu_Model');
+        // $dt = $this->Menu_Model->get_utype($userTypeid);
+        // $dep_name = $dt[0]->name;
+
+        $getUsers = $this->Management_model->getUsers($uid,$userTypeid);
+
+        $getReportbyUser = $this->Management_model->getReportbyUser($selected_user,$sdate,$edate);
+// echo "<pre>";print_r($getReportbyUser);exit;
+        $data = '';
+        if (!empty($user)) {
+            // $this->load->view('include/header');
+            // $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);
+            $this->load->view($this->dep_name.'/DayManagementReport',['uid'=>$this->uid,'user'=>$this->user,'sdate'=>$sdate,'edate'=>$edate,'users'=>$getUsers,'selected_user'=>$selected_user,'getReportbyUser'=>$getReportbyUser]);
+        } else {
+            redirect('Menu/main');
+        }
+    }
+
+    // New Daymanagement changes <======== END =======>
+
+
+    // MOM Start Here
+
+
+
+
+
+
+
+public function Change_RP_To_No_RP(){
 
     $mom_id= $this->input->post('mom_id');
     $tid= $this->input->post('tid');
@@ -818,7 +1008,5 @@ public function SendReminder(){
     $this->session->set_flashdata('success_message', 'Reminder Send Successfully !');
     redirect('Menu/Dashboard');
 }
-
-
 
 }

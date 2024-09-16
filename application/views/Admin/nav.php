@@ -18,7 +18,7 @@
 
       </li>
 
-      <li class="nav-item d-none d-sm-inline-block"> 
+      <li class="nav-item d-none d-sm-inline-block">
 
         <button type="button" class="btn btn-primary" onclick="goBack()">Go Back</button>
 
@@ -253,7 +253,76 @@
             </a>
 
           </li>
+          <li class="nav-item">
 
+                <a class="nav-link" href="<?= base_url(); ?>Management/CheckingDayManagement_New">
+                    <i class="fas fa-chart-line nav-icon"></i>
+
+                    <!-- <p>Day Check Management</p> -->
+                    Day Check Management
+
+                </a>
+
+</li>
+
+<li class="nav-item">
+
+    <a class="nav-link" href="<?= base_url(); ?>Management/DayManagementReport">
+        <i class="fas fa-chart-line nav-icon"></i>
+
+        <!-- <p>Day Check Report</p> -->
+        Day Check Report
+    </a>
+
+</li>
+
+<li class="nav-item">
+
+    <a class="nav-link" href="<?= base_url(); ?>Menu/TaskCheck_New">
+        <i class="fas fa-chart-bar nav-icon"></i>
+
+        <!-- <p>Task Check Management</p> -->
+        Task Check Management
+
+    </a>
+
+</li>
+
+<li class="nav-item">
+
+    <a class="nav-link" href="<?= base_url(); ?>Menu/TaskCheck_NewReport">
+        <i class="fas fa-chart-bar nav-icon"></i>
+
+        <!-- <p>Task Check Report</p> -->
+        Task Check Report
+
+    </a>
+
+</li>
+
+        <li class="nav-item">
+
+            <a class="nav-link" href="<?=base_url();?>Menu/UserRegistration" >
+
+              <i class="far fa-circle nav-icon"></i>
+
+              <p>User Entry Form</p>
+
+            </a>
+
+          </li>
+
+          <li class="nav-item">
+
+            <a class="nav-link" href="<?=base_url();?>Menu/UserDisplayPage" >
+
+              <i class="far fa-circle nav-icon"></i>
+
+              <p>User Details</p>
+
+            </a>
+
+          </li>
           
 
           <li class="nav-item">
@@ -338,7 +407,7 @@
 
               <i class="far fa-circle nav-icon"></i>
 
-              <p>Task Approvel Request</p>
+              <p>Task Approval Request</p>
 
             </a>
 
@@ -349,22 +418,17 @@
             <a class="nav-link" href="<?=base_url();?>Menu/AllReviewPlaing" >
 
               <i class="far fa-circle nav-icon"></i>
-
               <p>Plan BD Review</p>
-
             </a>
-
           </li>
-
-          
 
            <li class="nav-item">
 
-            <a class="nav-link" href="<?=base_url();?>Menu/Mytarget" >
+            <a class="nav-link" href="<?=base_url();?>Menu/targetVsAchievedData" >
 
               <i class="far fa-circle nav-icon"></i>
 
-              <p>My target</p>
+              <p>Target vs Achived Data Report</p>
 
             </a>
 
@@ -579,9 +643,8 @@
             </a>
 
             <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
-
-              <a class="dropdown-item" href="<?= base_url(); ?>Menu/funnel">FGraph</a>
-
+             <a class="dropdown-item" href="<?= base_url(); ?>Graphs/Fgraphs">FGraph..</a>
+             
               <a class="dropdown-item" href="<?= base_url(); ?>Menu/day">DGraph</a>
 
               <a class="dropdown-item" href="<?= base_url(); ?>Menu/request">RGraph</a>
@@ -655,7 +718,6 @@
             </a>
 
           </li>
-
           <li class="nav-item">
                     <a href="<?=base_url();?>Menu/YesterDayDaysCloseRequest" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
@@ -668,7 +730,6 @@
                         <p>Need Your Attentions </p>
                     </a>
                 </li>
-
           <!--<li class="nav-item">-->
 
           <!--  <a class="nav-link" href="<?=base_url();?>Menu/FAQReport" >-->
@@ -693,7 +754,17 @@
 
           </li>
 
-          
+          <li class="nav-item">
+
+<a href="<?=base_url();?>Menu/DayManagement" class="nav-link">
+
+  <i class="far fa-circle nav-icon"></i>
+
+  <p>Day Management</p>
+
+</a>
+
+</li>
 
           
 

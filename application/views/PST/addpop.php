@@ -852,8 +852,9 @@ $('[id^="add_act"]').on('click', function() {
          success: function(response){
            var len = response.length;
            $('#cname,#ctname,#bdname').text('');
+           console.log(response+"==");
            if(len > 0){
-               
+               console.log(response);
              var cstatus = response[0].cstatus;   
              var ltdate = response[0].ltdate;  
              var comid = response[0].comid;
@@ -865,7 +866,8 @@ $('[id^="add_act"]').on('click', function() {
              var emailid = response[0].emailid;
              var phoneno = response[0].phoneno;
              var designation = response[0].designation;
-             var cpurpose = response[0].cpurpose;
+            //  var cpurpose = response[0].cpurpose;
+             var cpurpose = response[0].purpose_id;
              var action_id = response[0].actiontype_id;
              var nstatus = response[0].status_id;
              var cmpid = response[0].cid_id;
@@ -892,6 +894,7 @@ $('[id^="add_act"]').on('click', function() {
                   type: 'POST',
                   data: { purposeId: cpurpose},
                   success: function(response) {
+                      console.log(response);
                     cpurpose_name = response;
                     document.getElementById("cpurpose").innerHTML = cpurpose_name;
                   }
@@ -1197,4 +1200,14 @@ function uploadFile(name){
         .catch( error => {
             console.error( error );
         } );
+</script>
+<script>
+  $("#rpmsClick").click(function(){
+var val = $("#bmcname").val();
+  if(val == 'Unknown' || val == ''){
+    alert("* Please Enter Valid Company Name");
+    $('#bmcname').css('border', '1px solid red');
+    return false;
+  }
+});
 </script>

@@ -2,18 +2,23 @@
 date_default_timezone_set("Asia/Calcutta");
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Menu extends CI_Controller {
-
+    public function __construct() {
+        parent::__construct();
+        // Load models, libraries, helpers, etc.
+        $this->load->model('Menu_model');
+         $this->load->helper('common_helper');
+          $this->load->helper('samestatustilldate_helper');
+    }
     public function main(){
         $msg = '';
         $this->load->model('Menu_model');
         $this->load->view('index');
+        //  $this->load->helper('SameStatusTillDate_helper');
     }
-
     public function logout(){
         $this->session->unset_userdata('user');
         redirect('Menu/main');
     }
-
     public function getpcode(){
         $cname= $this->input->post('cname');
         $this->load->model('Menu_model');
@@ -30,8 +35,6 @@ class Menu extends CI_Controller {
            echo  $data = '<b>Address:</b> '.$result[0]->address.'<br>'.$result[0]->city.', '.$result[0]->state.', '.$result[0]->country.'<br><b>Budget:</b>'.$result[0]->budget;
         return $data;
     }
-
-
     public function getcinfo(){
         $pcode= $this->input->post('pcode');
         $this->load->model('Menu_model');
@@ -44,7 +47,6 @@ class Menu extends CI_Controller {
                       ';
         return $data;
     }
-
     public function assignpsttask(){
         $compid= $this->input->post('compid');
         $apst= $this->input->post('apst');
@@ -52,21 +54,16 @@ class Menu extends CI_Controller {
         $this->Menu_model->assign_psttask($compid,$apst);
         redirect('Menu/assignpst');
     }
-
-
     public function startdayreview($uid,$ttype){
         $this->load->model('Menu_model');
         $this->Menu_model->start_dayreview($uid,$ttype);
         redirect('Menu/DayStartCheck');
     }
-
-
     public function closedayreview($rid){
         $this->load->model('Menu_model');
         $this->Menu_model->close_dayreview($rid);
         redirect('Menu/DayStartCheck');
     }
-
     public function bdHandover(){
         $bdid= $this->input->post('bdid');
         $client_name= $this->input->post('client_name');
@@ -94,7 +91,6 @@ class Menu extends CI_Controller {
            $filname = $_FILES['filname']['name'];
            $count = sizeof($filname);
         }else{$count=0;$filname=0;}
-
         if($spd_identify_by=='Client'){
             $sname = $this->input->post('sname');
             $saddress = $this->input->post('saddress');
@@ -104,9 +100,6 @@ class Menu extends CI_Controller {
             $sdegignation = $this->input->post('sdegignation');
             $snumber = $this->input->post('snumber');
         }else{$sname=0;$saddress=0;$scity=0;$sstate=0;$scontact=0;$sdegignation=0;$snumber=0;}
-
-
-
         $id=$this->Menu_model->add_bdHandover($sname,$saddress,$scity,$sstate,$scontact,$sdegignation,$snumber,$bdid, $client_name, $mediator, $noofschool, $location, $city, $state, $spd_identify_by, $infrastructure, $filname,$count, $contact_person, $cp_mno, $acontact_person, $acp_mno, $language, $expected_installation_date, $project_tenure,$project_type, $comments,$sid,$remark,$fttptype);
         if($id){
             redirect('Menu/handoverToaccount/'.$id);
@@ -114,7 +107,6 @@ class Menu extends CI_Controller {
             print('Insert error ');
         }
     }
-
     public function handoverToaccount($id){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -130,7 +122,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function RIDDetail(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -145,7 +136,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function NewFunnel(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -157,7 +147,6 @@ class Menu extends CI_Controller {
         }
         $sd=$sdate;
         $ed=$edate;
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -171,9 +160,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function RIDSummary(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -188,8 +174,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function RIDDetailbyProgram(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -204,9 +188,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function DGraph1(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -220,7 +201,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -234,8 +214,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function DGraph2(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -249,7 +227,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -263,8 +240,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function DGraph37(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -278,7 +253,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -292,8 +266,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function DGraph38(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -307,7 +279,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -321,9 +292,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function DGraph39(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -337,7 +305,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -351,9 +318,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function DGraph40(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -367,7 +331,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -381,8 +344,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function DGraph41(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -396,7 +357,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -410,8 +370,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function DGraph42(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -425,7 +383,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -439,8 +396,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function DGraph43(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -454,7 +409,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -468,9 +422,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function DGraph44(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -484,7 +435,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -498,8 +448,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function DGraph45(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -513,7 +461,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -527,8 +474,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function DGraph46(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -542,7 +487,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -556,9 +500,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function DGraph47(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -572,7 +513,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -586,8 +526,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function DGraph48(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -601,7 +539,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -615,8 +552,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function DGraph49(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -630,7 +565,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -644,9 +578,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function RGraph1(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -660,7 +591,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -674,7 +604,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
      public function RGraph2(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -688,7 +617,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -702,9 +630,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function RGraph3(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -718,7 +643,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -732,8 +656,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function RGraph4(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -747,7 +669,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -761,9 +682,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function RGraph5(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -777,7 +695,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -791,8 +708,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function RGraph6(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -806,7 +721,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -820,8 +734,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function RGraph7(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -835,7 +747,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -849,8 +760,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function RGraph8(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -864,7 +773,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -878,7 +786,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function RGraph9(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -892,7 +799,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -906,7 +812,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function RGraph10(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -920,7 +825,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -934,8 +838,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function ROGraph1(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -949,7 +851,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -963,8 +864,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function ROGraph2(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -978,7 +877,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -992,8 +890,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function ROGraph3(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1007,7 +903,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1021,9 +916,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function ROGraph4(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1037,7 +929,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1051,8 +942,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function ROGraph5(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1066,7 +955,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1080,8 +968,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function ROGraph6(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1095,7 +981,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1109,9 +994,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function ROGraph7(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1125,7 +1007,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1139,8 +1020,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function ROGraph8(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1154,7 +1033,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1168,8 +1046,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function ROGraph9(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1183,7 +1059,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1197,10 +1072,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function GraphLink(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -1215,8 +1086,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function PFGraph1(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1230,7 +1099,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1244,9 +1112,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function FGraph1($stid,$code){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1260,7 +1125,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1274,9 +1138,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function FGraph2($cityid){
         $code=2;
         if(isset($_POST['sdate'])){
@@ -1291,7 +1152,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1305,9 +1165,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function FGraph3($pid){
         $code=3;
         if(isset($_POST['sdate'])){
@@ -1322,7 +1179,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1336,9 +1192,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function FGraph4(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1352,7 +1205,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1366,8 +1218,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FGraph5($sttid){
         $code=5;
         if(isset($_POST['sdate'])){
@@ -1382,7 +1232,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1396,8 +1245,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FGraph6(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1411,7 +1258,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1425,8 +1271,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FGraph7(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1440,7 +1284,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1454,8 +1297,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FGraph8(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1469,7 +1310,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1483,8 +1323,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FGraph9(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1498,7 +1336,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1512,7 +1349,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function FGraph10(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1526,7 +1362,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1540,7 +1375,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function FGraph11(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1554,7 +1388,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1568,8 +1401,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FGraph12(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1583,7 +1414,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1597,8 +1427,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FGraph13(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1612,7 +1440,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1626,7 +1453,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function FGraph14(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1640,7 +1466,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1654,8 +1479,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FGraph15(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1669,7 +1492,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1683,8 +1505,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FGraph16(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1698,7 +1518,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1712,8 +1531,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FGraph17(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1727,7 +1544,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1741,7 +1557,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function FGraph18(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1755,7 +1570,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1769,8 +1583,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FGraph19(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1784,7 +1596,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1798,8 +1609,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FGraph20(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1813,7 +1622,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1827,8 +1635,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FGraph21(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1842,7 +1648,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1856,7 +1661,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function FGraph22(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1870,7 +1674,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1884,8 +1687,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FGraph23(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1899,7 +1700,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1913,8 +1713,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FGraph24(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1928,7 +1726,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1942,8 +1739,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FGraph25(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1957,7 +1752,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -1971,11 +1765,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
-
     public function TGraph1(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -1989,7 +1778,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2003,8 +1791,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TGraph2(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2018,7 +1804,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2032,8 +1817,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TGraph3(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2047,7 +1830,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2061,8 +1843,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TGraph4(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2076,7 +1856,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2090,8 +1869,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TGraph5(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2105,7 +1882,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2119,8 +1895,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TGraph6(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2134,7 +1908,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2148,8 +1921,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TGraph7(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2163,7 +1934,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2177,8 +1947,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TGraph8(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2192,7 +1960,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2206,8 +1973,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TGraph9(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2221,7 +1986,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2235,8 +1999,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TGraph10(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2250,7 +2012,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2264,8 +2025,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TGraph11(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2279,7 +2038,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2293,7 +2051,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function TGraph12(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2307,7 +2064,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2321,8 +2077,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TGraph13(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2336,7 +2090,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2350,8 +2103,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TGraph14(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2365,7 +2116,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2379,8 +2129,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TGraph15(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2394,7 +2142,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2408,9 +2155,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function TGraph16(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2424,7 +2168,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2438,9 +2181,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function TGraph17(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2454,7 +2194,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2468,9 +2207,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function TGraph18(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2484,7 +2220,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2498,9 +2233,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function TGraph19(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2514,7 +2246,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2528,9 +2259,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function TGraph20(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2544,7 +2272,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2558,25 +2285,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function FunnelGraph1($muid){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2590,7 +2298,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2604,11 +2311,7 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function FunnelBox(){
-
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
         $edate = $_POST['edate'];
@@ -2621,8 +2324,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2636,10 +2337,7 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FunnelBox1(){
-
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
         $edate = $_POST['edate'];
@@ -2652,8 +2350,6 @@ class Menu extends CI_Controller {
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -2667,9 +2363,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function NewPage(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -2684,8 +2377,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function NewPage1(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -2700,9 +2391,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function TaskGraph(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -2717,8 +2405,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TaskGraph1(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2745,8 +2431,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TaskGraph2(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2773,8 +2457,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TaskGraph3(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2801,8 +2483,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TaskGraph4(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2829,8 +2509,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TaskGraph5(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2857,8 +2535,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TaskGraph6(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2885,9 +2561,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function TaskGraph7(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -2914,15 +2587,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
-
-
-
-
-
     public function CompanyTaskBox($cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -2937,10 +2601,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function ModelDetail($chid,$sid,$tid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -2955,8 +2615,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function AllUtilisation(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -2972,8 +2630,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function Utilisation($pid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -2995,8 +2651,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function LiveCurrentTask(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -3011,7 +2665,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function LiveCurrentDayUTask(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -3026,8 +2679,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function  LiveTaskTracking(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -3042,7 +2693,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function  LiveTaskTrackingBD(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -3057,7 +2707,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function  LiveTaskTrackingPST(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -3072,8 +2721,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function  ReportTaskTracking(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -3088,10 +2735,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function LiveNextDayTask(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -3106,7 +2749,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function LiveStatusTask(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -3121,7 +2763,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function LiveStatusUTask(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -3136,8 +2777,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function CategoryStatusPage(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -3163,13 +2802,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
-
-
-
     public function AddWorkingDay(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -3187,10 +2819,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function CalendarPlanner(){
         $uid= $this->input->post('uid');
         $fdate= $this->input->post('fdate');
@@ -3201,31 +2829,18 @@ class Menu extends CI_Controller {
         $this->Menu_model->Calendar_Planner($uid,$fdate,$tdate,$wnw,$remark);
         redirect('Menu/AddWorkingDay/');
     }
-
-
-
-
-
     public function wstart(){
         $uid= $this->input->post('uid');
         $wname= $this->input->post('wname');
         $this->load->model('Menu_model');
         $this->Menu_model->w_start($uid,$wname);
     }
-
     public function wclose(){
         $uid= $this->input->post('uid');
         $wname= $this->input->post('wname');
         $this->load->model('Menu_model');
         $this->Menu_model->w_close($uid,$wname);
     }
-
-
-
-
-
-
-
     public function bdaccount(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -3249,14 +2864,11 @@ class Menu extends CI_Controller {
         $threey= $this->input->post('threey');
         $proformadate= $this->input->post('proformadate');
         $taxinvoicedate= $this->input->post('taxinvoicedate');
-
         $this->load->model('Menu_model');
-
         if(isset($_FILES['filname']['name'])) {
            $filname = $_FILES['filname']['name'];
            $count = sizeof($filname);
         }else{$count=0;$filname=0;}
-
         $id=$this->Menu_model->add_bdaccount($uid,$handover_id, $wono, $porno, $gstno, $panno,$tbudget, $payterm, $pwosdate, $moudate, $srfinovice, $filname,$count,$bname, $basic, $gst, $total, $oney, $twoy, $threey,$proformadate,$taxinvoicedate);
         if($id){
             redirect('Menu/Dashboard');
@@ -3264,9 +2876,6 @@ class Menu extends CI_Controller {
             print('Insert error ');
         }
     }
-
-
-
     public function ardata(){
         $uid= $this->input->post('uid');
         $uname= $this->input->post('uname');
@@ -3286,129 +2895,106 @@ class Menu extends CI_Controller {
         $kcqsno= $this->input->post('kcqsno');
         $kcqrevenue= $this->input->post('kcqrevenue');
         $achievement = $this->input->post('achievement');
-
         $svsnamem='';
         $l = sizeof($svsname);
         for($i=0;$i<$l;$i++){
             if($i==0){$svsnamem = $svsname[$i];}
             else{$svsnamem = $svsnamem.','.$svsname[$i];}
         }
-
         $svlocationm='';
         $l = sizeof($svlocation);
         for($i=0;$i<$l;$i++){
             if($i==0){$svlocationm = $svlocation[$i];}
             else{$svlocationm = $svlocationm.','.$svlocation[$i];}
         }
-
         $csvcnamem='';
         $l = sizeof($csvcname);
         for($i=0;$i<$l;$i++){
             if($i==0){$csvcnamem = $csvcname[$i];}
             else{$csvcnamem = $csvcnamem.','.$csvcname[$i];}
         }
-
         $csvlocationm='';
         $l = sizeof($csvlocation);
         for($i=0;$i<$l;$i++){
             if($i==0){$csvlocationm = $csvlocation[$i];}
             else{$csvlocationm = $csvlocationm.','.$csvlocation[$i];}
         }
-
         $cdcdatam='';
         $l = sizeof($cdcdata);
         for($i=0;$i<$l;$i++){
             if($i==0){$cdcdatam = $cdcdata[$i];}
             else{$cdcdatam = $cdcdatam.','.$cdcdata[$i];}
         }
-
         $cdrdatam='';
         $l = sizeof($cdrdata);
         for($i=0;$i<$l;$i++){
             if($i==0){$cdrdatam = $cdrdata[$i];}
             else{$cdrdatam = $cdrdatam.','.$cdrdata[$i];}
         }
-
         $kccompanym='';
         $l = sizeof($kccompany);
         for($i=0;$i<$l;$i++){
             if($i==0){$kccompanym = $kccompany[$i];}
             else{$kccompanym = $kccompanym.','.$kccompany[$i];}
         }
-
         $kcsnom='';
         $l = sizeof($kcsno);
         for($i=0;$i<$l;$i++){
             if($i==0){$kcsnom = $kcsno[$i];}
             else{$kcsnom = $kcsnom.','.$kcsno[$i];}
         }
-
         $kcrevenuem='';
         $l = sizeof($kcrevenue);
         for($i=0;$i<$l;$i++){
             if($i==0){$kcrevenuem = $kcrevenue[$i];}
             else{$kcrevenuem = $kcrevenuem.','.$kcrevenue[$i];}
         }
-
         $kcqcompanym='';
         $l = sizeof($kcqcompany);
         for($i=0;$i<$l;$i++){
             if($i==0){$kcqcompanym = $kcqcompany[$i];}
             else{$kcqcompanym = $kcqcompanym.','.$kcqcompany[$i];}
         }
-
         $kcqsnom='';
         $l = sizeof($kcqsno);
         for($i=0;$i<$l;$i++){
             if($i==0){$kcqsnom = $kcqsno[$i];}
             else{$kcqsnom = $kcqsnom.','.$kcqsno[$i];}
         }
-
         $kcqrevenuem='';
         $l = sizeof($kcqrevenue);
         for($i=0;$i<$l;$i++){
             if($i==0){$kcqrevenuem = $kcqrevenue[$i];}
             else{$kcqrevenuem = $kcqrevenuem.','.$kcqrevenue[$i];}
         }
-
         $csvsnamem='';
         $l = sizeof($csvsname);
         for($i=0;$i<$l;$i++){
             if($i==0){$csvsnamem = $csvsname[$i];}
             else{$csvsnamem = $csvsnamem.','.$csvsname[$i];}
         }
-
         $cdsdatam='';
         $l = sizeof($cdsdata);
         for($i=0;$i<$l;$i++){
             if($i==0){$cdsdatam = $cdsdata[$i];}
             else{$cdsdatam = $cdsdatam.','.$cdsdata[$i];}
         }
-
         $this->load->model('Menu_model');
-
         $filea = $_FILES['filea']['name'];
         $uploadPath = 'uploads/annual/';
         $flink1 = $this->Menu_model->mfilea($filea, $uploadPath);
-
         $fileb = $_FILES['fileb']['name'];
         $uploadPath = 'uploads/annual/';
         $flink2 = $this->Menu_model->mfileb($fileb, $uploadPath);
-
         $filec = $_FILES['filec']['name'];
         $uploadPath = 'uploads/annual/';
         $flink3 = $this->Menu_model->mfilec($filec, $uploadPath);
-
         $filed = $_FILES['filed']['name'];
         $uploadPath = 'uploads/annual/';
         $flink4 = $this->Menu_model->mfiled($filed, $uploadPath);
-
         $this->Menu_model->add_ardata($uid,$uname,$data,$svsnamem,$svlocationm,$csvcnamem,$csvsnamem,$csvlocationm,$cdcdatam,$cdsdatam,$cdrdatam,$kccompanym,$kcsnom,$kcrevenuem,$kcqcompanym,$kcqsnom,$kcqrevenuem,$achievement,$flink1,$flink2,$flink3,$flink4);
         redirect('Menu/Dashboard');
-
     }
-
-
     public function handoverchange(){
         $clientid= $this->input->post('clientid');
         $mediator= $this->input->post('mediator');
@@ -3442,27 +3028,17 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $this->Menu_model->add_handchange($clientid, $mediator, $location, $city, $state, $spd_identify_by, $infrastructure, $contact_person, $cp_mno, $acontact_person, $acp_mno, $language, $expected_installation_date, $project_tenure,$project_type,$comments,$remark,$fttptype,$wono,$porno,$gstno,$panno,$tbudget,$payterm,$pwosdate,$moudate,$srfinovice,$proformadate,$taxinvoicedate);
         redirect('Menu/Dashboard');
-
     }
-
-
     public function TaskReminder($tid,$uid){
         $this->load->model('Menu_model');
         $this->Menu_model->Task_Reminder($tid,$uid);
         redirect('Menu/LiveTaskTrackingBD');
     }
-
-
     public function TaskReminderPST($tid,$uid){
         $this->load->model('Menu_model');
         $this->Menu_model->Task_Reminder($tid,$uid);
         redirect('Menu/LiveTaskTrackingPST');
     }
-
-
-
-
-
     public function getctot(){
         $ctype= $this->input->post('ctype');
         $this->load->model('Menu_model');
@@ -3487,7 +3063,6 @@ class Menu extends CI_Controller {
         }
         return $data;
     }
-
     public function login(){
         $user=$this->input->post('user');
         $password=$this->input->post('password');
@@ -3516,10 +3091,6 @@ class Menu extends CI_Controller {
         redirect('Menu/Dashboard');}
         else{redirect('Menu/main');}
     }
-
-
-
-
     public function Mytarget(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d H:i:s');
@@ -3538,15 +3109,11 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
      public function MytargetStart($uid,$mid){
         $this->load->model('Menu_model');
         $this->Menu_model->Mytarget_Start($uid,$mid);
         redirect('Menu/Mytarget');
     }
-
     public function MytargetClose(){
         $mid = $this->input->post('taskid');
         $attch = $_FILES['attch']['name'];
@@ -3556,7 +3123,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->Mytarget_Close($mid,$mcremark,$attch,$count);
         redirect('Menu/Mytarget');
     }
-
     public function Mytargetchange(){
         $mid = $this->input->post('ttaskid');
         $ttchange = $this->input->post('ttchange');
@@ -3565,10 +3131,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->Mytarget_chnage($mid,$mcremark,$ttchange);
         redirect('Menu/Mytarget');
     }
-
-
-
-
     public function stpst(){
         $user=$this->input->post('user');
         $password=$this->input->post('password');
@@ -3597,7 +3159,6 @@ class Menu extends CI_Controller {
         redirect('Menu/Dashboard');}
         else{redirect('Menu/main');}
     }
-
     public function mainremark(){
         $status_id= $this->input->post('status_id');
         $this->load->model('Menu_model');
@@ -3609,58 +3170,46 @@ class Menu extends CI_Controller {
         echo  $data = '<option>Other</option>';
         return $data;
     }
-
-
     public function getstatus(){
         $cstatus= $this->input->post('cstatus');
         $this->load->model('Menu_model');
         $result=$this->Menu_model->get_status();
-
         if($cstatus==1){
         foreach($result as $d){if($d->id==8){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==8){
         foreach($result as $d){if($d->id==2){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==2){
         foreach($result as $d){if($d->id==8 || $d->id==4 || $d->id==5){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==3){
         foreach($result as $d){if($d->id==7 || $d->id==4 || $d->id==5 || $d->id==10 || $d->id==11 || $d->id==12){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==4){
         foreach($result as $d){if($d->id==1 || $d->id==8 || $d->id==2){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==5){
         foreach($result as $d){if($d->id==1 || $d->id==8 || $d->id==2){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==6){
         foreach($result as $d){if($d->id==12){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==7){
         foreach($result as $d){if($d->id==7){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==9){
         foreach($result as $d){if($d->id==9){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==10){
         foreach($result as $d){if($d->id==3){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
@@ -3669,76 +3218,56 @@ class Menu extends CI_Controller {
         foreach($result as $d){if($d->id==3){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==12){
         foreach($result as $d){if($d->id==6){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==13){
         foreach($result as $d){if($d->id==13){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==14){
         foreach($result as $d){if($d->id==14){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         return $data;
     }
-
-
-
     public function getstatusadmin(){
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
-
         $cstatus= $this->input->post('cstatus');
         $this->load->model('Menu_model');
-
-
         $result=$this->Menu_model->get_status();
-
         if($cstatus==1){
         foreach($result as $d){if($d->id==8){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==8){
         foreach($result as $d){if($d->id==1 || $d->id==2){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==2){
         foreach($result as $d){if($d->id==2 || $d->id==4 || $d->id==5){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==3){
         foreach($result as $d){if($d->id==6 || $d->id==7 || $d->id==4 || $d->id==5 || $d->id==10 || $d->id==11 || $d->id==12){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==4){
         foreach($result as $d){if($d->id==1 || $d->id==8 || $d->id==2){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==5){
         foreach($result as $d){if($d->id==1 || $d->id==8 || $d->id==2){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==11){
             foreach($result as $d){if($d->id==11 || $d->id==3){
                echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
             }}}
-
         if($uyid == 13){
         if($cstatus==6){
         foreach($result as $d){if($d->id==6){
@@ -3751,39 +3280,26 @@ class Menu extends CI_Controller {
                echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
             }}}
             }
-
         if($cstatus==7){
         foreach($result as $d){if($d->id==7 || $d->id==4  || $d->id==5 || $d->id==9 || $d->id==10 || $d->id==11 || $d->id==13){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==9){
         foreach($result as $d){if($d->id==9){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==10){
         foreach($result as $d){if($d->id==10 || $d->id==3){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==11){
         foreach($result as $d){if($d->id==11){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
-        // if($cstatus==12){
-        // foreach($result as $d){if($d->id==9 || $d->id==13){
-        //    echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
-        // }}}
-        // $uyid
-      
         if($cstatus==12){
-            foreach($result as $d){if($d->id==6){
-               echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
-            }}}
-            
-
+        foreach($result as $d){if($d->id==6 || $d->id==13){
+           echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
+        }}}
         if($uyid == 13){
             if($cstatus==13){
                 foreach($result as $d){if($d->id==13){
@@ -3796,17 +3312,12 @@ class Menu extends CI_Controller {
                    echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
              }}}
         }
-
-
         if($cstatus==14){
         foreach($result as $d){if($d->id==14){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         return $data;
     }
-
-
     public function getstatuspst(){
         $cstatus= $this->input->post('cstatus');
         $this->load->model('Menu_model');
@@ -3817,57 +3328,46 @@ class Menu extends CI_Controller {
         }
         return $data;
     }
-
     public function getstatusbd(){
         $cstatus= $this->input->post('cstatus');
         $this->load->model('Menu_model');
         $result=$this->Menu_model->get_status();
-
         if($cstatus==1){
         foreach($result as $d){if($d->id==8){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==8){
         foreach($result as $d){if($d->id==2){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==2){
         foreach($result as $d){if($d->id==2 || $d->id==4 || $d->id==5){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==3){
         foreach($result as $d){if($d->id==3){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==4){
         foreach($result as $d){if($d->id==1 || $d->id==8 || $d->id==2){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==5){
         foreach($result as $d){if($d->id==1 || $d->id==8 || $d->id==2){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==6){
         foreach($result as $d){if($d->id==6){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==7){
         foreach($result as $d){if($d->id==7){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==9){
         foreach($result as $d){if($d->id==9){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==10){
         foreach($result as $d){if($d->id==3){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
@@ -3876,26 +3376,20 @@ class Menu extends CI_Controller {
         foreach($result as $d){if($d->id==3){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==12){
         foreach($result as $d){if($d->id==12){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==13){
         foreach($result as $d){if($d->id==13){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         if($cstatus==14){
         foreach($result as $d){if($d->id==14){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
-
         return $data;
     }
-
-
     public function setdateremark(){
         $i = 0;
         date_default_timezone_set("Asia/Calcutta");
@@ -3912,23 +3406,17 @@ class Menu extends CI_Controller {
             if($t1<=$date && $t2>=$date){$i++;}
         }
         if($i>0){echo 1;}else{echo 0;}
-
     }
-
-
     public function submittask(){
-
         // echo "<pre>";
         // print_r($_POST);
         // die;
-
         $status=1;$filname="";$tid="";$uid="";$action_id="";$ystatus="";$remark="";$remark_msg="";$noremark="";$purpose="";$nremark_msg="";$rpmmom='null';$mom='null';$flink='null';$flink1='null';$flink2='null';
         $tid = $_POST['tid'];
         $uid = $_POST['uid'];
         $cmpid = $_POST['cmpid'];
         $cstatus = $_POST['ccstatus'];
         $actontaken = $_POST['actontaken'];
-
         if (isset($_POST['LinkedIn'])) {
         $LinkedIn = $_POST['LinkedIn'];
         }else{
@@ -3948,8 +3436,6 @@ class Menu extends CI_Controller {
         if(isset($_POST['OtherSocial'])){
             $OtherSocial = $_POST['OtherSocial'];
         }else{$OtherSocial ="";}
-
-
         if(isset($_POST['action_id'])){$action_id=$_POST['action_id'];}
         if(isset($_POST['yaction_id'])){$action_id = $_POST['yaction_id'];}
         if(isset($_POST['purpose'])){$purpose = $_POST['purpose'];}
@@ -3959,29 +3445,21 @@ class Menu extends CI_Controller {
         if(isset($_POST['nremark_msg'])){$nremark = $_POST['nremark_msg'];}
         if(isset($_POST['rpmmom'])){$rpmmom = $_POST['rpmmom'];}
         if(isset($_POST['nadate'])){$nadate = $_POST['nadate'];}else{$nadate='0';}
-
-
-
         if(isset($_FILES['filname']['name'])){$filname = $_FILES['filname']['name'];
             $uploadPath = 'uploads/proposal/';
             $this->load->model('Menu_model');
             $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
         }else{$this->load->model('Menu_model');$flink=0;}
-
-
         if(isset($_FILES['filname2']['name'])){$filname2 = $_FILES['filname2']['name'];
             $uploadPath = 'uploads/proposal/';
             $this->load->model('Menu_model');
             $flink2 = $this->Menu_model->uploadfile($filname2, $uploadPath);
         }else{$this->load->model('Menu_model');$flink2=0;}
-
         if(isset($_FILES['filname1']['name'])){$filname1 = $_FILES['filname1']['name'];
             $uploadPath = 'uploads/proposal/';
             $this->load->model('Menu_model');
             $flink1 = $this->Menu_model->uploadfile($filname1, $uploadPath);
         }else{$this->load->model('Menu_model');$flink1=0;}
-
-
         if($noremark!=''){$remark=$noremark;}
         if($yremark!=''){$remark=$yremark;}
         if($nremark!=''){$remark=$nremark;}
@@ -3996,7 +3474,6 @@ class Menu extends CI_Controller {
         redirect('Menu/Dashboard');
     }
     public function submittask1(){
-
         $this->load->library('session');
         $status=1;$filname="";$tid="";$uid="";$action_id="";$ystatus="";$remark="";$remark_msg="";$noremark="";$purpose="";$nremark_msg="";$rpmmom='null';$mom='null';$flink='null';$flink1='null';$flink2='null';
         $tid = $_POST['tid'];
@@ -4004,7 +3481,6 @@ class Menu extends CI_Controller {
         $cmpid = $_POST['cmpid'];
         $cstatus = $_POST['ccstatus'];
         $actontaken = $_POST['actontaken'];
-
         if (isset($_POST['LinkedIn'])) {
         $LinkedIn = $_POST['LinkedIn'];
         }else{
@@ -4024,8 +3500,6 @@ class Menu extends CI_Controller {
         if(isset($_POST['OtherSocial'])){
             $OtherSocial = $_POST['OtherSocial'];
         }else{$OtherSocial ="";}
-
-
         if(isset($_POST['action_id'])){$action_id=$_POST['action_id'];}
         if(isset($_POST['yaction_id'])){$action_id = $_POST['yaction_id'];}
         if(isset($_POST['purpose'])){$purpose = $_POST['purpose'];}
@@ -4034,28 +3508,22 @@ class Menu extends CI_Controller {
         if(isset($_POST['yremark_msg'])){$yremark = $_POST['yremark_msg'];}
         if(isset($_POST['nremark_msg'])){$nremark = $_POST['nremark_msg'];}
         if(isset($_POST['rpmmom'])){$rpmmom = $_POST['rpmmom'];}
-        if(isset($_POST['nadate'])){$nadate = $_POST['nadate'];}else{$nadate='0';}
-
+        // if(isset($_POST['nadate'])){$nadate = $_POST['nadate'];}else{$nadate='0';}
         if(isset($_FILES['filname']['name'])){$filname = $_FILES['filname']['name'];
             $uploadPath = 'uploads/proposal/';
             $this->load->model('Menu_model');
             $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
         }else{$this->load->model('Menu_model');$flink=0;}
-
-
         if(isset($_FILES['filname2']['name'])){$filname2 = $_FILES['filname2']['name'];
             $uploadPath = 'uploads/proposal/';
             $this->load->model('Menu_model');
             $flink2 = $this->Menu_model->uploadfile($filname2, $uploadPath);
         }else{$this->load->model('Menu_model');$flink2=0;}
-
         if(isset($_FILES['filname1']['name'])){$filname1 = $_FILES['filname1']['name'];
             $uploadPath = 'uploads/proposal/';
             $this->load->model('Menu_model');
             $flink1 = $this->Menu_model->uploadfile($filname1, $uploadPath);
         }else{$this->load->model('Menu_model');$flink1=0;}
-
-
         if($noremark!=''){$remark=$noremark;}
         if($yremark!=''){$remark=$yremark;}
         if($nremark!=''){$remark=$nremark;}
@@ -4066,19 +3534,17 @@ class Menu extends CI_Controller {
             $noofsc = $_POST['noofsc'];
             $pbudgetme = $_POST['pbudgetme'];
         }else{$partner = "";$noofsc = "";$pbudgetme = "";}
-
        
          // Start mom acten taken yes
          $momdata = $_POST['momdata'];
          $action_id = $_POST['action_id'];
-
          if($actontaken == 'yes' && $action_id == 6 && $momdata =='momdata'){
-            
+           
              $meetingdonewinitiator = $_POST['meetingdonewinitiator'];
-
             //  presentation Start
              $presentation = $_POST['presentation'];
              $presentationdata = '';
+ 
              foreach($presentation as $prs){
                  $presentationdata .=$prs.',';
              }
@@ -4093,7 +3559,6 @@ class Menu extends CI_Controller {
              }
              $ischoolstate = rtrim($ischoolstate, ',');
             //  identify_school_state End
-
             //  identify_school_district Start
              $ischool_district = $_POST['identify_school_district'];
              $ischooldistrict = '';
@@ -4102,7 +3567,6 @@ class Menu extends CI_Controller {
              }
              $ischooldistrict = rtrim($ischooldistrict, ',');
             //  identify_school_district End
-
              //  no_of_school Start
              $ino_of_school = $_POST['no_of_school'];
              $ischoolcnt = '';
@@ -4111,10 +3575,8 @@ class Menu extends CI_Controller {
              }
              $ischoolcnt = rtrim($ischoolcnt, ',');
             //  no_of_school End
-
             $client_int_type_project = $this->input->post('client_int_type_project');
             if($client_int_type_project == ''){$client_int_type_project = '';}
-
              $data = array(
                  'ccstatus' => $cstatus,
                  'action_id' => $this->input->post('action_id'),
@@ -4157,11 +3619,10 @@ class Menu extends CI_Controller {
              );
              // Call the model function to insert the data
              $id = $this->Menu_model->add_momData($data);
-             $this->session->set_flashdata('success_message','Mom Data Submit SuccessFully !');
+             $this->session->set_flashdata('success_message','Mom Data Submitted SuccessFully !');
          }
  
           // End mom acten taken yes
-
           if($action_id == 10){
             $init_id = $_POST['cmpid'];
             $getcmpinfo1 =  $this->Menu_model->get_cmpbyinid($init_id);
@@ -4170,9 +3631,7 @@ class Menu extends CI_Controller {
                 $status =1;
             }
         }
-
-  
-        $id = $this->Menu_model->submit_task1($tid,$uid,$cmpid,$actontaken,$action_id,$status,$remark,$rpmmom,$purpose,$flink,$flink1,$flink2,$partner,$noofsc,$pbudgetme,$LinkedIn,$Facebook,$YouTube,$Instagram,$OtherSocial,$nadate);
+        $id = $this->Menu_model->submit_task1($tid,$uid,$cmpid,$actontaken,$action_id,$status,$remark,$rpmmom,$purpose,$flink,$flink1,$flink2,$partner,$noofsc,$pbudgetme,$LinkedIn,$Facebook,$YouTube,$Instagram,$OtherSocial);
       
         
         if($action_id == 10){
@@ -4184,11 +3643,8 @@ class Menu extends CI_Controller {
                 $this->session->set_flashdata('success_message',' Please Add Your Lead ');
             }
         }
-
-
         redirect('Menu/Dashboard');
     }
-
     public function submitRPP(){
         $priority = $_POST['priority'];
         $tid = $_POST['tmid'];
@@ -4196,7 +3652,6 @@ class Menu extends CI_Controller {
         $id = $this->Menu_model->submit_RPP($tid,$priority);
         redirect('Menu/RPPriority');
     }
-
     public function daysc(){
       
         $wffo=0;
@@ -4206,20 +3661,56 @@ class Menu extends CI_Controller {
         $lat = $_POST['lat'];
         $lng = $_POST['lng'];
       
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+      
         $filname = $_FILES['filname']['name'];
         $uploadPath = 'uploads/day/';
         $this->load->model('Menu_model');
-
-        $cur_date = date("Y-m-d");
-        $getTodaysMeetinggs = $this->Menu_model->GetTodaysComplteMeeting($user_id,$cur_date);
-        // dd($getTodaysMeetinggs);
-        $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
-        $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
+     
+        if($do == 1){
+            if($uyid == 3 || $uyid == 4 || $uyid == 13){
+            $pendingtaskcmp = $this->Menu_model->get_PendingTaskForToday($user_id);
+            $pendingautotaskcmpcnt = sizeof($pendingtaskcmp);  
+           if($pendingautotaskcmpcnt > 0){
+               $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask Before Going Task Planner Page');
+               redirect('Menu/Dashboard');
+           }else{
+            $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
+            $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
+           } 
+        }else{
+            $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
+            $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
+        }
+        }
+      
+        if($do == 0){
+          
+            $pendingtaskcmp = $this->Menu_model->get_PendingTaskForToday($user_id);
+           $pendingautotaskcmpcnt = sizeof($pendingtaskcmp);  
+           if($pendingautotaskcmpcnt > 0){
+                $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
+                $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
+               $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask Before Going Task Planner Page');
+               redirect('Menu/Dashboard');
+           }else{
+            if($uyid == 3 || $uyid == 4 || $uyid == 13){
+                $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
+                $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
+                $this->session->set_flashdata('error_message','Please Set Todays Planner First');
+                redirect('Menu/TaskPlanner2/'.date("Y-m-d"));
+            }else{
+                $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
+                $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
+            }
+           }
+        }
+       
         redirect('Menu/Dashboard');
     }
-
-
-
     public function checkdays(){
         $rat1 = $_POST['rat1'];
         $rat2 = $_POST['rat2'];
@@ -4232,7 +3723,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->check_days($rat1,$rat2,$rat3,$rat4,$sremark,$udid,$que);
         redirect('Menu/DayStartCheck');
     }
-
     public function checkmeeting(){
         $rat1 = $_POST['rat1'];
         $rat2 = $_POST['rat2'];
@@ -4245,8 +3735,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->check_meeting($rat1,$rat2,$rat3,$rat4,$mremark,$udid,$que);
         redirect('Menu/MeetingCheck');
     }
-
-
     public function checkdayc(){
         $rat1 = $_POST['rat1'];
         $rat2 = $_POST['rat2'];
@@ -4259,8 +3747,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->check_dayc($rat1,$rat2,$rat3,$rat4,$sremark,$udid,$que);
         redirect('Menu/DayCloseCheck');
     }
-
-
     public function checkdaytask(){
         $rat = $_POST['rat'];
         $rremark = $_POST['rremark'];
@@ -4270,7 +3756,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->check_daytask($rat,$rremark,$taskid,$uuid);
         redirect('Menu/TaskCheck');
     }
-
     public function dailytc(){
         $start = $_POST['start'];
         $piid = $_POST['piid'];
@@ -4283,7 +3768,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->submit_tcs($start,$piid,$bdid,$pc,$dsr,$apps,$other);
         redirect('Menu/Dashboard');
     }
-
     public function rosterstart(){
         $pstid = $_POST['pstid'];
         $bdid = $_POST['bdid'];
@@ -4291,7 +3775,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->roster_start($pstid,$bdid);
         redirect('Menu/RosterCalling');
     }
-
     public function planreview(){
         $plandate = $_POST['plandate'];
         $uid = $_POST['uid'];
@@ -4303,7 +3786,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->plan_review($plandate,$uid,$bdid,$reviewtype,$meetlink,$fixdate);
         redirect('Menu/AllReviewPlaing');
     }
-
     public function pstplanreview(){
         $plandate = $_POST['plandate'];
         $uid = $_POST['uid'];
@@ -4315,8 +3797,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->plan_review($plandate,$uid,$bdid,$reviewtype,$meetlink,$fixdate);
         redirect('Menu/AllPSTReviewPlaing');
     }
-
-
     public function startreview(){
         $startt = $_POST['startt'];
         $reviewid = $_POST['reviewid'];
@@ -4324,7 +3804,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->start_review($startt,$reviewid);
         redirect('Menu/AllReviewPlaing');
     }
-
     public function pststartreview(){
         $startt = $_POST['startt'];
         $reviewid = $_POST['reviewid'];
@@ -4332,26 +3811,28 @@ class Menu extends CI_Controller {
         $this->Menu_model->start_review($startt,$reviewid);
         redirect('Menu/AllPSTReviewPlaing');
     }
-
     public function closereview(){
         $closeremark = $_POST['closeremark'];
         $closetdate = $_POST['closetdate'];
         $rrid = $_POST['rrid'];
         $this->load->model('Menu_model');
-        $this->Menu_model->close_review($closetdate,$closeremark,$rrid);
-        redirect('Menu/AllReviewPlaing');
+        $result = $this->Menu_model->close_review($closetdate,$closeremark,$rrid);
+        $data['uid'] =  $result[0]->uid;
+        $data['reviewType'] =  $result[0]->reviewType;
+        redirect('Menu/targetQandA',$data);
+        // redirect('Menu/AllReviewPlaing');
     }
-
-
     public function pstclosereview(){
         $closeremark = $_POST['closeremark'];
         $closetdate = $_POST['closetdate'];
         $rrid = $_POST['rrid'];
         $this->load->model('Menu_model');
-        $this->Menu_model->close_review($closetdate,$closeremark,$rrid);
-        redirect('Menu/AllPSTReviewPlaing');
+        $result = $this->Menu_model->close_review($closetdate,$closeremark,$rrid);
+        $data['uid']        =  $result[0]->uid;
+        $data['reviewType'] =  $result[0]->reviewType;
+        redirect('Menu/targetQandA',$data);
+        // redirect('Menu/AllPSTReviewPlaing');
     }
-
     public function rosterclose(){
         $pstid = $_POST['pid'];
         $bdid = $_POST['bid'];
@@ -4360,8 +3841,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->roster_close($pstid,$bdid,$closeremark);
         redirect('Menu/RosterCalling');
     }
-
-
     public function rcremark(){
         echo $pstid = $_POST['pst'];
         echo $bdid = $_POST['bd'];
@@ -4373,7 +3852,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->rc_remark($pstid,$bdid,$cid,$inid,$lremark,$cremark);
         redirect('Menu/RosterCalling');
     }
-
     public function rosterca(){
         $piid = $_POST['piid'];
         $bdid = $_POST['bdid'];
@@ -4386,8 +3864,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->submit_rosterca($piid,$bdid,$ps,$sscc,$rpcs,$pcu,$ecftw);
         redirect('Menu/Dashboard');
     }
-
-
     public function dailytcc(){
         $close = $_POST['close'];
         $piid = $_POST['piida'];
@@ -4396,18 +3872,14 @@ class Menu extends CI_Controller {
         $this->Menu_model->submit_tcsc($close,$piid,$cremark);
         redirect('Menu/Dashboard');
     }
-
-
-
     public function dateplan1($tdate,$uid){
         $taskid = $_POST['taskid'];
         $tasktimeplan = $_POST['tasktimeplan'];
         $date = $tdate.'T'.$tasktimeplan;
         $this->load->model('Menu_model');
         $this->Menu_model->plantask($taskid,$date,$uid);
-        redirect('Menu/TaskPlanner/'.$tdate);
+        redirect('Menu/TaskPlanner2/'.$tdate);
     }
-
     public function dateplan(){
         $taskid = $_POST['taskid'];
         $uid = $_POST['uid'];
@@ -4416,8 +3888,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->plantask($taskid,$date,$uid);
         redirect('Menu/Dashboard');
     }
-
-
     public function HandBINDReminder(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -4426,16 +3896,12 @@ class Menu extends CI_Controller {
         $rid = $_POST['rid'];
         $creminder = $_POST['creminder'];
         $this->load->model('Menu_model');
-
         list($val1, $val2) = explode(",", $rid);
         $stid=$val1;
         $cid = $val2;
-
         $this->Menu_model->HandBIND_Reminder($cid,$stid,$creminder,$uname);
         redirect('Menu/HandBINDDetail/'.$cid);
     }
-
-
     public function HandBINDWarn(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -4444,18 +3910,12 @@ class Menu extends CI_Controller {
         $wid = $_POST['wid'];
         $cwarning = $_POST['cwarning'];
         $this->load->model('Menu_model');
-
         list($val1, $val2) = explode(",", $wid);
         $stid=$val1;
         $cid = $val2;
-
         $this->Menu_model->HandBIND_Warn($cid,$stid,$cwarning,$uname);
         redirect('Menu/HandBINDDetail/'.$cid);
     }
-
-
-
-
     public function bdrcomment(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -4464,16 +3924,12 @@ class Menu extends CI_Controller {
         $rid = $_POST['rid'];
         $rcomment = $_POST['rcomment'];
         $this->load->model('Menu_model');
-
         if(isset($_FILES['filname']['name'])) {
            $filname = $_FILES['filname']['name'];
         }else{$filname=0;}
-
         $this->Menu_model->bdr_comment($rid,$rcomment,$filname,$uname);
         redirect('Menu/TotalBDRequest/1');
     }
-
-
     public function bdrclose(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -4485,7 +3941,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->bdr_close($rid,$ccomment,$uname);
         redirect('Menu/TotalBDRequest/1');
     }
-
     public function bdropen(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -4497,7 +3952,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->bdr_open($rid,$ccomment,$uname);
         redirect('Menu/TotalBDRequest/1');
     }
-
     public function AdminDailyReport(){
         date_default_timezone_set("Asia/Calcutta");
         if(isset($_POST['tdate'])){
@@ -4519,7 +3973,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function NextDayPlanner(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -4534,8 +3987,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function ClientProject(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -4550,8 +4001,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TaskPlanner1($adate){
         if(isset($_POST['adate'])){
             $adate = $_POST['adate'];
@@ -4567,17 +4016,14 @@ class Menu extends CI_Controller {
         $tptime=$this->Menu_model->get_tptime($uid);
         $tptime = $tptime[0]->tptime;
         $dep_name = $dt[0]->name;
-
         $getreqData  =  $this->db->query("SELECT * FROM `task_plan_for_today` WHERE user_id =$uid and date='$adate'");
         $getreqData =  $getreqData->result();
-
         if(!empty($user)){
             $this->load->view($dep_name.'/TaskPlanner1',['uid'=>$uid,'user'=>$user,'adate'=>$adate,'tptime'=>$tptime,'getreqData'=>$getreqData]);
         }else{
             redirect('Menu/main');
         }
     }
-
     public function TaskPlanner($adate){
         if(isset($_POST['adate'])){
             $adate = $_POST['adate'];
@@ -4593,20 +4039,16 @@ class Menu extends CI_Controller {
         $tptime=$this->Menu_model->get_tptime($uid);
         $tptime = $tptime[0]->tptime;
         $dep_name = $dt[0]->name;
-
         $planbutnotinited = $this->Menu_model->get_allcmp_planbutnotinited($uid);
         $planbutnotinitedcnt = sizeof($planbutnotinited);
         $getreqData  =  $this->db->query("SELECT * FROM `task_plan_for_today` WHERE user_id =$uid and date='$adate'");
         $getreqData =  $getreqData->result();
-
         $getAutoTaskTime  =  $this->db->query("SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$adate'");
         $getAutoTaskTime =  $getAutoTaskTime->result();
         $curdate = date("Y-m-d");
-
         $getPendingAutoTask  =  $this->db->query("SELECT * FROM `tblcallevents` WHERE user_id = $uid AND nextCFID = 0 AND autotask = 1 AND auto_plan = 1 AND cast(appointmentdatetime AS DATE) != '$curdate'");
         $getPendingTask =  $getPendingAutoTask->result();
         $pcount = sizeof($getPendingTask);
-
     $getPendingTimeTask  =  $this->db->query("SELECT *
     FROM `tblcallevents`
     WHERE user_id = $uid
@@ -4615,9 +4057,7 @@ class Menu extends CI_Controller {
            AND plan = 1
            AND autotask = 1
            AND auto_plan = 0)");
-
     $getPendingTimeTask =  $getPendingTimeTask->result();
-
     $timecount = 0;
     foreach ($getPendingTimeTask as $taskmin){
         $taskactiontime = $this->Menu_model->getTaskAction($taskmin->actiontype_id);
@@ -4627,37 +4067,28 @@ class Menu extends CI_Controller {
         $minutes = $timecount % 60;
         $mesaage = $hours ." Hours ".$minutes." Minutes Pending For Task Work";
         // $planbutnotinitedcnt =1;
-
         // echo "<pre>";
         // print_r($planbutnotinited);
         // die;
-
-
     if($planbutnotinitedcnt > 0){
         $this->load->library('session');
         $this->session->set_flashdata('success_message', $planbutnotinitedcnt . ' pending tasks - First, Plan You Old Pending Task with Plan But Not Initiated');
     }
-
     $getplandateindata  =  $this->db->query("SELECT * FROM `autotask_time` where user_id='$uid' AND date ='$adate'");
     $getplandateindata =  $getplandateindata->result();
-
         if(!empty($user)){
             $this->load->view($dep_name.'/TaskPlanner',['uid'=>$uid,'user'=>$user,'planbutnotinitedcnt'=>$planbutnotinitedcnt,'getplandt'=>$getplandateindata,'pendingtask'=>$pcount, 'mesaage'=>$mesaage,'adate'=>$adate,'tptime'=>$tptime,'getAutoTaskTime'=>$getAutoTaskTime,'getreqData'=>$getreqData]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function TaskPlanner2($adate){
-
         if(isset($_POST['adate'])){
             $adate = $_POST['adate'];
         }else{
             $adate = $adate;
         }
+
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -4670,15 +4101,12 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
 
         $planbutnotinited = $this->Menu_model->get_allcmp_planbutnotinited($uid);
-
         
         $user_day = $this->Menu_model->get_daydetail($uid,date("Y-m-d"));
-
         if(sizeof($user_day) == 0){
             $this->session->set_flashdata('error_message','* Please Start Your Day');
             redirect('Menu/DayManagement');
         }   
-
         $pendingautotaskcmp = $this->Menu_model->get_PendingAutoTask($uid);
        
         $pendingautotaskcmpcnt = sizeof($pendingautotaskcmp);
@@ -4687,8 +4115,6 @@ class Menu extends CI_Controller {
             $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask Before Going Task Planner Page');
             redirect('Menu/Dashboard2');
         }   
-
-
         $oldplanbutnotinited = $this->Menu_model->get_all_old_cmp_planbutnotinited($uid);
         $oldplanbutnotinitedcnt = sizeof($oldplanbutnotinited);
         if($oldplanbutnotinitedcnt > 0){
@@ -4701,19 +4127,14 @@ class Menu extends CI_Controller {
         $planbutnotinitedcnt = sizeof($planbutnotinited);
         $getreqData  =  $this->db->query("SELECT * FROM `task_plan_for_today` WHERE user_id =$uid and date='$adate'");
         $getreqData =  $getreqData->result();
-
         $getAutoTaskTime  =  $this->db->query("SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$adate'");
         $getAutoTaskTime =  $getAutoTaskTime->result();
         $curdate = date("Y-m-d");
-
         $getPendingAutoTask  =  $this->db->query("SELECT * FROM `tblcallevents` WHERE user_id = $uid AND nextCFID = 0 AND autotask = 1 AND auto_plan = 1 AND cast(appointmentdatetime AS DATE) != '$curdate'");
         $getPendingTask =  $getPendingAutoTask->result();
         $pcount = sizeof($getPendingTask);
-
     $getPendingTimeTask  =  $this->db->query("SELECT * FROM `tblcallevents` WHERE user_id = $uid  AND (nextCFID = 0 AND lastCFID = 0 AND plan = 1 AND autotask = 1 AND auto_plan = 0)");
-
     $getPendingTimeTask =  $getPendingTimeTask->result();
-
     $timecount = 0;
     foreach ($getPendingTimeTask as $taskmin){
         $taskactiontime = $this->Menu_model->getTaskAction($taskmin->actiontype_id);
@@ -4726,14 +4147,12 @@ class Menu extends CI_Controller {
    
     $getplandateindata  =  $this->db->query("SELECT * FROM `autotask_time` where user_id='$uid' AND date ='$adate'");
     $getplandateindata =  $getplandateindata->result();
-
         if(!empty($user)){
             $this->load->view($dep_name.'/TaskPlanner2',['uid'=>$uid,'user'=>$user,'planbutnotinitedcnt'=>$planbutnotinitedcnt,'getplandt'=>$getplandateindata,'pendingtask'=>$pcount, 'mesaage'=>$mesaage,'adate'=>$adate,'tptime'=>$tptime,'getAutoTaskTime'=>$getAutoTaskTime,'getreqData'=>$getreqData,'oldPendTask'=>$oldplanbutnotinited,'type_id'=>$uyid]);
         }else{
             redirect('Menu/main');
         }
     }
-
     public function CheckPlannerTimeisReadyorNot($uid,$adate){
         
         $this->load->model('Menu_model');
@@ -4744,7 +4163,6 @@ class Menu extends CI_Controller {
             if($aptime > 0){
                 $start_tttpft = $aptime[0]->start_tttpft;
                 $end_tttpft = $aptime[0]->end_tttpft;
-
                 $current_time = date("H:i:s");
                 $current_date = date("Y-m-d");
     
@@ -4760,34 +4178,27 @@ class Menu extends CI_Controller {
             }
         }
     }
-
-
-
     public function RequestForTodaysTaskPlan(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
-
         $userData  =  $this->db->query("SELECT * FROM `user_details` WHERE user_id = $uid");
         $userData =  $userData->result();
-
         $type_id =  $userData[0]->type_id;
         $inside =  $userData[0]->inside;
-
         if($type_id == 4 || $type_id == 5 || $type_id == 3){
-            if($inside == 1 || $type_id == 4){
+             //$inside == 1 ||  removed this condition from below
+            if($type_id == 4){
                 $auid = $userData[0]->admin_id;
             }else{
-                 $auid = $userData[0]->aadmin;
+                $auid = $userData[0]->aadmin;
             }
         }else{
             $auid = $userData[0]->aadmin;
         }
-
         if($uid == 100183 || $uid ==100166 || $uid == 100136 || $uid == 100193 || $uid == 100163 || $uid == 100184 || $uid == 100162 || $uid == 100176) {
             $auid = 100024;
         }
-
         if($type_id == 13){
             $auid = $userData[0]->pst_co;
         }
@@ -4798,18 +4209,15 @@ class Menu extends CI_Controller {
         $tptime=$this->Menu_model->get_tptime($uid);
         $tptime = $tptime[0]->tptime;
         $dep_name = $dt[0]->name;
-
         $setdatebyuser              = $_POST['setdatebyuser'];
         $requestForTodaysTaskPlan   = $_POST['requestForTodaysTaskPlan'];
         
         $taskcnt   = $_POST['taskcnt'];
         $would_you_want   = $_POST['would_you_want'];
-
         $this->db->query("INSERT INTO `task_plan_for_today`(`user_id`,`admin_id`, `date`, `request_remarks`,`taskcnt`,`would_you_want`) VALUES ('$uid','$auid','$setdatebyuser','$requestForTodaysTaskPlan','$taskcnt','$would_you_want')");
-
         $this->load->library('session');
         $this->session->set_flashdata('success_message', 'Your request has been successfully sent to the administrator. Please wait for approval.');
-         redirect("Menu/TaskPlanner/".date('Y-m-d'));
+         redirect("Menu/TaskPlanner2/".date('Y-m-d'));
     }
     public function RequestForYestTaskPlan(){
         $user = $this->session->userdata('user');
@@ -4818,72 +4226,54 @@ class Menu extends CI_Controller {
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
-
         $setdatebyuser    = $_POST['setdatebyuser'];
         $requestremarks   = $_POST['todaysPendingTaskPlanrem'];
         $oldPendTaskcnt   = $_POST['oldPendTaskcnt'];
-
         $setdatebyuser = $setdatebyuser.' '.date('H:i:s');
        
         $this->db->query("INSERT INTO `request_old_pend_task`(`user_id`, `req_date`,`taskcnt`, `request_remarks`) VALUES ('$uid','$setdatebyuser','$oldPendTaskcnt','$requestremarks')");
-
         $this->load->library('session');
         $this->session->set_flashdata('success_message', 'Your request has been successfully sent to the administrator. Please wait for approval.');
-         redirect("Menu/TaskPlanner/".date('Y-m-d'));
+         redirect("Menu/TaskPlanner2/".date('Y-m-d'));
     }
-
     public function TodaysTaskApprovelRequest(){
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
-
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $tptime=$this->Menu_model->get_tptime($uid);
         $tptime = $tptime[0]->tptime;
         $dep_name = $dt[0]->name;
-
         if(isset($_POST['targetdate'])){
             $adate = $_POST['targetdate'];
         }else{
             $adate = date("Y-m-d");
         }
-
          $getreqData  =  $this->db->query("SELECT * FROM `task_plan_for_today` WHERE admin_id = $uid and date='$adate'");
-         
          $getreqData =  $getreqData->result();
-    
          if(!empty($user)){
             $this->load->view($dep_name.'/TodaysTaskApprovelRequest',['uid'=>$uid,'user'=>$user,'adate'=>$adate,'getreqData'=>$getreqData]);
         }else{
             redirect('Menu/main');
         }
-
     }
-
-
-
     public function PendingTaskApprovelRequest(){
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
-
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $tptime=$this->Menu_model->get_tptime($uid);
         $tptime = $tptime[0]->tptime;
         $dep_name = $dt[0]->name;
-
         if(isset($_POST['targetdate'])){
             $adate = $_POST['targetdate'];
         }else{
             $adate = date("Y-m-d");
         }
-
          $getreqData  =  $this->db->query("SELECT `request_old_pend_task`.`id` AS tid, `request_old_pend_task`.*, `user_details`.* FROM `request_old_pend_task` LEFT JOIN `user_details` ON `request_old_pend_task`.`user_id` = `user_details`.`user_id` WHERE `user_details`.`aadmin` = '$uid' AND CAST(`request_old_pend_task`.`req_date` AS DATE) = '$adate'");
          $getreqData =  $getreqData->result();
         
@@ -4892,10 +4282,7 @@ class Menu extends CI_Controller {
         }else{
             redirect('Menu/main');
         }
-
     }
-
-
     public function TodaysTaskapprove($id,$type){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -4903,15 +4290,12 @@ class Menu extends CI_Controller {
         if($type == 'Approve'){
             $status = "Approved";
             $reamrks = "Approved By ".$user['name'];
-
             $query =  $this->db->query("UPDATE `task_plan_for_today` SET `approvel_status`='$status',`remarks`='$reamrks' WHERE id = $id");
             redirect("Menu/TodaysTaskApprovelRequest");
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function TodaysPendingTaskapprove($id,$type){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -4926,7 +4310,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function TodaysTaskReject(){
         $rejectid = $_POST['reject'];
         $rejectreamrk = $_POST['rejectreamrk'];
@@ -4937,8 +4320,6 @@ class Menu extends CI_Controller {
         $query =  $this->db->query("UPDATE `task_plan_for_today` SET `approvel_status`='$status',`remarks`='$rejectreamrk' WHERE id = $rejectid");
         redirect("Menu/TodaysTaskApprovelRequest");
     }
-
-
     public function TodaysPendingsTaskRequestReject(){
         $rejectid = $_POST['reject'];
         $rejectreamrk = $_POST['rejectreamrk'];
@@ -4949,8 +4330,6 @@ class Menu extends CI_Controller {
         $query =  $this->db->query("UPDATE `request_old_pend_task` SET `approvel_status`='$status',`approvel_reamrks`='$rejectreamrk',`approvel_by`='$uid' WHERE id = $rejectid");
         redirect("Menu/PendingTaskApprovelRequest");
     }
-
-
     public function ndplan(){
         $uid = $_POST['bdid'];
         $wffo = $_POST['wffo'];
@@ -4960,7 +4339,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->submit_ndplan($wffo,$nextdate,$reminder,$uid);
         redirect('Menu/NextDayPlanner');
     }
-
     public function MyDailyReport($tdate){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -4999,7 +4377,6 @@ class Menu extends CI_Controller {
         $positive=$this->Menu_model->get_positive();
         $vpositive=$this->Menu_model->get_vpositive();
         $bdrequest=$this->Menu_model->bdrequest($uid);
-
         $tnos=0;
         $revenue=0;
         $poc=0;
@@ -5019,14 +4396,12 @@ class Menu extends CI_Controller {
             $revenue +=  (int)$tost[0]->fbudget;
         }
         $pstc=$this->Menu_model->get_pstc($uid);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/MyDailyReport',['ttdone'=>$ttdone,'upt'=>$upt,'bdrequest'=>$bdrequest,'user'=>$user,'fr'=>$fr,'callr'=>$callr,'emailr'=>$emailr,'meetingr'=>$meetingr,'pendingt'=>$pendingt,'totalt'=>$totalt,'patc'=>$patc,'tatc'=>$tatc,'pate'=>$pate,'tate'=>$tate,'patm'=>$patm,'tatm'=>$tatm,'sc'=>$sc,'tptask'=>$tptask,'ttd'=>$ttd,'barg'=>$barg,'uid'=>$uid,'pstc'=>$pstc,'poc'=>$poc,'vpoc'=>$vpoc,'tnos'=>$tnos,'revenue'=>$revenue,'tsww'=>$tsww,'bdc'=>$bdc,'tdate'=>$tdate,'mbdc'=>$mbdc]);
         }else{
             redirect('Menu/main');
         }
     }
-
     public function TeamDailyReport($tdate){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5037,7 +4412,6 @@ class Menu extends CI_Controller {
         if($uid=='100142'){$uid=2;}
         if(isset($_POST["sdate"])){$tdate=$_POST["sdate"];}else{$tdate=$tdate;}
         if(isset($_POST["bdid"])){$userid=$bdid=$_POST["bdid"];}else{$userid=$uid;}
-
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
@@ -5068,7 +4442,6 @@ class Menu extends CI_Controller {
         $positive=$this->Menu_model->get_positive();
         $vpositive=$this->Menu_model->get_vpositive();
         $bdrequest=$this->Menu_model->bdrequest($userid);
-
         $tnos=0;
         $revenue=0;
         $poc=0;
@@ -5088,15 +4461,12 @@ class Menu extends CI_Controller {
             $revenue +=  (int)$tost[0]->fbudget;
         }
         $pstc=$this->Menu_model->get_pstc($uid);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/TeamDailyReport',['ttdone'=>$ttdone,'upt'=>$upt,'bdrequest'=>$bdrequest,'user'=>$user,'fr'=>$fr,'callr'=>$callr,'emailr'=>$emailr,'meetingr'=>$meetingr,'pendingt'=>$pendingt,'totalt'=>$totalt,'patc'=>$patc,'tatc'=>$tatc,'pate'=>$pate,'tate'=>$tate,'patm'=>$patm,'tatm'=>$tatm,'sc'=>$sc,'tptask'=>$tptask,'ttd'=>$ttd,'barg'=>$barg,'uid'=>$uid,'pstc'=>$pstc,'poc'=>$poc,'vpoc'=>$vpoc,'tnos'=>$tnos,'revenue'=>$revenue,'tsww'=>$tsww,'bdc'=>$bdc,'tdate'=>$tdate,'mbdc'=>$mbdc]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function DailyReport(){
         date_default_timezone_set("Asia/Calcutta");
         if(isset($_POST['tdate'])){
@@ -5141,7 +4511,6 @@ class Menu extends CI_Controller {
         $vpositive=$this->Menu_model->get_vpositive();
         $bdrequest=$this->Menu_model->bdrequest($uid);
         $daym = $this->Menu_model->get_BDdaydbyad($uid,$tdate,1);
-
         $tnos=0;
         $revenue=0;
         $poc=0;
@@ -5161,15 +4530,13 @@ class Menu extends CI_Controller {
             $revenue +=  (int)$tost[0]->fbudget;
         }
         $pstc=$this->Menu_model->get_pstc($uid);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/DailyReport',['daym'=>$daym,'ttdone'=>$ttdone,'upt'=>$upt,'bdrequest'=>$bdrequest,'user'=>$user,'fr'=>$fr,'callr'=>$callr,'emailr'=>$emailr,'meetingr'=>$meetingr,'pendingt'=>$pendingt,'totalt'=>$totalt,'patc'=>$patc,'tatc'=>$tatc,'pate'=>$pate,'tate'=>$tate,'patm'=>$patm,'tatm'=>$tatm,'sc'=>$sc,'tptask'=>$tptask,'ttd'=>$ttd,'barg'=>$barg,'uid'=>$uid,'pstc'=>$pstc,'poc'=>$poc,'vpoc'=>$vpoc,'tnos'=>$tnos,'revenue'=>$revenue,'tsww'=>$tsww,'bdc'=>$bdc,'tdate'=>$tdate,'mbdc'=>$mbdc]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
+/*
     public function Dashboard(){
         date_default_timezone_set("Asia/Calcutta");
         if(isset($_POST['tdate'])){
@@ -5183,22 +4550,10 @@ class Menu extends CI_Controller {
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
         $myid = $uid;
-
-        $this->load->model('Menu_model');
-        $this->load->library('session');;
-
-        if($uyid == 3 || $uyid == 4 || $uyid == 5 || $uyid == 7 || $uyid == 8 || $uyid == 9 || $uyid == 11 || $uyid == 12 || $uyid == 13 || $uyid == 15){
-            $user_day = $this->Menu_model->get_daydetail($uid,date("Y-m-d"));
-            if(sizeof($user_day) == 0){
-                $this->session->set_flashdata('error_message','* Please Start Your Day');
-                redirect('Menu/DayManagement');
-            } 
-        }
-
         if($uid=='100103'){$uid=45;}
         if($uid=='100149'){$uid=45;}
         if($uid=='100142'){$uid=2;}
-       
+        $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         $fr=$this->Menu_model->get_freport($uid);
@@ -5228,6 +4583,101 @@ class Menu extends CI_Controller {
         $autotasktimenew=$this->Menu_model->autotasktimenew($uid,$tdate);
         $positive=$this->Menu_model->get_positive();
         $vpositive=$this->Menu_model->get_vpositive();
+         $positveNAP = $this->Menu_model->get_positiveNAP();
+        $vpositveNAP = $this->Menu_model->get_vpositiveNAP();
+        $cmtd=$this->Menu_model->get_clusterTaskDetails($uid,$tdate);
+        $clusterFunnel = $this->Menu_model->get_clusterFunnel($uid);
+        $tnos=0;
+        $revenue=0;
+        $poc=0;
+        $vpoc=0;
+        foreach($positive as $po){
+            $poc++;
+            $iniid = $po->cid_id;
+            $tos=$this->Menu_model->get_initbyid($iniid);
+            $tnos +=  (int)$tos[0]->noofschools;
+            $revenue +=  (int)$tos[0]->fbudget;
+        }
+        foreach($vpositive as $vpo){
+            $vpoc++;
+            $iniid = $vpo->cid_id;
+            $tost=$this->Menu_model->get_initbyid($iniid);
+            $tnos +=  (int)$tost[0]->noofschools;
+            $revenue +=  (int)$tost[0]->fbudget;
+        }
+        $pstc=$this->Menu_model->get_pstc($uid);
+   
+        if(!empty($user)){
+            
+            // $this->load->view($dep_name.'/index',['myid'=>$myid,'ttdone'=>$ttdone,'upt'=>$upt,'user'=>$user,'fr'=>$fr,'callr'=>$callr,'emailr'=>$emailr,'meetingr'=>$meetingr,'pendingt'=>$pendingt,'totalt'=>$totalt,'patc'=>$patc,'tatc'=>$tatc,'pate'=>$pate,'tate'=>$tate,'patm'=>$patm,'tatm'=>$tatm,'sc'=>$sc,'tptask'=>$tptask,'ttd'=>$ttd,'barg'=>$barg,'uid'=>$uid,'pstc'=>$pstc,'poc'=>$poc,'vpoc'=>$vpoc,'tnos'=>$tnos,'revenue'=>$revenue,'tsww'=>$tsww,'bdc'=>$bdc,'tdate'=>$tdate,'autotasktimenew'=>$autotasktimenew,'mbdc'=>$mbdc]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+*/
+public function Dashboard(){
+        date_default_timezone_set("Asia/Calcutta");
+        if(isset($_POST['tdate'])){
+        $tdate = $_POST['tdate'];
+        }
+        else{
+            $tdate = date('Y-m-d');
+        }
+     
+        $this->load->library('session');;
+
+    	$this->load->model('Menu_model');
+        
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $myid = $uid;
+        if($uyid == 3 || $uyid == 4 || $uyid == 5 || $uyid == 7 || $uyid == 8 || $uyid == 9 || $uyid == 11 || $uyid == 12 || $uyid == 13 || $uyid == 15){
+            $user_day = $this->Menu_model->get_daydetail($uid,date("Y-m-d"));
+            if(sizeof($user_day) == 0){
+                $this->session->set_flashdata('error_message','* Please Start Your Day');
+                redirect('Menu/DayManagement');
+            } 
+        }
+        if($uid=='100103'){$uid=45;}
+        if($uid=='100149'){$uid=45;}
+        if($uid=='100142'){$uid=2;}
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        $fr=$this->Menu_model->get_freport($uid);
+        $bdc=$this->Menu_model->get_bdtcom($uid);
+        $mbdc=$this->Menu_model->get_mbdc($uid);
+        $atid=1;
+        $callr=$this->Menu_model->get_callingr($atid,$uid,$tdate);
+        $patc=$this->Menu_model->get_pat($atid,$uid,$tdate);
+        $tatc=$this->Menu_model->get_tat($atid,$uid,$tdate);
+        $atid=2;
+        $emailr=$this->Menu_model->get_callingr($atid,$uid,$tdate);
+        $pate=$this->Menu_model->get_pat($atid,$uid,$tdate);
+        $tate=$this->Menu_model->get_tat($atid,$uid,$tdate);
+        $atid=3;
+        $meetingr=$this->Menu_model->get_callingr($atid,$uid,$tdate);
+        $patm=$this->Menu_model->get_pat($atid,$uid,$tdate);
+        $tatm=$this->Menu_model->get_tat($atid,$uid,$tdate);
+        $pendingt=$this->Menu_model->get_pendingt($uid,$tdate);
+        $totalt=$this->Menu_model->get_totalt($myid,$tdate);
+        $ttdone=$this->Menu_model->get_ttdone($uid,$tdate);
+        $ttd=$this->Menu_model->get_totaltd($uid,$tdate);
+        $upt=$this->Menu_model->get_unplant($uid,$tdate);
+        $tsww=$this->Menu_model->get_tswwork($uid,$tdate);
+        $tptask=$this->Menu_model->get_tptask($uid);
+        $sc=$this->Menu_model->get_scon($uid,$tdate);
+        $barg=$this->Menu_model->get_bargdetail($uid,$tdate);
+        $autotasktimenew=$this->Menu_model->autotasktimenew($uid,$tdate);
+        $positive=$this->Menu_model->get_positive();
+        $vpositive=$this->Menu_model->get_vpositive();
+        
+        $positveNAP = $this->Menu_model->get_positiveNAP();
+        $vpositveNAP = $this->Menu_model->get_vpositiveNAP();
+        $cmtd=$this->Menu_model->get_clusterTaskDetails($uid,$tdate);
+        $clusterFunnel = $this->Menu_model->get_clusterFunnel($uid);
+        
         $tnos=0;
         $revenue=0;
         $poc=0;
@@ -5251,21 +4701,17 @@ class Menu extends CI_Controller {
         $pendingautotaskcmp = $this->Menu_model->get_PendingAutoTask($uid);
        
        $pendingautotaskcmpcnt = sizeof($pendingautotaskcmp);
-      
+    //   echo "12121";exit;
        if($pendingautotaskcmpcnt > 0){
            $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask Before Going Task Planner Page');
            redirect('Menu/Dashboard2');
        } 
-
-
         if(!empty($user)){
-            $this->load->view($dep_name.'/index',['myid'=>$myid,'ttdone'=>$ttdone,'upt'=>$upt,'user'=>$user,'fr'=>$fr,'callr'=>$callr,'emailr'=>$emailr,'meetingr'=>$meetingr,'pendingt'=>$pendingt,'totalt'=>$totalt,'patc'=>$patc,'tatc'=>$tatc,'pate'=>$pate,'tate'=>$tate,'patm'=>$patm,'tatm'=>$tatm,'sc'=>$sc,'tptask'=>$tptask,'ttd'=>$ttd,'barg'=>$barg,'uid'=>$uid,'pstc'=>$pstc,'poc'=>$poc,'vpoc'=>$vpoc,'tnos'=>$tnos,'revenue'=>$revenue,'tsww'=>$tsww,'bdc'=>$bdc,'tdate'=>$tdate,'autotasktimenew'=>$autotasktimenew,'mbdc'=>$mbdc]);
+            $this->load->view($dep_name.'/index',['myid'=>$myid,'cmtd'=>$cmtd,'clusterFunnel'=> $clusterFunnel ,'ttdone'=>$ttdone,'upt'=>$upt,'user'=>$user,'fr'=>$fr,'callr'=>$callr,'emailr'=>$emailr,'meetingr'=>$meetingr,'pendingt'=>$pendingt,'totalt'=>$totalt,'patc'=>$patc,'tatc'=>$tatc,'pate'=>$pate,'tate'=>$tate,'patm'=>$patm,'tatm'=>$tatm,'sc'=>$sc,'tptask'=>$tptask,'ttd'=>$ttd,'barg'=>$barg,'uid'=>$uid,'pstc'=>$pstc,'poc'=>$poc,'vpoc'=>$vpoc,'tnos'=>$tnos,'revenue'=>$revenue,'tsww'=>$tsww,'bdc'=>$bdc,'tdate'=>$tdate,'autotasktimenew'=>$autotasktimenew,'mbdc'=>$mbdc]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
 
     public function Dashboard2(){
         date_default_timezone_set("Asia/Calcutta");
@@ -5282,8 +4728,6 @@ class Menu extends CI_Controller {
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
         $myid = $uid;
-
-
         if($uyid == 3 || $uyid == 4 || $uyid == 5 || $uyid == 7 || $uyid == 8 || $uyid == 9 || $uyid == 11 || $uyid == 12 || $uyid == 13 || $uyid == 15){
             $user_day = $this->Menu_model->get_daydetail($uid,date("Y-m-d"));
             if(sizeof($user_day) == 0){
@@ -5346,22 +4790,15 @@ class Menu extends CI_Controller {
         $pstc=$this->Menu_model->get_pstc($uid);
         $pendingautotaskcmp = $this->Menu_model->get_totaltPendingAutoTaskdetails($uid);
         $pendingautotaskcmpcnt = sizeof($pendingautotaskcmp);
-
         if($pendingautotaskcmpcnt > 0){
             $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask');
         }   
-
-
         if(!empty($user)){
             $this->load->view($dep_name.'/index2',['myid'=>$myid,'ttdone'=>$ttdone,'upt'=>$upt,'user'=>$user,'fr'=>$fr,'callr'=>$callr,'emailr'=>$emailr,'meetingr'=>$meetingr,'pendingt'=>$pendingt,'totalt'=>$totalt,'patc'=>$patc,'tatc'=>$tatc,'pate'=>$pate,'tate'=>$tate,'patm'=>$patm,'tatm'=>$tatm,'sc'=>$sc,'tptask'=>$tptask,'ttd'=>$ttd,'barg'=>$barg,'uid'=>$uid,'pstc'=>$pstc,'poc'=>$poc,'vpoc'=>$vpoc,'tnos'=>$tnos,'revenue'=>$revenue,'tsww'=>$tsww,'bdc'=>$bdc,'tdate'=>$tdate,'autotasktimenew'=>$autotasktimenew,'mbdc'=>$mbdc,'pautotask'=>$pendingautotaskcmp]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function Dashboard1(){
         date_default_timezone_set("Asia/Calcutta");
         if(isset($_POST['tdate'])){
@@ -5375,8 +4812,6 @@ class Menu extends CI_Controller {
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
         $myid = $uid;
-
-
         if($uid=='100103'){$uid=45;}
         if($uid=='100149'){$uid=45;}
         if($uid=='100142'){$uid=2;}
@@ -5428,15 +4863,12 @@ class Menu extends CI_Controller {
             $revenue +=  (int)$tost[0]->fbudget;
         }
         $pstc=$this->Menu_model->get_pstc($uid);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/index1',['myid'=>$myid,'ttdone'=>$ttdone,'upt'=>$upt,'user'=>$user,'fr'=>$fr,'callr'=>$callr,'emailr'=>$emailr,'meetingr'=>$meetingr,'pendingt'=>$pendingt,'totalt'=>$totalt,'patc'=>$patc,'tatc'=>$tatc,'pate'=>$pate,'tate'=>$tate,'patm'=>$patm,'tatm'=>$tatm,'sc'=>$sc,'tptask'=>$tptask,'ttd'=>$ttd,'barg'=>$barg,'uid'=>$uid,'pstc'=>$pstc,'poc'=>$poc,'vpoc'=>$vpoc,'tnos'=>$tnos,'revenue'=>$revenue,'tsww'=>$tsww,'bdc'=>$bdc,'tdate'=>$tdate,'mbdc'=>$mbdc]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function AnnualReviewDetail(){
         date_default_timezone_set("Asia/Calcutta");
         if(isset($_POST['tdate'])){
@@ -5458,7 +4890,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function AnnualReview(){
         date_default_timezone_set("Asia/Calcutta");
         if(isset($_POST['tdate'])){
@@ -5501,7 +4932,6 @@ class Menu extends CI_Controller {
         $positive=$this->Menu_model->get_positive();
         $vpositive=$this->Menu_model->get_vpositive();
         $bdrequest=$this->Menu_model->bdrequest($uid);
-
         $tnos=0;
         $revenue=0;
         $poc=0;
@@ -5521,14 +4951,12 @@ class Menu extends CI_Controller {
             $revenue +=  (int)$tost[0]->fbudget;
         }
         $pstc=$this->Menu_model->get_pstc($uid);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/AnnualReview',['ttdone'=>$ttdone,'upt'=>$upt,'bdrequest'=>$bdrequest,'user'=>$user,'fr'=>$fr,'callr'=>$callr,'emailr'=>$emailr,'meetingr'=>$meetingr,'pendingt'=>$pendingt,'totalt'=>$totalt,'patc'=>$patc,'tatc'=>$tatc,'pate'=>$pate,'tate'=>$tate,'patm'=>$patm,'tatm'=>$tatm,'sc'=>$sc,'tptask'=>$tptask,'ttd'=>$ttd,'barg'=>$barg,'uid'=>$uid,'pstc'=>$pstc,'poc'=>$poc,'vpoc'=>$vpoc,'tnos'=>$tnos,'revenue'=>$revenue,'tsww'=>$tsww,'bdc'=>$bdc,'tdate'=>$tdate,'mbdc'=>$mbdc]);
         }else{
             redirect('Menu/main');
         }
     }
-
     public function DownloadAnnualReport($bdid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5546,8 +4974,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function BDDayDetail($tdate,$code){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5559,8 +4985,6 @@ class Menu extends CI_Controller {
         $mdata = $this->Menu_model->get_BDdaydbyad($uid,$tdate,$code);
         $this->load->view($dep_name.'/BDDayDetail',['user'=>$user,'mdata'=>$mdata,'uid'=>$uid,'tdate'=>$tdate,'code'=>$code]);
     }
-
-
     public function ThemeColor(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5571,7 +4995,6 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $this->load->view($dep_name.'/ThemeColor',['user'=>$user,'uid'=>$uid]);
     }
-
     public function OntimeLate($uid,$sd,$ed,$code){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5582,8 +5005,6 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $this->load->view($dep_name.'/OntimeLate',['user'=>$user,'uid'=>$uid,'sd'=>$sd,'ed'=>$ed,'code'=>$code]);
     }
-
-
     public function DayManagment($tdate){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5594,9 +5015,6 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $this->load->view($dep_name.'/DayManagment',['user'=>$user,'uid'=>$uid,'tdate'=>$tdate]);
     }
-
-
-
     public function PlannedTask($uid,$sd,$ed,$code){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5607,7 +5025,6 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $this->load->view($dep_name.'/PlannedTask',['user'=>$user,'uid'=>$uid,'sd'=>$sd,'ed'=>$ed,'code'=>$code]);
     }
-
     public function InitiatedTask($uid,$sd,$ed,$code){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5618,8 +5035,6 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $this->load->view($dep_name.'/InitiatedTask',['user'=>$user,'uid'=>$uid,'sd'=>$sd,'ed'=>$ed,'code'=>$code]);
     }
-
-
     public function UpdatedTask($uid,$sd,$ed,$code){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5630,8 +5045,6 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $this->load->view($dep_name.'/UpdatedTask',['user'=>$user,'uid'=>$uid,'sd'=>$sd,'ed'=>$ed,'code'=>$code]);
     }
-
-
     public function BDDetail($aid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5648,7 +5061,6 @@ class Menu extends CI_Controller {
      
         $this->load->view($dep_name.'/BDDetail',['user'=>$user,'mdata'=>$mdata,'uid'=>$uid]);
     }
-
     public function BDDetail1($aid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5660,10 +5072,6 @@ class Menu extends CI_Controller {
         $mdata = $this->Menu_model->get_userbyaaid($aid);
         $this->load->view($dep_name.'/BDDetail1',['user'=>$user,'mdata'=>$mdata,'uid'=>$uid]);
     }
-
-
-
-
     public function TWSWCombination(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -5690,9 +5098,9 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function MeetingDetail($code,$uid){
+        if($uid =='100147')
+        {$uid ='45';}
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
         $edate = $_POST['edate'];
@@ -5712,15 +5120,14 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
+        
         if(!empty($user)){
+            
             $this->load->view($dep_name.'/MeetingDetail',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function MeetingDetailtest($code,$uid){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -5741,16 +5148,12 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         if(!empty($user)){
             $this->load->view($dep_name.'/MeetingDetailtest',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
-
     public function BDFunnal($aid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5759,21 +5162,18 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-        // echo $uyid;
+        // echo $uyid."==".$uid;
         // die;
         if($uyid ==15){
-            $mdata = $this->Menu_model->get_userbyaSCid($aid);
-        }else if($uyid ==4){
-            $mdata = $this->Menu_model->get_userbyaaid($aid);
-        }else{
-            $mdata = $this->Menu_model->get_userbyaid($aid);
-        }
+        $mdata = $this->Menu_model->get_userbyaSCid($aid);
+    }else if($uyid ==4){
+        $mdata = $this->Menu_model->get_userbyaaid($aid);
+    }else{
+        $mdata = $this->Menu_model->get_userbyaid($aid);
+    }
         
         $this->load->view($dep_name.'/BDFunnal',['user'=>$user,'mdata'=>$mdata,'uid'=>$uid]);
     }
-
-
-
     public function PSTFunnal($aid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5785,9 +5185,6 @@ class Menu extends CI_Controller {
         $mdata = $this->Menu_model->get_userbypst($aid);
         $this->load->view($dep_name.'/PSTFunnal',['user'=>$user,'mdata'=>$mdata,'uid'=>$uid]);
     }
-
-
-
     public function Notification(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5799,8 +5196,6 @@ class Menu extends CI_Controller {
         $mdata = $this->Menu_model->notify($uid);
         $this->load->view($dep_name.'/Notification',['user'=>$user,'mdata'=>$mdata,'uid'=>$uid]);
     }
-
-
     public function ProposalApr(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5812,19 +5207,18 @@ class Menu extends CI_Controller {
         $mdata = $this->Menu_model->proposal_apr($uid);
         $this->load->view($dep_name.'/ProposalApr',['user'=>$user,'mdata'=>$mdata,'uid'=>$uid]);
     }
-
     public function PSTProposalApr(){
         $user = $this->session->userdata('user');
+// print_r($user);exit;
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-       
+       //echo $dep_name;exit;
         $this->load->view($dep_name.'/PSTProposalApr',['user'=>$user,'uid'=>$uid]);
     }
-
     public function DeleteCMP(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5836,8 +5230,6 @@ class Menu extends CI_Controller {
         $mdata = $this->Menu_model->delete_r($uid);
         $this->load->view($dep_name.'/DeleteCMP',['user'=>$user,'mdata'=>$mdata,'uid'=>$uid]);
     }
-
-
     public function RemovePKClient(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5849,7 +5241,6 @@ class Menu extends CI_Controller {
         $mdata = $this->Menu_model->pkclient_r($uid);
         $this->load->view($dep_name.'/RemovePKClient',['user'=>$user,'mdata'=>$mdata,'uid'=>$uid]);
     }
-
     public function RemoveKClient(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5861,8 +5252,6 @@ class Menu extends CI_Controller {
         $mdata = $this->Menu_model->kclient_r($uid);
         $this->load->view($dep_name.'/RemoveKClient',['user'=>$user,'mdata'=>$mdata,'uid'=>$uid]);
     }
-
-
     public function ProposalDetail($tid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5874,8 +5263,6 @@ class Menu extends CI_Controller {
         $mdata = $this->Menu_model->get_ProposalDetail($tid);
         $this->load->view($dep_name.'/ProposalDetail',['user'=>$user,'mdata'=>$mdata,'uid'=>$uid]);
     }
-
-
     public function ToDoList(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5886,8 +5273,6 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $this->load->view($dep_name.'/ToDoList',['user'=>$user,'uid'=>$uid]);
     }
-
-
     public function AllProposalDetail(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5896,11 +5281,9 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $mdata = $this->Menu_model->get_AllProposalDetail($uid);
         $this->load->view($dep_name.'/AllProposalDetail',['user'=>$user,'mdata'=>$mdata,'uid'=>$uid]);
     }
-
     public function AllProposalDetail_PSTTeam(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5911,19 +5294,16 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $this->load->view($dep_name.'/AllProposalDetail_PSTTeam',['user'=>$user,'uid'=>$uid]);
     }
-
     public function ProposalDetailbydate(){
         if(isset($_POST['sdate'])){
             $sdate = $_POST['sdate'];
             $edate = $_POST['edate'];
             $aprtype = $_POST['aprtype'];
-
         }
         else{
             $sdate = date('Y-m-d');
             $edate = date('Y-m-d');
             $aprtype = 1;
-
         }
         $sd=$sdate;
         $ed=$edate;
@@ -5939,19 +5319,16 @@ class Menu extends CI_Controller {
         $mdata = $this->Menu_model->get_ProposalDetailbydate($uid,$sd,$ed,$aprtype);
         $this->load->view($dep_name.'/ProposalDetailbydate',['sdate'=>$sdate, 'edate'=>$edate,'sd'=>$sd,'ed'=>$ed,'user'=>$user,'mdata'=>$mdata,'uid'=>$uid]);
     }
-
     public function ProposalDetailbydate_PSTTeam(){
         if(isset($_POST['sdate'])){
             $sdate = $_POST['sdate'];
             $edate = $_POST['edate'];
             $aprtype = $_POST['aprtype'];
-
         }
         else{
             $sdate = date('Y-m-d');
             $edate = date('Y-m-d');
             $aprtype = 1;
-
         }
         $sd=$sdate;
         $ed=$edate;
@@ -5967,7 +5344,6 @@ class Menu extends CI_Controller {
        
         $this->load->view($dep_name.'/ProposalDetailbydate_PSTTeam',['sdate'=>$sdate,'aprtype'=>$aprtype, 'edate'=>$edate,'sd'=>$sd,'ed'=>$ed,'user'=>$user,'uid'=>$uid]);
     }
-
     public function TotalRequest(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -5979,35 +5355,26 @@ class Menu extends CI_Controller {
         $mdata = $this->Menu_model->request_apr();
         $this->load->view($dep_name.'/TotalRequest',['user'=>$user,'mdata'=>$mdata,'uid'=>$uid]);
     }
-
-
     public function DCMP(){
         $cid = $_POST['cid'];
         $this->load->model('Menu_model');
         $mdata = $this->Menu_model->delete_cmp($cid);
     }
-
-
     public function RCMP(){
         $cid = $_POST['cid'];
         $this->load->model('Menu_model');
         $mdata = $this->Menu_model->rejectd_cmp($cid);
     }
-
-
     public function RPKCMP(){
         $cid = $_POST['cid'];
         $this->load->model('Menu_model');
         $mdata = $this->Menu_model->remove_pkcmp($cid);
     }
-
     public function RKCMP(){
         $cid = $_POST['cid'];
         $this->load->model('Menu_model');
         $mdata = $this->Menu_model->remove_kcmp($cid);
     }
-
-
     public function ProApr(){
         $remark=null;
         $aprid = $_POST['aprid'];
@@ -6017,21 +5384,16 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $mdata = $this->Menu_model->Pro_Apr($aprid,$adid,$apr,$remark);
     }
-
-
     public function handApr($aprid){
         $admid = $this->input->post('admid');
         $this->load->model('Menu_model');
         $mdata = $this->Menu_model->hand_Apr($aprid,$admid);
         redirect('Menu/handoverapr');
     }
-
     public function handDelete($aprid){
         $this->load->model('Menu_model');
         $mdata = $this->Menu_model->hand_Delete($aprid);
     }
-
-
     public function REQAPR(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6041,7 +5403,6 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $mdata = $this->Menu_model->REQ_APR($id,$uname);
     }
-
     public function EditWR(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6052,15 +5413,11 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $mdata = $this->Menu_model->Edit_WR($edid,$uname,$editrem);
     }
-
-
     public function readnotify(){
         $id = $_POST['id'];
         $this->load->model('Menu_model');
         $mdata = $this->Menu_model->read_notify($id);
     }
-
-
     public function TravelPlan(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6075,8 +5432,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TravelExpenses(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6091,9 +5446,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function TBMDetail(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6120,8 +5472,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TBMDetailBD($date){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6136,8 +5486,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TMDetail(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6164,7 +5512,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function TeamDetail(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6191,8 +5538,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function PSTStatusTaskD(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6219,9 +5564,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function StatusTaskD(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6248,7 +5590,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function StatusTaskDGroup(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6275,8 +5616,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function StatusTaskPSTSelf(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6303,9 +5642,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function TeamWork(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6333,7 +5669,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function TeamWorkpst(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6360,8 +5695,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function MyWork(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6388,9 +5721,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function PSTWork(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6417,8 +5747,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function PSTFTwork(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6445,8 +5773,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function BDTeamWork($sd,$ed){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6461,7 +5787,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function PSTTeamWork($sd,$ed){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6476,10 +5801,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function BDTaskDetail($sd,$ed,$bdid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6496,11 +5817,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
-
     public function PSTSRWork($date){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6515,7 +5831,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function PSTCTeamWork($date){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6530,9 +5845,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function BDStatusTask($datet){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6547,7 +5859,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function BDStatusTaskGroup($sd,$ed){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6562,7 +5873,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function BDStatusTaskGroupSelf($sd,$ed){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6577,8 +5887,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function PSTStatusTask($datet){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6593,9 +5901,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function BDSConversion($datet){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6610,8 +5915,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FinalBDSC($sd,$ed){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6626,7 +5929,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function FinalPSTSC($sd,$ed){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6641,9 +5943,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function momdetail(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6670,8 +5969,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function PSTData(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6698,8 +5995,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function AdminData(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6726,10 +6021,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function PSTSRData(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6756,8 +6047,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function PSTDataC(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6784,7 +6073,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function PSTDataCData(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6811,7 +6099,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function SConversion(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6838,8 +6125,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function PSTSConversion(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6866,8 +6151,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function MySConversion(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6894,10 +6177,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function AdminWork(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6924,7 +6203,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function UpsellClient(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6951,9 +6229,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function CompanyAllDetail(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -6980,7 +6255,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function totalcdetail($code){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -6992,8 +6266,6 @@ class Menu extends CI_Controller {
         $mdata = $this->Menu_model->get_vpd($code,$uid);
         $this->load->view($dep_name.'/totalcdetail',['user'=>$user,'mdata'=>$mdata,'uid'=>$uid,'code'=>$code]);
     }
-
-
     public function addcont(){
         $cid = $_POST['cid'];
         $cdate = $_POST['cdate'];
@@ -7006,8 +6278,6 @@ class Menu extends CI_Controller {
         $cbmid = $this->Menu_model->add_cont($cid, $cdate, $contactperson, $designation, $phoneno, $emailid, $primary);
         redirect('Menu/Dashboard');
     }
-
-
     public function setpcontact(){
         $setid = $_POST['setid'];
         $cid = $_POST['cid'];
@@ -7015,7 +6285,6 @@ class Menu extends CI_Controller {
         $cbmid = $this->Menu_model->get_setccid($setid,$cid);
         redirect('Menu/CompanyDetails/'.$cid);
     }
-
     public function editpcontact(){
         $id = $_POST['id'];
         $cid = $_POST['cid'];
@@ -7025,8 +6294,6 @@ class Menu extends CI_Controller {
         $cbmid = $this->Menu_model->get_editccid($id,$designation,$emailid);
         redirect('Menu/CompanyDetails/'.$cid);
     }
-
-
     public function updatecompany(){
         $state = $_POST['state'];
         $city = $_POST['city'];
@@ -7039,15 +6306,12 @@ class Menu extends CI_Controller {
         $cbmid = $this->Menu_model->get_ucompany($state,$city,$cid,$address,$website,$partnertype,$budget);
         redirect('Menu/CompanyDetails/'.$cid);
     }
-
-
     public function cbmeeting(){
         $bcytpe='';$bcid=0;$mlocation='';$piorl='';$bstate='';$bcity='';
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         $bcytpe = $_POST['bcytpe'];
         if($bcytpe=='From Funnel'){
            $bcid = $_POST['bcid'];
@@ -7056,7 +6320,6 @@ class Menu extends CI_Controller {
             $bstate = $_POST['bstate'];
             $bcity = $_POST['bcity'];
         }
-
         $piorl =  $_POST['piorl'];
         if($piorl=='Later'){
             $bmdate =  $_POST['bmdate'];
@@ -7065,15 +6328,12 @@ class Menu extends CI_Controller {
             date_default_timezone_set("Asia/Kolkata");
             $bmdate=date('Y-m-d H:i:s');
         }
-
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         $cbmid = $this->Menu_model->create_bmeeting($uid,$bcytpe,$bcid,$bmdate,$bstate,$bcity);
         redirect('Menu/Dashboard');
     }
-
-
     public function rpmstart(){
         $uid = $_POST['uid'];
         $smid = $_POST['smid'];
@@ -7084,21 +6344,17 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $this->load->library('session');
         $flink = $this->Menu_model->cphotofile($cphoto, $uploadPath);
-
         $lat = $_POST['lat'];
         $lng = $_POST['lng'];
         $bscid = $_POST['bscid'];
         $cphoto = $flink;
         $cbmid = $this->Menu_model->start_rpm($uid,$startm,$company_name,$cphoto,$lat,$lng,$smid,$bscid);
-        $this->session->set_flashdata('success_message','Meeting Start SuccessFully !');
+        $this->session->set_flashdata('success_message','Meeting Started SuccessFully !');
         redirect('Menu/Dashboard');
     }
-
     public function rpmclose(){
-
         $this->load->model('Menu_model');
         $this->load->library('session');
-
         $priority="";$closem="";$caddress="";$cpname="";$cpdes="";$cpno="";$cpemail="";
         $uid    = $_POST['uid'];
         $cmid   = $_POST['cmid'];
@@ -7117,7 +6373,6 @@ class Menu extends CI_Controller {
         $lat    = $_POST['lat'];
         $lng    = $_POST['lng'];
         $letmeetingsremarks = $_POST['letmeetingsremarks'];
-
         $updateStatus = $_POST['updateCompanyStatus'];
         if(isset($_POST['company_as'])){
             $company_as = $_POST['company_as'];
@@ -7136,17 +6391,11 @@ class Menu extends CI_Controller {
         }
         
        
-
         $cbmid = $this->Menu_model->close_rpm($uid,$closem,$caddress,$cpname,$cpdes,$cpno,$cpemail,$lat,$lng,$type,$priority,$cmid,$bmcid,$bmccid,$bminid,$bmtid,$letmeetingsremarks,$updateStatus,$company_as,$company_descri,$potentional_client);
-
         $this->session->set_flashdata('success_message','Meeting Close SuccessFully ! Please Update Your Lead');
         redirect('Menu/Dashboard');
-
     }
-
-
     public function TDetail(){
-
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
         $edate = $_POST['edate'];
@@ -7172,10 +6421,7 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TaskAStatus(){
-
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
         $edate = $_POST['edate'];
@@ -7201,10 +6447,7 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function PlanTaskAStatus(){
-
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
         $edate = $_POST['edate'];
@@ -7230,10 +6473,7 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function LiveVisit(){
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -7247,8 +6487,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TBMD($code,$bdid,$sdate,$edate){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -7266,6 +6504,7 @@ class Menu extends CI_Controller {
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         $mdata = $this->Menu_model->get_tbmd($code,$bdid,$uid,$sd,$ed);
+    
         // echo $str = $this->db->last_query(); 
         if(!empty($user)){
             $this->load->view($dep_name.'/TBMD',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
@@ -7273,8 +6512,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TBMD_PST($code,$bdid,$sdate,$edate){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -7321,7 +6558,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function TBMDFRP($code,$sd,$ed,$bdname){
         $sdate = $sd;
         $edate = $ed;
@@ -7334,14 +6570,12 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $mdata = $this->Menu_model->get_tbmd(5,$bdname,$bdname,$sd,$ed);
         if(!empty($user)){
-            $this->load->view($dep_name.'/TBMDF',['code'=>$code,'uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
+                $this->load->view($dep_name.'/TBMDF',['code'=>$code,'uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
         }else{
             redirect('Menu/main');
         }
     }
-
     public function TBMDFRP_PST($code,$sd,$ed,$bdname){
-
         if(isset($_POST['sdate']) && isset($_POST['edate'])){
             $sdate = $_POST['sdate'];
             $edate = $_POST['edate'];
@@ -7366,8 +6600,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TBMDF(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -7402,8 +6634,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function BDNotWorkDD(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -7417,11 +6647,9 @@ class Menu extends CI_Controller {
             $sdate = date('Y-m-d');
             $edate = date('Y-m-d');
         }
-
         if(isset($_POST['bdid'])){
         $bdid = $_POST['bdid'];}
         else{$bdid = $uid;}
-
         $sd=$sdate;
         $ed=$edate;
         $sdate = new DateTime($sdate);
@@ -7440,8 +6668,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function RPTHISYEAR(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -7456,14 +6682,11 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function BDWORKBWDBYTC(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
         $edate = $_POST['edate'];
@@ -7472,12 +6695,10 @@ class Menu extends CI_Controller {
             $sdate = date('Y-m-d');
             $edate = date('Y-m-d');
         }
-
         $sd=$sdate;
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -7491,15 +6712,11 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function PSTWorkOnRPCompanies(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
         $edate = $_POST['edate'];
@@ -7508,12 +6725,10 @@ class Menu extends CI_Controller {
             $sdate = date('Y-m-d');
             $edate = date('Y-m-d');
         }
-
         $sd=$sdate;
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -7527,14 +6742,11 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function PSTWorkOnRPALLCompanies(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
         $edate = $_POST['edate'];
@@ -7543,12 +6755,10 @@ class Menu extends CI_Controller {
             $sdate = date('Y-m-d');
             $edate = date('Y-m-d');
         }
-
         $sd=$sdate;
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -7562,13 +6772,11 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function PSTWorkOnRPPACompanies(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
         $edate = $_POST['edate'];
@@ -7577,12 +6785,10 @@ class Menu extends CI_Controller {
             $sdate = date('Y-m-d');
             $edate = date('Y-m-d');
         }
-
         $sd=$sdate;
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -7596,8 +6802,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function ExpectedPSTSchool($pstid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -7616,7 +6820,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function ExpectedSchool(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -7645,14 +6848,11 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function REVIEWBWDATE(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
         $edate = $_POST['edate'];
@@ -7661,12 +6861,10 @@ class Menu extends CI_Controller {
             $sdate = date('Y-m-d');
             $edate = date('Y-m-d');
         }
-
         $sd=$sdate;
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -7680,15 +6878,11 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function NOREVIEWCOMP(){
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
         $edate = $_POST['edate'];
@@ -7697,12 +6891,10 @@ class Menu extends CI_Controller {
             $sdate = date('Y-m-d');
             $edate = date('Y-m-d');
         }
-
         $sd=$sdate;
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -7716,14 +6908,11 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function CONVERSIONBWDATE(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
         $edate = $_POST['edate'];
@@ -7732,12 +6921,10 @@ class Menu extends CI_Controller {
             $sdate = date('Y-m-d');
             $edate = date('Y-m-d');
         }
-
         $sd=$sdate;
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -7751,14 +6938,11 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function BDNOWORKBWDBYTC(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
         $edate = $_POST['edate'];
@@ -7767,12 +6951,10 @@ class Menu extends CI_Controller {
             $sdate = date('Y-m-d');
             $edate = date('Y-m-d');
         }
-
         $sd=$sdate;
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -7786,8 +6968,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function BDWorkBWD(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -7801,11 +6981,9 @@ class Menu extends CI_Controller {
             $sdate = date('Y-m-d');
             $edate = date('Y-m-d');
         }
-
         if(isset($_POST['bdid'])){
         $bdid = $_POST['bdid'];}
         else{$bdid = $uid;}
-
         $sd=$sdate;
         $ed=$edate;
         $sdate = new DateTime($sdate);
@@ -7824,8 +7002,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function PSTCConversion(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -7863,69 +7039,49 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function GPReviewReport($sdate,$edate,$pstid,$bdid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         $sd=$sdate;
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $mdata = $this->Menu_model->get_reviewr($pstid,$bdid,$sd,$ed);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/ReviewReport',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function BDReviewReport($sd,$ed,$bdid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         $sdate = $sd;
         $edate = $ed;
         $pstid = $bdid;
         $bdid = $bdid;
-
-
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $mdata = $this->Menu_model->get_reviewr($pstid,$bdid,$sd,$ed);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/BDReviewReport',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function ReviewReport(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         if(isset($_POST['sdate'])){
             $sdate = $_POST['sdate'];
             $edate = $_POST['edate'];
@@ -7938,54 +7094,42 @@ class Menu extends CI_Controller {
             $pstid=0;
             $bdid=0;
         }
-
         $sd=$sdate;
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         if($uyid ==15){
             $mdata = $this->Menu_model->get_reviewrSCoo($pstid,$bdid,$sd,$ed);
         }else{
             $mdata = $this->Menu_model->get_reviewr($pstid,$bdid,$sd,$ed);
         }
         
-
         if(!empty($user)){
             $this->load->view($dep_name.'/ReviewReport',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function BDReviewReportSummary(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         if(isset($_POST['sdate'])){
             $sdate = $_POST['sdate'];
             $edate = $_POST['edate'];
-
         }
         else{
             $sdate = date('Y-m-d');
             $edate = date('Y-m-d');
-
         }
-
         $sd=$sdate;
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
-
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
@@ -7996,31 +7140,24 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function BDReviewReportSummarys(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         if(isset($_POST['sdate'])){
             $sdate = $_POST['sdate'];
             $edate = $_POST['edate'];
-
         }
         else{
             $sdate = date('Y-m-d');
             $edate = date('Y-m-d');
-
         }
         if($uid==0){$ab=0;}else{$ab=1;}
         $sd=$sdate;
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
-
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
@@ -8031,70 +7168,52 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function PSTReviewReport($sd,$ed,$bdid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         $sdate = $sd;
         $edate = $ed;
         $pstid = $bdid;
         $bdid = $bdid;
-
-
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $mdata = $this->Menu_model->get_reviewr($pstid,$bdid,$sd,$ed);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/PSTReviewReport',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function PSTReviewReportSummary(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         if(isset($_POST['sdate'])){
             $sdate = $_POST['sdate'];
             $edate = $_POST['edate'];
-
         }
         else{
             $sdate = date('Y-m-d');
             $edate = date('Y-m-d');
-
         }
-
         $sd=$sdate;
         $ed=$edate;
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
-
-
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $mdata = $this->Menu_model->get_pstsummryreviewr($uid,$sd,$ed);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/PSTReviewReportSummary',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function ReviewDetail($rid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8110,7 +7229,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function LatestReviewDetail($bdid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8125,31 +7243,21 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function AfterReviewDetail($rid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $mdata = $this->Menu_model->get_reviewdetail($rid);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/AfterReviewDetail',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
-
-
-
     public function AdminCConversion(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8187,10 +7295,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function PSTAllReview(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8226,9 +7330,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function PSTAllReviewData(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8265,9 +7366,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function RPMeetDetail($atid,$uid,$tdate){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8283,8 +7381,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function PSTFTTaskDetail($code,$bdid,$atid,$tdate,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8299,8 +7395,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function NotworkCompanyBDPST(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8315,9 +7409,7 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function workdoneCompanyBDPST(){
-
         if(isset($_POST['sdate'])){
             $sdate = $_POST['sdate'];
             $edate = $_POST['edate'];
@@ -8326,8 +7418,6 @@ class Menu extends CI_Controller {
                 $sdate = date('Y-m-d');
                 $edate = date('Y-m-d');
             }
-
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -8341,10 +7431,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function workbutactionnobd(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8359,8 +7445,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function workbutactionnopst(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8375,7 +7459,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function workOnClusterOnBDFunnels(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8390,9 +7473,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function ATaskDetail($code,$bdid,$atid,$sd,$ed,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8407,7 +7487,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function ATaskDetailTeam($code,$bdid,$atid,$sd,$ed,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8422,9 +7501,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function APSTTaskDetail($code,$bdid,$atid,$sd,$ed,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8439,7 +7515,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function AMyTaskDetail($code,$bdid,$atid,$sd,$ed,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8454,12 +7529,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
-
-
     public function BDAlertDetail($code){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8475,8 +7544,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function AlertDetail($code,$date){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8492,8 +7559,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function PlannerReport(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -8522,8 +7587,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function PlannerAReport(){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -8552,8 +7615,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function PSTDataDetail($code,$bdid,$atid,$tdate,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8568,8 +7629,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function PSTDataCDetail($bdid,$tdate,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8578,15 +7637,12 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         if(!empty($user)){
             $this->load->view($dep_name.'/PSTDataCDetail',['uid'=>$uid,'user'=>$user,'tdate'=>$tdate,'tardate'=>$tdate,'ab'=>$ab,'bdid'=>$bdid,'statuscode'=>$ab]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function PSTDataCDetailData($bdid,$tdate,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8595,15 +7651,12 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         if(!empty($user)){
             $this->load->view($dep_name.'/PSTDataCDetailData',['uid'=>$uid,'user'=>$user,'tdate'=>$tdate,'tardate'=>$tdate,'ab'=>$ab,'bdid'=>$bdid,'statuscode'=>$ab]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function PSTDataCDetail1($bdid,$tdate,$code1,$code2){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8612,15 +7665,12 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         if(!empty($user)){
             $this->load->view($dep_name.'/PSTDataCDetail1',['uid'=>$uid,'user'=>$user,'tdate'=>$tdate,'tardate'=>$tdate,'ab'=>$ab,'bdid'=>$bdid,'statuscode1'=>$code1,'statuscode2'=>$code2]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function PSTDataCDetailChange($bdid,$tdate,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8635,8 +7685,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function AdminDataCDetail($bdid,$tdate,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8651,8 +7699,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TaskDetail($code,$bdid,$atid,$tdate){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8667,7 +7713,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function StatusTask($bdid,$tdate,$atid,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8682,8 +7727,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function StatusTaskSelf($bdid,$tdate,$atid,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8698,8 +7741,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function StatusTaskGroup($bdid,$sd,$ed,$atid,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8714,7 +7755,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function StatusTaskGroupByTeam($bdid,$sd,$ed,$atid,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8729,7 +7769,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function StatusTaskGroupSelfPST($bdid,$sd,$ed,$atid,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8744,8 +7783,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function StatusTaskPST($bdid,$tdate,$atid,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8760,10 +7797,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function PlanStatusTask($bdid,$tdate,$atid,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8778,10 +7811,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function TotalRPMeeting(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8797,8 +7826,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function RPPriority(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8814,8 +7841,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function RPCPriority(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8831,8 +7856,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function DayManagement(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d');
@@ -8852,26 +7875,28 @@ class Menu extends CI_Controller {
             if($st!=''){$do=1;}
             if($ct!=''){$do=2;}
         }else{$do=0;}
-
-
         // $yesterday_date = date("Y-m-d", strtotime("-1 day"));
         $currentDate = date("Y-m-d");
         $tomorrowDate = date("Y-m-d", strtotime($currentDate . ' +1 day'));
-
         $query  =  $this->db->query("SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$tomorrowDate'");
         $gettoAutoTaskTime = $query->result();
-
         $query1  =  $this->db->query("SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$currentDate'");
         $gecurAutoTaskTime = $query1->result();
            
         if(!empty($user)){
-            $this->load->view($dep_name.'/DayManagement',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'tdate'=>$tdate,'uid'=>$uid,'do'=>$do,'yestdata'=>$yestdata,'gettoAutoTaskTime'=>$gettoAutoTaskTime,'uyid'=>$uyid,'gecurAutoTaskTime'=>$gecurAutoTaskTime]);
+            // $pendingtaskcmp = $this->Menu_model->get_PendingTaskForToday($uid);
+            
+            //     //  $pendingautotaskcmpcnt = $pendingtaskcmp[0]->totalrecords;  
+            //  //   echo "12121";exit;
+            //     if($pendingautotaskcmpcnt > 0){
+            //         $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask Before Going Task Planner Page');
+            //         redirect('Menu/Dashboard');
+            //     } 
+            $this->load->view($dep_name.'/DayManagement',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'tdate'=>$tdate,'uid'=>$uid,'do'=>$do,'yestdata'=>$yestdata,'gettoAutoTaskTime'=>$gettoAutoTaskTime,'uyid'=>$uyid,'gecurAutoTaskTime'=>$gecurAutoTaskTime,'daycheck'=>'start']);
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function DayStartCheck(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d');
@@ -8890,15 +7915,12 @@ class Menu extends CI_Controller {
         }
        
         $mdata = $this->Menu_model->get_BDdaystart($admid,$tdate);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/DayStartCheck',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function MeetingCheck(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d',strtotime("-1 days"));
@@ -8916,7 +7938,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function TravalCheck(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate="2023-05-19";
@@ -8934,9 +7955,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function TaskCheck(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -8951,8 +7969,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function DayCloseCheck(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d',strtotime("-1 days"));
@@ -8963,17 +7979,13 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $mdata = $this->Menu_model->get_BDdayclose($uid,$tdate);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/DayCloseCheck',['uid'=>$uid,'user'=>$user,'tdate'=>$tdate,'mdata'=>$mdata]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function DailyTeamCoordination(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d H:i:s');
@@ -8993,8 +8005,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function RosterCalling(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d H:i:s');
@@ -9014,8 +8024,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function EditReview(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d H:i:s');
@@ -9033,8 +8041,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TargerSetting(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d H:i:s');
@@ -9051,8 +8057,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function CmpTarget(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d H:i:s');
@@ -9069,8 +8073,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function AllReviewPlaing(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d H:i:s');
@@ -9087,8 +8089,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function GoalSetting(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d H:i:s');
@@ -9108,8 +8108,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function AllPSTReviewPlaing(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d H:i:s');
@@ -9129,9 +8127,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function AllPSTReviewac(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d H:i:s');
@@ -9151,7 +8146,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function AllReviewac(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d H:i:s');
@@ -9171,8 +8165,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function test1(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9184,8 +8176,6 @@ class Menu extends CI_Controller {
         $mdata = $this->Menu_model->get_testc();
         $this->load->view($dep_name.'/test1',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata]);
     }
-
-
     public function test2(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9196,10 +8186,7 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $this->Menu_model->get_testrp();
         $this->load->view($dep_name.'/test2',['uid'=>$uid,'user'=>$user]);
-
     }
-
-
     public function test3(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9211,7 +8198,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->get_testtc();
         $this->load->view($dep_name.'/test3',['uid'=>$uid,'user'=>$user]);
     }
-
     public function test4(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9223,7 +8209,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->get_testtfu();
         $this->load->view($dep_name.'/test4',['uid'=>$uid,'user'=>$user]);
     }
-
     public function test5(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9235,8 +8220,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->get_testaltf();
         $this->load->view($dep_name.'/test5',['uid'=>$uid,'user'=>$user]);
     }
-
-
     public function test6(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9247,8 +8230,6 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $this->Menu_model->get_testexbdmom();
     }
-
-
     public function test7(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9259,7 +8240,6 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $mdata = $this->Menu_model->get_test7();
     }
-
     // public function test8(){
     //     $user = $this->session->userdata('user');
     //     $data['user'] = $user;
@@ -9270,8 +8250,6 @@ class Menu extends CI_Controller {
     //     $dep_name = $dt[0]->name;
     //     $mdata = $this->Menu_model->get_test8();
     // }
-
-
     public function rpmmom(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9287,7 +8265,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function uprpmmom(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9301,8 +8278,6 @@ class Menu extends CI_Controller {
         $id = $this->Menu_model->set_uprpmmom($uid,$tblid,$mom);
         redirect('Menu/rpmmom');
     }
-
-
     public function assignpst(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9319,8 +8294,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function rpcheckbybdpst(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9337,15 +8310,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
-
-
-
-
-
     public function TaskReport($atid){
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
@@ -9372,7 +8336,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function StatusConversion($uid,$tdate){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9384,8 +8347,6 @@ class Menu extends CI_Controller {
         $mdata = $this->Menu_model->get_scon($uid,$tdate);
         $this->load->view($dep_name.'/Conversion',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'tdate'=>$tdate]);
     }
-
-
     public function Meeting(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9401,7 +8362,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function HandoverDetail(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9417,7 +8377,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function ProgramLogs($cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9433,8 +8392,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function ChangePST(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9450,8 +8407,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function PMTFTOBD(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9468,15 +8423,12 @@ class Menu extends CI_Controller {
             $mdata=$this->Menu_model->get_userbyaids($uid);
         }
       
-
         if(!empty($user)){
             $this->load->view($dep_name.'/PMTFTOBD',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function BDTOBDCTF(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9492,8 +8444,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function spddetail($cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9505,8 +8455,6 @@ class Menu extends CI_Controller {
         $spd=$this->Menu_model->get_spdbypc($cid);
         $this->load->view($dep_name.'/spddetail', ['uid'=>$uid,'user'=>$user,'spd'=>$spd]);
     }
-
-
     public function ZipDownload($cid){
         $this->load->model('Menu_model');
         $cpc=$this->Menu_model->get_clientbyid($cid);
@@ -9522,8 +8470,6 @@ class Menu extends CI_Controller {
           }
           $this->zip->download(time().'.zip');
     }
-
-
     public function ReportDownload($cid){
         $this->load->model('Menu_model');
         $cpc=$this->Menu_model->get_clientbyid($cid);
@@ -9535,12 +8481,8 @@ class Menu extends CI_Controller {
               $fpath=$r->filepath;
               $this->zip->read_file($fpath);
           }
-
         $this->zip->download(time().'.zip');
     }
-
-
-
     public function BDRBox(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9555,8 +8497,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function Handovertoinsr($pid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9571,7 +8511,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function DesignProcess($pid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9586,8 +8525,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function BackdropPrinting($pid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9602,7 +8539,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function UManualPrinting($pid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9617,7 +8553,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function PurchaseDetail($pid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9632,8 +8567,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function Preparing($pid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9648,7 +8581,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function Packing($pid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9663,8 +8595,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TManualPrinting($pid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9679,8 +8609,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function HandoverForm($cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9689,25 +8617,18 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $mdata=$this->Menu_model->get_clientbyid($cid);
         $mdc=$this->Menu_model->get_clientacbyid($cid);
         $spdc=$this->Menu_model->get_schoolbycid($cid);
         $budget=$this->Menu_model->get_budget($cid);
         $md = $mdata[0];
         $mdc = $mdc[0];
-
         if(!empty($user)){
             $this->load->view($dep_name.'/HandoverForm',['budget'=>$budget,'spdc'=>$spdc,'cid'=>$cid,'md'=>$md,'mdc'=>$mdc,'user'=>$user,'uid'=>$uid]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
-
-
-
     public function BDRequestCBox(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9722,8 +8643,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function OfflineDemoBox(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9738,8 +8657,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function SchoolIdentification($tid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9754,8 +8671,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function BDRVisitSchool($tid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9770,7 +8685,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function BDRVisitdetail($tid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9785,8 +8699,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function BDRCalldetail($sid,$tid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9801,7 +8713,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function BDRResearchDetail($sid,$tid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9816,10 +8727,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function BDRCallSchool($tid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9834,8 +8741,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function BDRResearchSchool($tid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9850,8 +8755,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function BDCreatedRequest($tid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9866,8 +8769,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function BDRAssignPIA($tid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9882,8 +8783,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function OnlineDemoBox(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9898,7 +8797,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function BDRequestBox(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9913,8 +8811,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function BDRBox2($rtype){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9929,8 +8825,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function ProgramBOX($cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9946,7 +8840,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function PendingTaskBox(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9962,8 +8855,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function ANPNTaskBox(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9979,7 +8870,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function AYPNTaskBox(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9995,8 +8885,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function AYPYTaskBox(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10012,8 +8900,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function ActionTaskBox($ac){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10029,8 +8915,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function StatusTaskBox($st){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10046,7 +8930,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function PartnerTaskBox($pt){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10062,8 +8945,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TimeSlotTaskBox($ts){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10079,8 +8960,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function ActionConversionBox($st1,$st2){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10096,9 +8975,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function MyTeamBox(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10113,9 +8989,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function NewHandover(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10131,9 +9004,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function RBDOP(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10148,8 +9018,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function RBDOPDetail($rid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10164,9 +9032,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function RDOPEN(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10181,7 +9046,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function RDMDetail($chid,$sid,$tid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10196,9 +9060,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function HandBIND(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10213,8 +9074,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function HandBINDDetail($cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10229,8 +9088,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function HJoinCall($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10245,7 +9102,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function HDesignProcesss($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10260,8 +9116,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function HBackdropPrinting($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10276,7 +9130,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function HUserManual($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10291,7 +9144,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function HTrainingManual($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10306,7 +9158,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function HPurchase($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10321,7 +9172,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function HPackingA($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10336,7 +9186,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function HPackingB($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10351,7 +9200,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function HPackingC($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10366,7 +9214,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function HPackingMS($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10381,8 +9228,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function HDelivery($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10397,8 +9242,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function HReceiveI($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10413,7 +9256,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function HDeliver($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10428,8 +9270,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function HeWay($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10444,7 +9284,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function HLogistic($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10459,8 +9298,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function HDispatchA($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10475,7 +9312,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function HDispatchB($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10490,7 +9326,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function HDispatchC($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10505,7 +9340,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function HDispatchMS($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10520,10 +9354,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function HSRCall($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10538,8 +9368,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function HSISCall($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10554,8 +9382,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function HSIVisit($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10570,9 +9396,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function HSIReport($code,$cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10587,10 +9410,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function HSDVDetail($code,$cid,$tid,$sid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10605,8 +9424,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function HSIVDetail($code,$cid,$tid,$sid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10621,24 +9438,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function SchoolBOX($cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10654,7 +9453,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function SPDTASKBOX($sid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10670,7 +9468,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function schooldetail($sid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10690,8 +9487,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function SPDVISITTASKBOX($sid,$tid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10708,10 +9503,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function SPDPANTASK($sid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10727,9 +9518,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function ProgramDetail(){
         $code=7;
         $user = $this->session->userdata('user');
@@ -10746,7 +9534,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function ProgramDetailinPST(){
         $code=7;
         $user = $this->session->userdata('user');
@@ -10763,7 +9550,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function HandoverCompany(){
         $code=7;
         $user = $this->session->userdata('user');
@@ -10785,9 +9571,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function artworkaprdone(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10803,7 +9586,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function artworkaprdoneinPST(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10818,7 +9600,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function artworkapr(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10834,8 +9615,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function artworkaprinPST(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10851,8 +9630,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function backdroparbd(){
         $by='BD';
         $apr= $this->input->post('apr');
@@ -10878,8 +9655,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->backdrop_ar($id, $val, $rem,$by,$cid,$filname,$count);
         redirect('Menu/artworkapr');
     }
-
-
     public function companies($code){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10891,19 +9666,23 @@ class Menu extends CI_Controller {
         if($uid=='100103'){$uid=45;}
         if($uid=='100149'){$uid=45;}
         if($uid=='100142'){$uid=2;}
-        if($code==0){
-            $mdata=$this->Menu_model->get_bdtcom($uid);
+        if($uyid == 2){
+              $mdata=$this->Menu_model->getBdWiseCompList($uid,$code);
         }else{
-            $mdata=$this->Menu_model->get_bdcombystatus($uid,$code);
+            if($uyid == 9){
+                  $mdata=$this->Menu_model->get_bdtcom($uid);
+            }
+            else{
+              $mdata=$this->Menu_model->get_bdcombystatus($uid,$code);   
+            } 
         }
+        
         if(!empty($user)){
             $this->load->view($dep_name.'/CreatedCompanies',['user'=>$user,'mdata'=>$mdata,'code'=>$code,'uid'=>$uid]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function pstnotassignc(){
         $code=30;
         $user = $this->session->userdata('user');
@@ -10927,9 +9706,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function TotalCompanies(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10948,8 +9724,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function CallDetail($sid,$tid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10960,22 +9734,17 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $spd= $this->Menu_model->get_spdbyid($sid);
         $pcode = $spd[0]->project_code;
-
         $programd1=$this->Menu_model->get_spddetail1($sid);
         $programd2=$this->Menu_model->get_spddetail2($sid);
         $programd3=$this->Menu_model->get_spddetail3($sid);
         $programd4=$this->Menu_model->get_spddetail4($sid);
         $sdetail=$this->Menu_model->get_sdetail($sid);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/CallDetail',['user'=>$user,'uid'=>$uid,'tid'=>$tid,'sid'=>$sid,'sdetail'=>$sdetail,'programd4'=>$programd4,'programd3'=>$programd3,'programd2'=>$programd2,'programd1'=>$programd1,'spd'=>$spd]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
-
     public function UtilisationDetail($sid,$tid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -10986,23 +9755,18 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $spd= $this->Menu_model->get_spdbyid($sid);
         $pcode = $spd[0]->project_code;
-
         $programd1=$this->Menu_model->get_spddetail1($sid);
         $programd2=$this->Menu_model->get_spddetail2($sid);
         $programd3=$this->Menu_model->get_spddetail3($sid);
         $programd4=$this->Menu_model->get_spddetail4($sid);
         $sdetail=$this->Menu_model->get_sdetail($sid);
         $wgd=$this->Menu_model->get_wgdatabytid($tid);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/UtilisationDetail',['wgd'=>$wgd,'user'=>$user,'uid'=>$uid,'tid'=>$tid,'sid'=>$sid,'sdetail'=>$sdetail,'programd4'=>$programd4,'programd3'=>$programd3,'programd2'=>$programd2,'programd1'=>$programd1,'spd'=>$spd]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
-
     public function addurwag(){
         $que=$this->input->post('que');
         $rat1=$this->input->post('rat1');
@@ -11013,7 +9777,6 @@ class Menu extends CI_Controller {
         $id=$this->Menu_model->add_wgurdata($urtid,$tid,$remark,$que,$rat1);
         redirect('Menu/Dashboard');
     }
-
     public function PotentialPartner($cid,$code){
         $this->load->model('Menu_model');
         $this->Menu_model->Potential_Partner($cid);
@@ -11024,33 +9787,26 @@ class Menu extends CI_Controller {
         $this->Menu_model->Non_Potential_Partner($cid);
         redirect('Menu/pstnotassignc/'.$code);
     }
-
     public function PotentialPartnerpst($cid,$code){
         $this->load->model('Menu_model');
         $this->Menu_model->Potential_Partnerpst($cid);
         redirect('Menu/pcompanies/'.$code);
     }
-
     public function nonPotentialPartnerpst($cid,$code){
         $this->load->model('Menu_model');
         $this->Menu_model->nonPotential_Partnerpst($cid);
         redirect('Menu/pcompanies/'.$code);
     }
-
     public function FYff($cid,$code){
         $this->load->model('Menu_model');
         $this->Menu_model->FY_ff($cid);
         redirect('Menu/pcompanies/'.$code);
     }
-
     public function QTRff($cid,$code){
         $this->load->model('Menu_model');
         $this->Menu_model->QTR_ff($cid);
         redirect('Menu/pcompanies/'.$code);
     }
-
-
-
     public function OppTaskDetail($type){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11066,7 +9822,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function ZipDownloadbytid($tid){
         $this->load->model('Menu_model');
         $wgdata=$this->Menu_model->get_wgbyttid($tid);
@@ -11076,13 +9831,9 @@ class Menu extends CI_Controller {
               $sp = "https://stemoppapp.in/";
               $fpath=$sp.$w->filepath;
               $this->zip->read_file($fpath);
-
           }
         $this->zip->download(time().'.zip');
-
     }
-
-
     public function pstcompanies($code){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11099,23 +9850,17 @@ class Menu extends CI_Controller {
         }else{
             $mdata=$this->Menu_model->get_pstcombystatus($uid,$code);
         }
-
         if(!empty($user)){
             $this->load->view($dep_name.'/pstcompanies',['user'=>$user,'mdata'=>$mdata,'code'=>$code,'uid'=>$uid]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
-
     public function AfterPSTTaskOnC(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
-
         if(isset($_POST['sdate'])){
         $sdate = $_POST['sdate'];
         $apst = $_POST['pst'];
@@ -11126,21 +9871,15 @@ class Menu extends CI_Controller {
         }
         $sd=$sdate;
         $sdate = new DateTime($sdate);
-
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         if(!empty($user)){
             $this->load->view($dep_name.'/afterpsttaskonc',['apst'=>$apst,'user'=>$user,'uid'=>$uid,'sdate'=>$sdate,'sd'=>$sd]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
-
-
     public function creatert(){
         $rtdatet=$_POST['rtdatet'];
         $tasktype=$_POST['tasktype'];
@@ -11151,7 +9890,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->pstreview($rtdatet,$tasktype,$bdid,$mlink,$pstid);
         redirect('Menu/Dashboard');
     }
-
     public function dremark(){
         $codeid=$_POST['codeid'];
         $bdid=$_POST['bdid'];
@@ -11162,8 +9900,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->add_dremark($cid,$pstuid,$dremark);
         redirect('Menu/bdcompanies/'.$codeid.'/'.$bdid);
     }
-
-
     public function set_kc(){
         $cid=$_POST['skcid'];
         $kcdate=$_POST['kcdate'];
@@ -11172,7 +9908,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->set_kcomp($cid,$kcdate,$kcremark);
         redirect('Menu/pcompanies/0');
     }
-
     public function rset_kc(){
         $cid=$_POST['rskcid'];
         $rsrremark=$_POST['rsrremark'];
@@ -11180,8 +9915,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->rset_kc($cid,$rsrremark);
         redirect('Menu/pcompanies/0');
     }
-
-
     public function set_kcc(){
         $cid=$_POST['spkcid'];
         $kcdate=$_POST['kccdate'];
@@ -11190,7 +9923,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->set_kcc($cid,$kcdate,$kcremark);
         redirect('Menu/pcompanies/0');
     }
-
     public function rset_kcc(){
         $cid=$_POST['rspkcid'];
         $rsprremark=$_POST['rsprremark'];
@@ -11198,10 +9930,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->rset_kcc($cid,$rsprremark);
         redirect('Menu/pcompanies/0');
     }
-
-
-
-
     public function csbchange(){
         $cid=$_POST['cid'];
         $sno=$_POST['sno'];
@@ -11211,8 +9939,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->add_csbchange($cid,$sno,$budget);
         redirect('Menu/totalcdetail/'.$code);
     }
-
-
     public function rremarkpnp(){
         $bdid=$_POST['bdid'];
         $codeid=$_POST['codeid'];
@@ -11222,8 +9948,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->add_rremarkpnp($cid,$remark);
         redirect('Menu/bdcompanies/'.$codeid.'/'.$bdid);
     }
-
-
     public function rremark(){
         $pstuid=$_POST['pstuid'];
         $ntaction=$_POST['ntaction'];
@@ -11238,7 +9962,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->add_rremark($cid,$bdid,$remark,$ntdate,$ntaction,$ntppose,$pstuid);
         redirect('Menu/bdcompanies/'.$codeid.'/'.$bdid);
     }
-
     public function uprremark(){
         $rid=$_POST['rid'];
         $potential=$_POST['potential'];
@@ -11248,15 +9971,10 @@ class Menu extends CI_Controller {
         $ans3=$_POST['ans3'];
         $csrbudget=$_POST['csrbudget'];
         $bdscholl=$_POST['bdscholl'];
-
         $this->load->model('Menu_model');
         $this->Menu_model->up_rremark($rid,$potential,$otherremark,$ans1,$ans2,$ans3,$csrbudget,$bdscholl);
         redirect('Menu/EditReview/');
     }
-
-
-
-
     public function DailyTarget(){
         $date=$_POST['date1'];
         $dep=$_POST['dep1'];
@@ -11267,7 +9985,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->Daily_Target($date,$dep,$user,$task,$remark);
         redirect('Menu/ToDoList/');
     }
-
     public function WeeklyObjectives(){
         $date=$_POST['date2'];
         $dep=$_POST['dep2'];
@@ -11278,10 +9995,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->Weekly_Objectives($date,$dep,$user,$task,$remark);
         redirect('Menu/ToDoList/');
     }
-
-
-
-
     public function rtaskc(){
         $rid=$_POST['rid'];
         $pstuid=$_POST['pstuid'];
@@ -11298,8 +10011,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->all_rremark($rid,$inid,$bdid,$remark,$ntdate,$ntaction,$pstuid,$exsid,$exdate,$rtype,$taskupdate);
         redirect('Menu/AllReviewPlaing/');
     }
-
-
     public function bdrtaskc(){
         $rid=$_POST['rid'];
         $pstuid=$_POST['pstuid'];
@@ -11320,7 +10031,6 @@ class Menu extends CI_Controller {
         $bdscholl = $_POST['bdscholl'];
         $requeststatus = $_POST['requeststatus'];
         $taskupdate = "NO";
-
         $deletef = $_POST['deletef'];
         $patnertype = $_POST['patnertype'];
         $topspender = $_POST['topspender'];
@@ -11329,12 +10039,9 @@ class Menu extends CI_Controller {
         $priorityclient = $_POST['priorityclient'];
         $upsellclient = $_POST['upsellclient'];
         $focusyclient = $_POST['focusyclient'];
-
         $travelcluster = $_POST['travelcluster'];
         $cluster_id = $_POST['cluster_id'];
-
         $review_time = $_POST['review_time'];
-
         $this->load->model('Menu_model');
         $this->load->library('session');
        
@@ -11343,24 +10050,17 @@ class Menu extends CI_Controller {
             $this->session->set_flashdata('success_message','Review Done SuccessFully !');
             redirect('Menu/AllReviewPlaing/');
         }
-
-
         if($review_time == 'First Time'){
-
             $this->Menu_model->all_bdrremark($deletef,$patnertype,$topspender,$keyclient,$pkeyclient,$priorityclient,$upsellclient,$focusyclient,$rid,$inid,$bdid,$remark,$ntdate,$ntaction,$pstuid,$exsid,$exdate,$rtype,$taskupdate,$potential,$ans1,$ans2,$ans3,$ans4,$requeststatus,$csrbudget,$bdscholl,$travelcluster,$cluster_id);
             $this->session->set_flashdata('success_message','Review Done SuccessFully !');
             redirect('Menu/AllReviewPlaing/');
-
         }
         if($review_time == 'Many Time'){
-
             $ex_status_id   = $_POST['exsid'];
             $exdate         = $_POST['exdate'];
-
             $ntaction       = $_POST['ntaction'];
             $ntppose        = $_POST['ntppose'];
             $ntdate         = $_POST['ntdate'];
-
             $sdate = date("Y-m-d H:i:s");
             $data = array(
                 'sdatet'                  => $sdate,
@@ -11390,18 +10090,11 @@ class Menu extends CI_Controller {
             
            
             $this->Menu_model->InsterManyTimeReview($rid,$inid,$pstuid,$bdid,$remark,$ntdate,$ntaction,$rtype,$taskupdate,$data);
-
             $this->session->set_flashdata('success_message','Review Done SuccessFully !');
             redirect('Menu/AllReviewPlaing/');
         }
-
-
        
     }
-
-
-
-
     public function tsetting(){
         $bdid=$_POST['bdid'];
         $inid=$_POST['inid'];
@@ -11411,8 +10104,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->tset_ting($bdid,$inid,$exstatus,$exdate);
         redirect('Menu/TargerSetting/');
     }
-
-
     public function pstrtaskc(){
         $rid=$_POST['rid'];
         $pstuid=$_POST['pstuid'];
@@ -11434,7 +10125,6 @@ class Menu extends CI_Controller {
         $taskupdate = $_POST['taskupdate'];
         $nschool = $_POST['nschool'];
         $nrvenue = $_POST['nrvenue'];
-
         $deletef = $_POST['deletef'];
         $patnertype = $_POST['patnertype'];
         $topspender = $_POST['topspender'];
@@ -11443,18 +10133,10 @@ class Menu extends CI_Controller {
         $priorityclient = $_POST['priorityclient'];
         $upsellclient = $_POST['upsellclient'];
         $focusyclient = $_POST['focusyclient'];
-
-
-
         $this->load->model('Menu_model');
         $this->Menu_model->all_pstrremark($deletef,$patnertype,$topspender,$keyclient,$pkeyclient,$priorityclient,$upsellclient,$focusyclient,$rid,$inid,$bdid,$remark,$ntdate,$ntaction,$pstuid,$exsid,$exdate,$rtype,$taskupdate,$ans1,$ans2,$ans3,$ans4,$requeststatus,$nschool,$nrvenue,$potential,$taskfor);
         redirect('Menu/AllReviewPlaing/');
     }
-
-
-
-
-
     public function rpsttaskc(){
         $rid=$_POST['rid'];
         $pstuid=$_POST['pstuid'];
@@ -11471,14 +10153,11 @@ class Menu extends CI_Controller {
         $this->Menu_model->all_rremark($rid,$inid,$bdid,$remark,$ntdate,$ntaction,$pstuid,$exsid,$exdate,$rtype,$taskupdate);
         redirect('Menu/AllPSTReviewPlaing/');
     }
-
-
     public function alreply($tid,$msg,$code,$uid){
         $this->load->model('Menu_model');
         $this->Menu_model->set_alreply($tid,$msg,$code,$uid);
         redirect('Menu/AlertReply/'.$code);
     }
-
     public function SetGoalSetting(){
         $rrrid=$_POST['rrrid'];
         $gsuid=$_POST['gsuid'];
@@ -11496,13 +10175,10 @@ class Menu extends CI_Controller {
         $clouserc=$_POST['clouserc'];
         $noofschool=$_POST['noofschool'];
         $gsremark=$_POST['gsremark'];
-
         $this->load->model('Menu_model');
         $this->Menu_model->Goal_Setting($rrrid, $gsuid, $gsbdid, $targetdt, $tcall, $email, $praposal, $outmeeting, $meeting, $rpmeeting, $research, $positivec, $vpositivec, $clouserc, $noofschool, $gsremark);
         redirect('Menu/AllReviewPlaing/');
     }
-
-
     public function editcmpbybd(){
         $city='';$state='';$address='';$website='';$partnerType_id='';$budget='';$top_spender='';$upsell_client='';$focus_funnel='';
         $cid=$_POST['cid'];
@@ -11517,10 +10193,7 @@ class Menu extends CI_Controller {
         $this->Menu_model->edit_cmpbybd($cid,$state,$city,$address,$website,$partnerType_id,$budget,$top_spender);
         redirect('Menu/CompanyDetails/'.$cid);
     }
-
-
     public function editcmp(){
-
         $city='';$state='';$address='';$website='';$top_spender='';$upsell_client='';$focus_funnel='';
         $cid=$_POST['cid'];
         $state=$_POST['state'];
@@ -11536,8 +10209,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->edit_cmp($cid,$state,$city,$address,$website,$top_spender,$upsell_client,$focus_funnel);
         redirect('Menu/bdcompanies/'.$codeid.'/'.$bdid);
     }
-
-
     public function handoverapr(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11554,8 +10225,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function bdcompanies($code,$bdid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11575,8 +10244,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function CommonCompaniesStatus($code,$bdid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11594,7 +10261,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function PSTbdcompanies($code,$bdid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11610,9 +10276,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function CreatedPSTCompanies($code,$bdid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11632,8 +10295,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function CategoryBDC($code,$bdid,$categories){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11644,16 +10305,12 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
    
         $mdata=$this->Menu_model->get_bdcombystatuscat($bdid,$code,$categories);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/CategoryBDC',['user'=>$user,'mdata'=>$mdata,'code'=>$code,'uid'=>$uid,'bdid'=>$bdid]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
-
     public function ActionReviewDetail($aid,$sid,$bdid,$fdate,$rid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11662,20 +10319,13 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $mdata=$this->Menu_model->get_actionlogs($sid,$aid,$fdate,$bdid);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/ActionReviewDetail',['user'=>$user,'mdata'=>$mdata,'uid'=>$uid,'bdid'=>$bdid,'rid'=>$rid]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
-
-
-
     public function pstassignc($uid,$tdate){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11691,9 +10341,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function AlertReply($code){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11708,12 +10355,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
-
-
     public function BDRequestSummary($code){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11729,8 +10370,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function bdrequestlogs($rid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11746,8 +10385,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TBDRequest($code){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11763,9 +10400,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function TotalBDRequest($code){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11781,7 +10415,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function TotalBDRequestinPST($code){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11797,10 +10430,7 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-     public function pcompanies($code){
-   
+    public function pcompanies($code){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -11810,7 +10440,6 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         
         if(isset($_POST['submit'])){
-
             $commoncompanies = $_POST['commoncompanies'];   // meetings or topspender
             $commonwith = $_POST['commonwith'];             // bd, pst, both
             $topspender = $_POST['topspender'];             // yes, no
@@ -11827,25 +10456,16 @@ class Menu extends CI_Controller {
             }else{
                 $mdata=$this->Menu_model->get_pbdcombystatus($uid,$code);
             }
-
             $commoncompanies = '';   // meetings or topspender
             $commonwith = '';             // bd, pst, both
             $topspender = '';
         }
-
         if(!empty($user)){
             $this->load->view($dep_name.'/CreatedCompanies',['user'=>$user,'mdata'=>$mdata,'code'=>$code,'uid'=>$uid,'commoncompanies'=>$commoncompanies,'commonwith'=>$commonwith,'topspender'=>$topspender]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
-
-
-
-
-
     public function bdeff($tdate,$s){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11861,8 +10481,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function psteff($tdate,$s){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -11878,9 +10496,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function cpst(){
         $topst = $_POST['topst'];
         $cid = $_POST['cid'];
@@ -11889,7 +10504,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->get_cpst($fopst,$topst,$cid);
         redirect('Menu/changepst');
     }
-
     public function cbdtf(){
         $topst = $_POST['topst'];
         $cid = $_POST['cid'];
@@ -11898,8 +10512,6 @@ class Menu extends CI_Controller {
         $this->Menu_model->get_cbdtf($fopst,$topst,$cid);
         redirect('Menu/PMTFTOBD');
     }
-
-
     public function rpmeetreport(){
         if(isset($_POST['sdate']) && isset($_POST['edate'])){
         $sdate = $_POST['sdate'];
@@ -11924,8 +10536,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function RoasterCallingReport(){
         if(isset($_POST['sdate']) && isset($_POST['edate'])){
         $sdate = $_POST['sdate'];
@@ -11951,8 +10561,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function getremark(){
         $sid= $this->input->post('sid');
         $this->load->model('Menu_model');
@@ -11963,8 +10571,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$rm->id.'>'.$rm->name.'</option>';
         }
     }
-
-
     public function getcmpbycmp(){
         $bycmp= $this->input->post('bycmp');
         $this->load->model('Menu_model');
@@ -11974,20 +10580,13 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$cmp->inid.'>'.$cmp->compname.'</option>';
         }
     }
-
-
     public function getinidtostatus(){
         $inid= $this->input->post('inid');
         $this->load->model('Menu_model');
         $cmp=$this->Menu_model->get_inidtostatus($inid);?>
         <input type="hidden" name="ntstatus" value="<?=$cmp[0]->cstatus?>">
-
         <?php
     }
-
-
-
-
     public function getcmpbycategory(){
         $category= $this->input->post('category');
         $uid= $this->input->post('uid');
@@ -11997,54 +10596,39 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$cmp->inid.'>'.$cmp->compname.'</option>';
         }
     }
-
     public function getcmpbycategory12(){
-
         $statusfiltercardCat = $this->input->post('statusfiltercardCat');
         $category= $this->input->post('category');
-
         $uid= $this->input->post('uid');
         $this->load->model('Menu_model');
-
         $cmp=$this->Menu_model->get_cmpbycategory12($category,$statusfiltercardCat,$uid);
         foreach($cmp as $cmp){
              echo  $data = '<option value='.$cmp->inid.'>'.$cmp->compname.'</option>';
         }
     }
-
-
     public function getcmpbycategory13(){
-
         $taskActionbyusercatcat = $this->input->post('taskActionbyusercatcat');
         $statusfiltercardCat = $this->input->post('statusfiltercardCat');
         $category= $this->input->post('category');
-
         $uid= $this->input->post('uid');
         $this->load->model('Menu_model');
-
         $cmp=$this->Menu_model->get_cmpbycategory13($category,$statusfiltercardCat,$taskActionbyusercatcat,$uid);
         foreach($cmp as $cmp){
              echo  $data = '<option value='.$cmp->inid.'>'.$cmp->compname.'</option>';
         }
     }
-
     public function getcmpbycategory14(){
-
         $taskPurposebyusercat = $this->input->post('taskPurposebyusercat');
         $taskActionbyusercatcat = $this->input->post('taskActionbyusercatcat');
         $statusfiltercardCat = $this->input->post('statusfiltercardCat');
         $category= $this->input->post('category');
-
         $uid= $this->input->post('uid');
         $this->load->model('Menu_model');
-
         $cmp=$this->Menu_model->get_cmpbycategory14($category,$statusfiltercardCat,$taskActionbyusercatcat,$taskPurposebyusercat,$uid);
         foreach($cmp as $cmp){
              echo  $data = '<option value='.$cmp->inid.'>'.$cmp->compname.'</option>';
         }
     }
-
-
     public function getcmpbynwbwd(){
         $uid= $this->input->post('uid');
         $sid= $this->input->post('sid');
@@ -12057,7 +10641,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$cmp->inid.'>'.$cmp->compname.'</option>';
         }
     }
-
     public function getcmpbypreplandate(){
         $uid= $this->input->post('uid');
         $plandate = $this->input->post('plandate');
@@ -12068,7 +10651,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$cmp->inid.'>'.$cmp->compname.'</option>';
         }
     }
-
     //get company by review
     public function getcmpbyreview(){
         $uid = $this->input->post('uid');
@@ -12080,13 +10662,9 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$cmp->inid.'>'.$cmp->compname.'</option>';
         }
     }
-
-
     public function getinitlogs(){
         $inid = $this->input->post('inid');
         $this->load->model('Menu_model');?>
-
-
         <div class="col-12">
     <div class="card">
               <div class="card-header">
@@ -12094,7 +10672,6 @@ class Menu extends CI_Controller {
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-
                   <button id="grid-view-btn" class="btn border">Grid View</button>
                   <button id="list-view-btn" class="btn border">Xls View</button>
                     <div class="container-fluid card p-5" id="data-container">
@@ -12103,14 +10680,11 @@ class Menu extends CI_Controller {
                             $oldd = "";$newd="";
                             $gdata = $this->Menu_model->get_utaskbycmp($inid);
                             foreach ($gdata as $gd) { if($oldd==''){$oldd = $gd->updateddate;} $newd = $gd->updateddate;?>
-
-
                                         <div class="col-sm-12 col-md-4 col-lg-4 mb-4">
                                         <div class="card p-3 border rounded border-success hover-div d-flex flex-column align-items-stretch h-100">
                                             <div class="custom-border-card">
                                             <span class="custom-border-text"><h5>Time Diff Between to Task : <?=$this->Menu_model->timediff($oldd, $newd);?></h5></span>
                                             <div class="card-body">
-
                                             Action<br><b style="color:<?=$gd->aclr?>"><?=$gd->acname?></b><hr>
                                             Befour Status<br><b style="color:<?=$gd->bsclr?>"><?=$gd->bstatus?></b><hr>
                                             After Status<br><b style="color:<?=$gd->asclr?>"><?=$gd->astatus?></b><hr>
@@ -12126,20 +10700,13 @@ class Menu extends CI_Controller {
                                                 bottom: -10px; left: 40%; transform: translateX(-50%); width: 20px; height: 20px;"></div>
                                             <div class="rounded-circle bg-danger" style="position: absolute;
                                                 bottom: -10px; left: 60%; transform: translateX(-50%); width: 20px; height: 20px;"></div>
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-
-
-
-
                             <?php $oldd = $gd->updateddate;} ?>
                         </div>
                         <div id="list-view" style="display: none;">
-
                             <div class="table-responsive">
                             <div class="table-responsive">
                                 <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
@@ -12165,7 +10732,6 @@ class Menu extends CI_Controller {
                                     <?php $i=1;
                             foreach ($gdata as $gd) {
                                 ?>
-
                                         <tr>
                                          <td><?=$i?></td>
                                          <td><b style="color:<?=$gd->aclr?>"><?=$gd->acname?></b></td>
@@ -12187,7 +10753,6 @@ class Menu extends CI_Controller {
                                 </table>
                         </div>
                     </div>
-
                         <script>
                             document.getElementById("grid-view-btn").addEventListener("click", function () {
                                 document.getElementById("grid-view").style.display = "block";
@@ -12195,24 +10760,15 @@ class Menu extends CI_Controller {
                                 document.getElementById("list-view-btn").classList.remove('btn-info');
                                 document.getElementById("grid-view-btn").classList.add('btn-info');
                             });
-
                             document.getElementById("list-view-btn").addEventListener("click", function () {
                                 document.getElementById("grid-view").style.display = "none";
                                 document.getElementById("list-view").style.display = "block";
                                 document.getElementById("grid-view-btn").classList.remove('btn-info');
                                 document.getElementById("list-view-btn").classList.add('btn-info');
                             });
-
                         </script>
               </div>
-
-
-
-
-
     <?php }
-
-
     public function getcmpbynwpsta(){
         $uid= $this->input->post('uid');
         $this->load->model('Menu_model');
@@ -12222,7 +10778,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$cmp->inid.'>'.$cmp->compname.'</option>';
         }
     }
-
     public function getcmpbypstassign(){
         $uid= $this->input->post('uid');
         $this->load->model('Menu_model');
@@ -12232,11 +10787,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$cmp->inid.'>'.$cmp->compname.'</option>';
         }
     }
-
-
-
-
-
     public function getcmpbytbs(){
         $uid= $this->input->post('uid');
         $this->load->model('Menu_model');
@@ -12245,10 +10795,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$cmp->inid.'>'.$cmp->compname.'</option>';
         }
     }
-
-
-
-
     public function getstatuscmp(){
         $sid= $this->input->post('sid');
         $uid= $this->input->post('uid');
@@ -12259,13 +10805,9 @@ class Menu extends CI_Controller {
         <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
-
         <?php
-
         }
     }
-
-
     public function getUserCompBy_cmp_id(){
         $company_val= $this->input->post('company_val');
         $uid= $this->input->post('uid');
@@ -12277,12 +10819,8 @@ class Menu extends CI_Controller {
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
-
-
     public function getstatuscmp_reviewTarget(){
         $sid= $this->input->post('sid');
         $uid= $this->input->post('uid');
@@ -12293,13 +10831,9 @@ class Menu extends CI_Controller {
         <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
-
         <?php
-
         }
     }
-
-
     public function getcmp_getreviewtype(){
         $getreviewtype= $this->input->post('getreviewtype');
         $uid= $this->input->post('uid');
@@ -12310,13 +10844,9 @@ class Menu extends CI_Controller {
         <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
-
         <?php
-
         }
     }
-
-
     public function getcmp_getreviewtype_self(){
         $getreviewtype= $this->input->post('getreviewtype');
         $getreviewtypeself= $this->input->post('getreviewtypeself');
@@ -12327,13 +10857,9 @@ class Menu extends CI_Controller {
         <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
-
         <?php
-
         }
     }
-
-
     public function getcmp_reviewTarget_typeoftaskData(){
         $sid= $this->input->post('sid');
         $typeoftask= $this->input->post('typeoftask');
@@ -12345,13 +10871,9 @@ class Menu extends CI_Controller {
         <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
-
         <?php
-
         }
     }
-
-
     public function getcmp_reviewTarget_actionData(){
         $sid= $this->input->post('sid');
         $typeoftask= $this->input->post('typeoftask');
@@ -12364,13 +10886,9 @@ class Menu extends CI_Controller {
         <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
-
         <?php
-
         }
     }
-
-
     public function getcmp_reviewTarget_purposeData(){
         $sid= $this->input->post('sid');
         $typeoftask  = $this->input->post('typeoftask');
@@ -12384,13 +10902,9 @@ class Menu extends CI_Controller {
         <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
-
         <?php
-
         }
     }
-
-
     public function getpstassigncmp(){
         $pstassign = $this->input->post('pstassign');
         $uid= $this->input->post('uid');
@@ -12401,14 +10915,9 @@ class Menu extends CI_Controller {
         <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
-
         <?php
-
         }
     }
-
-
-
     public function getstatuscmpnotplaned(){
         $sid= $this->input->post('sid');
         $uid= $this->input->post('uid');
@@ -12429,11 +10938,8 @@ class Menu extends CI_Controller {
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
-
     public function getcmp_partnertype(){
         $partnertype= $this->input->post('partnertype');
         $uid= $this->input->post('uid');
@@ -12445,11 +10951,8 @@ class Menu extends CI_Controller {
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
-
     public function getquarter1company(){
         $partnertype= $this->input->post('quarter');
         $uid= $this->input->post('uid');
@@ -12461,11 +10964,8 @@ class Menu extends CI_Controller {
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
-
     public function getallcmp_planbutnotinited(){
         $taskaction= $this->input->post('taskaction');
         $uid= $this->input->post('uid');
@@ -12480,7 +10980,6 @@ class Menu extends CI_Controller {
         $cmp = $this->Menu_model->get_all_old_cmp_planbutnotinited($uid);
         echo sizeof($cmp);
     }
-
     public function getallcmp_PendingAutotask(){
         $taskaction= $this->input->post('taskaction');
         $uid= $this->input->post('uid');
@@ -12490,7 +10989,6 @@ class Menu extends CI_Controller {
         // print_r($cmp);
         echo sizeof($cmp);
     }
-
     public function getcmp_planbutnotinited(){
         $taskaction= $this->input->post('taskaction');
         $uid= $this->input->post('uid');
@@ -12507,8 +11005,6 @@ class Menu extends CI_Controller {
         }
        echo $data;
     }
-
-
     public function getcmp_planbutnotinitedOld(){
         $taskaction= $this->input->post('taskaction');
         $uid= $this->input->post('uid');
@@ -12525,12 +11021,10 @@ class Menu extends CI_Controller {
         }
        echo $data;
     }
-
     public function getcmp_PendingAutotaskonPlanner(){
         $taskaction= $this->input->post('taskaction');
         $uid= $this->input->post('uid');
         $this->load->model('Menu_model');
-
         $cmp = $this->Menu_model->get_PendingAutoTaskByActionID($uid,$taskaction);
         
         $data = '';
@@ -12543,7 +11037,6 @@ class Menu extends CI_Controller {
         }
        echo $data;
     }
-
     public function getcmp_partnertypeCstatus(){
         $partnertype= $this->input->post('partnertype');
         $partnertype_cstatus= $this->input->post('partnertype_cstatus');
@@ -12556,10 +11049,8 @@ class Menu extends CI_Controller {
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
     public function getcmp_partnertypeCstatusTask(){
         $partnertype= $this->input->post('partnertype');
         $partnertype_cstatus= $this->input->post('partnertype_cstatus');
@@ -12573,11 +11064,8 @@ class Menu extends CI_Controller {
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
-
     public function getcmp_partnertypeCstatusTaskAction(){
         $partnertype= $this->input->post('partnertype');
         $partnertype_cstatus= $this->input->post('partnertype_cstatus');
@@ -12592,10 +11080,8 @@ class Menu extends CI_Controller {
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
     public function getcmp_partnertypeCstatusTaskPurpose(){
         $partnertype= $this->input->post('partnertype');
         $partnertype_cstatus= $this->input->post('partnertype_cstatus');
@@ -12611,11 +11097,8 @@ class Menu extends CI_Controller {
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
-
     public function getcmp_samestatuslastdays(){
         $samestatus= $this->input->post('samestatus');
         $uid= $this->input->post('uid');
@@ -12627,11 +11110,8 @@ class Menu extends CI_Controller {
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
-
     public function getcmp_samestatuslastdaysPartner(){
         $samestatus= $this->input->post('samestatus');
         $partnertype= $this->input->post('partnertype');
@@ -12644,10 +11124,8 @@ class Menu extends CI_Controller {
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
     public function getcmp_samestatuslastdaysPartnerDays(){
         $samestatus= $this->input->post('samestatus');
         $partnertype= $this->input->post('partnertype');
@@ -12656,16 +11134,21 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $cmp = $this->Menu_model->get_cmp_samestatuslastdaysPartnerdays($samestatus,$partnertype,$daysfilter,$uid);
         echo '<option value="">Select Company</option>';
-        foreach($cmp as $cmp){ ?>
+        $uniqueObjects = [];
+        foreach ($cmp as $object) {
+            if (!isset($uniqueObjects[$object->inid])) {
+                $uniqueObjects[$object->inid] = $object;
+            }
+        }
+        $uniqueObjects = array_values($uniqueObjects);
+
+        foreach($uniqueObjects as $cmp){ ?>
         <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
-
     public function getcmp_samestatuslastdaysPartnerDaysAction(){
         $samestatus= $this->input->post('samestatus');
         $partnertype= $this->input->post('partnertype');
@@ -12680,11 +11163,8 @@ class Menu extends CI_Controller {
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
-
     public function getcmp_samestatuslastdaysPartnerDaysPurpose(){
         $samestatus= $this->input->post('samestatus');
         $partnertype= $this->input->post('partnertype');
@@ -12700,11 +11180,8 @@ class Menu extends CI_Controller {
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
-
     public function taskactionnotplan(){
         $task_action= $this->input->post('task_action');
         $sid= $this->input->post('sid');
@@ -12717,11 +11194,8 @@ class Menu extends CI_Controller {
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
-
     public function taskactionnotplan_filter(){
         $task_action= $this->input->post('tasktaction');
       
@@ -12735,11 +11209,8 @@ class Menu extends CI_Controller {
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
-
     public function taskactionnotplan_filter_action(){
         $task_action= $this->input->post('tasktaction');
         $taskActionbyuserCardData= $this->input->post('tasktactionData');
@@ -12753,10 +11224,8 @@ class Menu extends CI_Controller {
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
     public function taskactionnotplan_filter_purpose(){
         $task_action= $this->input->post('tasktaction');
         $taskActionbyuserCardData= $this->input->post('tasktactionData');
@@ -12771,11 +11240,8 @@ class Menu extends CI_Controller {
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
-
     public function taskactionnotplanwithdays(){
         $task_action= $this->input->post('task_action');
         $daysfiltercard_anp_date= $this->input->post('daysfiltercard_anp_date');
@@ -12783,34 +11249,44 @@ class Menu extends CI_Controller {
         $uid= $this->input->post('uid');
         $this->load->model('Menu_model');
         $cmp = $this->Menu_model->get_statuscmpnotplan12($sid,$task_action,$daysfiltercard_anp_date,$uid);
-        // $cmp  = array_unique($cmp);
+      
+        $uniqueObjects = [];
+            foreach ($cmp as $object) {
+                if (!isset($uniqueObjects[$object->inid])) {
+                    $uniqueObjects[$object->inid] = $object;
+                }
+            }
+            $uniqueObjects = array_values($uniqueObjects);
         echo '<option value="">Select Company</option>';
-        foreach($cmp as $cmp){ ?>
+        foreach($uniqueObjects as $cmp){ ?>
         <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
         <?php
-
         }
     }
-
-
-
     public function getstatuscmpwithtasktaction(){
         $sid= $this->input->post('sid');
         $uid= $this->input->post('uid');
         $tasktaction= $this->input->post('tasktaction');
-
         $this->load->model('Menu_model');
         $cmp = $this->Menu_model->get_statuscmpwithtasktaction($sid,$uid,$tasktaction);
+    
         echo '<option value="">Select Company</option>';
-        foreach($cmp as $cmp){ ?>
+      
+        $uniqueObjects = [];
+        foreach ($cmp as $object) {
+            if (!isset($uniqueObjects[$object->inid])) {
+                $uniqueObjects[$object->inid] = $object;
+            }
+        }
+        $uniqueObjects = array_values($uniqueObjects);
+
+        foreach($uniqueObjects as $cmp){ ?>
         <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
             <?=$cmp->compname?> (<?=$cmp->pname?>)
         </option>
-
         <?php
-
         }
     }
     public function getTaskActionYesorNobyuser(){
@@ -12818,7 +11294,6 @@ class Menu extends CI_Controller {
         $uid= $this->input->post('uid');
         $taskActionbyuser= $this->input->post('taskActionbyuser');
         $tasktaction= $this->input->post('tasktaction');
-
         $this->load->model('Menu_model');
         $cmp = $this->Menu_model->task_Action_YesorNobyUser($sid,$uid,$tasktaction,$taskActionbyuser);
         echo '<option value="">Select Company</option>';
@@ -12826,9 +11301,7 @@ class Menu extends CI_Controller {
         <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
             <?=$cmp->compname?> (<?=$cmp->pname?>)
         </option>
-
         <?php
-
         }
     }
     public function getTaskPurposeYesorNobyuser(){
@@ -12837,7 +11310,6 @@ class Menu extends CI_Controller {
         $taskActionbyuser= $this->input->post('taskActionbyuser');
         $tasktaction= $this->input->post('tasktaction');
         $taskPurposebyuser= $this->input->post('taskPurposebyuser');
-
         $this->load->model('Menu_model');
         $cmp = $this->Menu_model->task_Purpose_YesorNobyUser($sid,$uid,$tasktaction,$taskPurposebyuser,$taskActionbyuser);
         echo '<option value="">Select Company</option>';
@@ -12845,15 +11317,10 @@ class Menu extends CI_Controller {
         <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
             <?=$cmp->compname?> (<?=$cmp->pname?>)
         </option>
-
         <?php
-
         }
     }
    
-
-
-
     public function getstatuscmp4(){
         $sid= $this->input->post('sid');
         $uid= $this->input->post('uid');
@@ -12864,14 +11331,9 @@ class Menu extends CI_Controller {
         <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
-
         <?php
-
         }
     }
-
-
-
     public function getstatuscmp6(){
         $sid= $this->input->post('sid');
         $uid= $this->input->post('uid');
@@ -12882,14 +11344,9 @@ class Menu extends CI_Controller {
         <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
     <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
-
         <?php
-
         }
     }
-
-
-
     public function getcmpbyloc(){
         $bylocation= $this->input->post('bylocation');
         $uid= $this->input->post('uid');
@@ -12900,8 +11357,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$cmp->inid.'>'.$cmp->compname.'</option>';
         }
     }
-
-
     public function getcmpbylocaction(){
         $bylocation= $this->input->post('bylocation');
         $selectactionplane= $this->input->post('selectactionplane');
@@ -12913,33 +11368,23 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$cmp->inid.'>'.$cmp->compname.'</option>';
         }
     }
-
-
-
     public function getcmpbybylocation(){
         $bylocation= $this->input->post('bylocation');
         $uid= $this->input->post('uid');
         $this->load->model('Menu_model');
-
         $query2 = $this->db->query("SELECT DISTINCT company_master.city AS city FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id WHERE init_call.mainbd = '$uid' AND company_master.city != ''");
         $data3  = $query2->result();
-
         echo '<option value="">Select Company Location</option>';
-
         foreach($data3 as $cmp){
              echo  $data = '<option value='.$cmp->city.'>'.$cmp->city.'</option>';
         }
     }
-
-
     public function getcmpbyClusterLocation(){
         $bylocation= $this->input->post('bylocation');
         $uid= $this->input->post('uid');
         $this->load->model('Menu_model');
-
         $query2 = $this->db->query("SELECT DISTINCT init_call.id,company_master.compname AS cname, init_call.cluster_id FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id WHERE init_call.mainbd = '$uid' and init_call.cluster_id !=''");
         $data3  = $query2->result();
-
         $clids = '';
         foreach($data3 as $d){
             $clids .= $d->cluster_id.',';
@@ -12948,14 +11393,11 @@ class Menu extends CI_Controller {
       
         $query3 = $this->db->query("SELECT * FROM `cluster` WHERE user_id = $uid AND id in($clids)");
         $data4  = $query3->result();
-
         echo '<option value="">Select Cluster Name</option>';
         foreach($data4 as $cmp){
              echo  $data = '<option value='.$cmp->id.'>'.$cmp->clustername.'</option>';
         }
     }
-
-
     public function getcmpbyClusterLocationid(){
         
         $clusterid= $this->input->post('clusterid');
@@ -12974,7 +11416,6 @@ class Menu extends CI_Controller {
         $clusterid= $this->input->post('clusterid');
         $statusfilterCluster= $this->input->post('statusfilterCluster');
         $uid= $this->input->post('uid');
-
         $this->load->model('Menu_model');
         if($statusfilterCluster == 'all'){
             $query2 = $this->db->query("SELECT DISTINCT init_call.id,company_master.compname AS cname, init_call.cluster_id FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id WHERE init_call.mainbd = '$uid' and (init_call.cluster_id =$clusterid and init_call.cstatus !='')");
@@ -12983,21 +11424,17 @@ class Menu extends CI_Controller {
         }
    
         $data3  = $query2->result();
-
         echo '<option value="">Select Company</option>';
         foreach($data3 as $cmp){
             echo  $data = '<option value='.$cmp->id.'>'.$cmp->cname.'</option>';
        }
     }
-
-
     public function getcmpbyClusteridWithStatusWithAction(){
         
         $clusterid= $this->input->post('clusterid');
         $statusfilterCluster= $this->input->post('statusfilterCluster');
         $taskActionbyCluster= $this->input->post('taskActionbyCluster');
         $uid= $this->input->post('uid');
-
         $this->load->model('Menu_model');
         if($statusfilterCluster == 'all'){
             $query2 = $this->db->query("SELECT DISTINCT init_call.id,company_master.compname AS cname, init_call.cluster_id FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents on tblcallevents.cid_id = init_call.id WHERE init_call.mainbd = '100171' and (init_call.cluster_id =108 and init_call.cstatus !='' and tblcallevents.actontaken ='$taskActionbyCluster')");
@@ -13011,17 +11448,13 @@ class Menu extends CI_Controller {
             echo  $data = '<option value='.$cmp->id.'>'.$cmp->cname.'</option>';
        }
     }
-
-
     public function getcmpbyClusteridWithStatusWithActionPurpose(){
         
         $clusterid              = $this->input->post('clusterid');
         $statusfilterCluster    = $this->input->post('statusfilterCluster');
         $taskActionbyCluster    = $this->input->post('taskActionbyCluster');
         $taskPurposebyCluster   = $this->input->post('taskPurposebyCluster');
-
         $uid                    = $this->input->post('uid');
-
         $this->load->model('Menu_model');
         if($statusfilterCluster == 'all'){
             $query2 = $this->db->query("SELECT DISTINCT init_call.id,company_master.compname AS cname, init_call.cluster_id FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents on tblcallevents.cid_id = init_call.id WHERE init_call.mainbd = '100171' and (init_call.cluster_id =108 and init_call.cstatus !='' and tblcallevents.actontaken ='$taskActionbyCluster' and tblcallevents.purpose_achieved ='$taskPurposebyCluster')");
@@ -13035,23 +11468,17 @@ class Menu extends CI_Controller {
             echo  $data = '<option value='.$cmp->id.'>'.$cmp->cname.'</option>';
        }
     }
-
-
     public function tbdata(){
         $sstid= $this->input->post('stid');
         $uuid= $this->input->post('uuid');
         $code= $this->input->post('code');
-
         $this->load->model('Menu_model');?>
-
         <script>
     $("#example1").DataTable({
       "responsive": false, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 </script>
-
-
         <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
 				<thead>
 					<tr>
@@ -13070,12 +11497,7 @@ class Menu extends CI_Controller {
                     </tr>
 				</thead>
 				<tbody>
-
-
-
-
         <?php
-
         $i=1;
         $mdata = $this->Menu_model->get_fannalbycode($uuid,$sstid,$code);
              foreach($mdata as $dt){
@@ -13098,8 +11520,6 @@ class Menu extends CI_Controller {
              $nextaction = $tblc[0]->nextaction;
              $remarks = $tblc[0]->remarks;}else{$appoint='';$nextaction='';$remarks='';}
         ?>
-
-
         <tr>
              <td><?=$i++?></td>
              <td style="color:<?=$sclr?>"><?=$sid?></td>
@@ -13115,18 +11535,10 @@ class Menu extends CI_Controller {
              <td><?=$timediff?></td>
         </tr>
        <?php }?>
-
-
 		</tbody>
 	</table>
 	<?php
-
-
-
     }
-
-
-
     public function gdata(){
         $sstid= $this->input->post('stid');
         $uuid= $this->input->post('uuid');
@@ -13156,7 +11568,6 @@ class Menu extends CI_Controller {
              $nextaction = $tblc[0]->nextaction;
              $remarks = $tblc[0]->remarks;}else{$appoint='';$nextaction='';$remarks='';}
         ?>
-
         <div class="col-sm-12 col-md-4 col-lg-4 mb-4 filter-item">
           <div class="card p-3 border rounded border-success hover-div d-flex flex-column align-items-stretch h-100 text-dark">
                  Current Status<br><b style="color:<?=$sclr?>"><?=$sid?></b><hr>
@@ -13174,15 +11585,10 @@ class Menu extends CI_Controller {
                 <div class="rounded-circle bg-danger" style="position: absolute;bottom: -10px; left: 60%; transform: translateX(-50%); width: 20px; height: 20px;"></div>
           </div>
         </div>
-
        <?php } ?>
-
        </div>
     <?php
     }
-
-
-
     public function actionremark(){
         $purpose_id= $this->input->post('purpose_id');
         $this->load->model('Menu_model');
@@ -13193,7 +11599,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }
     }
-
     public function purpose(){
         $action_id= $this->input->post('action_id');
         $this->load->model('Menu_model');
@@ -13204,7 +11609,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }
     }
-
     public function getpurpose(){
         $aid= $this->input->post('aid');
         $sid= $this->input->post('sid');
@@ -13216,8 +11620,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }
     }
-
-
     public function getpurposebyinid(){
         $inid= $this->input->post('inid');
         $aid= $this->input->post('aid');
@@ -13237,7 +11639,7 @@ class Menu extends CI_Controller {
         $inid = rtrim($inid , ',');
        
         $remark=$this->Menu_model->get_purposebyinidnew($aid,$inid);
-        
+       
         echo  $data = '<option value="">Select Purpose</option>';
         foreach($remark as $d){
              echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
@@ -13246,20 +11648,16 @@ class Menu extends CI_Controller {
             echo '<option value="34">Fresh Meeting</option>';
         }
     }
-
     public function changenorp(){
         $tid= $this->input->post('tid');
         $this->load->model('Menu_model');
         $remark=$this->Menu_model->change_norp($tid);
     }
-
-
     public function setkeycompny(){
         $cmpid = $this->input->post('cmpid');
         $this->load->model('Menu_model');
         $this->Menu_model->set_keycompny($cmpid);
     }
-
     public function getnextaction(){
         $pid= $this->input->post('pid');
         $this->load->model('Menu_model');
@@ -13269,7 +11667,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }
     }
-
     public function getcity(){
         $stid= $this->input->post('stid');
         $this->load->model('Menu_model');
@@ -13280,7 +11677,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$d->id.'>'.$d->city.'</option>';
         }
     }
-
     public function getcitybystate(){
         $stid= $this->input->post('stid');
         $this->load->model('Menu_model');
@@ -13291,8 +11687,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option>'.$d->city.'</option>';
         }
     }
-
-
     public function getcmpdbybdnst(){
         $pstid = $this->input->post('pstid');
         $stid = $this->input->post('stid');
@@ -13306,8 +11700,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$dt->inid.'>'.$dt->compname.'</option>';
         }
     }
-
-
     public function getcmpdbypstnst(){
         $pstid = $this->input->post('pstid');
         $stid = $this->input->post('stid');
@@ -13322,7 +11714,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$dt->inid.'>'.$dt->compname.'</option>';
         }
     }
-
   public function getcmpdbypstnst12(){
         $pstid = $this->input->post('pstid');
         $prtsl = $this->input->post('prtsl');
@@ -13337,23 +11728,14 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$dt->inid.'>'.$dt->compname.'</option>';
         }
     }
-
-
-
-
     public function getcsrcmp(){
         $rid = $this->input->post('rid');
         $this->load->model('Menu_model');
         echo $cmp=$this->Menu_model->get_csrcmp($rid);
     }
-
-
-
-
     public function getotherremark(){
         $stid = $this->input->post('stid');
         $this->load->model('Menu_model');
-
         if($stid==1){
             echo '<option>Select Option</option><option>No Calling Done</option><option>Other</option>';
         }
@@ -13373,7 +11755,6 @@ class Menu extends CI_Controller {
                 <option>Other</option>';
         }
     }
-
     public function getcallremark(){
         $stid = $this->input->post('stid');
         $this->load->model('Menu_model');
@@ -13402,8 +11783,6 @@ class Menu extends CI_Controller {
                 <option>Other</option>';
         }
     }
-
-
     public function getemailremark(){
         $stid = $this->input->post('stid');
         $this->load->model('Menu_model');
@@ -13419,7 +11798,6 @@ class Menu extends CI_Controller {
                 <option>Mailed Twice</option>
                 <option>Mailed more than Twice</option>
                 <option>Other</option>';
-
         }
         else{
           echo '<option>Select Option</option>
@@ -13430,8 +11808,6 @@ class Menu extends CI_Controller {
                 <option>Other</option>';
         }
     }
-
-
     public function getmeetremark(){
         $stid = $this->input->post('stid');
         $this->load->model('Menu_model');
@@ -13443,12 +11819,10 @@ class Menu extends CI_Controller {
                   <option>Barge in done more than twice but No Purpose Achieved</option>
                   <option>Other</option>';
         }
-
         elseif($stid==8){
           echo '<option>Select Option</option>
                 <option>No Meeting Done</option>
                 <option>Other</option>';
-
         }
         else{
           echo '<option>Select Option</option>
@@ -13458,10 +11832,7 @@ class Menu extends CI_Controller {
                 <option>Barge in done more than twice but No Purpose Achieved</option>
                 <option>Other</option>';
         }
-
     }
-
-
     public function getcmpdbybd(){
         $stid = $this->input->post('stid');
         $bdid = $this->input->post('bdid');
@@ -13473,8 +11844,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$dt->inid.'>'.$dt->compname.'</option>';
         }
     }
-
-
     public function getbdcmpts(){
         $stid = $this->input->post('stid');
         $bdid = $this->input->post('bdid');
@@ -13489,8 +11858,6 @@ class Menu extends CI_Controller {
             }
         }
     }
-
-
     public function getcmptscat(){
         $categories = $this->input->post('categories');
         $bdid = $this->input->post('bdid');
@@ -13505,8 +11872,6 @@ class Menu extends CI_Controller {
             }
         }
     }
-
-
     public function getbdcmpdbynst(){
         $rid = $this->input->post('rid');
         $pstid = $this->input->post('pstid');
@@ -13520,8 +11885,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$dt->inid.'>'.$dt->compname.'</option>';
         }
     }
-
-
     public function getpstcmpdbynst(){
         $pstid = $this->input->post('pstid');
         $stid = $this->input->post('stid');
@@ -13535,8 +11898,6 @@ class Menu extends CI_Controller {
              echo  $data = '<option value='.$dt->inid.'>'.$dt->compname.'</option>';
         }
     }
-
-
     public function getcmpdbyadmins(){
         $rid = $this->input->post('rid');
         $pstid = $this->input->post('pstid');
@@ -13555,9 +11916,6 @@ class Menu extends CI_Controller {
             }
         }
     }
-
-
-
     public function getgraphlog(){
         $uid = $this->input->post('uid');
         $inid = $this->input->post('inid');
@@ -13566,19 +11924,16 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');?>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.0.1/dist/chart.umd.min.js"></script>
-
     <div style="width: 80%; margin: auto;">
         <b><hr><center>Month Wise No of Task Action Planning</center><hr></b>
         <canvas id="stackedChartID21"></canvas>
     </div>
-
     <script>
         var myContext = document.getElementById("stackedChartID21").getContext('2d');
         var myChart21 = new Chart(myContext, {
             type: 'bar',
             data: {
                 labels: [
-
                     <?php   $currentDate = new DateTime();
                             $financialYear = ($currentDate->format('m') >= 4) ? $currentDate->format('Y') : ($currentDate->format('Y') - 1);
                             for ($month = 4; $month <= 15; $month++) {
@@ -13587,17 +11942,14 @@ class Menu extends CI_Controller {
                                 $monthName = DateTime::createFromFormat('!m', $adjustedMonth)->format('F');?>
                     "<?=$monthName?> (<?=$year?>)", <?php } ?>],
                 datasets: [
-
                     <?php
                     $colors = array('red','blue','green','yellow','purple','orange','pink','brown','cyan','magenta','teal','lime','violet','indigo','gray');
-
                     $action = $this->Menu_model->get_action(); $i=0; foreach($action as $ac){
                         $acid = $ac->id; ?>
                     {
                         label: '<?=$ac->name?>',
                         backgroundColor: "<?=$colors[$i]?>",
                         data: [
-
                         <?php $currentDate = new DateTime();
                         $financialYear = ($currentDate->format('m') >= 4) ? $currentDate->format('Y') : ($currentDate->format('Y') - 1);
                         for ($month = 4; $month <= 15; $month++) {
@@ -13611,19 +11963,15 @@ class Menu extends CI_Controller {
                 ],
             },
             options: {
-
                 plugins: {
                     title: {
                         display: true,
                         text: 'Month Wise No of Task Planning'
                     },
-
-
             },
             onClick: function (evt, activeElements) {
                 if (activeElements && activeElements.length) {
                     const clickedDatasetIndex = activeElements[0].datasetIndex;
-
                     let allOthersHidden = true;
                     for (let i = 0; i < myChart21.data.datasets.length; i++) {
                         if (i !== clickedDatasetIndex && !myChart21.getDatasetMeta(i).hidden) {
@@ -13631,7 +11979,6 @@ class Menu extends CI_Controller {
                             break;
                         }
                     }
-
                     if (allOthersHidden) {
                         for (let i = 0; i < myChart21.data.datasets.length; i++) {
                             myChart21.getDatasetMeta(i).hidden = false;
@@ -13641,27 +11988,22 @@ class Menu extends CI_Controller {
                             myChart21.getDatasetMeta(i).hidden = (i !== clickedDatasetIndex);
                         }
                     }
-
                     myChart21.update();
                 }
             }
         }
     });
     </script>
-
-
     <div style="width: 80%; margin: auto;">
         <b><hr><center>Month Wise No of Task Action No Purpose No</center><hr></b>
         <canvas id="stackedChartID22"></canvas>
     </div>
-
     <script>
         var myContext = document.getElementById("stackedChartID22").getContext('2d');
         var myChart22 = new Chart(myContext, {
             type: 'bar',
             data: {
                 labels: [
-
                     <?php   $currentDate = new DateTime();
                             $financialYear = ($currentDate->format('m') >= 4) ? $currentDate->format('Y') : ($currentDate->format('Y') - 1);
                             for ($month = 4; $month <= 15; $month++) {
@@ -13670,17 +12012,14 @@ class Menu extends CI_Controller {
                                 $monthName = DateTime::createFromFormat('!m', $adjustedMonth)->format('F');?>
                     "<?=$monthName?> (<?=$year?>)", <?php } ?>],
                 datasets: [
-
                     <?php
                     $colors = array('red','blue','green','yellow','purple','orange','pink','brown','cyan','magenta','teal','lime','violet','indigo','gray');
-
                     $action = $this->Menu_model->get_action(); $i=0; foreach($action as $ac){
                         $acid = $ac->id; ?>
                     {
                         label: '<?=$ac->name?>',
                         backgroundColor: "<?=$colors[$i]?>",
                         data: [
-
                         <?php $currentDate = new DateTime();
                         $financialYear = ($currentDate->format('m') >= 4) ? $currentDate->format('Y') : ($currentDate->format('Y') - 1);
                         for ($month = 4; $month <= 15; $month++) {
@@ -13694,19 +12033,15 @@ class Menu extends CI_Controller {
                 ],
             },
             options: {
-
                 plugins: {
                     title: {
                         display: true,
                         text: 'Month Wise No of Task Action No Purpose No'
                     },
-
-
             },
             onClick: function (evt, activeElements) {
                 if (activeElements && activeElements.length) {
                     const clickedDatasetIndex = activeElements[0].datasetIndex;
-
                     let allOthersHidden = true;
                     for (let i = 0; i < myChart22.data.datasets.length; i++) {
                         if (i !== clickedDatasetIndex && !myChart22.getDatasetMeta(i).hidden) {
@@ -13714,7 +12049,6 @@ class Menu extends CI_Controller {
                             break;
                         }
                     }
-
                     if (allOthersHidden) {
                         for (let i = 0; i < myChart22.data.datasets.length; i++) {
                             myChart22.getDatasetMeta(i).hidden = false;
@@ -13724,28 +12058,22 @@ class Menu extends CI_Controller {
                             myChart22.getDatasetMeta(i).hidden = (i !== clickedDatasetIndex);
                         }
                     }
-
                     myChart22.update();
                 }
             }
         }
     });
     </script>
-
-
-
     <div style="width: 80%; margin: auto;">
         <b><hr><center>Month Wise No of Task Action Yes Purpose No</center><hr></b>
         <canvas id="stackedChartID23"></canvas>
     </div>
-
     <script>
         var myContext = document.getElementById("stackedChartID23").getContext('2d');
         var myChart23 = new Chart(myContext, {
             type: 'bar',
             data: {
                 labels: [
-
                     <?php   $currentDate = new DateTime();
                             $financialYear = ($currentDate->format('m') >= 4) ? $currentDate->format('Y') : ($currentDate->format('Y') - 1);
                             for ($month = 4; $month <= 15; $month++) {
@@ -13754,17 +12082,14 @@ class Menu extends CI_Controller {
                                 $monthName = DateTime::createFromFormat('!m', $adjustedMonth)->format('F');?>
                     "<?=$monthName?> (<?=$year?>)", <?php } ?>],
                 datasets: [
-
                     <?php
                     $colors = array('red','blue','green','yellow','purple','orange','pink','brown','cyan','magenta','teal','lime','violet','indigo','gray');
-
                     $action = $this->Menu_model->get_action(); $i=0; foreach($action as $ac){
                         $acid = $ac->id; ?>
                     {
                         label: '<?=$ac->name?>',
                         backgroundColor: "<?=$colors[$i]?>",
                         data: [
-
                         <?php $currentDate = new DateTime();
                         $financialYear = ($currentDate->format('m') >= 4) ? $currentDate->format('Y') : ($currentDate->format('Y') - 1);
                         for ($month = 4; $month <= 15; $month++) {
@@ -13778,19 +12103,15 @@ class Menu extends CI_Controller {
                 ],
             },
             options: {
-
                 plugins: {
                     title: {
                         display: true,
                         text: 'Month Wise No of Task Action Yes Purpose No'
                     },
-
-
             },
             onClick: function (evt, activeElements) {
                 if (activeElements && activeElements.length) {
                     const clickedDatasetIndex = activeElements[0].datasetIndex;
-
                     let allOthersHidden = true;
                     for (let i = 0; i < myChart23.data.datasets.length; i++) {
                         if (i !== clickedDatasetIndex && !myChart23.getDatasetMeta(i).hidden) {
@@ -13798,7 +12119,6 @@ class Menu extends CI_Controller {
                             break;
                         }
                     }
-
                     if (allOthersHidden) {
                         for (let i = 0; i < myChart23.data.datasets.length; i++) {
                             myChart23.getDatasetMeta(i).hidden = false;
@@ -13808,27 +12128,22 @@ class Menu extends CI_Controller {
                             myChart23.getDatasetMeta(i).hidden = (i !== clickedDatasetIndex);
                         }
                     }
-
                     myChart23.update();
                 }
             }
         }
     });
     </script>
-
-
     <div style="width: 80%; margin: auto;">
         <b><hr><center>Month Wise No of Task Action Yes Purpose Yes</center><hr></b>
         <canvas id="stackedChartID24"></canvas>
     </div>
-
     <script>
         var myContext = document.getElementById("stackedChartID24").getContext('2d');
         var myChart24 = new Chart(myContext, {
             type: 'bar',
             data: {
                 labels: [
-
                     <?php   $currentDate = new DateTime();
                             $financialYear = ($currentDate->format('m') >= 4) ? $currentDate->format('Y') : ($currentDate->format('Y') - 1);
                             for ($month = 4; $month <= 15; $month++) {
@@ -13837,17 +12152,14 @@ class Menu extends CI_Controller {
                                 $monthName = DateTime::createFromFormat('!m', $adjustedMonth)->format('F');?>
                     "<?=$monthName?> (<?=$year?>)", <?php } ?>],
                 datasets: [
-
                     <?php
                     $colors = array('red','blue','green','yellow','purple','orange','pink','brown','cyan','magenta','teal','lime','violet','indigo','gray');
-
                     $action = $this->Menu_model->get_action(); $i=0; foreach($action as $ac){
                         $acid = $ac->id; ?>
                     {
                         label: '<?=$ac->name?>',
                         backgroundColor: "<?=$colors[$i]?>",
                         data: [
-
                         <?php $currentDate = new DateTime();
                         $financialYear = ($currentDate->format('m') >= 4) ? $currentDate->format('Y') : ($currentDate->format('Y') - 1);
                         for ($month = 4; $month <= 15; $month++) {
@@ -13861,19 +12173,15 @@ class Menu extends CI_Controller {
                 ],
             },
             options: {
-
                 plugins: {
                     title: {
                         display: true,
                         text: 'Month Wise No of Task Action Yes Purpose Yes'
                     },
-
-
             },
             onClick: function (evt, activeElements) {
                 if (activeElements && activeElements.length) {
                     const clickedDatasetIndex = activeElements[0].datasetIndex;
-
                     let allOthersHidden = true;
                     for (let i = 0; i < myChart24.data.datasets.length; i++) {
                         if (i !== clickedDatasetIndex && !myChart24.getDatasetMeta(i).hidden) {
@@ -13881,7 +12189,6 @@ class Menu extends CI_Controller {
                             break;
                         }
                     }
-
                     if (allOthersHidden) {
                         for (let i = 0; i < myChart24.data.datasets.length; i++) {
                             myChart24.getDatasetMeta(i).hidden = false;
@@ -13891,22 +12198,14 @@ class Menu extends CI_Controller {
                             myChart24.getDatasetMeta(i).hidden = (i !== clickedDatasetIndex);
                         }
                     }
-
                     myChart24.update();
                 }
             }
         }
     });
     </script>
-
-
-
-
     <?php
     }
-
-
-
     public function getcmpnlog(){
         $inid = $this->input->post('inid');
         $fdate = $this->input->post('fdate');
@@ -13935,25 +12234,17 @@ class Menu extends CI_Controller {
         if($cmptd[0]->s>0){echo '<lable><b>Action Yes with Purpose No: '.$cmptd[0]->s.'</b></lable></br>';}
         if($cmptd[0]->t>0){echo '<lable><b>Action Yes with Purpose Yes: '.$cmptd[0]->t.'</b></lable></br>';}
     }
-
-
-
     public function getcmplogs(){
         $inid = $this->input->post('inid');
         $fdate = $this->input->post('fdate');
         $this->load->model('Menu_model');
         $logdetail=$this->Menu_model->get_logdetail($inid,$fdate);
-
         $i=1;
-
         foreach($logdetail as $logs){
-
             $bdid = $logs->user_id;
             $aid = $logs->actiontype_id;
-
             $ui=$this->Menu_model->get_userbyid($bdid);
             $ai=$this->Menu_model->get_actionbyid($aid);
-
             echo '<tr>';
             echo '<td>'.$i++.'</td>';
             echo '<td>'.$ui[0]->name.'</td>';
@@ -13970,28 +12261,19 @@ class Menu extends CI_Controller {
             echo '<tr>';
         }
     }
-
-
     public function getactionlogs(){
         $actionid = $this->input->post('actionid');
         $fdate = $this->input->post('fdate');
         $bdid = $this->input->post('bdid');
         $statusid = $this->input->post('statusid');
-
         $this->load->model('Menu_model');
         $logdetail=$this->Menu_model->get_actionlogs($statusid,$actionid,$fdate,$bdid);
-
-
         $i=1;
-
         foreach($logdetail as $logs){
-
             $bdid = $logs->user_id;
             $aid = $logs->actiontype_id;
-
             $ui=$this->Menu_model->get_userbyid($bdid);
             $ai=$this->Menu_model->get_actionbyid($aid);
-
             echo '<tr>';
             echo '<td>'.$i++.'</td>';
             echo '<td>'.$logs->compname.'</td>';
@@ -14009,14 +12291,6 @@ class Menu extends CI_Controller {
             echo '<tr>';
         }
     }
-
-
-
-
-
-
-
-
     public function getactioninfo(){
         $actionid = $this->input->post('actionid');
         $fdate = $this->input->post('fdate');
@@ -14029,10 +12303,7 @@ class Menu extends CI_Controller {
         if($cmptd[0]->r>0){echo '<lable><b>Action No: '.$cmptd[0]->r.'</b></lable></br>';}
         if($cmptd[0]->s>0){echo '<lable><b>Action Yes with Purpose No: '.$cmptd[0]->s.'</b></lable></br>';}
         if($cmptd[0]->t>0){echo '<lable><b>Action Yes with Purpose Yes: '.$cmptd[0]->t.'</b></lable></br>';}
-
-
     }
-
     public function SalesKit(){
         $user = $this->session->userdata('user');
         $uid = $user['user_id'];
@@ -14046,12 +12317,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
-
-
     public function NewLead(){
         $user = $this->session->userdata('user');
         $uid = $user['user_id'];
@@ -14064,16 +12329,12 @@ class Menu extends CI_Controller {
         $action=$this->Menu_model->get_action();
         $states=$this->Menu_model->get_states();
         $partner=$this->Menu_model->get_partner();
-
         if(!empty($user)){
             $this->load->view($dep_name.'/NewLead.php',['user'=>$user,'alluser'=>$alluser,'status'=>$status,'action'=>$action,'states'=>$states,'partner'=>$partner,'uid'=>$uid]);
         }else{
             redirect('Menu/main');
         }
     }
-
- 
-
     public function BMNewLead($bmid){
         $user = $this->session->userdata('user');
         $uid = $user['user_id'];
@@ -14093,9 +12354,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function addplantask(){
         $tptime = $this->input->post('tptime');
         $ttype = $this->input->post('ttype');
@@ -14108,7 +12366,7 @@ class Menu extends CI_Controller {
         $ntppose= $this->input->post('ntppose');
         $this->load->model('Menu_model');
         $id=$this->Menu_model->add_plan($pdate,$uid,$ptime,$inid,$ntaction,$ntstatus,$ntppose,$ttype,$tptime);
-        redirect('Menu/TaskPlanner/'.$pdate);
+        redirect('Menu/TaskPlanner2/'.$pdate);
     }
     
     public function addplantask1(){
@@ -14129,11 +12387,8 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $id=$this->Menu_model->add_plan1($pdate,$uid,$ptime,$inid,$ntaction,$ntstatus,$ntppose,$ttype,$tptime,$selectby);
         $this->session->set_flashdata('success_message','Task Plan Successfully');
-        redirect('Menu/TaskPlanner/'.$pdate);
+        redirect('Menu/TaskPlanner2/'.$pdate);
     }
-
-
-
     public function addtask(){
         $date= $this->input->post('ntdate');
         $uid= $this->input->post('ntuid');
@@ -14146,8 +12401,6 @@ class Menu extends CI_Controller {
         $id=$this->Menu_model->add_task($uid,$ntinid,$ntaction,$ntstatus,$ntppose,$ntnextaction,$date);
         redirect('Menu/Dashboard');
     }
-
-
     public function addcompany(){
         $uid= $this->input->post('uid');
         $compname= $this->input->post('compname');
@@ -14173,25 +12426,20 @@ class Menu extends CI_Controller {
         // $facebook=$this->input->post('facebook');
         // $youtube=$this->input->post('youtube');
         // $instagram=$this->input->post('instagram');
-
         $clusterid        =   $this->input->post('cluster');
         $cstatusid      =   $this->input->post('cstatusid');
-
         $openrpem       =   $this->input->post('openrpem');
         $reachout       =   $this->input->post('reachout');
         $tentative      =   $this->input->post('tentative');
         $positivenap    =   $this->input->post('positivenap');
         $verypositive   =   $this->input->post('verypositive');
         $closure        =   $this->input->post('closure');
-
         // $openrpem,$reachout,$verypositive,$positivenap,$tentative,$closure,$clusterid,$cstatusid
         // `open`, `reachout`, `positive`, `positivenap`, `tentative`, `closure`, `cluster_id`
-
         $this->load->model('Menu_model');
         $id=$this->Menu_model->submit_company($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$key_company,$potential_company,$openrpem,$reachout,$verypositive,$positivenap,$tentative,$closure,$clusterid,$cstatusid);
         redirect('Menu/Dashboard');
     }
-
     public function addbmcompany(){
         $this->load->library('session');
         $uid= $this->input->post('uid');
@@ -14214,27 +12462,20 @@ class Menu extends CI_Controller {
         $phoneno= $this->input->post('phoneno');
         $draftop= $this->input->post('draftop');
         $designation= $this->input->post('designation');
-
         $top_spender= $this->input->post('top_spender');
         $upsell_client= $this->input->post('upsell_client');
         $focus_funnel= $this->input->post('focus_funnel');
-
         $key_client= $this->input->post('key_client');
         $potential_company = $this->input->post('potential_company');
         $cluster_id= $this->input->post('cluster');
-
+        $contact_type = $this->input->post('contact_type');
         $this->load->model('Menu_model');
-
-     
+        // dd($_POST);
         // $id=$this->Menu_model->submit_bmcompany($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$cid,$ccid,$inid,$tid,$bmid);
-
-        $id=$this->Menu_model->submit_bmcompany($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$cid,$ccid,$inid,$tid,$bmid,$key_client,$potential_company,$cluster_id);
-
-        $this->session->set_flashdata('success_message','Lead Update SuccessFully !');
+        $id=$this->Menu_model->submit_bmcompany($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$cid,$ccid,$inid,$tid,$bmid,$key_client,$potential_company,$cluster_id,$contact_type);
+        $this->session->set_flashdata('success_message','Lead Updated SuccessFully !');
         redirect('Menu/Dashboard');
-
     }
-
     public function manageuser(){
         $uid= $this->input->post('uid');
         $user_id= $this->input->post('usid');
@@ -14247,12 +12488,7 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $id=$this->Menu_model->manage_user($user_id,$name,$username,$password,$email,$phoneno,$active);
         redirect('Menu/BDDetail/'.$uid);
-
     }
-
-
-
-
     public function PrimaryContact($cid){
         $user = $this->session->userdata('user');
         $uid = $user['user_id'];
@@ -14261,15 +12497,12 @@ class Menu extends CI_Controller {
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         $cc=$this->Menu_model->get_ccdbypid($cid);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/primarycontact', ['uid'=>$uid,'cc'=>$cc,'user'=>$user]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function AlertsPage(){
         $user = $this->session->userdata('user');
         $uid = $user['user_id'];
@@ -14283,8 +12516,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function DayAlerts(){
         $user = $this->session->userdata('user');
         $uid = $user['user_id'];
@@ -14298,8 +12529,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FunnalAlerts(){
         $user = $this->session->userdata('user');
         $uid = $user['user_id'];
@@ -14313,8 +12542,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function TaskAlerts(){
         $user = $this->session->userdata('user');
         $uid = $user['user_id'];
@@ -14328,8 +12555,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function OperationAlerts(){
         $user = $this->session->userdata('user');
         $uid = $user['user_id'];
@@ -14343,8 +12568,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function ResponsibilityAlerts(){
         $user = $this->session->userdata('user');
         $uid = $user['user_id'];
@@ -14358,8 +12581,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function RegionalOwnershipAlerts(){
         $user = $this->session->userdata('user');
         $uid = $user['user_id'];
@@ -14373,9 +12594,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
     public function NotificationPage(){
         $user = $this->session->userdata('user');
         $uid = $user['user_id'];
@@ -14389,12 +12607,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
-
-
     public function EditContact($id,$cid){
         $user = $this->session->userdata('user');
         $uid = $user['user_id'];
@@ -14403,16 +12615,12 @@ class Menu extends CI_Controller {
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         $cc=$this->Menu_model->get_contactbyid($id);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/editcontact', ['id'=>$id,'cid'=>$cid,'uid'=>$uid,'cc'=>$cc,'user'=>$user]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
-
     public function EditCompany($cid){
         $user = $this->session->userdata('user');
         $uid = $user['user_id'];
@@ -14428,81 +12636,62 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function Muser(){
         $user_id= $this->input->post('user_id');
         $this->load->model('Menu_model');
         $result=$this->Menu_model->get_userbyid($user_id);
         echo json_encode($result);
     }
-
-
     public function binactivepstc(){
         $user_id= $this->input->post('user_id');
         $this->load->model('Menu_model');
         $result=$this->Menu_model->get_userbyid($user_id);
         echo json_encode($result);
     }
-
-
-
-
     public function adminpopup(){
         $ur_id= $this->input->post('ur_id');
         $this->load->model('Menu_model');
         echo $result=$this->Menu_model->get_adminpopup($ur_id);
     }
-
-
     public function pstpopup(){
         $ur_id= $this->input->post('ur_id');
         $this->load->model('Menu_model');
         echo $result=$this->Menu_model->get_pstpopup($ur_id);
     }
-
     public function bdpopup(){
         $ur_id= $this->input->post('ur_id');
         $this->load->model('Menu_model');
         echo $result=$this->Menu_model->get_bdpopup($ur_id);
     }
-
-
     public function opalsms(){
         $ur_id= $this->input->post('ur_id');
         $this->load->model('Menu_model');
         echo $result=$this->Menu_model->get_opalsms($ur_id);
     }
-
-
     public function nitisms(){
         $ur_id= $this->input->post('ur_id');
         $this->load->model('Menu_model');
         echo $result=$this->Menu_model->get_nitisms($ur_id);
     }
-
-
     public function cctd(){
         $tid= $this->input->post('tid');
         $this->load->model('Menu_model');
         $result=$this->Menu_model->get_cctd($tid);
         echo json_encode($result);
     }
-
     public function cctd_prupose(){
         $purposeId= $this->input->post('purposeId');
+//echo $purposeId;
         $this->load->model('Menu_model');
         $result=$this->Menu_model->get_purposeNameById($purposeId);
         echo $result;
     }
-
-
     public function inidbycid(){
         $cmpid= $this->input->post('cmpid');
         $this->load->model('Menu_model');
         $result=$this->Menu_model->get_inidbycid($cmpid);
         echo json_encode($result);
     }
-
     public function rpstc(){
         $pstid = $this->input->post('pstid');
         $bdid = $this->input->post('bdid');
@@ -14510,8 +12699,6 @@ class Menu extends CI_Controller {
         $result=$this->Menu_model->get_rpstc($pstid,$bdid);
         echo json_encode($result);
     }
-
-
     public function alpopup(){
         $user = $this->session->userdata('user');
         $uid = $user['user_id'];
@@ -14519,42 +12706,31 @@ class Menu extends CI_Controller {
         $result=$this->Menu_model->get_alpopup($uid);
         echo $result;
     }
-
-
-
     public function ccctd(){
         $tid= $this->input->post('tid');
         $this->load->model('Menu_model');
         $result=$this->Menu_model->get_ccctd($tid);
         echo json_encode($result);
     }
-
     public function indtime(){
         $tid= $this->input->post('tid');
         $this->load->model('Menu_model');
         $result=$this->Menu_model->in_dtime($tid);
         echo json_encode($result);
     }
-
     public function bmtd(){
         $id= $this->input->post('id');
         $this->load->model('Menu_model');
         $result=$this->Menu_model->get_bmalldata($id);
-
         echo json_encode($result);
     }
-
-
     public function ccitblall(){
         $tid= $this->input->post('tid');
         $this->load->model('Menu_model');
         $result=$this->Menu_model->get_ccitblall($tid);
         echo json_encode($result);
     }
-
-
     public function CompanyDetails($cid){
-
         if(isset($_GET['tid'])){$tid = $_GET['tid'];}
         else{$tid=0;}
         $user = $this->session->userdata('user');
@@ -14569,41 +12745,37 @@ class Menu extends CI_Controller {
         $ccd=$this->Menu_model->get_ccdbyid($cid);
         $pccd=$this->Menu_model->get_ccdbypid($cid);
         $init=$this->Menu_model->get_initcallbyid($cid);
+        
         $ciid = $init[0]->id;
         $sid = $init[0]->cstatus;
         $mainbd = $init[0]->mainbd;
+        
+        $userdetails = $this->Menu_model->get_userbyid($mainbd);
         $apst = $init[0]->apst;
+        if(empty($apst)){
+            $apst =$userdetails[0]->pst_co;
+        }
         $tblc = $this->Menu_model->get_tblcalleventsbyid($ciid);
-
-
         $statusCount = $this->Menu_model->getStatusCount($ciid);
-
         $merged = array_merge($status, $statusCount);
-
         $countObject = array_pop($merged);
         foreach ($merged as $item) {
             if (isset($countObject->{$item->name})) {
                 $item->count = $countObject->{$item->name};
             }
         }
-
       
-
         $tbllast=$this->Menu_model->get_tblcalleventsbyid($ciid);
         $aid = $tbllast[0]->actiontype_id;
         $cstatus=$this->Menu_model->get_statusbyid($sid);
         $action=$this->Menu_model->get_actionbyid($aid);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/CompanyDetails.php',['pccd'=>$pccd,'ciid'=>$ciid,'tid'=>$tid,'uid'=>$uid,'user'=>$user,'cd'=>$cd,'ccd'=>$ccd,'init'=>$init,'tblc'=>$tblc,'status'=>$status,'tbllast'=>$tbllast,'status'=>$status,'action'=>$action,'tbllast'=>$tbllast,'cstatus'=>$cstatus,'sid'=>$sid,'mainbd'=>$mainbd,'apst'=>$apst,'merged'=>$merged]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
      public function CompanyDetails1($cid){
-
         if(isset($_GET['tid'])){$tid = $_GET['tid'];}
         else{$tid=0;}
         $user = $this->session->userdata('user');
@@ -14623,29 +12795,21 @@ class Menu extends CI_Controller {
         $mainbd = $init[0]->mainbd;
         $apst = $init[0]->apst;
         $tblc = $this->Menu_model->get_tblcalleventsbyid($ciid);
-
         $tblc_new = $this->Menu_model->get_tblcalleventsbyidNew($ciid);
         // echo "<pre>";
         // print_r($tblc_new);
         // echo "SELECT * FROM tblcallevents WHERE cid_id='$ciid' AND is_new=1 and cast(updateddate as DATE)>'2023-04-01' ORDER BY tblcallevents.updateddate DESC";
         // die;
-
         $tbllast=$this->Menu_model->get_tblcalleventsbyid($ciid);
         $aid = $tbllast[0]->actiontype_id;
         $cstatus=$this->Menu_model->get_statusbyid($sid);
         $action=$this->Menu_model->get_actionbyid($aid);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/CompanyDetails1',['tblc_new'=>$tblc_new,'pccd'=>$pccd,'ciid'=>$ciid,'tid'=>$tid,'uid'=>$uid,'user'=>$user,'cd'=>$cd,'ccd'=>$ccd,'init'=>$init,'tblc'=>$tblc,'status'=>$status,'tbllast'=>$tbllast,'status'=>$status,'action'=>$action,'tbllast'=>$tbllast,'cstatus'=>$cstatus,'sid'=>$sid,'mainbd'=>$mainbd,'apst'=>$apst]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
-
-
-
     public function BDUFunnel($bdid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -14660,7 +12824,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function BDFunnel(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -14675,7 +12838,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function FunnelReport(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -14691,8 +12853,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function Proposal(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -14708,8 +12868,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function Synopsis(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -14725,8 +12883,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FinalSConversion($bdid,$sd,$ed,$fsid,$ssid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -14742,8 +12898,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FinalSConversionByTeam($bdid,$sd,$ed,$fsid,$ssid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -14759,7 +12913,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function FinalSConversionByClusterTeam($bdid,$sd,$ed,$fsid,$ssid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -14775,7 +12928,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function FinalPSTSConversion($bdid,$sd,$ed,$fsid,$ssid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -14791,8 +12943,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function FinalMySConversion($bdid,$sd,$ed,$fsid,$ssid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -14808,11 +12958,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-
-
-
     public function Conversion($bdid,$tdate,$code1,$code2,$ab){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -14822,7 +12967,6 @@ class Menu extends CI_Controller {
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         if(!empty($user)){
-
             $this->load->view($dep_name.'/Conversion',['uid'=>$uid,'user'=>$user,'code1'=>$code1,'code2'=>$code2,'tdate'=>$tdate,'ab'=>$ab,'bdid'=>$bdid]);
         }else{
             redirect('Menu/main');
@@ -14842,7 +12986,6 @@ class Menu extends CI_Controller {
     //         redirect('Menu/main');
     //     }
     // }
-
     public function Handover($cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -14862,8 +13005,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function handEdit($cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -14883,7 +13024,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function getcpmdetail(){
         $cid= $this->input->post('cid');
         $this->load->model('Menu_model');
@@ -14919,14 +13059,9 @@ class Menu extends CI_Controller {
                          <p> Country : '.$d->country.'</p>
                          <p> Website : '.$d->website.'</p>
                          <p> MOM : '.$mom[0]->mom.'</p>';
-
-
-
         }
         return $data;
     }
-
-
     public function CreateRequest(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -14943,8 +13078,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function store_location() {
         $uid = $_POST['ur_id'];
         $latitude = $_POST['latitude'];
@@ -14952,9 +13085,6 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $this->Menu_model->s_location($uid,$latitude,$longitude);
     }
-
-
-
     public function bdrequest(){
         $uid = $_POST['uid'];
         $ctype = $_POST['ctype'];
@@ -14975,15 +13105,13 @@ class Menu extends CI_Controller {
         $uploadPath = 'uploads/day/';
         $this->load->model('Menu_model');
         $ngoletter = $this->Menu_model->uploadfile($filname, $uploadPath);
-
         $this->load->model('Menu_model');
         $id = $this->Menu_model->submit_bdrequest($ctype,$uid,$targetd,$request_type,$remark,$cname,$tyschool,$noschool,$location,$idetype,$ngoletter,$sletter,$dmletter,$svalidation);
         redirect('Menu/Dashboard');
     }
-
      //Assign Task to user by higher authorities
+/*
      public function AssignTask(){
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -14994,8 +13122,7 @@ class Menu extends CI_Controller {
         $role = $this->db->select('*')->from('user_type')->get()->result();
         $this->load->view($dep_name.'/AssignTask',['user'=>$user,'uid'=>$uid,'role' => $role]);
     }
-
-
+*/
     //Select user according to role
     public function getRoleUser(){
         $selectedOption= $this->input->post('selectedOption');
@@ -15019,7 +13146,6 @@ class Menu extends CI_Controller {
             echo  $data = '<option value='.$d->user_id.'>'.$d->name.'</option>';
         }
     }
-
     //Select city according to user for assigning task
     public function getUserCity(){
         $user= $this->input->post('user');
@@ -15035,7 +13161,6 @@ class Menu extends CI_Controller {
                     ];
         echo json_encode($data);
     }
-
     public function getUserPartner(){
         $user= $this->input->post('user');
         $cities = $this->input->post('cities');
@@ -15049,19 +13174,14 @@ class Menu extends CI_Controller {
         }
         //  echo $this->db->last_query(); exit;
         $partner =$this->db->get()->result();
-
         $partnerCount = count($partner);
                     $data = [
                         'partner' => $partner,
                         'partnerCount' => $partnerCount
                     ];
-
         echo json_encode($data);
     }
-
-
     public function getcmpbylstatus2(){
-
         $user= $this->input->post('user');
         $cities = $this->input->post('cities');
         $partner = $this->input->post('partner');
@@ -15077,7 +13197,6 @@ class Menu extends CI_Controller {
         $daysbyplandate = $this->input->post('daysbyplandate');
         $workbyothers = $this->input->post('workbyothers');
         $daysbyplandatewithtask = $this->input->post('daysbyplandatewithtask');
-
         // echo $admid; exit;
         $company = $this->db->select('Distinct(company_master.compname),company_master.id as cid, cast(updateddate as DATE) as updateddate,tblcallevents.actontaken,tblcallevents.purpose_achieved,tblcallevents.actiontype_id,company_master.partnerType_id,user_id,tblcallevents.plandt,init_call.mainbd,init_call.id inid')
                             ->from('tblcallevents')
@@ -15086,7 +13205,6 @@ class Menu extends CI_Controller {
                             ->where(['user_id'=> $user])
                             ->where_in('company_master.city', $cities)
                             ->where_in('company_master.partnerType_id', $partner);
-
             if($days == "8"){
                 $company->where("DATEDIFF(CURDATE(), updateddate) < 8");
             }if($days == "15"){
@@ -15100,7 +13218,6 @@ class Menu extends CI_Controller {
             }
             if($current_status !=""){
                 $company->where('init_call.cstatus',$current_status);
-
             }if ($category != "") {
                 $company->where('init_call.' . $category, 'yes');
             }if($option1 == "actionPlanned" && $purpose != ""){
@@ -15111,10 +13228,8 @@ class Menu extends CI_Controller {
                 $company->where('tblcallevents.actiontype_id',$task_action);
             }if($cities == null){
                 $company->where_not_in('company_master.city',['', 'NA', 'blank', '<blank>']);
-
             }if($partner == null){
                 $company->group_by('company_master.partnerType_id');
-
             }
             if($daysbyplandate == "8" || $daysbyplandatewithtask == "8"){
                 $company->where("DATEDIFF(CURDATE(), tblcallevents.plandt) < 8");
@@ -15131,16 +13246,13 @@ class Menu extends CI_Controller {
             }
             if($workbyothers !="" && $workbyothers=="admin"){
                 $company->or_where_in('user_id',['45']);
-
             }
             $company->group_by('company_master.compname');
             $company->group_by('company_master.city');
         $company = $this->db->get()->result();
                     // echo $this->db->last_query(); exit;
-
         // echo  $data = '<option value="">Select company</option>';
         // foreach($company as $d){
-
         //     echo  $data = '<option value='.$d->cid.'>'.$d->compname.'</option>';
         // }
         $companyCount = count($company);
@@ -15150,12 +13262,10 @@ class Menu extends CI_Controller {
         ];
         echo json_encode($data);
     }
-
-
     //Assign Daily Task
+/*
     public function dailyTaskAssign(){
         $user = $this->session->userdata('user');
-
         $company = $this->input->post('company');
         $user = $this->input->post('user');
         $rmplandt = $this->input->post('plandate');
@@ -15165,7 +13275,6 @@ class Menu extends CI_Controller {
         $targetstatus = $this->input->post('targetstatus');
         $targetdate = $this->input->post('targetDate');
         $purpose = $this->input->post('ntppose');
-
         $i = 0;
         $action = $this->db->select('*')->from('action')->where('id',$task)->get()->row();
         // var_dump($i  + $action->yest); exit;
@@ -15202,6 +13311,96 @@ class Menu extends CI_Controller {
         //  exit;
         redirect('Menu/Dashboard');
     }
+*/
+/*****task assign function modification -ABHishek***/
+ public function dailyTaskAssign(){
+        $this->load->model('Menu_model');
+        $user = $this->session->userdata('user');
+        $company = $this->input->post('company');
+        $user = $this->input->post('user');
+        $rmplandt = $this->input->post('plandate');
+        $tasktimeplan = $this->input->post('tasktimeplan');
+        $task = $this->input->post('atask');
+        $status = $this->input->post('current_status');
+        $targetstatus = $this->input->post('targetstatus');
+        $targetdate = $this->input->post('targetDate');
+        $purpose = $this->input->post('ntppose');
+        //echo"<pre>company ";print_r($company);exit;
+        
+        $i = 0;
+        $action = $this->db->select('*')->from('action')->where('id',$task)->get()->row();
+        // var_dump($i  + $action->yest); exit;
+        foreach($company as $c){
+            $initDetails=$this->Menu_model->get_initbyid($c);
+            $cid = $initDetails[0]->cmpid_id;
+            $compDetails=$this->Menu_model->get_cdbyid($cid);
+            $compName = $compDetails[0]->compname;
+            $contactDetails=$this->Menu_model->get_ccdbyid($cid);
+            $ccid = $contactDetails[0]->id;
+            //echo"<pre>contactDetails ";print_r($contactDetails);exit;
+            $newTime = date('H:i:s', strtotime($tasktimeplan . '+'.$i.'minutes'));
+            $date = $rmplandt.'T'.$newTime;
+            $data =[
+                'rmplandt'              => $rmplandt,
+                'cid_id'                => $c,
+                'user_id'               => $user,
+                'purpose_achieved'      => "no",
+                'actontaken'            => "",
+                'pstassign'             => "",
+                'assignedto_id'         => $user,
+                'actiontype_id'         => $task,
+                'updateddate'          =>  $date,
+                'date'                  => $date,
+                'fwd_date'              => $date,
+                'appointmentdatetime'   => $date,
+                'plandt'                => $date,
+                'plan'                  => '1',
+                'status_id'             =>  $status,
+                'lastCFID'              => 0,
+                'nextCFID'              => 0,
+                'targetstatus'          => $targetstatus,
+                'targetdate'            => $targetdate,
+                'purpose_id'            => $purpose,
+                'remarks'               => ""
+            ];
+            $this->db->insert('tblcallevents',$data);
+            $tid = $this->db->insert_id();
+            //echo $tid;exit;
+            if($task==3 || $task==4){
+                $data2 = [
+                    'storedt' => $date,
+                    'user_id' => $user,
+                    'cid'     => $cid,
+                    'ccid'    => $ccid,
+                    'inid'    => $c,
+                    'tid'     => $tid,  
+                    'company_name' => $compName
+                ];
+                $this->db->insert('barginmeeting',$data2);
+            }
+            $i = $i + $action->yest;
+           
+        }
+        //echo"<pre>data ";print_r($data);exit;
+        //  exit;
+        redirect('Menu/Dashboard');
+    }
+    
+    
+     //Assign Task to user by higher authorities
+     public function AssignTask(){
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        $role = $this->db->select('*')->from('user_type')->get()->result();
+        //echo"<pre>role ";print_r($role);exit;
+        $this->load->view($dep_name.'/AssignTask',['user'=>$user,'uid'=>$uid,'role' => $role]);
+    }
+/*******Assign task ****/
     public function AnnualReviewComp(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -15213,8 +13412,6 @@ class Menu extends CI_Controller {
         $role = $this->db->select('*')->from('user_type')->get()->result();
         $this->load->view($dep_name.'/AnnualReviewComp',['user'=>$user,'uid'=>$uid,'role' => $role]);
     }
-
-
     public function getAnuualRevirewCmp(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -15222,7 +13419,6 @@ class Menu extends CI_Controller {
         $stid = $this->input->post('stid');
         // var_dump($stid); exit;
         $uyid =  $user['type_id'];
-
         // if($stid == 'reject'){
         //     $rej_cmp = $this->db->select('*')->from('annualreviewtarget')->where(['is_approved' => 'Reject','user_id'=>$uid])->get()->row();
         // }
@@ -15247,7 +13443,6 @@ class Menu extends CI_Controller {
                 }else{
                     $query=$this->db->query("SELECT *,init_call.id inid from init_call Left JOIN company_master ON company_master.id=init_call.cmpid_id where mainbd='$uid' or apst='$uid' or insidebd='$uid'");
                 }
-
             }else{
                 $query=$this->db->query("SELECT *,init_call.id inid from init_call Left JOIN company_master ON company_master.id=init_call.cmpid_id where cstatus='$stid' and mainbd='$uid' or apst='$uid' or insidebd='$uid'");
             }
@@ -15259,7 +13454,6 @@ class Menu extends CI_Controller {
                 $query=$this->db->query("SELECT *,init_call.id inid from init_call Left JOIN company_master ON company_master.id=init_call.cmpid_id where cstatus='$stid' and mainbd='$uid' or apst='$uid' or insidebd='$uid'");
             }
         }
-
         if($stid == "reject"){
             $query=$this->db->select('annualreviewtarget.*,company_master.compname,company_master.id as cmpid_id')->from('annualreviewtarget')
                             ->join('company_master','company_master.id = annualreviewtarget.company_id')
@@ -15272,15 +13466,11 @@ class Menu extends CI_Controller {
                             ->group_end()
                             ->get();
         }
-
         $cmp = $query->result();
         // echo $this->db->last_query();
         // $annualcmp = $this->db->select('*')->from('annualreviewtarget')->where('user_id',$uid)->get()->result();
-
         echo '<option value=""class="">Select Company</option>';
         foreach($cmp as $dt){
-
-
              $query=$this->db->query("SELECT * FROM `annualreviewtarget` WHERE `user_id` = '$uid'");
             //  $query=$this->db->query("SELECT * FROM `annualreviewtarget` WHERE 'reject_remark'='' or `pst_reject` = '1' OR `cluster_reject` = '1' AND `user_id` = '$uid' ");
              $annualcmp = $query->result();
@@ -15294,17 +13484,14 @@ class Menu extends CI_Controller {
                 // ->or_where('reject_remark', 'Not in my region')
                 // ->or_where('reject_remark', 'Not in my region.')
                 // ->get()->result();
-
             $companyExists = false;
             foreach ($annualcmp as $annual) {
                 if ($annual->company_id == $dt->cmpid_id) {
                     // if($annual->pst_reject == 0 || $annual->cluster_reject == 0){
-
                     if($annual->pst_reject == 0 && $annual->cluster_reject == 0){
                          $companyExists = true;
                             break;
                     }
-
                     // else if($annual->cluster_reject == 0){
                     //       $companyExists = true;
                     //         break;
@@ -15315,30 +13502,21 @@ class Menu extends CI_Controller {
                 // echo '<option value="' . $dt->cmpid_id . '">' . $dt->compname . '</option>';
                echo $annual->company_id."<br/><br/>";
                 echo '<option value="' . $dt->cmpid_id . '">'. $dt->cmpid_id .'&nbsp;/&nbsp;' . $dt->compname . '</option>';
-
             }
-
         }
-
     }
-
     public function annualAnalysisCompanyData(){
         $cmpid = $this->input->post('inid');
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
-
-
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $company = $this->db->select('*')->from('company_master')->where('id',$cmpid)->get()->row();
-
         //  echo "<pre>";
         // print_r($company);
         // exit;
-
-
         // if($uyid == 9){
             $init_data = $this->db->select('*')->from('init_call')->where(['cmpid_id'=>$company->id])->get()->row();
         // }
@@ -15353,16 +13531,11 @@ class Menu extends CI_Controller {
         // $query=$this->db->query("SELECT * FROM tblcallevents WHERE cid_id='$init_data->id' and user_id='$uid' and cast(updateddate as DATE)>'2023-03-31' ORDER BY tblcallevents.updateddate DESC");
         // $tblc = $query->result();
         // echo $this->db->last_query(); exit;
-
-
-
         // echo "<pre>";
         // print_r($init_data);
         // exit;
-
     $userdata = $this->db->select('*')->from('user_details')->where('user_id',$uid)->get()->row();
         $cluData = $this->Menu_model->getAllActiveClusterByUid($uid);
-
         $admin = $this->db->select('u2.name,u2.user_id')->from('user_details u1')
                             ->join('user_details u2','u2.user_id = u1.admin_id')
                             ->where(['u1.user_id'=> $uid])->get()->result();
@@ -15378,67 +13551,51 @@ class Menu extends CI_Controller {
                             ->where(['u1.user_id'=> $uid])->get()->result();
         }
         //   echo $this->db->last_query(); exit;
-
         $status=$this->Menu_model->get_status();
         $this->load->view($dep_name.'/AnnualAnalysisData',['user'=>$user,'company'=>$company,'init_data'=>$init_data,'ccd'=>$ccd,'tblc'=>$tblc,'status'=>$status,'alternate'=>$alternate,'cluData'=>$cluData,'admin'=>$admin,'clusteradmin'=>$clusteradmin,'badmin'=>$badmin]);
     }
-
-
     public function annualAnalysisDetails(){
-
         // echo "<pre>";
         // print_r($_POST);
         // exit;
-
          $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
-
         $uyid =  $user['type_id'];
-
-
         $que        = $this->input->post('que');
         $ans        = $this->input->post('remark');
         $cmp        = $this->input->post('company');
         $user       = $this->input->post('user');
         $noschool   = $this->input->post('noschool');
         $revenue    = $this->input->post('revenue');
-
         $reachout       = $this->input->post('reachout');
         $tentative      = $this->input->post('tentative');
         $positive       = $this->input->post('positive');
         $positivenap    = $this->input->post('positivenap');
         $verypositive   = $this->input->post('verypositive');
         $closure        = $this->input->post('closure');
-
-
         $focusfunnel = $this->input->post('focusfunnel');
         $topspender = $this->input->post('topspender');
         $partnership = $this->input->post('partnership');
         $fyear = $this->input->post('fyear');
         $timer = $this->input->post('timer');
         $cstatusid = $this->input->post('cstatusid');
-
         $focusquarter = $this->input->post('focusqu');
         $keepremark = $this->input->post('keepremark');
-
         $change_location = $this->input->post('change_location');
         $vmeeting = $this->input->post('vmeeting');
         $kcompany  = $this->input->post('kcompany');
-
         $district           = $this->input->post('district_location');
         $state_location     = $this->input->post('state_location');
         $focuspositive      = $this->input->post('focuspositive');
         $intervention       = $this->input->post('intervention');
         $support            = $this->input->post('support');
         $upsell             = $this->input->post('upsell');
-
         if($uyid == 4){
              $selectClusterid  = '0';
         }else{
              $selectClusterid  = $this->input->post('selectCluster');
         }
-
         $i=0;
         foreach($que as $q){
             $data = [
@@ -15451,7 +13608,6 @@ class Menu extends CI_Controller {
             ];
             $this->db->insert('annualreviewdetails',$data);
         }
-
         $data1 = [
             'fyear'=>$fyear,
             'company_id'=>$cmp,
@@ -15488,10 +13644,7 @@ class Menu extends CI_Controller {
         $this->db->insert('annualreviewtarget',$data1);
         // echo $this->db->last_query(); exit;
         redirect('Menu/AnnualReviewDet');
-
     }
-
-
     public function AnnualReviewDet(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -15513,15 +13666,10 @@ class Menu extends CI_Controller {
             $query=$this->db->query("SELECT init_call.cstatus,COUNT(init_call.cmpid_id) as totalCmp from init_call where mainbd='$uid' GROUP BY init_call.cstatus ORDER BY cstatus ASC");
         }
         $companydata = $query->result();
-
         $reviwcmp = $this->db->select('*')->from('annualreviewtarget')->where(['user_id'=>$uid])->get()->result();
-
         $startreview = $this->db->select('*')->from('startannualreview')->where(['user_id'=>$uid])->get()->row();
-
-
         $this->load->view($dep_name.'/AnnualReview',['user'=>$user,'companydata'=>$companydata,'reviwcmp'=>$reviwcmp,'startreview'=>$startreview]);
     }
-
     public function ReviewDetails(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -15533,7 +13681,6 @@ class Menu extends CI_Controller {
         if($uyid == 9){
             // $query=$this->db->query("SELECT init_call.cstatus,COUNT(init_call.cmpid_id) as totalCmp from init_call where mainbd='$uid' GROUP BY init_call.cstatus ORDER BY cstatus ASC");
         $query=$this->db->query("SELECT init_call.cmpid_id, init_call.cstatus from init_call where mainbd='$uid' ORDER BY cstatus ASC");
-
         }
         if($uyid == 4){
             // $query=$this->db->query("SELECT init_call.cstatus,COUNT(init_call.cmpid_id) as totalCmp from init_call where apst='$uid' GROUP BY init_call.cstatus ORDER BY cstatus ASC");
@@ -15542,7 +13689,6 @@ class Menu extends CI_Controller {
         if($uyid == 3){
             // $query=$this->db->query("SELECT init_call.cstatus,COUNT(init_call.cmpid_id) as totalCmp from init_call where mainbd='$uid' or apst='$uid' or insidebd='$uid' GROUP BY init_call.cstatus ORDER BY cstatus ASC");
             $query=$this->db->query("SELECT init_call.cmpid_id, init_call.cstatus from init_call where mainbd='$uid' ORDER BY cstatus ASC");
-
         }
         if($uyid == 13){
             // $query=$this->db->query("SELECT init_call.cstatus,COUNT(init_call.cmpid_id) as totalCmp from init_call where mainbd='$uid' GROUP BY init_call.cstatus ORDER BY cstatus ASC");
@@ -15578,8 +13724,6 @@ class Menu extends CI_Controller {
         $startreview = $this->db->select('*')->from('startannualreview')->where(['user_id'=>$uid])->get()->row();
         $this->load->view($dep_name.'/ReviewDetails',['user'=>$user,'companydata'=>$companydata,'reviwcmp'=>$reviwcmp,'startreview'=>$startreview,'pending'=>$pending,'totalcmp' => $totalcmp]);
     }
-
-
     public function startAnnualReview(){
         $data = [
             'start' => date('Y-m-d'),
@@ -15599,17 +13743,12 @@ class Menu extends CI_Controller {
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         $bd = $this->Menu_model->get_userbyaid('45');
-
         $userid = $this->input->post('bd');
         $company = $this->input->post('company');
         $userdata = $this->db->select()->from('user_details')->where('user_id',$userid)->get()->row();
-
         // die("Under Maintenance ");
-
-
         if($uyid == 4){
             // if($userdata->type_id == 3){
-
             // }
             $udetails = $this->db->select('*')->from('user_details')->where("(aadmin = $uid OR badmin = $uid)")->get()->result();
             $u = [];
@@ -15646,20 +13785,14 @@ class Menu extends CI_Controller {
         //                         ->where('is_approved','')
         //                         ->where_in('user_id', $u)
         //                         ->get()->result();
-
-
         // if($uyid == 2){
         $annualTarget = $this->db->select('*')->from('annualreviewtarget')->where(['user_id'=>$userid,'company_id'=>$company])->get()->result();
                                 // echo $this->db->last_query(); exit;
                                 //,['annualdata'=>$annualdata,'annualTarget'=>$annualTarget]
         $revDatatar = $this->db->select('*')->from('annualreviewtarget')->where(['user_id'=>$uid])->get()->result();
-
         $this->load->view($dep_name.'/AnnualReviewReport',['udetails'=>$udetails,'annualTarget'=>$annualTarget,'user'=>$user,'revDatatar'=>$revDatatar,'uid'=> $uid]);
-
         // }
         }
-
-
      public function AnnualReviewReportData(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -15668,12 +13801,10 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $revDatatar = $this->db->select('*')->from('annualreviewtarget')->where(['user_id'=>$uid])->get()->result();
         // echo $this->db->last_query(); exit;
         $this->load->view($dep_name.'/AnnualReviewReportData',['uid'=>$uid,'udetails'=>$udetails,'revDatatar'=>$revDatatar,'user'=>$user]);
     }
-
       public function AnnualReviewReportDatabkp(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -15682,12 +13813,9 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $revDatatar = $this->db->select('*')->from('annualreviewtarget')->where(['user_id'=>$uid])->get()->result();
-
         $this->load->view($dep_name.'/AnnualReviewReportDatabkp',['uid'=>$uid,'udetails'=>$udetails,'revDatatar'=>$revDatatar,'user'=>$user]);
     }
-
     public function AnnualReviewReportDataInAdmin(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -15696,19 +13824,15 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $userdata = $this->db->select('user_id')->from('user_details')->where(['admin_id'=>$uid,'status'=>'active'])->get()->result();
         $userIds = array_map(function($user) {
             return $user->user_id;
         }, $userdata);
-
             // $rcmp = $this->db->select('*')->from('annualreviewtarget')->where(['user_id'=>58])->group_by('company_id')->get()->result();
             // echo  $str = $this->db->last_query();
             // exit;
         //   die("Under Mentainence");
-
         $revDatatar = $this->db->select('*')->from('annualreviewtarget')->where(['is_approved'=>'Approve'])->where_in('user_id', $userIds)->get()->result();
-
         $this->load->view($dep_name.'/AnnualReviewReportDataInAdmin',['uid'=>$uid,'revDatatar'=>$revDatatar,'user'=>$user]);
     }
     public function getUpdatedReviewDetailsByUser(){
@@ -15719,23 +13843,17 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $userdata = $this->db->select('user_id')->from('user_details')->where(['admin_id'=>$uid,'status'=>'active'])->get()->result();
         $userIds = array_map(function($user) {
             return $user->user_id;
         }, $userdata);
-
             // $rcmp = $this->db->select('*')->from('annualreviewtarget')->where(['user_id'=>58])->group_by('company_id')->get()->result();
             // echo  $str = $this->db->last_query();
             // exit;
         //   die("Under Mentainence");
-
         $revDatatar = $this->db->select('*')->from('annualreviewtarget')->where(['is_approved'=>'Approve'])->where_in('user_id', $userIds)->get()->result();
-
         $this->load->view($dep_name.'/getUpdatedReviewDetailsByUser',['uid'=>$uid,'revDatatar'=>$revDatatar,'user'=>$user]);
     }
-
-
       public function AnnualCompanyReport(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -15748,13 +13866,9 @@ class Menu extends CI_Controller {
         $userIds = array_map(function($user) {
             return $user->user_id;
         }, $userdata);
-
         $revDatatar = $this->db->select('*')->from('annualreviewtarget')->where(['is_approved'=>'Approve'])->where_in('user_id', $userIds)->get()->result();
-
         $this->load->view($dep_name.'/AnnualCompanyReport',['uid'=>$uid,'revDatatar'=>$revDatatar,'user'=>$user]);
     }
-
-
        public function AnnualReviewReportDataInAdmin1(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -15763,10 +13877,8 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $this->load->view($dep_name.'/AnnualReviewReportDataInAdmin1',['uid'=>$uid,'user'=>$user]);
     }
-
        public function ReviewPage(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -15775,10 +13887,8 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $this->load->view($dep_name.'/ReviewPage',['uid'=>$uid,'user'=>$user]);
     }
-
     public function ShowCompanyReviewData($userid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -15789,9 +13899,6 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $this->load->view($dep_name.'/ShowCompanyReviewData',['uid'=>$uid,'userid'=>$userid,'user'=>$user]);
     }
-
-
-
     public function DuplicateCompanyReview($userid){
          ini_set('max_execution_time', 2000); // 300 seconds
         //  ini_set('max_execution_time', 0);
@@ -15802,7 +13909,6 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $query = $this->db->query("SELECT user_id FROM user_details where (aadmin='$userid' or badmin='$userid')  and status='active'");
          $userdata =  $query->result();
         $teamid = '';
@@ -15812,7 +13918,6 @@ class Menu extends CI_Controller {
         $teamid .= $userid;
         $this->load->view($dep_name.'/DuplicateCompanyReview',['uid'=>$uid,'userid'=>$userid,'user'=>$user,'teamid'=>$teamid]);
     }
-
       public function DuplicateCompanyReviewTable($userid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -15821,7 +13926,6 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $query = $this->db->query("SELECT user_id FROM user_details where (aadmin='$userid' or badmin='$userid')  and status='active'");
          $userdata =  $query->result();
         $teamid = '';
@@ -15831,7 +13935,6 @@ class Menu extends CI_Controller {
         $teamid .= $userid;
         $this->load->view($dep_name.'/DuplicateCompanyReviewTable',['uid'=>$uid,'userid'=>$userid,'user'=>$user,'teamid'=>$teamid]);
     }
-
       public function CompanyGroupWiseReviewDone($userid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -15840,7 +13943,6 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $query = $this->db->query("SELECT user_id FROM user_details where (aadmin='$userid' or badmin='$userid')  and status='active'");
          $userdata =  $query->result();
         $teamid = '';
@@ -15850,8 +13952,6 @@ class Menu extends CI_Controller {
         $teamid .= $userid;
         $this->load->view($dep_name.'/CompanyGroupWiseReviewDone',['uid'=>$uid,'userid'=>$userid,'user'=>$user,'teamid'=>$teamid]);
     }
-
-
        public function CompanyNotWithMe(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -15860,12 +13960,10 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $query = $this->db->query("SELECT DISTINCT(user_id) FROM `annualreviewtarget` WHERE keep_company ='no'");
         $userdata =  $query->result();
         $this->load->view($dep_name.'/CompanyNotWithMe',['uid'=>$uid,'user'=>$user,'userdata'=>$userdata]);
     }
-
       public function CompanyDetailsNotwithMe($userid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -15874,17 +13972,12 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $queryData = $this->Menu_model->getAllCompanyNotWithMe($userid);
-
-
         // echo "<pre>";
         // print_r($userdatacomp);
         // die;
-
         $this->load->view($dep_name.'/CompanyDetailsNotwithMe',['uid'=>$uid,'user'=>$user,'userid'=>$userid,'userdatacomp'=>$queryData]);
     }
-
      public function firstApproveAnnualReview($id,$a){
         // var_dump($_POST); exit;
         $user = $this->session->userdata('user');
@@ -15892,23 +13985,19 @@ class Menu extends CI_Controller {
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
-
         $annual = $this->db->select('*')->from('annualreviewtarget')
                             ->where('id',$id)->get()->row();
         $userdetails = $this->db->select('*')->from('user_details')->where('user_id',$annual->user_id)->get()->row();
-
         // echo "<pre>";
         // print_r($user['name']);
         // print_r($userdetails);
         // die;
-
         $cmpid = $annual->company_id;
         $topspender = $annual->topspender;
         $status = $annual->status;
         $focusfunnel = $annual->focusfunnel;
         $partnerType_id = $annual->partnertype;
         $isapprove = false;
-
         $compname = $this->Menu_model->get_cdbyid($cmpid)[0]->compname;
         $atarget = $this->db->select('*')->from('annualreviewtarget')->where('id',$id)->get()->row();
         $utype = $this->db->select('*')->from('user_details')->where('user_id',$atarget->user_id)->get()->row();
@@ -15932,27 +14021,22 @@ class Menu extends CI_Controller {
                 $this->db->where('id',$id)->update('annualreviewtarget',['is_approved'=>$a]);
                 $this->db->where('id',$id)->update('annualreviewtarget',['is_fapproved_name'=>$user['name']]);
             }
-
             $this->load->library('session');
             $this->session->set_flashdata('action_message',$compname.' - '. $cmpid.' - '. $a.' SuccessFully');
           }
          if($a == 'Reject'){
-
             $this->db->where('id',$id)->update('annualreviewtarget',['cluster_approve'=>$a]);
             $this->db->where('id',$id)->update('annualreviewtarget',['is_approved'=>$a]);
             $this->db->where('id',$id)->update('annualreviewtarget',['is_fapproved_name'=>$user['name']]);
-
             $this->load->library('session');
             $this->session->set_flashdata('action_message', $compname.' - '. $cmpid.' - '. $a.' SuccessFully');
           }
-
           if($uyid == 9){
                 redirect('Menu/AnnualReviewReportDatabkp');
             }else{
                redirect('Menu/AnnualReviewReport');
             }
     }
-
     public function firstApproveAnnualReviewNew($id,$a,$userid){
       
         $user = $this->session->userdata('user');
@@ -15960,23 +14044,19 @@ class Menu extends CI_Controller {
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
-
         $annual = $this->db->select('*')->from('annualreviewtarget')
                             ->where('id',$id)->get()->row();
         $userdetails = $this->db->select('*')->from('user_details')->where('user_id',$annual->user_id)->get()->row();
-
         // echo "<pre>";
         // print_r($user['name']);
         // print_r($userdetails);
         // die;
-
         $cmpid = $annual->company_id;
         $topspender = $annual->topspender;
         $status = $annual->status;
         $focusfunnel = $annual->focusfunnel;
         $partnerType_id = $annual->partnertype;
         $isapprove = false;
-
         $compname = $this->Menu_model->get_cdbyid($cmpid)[0]->compname;
         $atarget = $this->db->select('*')->from('annualreviewtarget')->where('id',$id)->get()->row();
         $utype = $this->db->select('*')->from('user_details')->where('user_id',$atarget->user_id)->get()->row();
@@ -16000,32 +14080,22 @@ class Menu extends CI_Controller {
                 $this->db->where('id',$id)->update('annualreviewtarget',['is_approved'=>$a]);
                 $this->db->where('id',$id)->update('annualreviewtarget',['is_fapproved_name'=>$user['name']]);
             }
-
             $this->load->library('session');
             $this->session->set_flashdata('action_message',$compname.' - '. $cmpid.' - '. $a.' SuccessFully');
           }
          if($a == 'Reject'){
-
             $this->db->where('id',$id)->update('annualreviewtarget',['cluster_approve'=>$a]);
             $this->db->where('id',$id)->update('annualreviewtarget',['is_approved'=>$a]);
             $this->db->where('id',$id)->update('annualreviewtarget',['is_fapproved_name'=>$user['name']]);
-
             $this->load->library('session');
             $this->session->set_flashdata('action_message', $compname.' - '. $cmpid.' - '. $a.' SuccessFully');
           }
-
           if($uyid == 9){
                 redirect('Menu/ShowCompanyReviewData/'.$userid);
             }else{
                redirect('Menu/AnnualReviewReport');
             }
     }
-
-
-
-
-
-
     public function rejectAnnualReview(){
         // var_dump($_POST); exit;
         $user = $this->session->userdata('user');
@@ -16066,39 +14136,29 @@ class Menu extends CI_Controller {
             }else{
                redirect('Menu/AnnualReviewReport');
             }
-
     }
-
-
     public function approveAnnualReview($id,$a){
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
-
         $annual = $this->db->select('*')->from('annualreviewtarget')
                             ->where('id',$id)->get()->row();
         $userdetails = $this->db->select('*')->from('user_details')->where('user_id',$annual->user_id)->get()->row();
-
         echo "<pre>";
         print_r($annual);
         echo "under mentainence";
         die;
-
         $cmpid = $annual->company_id;
         $topspender = $annual->topspender;
         $status = $annual->status;
         $focusfunnel = $annual->focusfunnel;
         $noofschool = $annual->noofschool;
         $partnerType_id = $annual->partnertype;
-
         $keycompany = $annual->keycompany;
         $exrevenue = $annual->revenue;
-
         $compname = $this->Menu_model->get_cdbyid($cmpid)[0]->compname;
-
            if($uyid == 2){
                 $isapprove = true;
             }else{
@@ -16106,21 +14166,12 @@ class Menu extends CI_Controller {
                 $this->session->set_flashdata('action_message', 'You are not Authrized to Access this action.');
                 redirect('Menu/AnnualReviewReportDataInAdmin');
             }
-
         if($a == "Approve" && $isapprove){
-
             $init = $this->db->select('*')->from('init_call')
                         ->where(['cmpid_id'=>$cmpid])->get()->row();
-
             // die("Approved are Under Maintenance");
-
             $this->db->where('id',$id)->update('annualreviewtarget',['is_admin_approved'=>$a]);
-
             // $this->db->where('id',$init->id)->update('init_call',['is_deleted'=>1]);
-
-
-
-
             $this->db->where('id',$init->id)->update('init_call',
             ['topspender'=>$topspender,
                 'cstatus'=>$status,
@@ -16143,20 +14194,13 @@ class Menu extends CI_Controller {
                 'keep_company'=>$annual->keep_company,
                 'review_date'=>$annual->createdat,
                 'support'=>$annual->support]);
-
             // $this->db->where('id',$init->id)->update('init_call',['is_deleted'=>1]);
-
             $this->db->where('id',$cmpid)->update('company_master',['partnerType_id'=>$partnerType_id]);
-
-
             if($annual->location !==''){
                $this->db->where('id',$cmpid)->update('company_master',['locations'=>$annual->location]);
             }
-
-
             // echo $init->id;
             // die;
-
             $fwd_date = date('Y-m-d H:i:s');
             $data = [
                 'lastCFID' => 0,
@@ -16176,11 +14220,9 @@ class Menu extends CI_Controller {
                 'updateddate' => date('Y-m-d H:i:s'),
                 'is_new' => 1
             ];
-
             $this->db->insert('tblcallevents',$data);
             // echo $str = $this->db->last_query();
             // die;
-
             //   $data = [
             //     'lastCFID' => 0,
             //     'nextCFID' => 0,
@@ -16220,12 +14262,9 @@ class Menu extends CI_Controller {
             // ];
             // $this->db->insert('tblcallevents',$data);
         }
-
         $this->session->set_flashdata('action_message', $compname.' - '. $cmpid.' - '. $a.' Successfully');
         redirect('Menu/AnnualReviewReportDataInAdmin1');
-
     }
-
     public function CompanyReviewRejectByAdmin(){
             // echo "<pre>";
             // print_r($_POST);
@@ -16237,14 +14276,11 @@ class Menu extends CI_Controller {
             $this->load->model('Menu_model');
             $id = $this->input->post('rejectid');
             $remark = $this->input->post('rejectreamrk');
-
-
                 $this->db->where('id',$id)->update('annualreviewtarget',['is_admin_approved'=>'Reject','reject_remark' => $remark]);
             //   echo $this->db->last_query(); exit;
                 $this->load->library('session');
                 $this->session->set_flashdata('action_message', 'Company Rejected SuccessFully');
             redirect('Menu/AnnualReviewReportDataInAdmin1');
-
     }
     public function cluster(){
         $user = $this->session->userdata('user');
@@ -16252,13 +14288,9 @@ class Menu extends CI_Controller {
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
-
-
          $state = $this->db->select('*')->from('in_state')
                             ->where('status','Active')->get()->result();
-
         $clusterData = $this->db->select('*')->from('cluster')->where('user_id',$uid)->get()->result();
-
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         $this->load->view($dep_name.'/cluster',['state'=>$state,'cluster'=>$clusterData,'uid' => $uid,'user'=>$user]);
@@ -16269,24 +14301,16 @@ class Menu extends CI_Controller {
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
-
-
          $state = $this->db->select('*')->from('in_state')
                             ->where('status','Active')->get()->result();
-
         $clusterData = $this->db->select('*')->from('cluster')->where('user_id',$uid)->get()->result();
-
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         $this->load->view($dep_name.'/cluster_test',['state'=>$state,'cluster'=>$clusterData,'uid' => $uid,'user'=>$user]);
     }
-
     public function getAllclusterDistrict(){
-
        $clusterStateid = $_POST['clusterState'];
-
         $this->load->model('Menu_model');
-
          $district = $this->db->select('*')->from('in_district')
                             ->where('state_id',$clusterStateid)->get()->result();
             // echo $this->db->last_query(); exit;
@@ -16296,17 +14320,12 @@ class Menu extends CI_Controller {
                 }
                 echo $data;
     }
-
     public function getAllclusterDistrictCity(){
-
        $clusterDistrict = $_POST['clusterDistrict'];
-
         $this->load->model('Menu_model');
         $cityids = implode(", ", $clusterDistrict);
-
         $query = $this->db->query("SELECT * FROM in_city WHERE districtid IN ($cityids)");
         $districtcity = $query->result();
-
             $data = '';
             $data .= '<option disabled >Select User </option>';
             foreach($districtcity as $dtc){
@@ -16314,35 +14333,26 @@ class Menu extends CI_Controller {
             }
         echo $data;
     }
-
     public function AddNewCluster(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
-
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
-
         $cluster = $_POST['cluster'];
         $clusterState = $_POST['clusterState'];
-
         $clusterDistrict = $_POST['clusterDistrict'];
         $clusterDistrict = implode(",", $clusterDistrict);
-
         $clusterCity = $_POST['clusterCity'];
         $clusterCity = implode(",", $clusterCity);
-
         $this->db->query("INSERT INTO `cluster`(`clustername`,`user_id`,`in_state`, `in_district`, `in_city`) VALUES ('$cluster','$uid','$clusterState','$clusterDistrict','$clusterCity')");
-
         $this->load->library('session');
         $this->session->set_flashdata('success_message', 'Cluster Add successfully');
      redirect('Menu/cluster');
     }
-
     public function AddFAQ(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -16354,7 +14364,6 @@ class Menu extends CI_Controller {
         $faq = $this->db->select('*')->from('faqquestion')->where('user_id',$uid)->get()->result();
         $this->load->view($dep_name.'/AddFAQ',['uid'=>$uid,'faq'=>$faq]);
     }
-
     public function createFaq(){
         $question = $this->input->post('faq');
         $user = $this->input->post('uid');
@@ -16367,7 +14376,6 @@ class Menu extends CI_Controller {
         $this->db->insert('faqquestion',$data);
         redirect('Menu/AddFAQ');
     }
-
     public function FAQReport(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -16412,7 +14420,6 @@ class Menu extends CI_Controller {
         // echo $this->db->last_query(); exit;
         $this->load->view($dep_name.'/FAQReport',['uid'=>$uid,'faq'=>$faq]);
     }
-
     public function getcmpbyannualreview(){
         $uid        = $this->input->post('uid');
         $plandate   = $this->input->post('plandate');
@@ -16430,7 +14437,6 @@ class Menu extends CI_Controller {
         $selectval   = $this->input->post('selectval');
         // $status     = $this->input->post('status');
         $this->load->model('Menu_model');
-
         if($selectval=='Top Spender'){
         $cmp=$this->Menu_model->get_cmpbytopSpender($uid,$plandate);
         }
@@ -16447,14 +14453,11 @@ class Menu extends CI_Controller {
         if($selectval=='Focus Lead For this Quarter 1'){
             echo 'Focus Lead For this Quarter 1';
         }
-
-
         echo '<option value="">Select Comapny</option>';
         foreach($cmp as $cmp){
              echo  $data = '<option value='.$cmp->id.'>'.$cmp->compname.'</option>';
         }
     }
-
     public function HumHongeTaiyar(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -16467,11 +14470,8 @@ class Menu extends CI_Controller {
         $allResource = $this->db->select('*')->from('allresourcedata')->where('user_id',$uid)->get()->result();
         $this->load->view($dep_name.'/HumHongeTaiyar',['uid'=>$uid, 'faq' => $faq,'allResource'=>$allResource,'user' => $user]);
     }
-
     // public function getcmpbyRMTaskAssign(){
-
     // }
-
     public function addAllResource(){
         // var_dump(implode(', ', $this->input->post('reference'))); exit;
         $pointscover = $this->input->post('pointscover');
@@ -16483,7 +14483,6 @@ class Menu extends CI_Controller {
             // $flink = $this->Menu_model->uploadFile11($filname, $uploadPath);
             $flink = $this->Menu_model->muploadfile($filname, $uploadPath);
         }else{$this->load->model('Menu_model');$flink=0;}
-
         // var_dump($flink); exit;
         $user = $this->input->post('uid');
         $type= $this->input->post('type');
@@ -16495,7 +14494,6 @@ class Menu extends CI_Controller {
         $depttype = $this->input->post('depttype');
         $deptdetail = $this->input->post('deptdetail');
         $slideno = $this->input->post('slideno');
-
         $data = [
             'user_id'       => $user,
             'type'          => $type,
@@ -16515,30 +14513,24 @@ class Menu extends CI_Controller {
         redirect('Menu/HumHongeTaiyar');
         // echo $this->db->last_query(); exit;
     }
-
     public function getstatusbycompany(){
         $inid = $this->input->post('inid');
         $last = $this->db->select('*')->from('init_call')->where('id',$inid)->get()->row();
         $status = $this->db->select('*')->from('status')->where('id',$last->lstatus)->get()->row();
         // var_dump($status); exit;
         echo $status->name;
-
     }
-
     public function AddSchoolDetails(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
-
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         $sdetails = $this->db->select('*')->from('schoolDetails')->where('user_id',$uid)->get()->result();
         $this->load->view($dep_name.'/AddSchoolDetails',['uid' => $uid,'user'=>$user, 'sdetails' => $sdetails]);
     }
-
-
     public function insertSchoolDetails(){
         $user = $this->input->post('uid');
         $clientname = $this->input->post('clientname');
@@ -16557,7 +14549,6 @@ class Menu extends CI_Controller {
         $this->db->insert('schoolDetails',$data);
         redirect('Menu/HumHongeTaiyar');
     }
-
     public function getannualreviewcmpbybd(){
         $user = $_POST['user'];
         $userdata = $this->db->select('*')->from('user_details')->where('user_id',$user)->get()->row();
@@ -16580,22 +14571,16 @@ class Menu extends CI_Controller {
             // var_dump($task); exit;
             $data .= '<option value='.$c->id.'>'.$c->compname.'</option>';
         }
-
         echo $data;
     }
-
     // public function getAnnualReviewCompany(){
-
     //     $userid = $this->input->post('bd');
     //     $company = $this->input->post('company');
-
     //     $annualTarget = $this->db->select('*')->from('annualreviewtarget')->where(['user_id'=>$userid,'company_id'=>$company])->get()->result();
     //     // echo $this->db->last_query(); exit;
     //     // redirect('Menu/AnnualReviewReport',['annualTarget'=>$annualTarget]);
     //     $this->load->view($dep_name.'/AnnualReviewReport',['annualTarget'=>$annualTarget]);
-
     // }
-
     public function AnnualReviewDetails($company){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -16606,7 +14591,6 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $annualTarget = $this->db->select('*')->from('annualreviewtarget')->where(['company_id'=>$company])->get()->result();
         $annualdata   = $this->db->select('*')->from('annualreviewdetails')->where(['company_id'=>$company])->get()->result();
-
         $this->load->view($dep_name.'/AnnualReviewDetails',['user'=>$user,'annualTarget'=>$annualTarget,'annualdata'=>$annualdata]);
     }
     
@@ -16625,7 +14609,6 @@ class Menu extends CI_Controller {
             // echo $str;
         $this->load->view($dep_name.'/AnnualReviewDetails',['user'=>$user,'annualTarget'=>$annualTarget,'annualdata'=>$annualdata]);
     }
-
       public function AnnualReviewDetails1($company,$user_id){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -16636,12 +14619,10 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $annualTarget = $this->db->select('*')->from('annualreviewtarget')->where(['company_id'=>$company,'user_id'=>$user_id])->get()->result();
         $annualdata   = $this->db->select('*')->from('annualreviewdetails')->where(['company_id'=>$company,'user_id'=>$user_id])->get()->result();
-
         //  echo "<pre>";
         //  print_r($annualTarget);
         //  print_r($annualdata);
         //  die;
-
         $this->load->view($dep_name.'/AnnualReviewDetails',['user'=>$user,'annualTarget'=>$annualTarget,'annualdata'=>$annualdata,'company_id'=>$company,'user_id'=>$user_id]);
     }
     public function newFinancialYearData($userid,$type){
@@ -16675,13 +14656,9 @@ class Menu extends CI_Controller {
         }else{
             $cmp = $this->db->select('*')->from('annualreviewtarget')->where([$type => 'yes', 'keep_company' => 'yes','user_id'=>$userid])->get()->result();
         }
-
-
         // echo $this->db->last_query(); exit;
         $this->load->view($dep_name.'/newFinancialYearData',['user'=>$user,'uid'=>$uid,'cmp'=>$cmp,'type'=>$type]);
     }
-
-
     public function newFinancialYearDataUpdated($userid,$type){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -16709,16 +14686,10 @@ class Menu extends CI_Controller {
         }else{
             $cmp = $this->db->select('*')->from('init_call')->where([$type => 'yes','mainbd'=>$userid])->get()->result();
         }
-
 // dd($cmp);
         // echo $this->db->last_query(); exit;
         $this->load->view($dep_name.'/newFinancialYearDataUpdated',['user'=>$user,'uid'=>$uid,'cmp'=>$cmp,'type'=>$type]);
     }
-
-
-
-
-
     public function HumHongeTaiyarReport(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -16731,9 +14702,6 @@ class Menu extends CI_Controller {
         $school = $this->db->select('*')->from('schoolDetails')->where(['user_id'=>$uid])->get()->result();
         $this->load->view($dep_name.'/HumHongeTaiyarReport',['user'=>$user,'uid'=>$uid,'revDatatar'=>$revDatatar,'school'=>$school]);
     }
-
-
-
     public function rejectResource(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -16744,14 +14712,11 @@ class Menu extends CI_Controller {
         if($uyid == 4){
             $this->db->where('id',$id)->update('allresourcedata',['pst_approve'=>'Reject','pst_remark' => $rejectreamrk]);
             $this->db->where('id',$id)->update('allresourcedata',['pst_name'=>$user['name']]);
-
         }
         if($uyid == 13){
             $this->db->where('id',$id)->update('allresourcedata',['cluster_approve'=>'Reject','cluster_remark' => $rejectreamrk]);
             $this->db->where('id',$id)->update('allresourcedata',['cluster_name'=>$user['name']]);
-
         }
-
         if($uyid == 8){
             $this->db->where('id',$id)->update('allresourcedata',['is_approved'=>$a]);
             $this->db->where('id',$id)->update('allresourcedata',['is_approve_remark'=>$rejectreamrk]);
@@ -16764,7 +14729,6 @@ class Menu extends CI_Controller {
         $this->session->set_flashdata('action_message','SuccessFully Rejected');
         redirect('Menu/HumHongeTaiyarReport');
     }
-
     public function rejectResourceSchool(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -16775,20 +14739,15 @@ class Menu extends CI_Controller {
         if($uyid == 4){
             $this->db->where('id',$id)->update('schoolDetails',['pst_approve'=>'Reject','pst_remark' => $rejectreamrk]);
             $this->db->where('id',$id)->update('schoolDetails',['pst_name'=>$user['name']]);
-
         }
         if($uyid == 13){
             $this->db->where('id',$id)->update('schoolDetails',['cluster_approve'=>'Reject','cluster_remark' => $rejectreamrk]);
             $this->db->where('id',$id)->update('schoolDetails',['cluster_name'=>$user['name']]);
-
         }
-
         if($uyid == 8){
             $this->db->where('id',$id)->update('schoolDetails',['is_approved'=>$a]);
             $this->db->where('id',$id)->update('schoolDetails',['is_approve_remark'=>$rejectreamrk]);
-
         }
-
         if($uyid == 9){
             $this->db->where('id',$id)->update('schoolDetails',['is_approved'=>$a]);
             $this->db->where('id',$id)->update('schoolDetails',['is_approve_remark'=>$rejectreamrk]);
@@ -16797,7 +14756,6 @@ class Menu extends CI_Controller {
         $this->session->set_flashdata('action_message','SuccessFully Rejected');
         redirect('Menu/HumHongeTaiyarReport');
     }
-
     public function approveAllResource($id,$type){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -16816,11 +14774,8 @@ class Menu extends CI_Controller {
         if($uyid == 13){
             $this->db->where('id',$id)->update('allresourcedata',['cluster_approve'=>$type]);
             $this->db->where('id',$id)->update('allresourcedata',['cluster_name'=>$user['name']]);
-
         }
-
         if($uyid == 2){
-
             if($type == 'Approve'){
                 $type = 'Approved';
                 $this->db->where('id',$id)->update('allresourcedata',['is_admin_approved'=>$type]);
@@ -16829,15 +14784,10 @@ class Menu extends CI_Controller {
             $this->db->where('id',$id)->update('allresourcedata',['is_admin_approved'=>$type]);
             $this->db->where('id',$id)->update('allresourcedata',['admin_remark'=>'Reject By Admin']);
             }
-
         }
-
-
-
         if($uyid == 8){
             $this->db->where('id',$id)->update('allresourcedata',['is_approve'=>'Approve']);
             $this->db->where('id',$id)->update('allresourcedata',['is_approve_remark'=>$rejectreamrk]);
-
         }
         if($uyid != 9){
             if($utype->type_id == 3 && ($atarget->cluster_approve != "" || $atarget->pst_approve != "")){
@@ -16853,8 +14803,6 @@ class Menu extends CI_Controller {
         $this->session->set_flashdata('action_message','SuccessFully Updated');
         redirect('Menu/HumHongeTaiyarReportAdmin');
     }
-
-
     public function approveAllResourceSchool($id,$type){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -16870,9 +14818,7 @@ class Menu extends CI_Controller {
                 $this->db->where('id',$id)->update('schoolDetails',['is_approve_remark'=>$rejectreamrk]);
             }
         }
-
      if($uyid == 2){
-
             if($type == 'Approve'){
                 $type = 'Approved';
                 $this->db->where('id',$id)->update('schoolDetails',['is_admin_approved'=>$type]);
@@ -16881,18 +14827,13 @@ class Menu extends CI_Controller {
             }
             redirect('Menu/HumHongeTaiyarReportAdmin');
         }
-
-
         if($uyid == 13){
             $this->db->where('id',$id)->update('schoolDetails',['cluster_approve'=>$type]);
             $this->db->where('id',$id)->update('schoolDetails',['cluster_name'=>$user['name']]);
-
         }
-
         if($uyid == 8){
             $this->db->where('id',$id)->update('schoolDetails',['is_approve'=>'Approve']);
             $this->db->where('id',$id)->update('schoolDetails',['is_approve_remark'=>$rejectreamrk]);
-
         }
         if($uyid != 9){
             if($utype->type_id == 3 && ($atarget->cluster_approve != "" || $atarget->pst_approve != "")){
@@ -16906,23 +14847,17 @@ class Menu extends CI_Controller {
         // echo $this->db->last_query(); exit;
         $this->load->library('session');
         $this->session->set_flashdata('action_message','SuccessFully Update');
-
         redirect('Menu/HumHongeTaiyarReport');
     }
-
-
      public function ApproveResourceFaqAdmin(){
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         $this->load->model('Menu_model');
         // print_r($_POST);
         $id = $this->input->post('approveid');
         $approvedmsg = $this->input->post('approvedmsg');
-
           if($uyid == 2){
             $this->db->query("UPDATE `allresourcedata` SET `is_admin_approved`='Approved', `admin_remark`='$approvedmsg' WHERE id='$id'");
             $this->load->library('session');
@@ -16930,20 +14865,16 @@ class Menu extends CI_Controller {
             redirect('Menu/HumHongeTaiyarReportAdmin');
           }
      }
-
      public function RejectResourceFaqAdmin(){
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         $this->load->model('Menu_model');
         // print_r($_POST);
         // die;
         $id = $this->input->post('rejectid');
         $approvedmsg = $this->input->post('rejectreamrk');
-
           if($uyid == 2){
             $this->db->query("UPDATE `allresourcedata` SET `is_admin_approved`='Reject', `admin_remark`='$approvedmsg' WHERE id='$id'");
             $this->load->library('session');
@@ -16951,17 +14882,13 @@ class Menu extends CI_Controller {
             redirect('Menu/HumHongeTaiyarReportAdmin');
           }
      }
-
     public function ApproveResourceFaq(){
-
        $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
-
         $id = $this->input->post('approvedid');
         $rejectreamrk = $this->input->post('approvedmsg');
-
         $atarget = $this->db->select('*')->from('allresourcedata')->where('id',$id)->get()->row();
         $utype = $this->db->select('*')->from('user_details')->where('user_id',$atarget->user_id)->get()->row();
         if($uyid == 4){
@@ -16971,20 +14898,16 @@ class Menu extends CI_Controller {
                 $this->db->where('id',$id)->update('allresourcedata',['is_approve'=>'Approve']);
                 $this->db->where('id',$id)->update('allresourcedata',['is_approve_remark'=>$rejectreamrk]);
             }
-
         }
         if($uyid == 13){
             $this->db->where('id',$id)->update('allresourcedata',['cluster_approve'=>'Approve','cluster_remark' => $rejectreamrk]);
             $this->db->where('id',$id)->update('allresourcedata',['cluster_name'=>$user['name']]);
-
         }
         if($uyid == 8){
             $this->db->where('id',$id)->update('allresourcedata',['is_approve'=>'Approve']);
             $this->db->where('id',$id)->update('allresourcedata',['is_approve_remark'=>$rejectreamrk]);
-
         }
         if($uyid != 9){
-
             if($utype->type_id == 3 && $atarget->cluster_approve != "" && $atarget->pst_approve != ""){
                 $this->db->where('id',$id)->update('allresourcedata',['is_approve'=>'Approve']);
                 $this->db->where('id',$id)->update('allresourcedata',['is_approve_remark'=>$rejectreamrk]);
@@ -16993,15 +14916,12 @@ class Menu extends CI_Controller {
                 $this->db->where('id',$id)->update('allresourcedata',['is_approve'=>'Approve']);
                 $this->db->where('id',$id)->update('allresourcedata',['is_approve_remark'=>$rejectreamrk]);
             }
-
         // echo $this->db->last_query(); exit;
         $this->load->library('session');
         $this->session->set_flashdata('action_message','SuccessFully Approved');
         redirect('Menu/HumHongeTaiyarReport');
     }
-
     public function HumHongeTaiyarReportAdmin(){
-
        $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -17013,16 +14933,13 @@ class Menu extends CI_Controller {
         $userIds = array_map(function($user) {
             return $user->user_id;
         }, $userdata);
-
         $school = $this->db->select('*')->from('schoolDetails')->where_in('user_id', $userIds)->get()->result();
-
         $revDatatar = $this->db->select('*')->from('allresourcedata')->where(['is_approve'=>'Approve','is_admin_approved'=>''])->where_in('user_id', $userIds)->get()->result();
         // $str = $this->db->last_query();
         // echo $str;
         // die;
         $this->load->view($dep_name.'/HumHongeTaiyarReport',['uid'=>$uid,'revDatatar'=>$revDatatar,'user'=>$user,'school'=>$school]);
     }
-
     public function HumHongeTaiyarReportApprove(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -17035,26 +14952,18 @@ class Menu extends CI_Controller {
         $userIds = array_map(function($user) {
             return $user->user_id;
         }, $userdata);
-
         $school = $this->db->select('*')->from('schoolDetails')->where_in('user_id', $userIds)->get()->result();
         // $revDatatar = $this->db->select('*')->from('allresourcedata')->where(['is_approve'=>'Approve'])->where_in('user_id', $userIds)->get()->result();
          $revDatatar = $this->db->select('*')->from('allresourcedata')->where(['is_approve'=>'Approve','is_admin_approved'=>'Approved'])->where_in('user_id', $userIds)->get()->result();
-
-
         $this->load->view($dep_name.'/HumHongeTaiyarReportApprove',['uid'=>$uid,'revDatatar'=>$revDatatar,'user'=>$user,'school'=>$school]);
     }
-
-
     public function approveResourceReview($id,$type){
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
-
           if($uyid == 2){
-
             if($type == 'Approve'){
                 $type = 'Approved';
                 $this->db->where('id',$id)->update('allresourcedata',['is_admin_approved'=>$type]);
@@ -17062,21 +14971,16 @@ class Menu extends CI_Controller {
                 $this->db->where('id',$id)->update('allresourcedata',['is_admin_approved'=>$type]);
             }
         }
-
         $this->load->library('session');
         $this->session->set_flashdata('action_message','SuccessFully Approved');
         redirect('Menu/HumHongeTaiyarReportAdmin');
-
     }
-
     public function approveResourceReviewSchool($id,$type){
         $this->db->where('id',$id)->update('allresourcedata',['is_admin_approved'=>$type]);
         $this->load->library('session');
         $this->session->set_flashdata('action_message','SuccessFully Approved');
         redirect('Menu/HumHongeTaiyarReportAdmin');
     }
-
-
     public function ResourceReviewSchoolRejectByAdmin(){
         $id = $this->input->post('reject');
         $rejectreamrk = $this->input->post('rejectreamrk');
@@ -17084,7 +14988,6 @@ class Menu extends CI_Controller {
         $this->session->set_flashdata('action_message','SuccessFully Rejected');
         redirect('Menu/HumHongeTaiyarReportAdmin');
     }
-
     public function AllResourceDetails($userid,$type){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -17100,7 +15003,6 @@ class Menu extends CI_Controller {
         }
         $this->load->view($dep_name.'/AllResourceDetails',['uid'=>$uid,'revDatatar'=>$revDatatar,'user'=>$user,'type'=>$type]);
     }
-
     public function AllResourceDetailsData($userid,$type,$column,$approve){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -17122,18 +15024,10 @@ class Menu extends CI_Controller {
         }else{
             $revDatatar = $this->db->select('*')->from('allresourcedata')->where(['user_id' => $userid, 'type'=>$type,$column => $app])->get()->result();
         }
-
         // echo $this->db->last_query(); exit;
         $this->load->view($dep_name.'/AllResourceDetails',['uid'=>$uid,'revDatatar'=>$revDatatar,'user'=>$user,'type'=>$type]);
     }
-
-
-
-
-
-
 // public function DeleteDuplicateRecord(){
-
 //     $user = $this->session->userdata('user');
 //     $data['user'] = $user;
 //     $uid = $user['user_id'];
@@ -17141,12 +15035,9 @@ class Menu extends CI_Controller {
 //     $this->load->model('Menu_model');
 //     $dt=$this->Menu_model->get_utype($uyid);
 //     $dep_name = $dt[0]->name;
-
-
 //     $query = $this->db->query("SELECT user_id FROM `user_details` WHERE type_id in(3,4,5,9,13,11,12)");
 //     $data1  = $query->result();
 //    foreach($data1 as $d){
-
 //     $query1 = $this->db->query("SELECT company_id, COUNT(company_id) AS cnt FROM annualreviewtarget WHERE user_id = '$d->user_id' GROUP BY company_id HAVING COUNT(company_id) > 1");
 //     $data2  = $query1->result();
 //     if(sizeof($data2) > 1){
@@ -17163,16 +15054,9 @@ class Menu extends CI_Controller {
 //         }
 //     }
 // echo "success <br/>";
-
 //    }
 // }
-
-
-
-
-
 // public function DeleteRecord(){
-
 //     $user = $this->session->userdata('user');
 //     $data['user'] = $user;
 //     $uid = $user['user_id'];
@@ -17180,7 +15064,6 @@ class Menu extends CI_Controller {
 //     $this->load->model('Menu_model');
 //     $dt=$this->Menu_model->get_utype($uyid);
 //     $dep_name = $dt[0]->name;
-
 //     $query = $this->db->query("SELECT * FROM `annualreviewtarget` WHERE user_id=100150 AND keep_company = 'no'");
 //     $data1  = $query->result();
 //   foreach($data1 as $d){
@@ -17192,8 +15075,6 @@ class Menu extends CI_Controller {
 //   }
 //     echo "Success";
 // }
-
-
         public function CompanyUpdateUsingCsv(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -17204,8 +15085,6 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         $this->load->view($dep_name.'/CompanyUpdateUsingCsv',['uid'=>$uid,'user'=>$user]);
     }
-
-
    public function UploadCompanyCSV(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -17214,7 +15093,6 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         if($uyid == 2){
             $isapprove = true;
         }else{
@@ -17222,7 +15100,6 @@ class Menu extends CI_Controller {
             $this->session->set_flashdata('action_message', 'You are not Authrized to Access this action.');
             redirect('Menu/Dashboard');
         }
-
     if($isapprove){
         $file_path  = "https://stemapp.in/uploads/CompanyCSV/ATeam.csv";
           if (($handle = fopen($file_path, "r")) !== FALSE) {
@@ -17232,14 +15109,11 @@ class Menu extends CI_Controller {
                 }
                 fclose($handle);
                 unset($csv_data[0]);
-
                 echo "<pre>";
                 print_r($csv_data);
                 die;
-
                 $k=1;
                 foreach($csv_data as $cdata){
-
                         $tid                = $cdata[0];        // ttable row id
                         $company_id         = $cdata[1];        // Company Id
                         $revuser_id         = $cdata[2];        // Review User ID
@@ -17264,23 +15138,17 @@ class Menu extends CI_Controller {
                         $very_positive      = $cdata[21];       // Very Positive
                         $positive_nap       = $cdata[22];       // Positive nap
                         $closer             = $cdata[23];       // Closure
-
                         $approved = 'Approve';
                         $remarks = 'Admin Approved';
-
                         $annual = $this->db->select('*')->from('annualreviewtarget')
                                        ->where('id',$tid)->get()->row();
-
                         $init = $this->db->select('*')->from('init_call')
                             ->where(['cmpid_id'=>$company_id])->get()->row();
-
                         // echo "<pre>";
                         // print_r($cdata);
                         // die;
-
                         if($annual->is_admin_approved == ''){
                         $this->db->where('id',$tid)->update('annualreviewtarget',['is_admin_approved'=>$approved,'is_admin_remarks'=>$remarks]);
-
                         $this->db->where('id',$init->id)->update('init_call',
                             ['topspender'=>$top_spender,
                             'cstatus'=>$current_ysid,
@@ -17303,23 +15171,19 @@ class Menu extends CI_Controller {
                             'keep_company'=>$keeping_comapny,
                             'review_date'=>$annual->createdat,
                             'support'=>$support]);
-
                         $this->db->where('id',$company_id)->update('company_master',
                         ['partnerType_id'=>$annual->partnertype]);
-
                         if($keeping_comapny == 'no'){
                             // $this->db->where('id',$init->id)->update('init_call',
                             // ['is_deleted'=>1,
                             // 'deleted_by'=>$revuser_id
                             // ]);
-
                         $company_delete = [
                                 'cid' => $company_id,
                                 'user_id' => $revuser_id,
                                 'deleted_remarks' => $annual->keepremark
                            ];
                         $this->db->insert('deleted_company',$company_delete);
-
                           }else{
                         //       $fwd_date = date('Y-m-d H:i:s');
                         //       $data = [
@@ -17342,11 +15206,9 @@ class Menu extends CI_Controller {
                         //     ];
                         //     $this->db->insert('tblcallevents',$data);
                           }
-
                         if($annual->location !==''){
                           $this->db->where('id',$company_id)->update('company_master',['locations'=>$annual->location]);
                         }
-
                         $compname = $this->Menu_model->get_cdbyid($company_id)[0]->compname;
                         echo "[".$k."] = ".$company_id ." - $compname ----------- Company Updated Succesffully<br>";
                     }else{
@@ -17354,34 +15216,24 @@ class Menu extends CI_Controller {
                     }
                 $k++;
                 }
-
                 }else{
                     echo "Files are not exists";
                 }
         }
-
         die("stem pvt ltd");
-
         $this->load->view($dep_name.'/CompanyUpdateUsingCsv',['uid'=>$uid,'user'=>$user]);
     }
-
-
-
-
     public function deleteCompanyFunnel(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
-
         $getcmp  =  $this->db->query("SELECT * FROM `deleted_company` WHERE is_delete = 0");
         $getcmpany =  $getcmp->result();
         die("Stem PVT LTD");
-
         $k=1;
         foreach($getcmpany as $cmp){
-
             $getcmpd  =  $this->db->query("SELECT * FROM `init_call` WHERE cmpid_id = '$cmp->cid'");
             $getcmpanyd =  $getcmpd->result();
             $getid = $getcmpanyd[0]->id;
@@ -17390,25 +15242,14 @@ class Menu extends CI_Controller {
       
             
             $getcmpd  =  $this->db->query("UPDATE `init_call` SET `mainbd`='0',`insidebd`='0',`bdid`='0',`abd`='0',`apst`='0',`bpst`='0',`cpst`='0' WHERE id ='$getid'");
-
             $did = $cmp->id;
             $getcmpd  =  $this->db->query("UPDATE `deleted_company` SET `is_delete`= '1' WHERE id = $did");
-
             $compname = $this->Menu_model->get_cdbyid($cmp->cid)[0]->compname;
-            echo "[".$k."] = ".$cmp->cid ." - $compname ----------- Company Delete Succesffully<br>";
-
+            echo "[".$k."] = ".$cmp->cid ." - $compname ----------- Company Deleted Successfully<br>";
             $k++;
         }
-
     }
-
-
-
-
-
-
     public function updateAtotaskTime(){
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -17416,31 +15257,23 @@ class Menu extends CI_Controller {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
         $bdid = $_POST['bdid'];
-
         $plandate = $_POST['pdate'];
         $plandatet = $_POST['pdate'];
-
         if(isset($_POST['userworkfrom'])){
             $userworkfrom = $_POST['userworkfrom'];
         }else{
             $userworkfrom = '';
         }
-
         $this->load->library('session');
-
         $date = date('Y-m-d H:i:s');
-
         $startautotasktime = $_POST['startautotasktime'].":00";
         $endautotasktime = $_POST['endautotasktime'].":00";
-
         $initiateddt = date("Y-m-d H:i:s");
         $plandate = $plandate ." ". $startautotasktime;
         $getplandateindata  =  $this->db->query("SELECT * FROM `autotask_time` where user_id='$uid' AND date ='$plandatet'");
         $getplandateindata =  $getplandateindata->result();
         $getplanrecord = sizeof($getplandateindata);
-
         $datetime1 = new DateTime($startautotasktime);
         $datetime2 = new DateTime($endautotasktime);
         // Calculate the difference between the two DateTime objects
@@ -17450,21 +15283,17 @@ class Menu extends CI_Controller {
         if ($interval->invert) {
             $minutes = -$minutes;
             }
-
         $datetime = new DateTime($plandate);
-
         $start_tttpft = $_POST['start_tttpft'];
         $end_tttpft = $_POST['end_tttpft'];
-
         if($getplanrecord == 0){
-
             $datetime1 = new DateTime($startautotasktime);
             $datetime2 = new DateTime($endautotasktime);
             $interval = $datetime1->diff($datetime2);
             $minutes = $interval->h * 60 + $interval->i;
             if($minutes > 90){
                 $this->session->set_flashdata('success_message',' AutoTask Time is Less Than 90 Minute only !!');
-                redirect('Menu/TaskPlanner/'.date("Y-m-d"));
+                redirect('Menu/TaskPlanner2/'.date("Y-m-d"));
             }else{
                 $this->db->query("INSERT INTO `autotask_time`(`user_id`, `date`, `stime`, `etime`, `start_tttpft`, `end_tttpft`,`userworkfrom`) VALUES ('$uid','$plandatet','$startautotasktime','$endautotasktime','$start_tttpft','$end_tttpft','$userworkfrom')");
                 $inid = $this->db->insert_id();
@@ -17472,26 +15301,21 @@ class Menu extends CI_Controller {
             $this->session->set_flashdata('success_message',' Nice job! You Have Planned For Time For Doing AutoTask');
             
             if($plandatet == date("Y-m-d")){
-                redirect('Menu/TaskPlanner/'.date("Y-m-d"));
+                redirect('Menu/TaskPlanner2/'.date("Y-m-d"));
             }else{
-                redirect('Menu/TaskPlanner/'.$plandatet);
+                redirect('Menu/TaskPlanner2/'.$plandatet);
             }
-
         }else{
             $this->session->set_flashdata('success_message',' You are Allready Planned');
-            redirect('Menu/TaskPlanner/'.date("Y-m-d"));
+            redirect('Menu/TaskPlanner2/'.date("Y-m-d"));
         }
-
     //     $today = date('Y-m-d');
     //     $autoPlanNWork  =  $this->db->query("SELECT * FROM `tblcallevents` WHERE user_id = $uid AND (nextCFID = 0 AND lastCFID = 0 AND plan = 1 AND autotask = 1 AND auto_plan = 1 AND cast(appointmentdatetime AS DATE)  != '$today')");
     //     $autoPlanNWork =  $autoPlanNWork->result();
-
     //     $autoPlanNWorkcnt = sizeof($autoPlanNWork);
-
     //     foreach($autoPlanNWork as $pendTask){
     //         $tid = $pendTask->id;
     //         $actiontype_id = $pendTask->actiontype_id;
-
     //         if($actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==10 || $actiontype_id == 15){
     //             $datetime->modify('+5 minutes');
     //             $updatedDatetimeString = $datetime->format('Y-m-d H:i:s');
@@ -17518,20 +15342,15 @@ class Menu extends CI_Controller {
     //             $plancount++;
     //             $query=$this->db->query("UPDATE tblcallevents SET appointmentdatetime='$updatedDatetimeString', initiateddt='$updatedDatetimeString', plandt='$updatedDatetimeString', auto_plan=1 WHERE id='$tid'");
     //     }
-
     // $getPendingAutoTask  =  $this->db->query("SELECT * FROM `tblcallevents` WHERE user_id = $uid AND (nextCFID = 0 AND lastCFID = 0 AND plan = 1 AND autotask = 1 AND auto_plan = 0)");
-
     // $getPendingTask =  $getPendingAutoTask->result();
     // $pcount = sizeof($getPendingTask);
     // if($pcount > 0){
     //     $plancount =0;
     //     foreach($getPendingTask as $ptask){
-
     //         if($minutes > 1){
-
     //         $tid = $ptask->id;
     //         $actiontype_id = $ptask->actiontype_id;
-
     //         if($actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==10 || $actiontype_id ==15){
     //         $datetime->modify('+5 minutes');
     //         $updatedDatetimeString = $datetime->format('Y-m-d H:i:s');
@@ -17557,26 +15376,19 @@ class Menu extends CI_Controller {
     //         }
     //         $plancount++;
     //         $query=$this->db->query("UPDATE tblcallevents SET appointmentdatetime='$updatedDatetimeString', initiateddt='$updatedDatetimeString', plandt='$updatedDatetimeString', auto_plan=1 WHERE id='$tid'");
-
     //         }else{
     //             $this->session->set_flashdata('success_message',' Total '.$plancount.' - Task Plan Successfully');
     //             redirect('Menu/TaskPlanner1/'.date("Y-m-d"));
     //         }
     //     }
-
     //     $this->session->set_flashdata('success_message',' Total '.$plancount.' - Task Plan Successfully');
     //     redirect('Menu/TaskPlanner1/'.date("Y-m-d"));
-
     // }else{
     //     $this->session->set_flashdata('success_message',' No Pending Task');
     //     redirect('Menu/TaskPlanner1/'.date("Y-m-d"));
     // }
-
     }
-
-
     public function momapproved($tid,$status){
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -17586,19 +15398,15 @@ class Menu extends CI_Controller {
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         $status = "Approved";
-
         $curdate = date("Y-m-d H:i:s");
         $currentDateTime = new DateTime();
         $currentDateTime->modify('+1 day');
         $tomorrowDateTime = $currentDateTime->format('Y-m-d H:i:s');
         $randomDateTime = $this->getRandomDateTime($tomorrowDateTime);
-
         $queryData = $this->db->query("SELECT * FROM tblcallevents WHERE id='$tid'");
         $queryData = $queryData->result();
-
         $assignedto_id = $queryData[0]->assignedto_id;
         $cid_id = $queryData[0]->cid_id;
-
         $draft  = 'Task Assign After Approved';
         $data = [
             'lastCFID' => $tid,
@@ -17633,14 +15441,10 @@ class Menu extends CI_Controller {
         $ntid = $this->db->insert_id();
       
         $query=$this->db->query("UPDATE `tblcallevents` SET `mom_approved`='$status', `mom_remarks`='Approved Success', `mom_approved_name`='$uid' WHERE id='$tid'");
-
         $this->session->set_flashdata('success_message',' MOM Approved And New Auto Task (Write Thanks Mail) Assign Successfully');
         redirect('Menu/momdetail');
-
     }
-
     public function momReject(){
-
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -17652,20 +15456,15 @@ class Menu extends CI_Controller {
         $status = "Reject";
         $tid = $_POST['reject'];
         $rejectreamrk = $_POST['rejectreamrk'];
-
         $curdate = date("Y-m-d H:i:s");
-
         $currentDateTime = new DateTime();
         $currentDateTime->modify('+1 day');
         $tomorrowDateTime = $currentDateTime->format('Y-m-d H:i:s');
         $randomDateTime = $this->getRandomDateTime($tomorrowDateTime);
-
         $queryData = $this->db->query("SELECT * FROM tblcallevents WHERE id='$tid'");
         $queryData = $queryData->result();
-
         $assignedto_id = $queryData[0]->assignedto_id;
         $cid_id = $queryData[0]->cid_id;
-
         $draft  = 'Task Assign After Reject';
         $data = [
             'lastCFID' => $tid,
@@ -17698,13 +15497,10 @@ class Menu extends CI_Controller {
         
         $this->db->insert('tblcallevents',$data);
         $ntid = $this->db->insert_id();
-
         $query=$this->db->query("UPDATE `tblcallevents` SET `mom_approved`='$status', `mom_remarks`='$rejectreamrk', `mom_approved_name`='$uid' WHERE id='$tid'");
-
         $this->session->set_flashdata('success_message','MOM Rejeect & New MOM Auto Task Assign Successfully');
         redirect('Menu/momdetail');
     }
-
     public function getRandomDateTime($endDateTime) {
         // Get the current timestamp
         $currentTimestamp = time();
@@ -17732,9 +15528,6 @@ class Menu extends CI_Controller {
         }
         return $randomDateTime;
     }
-
-
-
     public function PlannerTaskApprovelPage(){
         if(isset($_POST['sdate'])){
             $sdate = $_POST['sdate'];
@@ -17758,7 +15551,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
     public function PlannerTaskApprovelPageTest(){
         if(isset($_POST['sdate'])){
             $sdate = $_POST['sdate'];
@@ -17782,28 +15574,7 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
-    // public function CheckTaskDetailsByUser($userid,$taskdateselect){
-       
-    //     $user = $this->session->userdata('user');
-    //     $data['user'] = $user;
-    //     $uid = $user['user_id'];
-    //     $uyid =  $user['type_id'];
-    //     $this->load->model('Menu_model');
-    //     $this->load->library('session');
-    //     $dt=$this->Menu_model->get_utype($uyid);
-    //     $dep_name = $dt[0]->name;
-    //     //  $totalttaskdata =$this->Menu_model->get_totaltdetails($userid,$taskdateselect);
-    // //    $totalttask =$this->Menu_model->get_totaltdetails($userid,$taskdate);
-    //     if(!empty($user)){
-    //         $this->load->view($dep_name.'/CheckTaskDetailsByUser',['uid'=>$uid,'user'=>$user,'tuser_uid'=>$userid,'taskdate'=>$taskdateselect,'selected_date' => $selected_date]);
-    //     }else{
-    //         redirect('Menu/main');
-    //     }
-    // }
-
-  public function CheckTaskDetailsByUser($userid,$taskdateselect){
+    public function CheckTaskDetailsByUser($userid,$taskdateselect){
        
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -17814,7 +15585,6 @@ class Menu extends CI_Controller {
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         $selected_date = $this->input->post('adate');
-
         if(isset($_POST['adate'])){
             $taskdateselect = $_POST['adate'];
         }else{
@@ -17827,8 +15597,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
-
     public function updatecompanyOpenOrOpenRPM(){
        
         $user = $this->session->userdata('user');
@@ -17839,11 +15607,8 @@ class Menu extends CI_Controller {
         $this->load->library('session');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
-
-
         $aid = 45;
         $mdata = $this->Menu_model->get_userbyaid($aid);
-
          foreach($mdata as $dt){
             $bdid = $dt->user_id;
            
@@ -17851,15 +15616,10 @@ class Menu extends CI_Controller {
                 continue;
                 }
             $name  = $dt->name;
-
             $queryData = $this->db->query("SELECT * FROM init_call WHERE cstatus !=1 AND cstatus !=8 AND mainbd='$bdid'");
             $queryData = $queryData->result();
-
              echo "<pre>";
              print_r($queryData);
-
-
-
             $queryDatacnt = sizeof($queryData);
             if($queryDatacnt > 0){
                 foreach($queryData as $data){
@@ -17874,25 +15634,14 @@ class Menu extends CI_Controller {
                 echo "All Comapny is Open or Openrpm";
             }
          
-
-
-
         }
-
         // echo "<pre>";
         // print_r($mdata);
-
-
-
         die;
-
        
       
     }
-
-
 public function addplantask11(){
-
     $this->load->model('Menu_model');
     $this->load->model('Management_model');
     $this->load->library('session');
@@ -17901,10 +15650,8 @@ public function addplantask11(){
     $data['user'] = $user;
     $uid = $user['user_id'];
     $uyid =  $user['type_id'];
-
     $pendingTask = $this->Menu_model->get_allcmp_planbutnotinited($uid);
     $pendingTaskcnt = sizeof($pendingTask);
-
      $bdid = $this->input->post('bdid');
      $tptime = $this->input->post('tptime');
      $ptime = $this->input->post('ptime');
@@ -17912,21 +15659,17 @@ public function addplantask11(){
      $ntppose = $this->input->post('ntppose');
      $selectby = $this->input->post('selectby');
      $pdate = $this->input->post('pdate');
-
      $selectcompanybyuser = $this->input->post('selectcompanybyuser');
-
      if(sizeof($selectcompanybyuser) > 3){
         $this->session->set_flashdata('success_message',' You can only have three company plans at a time !!');
-        redirect('Menu/TaskPlanner/'.$pdate);
+        redirect('Menu/TaskPlanner2/'.$pdate);
      }
-
-        // if($bdid == 100095){
-            // Start Check Active Task Planner Restrication Set BY Admin 
-            $rstData = $this->Management_model->SpecialRestricationonTaskPlanner($uyid,$bdid,$tptime,$ptime,$ntaction,$ntppose,$selectby,$pdate,$selectcompanybyuser);     
-            // End Check Active Task Planner Restrication Set BY Admin 
-        // }
-        
-
+	if(!isset($_POST['selectcompanybyuser']) && $ntaction == 10){
+        $bmdate = $pdate.' '.$ptime.':00';
+        $partner = $this->Menu_model->CreateNewResearchTask($bdid,$bmdate,$ntaction,$ntppose);
+        $this->session->set_flashdata('success_message',' Task Planned Successfully !!');
+        redirect('Menu/TaskPlanner2/'.$pdate);
+     }
      $totalttaskdata =$this->Menu_model->get_totaltdetailsDatewise($bdid,$pdate);
      
      $cosumeTime = '';
@@ -17935,7 +15678,6 @@ public function addplantask11(){
      $getplandateindata =  $getplandateindata->result();
  
      if(sizeof($totalttaskdata) > 0){
-
         foreach($totalttaskdata as $task){
             $action = $this->Menu_model->get_actionbyid($task->actiontype_id);
             $cosumeTime +=$action[0]->yest;
@@ -17954,22 +15696,19 @@ public function addplantask11(){
     
         if($cosumeTime > $remaingtime){
             $this->session->set_flashdata('success_message_plan','* Nice Job !! You have Successfully Achive Your Target Time.');
-            redirect('Menu/TaskPlanner/'.$pdate);
+            redirect('Menu/TaskPlanner2/'.$pdate);
         }else{
             $rrtime = $remaingtime - $cosumeTime;
         }
      }
-
     $taskAssigntime = $pdate.' '.$ptime;
    
     foreach($selectcompanybyuser as $tid){
        
         $cmp_Data = $this->Menu_model->getCompanyStatus($tid);
         $ntstatus = $cmp_Data[0]->cstatus;
-
             $actiontype_id = $ntaction;
             $inid = $tid;
-
             if($actiontype_id ==1 || $actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==10 || $actiontype_id ==15){
                 $taskplanmincount = $taskplanmincount+5;
                 $modifystr = "+$taskplanmincount minutes";
@@ -17988,52 +15727,40 @@ public function addplantask11(){
             }else{
                 $new_datetime = date("y-m-d H:i:s");
             }
-
         $newdate = new DateTime($taskAssigntime);
         $modifystr = "+$taskplanmincount minutes";
         $newdate->modify($modifystr);
         $new_datetime = $newdate->format('Y-m-d H:i:s');
-
         if($selectby == 'Plan But Not Initiated'){
             
             $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
-
             $tbl_id = $this->Menu_model->getTBLTaskByID($tid); 
             $tbl_getaction = $tbl_id[0]->actiontype_id;
+            // echo $tbl_getaction;exit;
             if($tbl_getaction == 3 || $tbl_getaction ==4){
                 $query =  $this->db->query("UPDATE `barginmeeting` SET `storedt`='$new_datetime' WHERE tid =$tbl_id ");
             } 
             
         
         }else if($selectby == 'Review Target Date'){
-
         if($pendingTaskcnt > 0){
             $this->session->set_flashdata('success_message_plan',' First Plan Your Old Pending Task Using Filter - Plan But Not Initiated');
-            redirect('Menu/TaskPlanner/'.$pdate);
+            redirect('Menu/TaskPlanner2/'.$pdate);
         }
            $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
         }else{
-
         if($pendingTaskcnt > 0){
             $this->session->set_flashdata('success_message',' First Plan Your Old Pending Task Using Filter - Plan But Not Initiated');
-            redirect('Menu/TaskPlanner/'.$pdate);
+            redirect('Menu/TaskPlanner2/'.$pdate);
         }
-
             $ttype = $ntaction;
             $id = $this->Menu_model->add_plan2($pdate,$uid,$ptime,$inid,$ntaction,$ntstatus,$ntppose,$ttype,$tptime,$new_datetime,$selectby);
         }
     }
-
-    $this->session->set_flashdata('success_message_plan',' Task Plan Successfully !! and Total Remaining Time For Task Plan '.$rrtime. ' Minutes');
-    redirect('Menu/TaskPlanner/'.$pdate);
+    $this->session->set_flashdata('success_message_plan',' Task Planned Successfully !! and Total Remaining Time For Task Plan '.$rrtime. ' Minutes');
+    redirect('Menu/TaskPlanner2/'.$pdate);
 }
-
-
-
-
 public function addplantask12(){
-
-    
     $this->load->model('Menu_model');
     $this->load->model('Management_model');
     $this->load->library('session');
@@ -18042,10 +15769,8 @@ public function addplantask12(){
     $data['user'] = $user;
     $uid = $user['user_id'];
     $uyid =  $user['type_id'];
-
     $todayspendingTask = $this->Menu_model->get_allcmp_planbutnotinited($uid);
     $pendingOldTask = $this->Menu_model->get_all_old_cmp_planbutnotinited($uid);
-
     $pendingTodaysTaskcnt = sizeof($todayspendingTask);
     $pendingOldTask = sizeof($pendingOldTask);
     
@@ -18056,16 +15781,14 @@ public function addplantask12(){
      $ntppose = $this->input->post('ntppose');
      $selectby = $this->input->post('selectby');
      $pdate = $this->input->post('pdate');
-
      $select_cluster = $this->input->post('select_cluster');
      $selectcompanybyuser = $this->input->post('selectcompanybyuser');
     
-
      if(!isset($_POST['selectcompanybyuser']) && $ntaction == 4){
         
         $bmdate = $pdate.' '.$ptime.':00';
         $partner = $this->Menu_model->createBargMeetingWithClusterId($bdid,$bmdate,$select_cluster);
-        $this->session->set_flashdata('success_message',' Task Plan Successfully !!');
+        $this->session->set_flashdata('success_message',' Task Planned Successfully !!');
         redirect('Menu/TaskPlanner2/'.$pdate);
      } if(isset($_POST['selectcompanybyuser']) && $ntaction == 4){
         $ntaction = 4;
@@ -18075,31 +15798,26 @@ public function addplantask12(){
        
         $bmdate = $pdate.' '.$ptime.':00';
         $partner = $this->Menu_model->CreateJoinMeetingTaskWithClusterId($bdid,$selectcompanybyuser,$bmdate,$ntaction,$ntppose,$select_cluster);
-        $this->session->set_flashdata('success_message',' Task Plan Successfully !!');
+        $this->session->set_flashdata('success_message',' Task Planned Successfully !!');
         redirect('Menu/TaskPlanner2/'.$pdate);
         
      }
     
      if(!isset($_POST['selectcompanybyuser']) && $ntaction == 10){
-
         $bmdate = $pdate.' '.$ptime.':00';
         $partner = $this->Menu_model->CreateNewResearchTask($bdid,$bmdate,$ntaction,$ntppose);
-        $this->session->set_flashdata('success_message',' Task Plan Successfully !!');
+        $this->session->set_flashdata('success_message',' Task Planned Successfully !!');
         redirect('Menu/TaskPlanner2/'.$pdate);
      }
-
-
     $CheckingData = $this->input->post('check_data');  // Checking_Data
-
      if($CheckingData == 'Mom Check'){
         $bmdate = $pdate.' '.$ptime.':00';
         $addMOMCheckTask = $this->Menu_model->CreateTaskForMOMCheck($bdid,$bmdate);
-        $this->session->set_flashdata('success_message',' Task Plan Successfully !!');
+        $this->session->set_flashdata('success_message',' Task Planned Successfully !!');
         redirect('Menu/TaskPlanner2/'.$pdate);
      }
    
     
-
 // Abhishek Data Start
      $data = array(
         'selectstatusbyuser' => $this->input->post('selectstatusbyuser'),
@@ -18150,7 +15868,6 @@ public function addplantask12(){
         // 'ntactionnew' => $this->input->post('ntactionnew'),
         // 'ntppose' => $this->input->post('ntppose')
     );
-
     $selectedFields = [];
     $other = [];
     $statusId = null;
@@ -18215,26 +15932,20 @@ public function addplantask12(){
      }
      
      $array = array_unique (array_merge ($finalArr, $anotherArr));
-
     // END Abhishek Data Star
-
     $jsonData = json_encode($array);
-
      if(sizeof($selectcompanybyuser) > 3){
         $this->session->set_flashdata('success_message',' You can only have three company plans at a time !!');
-        redirect('Menu/TaskPlanner/'.$pdate);
+        redirect('Menu/TaskPlanner2/'.$pdate);
      }
-
   
      $totalttaskdata =$this->Menu_model->get_totaltdetailsDatewise($bdid,$pdate);
-
      $cosumeTime = '';
  
      $getplandateindata  =  $this->db->query("SELECT * FROM `autotask_time` where user_id='$uid' AND date ='$pdate'");
      $getplandateindata =  $getplandateindata->result();
  
      if(sizeof($totalttaskdata) > 0){
-
         foreach($totalttaskdata as $task){
             $action = $this->Menu_model->get_actionbyid($task->actiontype_id);
             $cosumeTime +=$action[0]->yest;
@@ -18258,8 +15969,6 @@ public function addplantask12(){
         //     $rrtime = $remaingtime - $cosumeTime;
         // }
      }
-
-
     $taskAssigntime = $pdate.' '.$ptime;
    
     $k=1;
@@ -18267,7 +15976,6 @@ public function addplantask12(){
        
         $cmp_Data = $this->Menu_model->getCompanyStatus($tid);
         $ntstatus = $cmp_Data[0]->cstatus;
-
         if($ntaction != 0){
             $actiontype_id = $ntaction;
         }else{
@@ -18276,7 +15984,6 @@ public function addplantask12(){
         }
         
             $inid = $tid;
-
             if($actiontype_id ==1 || $actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==10 || $actiontype_id ==15){
                 $taskplanmincount = $taskplanmincount+5;
                 $modifystr = "+$taskplanmincount minutes";
@@ -18295,16 +16002,12 @@ public function addplantask12(){
             }else{
                 $new_datetime = date("y-m-d H:i:s");
             }
-
         if($k==1){$taskplanmincount = 0;}
-
         $newdate = new DateTime($taskAssigntime);
         $modifystr = "+$taskplanmincount minutes";
         $newdate->modify($modifystr);
         $new_datetime = $newdate->format('Y-m-d H:i:s');
-
         if($selectby == 'Plan But Not Initiated'){
-
            $sact_type = $this->Menu_model->SelectTaskBYTid($tid);
            
            if($sact_type ==4 || $sact_type == 17 || $sact_type == 3){ 
@@ -18314,25 +16017,19 @@ public function addplantask12(){
             $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
           
         }else if($selectby == 'Plan When MOM Approved'){
-
             $sact_type = $this->Menu_model->SelectTaskBYTid($tid);
           
              $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
              $currentdatetime = date("Y-m-d H:i:s");
              $query =  $this->db->query("UPDATE `auto_assign_task` SET `status`='1',`updated_at`='$currentdatetime' WHERE call_tid = $tid");
-
          }else if($selectby == 'Because of Plan Change'){
-
                 $sact_type = $this->Menu_model->SelectTaskBYTid($tid);
                 if($sact_type ==4 || $sact_type == 17 || $sact_type == 3){ 
                     $this->Menu_model->updateBarginmeetingAfterPlanChnage($tid,$new_datetime);
                    }
              $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime',`plan_change`='0', `selectby`='$selectby' WHERE  id = $tid");
-
              echo $this->db->last_query()."<br/>";
-
          } else if($selectby == 'Review Target Date'){
-
        if(date("Y-m-d") !== $pdate){
             if($pendingTodaysTaskcnt > 0){
                 $this->session->set_flashdata('success_message_plan',' First Plan Your Todays Pending Task]');
@@ -18347,7 +16044,6 @@ public function addplantask12(){
         
         $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
         }else{
-
     if(date("Y-m-d") !== $pdate){     
         if($pendingTodaysTaskcnt > 0){
             $this->session->set_flashdata('success_message',' First Plan Your Yesterday Pending Task.');
@@ -18359,9 +16055,7 @@ public function addplantask12(){
             redirect('Menu/TaskPlanner2/'.$pdate);
         }
     }
-
             $ttype = $ntaction;
-
             if($select_cluster !== ''){
                 $this->Menu_model->updateClusterIdByinitID($uid,$tid,$select_cluster);
             }
@@ -18376,64 +16070,10 @@ public function addplantask12(){
         $k++;
      }
      
-    $this->session->set_flashdata('success_message_plan',' Task Plan Successfully !!');
-
+    $this->session->set_flashdata('success_message_plan',' Task Planned Successfully !!');
     redirect('Menu/TaskPlanner2/'.$pdate);
 }
-
-
-
-// public function approveDailyTask(){
-
-//     $this->load->model('Menu_model');
-//     $this->load->library('session');
-  
-//     $user = $this->session->userdata('user');
-//     $data['user'] = $user;
-//     $uid = $user['user_id'];
-//     $uyid =  $user['type_id'];
-
-//     $status = $this->input->post('status');
-//     $tid = $this->input->post('tid');
-//     $suser = $this->input->post('suser');
-
-//     $cdate = date("Y-m-d");
-//     $taskcount = sizeof($tid);
-
-//     if($status){
-//         if($taskcount > 0){
-//         foreach($tid as $id){
-//             if($status == 'Approve')
-//             {
-//                 $query =  $this->db->query("UPDATE `tblcallevents` SET `approved_status` = 1, `approved_by`='$uid' WHERE  id = $id");
-//                 //echo $id;
-//             }
-//             if($status == 'Reject')
-//             {
-//                 $query =  $this->db->query("UPDATE `tblcallevents` SET `approved_status` = 0, `approved_by`='$uid' WHERE  id = $id");
-//                 //echo $id;
-//             }
-
-//             //  echo "<pre>";
-//             //  print_r($tid);
-
-//         }
-
-//         $this->session->set_flashdata('success_message','Total '.$taskcount.' Task '.$status.' Successfully');
-//         redirect('Menu/CheckTaskDetailsByUser/'.$suser.'/'.$cdate);
-//         }else{
-//             $this->session->set_flashdata('error_message','* Select At List one Task For '.$status);
-//             redirect('Menu/CheckTaskDetailsByUser/'.$suser.'/'.$cdate);
-//         }
-//     }else{
-//         $this->session->set_flashdata('error_message','* Please Select Valid Approve / Reject Status');
-//         redirect('Menu/CheckTaskDetailsByUser/'.$suser.'/'.$cdate);
-//     }
-// }
-
-
 public function approveDailyTask(){
-
     $this->load->model('Menu_model');
     $this->load->library('session');
   
@@ -18446,18 +16086,14 @@ public function approveDailyTask(){
     $suser  = $this->input->post('suser');
     $cdate  = date("Y-m-d");
     $taskcount = sizeof($tid);
-
     if($status){
         if($taskcount > 0){
         foreach($tid as $id){
-
             $taskData = $this->Menu_model->getTBLTaskByID($id);
             $task_action_id = $taskData[0]->actiontype_id;
-
             if($status == 'Approve')
             {
                 $query =  $this->db->query("UPDATE `tblcallevents` SET `approved_status` = 1, `approved_by`='$uid' WHERE  id = $id");
-
                 if($task_action_id == 3 || $task_action_id == 4 || $task_action_id == 17){
                     $query =  $this->db->query("UPDATE `barginmeeting` SET `approved_status` = 1, `approved_by`='$uid' WHERE  tid = $id");
                 }
@@ -18465,13 +16101,11 @@ public function approveDailyTask(){
             if($status == 'Reject')
             {
                 $query =  $this->db->query("UPDATE `tblcallevents` SET `approved_status` = 0, `approved_by`='$uid' WHERE  id = $id");
-
                 if($task_action_id == 3 || $task_action_id == 4 || $task_action_id == 17){
                     $query =  $this->db->query("UPDATE `barginmeeting` SET `approved_status` = 0, `approved_by`='$uid' WHERE  tid = $id");
                 }
             }
         }
-
         $this->session->set_flashdata('success_message','Total '.$taskcount.' Task '.$status.' Successfully');
         redirect('Menu/CheckTaskDetailsByUser/'.$suser.'/'.$cdate);
         }else{
@@ -18483,24 +16117,17 @@ public function approveDailyTask(){
         redirect('Menu/CheckTaskDetailsByUser/'.$suser.'/'.$cdate);
     }
 }
-
-
 public function selfAssign($tableId, $selfAssign, $taskdate){
-
         $data = array(
             'self_assign' => $selfAssign,
         );
-
         $this->db->where('id', $tableId);
         $this->db->update('tblcallevents', $data);
-
        $query = $this->db->query("SELECT * FROM `tblcallevents` WHERE `id` = $tableId");
        $result = $query->result_array();
-
         $this->session->set_flashdata('success_message','Request for self assign was sent successfully to the user');
         redirect('Menu/CheckTaskDetailsByUser/'.$result[0]['user_id'].'/'.$taskdate);
     }
-
     public function AssignTaskById($tableId, $taskdate)
     {
         $this->load->model('Menu_model');
@@ -18524,7 +16151,6 @@ public function selfAssign($tableId, $selfAssign, $taskdate){
         $remark=$this->Menu_model->get_purposebyinidnew($aid,$inid);
         echo json_encode($remark);
     }
-
      public function dailyTaskAssignById(){
         $this->load->model('Menu_model');
         $cuser = $this->session->userdata('user');
@@ -18554,7 +16180,6 @@ public function selfAssign($tableId, $selfAssign, $taskdate){
         $cmp_name = $cmp_data[0]->compname;
         
         if($ntaction == 3 || $ntaction == 4){
-
             $tasktdata = array(
                 'lastCFID'              => '0',
                 'nextCFID'              => '0',
@@ -18620,7 +16245,6 @@ public function selfAssign($tableId, $selfAssign, $taskdate){
                 'approved_by'   => $approved_user,
                 'self_assign' => 2
             );
-
             // Insert data into tblcallevents
             $this->db->insert('tblcallevents', $createtask_data);
             $ntid = $this->db->insert_id();
@@ -18633,14 +16257,10 @@ public function selfAssign($tableId, $selfAssign, $taskdate){
         // Updating the database
         $this->db->where('id', $eventId);
         $this->db->update('tblcallevents', $data);
-
         $this->session->set_flashdata('success_message','Task assigned Successfuly');
         redirect('Menu/CheckTaskDetailsByUser/'.$taskDetails[0]['user_id'].'/'.$task_date);
     }
-
-
 public function getcmpbyStatus(){
-
         $uid= $this->input->post('uid');
         $status= $this->input->post('status');
         $this->load->model('Menu_model');
@@ -18648,8 +16268,6 @@ public function getcmpbyStatus(){
         $cmp = $this->Menu_model->get_statuscmp($status,$uid);
         echo json_encode($cmp);
     }
-
-
     public function UserTaskViewPage(){
         $this->load->model('Menu_model');
         $this->load->library('session');
@@ -18674,7 +16292,6 @@ public function getcmpbyStatus(){
             redirect('Menu/main');
         }
     }
-
      public function selfTaskAssignPage($tableId){
         $this->load->model('Menu_model');
         $this->load->library('session');
@@ -18687,17 +16304,13 @@ public function getcmpbyStatus(){
         $date =  date('Y-m-d');
         $taskDetails = $this->Menu_model->get_tbldata($tableId);
         $userdtl = $this->Menu_model->get_userbyid($taskDetails[0]->user_id);
-
         if(!empty($user)){
             $this->load->view($dep_name.'/selfTaskAssignPage',['uid'=>$uid,'user'=>$user, 'taskDetails'=> $taskDetails, 'date'=>$date, 'userdtl' => $userdtl]);
         }else{
             redirect('Menu/main');
         }
     }
-
-
     public function selfTaskAssign(){
-
     $this->load->model('Menu_model');
     $cuser = $this->session->userdata('user');
     $taskDetailsJson= $this->input->post('taskDetails');
@@ -18721,12 +16334,10 @@ public function getcmpbyStatus(){
     $cmpDataq       =  $this->db->query("SELECT * FROM `company_contact_master` WHERE company_id = '$cmpid_id'");
     $cmpData        = $cmpDataq->result();
     $ccid           = $cmpData[0]->id;
-
     $cmp_data = $this->Menu_model->get_cmpbyinid($inid);
     $cmp_name = $cmp_data[0]->compname;
     
     if($ntaction == 3 || $ntaction == 4){
-
         $tasktdata = array(
             'lastCFID'              => '0',
             'nextCFID'              => '0',
@@ -18784,44 +16395,34 @@ public function getcmpbyStatus(){
             'updateddate' => $ntdate,
             'selectby'    => $selectby
         );
-
         // Insert data into tblcallevents
         $this->db->insert('tblcallevents', $createtask_data);
         $ntid = $this->db->insert_id();
     }
-
     $data = array(
         'self_assign' => 3,
         'nextCFID' => $eventId,
     );
-
     // Updating the database
     $this->db->where('id', $eventId);
     $this->db->update('tblcallevents', $data);
-
     $this->session->set_flashdata('success_message','User Assigned Task via Admin Request Successfuly !');
     redirect('Menu/UserTaskViewPage');
     }
-
 // public function getTotalTaskData(){
-
 //     $this->load->model('Menu_model');
 //     $this->load->library('session');
-
 //     $user = $this->session->userdata('user');
 //     $data['user'] = $user;
 //     $uid = $user['user_id'];
 //     $uyid =  $user['type_id'];
-
 //     $taskdate  = date("Y-m-d");
 //     $uid = 100095;
 //     $totalttaskdata =$this->Menu_model->get_totaltdetailsDatewise(100095,$taskdate);
     
 //     $cosumeTime = '';
-
 //     $getplandateindata  =  $this->db->query("SELECT * FROM `autotask_time` where user_id='$uid' AND date ='$taskdate'");
 //     $getplandateindata =  $getplandateindata->result();
-
 //     foreach($totalttaskdata as $task){
 //         $action = $this->Menu_model->get_actionbyid($task->actiontype_id);
 //         $cosumeTime +=$action[0]->yest;
@@ -18829,29 +16430,19 @@ public function getcmpbyStatus(){
    
 //     $stime = $getplandateindata[0]->stime;
 //     $etime = $getplandateindata[0]->etime;
-
-
 //     $datetime1 = new DateTime($stime);
 //     $datetime2 = new DateTime($etime);
 //     $interval = $datetime1->diff($datetime2);
 //     $autominutes = $interval->h * 60 + $interval->i;
-
 //     $totalAssignTime = 540;
 //     $remaingtime = $totalAssignTime - $autominutes;
-
 //     if($cosumeTime > $remaingtime){
 //         $this->session->set_flashdata('success_message','* Nice Job !! You have Successfully Achive Your Target Time.');
 //     }else{
 //         $rrtime = $remaingtime - $cosumeTime;
 //     }
   
-
 // }
-
-
-
-
-
 public function ClusterWorkWithBDFunnel(){
     $user = $this->session->userdata('user');
     $data['user'] = $user;
@@ -18860,10 +16451,8 @@ public function ClusterWorkWithBDFunnel(){
     $this->load->model('Menu_model');
     $dt =$this->Menu_model->get_utype($uyid);
     $dep_name = $dt[0]->name;
-
     $udetail = $this->Menu_model->get_userbyid($uid);
     $clu_id = $udetail[0]->aadmin;
-
     $totalttaskdata =$this->Menu_model->ClusterWorkMyFunnel($uid,$clu_id);
  
     if(!empty($user)){
@@ -18872,7 +16461,6 @@ public function ClusterWorkWithBDFunnel(){
         redirect('Menu/main');
     }
 }
-
 public function PSTWorkWithBDFunnel(){
     $user = $this->session->userdata('user');
     $data['user'] = $user;
@@ -18881,10 +16469,8 @@ public function PSTWorkWithBDFunnel(){
     $this->load->model('Menu_model');
     $dt =$this->Menu_model->get_utype($uyid);
     $dep_name = $dt[0]->name;
-
     $udetail = $this->Menu_model->get_userbyid($uid);
     $pst_id = $udetail[0]->pst_co;
-
     $totalttaskdata =$this->Menu_model->PSTWorkMyFunnel($uid,$pst_id);
  
     if(!empty($user)){
@@ -18893,11 +16479,6 @@ public function PSTWorkWithBDFunnel(){
         redirect('Menu/main');
     }
 }
-
-
-
-
-
 public function Total_Team_Meetings($auser_id,$sdate,$edate){
     $user = $this->session->userdata('user');
     $data['user'] = $user;
@@ -18906,20 +16487,15 @@ public function Total_Team_Meetings($auser_id,$sdate,$edate){
     $this->load->model('Menu_model');
     $dt =$this->Menu_model->get_utype($uyid);
     $dep_name = $dt[0]->name;
-
     $udetail = $this->Menu_model->get_userbyid($uid);
     $pst_id = $udetail[0]->pst_co;
-
     $mdata = $this->Menu_model->get_all_bd_meetings($auser_id,$sdate,$edate);
-
     if(!empty($user)){
         $this->load->view($dep_name.'/Total_Team_Meetings',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'mdata'=>$mdata]);
     }else{
         redirect('Menu/main');
     }
 }
-
-
 public function Total_Team_RP_Meeting($auser_id,$sdate,$edate){
     $user = $this->session->userdata('user');
     $data['user'] = $user;
@@ -18928,20 +16504,33 @@ public function Total_Team_RP_Meeting($auser_id,$sdate,$edate){
     $this->load->model('Menu_model');
     $dt =$this->Menu_model->get_utype($uyid);
     $dep_name = $dt[0]->name;
-
     $udetail = $this->Menu_model->get_userbyid($uid);
     $pst_id = $udetail[0]->pst_co;
-
     $mdata = $this->Menu_model->get_all_bd_RP_meetings($auser_id,$sdate,$edate);
-
     if(!empty($user)){
         $this->load->view($dep_name.'/Total_Team_RP_Meeting',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'mdata'=>$mdata]);
     }else{
         redirect('Menu/main');
     }
 }
-
-
+public function Total_Team_No_RP_Meeting($auser_id,$sdate,$edate){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt =$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $udetail = $this->Menu_model->get_userbyid($uid);
+    $pst_id = $udetail[0]->pst_co;
+    $mdata = $this->Menu_model->get_all_bd_No_RP_meetings($auser_id,$sdate,$edate);
+   
+    if(!empty($user)){
+        $this->load->view($dep_name.'/Total_Team_NO_RP_Meeting',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'mdata'=>$mdata]);
+    }else{
+        redirect('Menu/main');
+    }
+}
 public function Total_Team_Fresh_Meeting($auser_id,$sdate,$edate){
     $user = $this->session->userdata('user');
     $data['user'] = $user;
@@ -18950,10 +16539,8 @@ public function Total_Team_Fresh_Meeting($auser_id,$sdate,$edate){
     $this->load->model('Menu_model');
     $dt =$this->Menu_model->get_utype($uyid);
     $dep_name = $dt[0]->name;
-
     $udetail = $this->Menu_model->get_userbyid($uid);
     $pst_id = $udetail[0]->pst_co;
-
     $mdata = $this->Menu_model->get_all_bd_Fresh_RP_meetings($auser_id,$sdate,$edate);
     $mdata1 = [];
     $toData = 0;
@@ -18967,11 +16554,9 @@ public function Total_Team_Fresh_Meeting($auser_id,$sdate,$edate){
         if($cmrp==0){
             $toData++;
             $tids .=$tid.',';
-
         }
     
 }   
-
 $tids = rtrim($tids, ',');
 $mdata2 = $this->Menu_model->get_all_bd_Fresh_RP_meetings_New($tids);
     if(!empty($user)){
@@ -18980,9 +16565,6 @@ $mdata2 = $this->Menu_model->get_all_bd_Fresh_RP_meetings_New($tids);
         redirect('Menu/main');
     }
 }
-
-
-
 public function Total_Team_Re_Meeting($auser_id,$sdate,$edate){
     $user = $this->session->userdata('user');
     $data['user'] = $user;
@@ -18991,13 +16573,10 @@ public function Total_Team_Re_Meeting($auser_id,$sdate,$edate){
     $this->load->model('Menu_model');
     $dt =$this->Menu_model->get_utype($uyid);
     $dep_name = $dt[0]->name;
-
     $udetail = $this->Menu_model->get_userbyid($uid);
     $pst_id = $udetail[0]->pst_co;
-
     $mdata = $this->Menu_model->get_all_bd_Fresh_RP_meetings($auser_id,$sdate,$edate);
     $mdata1 = [];
-
     $tids = '';
     $rmeet = 0;
     foreach($mdata as $dt){
@@ -19009,23 +16588,31 @@ public function Total_Team_Re_Meeting($auser_id,$sdate,$edate){
         if($cmrp>0){
             $rmeet++;
             $tids .=$tid.',';
-
         }
 }   
-
 $tids = rtrim($tids, ',');
 $mdata2 = $this->Menu_model->get_all_bd_Fresh_RP_meetings_New($tids);
-
     if(!empty($user)){
         $this->load->view($dep_name.'/Total_Team_Re_Meeting',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'mdata'=>$mdata2]);
     }else{
         redirect('Menu/main');
     }
 }
+public function Total_Team_Potential_Meeting($uid,$sdate,$edate){ 
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $mdata = $this->Menu_model->get_all_bd_Potential_meetings($uid,$sdate,$edate);
 
-
+    if(!empty($user)){
+        $this->load->view($dep_name.'/Total_Team_potential_Meeting',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'mdata'=>$mdata2]);
+    }else{
+        redirect('Menu/main');
+    }
+}
 public function SpecialRequestForLeave(){
-
     $pdate      = $_POST['pdate'];
     $stime      = $_POST['start_meeting_time'];
     $etime      = $_POST['end_meeting_time'];
@@ -19039,17 +16626,11 @@ public function SpecialRequestForLeave(){
     $this->load->library('session');
     $dt         = $this->Menu_model->get_utype($uyid);
     $dep_name = $dt[0]->name;
-
     $this->Menu_model->add_SpecialRequestForLeave($uid,$pdate,$stime,$etime,$purpose);
     
     $this->session->set_flashdata('success_message','Request For Plan Change Sended Successfully !');
-
     redirect('Menu/dashboard');
 }
-
-
-
-
 public function SpecialRequestForLeaveSomeTime(){
     $user = $this->session->userdata('user');
     $data['user'] = $user;
@@ -19058,12 +16639,10 @@ public function SpecialRequestForLeaveSomeTime(){
     $this->load->model('Menu_model');
     $dt=$this->Menu_model->get_utype($uyid);
     $dep_name = $dt[0]->name;
-
     $this->load->view($dep_name.'/SpecialRequestForLeaveSomeTime',['user'=>$user,'uid'=>$uid]);
 }
 
 public function GetCheckExistsTaskTime(){
-
     $user = $this->session->userdata('user');
     $data['user'] = $user;
     $uid = $user['user_id'];
@@ -19071,45 +16650,34 @@ public function GetCheckExistsTaskTime(){
     $this->load->model('Menu_model');
     $dt=$this->Menu_model->get_utype($uyid);
     $dep_name = $dt[0]->name;
-
     $timeValue = $_POST['timeValue'];
     $pdate = $_POST['pdate'];
-
     $cdata = $this->Menu_model->CheckExistsTaskTime($uid,$pdate,$timeValue);
     $cdatacnt = sizeof($cdata);
     echo $cdatacnt;
-
 }
-
-
 public function session_plan_time_start(){
     $user = $this->session->userdata('user');
     $data['user'] = $user;
     $uid = $user['user_id'];
     $uyid =  $user['type_id'];
     $this->load->model('Menu_model');
-
     $psdatetime = date("Y-m-d H:i:s");
     $pstime = date("H:i:s");
     $dt=$this->Menu_model->StorePlannerSessionStart($uid,$psdatetime,$pstime);
 }
-
 public function session_plan_time_close(){
     $user = $this->session->userdata('user');
     $data['user'] = $user;
     $uid = $user['user_id'];
     $uyid =  $user['type_id'];
     $this->load->model('Menu_model');
-
     $pcdatetime = date("Y-m-d H:i:s");
     $pctime = date("H:i:s");
     $totaltime = $_POST['close'];
     
     $dt=$this->Menu_model->StorePlannerSessionClose($uid,$pcdatetime,$pctime,$totaltime);
 }
-
-// Start on Local Server - 2024-07-22
-
 public function CheckPlanTaskBetweenTimes($stime,$etime){
     $user = $this->session->userdata('user');
     $data['user'] = $user;
@@ -19122,35 +16690,805 @@ public function CheckPlanTaskBetweenTimes($stime,$etime){
     $total_task = $this->Menu_model->TotalTaskBetweenTime($uid,$date,$stime,$etime);
     $this->load->view($dep_name.'/CheckPlanTaskBetweenTimes',['user'=>$user,'uid'=>$uid,'tdata'=>$total_task,'cdate'=>$date,'stime'=>$stime,'etime'=>$etime]);
 }
+public function get_BargeMeetCompany(){
+    $uid= $this->input->post('uid');
+    $this->load->model('Menu_model');
+    $cmp = $this->Menu_model->get_BargeMeetMeetCmp($uid);
+    echo '<option value="">Select Company</option>';
+    foreach($cmp as $cmp){ ?>
+    <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
+        <?=$cmp->compname?> (<?=$cmp->pname?>)
+    </option>
+    <?php
+    }
+}
+public function get_JoinMeetingsCompany(){
+    $uid= $this->input->post('uid');
+    $this->load->model('Menu_model');
+    $cmp = $this->Menu_model->get_JoinMeetingsCmp($uid);
+    echo '<option value="">Select Company</option>';
+    foreach($cmp as $cmp){ ?>
+    <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
+        <?=$cmp->compname?> (<?=$cmp->pname?>)
+    </option>
+    <?php
+    }
+}
+// New TaskCheck <=========================================== START ==================================>
+    public function TaskCheck_New(){
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $userList = $this->Menu_model->get_userForTask($uid,$uyid);
+        $dep_name = $dt[0]->name;
+        // $tdate=date('Y-m-d');
+        $date = new DateTime();
+        $date->modify('-1 day');
+        $tdate =  $date->format('Y-m-d');
+        $taskList = array();
+        
+        if(isset($_POST['userId'])){
+            $userId = $_POST['userId'];
+            $taskList = $this->Menu_model->getTasks($userId,$tdate);
+            
+        }
+        else{
+            $userId = '';
+        }
+        // echo "<pre>";print_r($taskList);exit;
+        // var_dump($taskList);die;
+        if(!empty($user)){
+            $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+    public function getTaskByUser(){
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        $userId = '100192';
+        $tdate = '2024-07-20';
+        // var_dump($_POST);die;
+        $getTasks = $this->Menu_model->getTasks($userId,$tdate);
+        print_r($getTasks);die;
+        if(!empty($user)){
+            $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'tasks'=>$getTasks]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+    public function RateTask(){
+        $rat = $_POST['rat'];
+        $rremark = $_POST['rremark'];
+        $taskid = $_POST['taskid'];
+        $uuid = $_POST['uuid'];
+        $this->Menu_model->RateTask($rat,$rremark,$taskid,$uuid);
+        $this->session->set_flashdata('success_message', 'Star Rating Added Successfully');
+        redirect('Menu/TaskCheck_New');
+    }
+    public function TaskCheckStarNew(){
+        // var_dump($_POST);die;
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $rating = $this->input->post('rating');
+        $question = $this->input->post('question');
+        $userId = $this->input->post('userId');
+        $taskid = $this->input->post('taskId');
+        // $cdate = $this->input->post('cdate');
+        $cdate = date('Y-m-d h:m:s');
+        $this->load->model('Menu_model');
+        $result = $this->Menu_model->InsertTaskRating($rating,$question,$userId,$taskid,$cdate,$uid);
+        echo json_encode($result);
+        // print_r($rating);die;
+    }
+     public function updateTaskCheckRemark() {
+        // var_dump($_POST);die;
+        $this->load->model('Menu_model');
+        $remark = $this->input->post('remark');
+        $starID = $this->input->post('starID');
+        
+        $result = $this->Menu_model->updateTaskCheckRemark($remark,$starID);
+    }
+    
+    public function meetingDetail_new(){
+                if($uid =='100147')
+        {$uid ='45';}
+        if(isset($_POST['sdate'])){
+        $sdate = $_POST['sdate'];
+        $edate = $_POST['edate'];
+        }
+        else{
+            $sdate = date('Y-m-d');
+            $edate = date('Y-m-d');
+        }
+        $sd=$sdate;
+        $ed=$edate;
+        $sdate = new DateTime($sdate);
+        $edate = new DateTime($edate);
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        
+        if(!empty($user)){
+            
+            $this->load->view($dep_name.'/MeetingDetail',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+    // New TaskCheck <=========================================== END ==================================>
+    
+    /******* To Create Target Vs Achievement Report Function - Manasvi 31-09-2024*******/
+    
+     public function targetQandA(){
+        // $reviewId = '100059';$reviewType="Roster";$reviewTypeId="2";
+        // echo "<pre>";print_r($_POST);exit;
+        if($_POST){
+            $uid = $this->input->post('uid');
+            $reviewType  = $this->input->post('reviewType ');
+        }
+        $uid                = $_SESSION['user']['user_id'];
+        $utype              = $_SESSION['user']['type_id'];
+        $bd_user_id         = $reviewId;
+        $dt                 = $this->Menu_model->get_utype($utype);
+        $utype              = $dt[0]->name;
+        $data['reviewType'] = $reviewType;
+        $bd_user_details    = $this->Menu_model->get_userbyid($reviewId);
+       
+        $data['username']       = $bd_user_details[0]->name;
+       
+        $data['partnerType']    = $this->Menu_model->get_partnertype();
+            if($_POST){
+               $data['bd']            = $reviewId;
+               $data['prospecting']   = $this->input->post('prospecting');
+               $data['revenue']       = $this->input->post('revenue');
+               $data['proposal']      = $this->input->post('proposal');
+               $data['closure']       = $this->input->post('closure');
+               $data['partner_type']  = $this->input->post('partner_type');
+               $data['updatedBy']     = $uid;
+               $targetQandAdata['reviewType']      = $reviewTypeId;
+               $targetQandAdata['targetStartDate'] = $this->input->post('sdate');
+               $targetQandAdata['targetEndDate']   = $this->input->post('edate');
+               $targetQandAdata['updatedAt']       =  date("Y-m-d h:i:s");
+               $this->Menu_model->insertTargetQandA($data);
+            }
+        
+        $data['utype'] = $utype;
+        $this->load->view('header.php');
+        $this->load->view('targetQandA.php',$data);
+        $this->load->view('footer.php');
+    }
+    
+    public function targetVsAchievedData(){
+        $uid     = $_SESSION['user']['user_id'];
+        $utypeid = $_SESSION['user']['type_id'];
+       
+        if($_POST){
+            $sdate                  = $this->input->post('sdate');  
+            $edate                  = $this->input->post('edate'); 
+            // $mainbd                 = $this->input->post('mainbd');
+        }
+        else{
+            $sdate          = date("Y-m-d");
+            $edate          = date("Y-m-d");
+            $sdate          = '2024-02-25';
+            $edate          = '2024-08-25';
 
+           
+        }
+      
+        $getMyTeamListIds_str   = $mainbd;
+        $dt                             = $this->Menu_model->get_utype($utypeid);
+        $utype                          = $dt[0]->name;
+          
+        $getMyTeamListIds               = $this->Menu_model->getMyTeamList($uid,$utypeid,$column='user_id');
+        $getMyTeamListIds_str           = implode(',',$getMyTeamListIds);
 
+        $data['sdate']  =  $sdate;
+        $data['edate']  =  $edate;
+        // $mainbd         = '100059';
+
+      
+        
+        $data['targetVsAchieved']       = $this->Menu_model->getAchievedData($getMyTeamListIds_str,$sdate,$edate);
+        $data['heading']                = 'Target Vs Achieved';
+
+        $this->load->view('TargetVsAchieved',$data);
+    }
+   
+    public function getAchievedDataList($uid,$category,$sdate,$edate){
+        $data             = $this->Menu_model->getAchievedDataList($uid,$category,$sdate,$edate);
+        
+        // for prospective page : prospective_achieved_View 
+        //for proposal          : proposal_achieved_View 
+        //for revenue           : revenue_achieved_View 
+        //for closure           : closure_achieved_View  
+        $data['sdate'] =$sdate;
+        $data['edate'] =$edate;
+        $data['username'] = $this->Menu_model->getUserNameById($uid);
+        $this->load->view($category.'_View.php',$data);
+    }
+    
+
+    /********End Target Vs Achievement Report Function********/
+    
+    /*******User Management** ABHISHEK**/
+   public function UserRegistration(){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $userArr = array();
+    if ($this->input->post()) {
+        $initUserId=$this->input->post('user_id');
+        $userId = $this->Menu_model->generateUserId();
+        $maxUserId = (int)($userId[0]->user_id);
+        $finalUserId = $maxUserId + 1;
+        $userArr = array(
+            'name' => $this->input->post('name'),
+            'email' => $this->input->post('email'),
+            'Username' => $this->input->post('Username'),
+            'joiningDate' => date("Y-m-d"),
+            'phone' => $this->input->post('phone'),
+            'zone' => $this->input->post('zone'),
+            'type' => $this->input->post('type'),
+            'cluster' => $this->input->post('cluster') ?? 0,
+            'bdpstF' => $this->input->post('bdpstF'),
+            'sales' =>$this->input->post('sales') ?? 0,
+            'pst' => $this->input->post('pst') ?? 0,
+            'password' => $this->input->post('password'),
+            'inside' => null,
+            'aadmin' => $this->input->post('admin'),
+            'admin_id' => 45,
+            'status' => 'active',
+            'userId'=>$finalUserId,
+        );
+
+        $username = $userArr['Username'];
+        $user     = $this->Menu_model->checkUsername($username);
+      
+        if($initUserId){
+            $isSucess = $this->Menu_model->editUserData($userArr, $initUserId);
+            if($isSucess){
+            $this->session->set_flashdata('success_message',"User updated successfully !");
+            redirect('Menu/UserRegistration');
+            }
+        }elseif($user){
+            //echo"here inside if";exit;
+            $this->session->set_flashdata('error_message',"Username already Exists !");
+            redirect('Menu/UserRegistration');
+        }else{
+           
+            $isSucess = $this->Menu_model->insertUserData($userArr);
+            if($isSucess){
+                //echo"here inside issucess";exit;
+                $this->session->set_flashdata('success_message',"User added successfully with User ID - $finalUserId ");
+                redirect('Menu/UserRegistration');
+            }
+        }
+        
+    }
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $zone=$this->Menu_model->getZone();
+    $type=$this->Menu_model->get_user_type();
+    $pst=$this->Menu_model->get_pstNames();
+    $salesCoordinator = $this->Menu_model->get_salesCoordinatorNames();
+    $clusterManager = $this->Menu_model->get_clusterManagerNames();
+    $bdpst = $this->Menu_model->get_bdpstNames();
+    $admin = $this->Menu_model->get_adminNames();
+    $this->load->view($dep_name.'/UserRegistration',['user'=>$user,'zone'=>$zone, "type"=>$type, "pst"=>$pst, "salesCoordinator"=>$salesCoordinator, "clusterManager"=>$clusterManager, "bdpst"=>$bdpst, "admin"=>$admin]);
+}
+     public function UserDisplayPage(){
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        $userDetails = $this->Menu_model->get_userDetails();
+        if(!empty($user)){
+            $this->load->view($dep_name.'/ActiveUserDisplayPage',['user'=>$user,'uid'=>$uid, 'userDetails'=>$userDetails]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+    public function UserEditAction($userId){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $userDetails = $this->Menu_model->get_userbyid($userId);
+    $zone=$this->Menu_model->getZone();
+    $type=$this->Menu_model->get_user_type();
+    $pst=$this->Menu_model->get_pstNames();
+    $salesCoordinator = $this->Menu_model->get_salesCoordinatorNames();
+    $clusterManager = $this->Menu_model->get_clusterManagerNames();
+    $bdpst = $this->Menu_model->get_bdpstNames();
+    $admin = $this->Menu_model->get_adminNames();
+    if(!empty($user)){
+        $this->load->view($dep_name."/UserEditPage",['user'=>$user,'uid'=>$uid, 'userDetails'=>$userDetails,'zone'=>$zone, 'type'=>$type, 'pst'=>$pst, 'salesCoordinator'=>$salesCoordinator, 'clusterManager'=>$clusterManager, 'bdpst'=>$bdpst, 'admin'=>$admin, 'userId'=>$userId]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function UserDeleteAction($userId){
+    $this->load->model('Menu_model');
+    $removed = $this->Menu_model->changeActiveStatus($userId);
+    if($removed==1){
+        $this->session->set_flashdata('success_message',"User Deleted successfully !");
+        redirect('Menu/UserDisplayPage');
+    }
+}
+ public function fetchClusterManagers() {
+        $zone_id = $this->input->post('zone_id');
+        //echo 'zone id',$zone_id;exit;
+        $this->load->model('Menu_model');
+        $data = $this->Menu_model->getClusterManagersByZone($zone_id);
+        //echo"<pre>data ";print_r($data);exit;
+        echo json_encode($data);
+    }
+    public function fetchSalesCoordinators() {
+        $zone_id = $this->input->post('zone_id');
+        $this->load->model('Menu_model');
+        $data = $this->Menu_model->getSalesCoordinatorsByZone($zone_id);
+        echo json_encode($data);
+    }
+    public function fetchBdpst() {
+        $zone_id = $this->input->post('zone_id');
+        $this->load->model('Menu_model');
+        $data = $this->Menu_model->getBdpstByZone($zone_id);
+        echo json_encode($data);
+    }
+    public function fetchPst() {
+        $zone_id = $this->input->post('zone_id');
+        $this->load->model('Menu_model');
+        $data = $this->Menu_model->getPstByZone($zone_id);
+        echo json_encode($data);
+    }
+    /*******END User Management*********/
+// -----------------------------28-08-2024 by Abhishek cluster cards----------------------------
+public function clusterManagerTaskDetail($code,$bdid,$atid,$sd,$ed,$ab){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $mtdata=$this->Menu_model->get_clustertaskdbyad($code,$atid,$uid,$sd,$ed,$ab);
+    //echo"<pre>mtdata ";print_r($mtdata);exit;
+    if(!empty($user)){
+        $this->load->view($dep_name.'/ClusterTaskDetail',['uid'=>$uid,'user'=>$user,'atid'=>$atid,'sd'=>$sd,'ed'=>$ed,'code'=>$code,'ab'=>$ab,'bdid'=>$bdid, 'mtdata'=>$mtdata]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function clusterWork(){
+    if(isset($_POST['sdate'])){
+    $sdate = $_POST['sdate'];
+    $edate = $_POST['edate'];
+    }
+    else{
+        $sdate = date('Y-m-d');
+        $edate = date('Y-m-d');
+    }
+    $sd=$sdate;
+    $ed=$edate;
+    $sdate = new DateTime($sdate);
+    $edate = new DateTime($edate);
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    if(!empty($user)){
+        $this->load->view($dep_name.'/clusterWork',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate, 'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function ClusterTeamWork($sd,$ed){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    if(!empty($user)){
+        $this->load->view($dep_name.'/ClusterTeamWork',['uid'=>$uid,'user'=>$user,'sd'=>$sd,'ed'=>$ed]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function StatusTaskCLuster($bdid,$tdate,$atid,$ab){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $mdata = $this->Menu_model->new_clusterttswdetail($atid,$bdid,$tdate,$ab);
+    //echo"<pre>mtdata ";print_r($mdata);exit;
+    if(!empty($user)){
+        $this->load->view($dep_name.'/StatusTaskCluster',['uid'=>$uid,'user'=>$user,'atid'=>$atid,'tdate'=>$tdate,'ab'=>$ab,'bdid'=>$bdid, 'mdata'=>$mdata]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function ClusterStatusTask(){
+    if(isset($_POST['sdate'])){
+    $sdate = $_POST['sdate'];
+    $edate = $_POST['edate'];
+    }
+    else{
+        $sdate = date('Y-m-d');
+        $edate = date('Y-m-d');
+    }
+    $sd=$sdate;
+    $ed=$edate;
+    $sdate = new DateTime($sdate);
+    $edate = new DateTime($edate);
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    if(!empty($user)){
+        $this->load->view($dep_name.'/ClusterStatusTask',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate, 'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+ public function ClusterStatusTaskDateWise($datet){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    if(!empty($user)){
+        $this->load->view($dep_name.'/ClusterStatusTaskDateWise',['uid'=>$uid,'user'=>$user,'datet'=>$datet]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function FinalClusterConversion($bdid,$sd,$ed,$fsid,$ssid){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $scdata = $this->Menu_model->final_clusterscon3($bdid,$sd,$ed,$fsid,$ssid);
+    //echo"<pre>";print_r($scdata);exit;
+    if(!empty($user)){
+        $this->load->view($dep_name.'/FinalClusterStatusConversion',['uid'=>$uid,'user'=>$user,'scdata'=>$scdata]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function ClusterStatusConversion(){
+    if(isset($_POST['sdate'])){
+    $sdate = $_POST['sdate'];
+    $edate = $_POST['edate'];
+    }
+    else{
+        $sdate = date('Y-m-d');
+        $edate = date('Y-m-d');
+    }
+    $sd=$sdate;
+    $ed=$edate;
+    $sdate = new DateTime($sdate);
+    $edate = new DateTime($edate);
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    if(!empty($user)){
+        $this->load->view($dep_name.'/ClusterStatusConversion',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate, 'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function AfterClusterTaskOnC(){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    if(isset($_POST['sdate']) && isset($_POST['cluster'])){
+    $sdate = $_POST['sdate'];
+    $cluster = $_POST['cluster'];
+    //echo'cluster from menu', $cluster;exit;
+    }
+    else{
+        $sdate = date('Y-m-d');
+        $cluster=$uid;
+    }
+    $sd=$sdate;
+    $sdate = new DateTime($sdate);
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $mdata=$this->Menu_model->get_clusterassignc($cluster);
+    // echo"<pre> mdata";print_r($mdata);exit;
+    if(!empty($user)){
+        $this->load->view($dep_name.'/AfterClusterTaskOnC',['cluster'=>$cluster,'user'=>$user,'uid'=>$uid,'sdate'=>$sdate,'sd'=>$sd, 'mdata'=>$mdata]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function ChangeCLuster(){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $mdata=$this->Menu_model->get_clusterbyaid($uid);
+    if(!empty($user)){
+        $this->load->view($dep_name.'/ChangeCLuster',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function assignCLuster(){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $mdata = $this->Menu_model->get_uapstc($uid);
+    $alluser = $this->Menu_model->get_user();
+    if(!empty($user)){
+        $this->load->view($dep_name.'/AssignCLuster',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'alluser'=>$alluser]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function ClusterFunnel($aid){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $mdata = $this->Menu_model->get_userbypst($aid);
+    $this->load->view($dep_name.'/ClusterFunnel',['user'=>$user,'mdata'=>$mdata,'uid'=>$uid]);
+}
+public function ClusterCompanies($code){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    if($uid=='100149'){$uid=45;}
+    if($uid=='100103'){$uid=45;}
+    if($uid=='100142'){$uid=2;}
+    if($code==0){
+        $mdata=$this->Menu_model->get_bdtcom($uid);
+    }else{
+        $mdata=$this->Menu_model->get_clustercombystatus($uid,$code);
+        //echo"<pre>here ";print_r($mdata);exit;
+    }
+    if(!empty($user)){
+        $this->load->view($dep_name.'/ClusterCompanies',['user'=>$user,'mdata'=>$mdata,'code'=>$code,'uid'=>$uid]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function CreatedClusterCompanies($code,$bdid){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    if(isset($_POST['submit'])){
+        $commoncompanies = $_POST['commoncompanies'];   // meetings or topspender
+        $commonwith = $_POST['commonwith'];             // bd, pst, both
+        $topspender = $_POST['topspender'];            // yes, no
+        // echo "inside if", $commoncompanies;
+        // echo $commonwith;
+        // echo $topspender;exit;
+        
+        if($commoncompanies =='meetings'){
+            $mdata=$this->Menu_model->get_ComCompaniesSelectionWise($uid,$bdid,$commonwith,$commoncompanies);
+        }
+        if($commoncompanies =='topspender'){
+            $mdata=$this->Menu_model->get_ComCompaniesSelectionWise($uid,$bdid,$topspender,$commoncompanies);
+        }
+    }else{
+        if($code==0){
+            $mdata=$this->Menu_model->get_clusterCom($bdid);
+        }else{
+            $mdata=$this->Menu_model->get_clusterCombyst($bdid,$code);
+        }
+        $commoncompanies = '';   // meetings or topspender
+        $commonwith = '';             // bd, pst, both
+        $topspender = '';
+    }
+    //echo"<pre>";print_r($mdata);exit;
+    if(!empty($user)){
+        $this->load->view($dep_name.'/CreatedCLusterCompanies',['user'=>$user,'mdata'=>$mdata,'code'=>$code,'uid'=>$uid,'bdid'=>$bdid, 'commoncompanies'=>$commoncompanies,'commonwith'=>$commonwith,'topspender'=>$topspender]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function ClmBDTaskDetail($code,$bdid,$atid,$sd,$ed,$ab){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    if(!empty($user)){
+        $this->load->view($dep_name.'/ClmBDTaskDetail',['uid'=>$uid,'user'=>$user,'atid'=>$atid,'sd'=>$sd,'ed'=>$ed,'code'=>$code,'ab'=>$ab,'bdid'=>$bdid]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function CMFunnelTransfer(){
+    $tocm = $_POST['toCluster'];
+    $cid = $_POST['cid'];
+    $focm = $_POST['foCluster'];
+    $this->load->model('Menu_model');
+    $this->Menu_model->transferFunnel($focm,$tocm,$cid);
+    redirect('Menu/changeCluster');
+}
+public function ClmWorkOnBDFunnel($code,$bdid,$atid,$sd,$ed,$ab){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    if(!empty($user)){
+        $this->load->view($dep_name.'/ClmWorkOnBDFunnel',['uid'=>$uid,'user'=>$user,'atid'=>$atid,'sd'=>$sd,'ed'=>$ed,'code'=>$code,'ab'=>$ab,'bdid'=>$bdid]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function FinalBDConversion($bdid,$sd,$ed,$fsid,$ssid){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $scdata = $this->Menu_model->bdFunnelConversion3($bdid,$sd,$ed,$fsid,$ssid);
+    //echo"<pre>";print_r($scdata);exit;
+    if(!empty($user)){
+        $this->load->view($dep_name.'/FinalBDConversion',['uid'=>$uid,'user'=>$user,'scdata'=>$scdata]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+/*****-----------------------------------Cluster Cards End----------------------------****/
+/***************Task check managment Rahul*********************/
+    public function getMoMData(){
+        $taskID = $this->input->post('taskID');
+        $this->load->model('Menu_model');   
+        // var_dump($taskID);die;
+        $result = $this->Menu_model->getMoMData($taskID);
+        echo json_encode($result);
+    }
+public function TaskCheck_NewReport()
+    {
+        if (isset($_POST['startDate']) && isset($_POST['endDate'])) {
+            $sdate = $_POST['startDate'];
+            $edate = $_POST['endDate'];
+        } else {
+            $sdate = date('Y-m-d');
+            $edate = date('Y-m-d');
+        }
+        if (isset($_POST['user'])) {
+            $selected_user = array_filter($_POST['user'], function ($value) {
+                return $value !== 'select_all';
+            });
+        } else {
+            $selected_user = [];
+        }
+//  var_dump($sdate);die;
+        // $selected_user = [];
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $userTypeid = $user['type_id'];
+        $this->load->model('Management_model');
+        $this->load->model('Menu_model');   
+        $dt = $this->Menu_model->get_utype($userTypeid);
+        $dep_name = $dt[0]->name;
+//echo "=="; print_r($dep_name);exit;
+        $getUsers = $this->Management_model->getUsers($uid,$userTypeid);
+        // $sdate
+       // var_dump($sdate);die;
+        $getReportbyUser = $this->Menu_model->getReportbyUser($selected_user,$sdate,$edate);
+        // $getReportbyUser = '';
+        if (!empty($user)) {
+            // $this->load->view('include/header');
+            $this->load->view($dep_name.'/TaskCheck_NewReport',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'users'=>$getUsers,'selected_user'=>$selected_user,'getReportbyUser'=>$getReportbyUser]);
+                                       
+        } else {
+            redirect('Menu/main');
+        }
+    }
+    public function submitMoMRating(){
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $jsonData = file_get_contents('php://input');
+        // Decode the JSON data
+        $data = json_decode($jsonData, true);
+        $this->load->model('Menu_model');
+        // var_dump($data);die;
+        foreach ($data as $review) {
+            // var_dump($review);die;
+            $review['date'] = date('Y-m-d');
+            $review['feedback_by'] = $uid;
+            $this->Menu_model->InsertMoMTaskRating($review);
+        }
+    }
+
+/*******task Planner***Deepak***6_09_2024******/
 // Start Day Close Request
-
 public function dayscRequest(){
-
     $user         = $this->session->userdata('user');
     $data['user'] = $user;
     $uid          = $user['user_id'];
     $uyid         =  $user['type_id'];
-
     $this->load->model('Menu_model');
     $this->load->library('session');
-
     $req_id           = $_POST['req_id'];
     $req_answer       = $_POST['would_you_want'];
     $message          = $_POST['requestForTodaysTaskPlan'];
-
     $startautotasktime  = $_POST['startautotasktime'];
     $endautotasktime    = $_POST['endautotasktime'];
     $start_tttpft       = $_POST['start_tttpft'];
     $end_tttpft         = $_POST['end_tttpft'];
-
     $autotasktimeisset  = $_POST['autotasktimeisset'];
     if($uyid ==15){
         $autotasktimeisset = 1;
     }
-
-
     if($autotasktimeisset != 0){
         $planbutnotinited = $this->Menu_model->CreateCloseDayRequest($uid,$req_id,$req_answer,$message,$autotasktimeisset);
     }else{
@@ -19162,9 +17500,7 @@ public function dayscRequest(){
     
 }
 
-
 public function YesterdayDayClose(){
-
     $user_id    = $_POST['user_id'];
     $lat        = $_POST['lat'];
     $lng        = $_POST['lng'];
@@ -19172,72 +17508,51 @@ public function YesterdayDayClose(){
   
     $filname    = $_FILES['filname']['name'];
     $uploadPath = 'uploads/day/';
-
     $this->load->library('session');
     $this->load->model('Menu_model');
-
     $flink      = $this->Menu_model->uploadfile($filname, $uploadPath);
-
     $this->Menu_model->UpdateCloseYesterDay($flink,$user_id,$lat,$lng,$req_id);
-
     $this->session->set_flashdata('success_message','* Yesterday Day Close SuccessFully ! Now Start Your Days');
     redirect('Menu/DayManagement');
 }
-
 public function YesterDayDaysCloseRequest(){
-
     $user           =   $this->session->userdata('user');
     $data['user']   =   $user;
     $uid            =   $user['user_id'];
     $uyid           =   $user['type_id'];
-
     $this->load->library('session');
     $this->load->model('Menu_model');
-
     $dt             =   $this->Menu_model->get_utype($uyid);
     $tptime         =   $this->Menu_model->get_tptime($uid);
     $tptime         =   $tptime[0]->tptime;
     $dep_name       =   $dt[0]->name;
-
     if(isset($_POST['targetdate'])){
         $adate = $_POST['targetdate'];
     }else{
         $adate = date("Y-m-d");
     }
-
     $getreqData  =   $this->Menu_model->GetDayCloseRequestData($uid,$adate,$uyid);
-
      if(!empty($user)){
         $this->load->view($dep_name.'/YesterDayDaysCloseRequest',['uid'=>$uid,'user'=>$user,'adate'=>$adate,'getreqData'=>$getreqData]);
     }else{
         redirect('Menu/main');
     }
-
 }
-
-
 public function YesterdayCloseRequestApprove($id,$type){
-
     $user           = $this->session->userdata('user');
     $data['user']   = $user;
     $uid            = $user['user_id'];
-
     $this->load->library('session');
     $this->load->model('Menu_model');
-
     if($type == 'Approved'){
-
         $status     = "Approved";
         $reamrks    = "Approved By ".$user['name'];
         $apdate     =  date("Y-m-d H:i:s");
         
         $queryslct =  $this->db->query("SELECT * FROM `close_your_day_request` WHERE id = '$id'");
         $data = $queryslct->result();
-
         $autotasktimeisset  = $data[0]->autotasktimeisset;
-
         if($autotasktimeisset == 0 ){
-
             $startautotasktime  = $data[0]->startautotasktime;
             $endautotasktime    = $data[0]->endautotasktime;
             $start_tttpft       = $data[0]->start_tttpft;
@@ -19255,41 +17570,31 @@ public function YesterdayCloseRequestApprove($id,$type){
             );
             $this->db->insert('autotask_time', $dataslct);
         }
-
         $query =  $this->db->query("UPDATE `close_your_day_request` SET `approved_status`='$status',`approved_remarks`='$reamrks',`approved_date`='$apdate', `approved_by`='$uid' WHERE id = $id");
-
         $this->session->set_flashdata('success_message','* Request Approved Successfully !');
         redirect("Menu/YesterDayDaysCloseRequest");
     }else{
         redirect('Menu/main');
     }
 }
-
 public function YesterdayCloseRequestReject(){
     
     $rejectid       = $_POST['reject'];
     $rejectreamrk   = $_POST['rejectreamrk'];
-
     $user           = $this->session->userdata('user');
     $data['user']   = $user;
     $uid            = $user['user_id'];
     $status         = "Reject";
     $apdate         =  date("Y-m-d H:i:s");
-
     $this->load->library('session');
     $this->load->model('Menu_model');
     
     $query =  $this->db->query("UPDATE `close_your_day_request` SET `approved_status`='$status',`approved_remarks`='$rejectreamrk',`approved_date`='$apdate', `approved_by`='$uid' WHERE id = '$rejectid'");
-
     $this->session->set_flashdata('error_message','* Request Reject Successfully !');
     redirect("Menu/YesterDayDaysCloseRequest");
 }
-
 // End Day Close Request
-
-
 public function get_SheduledMeetCompany(){
-
     $uid= $this->input->post('uid');
     $this->load->model('Menu_model');
     $cmp = $this->Menu_model->get_SheduledMeetCmp($uid);
@@ -19299,41 +17604,8 @@ public function get_SheduledMeetCompany(){
         <?=$cmp->compname?> (<?=$cmp->pname?>)
     </option>
     <?php
-
     }
 }
-public function get_BargeMeetCompany(){
-
-    $uid= $this->input->post('uid');
-    $this->load->model('Menu_model');
-    $cmp = $this->Menu_model->get_BargeMeetMeetCmp($uid);
-    echo '<option value="">Select Company</option>';
-    foreach($cmp as $cmp){ ?>
-    <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
-        <?=$cmp->compname?> (<?=$cmp->pname?>)
-    </option>
-    <?php
-
-    }
-}
-
-
-public function get_JoinMeetingsCompany(){
-
-    $uid= $this->input->post('uid');
-    $this->load->model('Menu_model');
-    $cmp = $this->Menu_model->get_JoinMeetingsCmp($uid);
-    echo '<option value="">Select Company</option>';
-    foreach($cmp as $cmp){ ?>
-    <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
-        <?=$cmp->compname?> (<?=$cmp->pname?>)
-    </option>
-    <?php
-
-    }
-}
-
-
 public function getJoinMeetpurposebyinid(){
     $inid= $this->input->post('inid');
     $aid= $this->input->post('aid');
@@ -19349,12 +17621,8 @@ public function getJoinMeetpurposebyinid(){
     }
   
 }
-
-
 public function GetStatusWhenMeetClose(){
-
     $this->load->model('Menu_model');
-
     $meetingslct = $_POST['meetingslct'];
     
     if($meetingslct == 'NO RP'){
@@ -19368,11 +17636,9 @@ public function GetStatusWhenMeetClose(){
     
     if($meetingslct == 'RP'){
         $cstatus = $_POST['cstatus'];
-
         // if($cstatus=='1' || $cstatus=='8' || $cstatus=='10' || $cstatus=='11'){
         //     $status=2;
         // }
-
         $status_name = $this->Menu_model->get_statusbyid(3);
         // echo  $data = '<option disabled value="">Select Status</option>';
         foreach($status_name as $d){
@@ -19387,24 +17653,16 @@ public function GetStatusWhenMeetClose(){
             echo  $data = '<option selected value='.$d->id.'>'.$d->name.'</option>';
         }
     }
-
 }
-
-
 public function MeetingFeedBack(){
     $this->load->model('Menu_model');
-
     $uid            = $_POST['uid'];
     $cmp_id         = $_POST['cmp_id'];
     $meeting_id     = $_POST['meeting_id'];
     $meetwith__person = $_POST['meet_user_feed'];
-
     $this->Menu_model->UserUpdatefeedinMeeting($meeting_id,$meetwith__person);
-
     redirect('Menu/Dashboard');
-
 }
-
 public function AddNewLead($init_id){
     $user = $this->session->userdata('user');
     $uid = $user['user_id'];
@@ -19417,14 +17675,12 @@ public function AddNewLead($init_id){
     $action=$this->Menu_model->get_action();
     $states=$this->Menu_model->get_states();
     $partner=$this->Menu_model->get_partner();
-
     if(!empty($user)){
         $this->load->view($dep_name.'/AddNewLead',['user'=>$user,'alluser'=>$alluser,'status'=>$status,'action'=>$action,'states'=>$states,'partner'=>$partner,'uid'=>$uid,'init_id'=>$init_id]);
     }else{
         redirect('Menu/main');
     }
 }
-
 public function addcompany_new(){
     $uid= $this->input->post('uid');
     $compname= $this->input->post('compname');
@@ -19446,10 +17702,8 @@ public function addcompany_new(){
     $focus_funnel= $this->input->post('focus_funnel');
     $key_company=$this->input->post('key_company');
     $potential_company=$this->input->post('potential_company');
-
     $clusterid      =   $this->input->post('cluster');
     $cstatusid      =   $this->input->post('cstatusid');
-
     $openrpem       =   $this->input->post('openrpem');
     $reachout       =   $this->input->post('reachout');
     $tentative      =   $this->input->post('tentative');
@@ -19457,23 +17711,17 @@ public function addcompany_new(){
     $verypositive   =   $this->input->post('verypositive');
     $closure        =   $this->input->post('closure');
     $init_id        =   $this->input->post('init_id');
-
     $this->load->model('Menu_model');
     $id=$this->Menu_model->submit_company_new($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$key_company,$potential_company,$openrpem,$reachout,$verypositive,$positivenap,$tentative,$closure,$clusterid,$cstatusid,$init_id);
-
     redirect('Menu/Dashboard');
 }
-
 // Get Slef Assign Task
 public function getAutoAssignTask(){
-
     $this->load->model('Menu_model');
-
     $uid            = $this->input->post('uid');
     $selectedValue  = $this->input->post('selectedValue');
   
     $cmps = $this->Menu_model->getTaskAssignBySelf($uid);
-
     $groupedByActionTypes = [];
     foreach ($cmps as $objects) {
         $action_id = $objects->action_id;
@@ -19482,10 +17730,8 @@ public function getAutoAssignTask(){
         }
         $groupedByActionTypes[$action_id][] = $objects;
     }
-
     // echo "<pre>";
     // print_r($groupedByActionTypes);
-
     echo '<option value="">Select Task</option>';
     
     foreach($groupedByActionTypes as $key => $petotaskData){
@@ -19495,7 +17741,6 @@ public function getAutoAssignTask(){
       }
 }
 public function getAutoAssignTaskWithType(){
-
     $this->load->model('Menu_model');
     $uid            = $this->input->post('uid');
     $selectedValue  = $this->input->post('selectedValue');
@@ -19518,12 +17763,10 @@ public function getAutoAssignTaskWithType(){
     echo $data;
 }
 public function getPendingTeamMoM(){
-
     $user           =   $this->session->userdata('user');
     $data['user']   =   $user;
     $uid            =   $user['user_id'];
     $uyid           =   $user['type_id'];
-
     $this->load->model('Menu_model');
     $uid            = $this->input->post('uid');
     if($uyid == 13 ){
@@ -19533,7 +17776,6 @@ public function getPendingTeamMoM(){
     }else{
         $users      = $this->Menu_model->get_userbyaaid($uid);
     }
-
     $user_id    = array_map(function($item) {
         return $item->user_id;
     }, $users);
@@ -19541,17 +17783,12 @@ public function getPendingTeamMoM(){
     $user_id = implode(', ', $user_id);
     // $query=$this->db->query("SELECT * FROM `mom_data` WHERE user_id IN ($user_id) AND approved_status IS NULL");
     $query=$this->db->query("SELECT * FROM `mom_data` WHERE mom_data.`user_id` IN ($user_id) AND `approved_status` IS NULL AND NOT EXISTS (SELECT 1 FROM `tblcallevents` WHERE `mom_data`.`id` = `tblcallevents`.`reviewtype`)");
-
     $data =  $query->result();
     $pending_momdata =  sizeof($data);
     echo $pending_momdata;
-
 }
-
 // 10-08-2024
-
 public function getstatuscmpnotplanedCompany(){
-
     $user           =   $this->session->userdata('user');
     $data['user']   =   $user;
     // $uid            =   $user['user_id'];
@@ -19560,7 +17797,6 @@ public function getstatuscmpnotplanedCompany(){
     $sid= $this->input->post('sid');
     $uid= $this->input->post('uid');
     $this->load->model('Menu_model');
-
     if($sid == 4 || $sid == 5){
         if($uyid == 3){
             $days = 15;
@@ -19572,7 +17808,6 @@ public function getstatuscmpnotplanedCompany(){
     }else{
         $days = 8;
     }
-
     $cmps = $this->Menu_model->CompanyThatBDHasNoWorkedInDays($uid,$days,$sid);
   
     echo '<option value="">Select Company</option>';
@@ -19581,13 +17816,9 @@ public function getstatuscmpnotplanedCompany(){
 <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
     <?php
-
     }
 }
-
-
 public function nostatuschange_indate(){
-
     $user           =   $this->session->userdata('user');
     $data['user']   =   $user;
     // $uid            =   $user['user_id'];
@@ -19596,7 +17827,6 @@ public function nostatuschange_indate(){
     $sid= $this->input->post('sid');
     $uid= $this->input->post('uid');
     $this->load->model('Menu_model');
-
     if($sid == 4 || $sid == 5){
         if($uyid == 3){
             $days = 15;
@@ -19608,25 +17838,18 @@ public function nostatuschange_indate(){
     }else{
         $days = 8;
     }
-
     $cmps = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$days,$sid);
-
     $cdate = date("Y-m-d");
-
     echo '<option value="">Select Company</option>';
     foreach($cmps as $cmp){ ?>
     <option style="color: #d90d2b;" title="<?=$cmp->days?> Days - <?=$cmp->compname?> (<?=$cmp->pname?>)" value="<?=$cmp->inid?>">
     <?=$cmp->days?> Days - <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
     <?php
-
     }
 }
-
-
 // Review Start 
 public function PlanningForReview(){
-
     $pdate              = $_POST['plandate'];
     $review_plantime    = $_POST['review_plantime'];
     $uid                = $_POST['uid'];
@@ -19636,18 +17859,12 @@ public function PlanningForReview(){
     $meetlink           = $_POST['meetlink'];
     $this->load->library('session');
     $this->load->model('Menu_model');
-
     $plandate = $pdate.' '.$review_plantime;
-
     $this->Menu_model->plan_review($plandate,$uid,$bdid,$reviewtype,$meetlink,$fixdate);
-    $this->session->set_flashdata('success_message', 'Review Plan Successfully !');
+    $this->session->set_flashdata('success_message', 'Review Plan Created Successfully !');
     redirect('Menu/TaskPlanner2/'.$pdate);
 }
-
-
-
 public function CheckFirstTimeReviewInYear(){
-
     $user   = $this->session->userdata('user');
     $uid    = $user['user_id'];
     $uyid   =  $user['type_id'];
@@ -19657,10 +17874,7 @@ public function CheckFirstTimeReviewInYear(){
     $getFirstTimeReview = $this->Menu_model->GetFirstTimeReviewInYear($uid,$inid,$cyear);
     $getFirstTimeReviewcnt = sizeof($getFirstTimeReview);
     echo $getFirstTimeReviewcnt;
-
 }
-
-
 public function GetCompnayDetailsUsiingInit(){
     $user   = $this->session->userdata('user');
     $uid    = $user['user_id'];
@@ -19679,33 +17893,24 @@ public function GetTaskOfReciewCompany(){
     $inid   = $_POST['inid'];
     $bdid   = $_POST['bdid'];
     $this->load->model('Menu_model');
-
     $data   = [];
     $query  = $this->db->query("SELECT * FROM `allreviewdata` WHERE inid = '$inid' and bdid = '$bdid' ORDER BY `id` DESC LIMIT 1");
     $data1  =  $query->result();
-
     $sdatet     = $data1[0]->sdatet;
     $exsid      = $data1[0]->exsid;
     $exdate     = $data1[0]->exdate;
     $reviewtype = $data1[0]->reviewtype;
-
     $statusname = $this->Menu_model->get_statusbyid($exsid)[0]->name;
     $inidData   = $this->Menu_model->get_cmpbyinid($inid);
     $cstatus    = $inidData[0]->cstatus;
     $cur_statusname = $this->Menu_model->get_statusbyid($cstatus)[0]->name;
-
     $data ['review_date']= $sdatet;
     $data ['expet_status_name']= $statusname;
     $data ['expet_status_date']= $exdate;
     $data ['current_status_name']= $cur_statusname;
     $data ['review_type']= $reviewtype;
-
     echo json_encode($data);
 }
-
-
-
-
 public function getPartnerBYID(){
     $user   = $this->session->userdata('user');
     $uid    = $user['user_id'];
@@ -19713,7 +17918,6 @@ public function getPartnerBYID(){
     $cyear  = date("Y");
     $name   = $_POST['name'];
     $pid   = $_POST['pid'];
-
     $this->load->model('Menu_model');
     if($name = 'Partner'){
         $partner = $this->Menu_model->get_partnerbyid($pid);
@@ -19722,20 +17926,15 @@ public function getPartnerBYID(){
     }
     
 }
-
 public function NeedYourAttentionInCompany(){
     $user = $this->session->userdata('user');
     $uid = $user['user_id'];
     $uyid =  $user['type_id'];
     $this->load->model('Menu_model');
-
     $sid= $this->input->post('sid');
     $uid= $this->input->post('uid');
-
     $days = 8;
-
     $nya_data  = $this->Menu_model->NeedYourAttentions($days,$sid);
-
     echo '<option value="">Select Company</option>';
     foreach($nya_data as $cmp){
         if($cmp->days <= 20){
@@ -19749,13 +17948,9 @@ public function NeedYourAttentionInCompany(){
         <option style="color:<?=$color;?>" title="<?= $cmp->days ?> Days - <?=$cmp->compname?> (<?= $cmp->bdname ?>)" value="<?=$cmp->inid?>">
         <?= $cmp->days ?> Days - <?=$cmp->compname?> (<?= $cmp->bdname ?> )
         </option>
-
         <?php
-
             }
 }
-
-
 public function SpecialRequestForLeaveSomeTimeData(){
     $user = $this->session->userdata('user');
     $data['user'] = $user;
@@ -19764,29 +17959,21 @@ public function SpecialRequestForLeaveSomeTimeData(){
     $this->load->model('Menu_model');
     $dt=$this->Menu_model->get_utype($uyid);
     $dep_name = $dt[0]->name;
-
     $requests = $this->Menu_model->getSpecialRequestForLeaveData($uid,$uyid);
-
     $this->load->view($dep_name.'/SpecialRequestForLeaveSomeTimeData',['user'=>$user,'uid'=>$uid,'requests'=>$requests]);
 }
-
-
 public function AdminAcceptSpecialRequest(){
-
     $user           = $this->session->userdata('user');
     $data['user']   = $user;
     $uid            = $user['user_id'];
     $uyid           =  $user['type_id'];
-
     $this->load->model('Menu_model');
     $this->load->library('session');
-
     $req_id     = $_POST['id'];
     $status     = $_POST['status'];
     $remarks    = $_POST['remarks'];
     
     $current_datetime   = date("Y-m-d H:i:s");
-
     if($status == 'Approved'){
         
         $message_variable   = 'success_message';
@@ -19802,7 +17989,6 @@ public function AdminAcceptSpecialRequest(){
        
         // $tostime = $start_tommorow;
         $tostime = '10:00:00';
-
         $tasks = $this->Menu_model->getTaskBetweenTime($req_user_id,$current_date,$req_stime,$req_etime);
       
         $taskssize = sizeof($tasks);
@@ -19815,12 +18001,9 @@ public function AdminAcceptSpecialRequest(){
                 $actiontype_id  =  $task->actiontype_id;
                 $act = $this->Menu_model->get_actionbyid($actiontype_id);
                 $yesttime = $act[0]->yest;
-
                 if($i == 1){
-
                     $newDateTime = $tomorrow_date . ' ' . $tostime;
                     $query  = $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$newDateTime',`plan_change`='1' WHERE id='$task_id'");
-
                     if($actiontype_id == 3 || $actiontype_id == 4 || $actiontype_id == 17){
                         $mtdata = $this->Menu_model->getMeetinfoBytid($task_id);
                         $mtdatacnt =sizeof($mtdata);
@@ -19828,19 +18011,14 @@ public function AdminAcceptSpecialRequest(){
                             $query  = $this->db->query("UPDATE `barginmeeting` SET `storedt`='$newDateTime',`plan_change`='1' WHERE tid ='$task_id'");
                         }
                     }
-
                     $start = new DateTime($newDateTime);
                     $start->modify("+$yesttime minutes");
                     $newDateTime = $start->format('Y-m-d H:i:s');
-
                 }else{
-
                     $start = new DateTime($newDateTime);
                     $start->modify("+$yesttime minutes");
                     $newDateTime = $start->format('Y-m-d H:i:s');
-
                     $query  = $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$newDateTime',`plan_change`='1' WHERE id='$task_id'");
-
                     if($actiontype_id == 3 || $actiontype_id == 4 || $actiontype_id == 17){
                         $mtdata = $this->Menu_model->getMeetinfoBytid($task_id);
                         $mtdatacnt =sizeof($mtdata);
@@ -19852,32 +18030,22 @@ public function AdminAcceptSpecialRequest(){
                 $i++;
             }
         }
-
         $query  = $this->db->query("UPDATE `special_request_for_leave` SET `approve_by`='$uid',`approve_status`='$status',`approve_date`='$current_datetime',`approve_remarks`='$remarks' WHERE id = '$req_id'");
     }
     if($status == 'Reject'){
         $message_variable = 'reject_message';
         $query  = $this->db->query("UPDATE `special_request_for_leave` SET `approve_by`='$uid',`approve_status`='$status',`approve_date`='$current_datetime',`approve_remarks`='$remarks' WHERE id = '$req_id'");
     }
-
     $this->session->set_flashdata($message_variable, 'Request '.$status.' Successfully !');
     redirect('Menu/SpecialRequestForLeaveSomeTimeData');
-
 }
-
-
-
-
 public function GetTaskBeetweenUserTime(){
-
     $user   = $this->session->userdata('user');
     $uid    = $user['user_id'];
     $uyid   =  $user['type_id'];
     $this->load->model('Menu_model');
-
     $mtime1 = $this->input->post('mtime1');
     $mtime2 = $this->input->post('mtime2');
-
     $cdate = date("Y-m-d");
     $tasks = $this->Menu_model->getTaskBetweenTimeWithAction($uid,$cdate,$mtime1,$mtime2);
     
@@ -19891,7 +18059,6 @@ public function GetTaskBeetweenUserTime(){
             </tr>
         </thead>
         <tbody>";
-
         $totoaltime = '';
         foreach ($tasks as $item) {
             $act = $this->Menu_model->get_actionbyid($item->aid);
@@ -19902,43 +18069,29 @@ public function GetTaskBeetweenUserTime(){
                 <td>{$item->acname}</td>
                 <td>{$item->cont}</td>
                 <td>{$tasktime} Minutes</td>
-
             </tr>";
         }
-
         $hours = floor($totoaltime / 60);  // Get the number of full hours
         $remainingMinutes = $totoaltime % 60; // Get the remaining minutes
-
         $html .= "<tr>
         <td colspan='3'>Total Time : {$hours} hours and {$remainingMinutes} minutes</td>
     </tr>";
         $html .= "</tbody>
         </table>";
-
         echo $html;
-
-
-
   
 }
-
-
 public function getUserDayStartStatus(){
     
     $user   = $this->session->userdata('user');
     $uid    = $user['user_id'];
     $uyid   =  $user['type_id'];
     $this->load->model('Menu_model');
-
     $user_day = $this->Menu_model->getUserDayStartDetails($uid,date("Y-m-d"));
     $user_day_wffo = $user_day[0]->wffo;
     
     echo $user_day_wffo;
-
 }
-
-
-
 public function AddSpecialCommentOnTask(){
     $user = $this->session->userdata('user');
     $data['user'] = $user;
@@ -19947,12 +18100,9 @@ public function AddSpecialCommentOnTask(){
     $this->load->model('Menu_model');
     $dt=$this->Menu_model->get_utype($uyid);
     $dep_name = $dt[0]->name;
-
     $tasks = $this->Menu_model->GetTommarowPlanTask($uid);
-
     $this->load->view($dep_name.'/AddSpecialCommentOnTask',['user'=>$user,'uid'=>$uid,'tasks'=>$tasks]);
 }
-
 public function AddThanksCommentOnTask(){
     $user = $this->session->userdata('user');
     $data['user'] = $user;
@@ -19961,65 +18111,50 @@ public function AddThanksCommentOnTask(){
     $this->load->model('Menu_model');
     $dt=$this->Menu_model->get_utype($uyid);
     $dep_name = $dt[0]->name;
-
     $tasks = $this->Menu_model->GetYesterDaysPlanTask($uid);
-
     if(!empty($user)){
         $this->load->view($dep_name.'/AddThanksCommentOnTask',['user'=>$user,'uid'=>$uid,'tasks'=>$tasks]);
     }else{
         redirect('Menu/main');
     }
 }
-
 public function AddTaskComments(){
     $user           = $this->session->userdata('user');
     $data['user']   = $user;
     $uid            = $user['user_id'];
     $uyid           =  $user['type_id'];
-
     $this->load->model('Menu_model');
     $this->load->library('session');
-
     $commentsid         = $this->input->post('commentsid');
     $comments           = $this->input->post('comments');
     $comments           = strip_tags($comments);
     $encode_comments    = base64_encode($comments);
     $query  = $this->db->query("UPDATE `tblcallevents` SET`comment_by`='$uid',`comments`='$encode_comments' WHERE id ='$commentsid'");
-
     $this->session->set_flashdata('success_message','Task Comments Added Successfully !');
     redirect('Menu/AddSpecialCommentOnTask');
 }
-
 public function AddTaskthanksCommentsbyUser(){
     $user           = $this->session->userdata('user');
     $data['user']   = $user;
     $uid            = $user['user_id'];
     $uyid           =  $user['type_id'];
-
     $this->load->model('Menu_model');
     $this->load->library('session');
-
     $commentsid         = $this->input->post('commentsid');
     $comments           = $this->input->post('comments');
     $comments           = strip_tags($comments);
     $encode_comments    = base64_encode($comments);
     $query  = $this->db->query("UPDATE `tblcallevents` SET`comment_by`='$uid',`thnkscomments`='$encode_comments' WHERE id ='$commentsid'");
-
     $this->session->set_flashdata('success_message','Thanks Comments Added Successfully !');
     redirect('Menu/AddThanksCommentOnTask');
 }
-
-
 public function GetTaskComments(){
   
     $this->load->model('Menu_model');
-
     $taskid             = $this->input->post('taskid');
     $tasksData          = $this->Menu_model->get_lasttask($taskid);
-
     $comment_by         = $tasksData[0]->comment_by;
     $comments           = $tasksData[0]->comments;
-
     if($comment_by !== '' && $comment_by !== NULL){
         $decode_comments    = base64_decode($comments);
         $udetail            = $this->Menu_model->get_userbyid($comment_by);
@@ -20030,7 +18165,6 @@ public function GetTaskComments(){
         echo $message = '';
     }
 }
-
 public function NeedYourAttentionsInAdmin(){
    
     $user = $this->session->userdata('user');
@@ -20041,16 +18175,12 @@ public function NeedYourAttentionsInAdmin(){
     $dt=$this->Menu_model->get_utype($uyid);
     $dep_name = $dt[0]->name;
     $needdata = $this->Menu_model->NeedYourAttentions(15,'1,2,8,3,6,9,12,13');
-
     if(!empty($user)){
         $this->load->view($dep_name.'/NeedYourAttentionsInAdmin',['uid'=>$uid,'user'=>$user,'needdata'=>$needdata]);
     }else{
         redirect('Menu/main');
     }
 }
-
-
-
 public function GetMeetCompanyInfo(){
     
     $user   = $this->session->userdata('user');
@@ -20066,8 +18196,6 @@ public function GetMeetCompanyInfo(){
         echo $mitinfojson;
     }
 }
-
-
 public function GetCompanyLastStatus(){
     
     $user   = $this->session->userdata('user');
@@ -20084,24 +18212,18 @@ public function GetCompanyLastStatus(){
     echo "<option value='".$lstatus."'>".$lstatusdata[0]->name."</option>";
    
 }
-
-
 public function ConfirmReminder($id){
     
     $user   = $this->session->userdata('user');
     $uid    = $user['user_id'];
     $uyid   =  $user['type_id'];
     $this->load->model('Menu_model');
-
     $message    = 'Reminder was successfully accepted.';
     $remdata    = $this->Menu_model->getReminderData($id);
     $rem_type   = $remdata[0]->type;
-
     $this->Menu_model->ConfirmRemindertoUser($id,$uid,$message);
-
     $this->load->library('session');
     $this->session->set_flashdata('success_message',$message);
-
     if($rem_type == 1){
         redirect('Menu/YesterDayDaysCloseRequest');
     }elseif($rem_type == 2){
@@ -20116,8 +18238,6 @@ public function ConfirmReminder($id){
         redirect('Menu/dashboard');
     }
 }
-
-
 public function CheckuserDayAccardingPlanner(){
     
     $user   = $this->session->userdata('user');
@@ -20126,12 +18246,9 @@ public function CheckuserDayAccardingPlanner(){
     $this->load->model('Menu_model');
     
     $wffo = $this->input->post('wffo');
-
     $usdata1 = $this->Menu_model->userworkfrombyid($wffo);
     $wffomsg = $usdata1[0]->TYPE;
-
     $cdate = date("Y-m-d");
-
     $uime =$this->db->select('*') ->from('autotask_time') ->where('date', $cdate) ->where('user_id', $uid) ->order_by('id', 'DESC') ->get() ->result();
     $uimecnt = sizeof($uime);
     if($uimecnt > 0){
@@ -20144,17 +18261,14 @@ public function CheckuserDayAccardingPlanner(){
         }
     }
 }
-
 public function SendRequestForDayStartChnage(){
     
     $user   = $this->session->userdata('user');
     $uid    = $user['user_id'];
     $uyid   =  $user['type_id'];
     $this->load->model('Menu_model');
-
     $message            = $this->input->post('message');
     $user_want_start    = $this->input->post('user_want_start');
-
     $data = array(
         'user_id'     => $uid,
         'date'        => date("Y-m-d H:i:s"),
@@ -20163,14 +18277,10 @@ public function SendRequestForDayStartChnage(){
     );
     
     $this->db->insert('change_user_day_request', $data);
-
     $this->load->library('session');
-
     $this->session->set_flashdata('success_message','Request to change the start your Days Sended Successfully !');
     redirect('Menu/DayManagement');
 }
-
-
 public function GetTodaysTeamDayChnageRequestData(){
    
     $user = $this->session->userdata('user');
@@ -20181,16 +18291,12 @@ public function GetTodaysTeamDayChnageRequestData(){
     $dt=$this->Menu_model->get_utype($uyid);
     $dep_name = $dt[0]->name;
     $daychangedata = $this->Menu_model->GetTodaysTeamDayChnageRequest($uid);
-
     if(!empty($user)){
         $this->load->view($dep_name.'/GetTodaysTeamDayChnageRequestData',['uid'=>$uid,'user'=>$user,'daychangedata'=>$daychangedata]);
     }else{
         redirect('Menu/main');
     }
 }
-
-
-
 public function TodayDayStartapprove($id,$type){
     $user = $this->session->userdata('user');
     $data['user'] = $user;
@@ -20198,19 +18304,14 @@ public function TodayDayStartapprove($id,$type){
     if($type == 'Approve'){
         $status = 1;
         $reamrks = "Approved By ".$user['name'];
-
         $query =  $this->db->query("UPDATE `change_user_day_request` SET `apr_status`='$status',`apr_by`='$uid',`amessage`='$reamrks' WHERE id = $id");
-
         $this->load->library('session');
         $this->session->set_flashdata('success_message','Request to change the start your Days Approved  Successfully !');
-
         redirect("Menu/GetTodaysTeamDayChnageRequestData");
-
     }else{
         redirect('Menu/main');
     }
 }
-
 public function TodaysDayChageReject(){
     $rejectid = $_POST['reject'];
     $rejectreamrk = $_POST['rejectreamrk'];
@@ -20221,13 +18322,10 @@ public function TodaysDayChageReject(){
     $query =  $this->db->query("UPDATE `change_user_day_request` SET `apr_by`='$uid',`apr_status`='$status',`amessage`='$rejectreamrk' WHERE id = $rejectid");
     redirect("Menu/GetTodaysTeamDayChnageRequestData");
 }
-
-
 public function getcmp_becauseofplanchange(){
     $taskaction= $this->input->post('taskaction');
     $uid= $this->input->post('uid');
     $this->load->model('Menu_model');
-
     $cmp = $this->Menu_model->GetTaskBecauseOfPlanChangeWithAction($taskaction,$uid);
    
     $data = '';
@@ -20240,9 +18338,6 @@ public function getcmp_becauseofplanchange(){
     }
    echo $data;
 }
-
-
-
 public function getownfunnel(){
     $sid = $this->input->post('sid');
     $uid= $this->input->post('uid');
@@ -20253,18 +18348,14 @@ public function getownfunnel(){
     <option style="color: #d90d2b;" value="<?=$cmp->inid?>">
 <?=$cmp->compname?> (<?=$cmp->pname?>)
 </option>
-
     <?php
-
     }
 }
 public function getstatuscmp_becauseoftpm(){
-
     $becauseofTPM = $this->input->post('becauseofTPM');
     $uid= $this->input->post('uid');
     $this->load->model('Menu_model');
     $cmp = $this->Menu_model->GetCompanyClusterWorkBecauseOf($uid,$becauseofTPM);
-
     echo '<option value="">Select Company</option>';
     foreach($cmp as $cmp){
         $name = $cmp->name;
@@ -20280,16 +18371,12 @@ public function getstatuscmp_becauseoftpm(){
         <?php
         }
 }
-
 public function get_becauseoftpm(){
-
     $usertypes = $this->input->post('usertypes');
     $becauseofTPM = $this->input->post('becauseofTPM');
     $uid= $this->input->post('uid');
     $this->load->model('Menu_model');
-
     $cmp = $this->Menu_model->GetCompanyClusterWorkBecauseOfUser($uid,$usertypes,$becauseofTPM);
-
     echo '<option value="">Select Company</option>';
     foreach($cmp as $cmp){
         $name = $cmp->name;
@@ -20306,169 +18393,157 @@ public function get_becauseoftpm(){
         }
   
 }
+/********End *****************/
 
 
-// Start Travel Adavance Functionality
+/******** Start To Get Task Available Slot TIme *****************/
 
-public function CheckCashRequest(){
-  
+public function getTaskAvailableTime(){
+
     $user           = $this->session->userdata('user');
-    $data['user']   = $user;
     $uid            = $user['user_id'];
-    $amount         = $this->input->post('amount');
-    $purpose        = $this->input->post('purpose');
-
+    $data['user']   = $user;
+    $user_id        = $user['user_id'];
     $this->load->model('Menu_model');
-    
-    $this->Menu_model->InsertCashRequest($uid,$amount,$purpose);
-    $this->load->library('session');
-    $this->session->set_flashdata('success_message','Travel Advanced Request Sent SuccessFfully.');
+    $sdate    = $this->input->post('sdate');
+    $avltimeslct    = $this->input->post('avltimeslct');
 
-    redirect("Menu/dashboard");
+    if($avltimeslct == 1){
+        $time1 = '10:00:00';
+        $time2 = '11:00:00';
+    }elseif($avltimeslct == 2){
+        $time1 = '11:00:00';
+        $time2 = '12:00:00';
+    }elseif($avltimeslct == 3){
+        $time1 = '12:00:00';
+        $time2 = '13:00:00';
+    }elseif($avltimeslct == 4){
+        $time1 = '13:00:00';
+        $time2 = '14:00:00';
+    }elseif($avltimeslct == 5){
+        $time1 = '14:00:00';
+        $time2 = '15:00:00';
+    }elseif($avltimeslct == 6){
+        $time1 = '15:00:00';
+        $time2 = '16:00:00';
+    }elseif($avltimeslct == 7){
+        $time1 = '16:00:00';
+        $time2 = '17:00:00';
+    }
+
+$slotdata =   $this->Menu_model->CheckTodaysTaskAvilableTime($user_id,$time1,$time2,$sdate);
+// echo $this->db->last_query();
+
+$appointmentDates = array_column($slotdata, 'appointmentdatetime');
+$filteredTimes = array_filter($slotdata, function($item) use ($appointmentDates) {
+    return !in_array($item->next_available_time, $appointmentDates);
+});
+$result = array_map(function($item) {
+    return $item->next_available_time;
+}, $filteredTimes);
+
+$slotrees = sizeof($result);
+
+$html = '';
+if($slotrees == 0){
+    $span = '<span class="findslot">All Slot is Free</span>';
+    $html .= $span;
+}else{
+    $filteredArray = array_filter($result);
+    foreach($filteredArray as $res){
+        if($res !== ''){
+
+            $dateTime = new DateTime($res);
+            $time = $dateTime->format('H:i:s');
+            $span = '<span class="findslot">'.$time.'</span>';
+            $html .= $span;
+        }
+    }
+    
+}
+
+echo $html;
 
 }
-public function TravelAdavancedReject(){
-  
+public function getTaskPlannedTime(){
+
     $user           = $this->session->userdata('user');
-    $data['user']   = $user;
     $uid            = $user['user_id'];
- 
-    $rejectid         = $this->input->post('reject');
-    $rejectreamrk   = $this->input->post('rejectreamrk');
-
+    $data['user']   = $user;
+    $user_id        = $user['user_id'];
     $this->load->model('Menu_model');
-    
-    $this->Menu_model->RejectCashRequest($uid,$rejectid,$rejectreamrk);
-    $this->load->library('session');
-    $this->session->set_flashdata('error_message','Travel Advanced Request Rejected SuccessFfully.');
-    redirect("Menu/OurTeamTravelAdvanceRequest");
+    $sdate    = $this->input->post('sdate');
+    $avltimeslct    = $this->input->post('avltimeslct');
 
-}
+    if($avltimeslct == 1){
+        $time1 = '10:00:00';
+        $time2 = '11:00:00';
+    }elseif($avltimeslct == 2){
+        $time1 = '11:00:00';
+        $time2 = '12:00:00';
+    }elseif($avltimeslct == 3){
+        $time1 = '12:00:00';
+        $time2 = '13:00:00';
+    }elseif($avltimeslct == 4){
+        $time1 = '13:00:00';
+        $time2 = '14:00:00';
+    }elseif($avltimeslct == 5){
+        $time1 = '14:00:00';
+        $time2 = '15:00:00';
+    }elseif($avltimeslct == 6){
+        $time1 = '15:00:00';
+        $time2 = '16:00:00';
+    }elseif($avltimeslct == 7){
+        $time1 = '16:00:00';
+        $time2 = '17:00:00';
+    }
 
-public function OurTravelAdvanceRequest(){
-   
-    $user = $this->session->userdata('user');
-    $data['user'] = $user;
-    $uid = $user['user_id'];
-    $uyid =  $user['type_id'];
-    $this->load->model('Menu_model');
-    $dt=$this->Menu_model->get_utype($uyid);
-    $dep_name = $dt[0]->name;
+$slotdata =   $this->Menu_model->GetBookedSlot($user_id,$time1,$time2,$sdate);
 
-    $ocashreq = $this->Menu_model->GetOurCashRequest($uid);
+// echo $this->db->last_query();
+$slotrees = sizeof($slotdata);
 
-    if(!empty($user)){
-        $this->load->view($dep_name.'/OurTravelAdvanceRequest',['uid'=>$uid,'user'=>$user,'ocashreq'=>$ocashreq]);
-    }else{
-        redirect('Menu/main');
+$html = '';
+
+if($slotrees > 0){
+    foreach($slotdata as $res){
+
+        $dateTime = new DateTime($res->bookedtime);
+        $time = $dateTime->format('H:i:s');
+        $span = '<span class="findbookedslottime">'.$time.'</span>';
+        $html .= $span;
     }
 }
 
-public function OurTeamTravelAdvanceRequest(){
-   
-    $user = $this->session->userdata('user');
-    $data['user'] = $user;
-    $uid = $user['user_id'];
-    $uyid =  $user['type_id'];
-    $this->load->model('Menu_model');
-    $dt=$this->Menu_model->get_utype($uyid);
-    $dep_name = $dt[0]->name;
+echo $html;
 
-    $ocashreq = $this->Menu_model->GetOurTeamCashRequest($uid);
-
-    if(!empty($user)){
-        $this->load->view($dep_name.'/OurTeamTravelAdvanceRequest',['uid'=>$uid,'user'=>$user,'ocashreq'=>$ocashreq]);
-    }else{
-        redirect('Menu/main');
-    }
 }
 
-public function TravelAdavancedApprove(){
-  
+/******** Start To Get Task Available Slot TIme *****************/
+
+public function UserVisitPage(){
     $user           = $this->session->userdata('user');
-    $data['user']   = $user;
-    $uid            = $user['user_id'];
-
-    $approveid         = $this->input->post('approveid');
-    $approve_remarks   = $this->input->post('approve_remarks');
-
+    $user_id        = $user['user_id'];
+    $page           = "Planner Page";
+    $action         = "Planning";
     $this->load->model('Menu_model');
-    
-    $aprData            = $this->Menu_model->GetTravelRequestById($approveid);
-    $aprData_user_id    = $aprData[0]->user_id;
-    $aprData_date       = $aprData[0]->date;
-    $aprData_cash       = $aprData[0]->cash;
-    $aprData_purpose    = $aprData[0]->purpose;
 
-    $message  = '<h1>HTML message content</h1><p>This is a test email.</p>';
-
-    // die("stem");
-
-    $udetail    = $this->Menu_model->get_userbyid($aprData_user_id);
-    $apr_ucash  = $udetail[0]->ucash;
-    $new_cash = $apr_ucash + $aprData_cash;
-
-    $this->Menu_model->UpdateUserCashAmmount($aprData_user_id,$new_cash);
-    $this->Menu_model->ApproveCashRequest($uid,$approveid,$approve_remarks);
-
-    $this->load->library('session');
-    $this->session->set_flashdata('success_message','Travel Advanced Request Approved SuccessFfully.');
-    redirect("Menu/OurTeamTravelAdvanceRequest");
-
-}
-
-
-public function send_email($reciver_email,$message) {
-    // Load email library
-    $this->load->library('email');
-
-    // SMTP & email configuration
-    $config = array(
-        'protocol'  => 'smtp',
-        'smtp_host' => 'smtp.example.com',
-        'smtp_user' => 'your_email@example.com',
-        'smtp_pass' => 'your_password',
-        'smtp_port' => 587,
-        'mailtype'  => 'html',
-        'charset'   => 'utf-8',
-        'newline'   => "\r\n"
-    );
-
-    $this->email->initialize($config);
-
-    // Email content
-    $this->email->from('your_email@example.com', 'Your Name');
-    $this->email->to('recipient@example.com');
-    $this->email->subject('Email Test');
-    $this->email->message($message);
-
-    // Send email
-    if ($this->email->send()) {
-        echo 'Email sent successfully.';
-    } else {
-        echo 'Email sending failed.';
-        show_error($this->email->print_debugger());
-    }
-}
-
-
-public function TravelExpenseTimeline($rid){
+    $action = $_POST['action'] ?? '';
    
-    $user = $this->session->userdata('user');
-    $data['user'] = $user;
-    $uid = $user['user_id'];
-    $uyid =  $user['type_id'];
-    $this->load->model('Menu_model');
-    $dt=$this->Menu_model->get_utype($uyid);
-    $dep_name = $dt[0]->name;
-    $daychangedata = $this->Menu_model->GetTodaysTeamDayChnageRequest($uid);
-
-    if(!empty($user)){
-        $this->load->view($dep_name.'/TravelExpenseTimeline',['uid'=>$uid,'user'=>$user,'daychangedata'=>$daychangedata,'rid'=>$rid]);
-    }else{
-        redirect('Menu/main');
-    }
+        if ($action && $page) {
+            if ($action === 'visit') {
+                $this->Menu_model->insert_visit($user_id, $page, $action);
+            } elseif ($action === 'leave') {
+                $this->Menu_model->insert_visit($user_id, $page, $action);
+                echo  $this->db->last_query();
+            }
+    }   
 }
+
+
+
+
+
 
 
 

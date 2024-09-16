@@ -741,7 +741,7 @@
                       }
                     }
                   }else{
-                    $('#goodmessage').text("* Good Plan As Your Days According to Planner.").css('color', 'green');
+                    // $('#goodmessage').text("* Good Plan As Your Days According to Planner.").css('color', 'green');
                     $('#submitButton').prop('disabled', false);
                   }
                 }

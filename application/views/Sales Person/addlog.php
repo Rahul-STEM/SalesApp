@@ -25,29 +25,19 @@
                                         <h6>Last Status : <?=$tstatus[0]->name?></h6>
                                     <h6>Last Task Remark : <?=$ttbl[0]->remarks?></h6></center><hr>
                                     <h6><?=$cd[0]->compname?></h6>
-             
-                           
-                <?php foreach($ccd as $d) {
-                    $contactperson = $d->contactperson;
-                    $phoneno = $d->phoneno;
-                    $emailid = $d->emailid;
-                    $designation = $d->designation;
-                ?>
+                <?php foreach($ccd as $d){$contactperson=$d->contactperson;$phoneno=$d->phoneno;$emailid=$d->emailid;$designation=$d->designation;?>
                     <div class="col-sm">Name : <?=$contactperson?></div>
-                    <div class="col-sm">Designation : <?=$designation;?></div>
-                    <div class="col-sm">Email id : <?=$emailid;?></div>
-                    <div class="col-sm">Phone No : <?=$phoneno;?>
+                    <div class="col-sm">Designation : <?=$designation?></div>
+                    <div class="col-sm">Email id : <?=$emailid?></div>
+                    <div class="col-sm">Phone No : <?=$phoneno?>
                         <span>
-                            <a href="tel:+91<?=$phoneno;?>" target="_blank" style="padding:7px;border-radius:20px;">
-                                <img src="https://stemlearning.in/opp/assets/image/icon/call.png" style="height:30px;">
-                            </a>
-                            <a href="https://wa.me/91<?=$phoneno;?>" target="_blank" style="padding:7px;border-radius:20px;">
-                                <img src="https://stemlearning.in/opp/assets/image/icon/whatsapp.png" style="height:30px;">
-                            </a>
+                            <a href="tel:+91<?=$phoneno?>" target="_blank" style="padding:7px;border-radius:20px;">
+                            <img src="https://stemlearning.in/opp/assets/image/icon/call.png" style="height:30px;"></a>
+                            <a href="https://wa.me/91<?=$phoneno?>" target="_blank" style="padding:7px;border-radius:20px;">
+                            <img src="https://stemlearning.in/opp/assets/image/icon/whatsapp.png" style="height:30px;"></a>
                         </span>
                     </div>
-                <?php } ?>
-                
+                    <? }?>
                                 </div>
                                 <input type="hidden" name="action_id" id="action_id" value="<?=$ttbl[0]->actiontype_id?>">
                                 <div class="col-lg-12 card-form__body card-body">
@@ -762,4 +752,3 @@ $('#next_action_remark').on('change', function c() {
 		});		
 });
  </script>
-

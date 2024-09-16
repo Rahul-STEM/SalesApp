@@ -353,7 +353,7 @@ $mytaskd = $this->Menu_model->get_admintteamtd($myid,$tdate);
                         <p><a href="companies/23">Potential Partner This QTR - <b><?=$mc->s?></b></p></a><hr>
                         <p><a href="companies/24">Potential Partner This FY - <b><?=$mc->t?></b></p></a><hr>
                         <?php } ?>
-                        <!-- <p><a href="NewLead">Add New Lead</a></p> -->
+                        <p><a href="NewLead">Add New Lead</a></p>
                     </div></div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
@@ -418,19 +418,19 @@ $mytaskd = $this->Menu_model->get_admintteamtd($myid,$tdate);
                 <div class="collapse" id="collapse5">
                     <p><a href="momdetail">MOM Detail</b></a></p><hr>
                     <p><a href="TBMDF">Total RP Meeting</b></a></p><hr>
-                    <p><a href="MeetingDetail/1/<?=$admid?>/<?=$tdate?>"><b>Meeting Detail</b></a></p><hr>
-                    <p><a href="TBMD/1/<?=$admid?>/<?=$tdate?>/<?=$tdate?>">Total Bargin Plan - <b><?=$tmd->ab?></b></a></p><hr>
-                    <p><a href="TBMD/2/<?=$admid?>/<?=$tdate?>/<?=$tdate?>">Not Started Bargin - <b><?=$tmd->a?></b></a></p><hr>
-                    <p><a href="TBMD/2/<?=$admid?>/<?=$tdate?>/<?=$tdate?>">Started Bargin - <b><?=$tmd->i?></b></a></p><hr>
-                    <p><a href="TBMD/3/<?=$admid?>/<?=$tdate?>/<?=$tdate?>">Not Close Bargin - <b><?=$tmd->b?></b></a></p><hr>
-                    <p><a href="TBMD/3/<?=$admid?>/<?=$tdate?>/<?=$tdate?>">Close Bargin - <b><?=$tmd->b?></b></a></p><hr>
-                    <p><a href="TBMD/3/<?=$admid?>/<?=$tdate?>/<?=$tdate?>">Lead not Updated - <b><?=$tmd->h?></b></a></p><hr>
-                    <p><a href="TBMD/4/<?=$admid?>/<?=$tdate?>/<?=$tdate?>">Completed Bargin - <b><?=$tmd->c?></b></a></p><hr>
-                    <p><a href="TBMD/5/<?=$admid?>/<?=$tdate?>/<?=$tdate?>">Total RP Meeting - <b><?=$tmd->d?></b></a></p><hr>
-                    <p><a href="TBMD/6/<?=$admid?>/<?=$tdate?>/<?=$tdate?>">Total Non RP Meeting - <b><?=$tmd->e?></b></a></p><hr>
-                    <p><a href="TBMD/7/<?=$admid?>/<?=$tdate?>/<?=$tdate?>">Total RP Priority - <b><?=$tmd->f?></b></a></p><hr>
-                    <p><a href="TBMD/8/<?=$admid?>/<?=$tdate?>/<?=$tdate?>">Total RP Not Priority - <b><?=$tmd->g?></b></a></p><hr>
-                    <p><a href="TBMD/9/<?=$admid?>/<?=$tdate?>/<?=$tdate?>">Total Only Got Detail - <b><?=$tmd->k?></b></a></p><hr>
+                    <p><a href="MeetingDetail/1/<?=$uid?>/<?=$tdate?>"><b>Meeting Detail</b></a></p><hr>
+                    <p><a href="TBMD/1/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Total Bargin Plan - <b><?=$tmd->ab?></b></a></p><hr>
+                    <p><a href="TBMD/2/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Not Started Bargin - <b><?=$tmd->a?></b></a></p><hr>
+                    <p><a href="TBMD/2/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Started Bargin - <b><?=$tmd->i?></b></a></p><hr>
+                    <p><a href="TBMD/3/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Not Close Bargin - <b><?=$tmd->b?></b></a></p><hr>
+                    <p><a href="TBMD/3/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Close Bargin - <b><?=$tmd->b?></b></a></p><hr>
+                    <p><a href="TBMD/3/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Lead not Updated - <b><?=$tmd->h?></b></a></p><hr>
+                    <p><a href="TBMD/4/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Completed Bargin - <b><?=$tmd->c?></b></a></p><hr>
+                    <p><a href="TBMD/5/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Total RP Meeting - <b><?=$tmd->d?></b></a></p><hr>
+                    <p><a href="TBMD/6/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Total Non RP Meeting - <b><?=$tmd->e?></b></a></p><hr>
+                    <p><a href="TBMD/7/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Total RP Priority - <b><?=$tmd->f?></b></a></p><hr>
+                    <p><a href="TBMD/8/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Total RP Not Priority - <b><?=$tmd->g?></b></a></p><hr>
+                    <p><a href="TBMD/9/<?=$uid?>/<?=$tdate?>/<?=$tdate?>">Total Only Got Detail - <b><?=$tmd->k?></b></a></p><hr>
                     
                 <?php } ?>
                 </div>
@@ -534,7 +534,7 @@ $mytaskd = $this->Menu_model->get_admintteamtd($myid,$tdate);
               <div class="row">
                   <div class="col-lg-12 col-sm">
             <div class="card card-primary card-outline card-outline-tabs">
-                <h4 class="p-3">Today's Task Calendar</h4>
+                <h4 class="p-3">Today's Task Planned</h4>
               <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                   <li class="nav-item">
@@ -1314,107 +1314,64 @@ $mytaskd = $this->Menu_model->get_admintteamtd($myid,$tdate);
               </div></div></div></div>
             <div class="col-lg-4 col-sm">
             <div class="card card-primary card-outline card-outline-tabs">
-
-            <div class="card p-3">
-
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalReminder">
-  Create A Reminder
-</button>
-
-      
-<?php 
-        $reminderData = $this->Menu_model->GetTodaysTeamReminder($uid);
-        $reminderDatacnt = sizeof($reminderData);
-        if($reminderDatacnt > 0){ ?>
-        <div class="ourreminder">
-        <hr>
-        <h6 class='text-center bg-danger p-2 '>Team Reminder</h6>
-        <hr>
-        <?php foreach($reminderData as $remi){ ?>
-
-          <div class="card p-2" style="background: #ffafaf;">
-          <span class="p-1"> <b>Reminder Name : </b> <?= $remi->name; ?></span>
-          <span class="p-1"> <b>Reminder Type : </b> <?= $this->Menu_model->remindermessagebyid($remi->type)[0]->message; ?></span>
-          <span class="p-1"> <b>Message : </b> <?= $remi->message; ?></span>
-          <span class="p-1"> <b>Request Time : </b> <?= $remi->created_at; ?></span>
-          <span class="p-1"> <b>Reminder Acknowledge : </b>
-          <?php 
-          if($remi->status == 0){
-            echo "<span class='p-1 bg-warning btn btn-warning'><a href='".base_url()."Management/ConfirmReminder/".$remi->id."'>Checked</a></span>";
-          }
-          ?>
-          </span>
-          </div>
-        <?php } ?>
-        </div>
-        <?php } ?>
-        
-        <?php 
-        $reminderData = $this->Menu_model->GetTodaysOurReminder($uid);
-        $reminderDatacnt = sizeof($reminderData);
-        if($reminderDatacnt > 0){ ?>
-        <div class="ourreminder">
-        <hr>
-        <h6 class='text-center bg-info p-2'>Our Reminder</h6>
-        <hr>
-        <?php foreach($reminderData as $remi){ ?>
-
-          <div class="card p-2" style="background: azure;">
-          <span class="p-1"> <b>Reminder Type : </b> <?= $remi->type; ?></span>
-          <span class="p-1"> <b>Message : </b> <?= $remi->message; ?></span>
-          <span class="p-1"> <b>Request Time : </b> <?= $remi->created_at; ?></span>
-          <?php 
-      if($remi->status == 0){
-          echo "<span class='p-1'> <b>Reminder Acknowledge : </b><span class='p-1 bg-warning'>Pending</span>";
-      }else{ ?>
-          <span class="p-1"> <b>Acknowledge By : </b> <?= $this->Menu_model->get_userbyid($remi->acknowledge_by)[0]->name; ?></span>
-          <span class="p-1"> <b>Acknowledge Message: </b> <?= $remi->acknowledge_message; ?>
-     <?php }  ?>
-          </span>
-          </div>
-        <?php } ?>
-        </div>
-        <?php } ?>
-        
-  </div>
-
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModalReminder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-<div class="modal-dialog" role="document">
-<div class="modal-content">
-<div class="modal-header bg-info text-center">
-<h5 class="modal-title" id="exampleModalLabel">Create Reminder</h5>
-<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-<span aria-hidden="true">&times;</span>
-</button>
-</div>
-<div class="modal-body">
-<form action="<?=base_url();?>Management/SendReminder" method="post">
-<div class="form-group">
-<label>Select Reminder Type : </label>
-<select class="form-control" name="reminder_type">
-<?php 
-    $rmmess = $this->Menu_model->remindermessage();
-    foreach($rmmess as $mess){
-    ?>
-    <option value="<?=$mess->id; ?>"><?=$mess->message; ?></option>
-      <?php } ?>
-</select>
-</div>
-<div class="form-group">
-  <label>Reminder Message: </label>
-  <textarea class="form-control" name="reminder_message" rows="3"></textarea>
-</div>
-<div class="form-group text-center">
-<button type="submit" class="btn btn-primary">Send Reminder</button>
-</div>
-</form>
-</div>
-
-</div>
-</div>
-</div>          
+                <?php $ptd = $this->Menu_model->get_tptd($uid,$tdate);
+                $ptsd = $this->Menu_model->get_tptsd($uid,$tdate);?>
+              <div class="card-header text-center bg-info"><b>Created Pending Task to be Schedule</b></div>
+              <div class="card-header text-center bg-light"><b>
+              Total Task <?=$ptd[0]->ab?> | Call(<?=$ptd[0]->a?>) | Email(<?=$ptd[0]->b?>) | Whatsapp(<?=$ptd[0]->e?>) | Meeting(<?=$ptd[0]->c+$ptd[0]->d?>) | MOM(<?=$ptd[0]->f?>) | Proposal(<?=$ptd[0]->g?>)
+              </b></div>
+              <div class="card-header text-center bg-light"><b>
+              Open(<?=$ptsd[0]->a?>) | Open RPEM(<?=$ptsd[0]->b?>) | Rechaout(<?=$ptsd[0]->c?>) | Tentative(<?=$ptsd[0]->d?>) | WDL(<?=$ptsd[0]->e?>) | NI(<?=$ptsd[0]->f?>) | TTD(<?=$ptsd[0]->g?>) | WNO(<?=$ptsd[0]->h?>) | Positive(<?=$ptsd[0]->i?>) | Very Positive(<?=$ptsd[0]->j?>) | Closure(<?=$ptsd[0]->k?>)
+              </b></div>
+              <div class="card-body">
+                    <table id="" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $ai=0;foreach($totalt as $tt){if($tt->plan==0){if($tt->autotask==1){?>
+                            <tr>
+                                <td>
+                                    <button id="add_plan<?=$ai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                                        <?=$tt->aname?> | 
+                                        <strong class="text-secondary"><?=$tt->compname?> | <b style="color:<?=$tt->color?>"><?=$tt->name?></b></strong>
+                                    </button>
+                                </td>
+                            </tr>
+                            <?php $ai++;}}} ?>
+                        </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+                
+                <div class="card card-primary card-outline card-outline-tabs">
+                <?php $patd = $this->Menu_model->get_atptd($uid,$tdate);
+                      $patsd = $this->Menu_model->get_atptsd($uid,$tdate);
+                ?>
+              <div class="card-header text-center bg-info"><b>Auto Pending Task to be Schedule</b></div>
+              <div class="card-header text-center bg-light"><b>
+              Total Task <?=$patd[0]->ab?> | Call(<?=$patd[0]->a?>) | Email(<?=$patd[0]->b?>) | Whatsapp(<?=$patd[0]->e?>) | Meeting(<?=$patd[0]->c+$patd[0]->d?>) | MOM(<?=$patd[0]->f?>) | Proposal(<?=$patd[0]->g?>)
+              </b></div>
+              <div class="card-header text-center bg-light"><b>
+              Open(<?=$patsd[0]->a?>) | Open RPEM(<?=$patsd[0]->b?>) | Rechaout(<?=$patsd[0]->c?>) | Tentative(<?=$patsd[0]->d?>) | WDL(<?=$patsd[0]->e?>) | NI(<?=$patsd[0]->f?>) | TTD(<?=$patsd[0]->g?>) | WNO(<?=$patsd[0]->h?>) | Positive(<?=$patsd[0]->i?>) | Very Positive(<?=$patsd[0]->j?>) | Closure(<?=$patsd[0]->k?>)
+              </b></div>
+              <div class="card-body">
+                    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+                        <ul id="myUL">
+                            <?php $ai=0;foreach($totalt as $tt){if($tt->plan==0){if($tt->autotask==0){?>
+                          <li><a>
+                           <?=$tt->aname?> | 
+                           <strong class="text-secondary"><?=$tt->compname?> | <b style="color:<?=$tt->color?>"><?=$tt->csname?></b></strong>
+                           <button id="add_plan<?=$ai?>" value="<?=$tt->id?>">Plan</button>
+                          </a>
+                          
+                          </li><?php $ai++;}}} ?>
+                        </ul>
+                  </div>
+                </div>
               
           </div>
         </div>

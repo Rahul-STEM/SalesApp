@@ -103,7 +103,10 @@ $bd = $this->Menu_model->get_userbyaid($uid);
                                         </tr>
                                     </thead>
                                     <tbody>
-                                      
+                                        <?php 
+                                            $i=1
+                                            foreach(){
+                                        ?>
                                     <tr>
                                         <td><?=$i?></td>
                                         <td>0</td>
@@ -112,7 +115,7 @@ $bd = $this->Menu_model->get_userbyaid($uid);
                                         <td>0</td>
                                         <td>0</td>
                                     </tr>
-                               
+                                    <?php $i++;} ?>  
                                   </tbody>
                                 </table> 
                             </div>

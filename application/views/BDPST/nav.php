@@ -157,35 +157,37 @@
             </a>
           </li>
           <li class="nav-item">
-              <a href="<?=base_url();?>Menu/YesterDayDaysCloseRequest" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Day Close Request</p>
-              </a>
+                    <a href="<?=base_url();?>Menu/YesterDayDaysCloseRequest" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Day Close Request</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/GetTodaysTeamDayChnageRequestData" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Day Change Request</p>
+                    </a>
+                </li>
+ 
+                <li class="nav-item">
+                <a href="<?=base_url();?>Menu/PlannerTaskApprovelPage" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Planner Task Approvel</p>
+                </a>
           </li>
-          <li class="nav-item">
-              <a href="<?=base_url();?>Menu/GetTodaysTeamDayChnageRequestData" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Day Change Request</p>
-              </a>
-          </li>
+            
           <li class="nav-item">
             <a href="<?=base_url();?>Menu/TodaysTaskApprovelRequest" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
-              <p>Planner Approvel Request</p>
+              <p>Todays Task Approvel Request</p>
             </a>
           </li>
           <li class="nav-item">
-                    <a href="<?=base_url();?>Menu/PlannerTaskApprovelPage" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Planner Task Approvel</p>
-                    </a>
-                </li>
-          <li class="nav-item">
-            <a href="<?=base_url();?>Menu/AddSpecialCommentOnTask" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Add Special Comment On Task</p>
+            <a href="<?=base_url();?>Menu/SpecialRequestForLeaveSomeTimeData" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Team Special Request For Leave Some Time </p>
             </a>
-          </li>
+        </li>
           
           <li class="nav-item">
             <a href="<?=base_url();?>Menu/Mytarget" class="nav-link">
@@ -297,7 +299,17 @@
     </div>
     <!-- /.sidebar -->
   </aside>
-  
+  <?php 
+      if(!isset($daycheck)){
+        $current_uid    = $user['user_id'];
+      $user_type = $user['type_id'];
+      $user_day = $this->Menu_model->get_daydetail($current_uid,date("Y-m-d"));
+      if(sizeof($user_day) == 0){
+          $this->session->set_flashdata('error_message','* Please start your day first');
+          redirect('Menu/DayManagement');
+      }  
+      }    
+      ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script> 
 <script> 

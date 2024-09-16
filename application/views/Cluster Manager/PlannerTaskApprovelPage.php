@@ -79,7 +79,13 @@
                       <div class="col-12">
                         <div>
                           <form class="p-3" method="POST" action="PlannerTaskApprovelPage">
-                            <input type="date" name="sdate" class="mr-2" value="<?=$sdate?>">
+
+                          <?php 
+                        $adatess = date("Y-m-d");
+                        $yest_date = date('Y-m-d', strtotime('-1 day', strtotime($adatess)));
+                        ?>
+              
+                  <input type="date" name="sdate" max="<?= date('Y-m-d') ?>" min="<?= $yest_date; ?>" class="mr-2" value="<?=$sdate?>">
                         <button type="submit" class="bg-primary text-light">Filter</button></form>
                         </form> 
                       </div>
@@ -94,9 +100,7 @@
                             <?php 
                             
                             $getbdteam = $this->Menu_model->get_userbyaaid($uid);
-                            unset($getbdteam[0]);
-                            // $totalttaskdata =$this->Menu_model->get_totaltdetails(100095,$sdate);
-                            // dd($totalttaskdata);
+
                              ?>
                               <fieldset>
                                  <div class="card">

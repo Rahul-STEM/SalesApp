@@ -326,7 +326,7 @@
                            <center>
                            <p>
                             <button type="button" class="btn btn-success" onclick="MomApprove(<?=$ce_id?>,<?= $mom_id?>,'Approve')">Approve</button>
-                            <button type="button" class="btn btn-primary" onclick="Reject(<?=$ce_id?>,<?= $mom_tid?>,<?= $mom_id?>,'Reject')">Edit</button>
+                            <button type="button" class="btn btn-primary" onclick="Reject(<?=$ce_id?>,<?= $mom_tid?>,<?= $mom_id?>,'Reject')">Need to Update</button>
                             <button type="button" class="btn btn-primary" id="rPtoNoRPConvert" onclick="RPtoNoRPConvert(<?=$ce_id?>,<?= $mom_tid?>,<?= $mom_id?>,'RPtoNoRPConvert')">RP to No RP Convert</button>
                         </p>
                            </center>

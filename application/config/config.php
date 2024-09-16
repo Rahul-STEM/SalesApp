@@ -1,4 +1,7 @@
 <?php
+header("Cache-Control: no-cache, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*

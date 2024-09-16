@@ -85,7 +85,7 @@
                        $pstTeamuid = $team->user_id;
                        $pstTeamuidname = $team->name;
                       $mdata = $this->Menu_model->proposal_apr($pstTeamuid);
-
+// echo "<pre>"; print_r($mdata);exit;
                      foreach($mdata as $md){
                       
                       ?>

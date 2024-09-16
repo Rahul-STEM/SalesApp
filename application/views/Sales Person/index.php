@@ -991,7 +991,9 @@ $dataPoints2 = array(
 
 
                   <div class="tab-pane fade" id="custom-tabs-four-call" role="tabpanel" aria-labelledby="custom-tabs-four-call-tab">
-                      <?php $aai=0;foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='1'){
+                      <?php $aai=0;
+                     
+                      foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='1'){
                           $taid = $tt->actiontype_id;
                           $taid=$this->Menu_model->get_action($taid);
                           $time = $tt->appointmentdatetime;
@@ -1025,7 +1027,8 @@ $dataPoints2 = array(
 
 
                   <div class="tab-pane fade" id="custom-tabs-four-research" role="tabpanel" aria-labelledby="custom-tabs-four-research-tab">
-                      <?php $aai=0;foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='10'){
+                      <?php $aai=0;foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='10')
+                      {
                           $taid = $tt->actiontype_id;
                           $taid=$this->Menu_model->get_actionbyid($taid);
                           $time = $tt->appointmentdatetime;
@@ -1863,15 +1866,6 @@ $dataPoints2 = array(
                   </div>
                 <?php  } ?> 
 
-         
-
-                <div class="card p-3">
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenterspclcashPurchase">
-                      <b>Travel Advance</b>
-                  </button>
-                </div>
-
-
                 <div class="card p-3">
                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenterspclchngreq">
                       <b>Create a Special Request For Plan Change </b>
@@ -1946,45 +1940,6 @@ $dataPoints2 = array(
                 </div>
 
 
-                   <!-- Modal -->
-             <div class="modal fade" id="exampleModalCenterspclcashPurchase" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-     
-                    <div class="was-validated">
-                      <div class="modal-content">
-                        <div class="modal-header" styel="background: #fbff00;" >
-                          <h5 class="modal-title" id="exampleModalLongTitle">Travel Advance Request </h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body" style="background: darkslategrey;color: white;" >
-                            <form method="POST" action='<?=base_url();?>Menu/CheckCashRequest' enctype="multipart/form-data">
-                                <div class="form-group mb-3">
-                                    <label for="amount">Amount</label>
-                                    <input type="hidden" class="form-control" name="user" value="<?= $username ?>">
-                                    <input type="number" class="form-control" name="amount" id="amount" placeholder="Enter amount" required>
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="purpose">Purpose of Request</label>
-                                    <textarea class="form-control" name="purpose" id="purpose" rows="4" placeholder="Enter purpose of request" required></textarea>
-                                </div>
-                           
-                                <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-primary btn-block">Submit Request</button>
-                                </div>
-                            </form>
-                        </div>
-                      </div>
-                      </div>
-                        </form>
-                    </div>
-                  </div>
-
-
-
-
-
              <!-- Modal -->
              <div class="modal fade" id="exampleModalCenterspclchngreq" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -2038,7 +1993,7 @@ $dataPoints2 = array(
          
                 </div>
 
-               
+
          
 
           </div>

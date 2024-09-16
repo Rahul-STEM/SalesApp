@@ -142,6 +142,7 @@
                   if(result > 0){
                     alert("You have allready plan task for this time, please enter another time");
                     input.value = "";
+                    
                   }
                     // console.log(result);
                     }
@@ -170,6 +171,26 @@
 lable{font-size: 14px!important; font-weight: 500!important;font-family: system-ui!important;}
 .boxshadownew{box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;border-radius: 25px;}span#tasktype {color: green;}   
 .pllanerseesioncnt {align-items: center;justify-content: center;display: flex;}
+.findslot{background-color: green; color: white; padding: 4px; border-radius: 8px; box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px; font-size: 12px;margin: 4px;}
+div#findbookedslot,div#freeaslotDisplay{
+  justify-content: center; 
+  display: flex; flex-wrap: wrap;
+}
+.findbookedslottime{
+  background-color: red; 
+  color: white;
+  padding: 4px; 
+  border-radius: 8px; 
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px; 
+  font-size: 12px;
+  margin: 4px;
+}
+button#resteFilter {
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+    border-radius: 20px;
+}
     </style>
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -1127,7 +1148,7 @@ if($type_id == 3){
                           <option value="topspender">Top Spender</option>
                           <option value="upsell_client">Upsell Client</option>
                           <option value="focus_funnel">Focus Funnel</option>
-                          <option value="keycompany">Key Company</option>
+                          <!-- <option value="keycompany">Key Company</option> -->
                           <option value="pkclient">P Key Client</option>
                         </select>
                       </div>
@@ -1232,7 +1253,7 @@ if($type_id == 3){
                           <option value="admin_assign">Admin Assign</option>
                         </select>
                       </div>
-                    </div>
+                  </div>
                     <div id="taskActionCard" class="card p-4">
                     <div class="form-group" id="taskaction_card_area">
                         <div class="form-group">
@@ -1240,7 +1261,7 @@ if($type_id == 3){
                           <select id="task_action_filter" class="form-control" name="task_action_filter">
                             <option value="">Select Task</option>
                             <option value="all">All</option>
-                            <?php foreach($action as $a){if($a->id!=9 && $a->id!=15){ ?>
+                            <?php foreach($action as $a){if($a->id!=9 && $a->id!=15 && $a->id!=6 && $a->id!=8){ ?>
                             <option value="<?=$a->id?>"><?=$a->name?></option>
                             <?php }} ?>
                           </select>
@@ -1659,7 +1680,13 @@ if($type_id == 3){
                     </div>
                     </div>
                   </form>
+
+                  
                       </div>
+
+
+                      <button type="button" class="form-control btn btn-info btn-sm" id="resteFilter">Reset Filter</button>
+
                   </div>
                   <div class="card col-lg-4 col-sm-4 p-2" id="content">
                     <div class="card" id="taskplanningimg"  >
@@ -1672,6 +1699,20 @@ if($type_id == 3){
                           <input type="hidden" id="curuserid" value="<?=$uid?>" name="bdid" required=""> 
                           <input type="hidden" id="pdate" value="<?=$adate?>" name="pdate" required=""> 
                           <input type="hidden" readonly class="form-control" id="tptime" name="tptime" required=""> 
+                          <div class="form-group">
+                            <select class="form-control" id="getAvailableTime">
+                              <option selected disabled>Get Available Time</option>
+                              <option value="1">10:00 AM To 11:00 AM</option>
+                              <option value="2">11:00 AM To 12:00 PM</option>
+                              <option value="3">12:00 PM To 01:00 PM</option>
+                              <option value="4">01:00 PM To 02:00 PM</option>
+                              <option value="5">02:00 PM To 03:00 PM</option>
+                              <option value="6">03:00 PM To 04:00 PM</option>
+                              <option value="7">04:00 PM To 05:00 PM</option>
+                            </select>
+                            <div id="freeaslotDisplay" class="mt-2"></div>
+                            <div id="findbookedslot" class="mt-2"></div>
+                          </div>
                           <hr>
                           <input type="time" id="meeting-time" name="ptime" min="10:00" max="19:00" class="form-control" required=""> 
                           <hr>
@@ -2641,6 +2682,7 @@ if($type_id == 3){
                     var selectstatusbyusernotplaned = $(this).val();
                     $("#selectcompanybyuser").html('');
                     $("#totalcompany").text('');
+                    $("#taskplanningimg").hide('');
                     var uid = $("#curuserid").val();
                
                         $.ajax({
@@ -4952,6 +4994,29 @@ if($type_id == 3){
             $('#plantimerBox').hide();
             $('#planningStartbtn').show();
 
+
+            $('#resteFilter').click(function() {
+              // location.reload();
+              $('input[name="optradio"]').prop('checked', false);
+                $('#actionPlanned').fadeOut();
+                $('#actionnotplaned_NeedYour').fadeOut();
+                $('#need_your_attention').fadeOut();
+                $('#selectCategory').fadeOut();
+                $('#clusterLocactionFiltercard').fadeOut();
+                $('#companyLocationdatacard').fadeOut();
+                $('#pstAssignCard').fadeOut();
+                $('#taskActionCard').fadeOut();
+                $('#firstQuarter1').fadeOut();
+                $('#reviewTargetDate').fadeOut();
+                $('#auto_assign').fadeOut();
+                $('#compulsive_task_card').fadeOut();
+                $('#review_planning_card').fadeOut();
+                // $('input[type="text"], input[type="number"], select').val('');
+                $('#taskplanningimg').fadeIn();
+                $('#maintaskcard').fadeOut();
+        });
+
+
             var timerInterval;
             var startTime;
             // Function to update the timer every second
@@ -5149,7 +5214,73 @@ if($type_id == 3){
                 }
             }
             });
+
+
+
+            $('#getAvailableTime').on('change', function() {
+              $('#freeaslotDisplay').html('').slideUp("fast");
+              var avltimeslct = $('#getAvailableTime').val();
+          
+              $.ajax({
+                  url:'<?=base_url();?>Menu/getTaskAvailableTime',
+                  type: "POST",
+                  data: {
+                    sdate: '<?= $adate; ?>',
+                    avltimeslct: avltimeslct
+                  },
+                  cache: false,
+                  success: function a(result){
+                    $('#freeaslotDisplay').html(result).slideDown("fast");
+                  }
+                  });
+
+                  $.ajax({
+                  url:'<?=base_url();?>Menu/getTaskPlannedTime',
+                  type: "POST",
+                  data: {
+                    sdate: '<?= $adate; ?>',
+                    avltimeslct: avltimeslct
+                  },
+                  cache: false,
+                  success: function a(result){
+                    $('#findbookedslot').html(result).fadeIn();
+                  }
+                  });
+
+
           });
+
+
+          
+          var slctplanddate = '<?= $adate; ?>';
+          const getcurrentDate = new Date();
+          const year = getcurrentDate.getFullYear();
+          const month = String(getcurrentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+          const day = String(getcurrentDate.getDate()).padStart(2, '0');
+          const formattedDate = `${year}-${month}-${day}`;
+
+          if(slctplanddate == formattedDate){
+                document.getElementById('meeting-time').addEventListener('change', function() {
+                var inputTime = this.value; // Get the selected time
+                var currentTime = new Date(); // Get the current time
+                var currentHours = currentTime.getHours().toString().padStart(2, '0'); // Get current hour in HH format
+                var currentMinutes = currentTime.getMinutes().toString().padStart(2, '0'); // Get current minutes in MM format
+                var currentTimeString = `${currentHours}:${currentMinutes}`; // Current time in HH:MM format
+
+                if (inputTime < currentTimeString) {      
+                    alert('Selected time is earlier than the current time.');
+                    $('#meeting-time').val('');
+                }
+            });
+          }
+
+
+            
+      
+
+          });
+
+
       </script>
       <style>
         #myInput {
@@ -5323,9 +5454,9 @@ $(document).ready(function(){
     });
 
 
+ 
     $('#end-time').on('change', function() {
         let endTime = $(this).val();
-
         if (endTime) {
             // Convert endTime to a Date object
             let endDateTime = new Date('1970-01-01T' + endTime + ':00');
@@ -5344,7 +5475,7 @@ $(document).ready(function(){
             $('#end_tttpft').val(endTttPftHours + ':' + endTttPftMinutes);
         }
     });
-
+ 
     $('#autoplan_submit').click(function(event) {
             var endTime = $('#end_tttpft').val();
             var time = new Date('1970-01-01T' + endTime + 'Z');
@@ -5393,6 +5524,26 @@ $(document).ready(function(){
             
             // Update the countdown every second
             var countdownInterval = setInterval(updateCountdown, 1000);
+
+            var url = '<?= base_url(); ?>Menu/UserVisitPage'; 
+            function sendAjaxRequest(action) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', url, true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.send('action=' + encodeURIComponent(action));
+            }
+            $(document).on('visibilitychange', function() {
+            if(document.visibilityState == 'hidden') {
+              sendAjaxRequest('visit');
+            } else {
+              sendAjaxRequest('leave');
+            }
+            });
+
+            // Track initial page load
+            // window.onload = function() {
+            //     sendAjaxRequest('visit');
+// };
 
 
 });

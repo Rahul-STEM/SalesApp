@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="wi$dth=device-wi$dth, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>STEM APP | WebAPP</title>
 <!-- Google Font: Source Sans Pro -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
@@ -29,9 +29,9 @@
 <link rel="stylesheet" href="<?=base_url();?>assets/css/responsive.bootstrap4.min.css">
 <link rel="stylesheet" href="<?=base_url();?>assets/css/buttons.bootstrap4.min.css">
 <style>
-.scrollme {
-overflow-x: auto;
-}
+    .dataTables_scroll {
+        overflow-x: auto;
+    }
 </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -39,7 +39,7 @@ overflow-x: auto;
 <!-- Preloader -->
 
 <!-- Navbar -->
-<?php require('nav.php');?>
+<?php require('nav.php'); ?>
 <!-- /.navbar -->
 
 <!-- Content Wrapper. Contains page content -->
@@ -66,122 +66,94 @@ overflow-x: auto;
 <div class="row">
 <div class="col-12">
 <div class="card">
-	<div class="card-header">
-		<h3 class="card-title">Created Companies</h3>
-	</div>
-	<!-- /.card-header -->
-	<div class="card-body">
-		<div class="container-fluid body-content">
-			<div class="page-header">
-				<div class="form-group">
-					<fieldset>
-						<form action="" class="form-group" method="post">
-							<div class="table-responsive">
-								<div class="table-responsive">
-									<table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
-										<thead>
-											<tr>
-												<th>S.No.</th>
-												<th>BD Name</th>
-												<th>PST</th>
-												<th>Company ID</th>
-												<th>Company Name</th>
-												<th>Total Logs</th>
-												<th>State</th>
-												<th>City</th>
-												<th>Draft</th>
-												<th>Budget</th>
-												<th>Address</th>
-												<th>Website</th>
-												<th>Partner Type</th>
-												<th>Focus Funnel</th>
-												<th>Upsell Client</th>
-												<th>Key Client</th>
-												<th>Contact Person</th>
-												<th>Contact Number</th>
-												<th>Email</th>
-												<th>Designation</th>
-												<th>Created By</th>
-												<th>Created At</th>
-												<th>Current Status</th>
-												<th>Current Remark</th>
-											</tr>
-										</thead>
-										<tbody>
-											
-											<?php
-											$i=1;
-											
-											foreach($mdata as $dt){
-											$cid = $dt->cmpid_id;
-											$cd=$this->Menu_model->get_cdbyid($cid);
-											$ccd=$this->Menu_model->get_ccdbyid($cid);
-											if($ccd){$contactperson=$ccd[0]->contactperson;$phoneno=$ccd[0]->phoneno;$emailid=$ccd[0]->emailid;$designation=$ccd[0]->designation;}
-											else{$contactperson="";$phoneno="";$emailid="";$designation="";}
-											$init=$this->Menu_model->get_initcallbyid($cid);
-											$cuid = $init[0]->creator_id;
-											$sid = $init[0]->cstatus;
-											$ciid = $init[0]->id;
-											$pid = $init[0]->apst;
-											$bdid = $init[0]->mainbd;
-											$bdname=$this->Menu_model->get_userbyid($bdid);
-											$tblc=$this->Menu_model->get_tblbyidwithremark($ciid);
-											$logs = sizeof($tblc);
-										
-											if($sid){$sid=$this->Menu_model->get_statusbyid($sid);$sid=$sid[0]->name;}
-											else{$sid='';}
-											if($pid){$pstname=$this->Menu_model->get_userbyid($pid);$pstname=$pstname[0]->name;}
-											else{$pstname='';}
-											if($cuid!=''){$creatername=$this->Menu_model->get_userbyid($cuid);$creatername=$creatername[0]->name;}
-											else{$creatername='';}
-											?>
-											<tr>
-												<td><?=$i?></td>
-												<td><?=$bdname[0]->name?></td>
-												<td><?=$pstname?></td>
-												<td><?=$cd[0]->id?></td>
-												<td><a href="../CompanyDetails/<?=$cid?>"><?=$cd[0]->compname?></a></td>
-												<td><?=$logs?></td>
-												<td><?=$cd[0]->state?></td>
-												<td><?=$cd[0]->city?></td>
-												<td><?=$cd[0]->draft?></td>
-												<td><?=$cd[0]->budget?></td>
-												<td><?=$cd[0]->address?></td>
-												<td><?=$cd[0]->website?></td>
-												<td><?php if(isset($cd[0]->partnerType_id)){
-													$pid = $cd[0]->partnerType_id;
-													$pid = $this->Menu_model->get_partnerbyid($pid);
-													echo $pid[0]->name;
-													}?>
-												</td>
-												<td><?=$init[0]->focus_funnel;?></td>
-												<td><?=$init[0]->upsell_client;?></td>
-												<td><?=$init[0]->keycompany;?></td>
-												<td><?=$contactperson?></td>
-												<td><?=$phoneno?></td>
-												<td><?=$emailid?></td>
-												<td><?=$designation?></td>
-												<td><?=$creatername?></td>
-												<td><?=$cd[0]->createddate?></td>
-												<td><?=$sid?></td>
-												<td><?=$tblc[0]->remarks?></td>
-												
-											</tr>
-											<?php $i++;} ?>
-										</tbody>
-									</table>
-								</div>
-							</div>
-							</form>            <!--END OF FORM ^^-->
-						</fieldset>
-					</div>
-					<hr />
-				</div>
-			</div></div></div></div>
-		</div>
-		<!-- /.card-body -->
-	</div>
-	<!-- /.card -->
+    <div class="card-header">
+        <h3 class="card-title">Created Companies</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <div class="container-fluid body-content">
+            <div class="page-header">
+                <div class="form-group">
+                    <fieldset>
+                        <form class="form-group">
+                            <div class="table-responsive dataTables_scroll">
+                                <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>S.No.</th>
+                                            <th>BD Name</th>
+                                            <th>PST</th>
+                                            <th>Company ID</th>
+                                            <th>Company Name</th>
+                                            <th>Total Logs</th>
+                                            <th>State</th>
+                                            <th>City</th>
+                                            <th>Draft</th>
+                                            <th>Budget</th>
+                                            <th>Address</th>
+                                            <th>Website</th>
+                                            <th>Partner Type</th>
+                                            <th>Focus Funnel</th>
+                                            <th>Upsell Client</th>
+                                            <th>Key Client</th>
+                                            <th>Contact Person</th>
+                                            <th>Contact Number</th>
+                                            <th>Email</th>
+                                            <th>Designation</th>
+                                            <th>Created By</th>
+                                            <th>Created At</th>
+                                            <th>Current Status</th>
+                                            <th>Current Remark</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        <?php
+                                        $i=1;
+                                        foreach($mdata as $dt){ 
+                                            //echo"<pre>dt ";print_r($dt);exit;
+                                            ?>   
+                                        <tr>
+                                            <td><?=$i?></td>
+                                            <td><?=$dt->bdname?></td>
+                                            <td><?=$dt->apst?></td>
+                                            <td><?=$dt->cid?></td>
+                                            <td><a href="../CompanyDetails/<?=$dt->cid?>"><?=$dt->compname?></a></td>
+                                            <td><?=$dt->tblc_count?></td>
+                                            <td><?=$dt->state?></td>
+                                            <td><?=$dt->city?></td>
+                                            <td><?=$dt->draft?></td>
+                                            <td><?=$dt->budget?></td>
+                                            <td><?=$dt->address?></td>
+                                            <td><?=$dt->website?></td>
+                                            <td><?=$dt->partnername?></td>
+                                            <td><?=$dt->focus_funnel?></td>
+                                            <td><?=$dt->upsell_client?></td>
+                                            <td><?=$dt->keycompany?></td>
+                                            <td><?=$dt->contactperson?></td>
+                                            <td><?=$dt->phoneno?></td>
+                                            <td><?=$dt->emailid?></td>
+                                            <td><?=$dt->designation?></td>
+                                            <td><?=$dt->creatorname?></td>
+                                            <td><?=$dt->createddate?></td>
+                                            <td><?=$dt->status?></td>
+                                            <td><?=$dt->remarks?></td>
+                                            
+                                        </tr>
+                                        <?php $i++;} ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>            <!--END OF FORM ^^-->
+                    </fieldset>
+                </div>
+                <hr />
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->
 </div>
 <!-- /.col -->
 </div>
@@ -189,7 +161,6 @@ overflow-x: auto;
 </div>
 <!-- /.container-fluid -->
 </section>
-
 
 <footer class="main-footer">
 <strong>Copyright &copy; 2021-2022 <a href="<?=base_url();?>">Stemlearning</a>.</strong>
@@ -223,7 +194,7 @@ $.widget.bridge('uibutton', $.ui.button)
 <script src="<?=base_url();?>assets/js/jquery.vmap.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery.vmap.usa.js"></script>
 <!-- jQuery Knob Chart -->
-<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+<script src="<?=base_url();?>assets/js/jquery.knob.min.js"></script>
 <!-- daterangepicker -->
 <script src="<?=base_url();?>assets/js/moment.min.js"></script>
 <script src="<?=base_url();?>assets/js/daterangepicker.js"></script>
@@ -251,10 +222,45 @@ $.widget.bridge('uibutton', $.ui.button)
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="<?=base_url();?>assets/js/dashboard.js"></script>
 <script>
-$("#example1").DataTable({
-"responsive": false, "lengthChange": false, "autoWidth": false,
-"buttons": ["csv", "excel", "pdf","colvis"]
-}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+// $(document).ready(function() {
+//     $("#example1").DataTable({
+//         responsive: true,
+//         autoWidth: true,
+//         paging: true,
+//         searching: true,
+//         ordering: false,
+//         info: true,
+//         scrollX: true, // Enable horizontal scrolling
+//         dom: 'Bfrtip', // Include button controls in the DOM
+//         buttons: [
+//             'copy', 'csv', 'excel', 'pdf', 'print'
+//         ]
+//     });
+// });
+
+// $(document).ready(function() {
+//     $('#example1').DataTable({
+//         //"serverSide":true,
+//         //"pagingType": "full_numbers",
+//         "pageLength": 10,
+//         "lengthMenu": [10, 25, 50, 75, 100],
+//         "lengthChange": true,
+//         "searching": true,
+//         "ordering": true,
+//         "info": true,
+//         "autoWidth": true,
+//         "buttons": ["csv", "excel", "pdf","colvis"]
+//         "language": {
+//             "processing": "<div class='dataTables_processing'></div>" // Custom processing indicator
+//         }
+//     });
+// });
+
+ $("#example1").DataTable({
+ "responsive": false, "lengthChange": false, "autoWidth": false,
+ "buttons": ["csv", "excel", "pdf","colvis"]
+ }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
 </script>
 </body>
 </html>

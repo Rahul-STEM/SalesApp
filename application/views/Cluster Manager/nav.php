@@ -10,11 +10,7 @@
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <button type="button" class="btn btn-primary" onclick="goBack()">Go Back</button>
-            <?php 
-            $udetail    = $this->Menu_model->get_userbyid($uid);
-            $ucash  = $udetail[0]->ucash;
-            ?>
-            <button type="button" class="btn btn-success"><span><b>Our Cash : <?=$ucash;?> ₹</b></span></button>
+            <button type="button" class="btn btn-secondary" onclick="goForward()">Go Forward</button>
         </li>
     </ul>
     <!-- Right navbar links -->
@@ -80,8 +76,7 @@
             </div>
         </li>-->
         <!-- Notifications Dropdown Menu -->
-        <h4>HI!  <?=$user['name']?> </h4> 
-    
+        <h4>HI!  <?=$user['name']?> </h4>
         <input type="hidden" id="ur_id" value="<?=$uid?>">
         <li class="nav-item">
             <a class="nav-link" href="<?=base_url();?>/Menu/Notification">
@@ -162,6 +157,7 @@
                         <p>Day Management</p>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a href="<?=base_url();?>Management/CheckingDayManagement" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
@@ -172,9 +168,10 @@
                 <?php
                 
                 $days = $this->Menu_model->get_daystarted($uid,$tdate);
+                $current_date = date('Y-m-d');
                 if($days){?>
                 <li class="nav-item">
-                    <a href="<?=base_url();?>Menu/TaskPlanner/<?=$tdate?>" class="nav-link">
+                <a href="<?=base_url();?>Menu/TaskPlanner2/<?=$current_date?>" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Task Planner</p>
                     </a>
@@ -205,13 +202,13 @@
                         <p>Planner Task Approvel</p>
                     </a>
                 </li>
-               
                 <!-- <li class="nav-item">
                     <a href="<?=base_url();?>Menu/AddSpecialCommentOnTask" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Add Special Comment On Task</p>
                     </a>
                 </li> -->
+
                 <li class="nav-item">
             <a href="<?=base_url();?>Menu/AddSpecialCommentOnTask" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
@@ -224,6 +221,7 @@
               <p>Add Thanks Comment On Task (Complete)</p>
             </a>
           </li>
+
                 <li class="nav-item">
                     <a href="<?=base_url();?>Menu/SpecialRequestForLeaveSomeTimeData" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
@@ -236,21 +234,6 @@
                     <p>Our Special Request For Leave Some Time </p>
                     </a>
                 </li>
-
-                <li class="nav-item">
-                    <a href="<?=base_url();?>Menu/OurTeamTravelAdvanceRequest" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Our Team Travel Advance Request</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?=base_url();?>Menu/OurTravelAdvanceRequest" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Our Travel Advance Request</p>
-                    </a>
-                </li>
-
-
                 <li class="nav-item">
                     <a href="<?=base_url();?>Management/OurMoMApprovedStatus" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
@@ -265,9 +248,6 @@
                         <p>RP Check</p>
                     </a>
                 </li>
-
-
-
                 
                 <!--<li class="nav-item">-->
                 <!--  <a href="<?=base_url();?>Menu/AddFAQ" class="nav-link">-->
@@ -333,7 +313,17 @@
                         <p>Category Wise Status</p>
                     </a>
                 </li>
-                
+                <li class="nav-item">
+
+            <a href="<?=base_url();?>Menu/AssignTask" class="nav-link">
+
+              <i class="far fa-circle nav-icon"></i>
+
+              <p>Assign Task</p>
+
+            </a>
+
+          </li>
                 
                 
                 <li class="nav-item">
@@ -359,6 +349,17 @@
 </div>
 <!-- /.sidebar -->
 </aside>
+<?php 
+      if(!isset($daycheck)){
+        $current_uid    = $user['user_id'];
+      $user_type = $user['type_id'];
+      $user_day = $this->Menu_model->get_daydetail($current_uid,date("Y-m-d"));
+      if(sizeof($user_day) == 0){
+          $this->session->set_flashdata('error_message','* Please start your day first');
+          redirect('Menu/DayManagement');
+      }  
+      }    
+      ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
 <script>
@@ -420,6 +421,7 @@ else {console.error("Geolocation is not supported by this browser.");}
 }
 function goBack() { window.history.back(); }
 function goForward() { window.history.forward(); }
+
 var ur_id = document.getElementById("ur_id").value;
 $.ajax({
 url:'<?=base_url();?>Menu/bdpopup',
@@ -430,6 +432,8 @@ var res = result;
 $("#alsmss").html(result);
 }
 });
+
+
 $.ajax({
 url:'<?=base_url();?>Menu/opalsms',
 method: 'post',
@@ -439,6 +443,8 @@ var res = result;
 $("#opalsms").html(result);
 }
 });
+
+
 $.ajax({
 url:'<?=base_url();?>Menu/nitisms',
 method: 'post',
@@ -448,4 +454,7 @@ var res = result;
 $("#nitisms").html(result);
 }
 });
+
+
+
 </script>

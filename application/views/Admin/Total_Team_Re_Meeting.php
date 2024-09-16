@@ -82,6 +82,7 @@ overflow-x: auto;
                               <tr>
                                 <th>S.No.</th>
                                 <th>BD Name</th>
+                                <th>CIN</th>
                                 <th>Company Name</th>
                                 <th>Photo</th>
                                 <th>Started @</th>
@@ -99,6 +100,7 @@ overflow-x: auto;
                             <tbody>
                               <?php $i=1;
                               foreach($mdata as $dt){
+                                  if($dt->cmpid != 0){
                               $cmpid = $dt->cmpid;
                               $cid = $dt->cid;
                               $tid = $dt->tid;
@@ -106,14 +108,16 @@ overflow-x: auto;
                               if($momc){$momc='yes';}else{$momc='no';}
                               $emailc = $this->Menu_model->get_temailyn($cid,$tid);
                               if($emailc){$emailc='yes';}else{$emailc='no';}
-                              $psta = $this->Menu_model->get_psta($cid);
+                              //$psta = $this->Menu_model->get_psta($cid);
+                              $psta =$dt->apst;
                               if($psta){$psta='yes';}else{$psta='no';}
-                              
+                               if($momc !='no'){
                               ?>
                               
                               <tr>
                                 <td><?=$i?></td>
                                 <td><?=$dt->name?></td>
+                                <td><?=$cmpid?></td>
                                 <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$cmpid?>"><?=$dt->company_name?></a></td>
                                 <td>
                                     <img src="<?=base_url();?><?=$dt->cphoto?>" alt="image not found" width="200">
@@ -135,7 +139,7 @@ overflow-x: auto;
                                 <td><?=$emailc?></td>
                                 <td><?=$psta?></td>
                                 <td><?=$dt->queans?><hr><?=$dt->mcomment?></td>
-                                <?php $i++;} ?>
+                                <?php $i++;} }} ?>
                               </tbody>
                             </table>
                           </div>

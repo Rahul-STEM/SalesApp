@@ -239,7 +239,7 @@ span.tsby {
                                                     <th>Task Appointment date time</th>
                                                     <th>Plan By</th>
                                                     <th>Filter Used</th>
-                                                    <th>Filter By</th>
+                                                    <!-- <th>Filter By</th> -->
                                                     <th>Task Work Status</th>
                                                     <th>Action Status</th>
                                                     <th>Approved/Rejected By</th>
@@ -311,6 +311,7 @@ span.tsby {
                                                       }
                                                     endforeach;
                                                     ?></td>
+                                                    <?php /*
                                                     <td>
                                                         <?php 
 
@@ -338,6 +339,7 @@ span.tsby {
                                                              endforeach; ?>
                                                         <?php endif; ?>
                                                     </td>
+                                                    <?php */ ?>
                                                     <td>
                                                     <?php 
                                                     if($taskdata->nextCFID == 0){?>

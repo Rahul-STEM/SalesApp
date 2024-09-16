@@ -87,6 +87,7 @@ date_default_timezone_set("Asia/Kolkata");
                    <!-- Start Meeting Form -->
 
                   <div class="p-3 write_mom_section" id="test6" style="display: none;">
+                 
                   <div class="text-center momhbox">
                     <div> <label> <i>MINUTES OF MEETING (MoM)</i> </label>
                     <!-- <hr style="width:200px;"> -->
@@ -187,7 +188,6 @@ date_default_timezone_set("Asia/Kolkata");
                         <option value="no">No</option>
                         <option value="yes">Yes</option>
                     </select>
-                    
                     <br>
                     <div id="identify_school_box" class="identify_school_box">
                       <div class="text-right mb-2">
@@ -198,7 +198,6 @@ date_default_timezone_set("Asia/Kolkata");
                     <input type="text" required class="form-control"name="no_of_school[]" placeholder="Enter No of School">
                    
                     </div>
-                    
                     </div>
          
                     <hr>
@@ -345,12 +344,12 @@ date_default_timezone_set("Asia/Kolkata");
                       <div class="invalid-feedback">.</div>
                       <div class="valid-feedback">Looks good!</div>
                     </div>
-                    <div class="col-12 col-md-12 mb-12">
+                    <!-- <div class="col-12 col-md-12 mb-12">
                       <label>Next Action Date</label>
                       <input type="date" class="form-control" name='nadate' required>
                       <div class="invalid-feedback">.</div>
                       <div class="valid-feedback">Looks good!</div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
@@ -729,7 +728,9 @@ date_default_timezone_set("Asia/Kolkata");
                                           <iframe style="width:100%;height:200px;" id="mylocation" src="" frameborder="0" style="border:0" allowfullscreen></iframe>
                                         </div>
                                       </div>
+
                                       <button type="submit" id="rpmsClick" class="btn btn-primary mt-3">Submit</button>
+                                   
                                     </form>
                                   </div>
                                   
@@ -1154,7 +1155,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 $('#RPMorN').on('change', function b() {
                                 var a =this.value;
                                 if(a=='RP' || a=='Only Got Detail'){$("#RPMbox").show();}
-                                else{$("#RPMbox").hide();  }
+                                else{$("#RPMbox").hide();}
                                 });
                                 $('#mbolocation').on('change', function b() {
                                 var a =this.value;
@@ -1315,7 +1316,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 success: function(response){
                                 var len = response.length;
                                 $('#cname,#ctname').text('');
-                                // console.log(response);
+                                   console.log(response);
                                 if(len > 0){
                                 
                                 var cstatus = response[0].cstatus;
@@ -1350,6 +1351,7 @@ date_default_timezone_set("Asia/Kolkata");
                                       type: 'POST',
                                       data: { purposeId: cpurpose},
                                       success: function(response) {
+                                          console.log(response);
                                         cpurpose_name = response;
                                         document.getElementById("cpurpose").innerHTML = cpurpose_name;
                                       }
@@ -1367,7 +1369,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 document.getElementById("emailid").innerHTML = emailid;
                                 document.getElementById("phoneno").innerHTML = phoneno;
                                 document.getElementById("designation").innerHTML = designation;
-                                // document.getElementById("cpurpose").innerHTML = cpurpose;
+                                document.getElementById("cpurpose").innerHTML = cpurpose;
                                 document.getElementById("action_id").value = actiontype_id;
                                 document.getElementById("yaction_id").value = actiontype_id;
                                 document.getElementById("cmpid").value = cmpid;
@@ -1376,8 +1378,8 @@ date_default_timezone_set("Asia/Kolkata");
                                 document.getElementById("wlink").href = "https://wa.me/91"+phoneno;
                                 document.getElementById("glink").href = "mailto:"+emailid;
                                 document.getElementById("cmplink").href = "CompanyDetails/"+cmid;
-
-                                if(ctname=='Research'){
+                                //  alert(ctname);
+ 								if(ctname=='Research'){
                                   $("#reaserch_message").show();
                                   $("#reaserch_message").html('<h5 class="p-2">Research</h5>');
                                   $("#reaserch_message1").text('* Add New Lead Please Submit this form');
@@ -1399,6 +1401,7 @@ date_default_timezone_set("Asia/Kolkata");
                                   $("#reaserch_message").hide();
                                   $("#reaserch_message1").hide();
                                 }
+	
                                 if(ctname=='Call' || ctname=='Whatsapp Activity'){
                                 //  alert(ctname);
                                 //  document.getElementById("moshow").classList.add('d-lg-none');
@@ -1437,7 +1440,6 @@ date_default_timezone_set("Asia/Kolkata");
                                 });
                                 $('[id^="startm"]').on('click', function() {
                                 $('#add_startm').modal('show');
-
                                 var id = this.value;
                                 document.getElementById("startmid").value=id;
                                 $.ajax({

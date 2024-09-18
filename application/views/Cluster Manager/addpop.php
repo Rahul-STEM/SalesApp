@@ -786,7 +786,7 @@ date_default_timezone_set("Asia/Kolkata");
                                               </select>
                                              <hr>
 
-                                             <div class="form-group p-3">
+                                             <div class="form-group p-3" id="potentional_client_card">
                                               <label>Potentional Client:</label><br>
                                               <input type="radio" id="yes" name="potentional_client" value="yes" required>
                                               <label for="male">YES</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -1669,7 +1669,15 @@ date_default_timezone_set("Asia/Kolkata");
 
             
 
-
+            $("#potentional_client_card").hide();
+            $('#priority').on('change', function f() {
+                    var priority = this.value;
+                    if(priority == 'yes'){
+                      $("#potentional_client_card").show();
+                    }else{
+                      $("#potentional_client_card").hide();
+                    }
+                });
 
         });
     </script>

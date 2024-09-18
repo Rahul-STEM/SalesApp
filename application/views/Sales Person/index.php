@@ -933,19 +933,11 @@ $dataPoints2 = array(
                                         </button>
                                     </div>
                                     <?php } ?>
-
-
-
-
-
                                   <?php } ?>
                                   </div>
                                 </div>
                               </div>
                             <?php } ?>
-
-
-
                               <div class="card">
                                 <div class="card-header bg-light" id="headingThree" data-toggle="collapse" data-target="#collapse9121" aria-expanded="false" aria-controls="collapse9121">
                                       <?php $ttbytime = $this->Menu_model->get_ttbytime($uid,$tdate,'19:00:00','21:00:00');
@@ -981,6 +973,36 @@ $dataPoints2 = array(
                                   </div>
                                 </div>
                               </div>
+
+                            <?php 
+                              $user_day_planner  = $this->Menu_model->get_daystarted($uid,date("Y-m-d"));
+                              $pinitiate_time = $user_day_planner[0]->planner_initiate_time;
+                              $textmessage = $pinitiate_time == '' ? "Start" : "Resume";
+                              ?>
+                            <div class="card">
+                                <div class="card-header bg-primary" id="start_planning1" data-toggle="collapse" data-target="#start_planning2" aria-expanded="false" aria-controls="collapse9121">
+                                <b><?= $textmessage; ?> Planning </b>   
+                                </div>
+                                <div id="start_planning2" class="collapse" aria-labelledby="start_planning1" data-parent="#accordion">
+                                  <div class="card-body">
+                                    <div class="list-group-item list-group-item-action ">
+                                    <center>
+                                    <button type="button" class="btn btn-success font-weight-bold" style="padding:6px 70px;" onclick="handleReminderCreation()">
+                                    <?= $textmessage; ?> &nbsp;<i class="fa-solid fa-forward"></i>
+                                    </button>
+                                    </center>
+                                    <!-- <br> -->
+                                    <!-- <hr> -->
+                                    <!-- <button id="add_act6734763254" value="" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                                       <span class="mr-3 align-items-center">
+                                         sdsadsagd
+                                       </span>
+                                    </button> -->
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
                             </div>
                   </div>
 
@@ -1865,13 +1887,6 @@ $dataPoints2 = array(
                     <span> <b>Todays Planner Time : <?=$start_tttpft;?> to <?=$end_tttpft;?></b> </span>
                   </div>
                 <?php  } ?> 
-
-             
-                <div class="card p-2 text-center text-white">
-                <button type="button" class="btn btn-success" onclick="handleReminderCreation()">
-                Start Planner
-              </button>
-                  </div>
                 <div class="card p-3">
                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenterspclchngreq">
                       <b>Create a Special Request For Plan Change </b>

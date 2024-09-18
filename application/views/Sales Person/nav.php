@@ -115,17 +115,7 @@
               <p>Day Management</p>
             </a>
           </li>
-          <?php 
-          $current_date = date("Y-m-d");
-          $days = $this->Menu_model->get_daydetail($uid,$current_date); 
-          if($days){ ?>
-          <li class="nav-item">
-            <a href="<?=base_url();?>Menu/TaskPlanner2/<?=$current_date?>" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Task Planner</p>
-            </a>
-          </li>
-          <?php } ?>
+       
            <li class="nav-item">
             <a href="<?=base_url();?>Menu/NewFunnel" class="nav-link">
               <i class="far fa-circle nav-icon"></i>

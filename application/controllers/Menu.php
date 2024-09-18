@@ -11873,6 +11873,9 @@ public function Dashboard(){
         $bdid = $this->input->post('bdid');
         $fdate = $this->input->post('fdate');
         $this->load->model('Menu_model');
+
+        dd($_POST);
+
         $cmp=$this->Menu_model->get_cmpdbybd($stid,$bdid,$fdate);
         echo '<option value="">Select Company</option>';
         foreach($cmp as $dt){
@@ -18241,7 +18244,8 @@ public function GetCompanyLastStatus(){
     $momdata = $this->Menu_model->getRequestMOMBYID($mom_id);
     $init_cmpid = $momdata[0]->init_cmpid;
     $initdata = $this->Menu_model->get_cmpbyinid($init_cmpid);
-    $lstatus = $initdata[0]->lstatus;
+    // $lstatus = $initdata[0]->lstatus;
+    $lstatus = 2;
     
     $lstatusdata = $this->Menu_model->get_statusbyid($lstatus);
     echo "<option value='".$lstatus."'>".$lstatusdata[0]->name."</option>";
@@ -18622,7 +18626,23 @@ public function CheckTaskPlanningTime(){
 
 
 
-
+public function TestPage(){
+    date_default_timezone_set("Asia/Calcutta");
+    $tdate=date('Y-m-d H:i:s');
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+  
+    if(!empty($user)){
+        $this->load->view($dep_name.'/TestPage',['uid'=>$uid,'user'=>$user,'mdata'=>'']);
+    }else{
+        redirect('Menu/main');
+    }
+}
 
 
 

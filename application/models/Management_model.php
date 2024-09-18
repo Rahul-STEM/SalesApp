@@ -1206,11 +1206,13 @@ public function UpdateMOMAterCheck_DataTo_NORP($mom_id,$uaid,$tid,$ntid) {
     $approved_status = 'NO RP';
     $approvedtDate = date("Y-m-d H:i:s");
     $approvedreamrk = 'Meetings Converted To NO RP Successfully';
-    
+  
     $query =$this->db->query("SELECT cid_id FROM `tblcallevents` WHERE id = '$tid' ");
     $resData =  $query->result();
     $cid_id = $resData[0]->cid_id;
-    $query=$this->db->query("UPDATE `init_call` SET `cstatus` = `lstatus` WHERE id='$cid_id'");
+    $lstatus = 2;
+    $query=$this->db->query("UPDATE `init_call` SET `cstatus` = '$lstatus' WHERE id='$cid_id'");
+   
     $remark = 'NO RP FOUND';
     $date = date("Y-m-d H:i:s");
     $dataup = array(

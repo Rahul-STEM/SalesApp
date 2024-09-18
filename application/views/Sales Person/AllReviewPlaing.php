@@ -132,6 +132,7 @@
                   <hr>
                   <div class="was-validated">
                     <div class="form-group">
+                      <input type="hidden" id="slsct_reviewtype" name="reviewtype" value="<?=$revst[0]->reviewtype;?>">
                       <input type="hidden" name="uidaa" value="<?=$uid?>">
                       <input type="hidden" id="bdid" value="<?=$revst[0]->bdid;?>">
                       <?php date_default_timezone_set("Asia/Kolkata"); ?>
@@ -683,8 +684,6 @@
         else if(stid==2){$("#orrr").show();}
         else{$("#orrr").show();}
         
-        
-        
         $.ajax({
         url:'<?=base_url();?>Menu/getotherremark',
         type: "POST",
@@ -772,6 +771,7 @@
         
         
         $('#statusid').on('change', function b() {
+        var reviewtype = document.getElementById("slsct_reviewtype").value;
         var pstid = document.getElementById("pstid").value;
         var stid = document.getElementById("statusid").value;
         var bdid = document.getElementById("bdid").value;
@@ -780,6 +780,7 @@
         url:'<?=base_url();?>Menu/getcmpdbybd',
         type: "POST",
         data: {
+        reviewtype: reviewtype,
         pstid: pstid,
         stid: stid,
         bdid: bdid,

@@ -334,21 +334,6 @@ class Management extends Menu {
             $groupedByDate[$date][$period][] = $record;
         }
         
-
-        // foreach ($getReportbyUser as $record) {
-
-        //     $date = $record->date;
-
-        //     if (!isset($groupedByDate[$date])) {
-
-        //         $groupedByDate[$date] = [];
-        //     }
-
-        //     $groupedByDate[$date][] = $record;
-        // }
-
-        // var_dump($groupedByDate);die;
-
         if (!empty($user)) {
             // $this->load->view('include/header');
             // $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);
@@ -368,59 +353,6 @@ class Management extends Menu {
         // Create a new PHPExcel object
         
     }
-
-
-    // public function export_to_excel() {
-    //     // Load PhpSpreadsheet
-    //     // require 'vendor/autoload.php';
-        
-    //     // Create a new Spreadsheet object
-    //     // $spreadsheet = new Spreadsheet();
-    //     require_once APPPATH . 'libraries/PHPExcel.php';
-
-
-    //     $selected_user = $this->input->post('userID');
-    //     $sdate = $this->input->post('startDate');
-    //     $edate = $this->input->post('endDate');
-
-    //     $objPHPExcel = new PHPExcel();
-
-    //     // Fetch data for Morning Period Ratings
-    //     // $data_morning = $this->Report_model->get_report_by_period('Mornings');
-    //     $getReportbyUser = $this->Management_model->getReportbyUser($selected_user,$sdate,$edate);
-    //     // Create sheet for Morning Period Ratings
-    //     $objPHPExcel->createSheet();
-    //     $sheet->setTitle('Morning Period Ratings');
-    //     $sheet->setCellValue('A1', 'Date');
-    //     $sheet->setCellValue('B1', 'Question');
-    //     $sheet->setCellValue('C1', 'Rating');
-    //     $sheet->setCellValue('D1', 'Remark');
-    //     $sheet->setCellValue('E1', 'Feedback By');
-        
-    //     $rowNumber = 2;
-    //     foreach ($getReportbyUser as $row) {
-    //         $sheet->setCellValue('A' . $rowNumber, $row->date);
-    //         $sheet->setCellValue('B' . $rowNumber, $row->question);
-    //         $sheet->setCellValue('C' . $rowNumber, str_repeat('★', $row->star) . str_repeat('☆', 5 - $row->star));
-    //         $sheet->setCellValue('D' . $rowNumber, $row->remarks);
-    //         $sheet->setCellValue('E' . $rowNumber, $row->feedbackBy);
-    //         $rowNumber++;
-    //     }
-
-    //     $spreadsheet->setActiveSheetIndex(0);
-
-        
-    //     // Save the spreadsheet
-    //     $writer = new Xlsx($spreadsheet);
-    //     $filename = 'Reports_' . date('Y-m-d_H-i-s') . '.xlsx';
-        
-    //     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    //     header('Content-Disposition: attachment;filename="' . $filename . '"');
-    //     header('Cache-Control: max-age=0');
-        
-    //     $writer->save('php://output');
-    //     exit;
-    // }
 
     // New Daymanagement changes <======== END =======>
 

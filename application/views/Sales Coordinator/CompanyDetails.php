@@ -209,6 +209,8 @@
                                             <th>Updated By</th>
                                             <th>Last Status</th>
                                             <th>Updated Status</th>
+                                            <th>Reviewed By</th>
+                                            <th>Review Remark</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -239,6 +241,8 @@
                                         <td><?=$ui[0]->name?></td>
                                         <td><?=$lsi[0]->name;?></td>
                                         <td><?=$usi[0]->name;?></td>
+                                        <td><?= $tb->reviewedBy; ?></td>
+                                        <td><?= $tb->reviewRemark; ?></td>
                                     </tr>
                                     <?php $i++;}} ?>
                                   </tbody>

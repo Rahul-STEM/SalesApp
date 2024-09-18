@@ -1023,18 +1023,18 @@
                                                             <b>Action No Purpose No : :<a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/ANPN/' . $teamuid . '/' . $cdate ?>"><?= $dayData[0]->completedANPN ?> </a></b> <br>
                                                             <hr>
                                                             
-                                                            <?php // $data->type_id = 13; 
+                                                            <?php  $data->type_id = 13; 
                                                             if ($data->type_id  == 13) { ?>
                                                             <b>On Team funnel Completed tasks : </b> 
                                                                     <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/TotalTeamCompleted/' . $uid . '/' . $cdate ?>">
                                                                 <?= ($funnelData[0]->TotalTeamdone); ?></a>
                                                             <hr>
                                                             <!-- <br> -->
-                                                            <b>Status Change because of my Task : </b> 
+                                                            <b>Status Change because of own funnel Task : </b> 
                                                                     <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/StatusChangebcozMyTask/' . $uid . '/' . $cdate ?>">
                                                                 <?= ($dayData[0]->StatusChangeByMyFunnelTask); ?></a>
-                                                                <br>
-                                                            <b>Status Change because of others Task : </b> 
+                                                                <br><br>
+                                                            <b>Status Change because of team funnel Task : </b> 
                                                                     <a class="text-primary" target="_BLANK" href="<?= base_url() . 'Management/CheckingYesterDayTask/StatusChangebcozOtherTask/' . $uid . '/' . $cdate ?>">
                                                                 <?= ($funnelData[0]->TotalStatusChangeByOtherFunnelTask); ?></a>
                                                             <?php } ?>

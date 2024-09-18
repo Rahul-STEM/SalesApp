@@ -3047,7 +3047,20 @@ WHERE cid = '$cid'");
 
 
     public function get_tblcalleventsbyid($ciid){
-        $query=$this->db->query("SELECT * FROM tblcallevents WHERE cid_id='$ciid' and cast(updateddate as DATE)>'2023-04-01' ORDER BY tblcallevents.updateddate DESC");
+        // $query=$this->db->query("SELECT * FROM tblcallevents WHERE cid_id='$ciid' and cast(updateddate as DATE)>'2023-04-01' ORDER BY tblcallevents.updateddate DESC");
+
+        $this->db->select('tblcallevents.*');
+        $this->db->select('tsr.remarks reviewRemark');
+        $this->db->select('ud.name reviewedBy');
+
+        $this->db->from('tblcallevents');
+        $this->db->join('taskcheck_star_rating tsr','tsr.task_id = tblcallevents.id', 'left');
+        $this->db->join('user_details ud','ud.user_id = tsr.feedback_by', 'left');
+
+        $this->db->where('cid_id', $ciid);
+        $this->db->where('CAST(updateddate AS DATE) >', '2023-04-01');
+        $this->db->order_by('updateddate', 'DESC');
+        $query = $this->db->get();
 
         return $query->result();
     }
@@ -11755,19 +11768,6 @@ public function getManyReviewData($id) {
     $this->db->select('mtr.suppert');
     $this->db->select('mtr.rtype reviewType');
     
-    // $this->db->select('mtr.ex_status_id');
-    // $this->db->select('mtr.many_times_barge_meeting');
-    // $this->db->select('mtr.many_times_barge_meeting');
-
-    // $this->db->select('ard.ans1 callRemark');
-    // $this->db->select('ard.ans2 emailRemark');
-    // $this->db->select('ard.ans3 meetingRemark');
-
-    // $this->db->select('ar.plant reviewPlan_time');
-    // $this->db->select('ar.startt reviewStart_time');
-    // $this->db->select('ar.closet reviewEnd_time');
-    // $this->db->select('ar.reviewtype reviewType');
-    // $this->db->select('ar.fixdate fixdate');
     $this->db->select('partner_master.name partnerType');
     // $this->db->select('st1.name NewStatus');
     
@@ -11817,38 +11817,6 @@ public function getReviewData($id) {
     $this->db->select('st1.name exStatus');
     $this->db->select('st2.name requestStatus');
 
-
-    // $this->db->select('mtr.type_of_task type_of_task');
-    // $this->db->select('mtr.rp_meeting_done RPMeeting');
-    // $this->db->select('mtr.mom_done mom_done');
-    // $this->db->select('mtr.social_networking_done SN_done');
-    // $this->db->select('mtr.category_right');
-    // $this->db->select('mtr.slct_category selectedCategory');
-    // $this->db->select('mtr.current_status_right currentStatus_right');
-    // $this->db->select('mtr.many_times_barge_meeting');
-    // $this->db->select('mtr.research_prospecting');
-    // $this->db->select('mtr.base_or_travel_location');
-    // $this->db->select('mtr.partner_type_right');
-    // $this->db->select('mtr.partner_type');
-    // $this->db->select('mtr.suppert');
-    // $this->db->select('mtr.rtype reviewType');
-    // $this->db->select('mtr.ex_status_id');
-    // $this->db->select('mtr.many_times_barge_meeting');
-    // $this->db->select('mtr.many_times_barge_meeting');
-
-    // $this->db->select('ard.ans1 callRemark');
-    // $this->db->select('ard.ans2 emailRemark');
-    // $this->db->select('ard.ans3 meetingRemark');
-
-    // $this->db->select('ar.plant reviewPlan_time');
-    // $this->db->select('ar.startt reviewStart_time');
-    // $this->db->select('ar.closet reviewEnd_time');
-    // $this->db->select('ar.reviewtype reviewType');
-    // $this->db->select('ar.fixdate fixdate');
-    // $this->db->select('st.name ExistingStatus');
-    // $this->db->select('st1.name NewStatus');
-    
-
     $this->db->select('ud.name userName');
     $this->db->select('ud1.name BDName');
 
@@ -11869,6 +11837,44 @@ public function getReviewData($id) {
     // die;
     return $query->row();
 }
+
+
+public function getMomDetails($id) {
+
+
+    $this->db->select('md.rpmmom momremark');
+    $this->db->select('md.approved_status momStatus');
+    $this->db->select('md.approved_date approvedDate');
+    
+    $this->db->from('mom_data md');
+    
+    $this->db->where('md.tid', $id);
+
+    $query = $this->db->get();
+    // echo $this->db->last_query();
+    // die;
+    return $query->row();
+}
+
+public function getProposalData($id) {
+
+
+    $this->db->select('pro.proattach pro_attachment');
+    $this->db->select('pro.apr pro_apr');
+    $this->db->select('pro.remark pro_remark');
+    $this->db->select('pro.aprdatet pro_approvedDate');
+    $this->db->select('pt.name pro_status');
+
+    $this->db->from('proposal pro');
+    $this->db->join('proposal_type pt', 'pt.id = pro.apr', 'left');
+    $this->db->where('pro.tid', $id);
+
+    $query = $this->db->get();
+    // echo $this->db->last_query();
+    // die;
+    return $query->row();
+}
+
 public function getReportbyUser($selected_user,$sdate,$edate){
 
     // var_dump($sdate);die;
@@ -11896,20 +11902,80 @@ public function getReportbyUser($selected_user,$sdate,$edate){
 
     $query = $this->db->get();
 
-    // echo $this->db->last_query();
+    // echo $this->db->last_query();die;
     return $query->result();
 }
 
 public function InsertMoMTaskRating($review){
 
     return $this->db->insert('taskcheck_star_rating', $review);
+}
 
-    // $this->db->insert('taskcheck_star_rating', $data);
-    // echo $this->db->last_query();die;
-    // Redirect or load a view
-    // $insert_id = $this->db->insert_id();
-    // return $insert_id;
+public function replicate_record($id) {
 
+    // Fetch the existing record
+    $this->db->where('id', $id);
+    $query = $this->db->get('tblcallevents');
+
+    if ($query->num_rows() > 0) {
+        $existing_record = $query->row_array();
+
+        $existing_record['tid'] = $existing_record['id'];
+        // Prepare data for the new record
+        unset($existing_record['id']); // Remove ID
+        unset($existing_record['created_at']); // Example of a field to exclude
+        unset($existing_record['updated_at']); // Another field to exclude
+
+        // Insert the new record
+        $this->db->insert('tblcallevents_taskCheck', $existing_record);
+
+        // Check if the insert was successful
+        if ($this->db->affected_rows() > 0) {
+            return $this->db->insert_id(); // Return the new ID
+        } else {
+            return false; // Insert failed
+        }
+    } else {
+        return false; // Record not found
+    }
+}
+
+public function get_scteam_tasks($uid){
+
+    $this->db->select('id');
+    $this->db->from('user_details');
+    $this->db->where('sales_co',$uid);
+    // $getSCTeam 
+    $getSCTeam = $this->db->get_compiled_select();
+
+    // var_dump($getSCTeam);die;
+    $this->db->select('id');
+    $this->db->from('tblcallevents');
+    $this->db->where_in('user_id',$getSCTeam);
+
+    // $getSCTeamTask = $this->db->get_compiled_select();
+
+    $getSCTeamTask = $this->db->get();
+    
+    return $getSCTeamTask->result_array();
+
+}
+
+public function replicate_scteam_tasks($uid) {
+    // Get the tasks for the sales team
+    $tasks = $this->get_scteam_tasks($uid);
+    
+    $new_ids = []; // Array to hold new IDs
+
+    // Loop through each task and replicate it
+    foreach ($tasks as $task) {
+        $new_id = $this->replicate_record($task['id']);
+        if ($new_id !== false) {
+            $new_ids[] = $new_id; // Store the new ID if successful
+        }
+    }
+
+    return $new_ids; // Return an array of new IDs
 }
 // New TaskCheck function <======================== END ==============================>
 

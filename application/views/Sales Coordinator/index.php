@@ -562,28 +562,41 @@ $mytaskd = $this->Menu_model->get_admintteamtd($myid,$tdate);
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-whatsapp-tab" data-toggle="pill" href="#custom-tabs-four-whatsapp" role="tab" aria-controls="custom-tabs-whatsapp" aria-selected="false">
-                        WA<span class="badge badge-success"><?=$ttbyd[0]->e?></span>
+                        WA <span class="badge badge-success"><?=$ttbyd[0]->e?></span>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-review-tab" data-toggle="pill" href="#custom-tabs-four-review" role="tab" aria-controls="custom-tabs-review" aria-selected="false">
-                        Review<span class="badge badge-success"><?=$ttbyd[0]->f?></span>
+                        Review <span class="badge badge-success"><?=$ttbyd[0]->f?></span>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-proposal-tab" data-toggle="pill" href="#custom-tabs-four-proposal" role="tab" aria-controls="custom-tabs-proposal" aria-selected="false">
-                        Proposal<span class="badge badge-success"><?=$ttbyd[0]->g?></span>
+                        Proposal <span class="badge badge-success"><?=$ttbyd[0]->g?></span>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link" id="custom-tabs-four-barg-tab" data-toggle="pill" href="#custom-tabs-four-barg" role="tab" aria-controls="custom-tabs-four-barg" aria-selected="false">
-                        Visit Meeting <span class="badge badge-success"><?=$ttbyd[0]->d?></span>
-                    </a>
-                  </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-four-barg-tab" data-toggle="pill" href="#custom-tabs-four-barg" role="tab" aria-controls="custom-tabs-four-barg" aria-selected="false">
+                            Visit Meeting <span class="badge badge-success"><?=$ttbyd[0]->d?></span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url(); ?>Menu/CreateTaskForTaskCheck" target="_blank">
+                            Task Check 
+                        </a>
+                    </li>
+
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url(); ?>Management/CheckingDayManagement_New" target="_blank">
+                            Day Check Management
+                        </a>
+                    </li> -->
                   
                 </ul>
                 
               </div>
+              
               <div class="card-body">
                 <div class="tab-content" id="custom-tabs-four-tabContent">
                   <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">

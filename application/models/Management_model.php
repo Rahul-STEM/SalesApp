@@ -47,39 +47,19 @@ class Management_model  extends Menu_model {
         $date = new DateTime();
         $date->modify('-1 day');
         $pdate =  $date->format('Y-m-d');
-        $pdate = '2024-07-19';
+        // $pdate = '2024-07-19';
 
         $uyid =  $uid;
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utypebyUserID($uyid);
         $utype = $dt[0]->type_id;
-        // echo ($utype);
-        // $utype = 13;
-        // $dep_name = $dt[0]->name;
-        // $query=$this->db->query("SELECT COUNT(*) AS plan, COUNT(CASE WHEN autotask = 1 THEN autotask END) AS autotask, COUNT(CASE WHEN nextCFID != 0 THEN 1 END) AS done, COUNT(CASE WHEN nextCFID = 0 AND lastCFID = 0 THEN 1 END) AS pending , COUNT(CASE WHEN reassign_type = 2 THEN 1 END) AS assignByOther FROM tblcallevents WHERE assignedto_id = $uid AND CAST(appointmentdatetime AS DATE) = '$pdate'");
-
-        // if ($utype == 13) {
-            
-        //     $this->db->select("COUNT(*) AS teamFunneltask");
-        // }
-
-        // $this->db->select("COUNT(*) AS plan");
-        // $this->db->select("COUNT(CASE WHEN autotask = 1 AND nextCFID != 0 THEN autotask END) AS Completedautotask");
-        // $this->db->select("COUNT(CASE WHEN autotask = 1 THEN autotask END) AS autotask");
-        // $this->db->select("COUNT(CASE WHEN nextCFID != 0 THEN 1 END) AS done");
-        // $this->db->select("COUNT(CASE WHEN nextCFID != 0 AND actontaken = 'yes' AND purpose_achieved = 'yes' THEN 1 END) AS completedAYPY");
-        // $this->db->select("COUNT(CASE WHEN nextCFID != 0 AND actontaken = 'yes' AND purpose_achieved = 'no' THEN 1 END) AS completedAYPN");
-        // $this->db->select("COUNT(CASE WHEN nextCFID != 0 AND actontaken = 'no' AND purpose_achieved = 'no' THEN 1 END) AS completedANPN");
-        // $this->db->select("COUNT(CASE WHEN nextCFID = 0 AND lastCFID = 0 THEN 1 END) AS pending");
-        // $this->db->select("COUNT(CASE WHEN reassign_type = 2 THEN 1 END) AS assignByOther");
-        // $this->db->select("COUNT(CASE WHEN reassign_type = 2 AND nextCFID != 0 THEN 1 END) AS CompletedassignByOther");
 
         $this->db->select('
                 COUNT(*) AS plan, 
                 COUNT(CASE WHEN autotask = 1 AND nextCFID != 0 THEN autotask END) AS Completedautotask, 
                 COUNT(CASE WHEN autotask = 1 THEN autotask END) AS autotask, 
                 COUNT(CASE WHEN nextCFID != 0 THEN 1 END) AS done, 
-                COUNT(CASE WHEN nextCFID != 0 `status_id` != `nstatus_id` THEN 1 END) AS StatusChangeByMyFunnelTask, 
+                COUNT(CASE WHEN nextCFID != 0 AND `status_id` != `nstatus_id` THEN 1 END) AS StatusChangeByMyFunnelTask, 
                 COUNT(CASE WHEN nextCFID != 0 AND actontaken = "yes" AND purpose_achieved = "yes" THEN 1 END) AS completedAYPY, 
                 COUNT(CASE WHEN nextCFID != 0 AND actontaken = "yes" AND purpose_achieved = "no" THEN 1 END) AS completedAYPN, 
                 COUNT(CASE WHEN nextCFID != 0 AND actontaken = "no" AND purpose_achieved = "no" THEN 1 END) AS completedANPN, 
@@ -90,12 +70,6 @@ class Management_model  extends Menu_model {
                 FLOOR(SUM(CASE WHEN nextCFID != 0 THEN TIMESTAMPDIFF(MINUTE, initiateddt, updateddate) ELSE 0 END) / 60) AS totalHours,
                 MOD(SUM(CASE WHEN nextCFID != 0 THEN TIMESTAMPDIFF(MINUTE, initiateddt, updateddate) ELSE 0 END), 60) AS totalMinutes
 ');
-// $this->db->from('tblcallevents');
-// $this->db->where('assignedto_id', '100059');
-// $this->db->where('DATE(appointmentdatetime)', '2024-07-19');
-
-// $query = $this->db->get();
-// $result = $query->row_array(); // Fetch the result as an associative array
 
         $this->db->from('tblcallevents');
 
@@ -412,9 +386,6 @@ class Management_model  extends Menu_model {
         // mainbd != '$uid'
         $subquery = $this->db->get_compiled_select();
 
-
-        // 
-
         $this->db->select("COUNT(*) AS TotalTeamplan");
         $this->db->select("COUNT(CASE WHEN autotask = 1 AND nextCFID != 0 THEN autotask END) AS TotalTeamCompletedautotask");
         $this->db->select("COUNT(CASE WHEN autotask = 1 THEN autotask END) AS TotalTeamautotask");
@@ -470,26 +441,17 @@ class Management_model  extends Menu_model {
 
     public function get_AvgTime($actionType){
 
-        // $datetime1 = new DateTime($date1);
-        // $datetime2 = new DateTime($date2);
-
-        // // Calculate the difference
-        // $interval = $datetime1->diff($datetime2);
-
         $this->db->select("AVG(TIMESTAMPDIFF(MINUTE,initiateddt,updateddate)) AS avg_time");
         $this->db->from('tblcallevents');
         $this->db->where('actiontype_id', $actionType);
         $query = $this->db->get();
-        
-        // echo $this->db->last_query();
-        // return $query->result();
+
         $result = $query->row();
         return $result->avg_time;
     }
 
     public function getReportbyUser($selected_user,$sdate,$edate){
 
-        // var_dump($selected_user);die;
         $this->db->select('star_rating.*');
         $this->db->select('ud1.name as userName');
         $this->db->select('ud2.name as feedbackBy');

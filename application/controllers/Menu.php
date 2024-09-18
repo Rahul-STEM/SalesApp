@@ -9129,6 +9129,34 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
+
+    public function CreateTaskForTaskCheck() {
+        // Load your model
+        $this->load->model('Menu_model');
+    
+        // Prepare your data
+        // $data = [
+        //     'column1' => 'value1',
+        //     'column2' => 'value2',
+        //     // Add more columns as needed
+        // ];
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+
+        // Insert the data
+        if ($this->Menu_model->replicate_scteam_tasks($uid)) {
+            // Redirect if the insertion was successful
+            redirect('Menu/TaskCheck_New');
+        } else {
+            // Handle the error
+            // You might want to show an error message or redirect to an error page
+            show_error('Data insertion failed.');
+        }
+    }
+
+    
     // New TaskCheck <=========================================== END ==================================>
 
     // New Dashboard Changes <======= START =======>
@@ -9547,7 +9575,6 @@ class Menu extends CI_Controller {
     }
 
 
-
     public function AllPSTReviewac(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d H:i:s');
@@ -9587,7 +9614,6 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
-
 
     public function test1(){
         $user = $this->session->userdata('user');

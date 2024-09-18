@@ -177,25 +177,28 @@
 					<div class="card-body box-profile">
                         <h3 class="text-center">Task Check</h3>
                         <hr>
-                        <form action="<?=base_url();?>Menu/TaskCheck_New" method="post">
+                        <form action="<?=base_url();?>Menu/TaskCheck_New" method="post" id="taskForm">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <select class="form-control" name="userId">
+                                    <select class="form-control" name="userId" <?php if (!empty($selectedUser)) echo 'disabled'; ?>>
                                         <option selected disabled>--Select--</option>
-                                        <?php 
-
-                                            foreach($userList as $user){?>
+                                    <?php 
+                                    foreach($userList as $user){?>
 
                                         <option value="<?=$user->user_id?>" <?php if ($user->user_id == $selectedUser) echo ' selected="selected"';?>><?=$user->name?></option>
 
-                                        <?php } ?>
+                                    <?php } ?>
                                     </select>    
                                 </div>
                                 <div class="col-md-4">
                                     <button type="submit" class="btn btn-primary">Filter</button>
                                 </div>
+                                <div class="col-md-4">
+                                    <button type="button" class="btn btn-danger" onclick="clearSelectedUser()">Final Submit</button>
+                                </div>
                             </div> 
                         </form>
+
                         <br>
 
                         <div class="table-responsive" id="tbdata">
@@ -384,11 +387,11 @@
                                             if(sizeof($chkStarRating) == 0){ ?>
 
                                                 <div class="rating" data-question="Was Task Initiated on time" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>">
-                                                    <input type="radio" name="rat2_" value="5" id="10_<?=$task->tid; ?>"><label for="10_<?= $task->tid; ?>">☆</label>
-                                                    <input type="radio" name="rat2_" value="4" id="9_<?= $task->tid; ?>"><label for="9_<?= $task->tid; ?>">☆</label>
-                                                    <input type="radio" name="rat2_" value="3" id="8_<?= $task->tid; ?>"><label for="8_<?= $task->tid; ?>">☆</label>
-                                                    <input type="radio" name="rat2_" value="2" id="7_<?= $task->tid;?>"><label for="7_<?= $task->tid; ?>">☆</label>
-                                                    <input type="radio" name="rat2_" value="1" id="6_<?= $task->tid; ?>"><label for="6_<?= $task->tid;?>">☆</label>
+                                                    <input type="radio" name="rat2_<?= $task->user_id; ?>" value="5" id="10_<?=$task->tid; ?>"><label for="10_<?= $task->tid; ?>">☆</label>
+                                                    <input type="radio" name="rat2_<?= $task->user_id; ?>" value="4" id="9_<?= $task->tid; ?>"><label for="9_<?= $task->tid; ?>">☆</label>
+                                                    <input type="radio" name="rat2_<?= $task->user_id; ?>" value="3" id="8_<?= $task->tid; ?>"><label for="8_<?= $task->tid; ?>">☆</label>
+                                                    <input type="radio" name="rat2_<?= $task->user_id; ?>" value="2" id="7_<?= $task->tid;?>"><label for="7_<?= $task->tid; ?>">☆</label>
+                                                    <input type="radio" name="rat2_<?= $task->user_id; ?>" value="1" id="6_<?= $task->tid; ?>"><label for="6_<?= $task->tid;?>">☆</label>
                                                 </div>
 
                                         <?php }else{
@@ -498,7 +501,46 @@
                                             }  ?>
 
                                             <hr>
-                                            Remarks - <b><?= $task->remarks; ?></b> 
+
+                                            <b>Task Remarks - </b><?= $task->remarks; ?>
+
+                                            <?php
+
+                                                if ($task->actiontype_id == 6 ) {
+                                                   
+                                                    $getMomData = getMomData($task->tid); ?>
+                                                    <br>
+                                                    <!-- <b>MoM remark - </b> <?= $getMomData->momremark; ?> -->
+                                                    <br>
+                                                    <b>MoM Status - </b><?= $getMomData->momStatus; ?>
+                                                    <br>
+                                                    <b>MoM Status Update at - </b> <?= $getMomData->approvedDate; ?>
+                                                    <br>
+                                            <?php    }
+
+                                                if ($task->actiontype_id == 7 ) {
+                                                                                                
+                                                    $getProposalData = getProposalData($task->tid); ?>
+                                                    <br>
+                                                    <br>
+                                                    <b>Proposal Remark - </b><?= $getProposalData->momStatus; ?>
+                                                    <br>
+                                                    <br>
+                                                    <b>Proposal Status - </b> <?= $getProposalData->pro_status; ?>
+                                                    <br>
+                                                    <br>
+                                                    <b>Proposal Status Change At - </b> <?= $getProposalData->pro_approvedDate; ?>
+                                                    <?php 
+
+                                                        if ($getProposalData->pro_apr == 1) { ?>
+                                                            
+                                                            <a href="<?= base_url() . $getProposalData->pro_attachment . '/'?>" class="btn btn-primary" target="_blank">View Document</a>
+
+                                            <?php       }
+ 
+                                                    }
+                                                ?>
+
                                             <hr>
                                             <p class="question">Was correct remark entered..??</p>
 
@@ -620,107 +662,7 @@
                                     </fieldset>
                                     <hr>
                                 </div>
-                                <!-- <div class="col-md-6">
-                                    <p><strong>Task Update:</strong> <span id="TaskUpdate"></span></p>
-                                    
-                                    <p><b> Is task update correct..??</b></p>
-
-                                    <fieldset class="MoMrating" data-question="Did the meeting started on right time" data-userid="" data-taskid="">
-                                        <input type="radio" name="Reviewrat2_02" value="5" id="06_Reviewrating_01"><label for="06_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_02" value="4" id="07_Reviewrating_01"><label for="07_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_02" value="3" id="08_Reviewrating_01"><label for="08_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_02" value="2" id="09_Reviewrating_01"><label for="09_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_02" value="1" id="10_Reviewrating_01"><label for="10_Reviewrating_01">☆</label> 
-
-                                        <div class="remark-box">
-                                            <label for="remark_02">Please provide additional remarks:</label>
-                                            <textarea id="remark_02" rows="4" cols="50"></textarea>
-                                        </div>
-
-                                    </fieldset>
-                                    <hr>
-                                </div> -->
-                                <!-- <div class="col-md-6">
-                                    <p><strong>Review Plan Time:</strong> <span id="ReviewPlanTime"></span></p>
-
-                                    <fieldset class="MoMrating" data-question="Did the meeting started on right time" data-userid="" data-taskid="">
-                                        <input type="radio" name="Reviewrat2_03" value="5" id="11_Reviewrating_01"><label for="11_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_03" value="4" id="12_Reviewrating_01"><label for="12_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_03" value="3" id="13_Reviewrating_01"><label for="13_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_03" value="2" id="14_Reviewrating_01"><label for="14_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_03" value="1" id="15_Reviewrating_01"><label for="15_Reviewrating_01">☆</label> 
-
-                                        <div class="remark-box">
-                                            <label for="remark_03">Please provide additional remarks:</label>
-                                            <textarea id="remark_03" rows="4" cols="50"></textarea>
-                                        </div>
-                                        
-                                    </fieldset>
-                                    <hr>
-                                </div> -->
-                                <!-- <div class="col-md-6">
-                                    <p><strong>Review Start Time:</strong> <span id="ReviewStartTime"></span></p>
-
-                                    <fieldset class="MoMrating" data-question="Did the review started on right time" data-userid="" data-taskid="">
-                                        <input type="radio" name="Reviewrat2_04" value="5" id="20_Reviewrating_01"><label for="20_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_04" value="4" id="19_Reviewrating_01"><label for="19_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_04" value="3" id="18_Reviewrating_01"><label for="18_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_04" value="2" id="17_Reviewrating_01"><label for="17_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_04" value="1" id="16_Reviewrating_01"><label for="16_Reviewrating_01">☆</label> 
-
-                                        <div class="remark-box">
-                                            <label for="remark_04">Please provide additional remarks:</label>
-                                            <textarea id="remark_04" rows="4" cols="50"></textarea>
-                                        </div>
-                                        
-                                    </fieldset>
-                                    <hr>
-                                </div> -->
-                                <!-- <div class="col-md-6">
-                                    <p><strong>Review End Time:</strong> <span id="ReviewEndTime"></span></p>
-
-                                    <fieldset class="MoMrating" data-question="Did the review ended on right time" data-userid="" data-taskid="">
-                                        <input type="radio" name="Reviewrat2_05" value="5" id="25_Reviewrating_01"><label for="25_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_05" value="4" id="24_Reviewrating_01"><label for="24_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_05" value="3" id="23_Reviewrating_01"><label for="23_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_05" value="2" id="22_Reviewrating_01"><label for="22_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_05" value="1" id="21_Reviewrating_01"><label for="21_Reviewrating_01">☆</label> 
-
-                                        <div class="remark-box">
-                                            <label for="remark_05">Please provide additional remarks:</label>
-                                            <textarea id="remark_05" rows="4" cols="50"></textarea>
-                                        </div>
-                                        
-                                    </fieldset>
-                                    <hr>
-                                </div> -->
                                 
-                                <!-- <div class="col-md-6">
-                                    <p><strong>Review Type:</strong> <span id="ReviewType"></span></p>
-
-                                    <fieldset class="MoMrating" data-question="Did the review ended on right time" data-userid="" data-taskid="">
-                                        <input type="radio" name="Reviewrat2_06" value="5" id="30_Reviewrating_01"><label for="30_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_06" value="4" id="29_Reviewrating_01"><label for="29_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_06" value="3" id="28_Reviewrating_01"><label for="28_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_06" value="2" id="27_Reviewrating_01"><label for="27_Reviewrating_01">☆</label>
-                                        <input type="radio" name="Reviewrat2_06" value="1" id="26_Reviewrating_01"><label for="26_Reviewrating_01">☆</label> 
-
-                                        <div class="remark-box">
-                                            <label for="remark_05">Please provide additional remarks:</label>
-                                            <textarea id="remark_05" rows="4" cols="50"></textarea>
-                                        </div>
-                                    </fieldset>
-                                    <hr>
-                                </div> -->
-                                
-                                <!-- <div class="col-md-6">
-                                    <p><strong>BD Name:</strong> <span id="BDName"></span></p>
-                                    <hr>
-                                </div>
-                                <div class="col-md-6">
-                                    <p><strong>PST Name:</strong> <span id="PSTName"></span></p>
-                                    <hr>
-                                </div> -->
                                 <div class="col-md-6">
                                     <p><strong>Potential / Non Potential:</strong> <span id="potential"></span></p>
 
@@ -799,10 +741,6 @@
                                     </fieldset>
                                     <hr>
                                 </div>
-                                <!-- <div class="col-md-6">
-                                    <p><strong>Need to change PartnerType:</strong> <span id="changepartnerType"></span></p>
-                                    <hr>
-                                </div> -->
                                 <div class="col-md-6">
                                     <p><strong>Top Spender:</strong> <span id="topSpender"></span></p>
                                     <hr>
@@ -850,70 +788,8 @@
                             <input type="hidden" name="userManyID" id="userManyID">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <p><strong>Review Remark:</strong> <span id="reviewRemarkMany"></span></p>
-
-                                    <p><b> Is review remark correct..??</b></p>
-                                    <fieldset class="MoMrating" data-question="Did review remarks entered correctly" data-userid="" data-taskid="">
-                                        <input type="radio" name="Reviewrat3_01" value="5" id="01_Reviewrating_03"><label for="01_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_01" value="4" id="02_Reviewrating_03"><label for="02_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_01" value="3" id="03_Reviewrating_03"><label for="03_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_01" value="2" id="04_Reviewrating_03"><label for="04_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_01" value="1" id="05_Reviewrating_03"><label for="05_Reviewrating_03">☆</label>
-
-                                        <div class="remark-box">
-                                            <label for="remark_109">Please provide additional remarks:</label>
-                                            <textarea id="remark_109" rows="4" cols="50"></textarea>
-                                        </div>
-
-                                    </fieldset>
-                                    <hr>
-                                </div>
-                                
-                                <!-- <div class="col-md-6">
-                                    <p><strong>Review Type:</strong> <span id="ReviewType"></span></p>
-
-                                    <fieldset class="MoMrating" data-question="Did the review ended on right time" data-userid="" data-taskid="">
-                                        <input type="radio" name="Reviewrat3_06" value="5" id="10_Reviewrating_03"><label for="10_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_06" value="4" id="09_Reviewrating_03"><label for="09_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_06" value="3" id="08_Reviewrating_03"><label for="08_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_06" value="2" id="07_Reviewrating_03"><label for="07_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_06" value="1" id="06_Reviewrating_03"><label for="06_Reviewrating_03">☆</label> 
-
-                                        <div class="remark-box">
-                                            <label for="remark_110">Please provide additional remarks:</label>
-                                            <textarea id="remark_110" rows="4" cols="50"></textarea>
-                                        </div>
-                                    </fieldset>
-                                    <hr>
-                                </div> -->
-                                <!-- <div class="col-md-6">
-                                    <p><strong>BD Name:</strong> <span id="BDName"></span></p>
-                                    <hr>
-                                </div>
-                                <div class="col-md-6">
-                                    <p><strong>PST Name:</strong> <span id="PSTName"></span></p>
-                                    <hr>
-                                </div> -->
-                                <!-- <div class="col-md-6">
-                                    <p><strong>Potential / Non Potential:</strong> <span id="potential"></span></p>
-
-                                    <fieldset class="MoMrating" data-question="potential or non marked correctly" data-userid="" data-taskid="">
-                                        <input type="radio" name="Reviewrat3_07" value="5" id="15_Reviewrating_03"><label for="15_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_07" value="4" id="14_Reviewrating_03"><label for="14_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_07" value="3" id="13_Reviewrating_03"><label for="13_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_07" value="2" id="12_Reviewrating_03"><label for="12_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_07" value="1" id="11_Reviewrating_03"><label for="11_Reviewrating_03">☆</label> 
-
-                                        <div class="remark-box">
-                                            <label for="remark_111">Please provide additional remarks:</label>
-                                            <textarea id="remark_111" rows="4" cols="50"></textarea>
-                                        </div>
-                                    </fieldset>
-                                    <hr>
-                                </div> -->
-                                <div class="col-md-6">
                                     <p><strong>How many task were done? :</strong> <span id="howManyTaskDone"></span></p>
-                                    <p><b>How many task were done..??</b></p>
+                                    <!-- <p><b>How many task were done..??</b></p> -->
                                     <fieldset class="MoMrating" data-question="How many task were done" data-userid="" data-taskid="">
                                         <input type="radio" name="Reviewrat3_08" value="5" id="20_Reviewrating_03"><label for="20_Reviewrating_03">☆</label>
                                         <input type="radio" name="Reviewrat3_08" value="4" id="19_Reviewrating_03"><label for="19_Reviewrating_03">☆</label>
@@ -929,34 +805,9 @@
                                     
                                     <hr>
                                 </div>
-                            <!--  <div class="col-md-6">
-                                    <p><strong>Existing Status:</strong> <span id="ExistingStatus"></span></p>
-                                    <hr>
-                                </div>
-                                <div class="col-md-6">
-                                    <p><strong>Current Status:</strong> <span id="CurrentStatus"></span></p>
-                                    <hr>
-                                </div> -->
-                                <div class="col-md-6">
-                                    <p><strong>Frequency of Task right?:</strong> <span id="frequencyOfTask"></span></p>
-                                    <p><b>Frequency of Task is right..??</b></p>
-                                    <fieldset class="MoMrating" data-question="frequency of task is right" data-userid="" data-taskid="">
-                                        <input type="radio" name="Reviewrat3_08" value="5" id="25_Reviewrating_03"><label for="25_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_08" value="4" id="24_Reviewrating_03"><label for="24_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_08" value="3" id="23_Reviewrating_03"><label for="23_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_08" value="2" id="22_Reviewrating_03"><label for="22_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_08" value="1" id="21_Reviewrating_03"><label for="21_Reviewrating_03">☆</label> 
-
-                                        <div class="remark-box">
-                                            <label for="remark_113">Please provide additional remarks:</label>
-                                            <textarea id="remark_113" rows="4" cols="50"></textarea>
-                                        </div>
-                                    </fieldset>
-                                    <hr>
-                                </div>
                                 <div class="col-md-6">
                                     <p><strong>RP Meeting done?:</strong> <span id="rpMeetingdone"></span></p>
-                                    <p><b>RP Meeting done..??</b></p>
+                                    <!-- <p><b>RP Meeting done..??</b></p> -->
                                     <fieldset class="MoMrating" data-question="RP Meeting done" data-userid="" data-taskid="">
                                         <input type="radio" name="Reviewrat3_09" value="5" id="30_Reviewrating_03"><label for="30_Reviewrating_03">☆</label>
                                         <input type="radio" name="Reviewrat3_09" value="4" id="29_Reviewrating_03"><label for="29_Reviewrating_03">☆</label>
@@ -973,7 +824,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <p><strong>Write MoM Done?:</strong> <span id="writeMoMDone"></span></p>
-                                    <p><b>Write MoM Done..??</b></p>
+                                    <!-- <p><b>Write MoM Done..??</b></p> -->
                                     <fieldset class="MoMrating" data-question="write MoM done" data-userid="" data-taskid="">
                                         <input type="radio" name="Reviewrat3_10" value="5" id="35_Reviewrating_03"><label for="35_Reviewrating_03">☆</label>
                                         <input type="radio" name="Reviewrat3_10" value="4" id="34_Reviewrating_03"><label for="34_Reviewrating_03">☆</label>
@@ -990,7 +841,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <p><strong>Social networking done?:</strong> <span id="socialNetworking"></span></p>
-                                    <p><b>Social networking done correctly..??</b></p>
+                                    <!-- <p><b>Social networking done correctly..??</b></p> -->
                                     <fieldset class="MoMrating" data-question="social networking done" data-userid="" data-taskid="">
                                         <input type="radio" name="Reviewrat3_11" value="5" id="40_Reviewrating_03"><label for="40_Reviewrating_03">☆</label>
                                         <input type="radio" name="Reviewrat3_11" value="4" id="39_Reviewrating_03"><label for="39_Reviewrating_03">☆</label>
@@ -1006,9 +857,9 @@
                                     <hr>
                                 </div>
                                 <div class="col-md-6">
-                                    <p><strong>Is category right?:</strong> <span id="categoryRight"></span></p>
-                                    <p><b>Is right category selected..??</b></p>
-                                    <fieldset class="MoMrating" data-question="is category right" data-userid="" data-taskid="">
+                                    <p><strong>Was the tasks closed on the target date : </strong> <span id="categoryRight"></span></p>
+                                    <!-- <p><b>Was the tasks closed on the target date..??</b></p> -->
+                                    <fieldset class="MoMrating" data-question="Was the tasks closed on the target date" data-userid="" data-taskid="">
                                         <input type="radio" name="Reviewrat3_12" value="5" id="45_Reviewrating_03"><label for="45_Reviewrating_03">☆</label>
                                         <input type="radio" name="Reviewrat3_12" value="4" id="44_Reviewrating_03"><label for="44_Reviewrating_03">☆</label>
                                         <input type="radio" name="Reviewrat3_12" value="3" id="43_Reviewrating_03"><label for="43_Reviewrating_03">☆</label>
@@ -1023,9 +874,9 @@
                                     <hr>
                                 </div>
                                 <div class="col-md-6">
-                                    <p><strong>Is the current status right?:</strong> <span id="isCurrentStatusRight"></span></p>
-                                    <p><b>Is current status right..??</b></p>
-                                    <fieldset class="MoMrating" data-question="is category right" data-userid="" data-taskid="">
+                                    <p><strong>Schedule meeting was done or not?</strong> <span id="schedule_meeting"></span></p>
+                                    <!-- <p><b>Do you agree schedule meeting was not done</b></p> -->
+                                    <fieldset class="MoMrating" data-question="Do you agree schedule meeting was not done" data-userid="" data-taskid="">
                                         <input type="radio" name="Reviewrat3_13" value="5" id="50_Reviewrating_03"><label for="50_Reviewrating_03">☆</label>
                                         <input type="radio" name="Reviewrat3_13" value="4" id="49_Reviewrating_03"><label for="49_Reviewrating_03">☆</label>
                                         <input type="radio" name="Reviewrat3_13" value="3" id="48_Reviewrating_03"><label for="48_Reviewrating_03">☆</label>
@@ -1040,25 +891,8 @@
                                     <hr>
                                 </div>
                                 <div class="col-md-6">
-                                    <p><strong>No of barg in meeting done?:</strong> <span id="howManyBargMeeting"></span></p>
-                                    <p><b>How many barg in meeting done?..??</b></p>
-                                    <fieldset class="MoMrating" data-question="How many barg in meeting done" data-userid="" data-taskid="">
-                                        <input type="radio" name="Reviewrat3_14" value="5" id="55_Reviewrating_03"><label for="55_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_14" value="4" id="54_Reviewrating_03"><label for="54_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_14" value="3" id="53_Reviewrating_03"><label for="53_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_14" value="2" id="52_Reviewrating_03"><label for="52_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_14" value="1" id="51_Reviewrating_03"><label for="51_Reviewrating_03">☆</label> 
-
-                                        <div class="remark-box">
-                                            <label for="remark_119">Please provide additional remarks:</label>
-                                            <textarea id="remark_119" rows="4" cols="50"></textarea>
-                                        </div>
-                                    </fieldset>
-                                    <hr>
-                                </div>
-                                <div class="col-md-6">
                                     <p><strong>Research Prospecting:</strong> <span id="researchProspecting"></span></p>
-                                    <p><b>Research Prospecting done..??</b></p>
+                                    <!-- <p><b>Research Prospecting done..??</b></p> -->
                                     <fieldset class="MoMrating" data-question="research prospecting done" data-userid="" data-taskid="">
                                         <input type="radio" name="Reviewrat3_15" value="5" id="60_Reviewrating_03"><label for="60_Reviewrating_03">☆</label>
                                         <input type="radio" name="Reviewrat3_15" value="4" id="59_Reviewrating_03"><label for="59_Reviewrating_03">☆</label>
@@ -1074,9 +908,9 @@
                                     <hr>
                                 </div>
                                 <div class="col-md-6">
-                                    <p><strong>Base Location or Out Station Travel?:</strong> <span id="BaseLocationOrOutStationTravel"></span></p>
-                                    <p><b>Meeting was done ar base location or out station..??</b></p>
-                                    <fieldset class="MoMrating" data-question="Base Location or Out Station Travel" data-userid="" data-taskid="">
+                                    <p><strong>Mail check was done?:</strong> <span id="mailCheck"></span></p>
+                                    <!-- <p><b>Do you agree Mail Check was not done..??</b></p> -->
+                                    <fieldset class="MoMrating" data-question="Do you agree Mail Check was not done" data-userid="" data-taskid="">
                                         <input type="radio" name="Reviewrat3_16" value="5" id="65_Reviewrating_03"><label for="65_Reviewrating_03">☆</label>
                                         <input type="radio" name="Reviewrat3_16" value="4" id="64_Reviewrating_03"><label for="64_Reviewrating_03">☆</label>
                                         <input type="radio" name="Reviewrat3_16" value="3" id="63_Reviewrating_03"><label for="63_Reviewrating_03">☆</label>
@@ -1090,9 +924,10 @@
                                     </fieldset>
                                     <hr>
                                 </div>
-                                <!-- <div class="col-md-6">
-                                    <p><strong>Is this client comes under prioriy with respect to closure?:</strong> <span id="isPrioritytoClouser"></span></p>
-                                    <fieldset class="MoMrating" data-question="Is this client comes under prioriy with respect to closure" data-userid="" data-taskid="">
+                                <div class="col-md-6">
+                                    <p><strong>Roaster Calling was done?:</strong> <span id="roasterCalling"></span></p>
+                                    <!-- <p><b>Do you agree Roster Calling was not done..??</b></p> -->
+                                    <fieldset class="MoMrating" data-question="Do you agree Roster Calling was not done" data-userid="" data-taskid="">
                                         <input type="radio" name="Reviewrat3_17" value="5" id="70_Reviewrating_03"><label for="70_Reviewrating_03">☆</label>
                                         <input type="radio" name="Reviewrat3_17" value="4" id="69_Reviewrating_03"><label for="69_Reviewrating_03">☆</label>
                                         <input type="radio" name="Reviewrat3_17" value="3" id="68_Reviewrating_03"><label for="68_Reviewrating_03">☆</label>
@@ -1105,9 +940,10 @@
                                         </div>
                                     </fieldset>
                                     <hr>
-                                </div> -->
-                                <!-- <div class="col-md-6">
-                                    <p><strong>Proposal done?:</strong> <span id="proposalDone"></span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Documentation was done :</strong> <span id="documentation"></span></p>
+                                    <!-- <p><b>Do you agree Documentation was not done..??</b></p> -->
                                     <fieldset class="MoMrating" data-question="Proposal done" data-userid="" data-taskid="">
                                         <input type="radio" name="Reviewrat3_18" value="5" id="75_Reviewrating_03"><label for="75_Reviewrating_03">☆</label>
                                         <input type="radio" name="Reviewrat3_18" value="4" id="74_Reviewrating_03"><label for="74_Reviewrating_03">☆</label>
@@ -1121,10 +957,11 @@
                                         </div>
                                     </fieldset>
                                     <hr>
-                                </div> -->
-                                <!-- <div class="col-md-6">
-                                    <p><strong>No Of School:</strong> <span id="noOfSchool"></span></p>
-                                    <fieldset class="MoMrating" data-question="No Of School" data-userid="" data-taskid="">
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Number of Task Performed Against Each Status :</strong> <span id="noOftaskPerformed"></span></p>
+                                    <!-- <p><b>Number of Task Performed Against Each Status</b></p> -->
+                                    <fieldset class="MoMrating" data-question="Number of Task Performed Against Each Status" data-userid="" data-taskid="">
                                         <input type="radio" name="Reviewrat3_19" value="5" id="80_Reviewrating_03"><label for="80_Reviewrating_03">☆</label>
                                         <input type="radio" name="Reviewrat3_19" value="4" id="79_Reviewrating_03"><label for="79_Reviewrating_03">☆</label>
                                         <input type="radio" name="Reviewrat3_19" value="3" id="78_Reviewrating_03"><label for="78_Reviewrating_03">☆</label>
@@ -1137,73 +974,7 @@
                                         </div>
                                     </fieldset>
                                     <hr>
-                                </div> -->
-                                <!-- <div class="col-md-6">
-                                    <p><strong>Revenue:</strong> <span id="Revenue"></span></p>
-                                    <fieldset class="MoMrating" data-question="No Of School" data-userid="" data-taskid="">
-                                        <input type="radio" name="Reviewrat3_20" value="5" id="85_Reviewrating_03"><label for="85_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_20" value="4" id="84_Reviewrating_03"><label for="84_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_20" value="3" id="83_Reviewrating_03"><label for="83_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_20" value="2" id="82_Reviewrating_03"><label for="82_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_20" value="1" id="81_Reviewrating_03"><label for="81_Reviewrating_03">☆</label> 
-
-                                        <div class="remark-box">
-                                            <label for="remark_125">Please provide additional remarks:</label>
-                                            <textarea id="remark_125" rows="4" cols="50"></textarea>
-                                        </div>
-                                    </fieldset>
-                                    <hr>
-                                </div> -->
-                                <div class="col-md-6">
-                                    <p><strong>Partner Type:</strong> <span id="partnerType"></span></p>
-                                    <p><b>Is correct partner type selected..??</b></p>
-                                    <fieldset class="MoMrating" data-question="Partner Type" data-userid="" data-taskid="">
-                                        <input type="radio" name="Reviewrat3_21" value="5" id="90_Reviewrating_03"><label for="90_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_21" value="4" id="89_Reviewrating_03"><label for="89_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_21" value="3" id="88_Reviewrating_03"><label for="88_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_21" value="2" id="87_Reviewrating_03"><label for="87_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_21" value="1" id="86_Reviewrating_03"><label for="86_Reviewrating_03">☆</label> 
-
-                                        <div class="remark-box">
-                                            <label for="remark_126">Please provide additional remarks:</label>
-                                            <textarea id="remark_126" rows="4" cols="50"></textarea>
-                                        </div>
-                                    </fieldset>
-                                    <hr>
                                 </div>
-                                <div class="col-md-6">
-                                    <p><strong>Do you need any intervention or support from? :</strong> <span id="needSupport"></span></p>
-                                    <p><b>Do you need any intervention or support from?</b></p>
-                                    <fieldset class="MoMrating" data-question="Do you need any intervention or support from" data-userid="" data-taskid="">
-                                        <input type="radio" name="Reviewrat3_22" value="5" id="95_Reviewrating_03"><label for="95_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_22" value="4" id="94_Reviewrating_03"><label for="94_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_22" value="3" id="93_Reviewrating_03"><label for="93_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_22" value="2" id="92_Reviewrating_03"><label for="92_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_22" value="1" id="91_Reviewrating_03"><label for="91_Reviewrating_03">☆</label> 
-
-                                        <div class="remark-box">
-                                            <label for="remark_127">Please provide additional remarks:</label>
-                                            <textarea id="remark_127" rows="4" cols="50"></textarea>
-                                        </div>
-                                    </fieldset>
-                                    <hr>
-                                </div>
-                                <!-- <div class="col-md-6">
-                                    <p><strong>Do you need any intervention or suppert from? :</strong> <span id="needSupport"></span></p>
-                                    <fieldset class="MoMrating" data-question="Do you need any intervention or support from" data-userid="" data-taskid="">
-                                        <input type="radio" name="Reviewrat3_22" value="5" id="95_Reviewrating_03"><label for="95_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_22" value="4" id="94_Reviewrating_03"><label for="94_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_22" value="3" id="93_Reviewrating_03"><label for="93_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_22" value="2" id="92_Reviewrating_03"><label for="92_Reviewrating_03">☆</label>
-                                        <input type="radio" name="Reviewrat3_22" value="1" id="91_Reviewrating_03"><label for="91_Reviewrating_03">☆</label> 
-
-                                        <div class="remark-box">
-                                            <label for="remark_127">Please provide additional remarks:</label>
-                                            <textarea id="remark_127" rows="4" cols="50"></textarea>
-                                        </div>
-                                    </fieldset>
-                                    <hr>
-                                </div> -->
                             </div>
                         </form>
                     </div>
@@ -1275,24 +1046,6 @@
                                     <hr>
                                 </div>
                                 
-                                <!-- <div class="col-md-6">
-                                    <p> <strong>Duration of Meeting :</strong> <span id="modalDuration"> mins</span></p>
-                                    <p><b> Did the meeting ended on right time..??</b></p>
-
-                                    <fieldset class="MoMrating" data-question="Did the meeting ended on right time" data-userid="" data-taskid="">
-                                        <input type="radio" name="momrat2_3" value="5" id="15_rating_2"><label for="15_rating_2">☆</label>
-                                        <input type="radio" name="momrat2_3" value="4" id="14_rating_2"><label for="14_rating_2">☆</label>
-                                        <input type="radio" name="momrat2_3" value="3" id="13_rating_2"><label for="13_rating_2">☆</label>
-                                        <input type="radio" name="momrat2_3" value="2" id="12_rating_2"><label for="12_rating_2">☆</label>
-                                        <input type="radio" name="momrat2_3" value="1" id="11_rating_2"><label for="11_rating_2">☆</label>
-                                        <div class="remark-box">
-                                            <label for="remark_3">Please provide additional remarks:</label>
-                                            <textarea id="remark_3" rows="4" cols="50"></textarea>
-                                        </div>
-                                    </fieldset>
-                                    <hr>
-                                </div> -->
-
                                 <div class="col-md-6">
                                     <p><strong>RP/No RP:</strong> <span id="modalMomType"></span></p>
 
@@ -1378,36 +1131,7 @@
                                         </div>
                                     </fieldset>
                                 </div>
-                                
-                                <!-- <div class="col-md-6">
-                                    <p><strong>Type:</strong> <span id="modalMomType"></span></p>
-                                    <p><b>MoM type is correct..??</b> </p>
-                                    <fieldset class="MoMrating" data-question="MoM type is correct" data-userid="" data-taskid="">
-                                        <input type="radio" name="momrat2_6" value="5" id="30_rating_2"><label for="30_rating_2">☆</label>
-                                        <input type="radio" name="momrat2_6" value="4" id="29_rating_2"><label for="29_rating_2">☆</label>
-                                        <input type="radio" name="momrat2_6" value="3" id="28_rating_2"><label for="28_rating_2">☆</label>
-                                        <input type="radio" name="momrat2_6" value="2" id="27_rating_2"><label for="27_rating_2">☆</label>
-                                        <input type="radio" name="momrat2_6" value="1" id="26_rating_2"><label for="26_rating_2">☆</label>
-                                    </fieldset>
-                                    <hr>
-                                </div> -->
 
-                                <!-- <div class="col-md-6">
-                                    <p><strong>Partner Type:</strong> <span id="modalPartnerType"></span></p>
-                                    <p><b>Was partner type correct..??</b> </p>
-                                    <fieldset class="MoMrating" data-question="Was partner type correct" data-userid="" data-taskid="">
-                                        <input type="radio" name="momrat2_7" value="5" id="35_rating_2"><label for="35_rating_2">☆</label>
-                                        <input type="radio" name="momrat2_7" value="4" id="34_rating_2"><label for="34_rating_2">☆</label>
-                                        <input type="radio" name="momrat2_7" value="3" id="33_rating_2"><label for="33_rating_2">☆</label>
-                                        <input type="radio" name="momrat2_7" value="2" id="32_rating_2"><label for="32_rating_2">☆</label>
-                                        <input type="radio" name="momrat2_7" value="1" id="31_rating_2"><label for="31_rating_2">☆</label>
-                                        <div class="remark-box">
-                                            <label for="remark_7">Please provide additional remarks:</label>
-                                            <textarea id="remark_7" rows="4" cols="50"></textarea>
-                                        </div>
-                                    </fieldset>
-                                    <hr>
-                                </div> -->
                                 
                                 <div class="col-md-6">
 
@@ -1427,25 +1151,7 @@
                                     </fieldset>
                                     
                                 </div>
-                                
-                                <!-- <div class="col-md-6">
-                                    <p><strong>MoM Remark : </strong> <span id="momRemark"></span></p>
-                                    <p><b>MoM remarks entered correctly..??</b> </p>
-                                    
-                                        <fieldset class="MoMrating" data-question="MoM remarks entered correctly" data-userid="" data-taskid="">
-                                            <input type="radio" name="momrat2_9" value="5" id="45_rating_2"><label for="45_rating_2">☆</label>
-                                            <input type="radio" name="momrat2_9" value="4" id="44_rating_2"><label for="44_rating_2">☆</label>
-                                            <input type="radio" name="momrat2_9" value="3" id="43_rating_2"><label for="43_rating_2">☆</label>
-                                            <input type="radio" name="momrat2_9" value="2" id="42_rating_2"><label for="42_rating_2">☆</label>
-                                            <input type="radio" name="momrat2_9" value="1" id="41_rating_2"><label for="41_rating_2">☆</label>
-                                            <br>
-                                            <div class="remark-box">
-                                                <label for="remark_9">Please provide additional remarks:</label>
-                                                <textarea id="remark_9" rows="4" cols="50"></textarea>
-                                            </div>
-                                        </fieldset>
-                                </div> -->
-                                
+                                                            
                             </div>                            
                         </form>
                     </div>
@@ -1456,22 +1162,31 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="RatingReviewModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- <h5 class="modal-title">Modal title</h5> -->
+                    </div>
+                    <div class="modal-body">
+                    <form >
+                        <input type="hidden" name="starID" id="starID">
+                        <textarea class="form-control" name="remark" id="remark" placeholder="Remark" required="true"></textarea>
+                    </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="submitReview()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         
     </div>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-<script type='text/javascript'>
-
-    $('[id^="giveRating"]').on('click', function() {
-        $('#RatingModal').modal('show');
-        var tid = this.value;
-        document.getElementById("taskid").value = tid;
-        
-    });
-</script>
-
           
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
@@ -1541,75 +1256,74 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <!-- <script src="<?=base_url();?>assets/js/dashboard.js"></script> -->
 
-
-
 <script>
-    $("#PlannerTable").DataTable({
-      "responsive": false, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container();
+    $(document).ready(function() {
+        $("#PlannerTable").DataTable({
+            "responsive": false,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["csv", "excel", "pdf", "print"]
+        });
+    });
+
 </script>
 
 <script>
-    $(document).ready(function(){
+    $(".rating input").on("click", function() {
 
-        $(".rating input").on("click", function() {
+        var $rating = $(this);
 
-            var $rating = $(this);
-            var inputId = $rating.attr('id');
+        // Get other data attributes
+        var taskId = $rating.closest('.rating').data('taskid');
+        var userId = $rating.closest('.rating').data('userid');
+        var question = $rating.closest('.rating').data('question');
+        var ratingValue = $rating.val();
+        alert(ratingValue);
+        // console.log("Extracted ID: " + extractedId);
+        // alert("Task ID: " + taskId + "\nUser ID: " + userId + "\nExtracted ID: " + extractedId + "\nRating Value: " + ratingValue);
+        
+        // Prevent the default action
+        // return false;
 
-            var extractedId = inputId.split('_')[1];
+        $.ajax({
+        url: '<?=base_url();?>Menu/TaskCheckStarNew',
+        type: 'POST',
+        data: {
+            rating: ratingValue,
+            question: question,
+            userId: userId,
+            taskId: taskId
+            // cdate:cdate
+            },
+            success: function(response) {
+                console.log('Response:', response); 
 
-            // Get other data attributes
-            var taskId = $rating.closest('.rating').data('taskid');
-            var userId = $rating.closest('.rating').data('userid');
-            var question = $rating.closest('.rating').data('question');
-            var ratingValue = $rating.val();
+                if (ratingValue <= 2) {
 
-            // console.log("Extracted ID: " + extractedId);
-            // alert("Task ID: " + taskId + "\nUser ID: " + userId + "\nExtracted ID: " + extractedId + "\nRating Value: " + ratingValue);
-            
-            // Prevent the default action
-            // return false;
+                    
 
-            $.ajax({
-            url: '<?=base_url();?>Menu/TaskCheckStarNew',
-            type: 'POST',
-            data: {
-                rating: ratingValue,
-                question: question,
-                userId: userId,
-                taskId: taskId
-                // cdate:cdate
-                },
-                success: function(response) {
-                    console.log('Response:', response); 
+                    $('#starID').val(response);
+                    $('#RatingReviewModal').modal('show');
 
-                    if (ratingValue <= 2) {
+                }else{
+                    $('#RatingReviewModal').modal('hide');
+                    $('#success-message').show();
 
-                        $('#starID').val(response);
-                        $('#ReviewModal').modal('show');
+                    $('html, body').animate({
+                        scrollTop: $('#success-message').offset().top
+                    }, 1000);
 
-                    }else{
+                    setTimeout(function() {
 
-                        $('#success-message').show();
-    
-                        $('html, body').animate({
-                            scrollTop: $('#success-message').offset().top
-                        }, 1000);
-    
-                        setTimeout(function() {
-
-                            $('#success-message').fadeOut('slow', function() {
-                                location.reload();
-                            });
-                        }, 3000);
-                    }
-                },
-                error: function() {
-                    alert("There was an error submitting the rating.");
+                        $('#success-message').fadeOut('slow', function() {
+                            location.reload();
+                        });
+                    }, 3000);
                 }
-            });
+            },
+            error: function() {
+                alert("There was an error submitting the rating.");
+            }
         });
     });
 </script>
@@ -1743,20 +1457,20 @@
 
                     } else {
 
-                        document.getElementById('reviewRemarkMany').textContent = data.review_remark; 
-                        document.getElementById('howManyTaskDone').textContent = data.NoOfTask; 
-                        document.getElementById('frequencyOfTask').textContent = data.frequency_of_the_task;
-                        document.getElementById('rpMeetingdone').textContent = data.RPMeeting;
-                        document.getElementById('writeMoMDone').textContent = data.mom_done;
-                        document.getElementById('socialNetworking').textContent = data.SN_done;
-                        document.getElementById('categoryRight').textContent = data.category_right;
-                        document.getElementById('isCurrentStatusRight').textContent = data.currentStatus_right;
-                        document.getElementById('howManyBargMeeting').textContent = data.many_times_barge_meeting;
-                        document.getElementById('researchProspecting').textContent = data.research_prospecting;
-                        document.getElementById('BaseLocationOrOutStationTravel').textContent = data.base_or_travel_location;
-                        // document.getElementById('isPrioritytoClouser').textContent = data.fixdate;
-                        document.getElementById('partnerType').textContent = data.partnerType;
-                        document.getElementById('needSupport').textContent = data.suppert;
+                        // document.getElementById('reviewRemarkMany').textContent = data.review_remark; 
+                        // document.getElementById('howManyTaskDone').textContent = data.NoOfTask; 
+                        // document.getElementById('frequencyOfTask').textContent = data.frequency_of_the_task;
+                        // document.getElementById('rpMeetingdone').textContent = data.RPMeeting;
+                        // document.getElementById('writeMoMDone').textContent = data.mom_done;
+                        // document.getElementById('socialNetworking').textContent = data.SN_done;
+                        // document.getElementById('categoryRight').textContent = data.category_right;
+                        // document.getElementById('isCurrentStatusRight').textContent = data.currentStatus_right;
+                        // document.getElementById('howManyBargMeeting').textContent = data.many_times_barge_meeting;
+                        // document.getElementById('researchProspecting').textContent = data.research_prospecting;
+                        // document.getElementById('BaseLocationOrOutStationTravel').textContent = data.base_or_travel_location;
+                        // // document.getElementById('isPrioritytoClouser').textContent = data.fixdate;
+                        // document.getElementById('partnerType').textContent = data.partnerType;
+                        // document.getElementById('needSupport').textContent = data.suppert;
 
                         $('#ManyReviewModal').modal('show');
                     }
@@ -1783,31 +1497,28 @@
             url: '<?=base_url();?>Menu/updateTaskCheckRemark',
             type: 'POST',
             data: {
-
                 remark: remark,
-                starID: starID,
-                
-                },
-                success: function(response) {
-                    $('#ReviewModal').modal('hide');
+                starID: starID,    
+            },
+            success: function(response) {
+                $('#ReviewModal').modal('hide');
 
-                    $('#success-message').show();
+                $('#success-message').show();
 
-                    $('html, body').animate({
-                        scrollTop: $('#success-message').offset().top
-                    }, 1000);
+                $('html, body').animate({
+                    scrollTop: $('#success-message').offset().top
+                }, 1000);
 
-                    setTimeout(function() {
-                        $('#success-message').fadeOut('slow');
-                    }, 3000);
+                setTimeout(function() {
+                    $('#success-message').fadeOut('slow');
+                }, 3000);
 
-                        location.reload();
-                },
-                error: function() {
-                    alert("There was an error submitting the rating.");
-                }
-            });
-
+                    location.reload();
+            },
+            error: function() {
+                alert("There was an error submitting the rating.");
+            }
+        });
     }
 </script>
 
@@ -2038,6 +1749,23 @@
             });
         }
 
+</script>
+
+<script>
+    function clearSelectedUser() {
+    // Clear the selected user value
+        if (confirm("Are you sure you want to submit?")) {
+            // Clear the selected user value
+            document.querySelector('select[name="userId"]').selectedIndex = 0; // Reset to the first option
+            // Optionally, enable the select again
+            document.querySelector('select[name="userId"]').disabled = false; 
+            // Reload the page
+            location.reload(); 
+            // Submit the form if needed
+            document.getElementById('taskForm').submit();
+        }
+
+    }
 </script>
 
 </body>

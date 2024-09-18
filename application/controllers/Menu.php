@@ -10079,6 +10079,8 @@ public function Dashboard(){
         $review_time = $_POST['review_time'];
         $this->load->model('Menu_model');
         $this->load->library('session');
+
+        dd($_POST);
        
         if($rtype == 'Roaster'){
             $this->Menu_model->all_bdrremark($deletef,$patnertype,$topspender,$keyclient,$pkeyclient,$priorityclient,$upsellclient,$focusyclient,$rid,$inid,$bdid,$remark,$ntdate,$ntaction,$pstuid,$exsid,$exdate,$rtype,$taskupdate,$potential,$ans1,$ans2,$ans3,$ans4,$requeststatus,$csrbudget,$bdscholl,$travelcluster,$cluster_id);
@@ -11869,16 +11871,32 @@ public function Dashboard(){
         }
     }
     public function getcmpdbybd(){
-        $stid = $this->input->post('stid');
-        $bdid = $this->input->post('bdid');
-        $fdate = $this->input->post('fdate');
-        $this->load->model('Menu_model');
 
-        dd($_POST);
+        $stid       = $this->input->post('stid');
+        $bdid       = $this->input->post('bdid');
+        $fdate      = $this->input->post('fdate');
+
+        $pstid      = $this->input->post('pstid');
+        $review_id  = $this->input->post('review_id');
+        $this->load->model('Menu_model');
+       
+        $revdata    =   $this->Menu_model->getReviewByRID($review_id);
+        $rev_startt =   $revdata[0]->startt;
+        $reviewtype =   $revdata[0]->reviewtype;
+        $cdatetime  =   date("Y-m-d H:i:s");
+
+        $revcmp     =   $this->Menu_model->getReviewedCMP($rev_startt,$cdatetime,$bdid,$reviewtype);
 
         $cmp=$this->Menu_model->get_cmpdbybd($stid,$bdid,$fdate);
+            function filterArray($array1, $array2) {
+                $inidValues = array_column($array1, 'inid');
+                return array_filter($array2, function($item) use ($inidValues) {
+                    return !in_array($item->inid, $inidValues);
+                });
+            }
+        $result = filterArray($revcmp, $cmp);
         echo '<option value="">Select Company</option>';
-        foreach($cmp as $dt){
+        foreach($result as $dt){
              echo  $data = '<option value='.$dt->inid.'>'.$dt->compname.'</option>';
         }
     }
@@ -18642,6 +18660,38 @@ public function TestPage(){
     }else{
         redirect('Menu/main');
     }
+}
+
+
+public function GetCompanyPrimaryContact(){
+
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+
+    $this->load->model('Menu_model');
+
+    $cmpid = $_POST['cmpid_id'];
+    $ctype = $_POST['ctype'];
+
+    $data = $this->Menu_model->getCompanyContact($cmpid,$ctype);
+    $datacnt = sizeof($data);
+    $html = "";
+    if($datacnt > 0){
+        foreach ($data as $dt){
+            $html .= "Contact Person : <span class='pccolor'>".($dt->contactperson) ? $dt->contactperson : 'NA'."</span><br/>";
+            $html .= "Email ID : <span class='pccolor'>". ($dt->emailid) ? $dt->emailid : 'NA'."</span><br/>";
+            $html .= "Phone Number : <span class='pccolor'>". ($dt->phoneno) ? $dt->phoneno : 'NA'."</span><br/>";
+            $html .= "Designation : <span class='pccolor'>". ($dt->designation) ? $dt->designation : 'NA'."</span><br/>";
+            $html .= "Contact Type : <span class='pccolor'>".($dt->type) ? $dt->type : 'NA'."</span><br/>";
+    
+            $html .= "<br/>";
+        }
+    }else{
+        $html .= "NA";
+    }
+    echo $html;
 }
 
 

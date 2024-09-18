@@ -12252,6 +12252,7 @@ public function get_initcallby_id($inid){
     $query=$this->db->query("SELECT * FROM init_call WHERE id='$inid'");
     return $query->result();
 }
+
 public function get_all_bd_Potential_meetings(){
     $query = $this->db->query("SELECT * FROM init_call WHERE id='$inid' AND mainbd = ".$uid."");
     return $query->result();
@@ -12305,6 +12306,40 @@ public function insert_visit($user_id, $page, $action) {
     }
   
 }
+
+// Review Chnages Start
+
+public function getReviewByRID($rid){
+    $query=$this->db->query("SELECT * FROM allreview WHERE id='$rid'");
+    return $query->result();
+}
+public function getReviewedCMP($rev_startt,$cdatetime,$bdid,$reviewtype){
+    $query=$this->db->query("SELECT * FROM `allreviewdata` WHERE bdid = '$bdid' AND sdatet BETWEEN '$rev_startt' AND '$cdatetime' AND reviewtype ='$reviewtype' ");
+    return $query->result();
+}
+public function getCompanyContact($cid,$type){
+    $query=$this->db->query("SELECT * FROM `company_contact_master` WHERE `company_id` = '$cid' AND type = '$type'");
+    return $query->result();
+}
+
+public function GetCountry(){
+    $query=$this->db->query("SELECT * FROM `country_db`");
+    return $query->result();
+}
+public function GetState(){
+    $query=$this->db->query("SELECT * FROM `in_state`");
+    return $query->result();
+}
+public function GetCity(){
+    $query=$this->db->query("SELECT * FROM `in_city`");
+    return $query->result();
+}
+public function GetDistrict(){
+    $query=$this->db->query("SELECT * FROM `in_district`");
+    return $query->result();
+}
+
+
 
 
 

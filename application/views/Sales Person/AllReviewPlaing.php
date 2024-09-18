@@ -33,6 +33,25 @@
     background: black;
     color: white;
 }
+
+.form-group {
+    font-weight: 700;
+}
+.clrdiff{
+  color: #F5004F;
+}
+.form-group, .create_task_bg  {
+    background: aliceblue;
+    padding: 15px;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+}
+.form-control.is-valid, .was-validated .form-control:valid {
+    background: none !important;
+    border-radius: 5px;
+}
+span.pccolor {
+  color: #0830b1;
+}
     </style>
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -124,15 +143,17 @@
               </div>
             </div>
             <?php }else{ ?>
-            <div class="col-sm col-md-6 col-lg-6 m-auto">
+            <div class="col-sm col-md-12 col-lg-12 m-auto">
               <div class="card card-primary card-outline">
                 <div class="card-body box-profile">
                   <h4 class="text-center"><?=$revst[0]->reviewtype;?> Review/Calling</h4>
                   <h5 class="text-center"><?=$revst[0]->name;?></h5>
                   <hr>
-                  <div class="was-validated">
+                  <div class="row">
+                    <div class="col-md-6">
+                    <div class="was-validated">
                     <div class="form-group">
-                      <input type="hidden" id="slsct_reviewtype" name="reviewtype" value="<?=$revst[0]->reviewtype;?>">
+                      <input type="hidden" id="slsct_review_id" name="reviewtype" value="<?=$revst[0]->rid;?>">
                       <input type="hidden" name="uidaa" value="<?=$uid?>">
                       <input type="hidden" id="bdid" value="<?=$revst[0]->bdid;?>">
                       <?php date_default_timezone_set("Asia/Kolkata"); ?>
@@ -175,28 +196,51 @@
                     </div>
                     <a href="<?=base_url();?>Menu/AllReviewac"><button type="button" class="btn btn-outline-danger">Go to Action wise Review</button></a><br>
                   </div>
+                    </div>
+                    
+                 
+                  <div class="col-md-6">
                   <div class="card p-3 mt-3">
                     <div class="was-validated">
                       <form action="<?=base_url();?>Menu/closereview" method="post">
                         <input type="hidden" name="rrid" value="<?=$revst[0]->rid;?>">
-                        <b class="text-danger mt-3">Are you sure you want to close review task ?</b>
+                        
                         <div class="form-group">
                           <textarea class="form-control mt-3" name="closeremark" placeholder="Review Close Final Remark..."  required=""></textarea>
                           <input type="datetime-local" name="closetdate" value="<?=date('Y-m-d H:i:s');?>" class="form-control mt-3" required="">
                           <div class="form-group text-center mt-3">
-                            <button type="submit" class="btn btn-danger" onclick="this.form.submit(); this.disabled = true;">Close Review</button>
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to close review task ?');">Close Review</button>
                           </div>
                         </div>
                       </form>
                     </div>
                   </div>
+                      </div>
+                    </div>
+                 
                 </div>
               </div>
-              <div class="card p-3" id="graphlog"></div>
+              <div id="accordion">
+                <div class="card">
+                  <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link bg-info font-weight-bold form-control" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Graph
+                      </button>
+                    </h5>
+                  </div>
+                  <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                    <div class="card p-3" id="graphlog"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
             </div>
-            <div class="col-sm col-md-6 col-lg-6 m-auto">
+            <div class="col-sm-12 col-md-12 col-lg-12 m-auto">
               <div class="card card-primary card-outline">
-                <img src="http://localhost/StemSales/assets/image/2391280.jpg" id="hideimage" alt="">
+                <center><img src="http://localhost/StemSales/assets/image/2391280.jpg" id="hideimage" style="width:300px;" alt=""></center>
                 <div id="loadcompinfo">
                   <form action="<?=base_url();?>Menu/bdrtaskc" method="post">
                     <input type="hidden" id="rtype" name="rtype" value="<?=$revst[0]->reviewtype;?>">
@@ -212,115 +256,275 @@
                       <input type="hidden" name="rid" value="<?=$revst[0]->rid;?>">
                       <div id="cmpfirsttime">
                         <input type="hidden" id="review_time" name="review_time" value="">
-                        <div id="orrr">
-                          <lable>Potential / Non-Potential Clients? <span id="potentialclient"></span> </lable>
-                          <select class="form-control" id="potential" name="potential">
-                            <option value='yes'>Potential</option>
-                            <option value='no'>Non-Potential</option>
+                        <div class="row">
+                            <div class="col-md-4">
+                            <div id="orrr">
+                          <div class="form-group">
+                          <lable>Is this Company Name is Right? : 
+                            <span class="clrdiff" id="ccompanyname"></span>
+                          </lable>
+                          <select class="form-control" required="">
+                            <option value="" selected disabled >Select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
                           </select>
-                          <lable>1st Remark</lable>
-                          <select class="form-control" id="otherremark">
-                            <option value="">Select Remark</option>
+                          <!-- <input type="text" class="form-control" name="websiteisright" id="websiteisright"> -->
+                          </div>
+                          <hr>
+                          <div class="form-group">
+                          <lable>Is this Address is Right? : <span class="clrdiff" id="caddress"></span></lable>
+                          <select class="form-control" required="">
+                          <option value="" selected disabled >Select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
                           </select>
-                          <input type="text" class="form-control" name="otherremark" id="otherremark1">
-                          <lable>Call Remark</lable>
-                          <select class="form-control" id="ans1">
-                            <option value="">Select Remark</option>
+                          <!-- <input type="text" class="form-control" name="websiteisright" id="websiteisright"> -->
+                          </div>
+                          <hr>
+                          <div class="form-group">
+                          <lable>Is this City is Right? :  <span class="clrdiff" id="ccity"></span></lable>
+                          <select class="form-control" required="" id="user_slct_city">
+                          <option value="" selected disabled >Select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
                           </select>
-                          <input type="text" class="form-control" name="ans1" id="ans11">
-                          <lable>Email Remark</lable>
-                          <select class="form-control" id="ans2">
-                            <option value="">Select Remark</option>
+                          <div id="slctCity" class="mt-2">
+                          <select class="form-control" required="">
+                            <?php $city = $this->Menu_model->GetCity(); ?>
+                          <option value="" selected disabled >Select</option>
+                          <?php foreach($city as $ct){ ?>
+                            <option value="<?= $ct->name; ?>"><?= $ct->name; ?></option>
+                            <?php } ?>
                           </select>
-                          <input type="text" class="form-control" name="ans2" id="ans21">
-                          <lable>Meeting Remark</lable>
-                          <select class="form-control" id="ans3">
-                            <option value="">Select Remark</option>
+                          </div> 
+                          </div>
+                          <hr>
+                          <div class="form-group">
+                          <lable>Is this State is Right? : <span class="clrdiff" id="cstate"></span></lable>
+                          <select class="form-control" required="" id="user_slct_state" >
+                          <option value="" selected disabled >Select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
                           </select>
-                          <input type="text" class="form-control" name="ans3" id="ans31">
-                          <lable>Add CSR Budget</lable>
-                          <select class="form-control" id="csrbudget" name="csrbudget">
-                            <option>More than 2.5 csr budget</option>
-                            <option>Between 50 lacs to 2 cr</option>
-                            <option>Less than 50 lacs</option>
+                          <div id="slctState" class="mt-2">
+                          <select class="form-control" required="">
+                            <?php $state = $this->Menu_model->GetState(); ?>
+                          <option value="" selected disabled >Select</option>
+                          <?php foreach($state as $st){ ?>
+                            <option value="<?= $st->state_title; ?>"><?= $st->state_title; ?></option>
+                            <?php } ?>
                           </select>
-                          <lable>Add Number of schools</lable>
-                          <input type="number" class="form-control" name="bdscholl" id="bdscholl">
+                          </div> 
+                          </div>
+                          <hr>
+                          <div class="form-group">
+                          <lable>Is this Country is Right? : <span class="clrdiff" id="ccountry"></span></lable>
+                          <select class="form-control" required="" id="user_slct_country" >
+                          <option value="" selected disabled >Select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
+                        
+                          <div id="slctCountry" class="mt-2">
+                          <select class="form-control" required="">
+                            <?php $country = $this->Menu_model->GetCountry(); ?>
+                          <option value="" selected disabled >Select</option>
+                          <?php foreach($country as $cty){ ?>
+                            <option value="<?= $cty->name; ?>"><?= $cty->name; ?></option>
+                            <?php } ?>
+                          </select>
+                          </div>
+
+
+                          </div>
+                   
+                          <hr>
+                          <div class="form-group">
+                          <lable>Is this Primary Contact information is Right? : <br/> 
+                          <span class="clrdiff" id="primary_contact"></span>
+                        </lable>
+                          <select class="form-control" required="">
+                          <option value="" selected disabled >Select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
+                          <!-- <input type="text" class="form-control" name="primaryContact" id="primaryContact"> -->
+                          </div>
+                          <hr>
+                          <div class="form-group">
+                          <lable>Is this Secondary Contact information is Right? <br/>
+                          <span class="clrdiff" id="secondary_contact"></span>
+                        </lable>
+                          <select class="form-control" required="">
+                          <option value="" selected disabled >Select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
+                          <!-- <input type="text" class="form-control" name="secondaryContact" id="secondaryContact"> -->
+                          </div>
+                        
                         </div>
+                            </div>
+                            <div class="col-md-4">
+                            <div class="form-group">
                         <lable>Is the Current Status right? </lable>
-                        <select class="form-control" id="statusright" name="statusright">
+                        <select class="form-control" id="statusright" name="statusright" required="">
+                        <option value="" selected disabled >Select</option>
                           <option>Yes</option>
                           <option>No</option>
                         </select>
+                
                         <div id="statusno">
+                        <lable>Select Status : </lable>
                           <select class="form-control" name="requeststatus" required="">
                             <?php $status = $this->Menu_model->get_status($uid);
                               foreach($status as $st){?>
                             <option value="<?=$st->id?>"><?=$st->name?></option>
                             <?php } ?>
                           </select>
-                          <textarea name="ans4" class="form-control" placeholder="Remark...."></textarea>
+                          <!-- <textarea name="ans4" class="form-control" placeholder="Remark...."></textarea> -->
                         </div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
                         <lable>Need to Delete This Company From Your Funnel? </lable>
-                        <input type="text" class="form-control" name="deletef" value="No">
-                        <lable>Need to Change Patner Type? </lable>
-                        <select class="form-control" name="patnertype">
+                        <!-- <input type="text" class="form-control" name="deletef" value="No"> -->
+                        <select class="form-control" required="">
+                        <option value="" selected disabled >Select</option>
+                        <option>No</option>
+                        <option>Yes</option>
+                        </select>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                        <lable>Need to Change Partner Type? </lable>
+                        <select class="form-control" name="patnertype" required="">
+                        <option value="" selected disabled >Select</option>
                           <option>No</option>
                           <option>yes</option>
                         </select>
-                        <lable>Top Spender? </lable>
-                        <select class="form-control" name="topspender">
-                          <option>No</option>
-                          <option>Yes</option>
-                        </select>
-                        <lable>Key Client? </lable>
-                        <select class="form-control" name="keyclient">
-                          <option>No</option>
-                          <option>Yes</option>
-                        </select>
-                        <lable>Positive Key Client? </lable>
-                        <select class="form-control" name="pkeyclient">
-                          <option>No</option>
-                          <option>Yes</option>
-                        </select>
-                        <lable>Priority Client? </lable>
-                        <select class="form-control" name="priorityclient">
-                          <option>No</option>
-                          <option>Yes</option>
-                        </select>
-                        <lable>Upsell Client? </lable>
-                        <select class="form-control" name="upsellclient">
-                          <option>No</option>
-                          <option>Yes</option>
-                        </select>
-                        <lable>Focus Funnel? </lable>
-                        <select class="form-control" name="focusyclient">
-                          <option>No</option>
-                          <option>Yes</option>
-                        </select>
-                        <hr>
-                        <div class="col-12 col-md-12 mb-12">
-                          <lable>Travel Cluster is Right or not </lable>
-                          <select class="form-control" id="travelcluster" name="travelcluster">
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                          </select>
                         </div>
+                        <hr>
+                        
+                        <div class="form-group">
+                          <div class="col-12 col-md-12 mb-12">
+                            <lable>Travel Cluster is Right or not </lable>
+                            <select class="form-control" id="travelcluster" name="travelcluster" required="">
+                            <option value="" selected disabled >Select</option>
+                              <option value="yes">Yes</option>
+                              <option value="no">No</option>
+                            </select>
+                          </div>
+                        </div>
+                        <hr>
                         <div class="col-12 col-md-12 mb-12" id ="travelclustercard">
                           <label for="validationSample04">Select Travel Cluster</label>
                           <?php $clusterData = $this->Menu_model->getClusterByUserId($uid);  ?>
-                          <select id="cluster" class="form-control" name="cluster_id" required>
+                          <select id="cluster" class="form-control" name="cluster_id">
                             <option selected value="">Select Cluster</option>
                             <?php foreach($clusterData as $cdata): ?>
                             <option value="<?=$cdata->id?>"><?=$cdata->clustername ?></option>
                             <?php endforeach; ?>
                           </select>
                         </div>
+                        <div class="form-group">
+                          <lable>Add CSR Budget : <span class="clrdiff" id="csr_budget"></span></lable>
+                          <select class="form-control" id="csrbudget" name="csrbudget" required="">
+                          <option value="" selected disabled >Select</option>
+                            <option>More than 2.5 csr budget</option>
+                            <option>Between 50 lacs to 2 cr</option>
+                            <option>Less than 50 lacs</option>
+                          </select>
+                          </div>
+                          <hr>
+                          <div class="form-group">
+                          <lable>Add Number of Schools : <span class="clrdiff" id="number_of_schools"></span></lable>
+                          <input type="number" class="form-control" name="bdscholl" id="bdscholl" required="">
+                          </div>
+                          <hr>
+                          <div class="form-group">
+                          <lable>Is this Website is Right? : <span class="clrdiff" id="website_is_right"></span></lable>
+                          <select class="form-control" required="">
+                          <option value="" selected disabled >Select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
+                          <!-- <input type="text" class="form-control" name="websiteisright" id="websiteisright"> -->
+                          </div>
+                            </div>
+                            <div class="col-md-4">
+              
+                          <div class="form-group">
+                          <lable>Potential / Non-Potential Clients? : <span class="clrdiff" id="potential_client"></span> </lable>
+                          <select class="form-control" id="potential" name="potential" required="">
+                          <option value="" selected disabled >Select</option>
+                            <option value='yes'>Potential</option>
+                            <option value='no'>Non-Potential</option>
+                          </select>
+                          </div>
+                          <hr>
+        
+                        
+                         
+                          <div class="form-group">
+                        <lable>Top Spender?  : <span class="clrdiff" id="top_spender"></span></lable>
+                        <select class="form-control" name="topspender" required="">
+                        <option value="" selected disabled >Select</option>
+                          <option>No</option>
+                          <option>Yes</option>
+                        </select>
+                        </div>
+                        <!-- <hr>
+                        <div class="form-group">
+                        <lable>Key Client? : <span class="clrdiff" id="key_client"></span></lable>
+                        <select class="form-control" name="keyclient">
+                          <option>No</option>
+                          <option>Yes</option>
+                        </select>
+                        </div> -->
+                        <hr>
+                        <div class="form-group">
+                        <lable>Positive Key Client? : <span class="clrdiff" id="p_key_client"></span></lable>
+                        <select class="form-control" name="pkeyclient" required="">
+                        <option value="" selected disabled >Select</option>
+                          <option>No</option>
+                          <option>Yes</option>
+                        </select>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                        <lable>Priority Client? : <span class="clrdiff" id="priority_client"></span></lable>
+                        <select class="form-control" name="priorityclient" required="">
+                        <option value="" selected disabled >Select</option>
+                          <option>No</option>
+                          <option>Yes</option>
+                        </select>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                        <lable>Upsell Client? : <span class="clrdiff" id="upsell_client"></span></lable>
+                        <select class="form-control" name="upsellclient" required="">
+                        <option value="" selected disabled >Select</option>
+                          <option>No</option>
+                          <option>Yes</option>
+                        </select>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                        <lable>Focus Funnel? : <span class="clrdiff" id="focus_funnel"></span></lable>
+                        <select class="form-control" name="focusyclient" required="">
+                        <option value="" selected disabled >Select</option>
+                          <option>No</option>
+                          <option>Yes</option>
+                        </select>
+                        </div>
+                        <hr>
+                            </div>
+                          </div>
+                       
+                       
                       </div>
-
-
                       <div id="rosterform">
-
                               <div class="card" id="expeted_status">
                                 <table class="table table-striped thead-dark">
                                   <thead>
@@ -342,9 +546,6 @@
                                 </table>
                               </div>
                       </div>
-
-
-
                       <div id="cmpmanytime">
                         <div>
                           <div class="col-12 col-md-12 mb-12">
@@ -404,7 +605,7 @@
                             <div class="col-12 col-md-12 mb-12" id="slct_category_card">
                               <label for="validationSample02">Select Category</label>
                               <?php  $category=$this->Menu_model->GetCategories(); ?>
-                              <select id="slct_category" name="slct_category" class="form-control" required>
+                              <select id="slct_category" name="slct_category" class="form-control">
                                 <option value="">Select Category</option>
                                 <?php foreach($category as $p){?>
                                 <option value="<?=$p->id?>"><?=$p->name?></option>
@@ -421,7 +622,7 @@
                             </div>
                             <div class="col-12 col-md-12 mb-12" id="many_times_barge_meeting_card">
                               <label for="validationSample04">How many times barge meeting done?</label>
-                              <select id="many_times_barge_meeting" class="form-control" name="many_times_barge_meeting" required>
+                              <select id="many_times_barge_meeting" class="form-control" name="many_times_barge_meeting">
                                 <option selected value="">Select</option>
                                 <option value="yes">Yes</option>
                                 <option value="no">No</option>
@@ -429,7 +630,7 @@
                             </div>
                             <div class="col-12 col-md-12 mb-12" id="research_prospecting_card">
                               <label for="validationSample04">Research prospecting ?</label>
-                              <select id="research_prospecting" class="form-control" name="research_prospecting" required>
+                              <select id="research_prospecting" class="form-control" name="research_prospecting">
                                 <option selected value="">Select</option>
                                 <option value="yes">Yes</option>
                                 <option value="no">No</option>
@@ -437,14 +638,13 @@
                             </div>
                             <div class="col-12 col-md-12 mb-12" id="base_or_travel_location_card">
                               <label for="validationSample04">Base location or out station travel?</label>
-                              <select id="base_or_travel_location" class="form-control" name="base_or_travel_location" required>
+                              <select id="base_or_travel_location" class="form-control" name="base_or_travel_location">
                                 <option selected value="">Select</option>
                                 <option value="yes">Yes</option>
                                 <option value="no">No</option>
                               </select>
                             </div>
                           </div>
-
                           <div class="col-12 col-md-12 mb-12" id="base_or_travel_location_card">
                               <label for="validationSample04">Is this Partner Type is right? <span id="partner_type_set"></span></label>
                               <select id="partner_type_right" class="form-control" name="partner_type_right" required>
@@ -453,11 +653,10 @@
                                 <option value="no">No</option>
                               </select>
                             </div>
-
                           <div class="col-12 col-md-12 mb-12" id="slct_partner_type_card">
                             <label for="validationSample02"> Partner Type </label>
                             <?php  $partner=$this->Menu_model->get_partner(); ?>
-                            <select id="slct_partner_type" name="slct_partner_type" class="form-control" required>
+                            <select id="slct_partner_type" name="slct_partner_type" class="form-control">
                               <option value="">Select Partner Type</option>
                               <?php foreach($partner as $p){?>
                               <option value="<?=$p->id?>"><?=$p->name?></option>
@@ -475,11 +674,8 @@
                           </div>
                         </div>
                       </div>
-
-
-
                       <hr>
-                      <div class="card p-2" id="rosterhide">
+                      <div class="card p-2 create_task_bg pb-4" id="rosterhide">
                         <center>
                           <h5>Create Task</h5>
                         </center>
@@ -510,7 +706,8 @@
                         <input type="date" id="exdate" name="exdate" value="" class="form-control" required="" min="<?=date('Y-m-d');?>">
                       </div>
                       <div class="form-group text-center mt-3">
-                        <button type="submit" class="btn btn-success" onclick="this.form.submit(); this.disabled = true;">Submit</button>
+                        <!-- <button type="submit" class="btn btn-success" onclick="this.form.submit(); this.disabled = true;">Submit</button> -->
+                        <button type="submit" class="btn btn-success" id="mainformbtn" value="">Submit</button>
                       </div>
                     </div>
                   </form>
@@ -568,6 +765,10 @@
             $("#category_right_card").hide();
             $("#current_status_right_card").hide();
             $("#slct_partner_type_card").hide();
+
+            $("#slctCountry").hide();
+            $("#slctState").hide();
+            $("#slctCity").hide();
         
         });
         
@@ -578,6 +779,40 @@
             if(val=='Other'){document.getElementById("otherremark1").readOnly = false;}else{
             document.getElementById("otherremark1").value=val;document.getElementById("otherremark1").readOnly = true;}
         });
+
+        $('#user_slct_city').on('change', function() {
+          var val = this.value;
+          if(val == 'no'){
+            $("#slctCity").show();
+            $("#slctCity select").attr('required');
+          }else{
+            $("#slctCity > select").removeAttr('required');
+            $("#slctCity").hide();
+            
+          }
+      });
+        $('#user_slct_state').on('change', function() {
+          var val = this.value;
+          if(val == 'no'){
+            $("#slctState").show();
+            $("#slctState").attr('required');
+          }else{
+            $("#slctState > select").removeAttr('required');
+            $("#slctState").hide();
+          }
+      });
+        $('#user_slct_country').on('change', function() {
+          var val = this.value;
+          if(val == 'no'){
+            $("#slctCountry").show();
+            $("#slctCountry").attr('required');
+          }else{
+            $("#slctCountry > select").removeAttr('required');
+            $("#slctCountry").hide();
+          }
+      });
+
+
         
         $('#rp_meeting_done').on('change', function b() {
             var val = this.value;
@@ -624,7 +859,6 @@
                 $("#slct_category_card").show();
             }
         });
-
         $('#partner_type_right').on('change', function b() {
             var val = this.value;
             if(val=='yes'){
@@ -771,7 +1005,7 @@
         
         
         $('#statusid').on('change', function b() {
-        var reviewtype = document.getElementById("slsct_reviewtype").value;
+        var review_id = document.getElementById("slsct_review_id").value;
         var pstid = document.getElementById("pstid").value;
         var stid = document.getElementById("statusid").value;
         var bdid = document.getElementById("bdid").value;
@@ -780,7 +1014,7 @@
         url:'<?=base_url();?>Menu/getcmpdbybd',
         type: "POST",
         data: {
-        reviewtype: reviewtype,
+        review_id: review_id,
         pstid: pstid,
         stid: stid,
         bdid: bdid,
@@ -863,14 +1097,12 @@
             }
             });
               
-
-
-
             }else{
             if(result == 0){
             $("#cmpfirsttime").show();
             $("#cmpmanytime").hide();
             $("#review_time").val('First Time');
+            $("#mainformbtn").val('FirstTime');
         
             $.ajax({
             url:'<?=base_url();?>Menu/GetCompnayDetailsUsiingInit',
@@ -889,12 +1121,62 @@
                 var cstatus         = jsonArray[0].cstatus; 
                 var partnerType_id  = jsonArray[0].partnerType_id; 
                 var topspender      = jsonArray[0].topspender; 
-                var pkclient        = jsonArray[0].pkclient; 
                 var priorityc       = jsonArray[0].priorityc; 
                 var upsell_client   = jsonArray[0].upsell_client; 
                 var focus_funnel    = jsonArray[0].focus_funnel; 
                 var cluster_id      = jsonArray[0].cluster_id; 
+                var address      = jsonArray[0].address; 
+                var city      = jsonArray[0].city; 
+                var state      = jsonArray[0].state; 
+                var country      = jsonArray[0].country; 
+                var cmpid_id      = jsonArray[0].cmpid_id; 
+                var website      = jsonArray[0].website; 
+                var budget      = jsonArray[0].budget; 
+                var potential      = jsonArray[0].potential; 
                 
+                $("#ccompanyname").text((companyName !== '')? companyName : 'NA');
+                $("#caddress").text((address !== '')? address : 'NA');
+                $("#ccity").text((city !== '')? city : 'NA');
+                $("#cstate").text((state !== '')? state : 'NA');
+                $("#ccountry").text((country !== '')? country : 'NA');
+
+                $("#csr_budget").text((budget != 0)? budget : 'NA');
+                $("#number_of_schools").text((noofschools != 0)? noofschools : 'NA');
+                $("#website_is_right").text((website !== '')? website : 'NA');
+                $("#potential_client").text((potential !== '')? potential : 'NA');
+                $("#top_spender").text((topspender !== '')? topspender : 'NA');
+                $("#p_key_client").text((pkclient !== '')? pkclient : 'NA');
+                $("#priority_client").text((priorityc !== '')? priorityc : 'NA');
+                $("#upsell_client").text((upsell_client !== '')? upsell_client : 'NA');
+                $("#focus_funnel").text((focus_funnel !== '')? focus_funnel : 'NA');
+
+                $.ajax({
+                url:'<?=base_url();?>Menu/GetCompanyPrimaryContact',
+                type: "POST",
+                data: {
+                  cmpid_id: cmpid_id,
+                  ctype: 'primary'
+                },
+                cache: false,
+                success: function a(result){
+                  $("#primary_contact").html(result);
+                }
+              });
+
+                $.ajax({
+                url:'<?=base_url();?>Menu/GetCompanyPrimaryContact',
+                type: "POST",
+                data: {
+                  cmpid_id: cmpid_id,
+                  ctype: 'alternate'
+                },
+                cache: false,
+                success: function a(result){
+                  $("#secondary_contact").html(result);
+                }
+              });
+
+
                 // console.log(companyName);
                 console.log(result);
             }
@@ -904,8 +1186,7 @@
             $("#cmpfirsttime").hide();
             $("#cmpmanytime").show();
             $("#review_time").val('Many Time');
-
-
+            $("#mainformbtn").val('ManyTime');
             $.ajax({
             url:'<?=base_url();?>Menu/GetCompnayDetailsUsiingInit',
             type: "POST",
@@ -930,7 +1211,6 @@
                 // var cluster_id      = jsonArray[0].cluster_id; 
                 
                 
-
                     $.ajax({
                     url:'<?=base_url();?>Menu/getPartnerBYID',
                     type: "POST",
@@ -943,8 +1223,6 @@
                         $("#partner_type_set").html("<b> : "+result+"<b>");
                     }
                     });
-
-
             }
             });
         
@@ -955,6 +1233,21 @@
         });
         
         
+        $("#mainformbtn").click(function() {
+          var buttonValue = $(this).val(); 
+          alert(buttonValue);
+          if (buttonValue === 'FirstTime') {
+            // $("#cmpfirsttime input, #cmpfirsttime select, #cmpfirsttime textarea").attr('required', 'required');
+            $("#cmpmanytime input, #cmpmanytime select, #cmpmanytime textarea").removeAttr('required');
+          }else if(buttonValue === 'ManyTime'){
+            
+            $("#cmpfirsttime input, #cmpfirsttime select, #cmpfirsttime textarea").removeAttr('required');
+            // $("#cmpmanytime input, #cmpmanytime select, #cmpmanytime textarea").attr('required', 'required');
+          }
+        });
+        
+
+
         $('#inid').on('change', function b() {
         var inid = document.getElementById("inid").value;
         var fdate = document.getElementById("fdate").value;
@@ -1030,7 +1323,6 @@
         
         
       </script>
-
       <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
       </section>

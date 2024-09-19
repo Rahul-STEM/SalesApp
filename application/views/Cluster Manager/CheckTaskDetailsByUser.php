@@ -177,7 +177,9 @@ span.tsby {
                                         $nine_hours_planning =540; // 9 hours Planning = 9* 60 = 540 Minutes 
                                         $userplanetime = $nine_hours_planning - $texpense_time; // total plan time  - 345 minutes
                                         $plannerremTime = $userplanetime - $taskplanmincount;
-                                   
+
+                                        $srlData = $this->Menu_model->GetTodaysApprovedSpecialRequestforLeave($tuser_uid,$taskdate);
+                                        // dd($srlData);
                                        ?>
                              
                               <form method="post" action="<?=base_url();?>Menu/approveDailyTask">

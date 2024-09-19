@@ -18662,7 +18662,7 @@ public function TestPage(){
     }
 }
 
-
+// Start Review Changes
 public function GetCompanyPrimaryContact(){
 
     $user = $this->session->userdata('user');
@@ -18678,23 +18678,40 @@ public function GetCompanyPrimaryContact(){
     $data = $this->Menu_model->getCompanyContact($cmpid,$ctype);
     $datacnt = sizeof($data);
     $html = "";
-    if($datacnt > 0){
-        foreach ($data as $dt){
-            $html .= "Contact Person : <span class='pccolor'>".($dt->contactperson) ? $dt->contactperson : 'NA'."</span><br/>";
-            $html .= "Email ID : <span class='pccolor'>". ($dt->emailid) ? $dt->emailid : 'NA'."</span><br/>";
-            $html .= "Phone Number : <span class='pccolor'>". ($dt->phoneno) ? $dt->phoneno : 'NA'."</span><br/>";
-            $html .= "Designation : <span class='pccolor'>". ($dt->designation) ? $dt->designation : 'NA'."</span><br/>";
-            $html .= "Contact Type : <span class='pccolor'>".($dt->type) ? $dt->type : 'NA'."</span><br/>";
-    
+    if ($datacnt > 0) {
+        foreach ($data as $dt) {
+            $html .= "Contact Person : <span class='pccolor'>" . (($dt->contactperson) ? $dt->contactperson : 'NA') . "</span><br/>";
+            $html .= "Email ID : <span class='pccolor'>" . (($dt->emailid) ? $dt->emailid : 'NA') . "</span><br/>";
+            $html .= "Phone Number : <span class='pccolor'>" . (($dt->phoneno) ? $dt->phoneno : 'NA') . "</span><br/>";
+            $html .= "Designation : <span class='pccolor'>" . (($dt->designation) ? $dt->designation : 'NA') . "</span><br/>";
+            $html .= "Contact Type : <span class='pccolor'>" . (($dt->type) ? $dt->type : 'NA') . "</span><br/>";
             $html .= "<br/>";
         }
-    }else{
+    } else {
         $html .= "NA";
     }
+    
     echo $html;
 }
 
-
+public function GetStatusName(){
+    $this->load->model('Menu_model');
+    $cstatus    = $_POST['cstatus'];
+    $statusName = $this->Menu_model->get_statusbyid($cstatus)[0]->name;
+    echo $statusName;
+}
+public function GetPartnerTypeName(){
+    $this->load->model('Menu_model');
+    $ptid    = $_POST['partnerType_id'];
+    $partnerName = $this->Menu_model->get_partnerbyid($ptid)[0]->name;
+    echo $partnerName;
+}
+public function GetClusterName(){
+    $this->load->model('Menu_model');
+    $cluster_id    = $_POST['cluster_id'];
+    $clusterName = $this->Menu_model->getClusterByid($cluster_id)[0]->clustername;
+    echo $clusterName;
+}
 
 
 }

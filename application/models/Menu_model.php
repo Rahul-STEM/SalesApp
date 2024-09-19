@@ -12307,6 +12307,26 @@ public function insert_visit($user_id, $page, $action) {
   
 }
 
+public function createBargMeetingWithClusterId($uid,$bmdate,$select_cluster){
+      
+    $this->db->query("INSERT INTO company_master(compname, createddate,partnerType_id) VALUES ('Unknown', '$bmdate','1')");
+    $cid = $this->db->insert_id();
+
+    $this->db->query("INSERT INTO company_contact_master(contactperson, emailid, phoneno, designation, type, createddate, company_id) VALUES ('', '', '', '', 'primary', '$bmdate', '$cid')");
+    $ccid = $this->db->insert_id();
+
+    $this->db->query("INSERT INTO init_call(createDate, cmpid_id, creator_id,mainbd,cstatus,cluster_id) VALUES ('$bmdate','$cid','$uid','$uid','1','$select_cluster')");
+    $inid = $this->db->insert_id();
+
+    $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, purpose_achieved, fwd_date, actontaken, nextaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type,plan) VALUES ('0', '0','no', '$bmdate', 'no', 'Will Collect Data by RP Meeting', 'no','$bmdate','4','$uid','$inid','66','Will Collect Data by RP Meeting','1','$uid','$bmdate','$bmdate','updated',1)");
+     $ntid = $this->db->insert_id();
+
+     $this->db->query("INSERT INTO barginmeeting(storedt,user_id,cid,company_name) VALUES ('$bmdate','$uid','$cid','Unknown')");
+     $bmid = $this->db->insert_id();
+
+    $query=$this->db->query("update barginmeeting set cid='$cid',ccid='$ccid',inid='$inid',tid='$ntid' WHERE id='$bmid'");
+}
+
 // Review Chnages Start
 
 public function getReviewByRID($rid){
@@ -12338,10 +12358,9 @@ public function GetDistrict(){
     $query=$this->db->query("SELECT * FROM `in_district`");
     return $query->result();
 }
-
-
-
-
-
+public function GetTodaysApprovedSpecialRequestforLeave($uid,$tdate){
+    $query=$this->db->query("SELECT * FROM `special_request_for_leave` WHERE date='$tdate' AND user_id = '$uid' AND approve_status = 'Approved'");
+    return $query->result();
+}
 
 }

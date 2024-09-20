@@ -446,18 +446,65 @@ class Management extends Menu {
 
     public function MomDataDisplay($suid,$tdate,$t_id){
 
+        // $t_id = 479;
         $cdate = date("Y-m-d");
         $sdate = new DateTime($cdate);
         $sdate->modify('-1 day');
         $previousDate = $sdate->format('Y-m-d');
         $momdata = $this->Management_model->getBDMoMDataWthTid($suid,$t_id);
-        // echo $str = $this->db->last_query(); 
+        $momdataOld = $this->Management_model->getBDMoMDataWthOldTid($suid,$t_id);
+        
+        // function compareArrays($momdataOld, $momdata) {
 
+        //     $differences = [
+        //         'only_in_array1' => [],
+        //         'only_in_array2' => [],
+        //         'common' => [],
+        //     ];
+        
+        //     foreach ($momdataOld as $obj1) {
+        //         $found = false;
+        //         foreach ($momdata as $obj2) {
+        //             if ($obj1->id === $obj2->id) {
+        //                 $differences['common'][] = $obj1;
+        //                 $found = true;
+        //                 break;
+        //             }
+        //         }
+        //         if (!$found) {
+        //             $differences['only_in_array1'][] = $obj1;
+        //         }
+        //     }
+        
+        //     foreach ($momdata as $obj2) {
+        //         $found = false;
+        //         foreach ($momdataOld as $obj1) {
+        //             if ($obj2->id === $obj1->id) {
+        //                 $found = true;
+        //                 break;
+        //             }
+        //         }
+        //         if (!$found) {
+        //             $differences['only_in_array2'][] = $obj2;
+        //         }
+        //     }
+        
+        //     return $differences;
+        // }
+
+
+        // $result = compareArrays($momdataOld, $momdata);
+        // var_dump($result);die;
+        
+        // echo $str = $this->db->last_query(); die;
+
+        
         if(!empty($this->user)){
-                $this->load->view($this->dep_name.'/MomDataDisplay',['uid'=>$this->uid,'user'=>$this->user,'cdate'=>$cdate,'previousDate'=>$previousDate,'momdata'=>$momdata,'t_id'=>$t_id,'tdate'=>$tdate]);
-            }else{
-                redirect('Menu/main');
-            }
+                $this->load->view($this->dep_name.'/MomDataDisplay',['uid'=>$this->uid,'user'=>$this->user,'cdate'=>$cdate,'previousDate'=>$previousDate,'momdata'=>$momdata,'momdataOld'=>$momdataOld,'t_id'=>$t_id,'tdate'=>$tdate]);
+        }else{
+            redirect('Menu/main');
+        }
+
     }
 
     public function MomRejectByUserAdmin(){

@@ -19,6 +19,9 @@ date_default_timezone_set("Asia/Kolkata");
                 Current Task : <lable id="ctname"></lable><br>
                 Last Status :  <lable id="clsname"></lable><br>
                 Last Task Remark : <lable id="cremarks"></lable>
+                Last Task Remark : <lable id="cremarks"></lable>
+                Task Assigned By : <lable id="assignedBy"></lable>
+                Task Assigned To : <lable id="assigneTo"></lable>
               </div>
             </div>
           </div>
@@ -1363,8 +1366,8 @@ date_default_timezone_set("Asia/Kolkata");
                                 document.getElementById("yaction_id").value = actiontype_id;
                                 document.getElementById("cmpid").value = cmpid;
                                 document.getElementById("tidd").value = tidd;
-                                document.getElementById("clink").href = "tel:+91"+phoneno;
-                                document.getElementById("wlink").href = "https://wa.me/91"+phoneno;
+                                // document.getElementById("clink").href = "tel:+91"+phoneno;
+                                // document.getElementById("wlink").href = "https://wa.me/91"+phoneno;
                                 document.getElementById("glink").href = "mailto:"+emailid;
                                 document.getElementById("cmplink").href = "CompanyDetails/"+cmid;
 
@@ -1391,6 +1394,12 @@ date_default_timezone_set("Asia/Kolkata");
                                   $("#reaserch_message1").hide();
                                 }
                                 if(ctname=='Call' || ctname=='Whatsapp Activity'){
+
+                                    // var isMobile = window.orientation > -1;
+                                    // if (isMobile != 'Mobile') {
+                                    //     alert('You need to perform and update this task from mobile..!!');
+                                    //     return false;
+                                    // }
                                 //  alert(ctname);
                                 //  document.getElementById("moshow").classList.add('d-lg-none');
                                 //  document.getElementById("moshow").classList.add('d-sm-block');
@@ -1636,18 +1645,24 @@ date_default_timezone_set("Asia/Kolkata");
                                 });
                                 
                                 $('#clink').click(function(){
-                                var tid = document.getElementById("tidd").value;
-                                $.ajax({
-                                url:'<?=base_url();?>Menu/indtime',
-                                method: 'post',
-                                data: {tid: tid},
-                                dataType: 'json',
-                                success: function(response){
-                                var len = response.length;
-                                }
-                                });
-                                $("#taskbox").show();
-                                $("#taskbtn").show();
+                                    var isMobile = window.orientation > -1;
+                                    if (isMobile != 'Mobile') {
+                                        alert('You need to perform and update this task from mobile..!!');
+                                        return false;
+                                    }
+                                    // alert(isMobile ? 'Mobile' : 'Not mobile');
+                                    var tid = document.getElementById("tidd").value;
+                                    $.ajax({
+                                        url:'<?=base_url();?>Menu/indtime',
+                                        method: 'post',
+                                        data: {tid: tid},
+                                        dataType: 'json',
+                                        success: function(response){
+                                            var len = response.length;
+                                        }
+                                    });
+                                    $("#taskbox").show();
+                                    $("#taskbtn").show();
                                 });
                                 
                                 });

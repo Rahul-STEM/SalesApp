@@ -51,6 +51,7 @@
 </div>
 <!-- /.content-header -->
 <section class="content request_section">
+    <div class="content-header"><center><h2>Approve Day Check Request</h2></center></div>
     <div class="container-fluid">
         <div class="row p-3">
             <div class="col-sm col-md-12 col-lg-12 m-auto">

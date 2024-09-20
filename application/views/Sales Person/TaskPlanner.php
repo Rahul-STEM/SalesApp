@@ -313,7 +313,7 @@
               </div>
             </div>
             <?php }}else if($adate == date("Y-m-d") || $approvel_status == '' || $approvel_status =='Reject'){
-             
+            //  var_dump($reqCount );die;
               if($reqCount !== 1 && $adate == date("Y-m-d")){
                 
               ?>

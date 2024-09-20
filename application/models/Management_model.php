@@ -47,7 +47,7 @@ class Management_model  extends Menu_model {
         $date = new DateTime();
         $date->modify('-1 day');
         $pdate =  $date->format('Y-m-d');
-        // $pdate = '2024-07-19';
+        $pdate = '2024-07-19';
 
         $uyid =  $uid;
         $this->load->model('Menu_model');
@@ -84,6 +84,7 @@ class Management_model  extends Menu_model {
     }
 
     public function CheckingTotalYestTask($uid,$sdate,$type){
+        
         if($type == 'total'){
             
             $query=$this->db->query("SELECT * FROM `tblcallevents` WHERE assignedto_id = $uid and cast(appointmentdatetime as DATE)='$sdate'");
@@ -109,12 +110,12 @@ class Management_model  extends Menu_model {
         if($type == 'otherTaskAssign'){
             $query=$this->db->query("SELECT * FROM `tblcallevents` WHERE reassign_type = 2 AND assignedto_id = $uid and cast(appointmentdatetime as DATE)='$sdate'");
         }
-        // if($type == 'StatusChangebyMyTask'){
-        //     $query=$this->db->query("SELECT * FROM `tblcallevents` WHERE reassign_type = 2 AND assignedto_id = $uid and cast(appointmentdatetime as DATE)='$sdate'");
-        // }
-        // if($type == 'StatusChangebyOthersTask'){
-        //     $query=$this->db->query("SELECT * FROM `tblcallevents` WHERE reassign_type = 2 AND assignedto_id = $uid and cast(appointmentdatetime as DATE)='$sdate'");
-        // }
+        if($type == 'StatusChangebyMyTask'){
+            $query=$this->db->query("SELECT * FROM `tblcallevents` WHERE reassign_type = 2 AND assignedto_id = $uid and cast(appointmentdatetime as DATE)='$sdate'");
+        }
+        if($type == 'StatusChangebyOthersTask'){
+            $query=$this->db->query("SELECT * FROM `tblcallevents` WHERE reassign_type = 2 AND assignedto_id = $uid and cast(appointmentdatetime as DATE)='$sdate'");
+        }
         // echo $str = $this->db->last_query(); die;
         return $query->result();
     }
@@ -514,6 +515,13 @@ class Management_model  extends Menu_model {
 
     public function getBDMoMDataWthTid($suid,$tid) {
         $query=$this->db->query("SELECT * FROM `mom_data` WHERE user_id  = $suid and id=$tid");
+        return $query->result();
+    }
+
+    public function getBDMoMDataWthOldTid($suid,$tid) {
+        $query=$this->db->query("SELECT * FROM `mom_data` WHERE user_id  = $suid and edit_cnt=$tid");
+
+        echo $this->db->last_query();
         return $query->result();
     }
 

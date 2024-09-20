@@ -8858,7 +8858,6 @@ class Menu extends CI_Controller {
         $dep_name = $dt[0]->name;
         // $tdate=date('Y-m-d');
 
-        
         $date = new DateTime();
         $date->modify('-1 day');
         $tdate =  $date->format('Y-m-d');
@@ -9133,13 +9132,6 @@ class Menu extends CI_Controller {
     public function CreateTaskForTaskCheck() {
         // Load your model
         $this->load->model('Menu_model');
-    
-        // Prepare your data
-        // $data = [
-        //     'column1' => 'value1',
-        //     'column2' => 'value2',
-        //     // Add more columns as needed
-        // ];
 
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -9152,7 +9144,8 @@ class Menu extends CI_Controller {
         } else {
             // Handle the error
             // You might want to show an error message or redirect to an error page
-            show_error('Data insertion failed.');
+            // show_error('Data insertion failed.');
+            redirect('Menu/TaskCheck_New');
         }
     }
 

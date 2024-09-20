@@ -583,387 +583,388 @@ $mytaskd = $this->Menu_model->get_admintteamtd($myid,$tdate);
 
                     <li class="nav-item">
                         <a class="nav-link" href="<?= base_url(); ?>Menu/CreateTaskForTaskCheck" target="_blank">
-                            Task Check 
+                            Team Task Check Management
                         </a>
                     </li>
 
-                    <!-- <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link" href="<?= base_url(); ?>Management/CheckingDayManagement_New" target="_blank">
-                            Day Check Management
+                            Team Day Check Management
                         </a>
-                    </li> -->
+                    </li>
                   
                 </ul>
                 
               </div>
-              
-              <div class="card-body">
-                <div class="tab-content" id="custom-tabs-four-tabContent">
-                  <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
-                      <div id="accordion">
-                            <div class="card">
-                                <div class="card-header bg-info" id="headingOne" data-toggle="collapse" data-target="#collapse0911" aria-expanded="true" aria-controls="collapse0911">
-                                      <?php $ttbytime = $this->Menu_model->get_ttbytime($uid,$tdate,'09:00:00','11:00:00');
-                                        $ted = $this->Menu_model->get_ttbytimed($uid,$tdate,'09:00:00','11:00:00');
-                                      ?>
-                                      <b>9:00 AM to 11:00 AM</b><br>
-                                      Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) | Proposal(<?=$ted[0]->g?>)
-                                </div>
-                                <div id="collapse0911" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                                  <div class="card-body">
-                                      <?php 
-                                      foreach($ttbytime as $tt){
-                                      $taid = $tt->actiontype_id;
-                                      $taid=$this->Menu_model->get_action($taid);
-                                      $time = $tt->appointmentdatetime;
-                                      $time = date('h:i a', strtotime($time));
-                                  ?>
-                                    <div class="list-group-item list-group-item-action">
-                                       <span class="mr-3 align-items-center">
-                                          <i class="fa-solid fa-circle"></i>
-                                       </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
-                                        </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
-                                        <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
+                
+                <div class="card-body"></div>
+                <div class="card-body">
+                    <div class="tab-content" id="custom-tabs-four-tabContent">
+                    <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
+                        <div id="accordion">
+                                <div class="card">
+                                    <div class="card-header bg-info" id="headingOne" data-toggle="collapse" data-target="#collapse0911" aria-expanded="true" aria-controls="collapse0911">
+                                        <?php $ttbytime = $this->Menu_model->get_ttbytime($uid,$tdate,'09:00:00','11:00:00');
+                                            $ted = $this->Menu_model->get_ttbytimed($uid,$tdate,'09:00:00','11:00:00');
+                                        ?>
+                                        <b>9:00 AM to 11:00 AM</b><br>
+                                        Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) | Proposal(<?=$ted[0]->g?>)
                                     </div>
-                                  <?php } ?>
-                                  
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="card">
-                                <div class="card-header bg-light" id="headingTwo" data-toggle="collapse" data-target="#collapse1113" aria-expanded="false" aria-controls="collapse1113">
-                                      <?php $ttbytime = $this->Menu_model->get_ttbytime($uid,$tdate,'11:00:00','13:00:00');
-                                      $ted = $this->Menu_model->get_ttbytimed($uid,$tdate,'11:00:00','13:00:00');
-                                      ?>
-                                      <b>11:00 AM to 01:00 PM</b><br>
-                                      Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) | Proposal(<?=$ted[0]->g?>)
-                                </div>
-                                <div id="collapse1113" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                                  <div class="card-body">
-                                   <?php 
-                                      foreach($ttbytime as $tt){
-                                      $taid = $tt->actiontype_id;
-                                      $taid=$this->Menu_model->get_action($taid);
-                                      $time = $tt->appointmentdatetime;
-                                      $time = date('h:i a', strtotime($time));
-                                  ?>
-                                    <div class="list-group-item list-group-item-action">
-                                       <span class="mr-3 align-items-center">
-                                          <i class="fa-solid fa-circle"></i>
-                                       </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
+                                    <div id="collapse0911" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <?php 
+                                        foreach($ttbytime as $tt){
+                                        $taid = $tt->actiontype_id;
+                                        $taid=$this->Menu_model->get_action($taid);
+                                        $time = $tt->appointmentdatetime;
+                                        $time = date('h:i a', strtotime($time));
+                                    ?>
+                                        <div class="list-group-item list-group-item-action">
+                                        <span class="mr-3 align-items-center">
+                                            <i class="fa-solid fa-circle"></i>
                                         </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
-                                        <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
+                                        <span class="flex"><?=$taid[0]->name?> | 
+                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                            <small class="text-muted">Task Time:- <?=$time?></small>
+                                            </span>
+                                            <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                            </span>
+                                            <span class="text-right">
+                                                <i class="fa-solid fa-forward"></i>
+                                            </span>
+                                        </div>
+                                    <?php } ?>
+                                    
                                     </div>
-                                  <?php } ?>
-                                  </div>
+                                    </div>
                                 </div>
-                              </div>
-                              <div class="card">
-                                <div class="card-header bg-info" id="headingThree" data-toggle="collapse" data-target="#collapse1315" aria-expanded="false" aria-controls="collapse1315">
-                                      <?php $ttbytime = $this->Menu_model->get_ttbytime($uid,$tdate,'13:00:00','15:00:00');
-                                      $ted = $this->Menu_model->get_ttbytimed($uid,$tdate,'13:00:00','15:00:00');
-                                      ?>
-                                      <b>01:00 PM to 03:00 PM</b><br>
-                                      Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) | Proposal(<?=$ted[0]->g?>)
-                                </div>
-                                <div id="collapse1315" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                                  <div class="card-body">
+                                <div class="card">
+                                    <div class="card-header bg-light" id="headingTwo" data-toggle="collapse" data-target="#collapse1113" aria-expanded="false" aria-controls="collapse1113">
+                                        <?php $ttbytime = $this->Menu_model->get_ttbytime($uid,$tdate,'11:00:00','13:00:00');
+                                        $ted = $this->Menu_model->get_ttbytimed($uid,$tdate,'11:00:00','13:00:00');
+                                        ?>
+                                        <b>11:00 AM to 01:00 PM</b><br>
+                                        Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) | Proposal(<?=$ted[0]->g?>)
+                                    </div>
+                                    <div id="collapse1113" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                                    <div class="card-body">
                                     <?php 
-                                      foreach($ttbytime as $tt){
-                                      $taid = $tt->actiontype_id;
-                                      $taid=$this->Menu_model->get_action($taid);
-                                      $time = $tt->appointmentdatetime;
-                                      $time = date('h:i a', strtotime($time));
-                                  ?>
-                                    <div class="list-group-item list-group-item-action">
-                                       <span class="mr-3 align-items-center">
-                                          <i class="fa-solid fa-circle"></i>
-                                       </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
+                                        foreach($ttbytime as $tt){
+                                        $taid = $tt->actiontype_id;
+                                        $taid=$this->Menu_model->get_action($taid);
+                                        $time = $tt->appointmentdatetime;
+                                        $time = date('h:i a', strtotime($time));
+                                    ?>
+                                        <div class="list-group-item list-group-item-action">
+                                        <span class="mr-3 align-items-center">
+                                            <i class="fa-solid fa-circle"></i>
                                         </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
-                                        <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
+                                        <span class="flex"><?=$taid[0]->name?> | 
+                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                            <small class="text-muted">Task Time:- <?=$time?></small>
+                                            </span>
+                                            <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                            </span>
+                                            <span class="text-right">
+                                                <i class="fa-solid fa-forward"></i>
+                                            </span>
+                                        </div>
+                                    <?php } ?>
                                     </div>
-                                  <?php } ?>
-                                  </div>
+                                    </div>
                                 </div>
-                              </div>
-                              <div class="card">
-                                <div class="card-header bg-light" id="headingThree" data-toggle="collapse" data-target="#collapse1517" aria-expanded="false" aria-controls="collapse1517">
-                                      <?php $ttbytime = $this->Menu_model->get_ttbytime($uid,$tdate,'15:00:00','17:00:00');
-                                      $ted = $this->Menu_model->get_ttbytimed($uid,$tdate,'15:00:00','17:00:00');
-                                      ?>
-                                      <b>03:00 PM to 05:00 PM</b><br>
-                                      Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) |  Proposal(<?=$ted[0]->g?>)
+                                <div class="card">
+                                    <div class="card-header bg-info" id="headingThree" data-toggle="collapse" data-target="#collapse1315" aria-expanded="false" aria-controls="collapse1315">
+                                        <?php $ttbytime = $this->Menu_model->get_ttbytime($uid,$tdate,'13:00:00','15:00:00');
+                                        $ted = $this->Menu_model->get_ttbytimed($uid,$tdate,'13:00:00','15:00:00');
+                                        ?>
+                                        <b>01:00 PM to 03:00 PM</b><br>
+                                        Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) | Proposal(<?=$ted[0]->g?>)
+                                    </div>
+                                    <div id="collapse1315" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <?php 
+                                        foreach($ttbytime as $tt){
+                                        $taid = $tt->actiontype_id;
+                                        $taid=$this->Menu_model->get_action($taid);
+                                        $time = $tt->appointmentdatetime;
+                                        $time = date('h:i a', strtotime($time));
+                                    ?>
+                                        <div class="list-group-item list-group-item-action">
+                                        <span class="mr-3 align-items-center">
+                                            <i class="fa-solid fa-circle"></i>
+                                        </span>
+                                        <span class="flex"><?=$taid[0]->name?> | 
+                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                            <small class="text-muted">Task Time:- <?=$time?></small>
+                                            </span>
+                                            <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                            </span>
+                                            <span class="text-right">
+                                                <i class="fa-solid fa-forward"></i>
+                                            </span>
+                                        </div>
+                                    <?php } ?>
+                                    </div>
+                                    </div>
                                 </div>
-                                <div id="collapse1517" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                                  <div class="card-body">
+                                <div class="card">
+                                    <div class="card-header bg-light" id="headingThree" data-toggle="collapse" data-target="#collapse1517" aria-expanded="false" aria-controls="collapse1517">
+                                        <?php $ttbytime = $this->Menu_model->get_ttbytime($uid,$tdate,'15:00:00','17:00:00');
+                                        $ted = $this->Menu_model->get_ttbytimed($uid,$tdate,'15:00:00','17:00:00');
+                                        ?>
+                                        <b>03:00 PM to 05:00 PM</b><br>
+                                        Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) |  Proposal(<?=$ted[0]->g?>)
+                                    </div>
+                                    <div id="collapse1517" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <?php 
+                                        foreach($ttbytime as $tt){
+                                        $taid = $tt->actiontype_id;
+                                        $taid=$this->Menu_model->get_action($taid);
+                                        $time = $tt->appointmentdatetime;
+                                        $time = date('h:i a', strtotime($time));
+                                    ?>
+                                        <div class="list-group-item list-group-item-action">
+                                        <span class="mr-3 align-items-center">
+                                            <i class="fa-solid fa-circle"></i>
+                                        </span>
+                                        <span class="flex"><?=$taid[0]->name?> | 
+                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                            <small class="text-muted">Task Time:- <?=$time?></small>
+                                            </span>
+                                            <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                            </span>
+                                            <span class="text-right">
+                                                <i class="fa-solid fa-forward"></i>
+                                            </span>
+                                        </div>
+                                    <?php } ?>
+                                    </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card">
+                                    <div class="card-header bg-info" id="headingThree" data-toggle="collapse" data-target="#collapse1719" aria-expanded="false" aria-controls="collapse1719">
+                                        <?php  $ttbytime = $this->Menu_model->get_ttbytime($uid,$tdate,'17:00:00','19:00:00');
+                                        $ted = $this->Menu_model->get_ttbytimed($uid,$tdate,'17:00:00','19:00:00'); ?>
+                                        <b>05:00 PM to 07:00 PM</b></br>
+                                        Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) |  Proposal(<?=$ted[0]->g?>)
+                                    </div>
+                                    <div id="collapse1719" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <?php 
+                                        foreach($ttbytime as $tt){
+                                        $taid = $tt->actiontype_id;
+                                        $taid=$this->Menu_model->get_action($taid);
+                                        $time = $tt->appointmentdatetime;
+                                        $time = date('h:i a', strtotime($time));
+                                    ?>
+                                        <div class="list-group-item list-group-item-action">
+                                        <span class="mr-3 align-items-center">
+                                            <i class="fa-solid fa-circle"></i>
+                                        </span>
+                                        <span class="flex"><?=$taid[0]->name?> | 
+                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                            <small class="text-muted">Task Time:- <?=$time?></small>
+                                            </span>
+                                            <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                            </span>
+                                            <span class="text-right">
+                                                <i class="fa-solid fa-forward"></i>
+                                            </span>
+                                        </div>
+                                    <?php } ?>
+                                    </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card">
+                                    <div class="card-header bg-light" id="headingThree" data-toggle="collapse" data-target="#collapse9121" aria-expanded="false" aria-controls="collapse9121">
+                                        <?php $ttbytime = $this->Menu_model->get_ttbytime($uid,$tdate,'19:00:00','21:00:00'); 
+                                        $ted = $this->Menu_model->get_ttbytimed($uid,$tdate,'19:00:00','21:00:00');
+                                        ?>
+                                        <b>19:00 PM to 21:00 PM</b><br>
+                                        Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) |  Proposal(<?=$ted[0]->g?>)
+                                    </div>
+                                    <div id="collapse9121" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                                    <div class="card-body">
                                     <?php 
-                                      foreach($ttbytime as $tt){
-                                      $taid = $tt->actiontype_id;
-                                      $taid=$this->Menu_model->get_action($taid);
-                                      $time = $tt->appointmentdatetime;
-                                      $time = date('h:i a', strtotime($time));
-                                  ?>
-                                    <div class="list-group-item list-group-item-action">
-                                       <span class="mr-3 align-items-center">
-                                          <i class="fa-solid fa-circle"></i>
-                                       </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
+                                        foreach($ttbytime as $tt){
+                                        $taid = $tt->actiontype_id;
+                                        $taid=$this->Menu_model->get_action($taid);
+                                        $time = $tt->appointmentdatetime;
+                                        $time = date('h:i a', strtotime($time));
+                                    ?>
+                                        <div class="list-group-item list-group-item-action">
+                                        <span class="mr-3 align-items-center">
+                                            <i class="fa-solid fa-circle"></i>
                                         </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
-                                        <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
+                                        <span class="flex"><?=$taid[0]->name?> | 
+                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                            <small class="text-muted">Task Time:- <?=$time?></small>
+                                            </span>
+                                            <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                            </span>
+                                            <span class="text-right">
+                                                <i class="fa-solid fa-forward"></i>
+                                            </span>
+                                        </div>
+                                    <?php } ?>
                                     </div>
-                                  <?php } ?>
-                                  </div>
-                                </div>
-                              </div>
-                              
-                              <div class="card">
-                                <div class="card-header bg-info" id="headingThree" data-toggle="collapse" data-target="#collapse1719" aria-expanded="false" aria-controls="collapse1719">
-                                      <?php  $ttbytime = $this->Menu_model->get_ttbytime($uid,$tdate,'17:00:00','19:00:00');
-                                      $ted = $this->Menu_model->get_ttbytimed($uid,$tdate,'17:00:00','19:00:00'); ?>
-                                      <b>05:00 PM to 07:00 PM</b></br>
-                                      Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) |  Proposal(<?=$ted[0]->g?>)
-                                </div>
-                                <div id="collapse1719" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                                  <div class="card-body">
-                                    <?php 
-                                      foreach($ttbytime as $tt){
-                                      $taid = $tt->actiontype_id;
-                                      $taid=$this->Menu_model->get_action($taid);
-                                      $time = $tt->appointmentdatetime;
-                                      $time = date('h:i a', strtotime($time));
-                                  ?>
-                                    <div class="list-group-item list-group-item-action">
-                                       <span class="mr-3 align-items-center">
-                                          <i class="fa-solid fa-circle"></i>
-                                       </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
-                                        </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
-                                        <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
                                     </div>
-                                  <?php } ?>
-                                  </div>
                                 </div>
-                              </div>
-                              
-                              <div class="card">
-                                <div class="card-header bg-light" id="headingThree" data-toggle="collapse" data-target="#collapse9121" aria-expanded="false" aria-controls="collapse9121">
-                                      <?php $ttbytime = $this->Menu_model->get_ttbytime($uid,$tdate,'19:00:00','21:00:00'); 
-                                      $ted = $this->Menu_model->get_ttbytimed($uid,$tdate,'19:00:00','21:00:00');
-                                      ?>
-                                      <b>19:00 PM to 21:00 PM</b><br>
-                                      Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) |  Proposal(<?=$ted[0]->g?>)
                                 </div>
-                                <div id="collapse9121" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                                  <div class="card-body">
-                                   <?php 
-                                      foreach($ttbytime as $tt){
-                                      $taid = $tt->actiontype_id;
-                                      $taid=$this->Menu_model->get_action($taid);
-                                      $time = $tt->appointmentdatetime;
-                                      $time = date('h:i a', strtotime($time));
-                                   ?>
-                                    <div class="list-group-item list-group-item-action">
-                                       <span class="mr-3 align-items-center">
-                                          <i class="fa-solid fa-circle"></i>
-                                       </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
-                                        </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
-                                        <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
-                                    </div>
-                                  <?php } ?>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                  </div>
-                  <div class="tab-pane fade" id="custom-tabs-four-call" role="tabpanel" aria-labelledby="custom-tabs-four-call-tab">
-                      <?php $aai=0;foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='1'){
-                          $taid = $tt->actiontype_id;
-                          $taid=$this->Menu_model->get_action($taid);
-                          $time = $tt->appointmentdatetime;
-                          $time = date('h:i a', strtotime($time));
-                      ?>
-                        
-                        <div class="list-group-item list-group-item-action">
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-four-call" role="tabpanel" aria-labelledby="custom-tabs-four-call-tab">
+                        <?php $aai=0;foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='1'){
+                            $taid = $tt->actiontype_id;
+                            $taid=$this->Menu_model->get_action($taid);
+                            $time = $tt->appointmentdatetime;
+                            $time = date('h:i a', strtotime($time));
+                        ?>
+                            
+                            <div class="list-group-item list-group-item-action">
+                                <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                            <input type="hidden" value="<?=$tt->id?>" id="tid">
+                            <span class="mr-3 align-items-center">
+                                <i class="fa-solid fa-circle"></i>
+                            </span>
+                            <span class="flex"><?=$taid[0]->name?> | 
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <small class="text-muted">Task Time:- <?=$time?></small>
+                                </span>
+                                <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                </span>
+                                <span class="text-right">
+                                    <i class="fa-solid fa-forward"></i>
+                                </span>
+                            </button></div>
+                        <?php $aai++;}}} ?>
+                    </div></button>
+                    <div class="tab-pane fade" id="custom-tabs-four-email" role="tabpanel" aria-labelledby="custom-tabs-four-email-tab">
+                        <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='2'){
+                        ?>
+                            <div class="list-group-item list-group-item-action">
                             <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
-                          <input type="hidden" value="<?=$tt->id?>" id="tid">
-                           <span class="mr-3 align-items-center">
-                              <i class="fa-solid fa-circle"></i>
-                           </span>
-                           <span class="flex"><?=$taid[0]->name?> | 
-                               <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                               <small class="text-muted">Task Time:- <?=$time?></small>
+                            
+                            <span class="mr-3 align-items-center">
+                                <i class="fa-solid fa-circle"></i>
                             </span>
-                            <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                            <span class="flex">
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <small class="text-muted">Next Task:- </small>
+                                </span>
+                                <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                </span>
+                                <span class="text-right">
+                                    <i class="fa-solid fa-forward"></i>
+                                </span>
+                            </button></div>
+                        <?php $aai++;}}} ?>
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-four-meeting" role="tabpanel" aria-labelledby="custom-tabs-four-meeting-tab">
+                        <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='3'){
+                        ?>
+                            <div class="list-group-item list-group-item-action">
+                            <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                            
+                            <span class="mr-3 align-items-center">
+                                <i class="fa-solid fa-circle"></i>
                             </span>
-                            <span class="text-right">
-                                <i class="fa-solid fa-forward"></i>
+                            <span class="flex">
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <small class="text-muted">Next Task:- </small>
+                                </span>
+                                <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                </span>
+                                <span class="text-right">
+                                    <i class="fa-solid fa-forward"></i>
+                                </span>
+                            </button></div>
+                        <?php $aai++;}}} ?>
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-four-whatsapp" role="tabpanel" aria-labelledby="custom-tabs-four-whatsapp-tab">
+                        <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='5'){
+                        ?>
+                            <div class="list-group-item list-group-item-action">
+                            <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                            <span class="mr-3 align-items-center">
+                                <i class="fa-solid fa-circle"></i>
                             </span>
-                        </button></div>
-                      <?php $aai++;}}} ?>
-                  </div></button>
-                  <div class="tab-pane fade" id="custom-tabs-four-email" role="tabpanel" aria-labelledby="custom-tabs-four-email-tab">
-                      <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='2'){
-                      ?>
-                        <div class="list-group-item list-group-item-action">
-                        <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                            <span class="flex">
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <small class="text-muted">Next Task:- </small>
+                                </span>
+                                <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                </span>
+                                <span class="text-right">
+                                    <i class="fa-solid fa-forward"></i>
+                                </button></span>
+                            </div>
+                        <?php $aai++;}}} ?>
+                    </div>
+                    
+                    <div class="tab-pane fade" id="custom-tabs-four-proposal" role="tabpanel" aria-labelledby="custom-tabs-four-proposal-tab">
+                        <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='7'){
+                        ?>
+                            <div class="list-group-item list-group-item-action">
+                            <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                            <span class="mr-3 align-items-center">
+                                <i class="fa-solid fa-circle"></i>
+                            </span>
+                            <span class="flex">
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <small class="text-muted">Next Task:- </small>
+                                </span>
+                                <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                </span>
+                                <span class="text-right">
+                                    <i class="fa-solid fa-forward"></i>
+                                </button></span>
+                            </div>
+                        <?php $aai++;}}} ?>
+                    </div>
+                    
+                    <div class="tab-pane fade" id="custom-tabs-four-review" role="tabpanel" aria-labelledby="custom-tabs-four-review-tab">
+                        <?php $pr = $this->Menu_model->get_pstreview($uid);
+                            foreach($pr as $pr){?>
+                            <a href="BDUFunnel/<?=$pr->bdid?>"><div class="list-group-item list-group-item-action">
+                            <span class="mr-3 align-items-center">
+                                <i class="fa-solid fa-circle"></i>
+                            </span>
+                            <span class="flex">
+                                <strong class="text-secondary mr-1"><?=$pr->meetinglink?></strong><br>
+                                <small class="text-muted">BD Name :- <?=$pr->bdid?></small>
+                                <small class="text-muted">Date Time :- <?=$pr->sdatet?></small>
+                                </span>
+                                <span class="text-right">
+                                    <i class="fa-solid fa-forward"></i>
+                                </span>
+                            </div></a>
+                        <?php } ?>
+                    </div>
+                    
+                    <div class="tab-pane fade" id="custom-tabs-four-barg" role="tabpanel" aria-labelledby="custom-tabs-four-barg-tab">
                         
-                           <span class="mr-3 align-items-center">
-                              <i class="fa-solid fa-circle"></i>
-                           </span>
-                           <span class="flex">
-                               <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                               <small class="text-muted">Next Task:- </small>
-                            </span>
-                            <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                            </span>
-                            <span class="text-right">
-                                <i class="fa-solid fa-forward"></i>
-                            </span>
-                        </button></div>
-                      <?php $aai++;}}} ?>
-                  </div>
-                  <div class="tab-pane fade" id="custom-tabs-four-meeting" role="tabpanel" aria-labelledby="custom-tabs-four-meeting-tab">
-                      <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='3'){
-                      ?>
-                        <div class="list-group-item list-group-item-action">
-                        <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
-                        
-                           <span class="mr-3 align-items-center">
-                              <i class="fa-solid fa-circle"></i>
-                           </span>
-                           <span class="flex">
-                               <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                               <small class="text-muted">Next Task:- </small>
-                            </span>
-                            <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                            </span>
-                            <span class="text-right">
-                                <i class="fa-solid fa-forward"></i>
-                            </span>
-                        </button></div>
-                      <?php $aai++;}}} ?>
-                  </div>
-                  <div class="tab-pane fade" id="custom-tabs-four-whatsapp" role="tabpanel" aria-labelledby="custom-tabs-four-whatsapp-tab">
-                      <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='5'){
-                      ?>
-                        <div class="list-group-item list-group-item-action">
-                        <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
-                           <span class="mr-3 align-items-center">
-                              <i class="fa-solid fa-circle"></i>
-                           </span>
-                           <span class="flex">
-                               <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                               <small class="text-muted">Next Task:- </small>
-                            </span>
-                            <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                            </span>
-                            <span class="text-right">
-                                <i class="fa-solid fa-forward"></i>
-                            </button></span>
-                        </div>
-                      <?php $aai++;}}} ?>
-                  </div>
-                  
-                  <div class="tab-pane fade" id="custom-tabs-four-proposal" role="tabpanel" aria-labelledby="custom-tabs-four-proposal-tab">
-                      <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='7'){
-                      ?>
-                        <div class="list-group-item list-group-item-action">
-                        <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
-                           <span class="mr-3 align-items-center">
-                              <i class="fa-solid fa-circle"></i>
-                           </span>
-                           <span class="flex">
-                               <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                               <small class="text-muted">Next Task:- </small>
-                            </span>
-                            <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                            </span>
-                            <span class="text-right">
-                                <i class="fa-solid fa-forward"></i>
-                            </button></span>
-                        </div>
-                      <?php $aai++;}}} ?>
-                  </div>
-                  
-                  <div class="tab-pane fade" id="custom-tabs-four-review" role="tabpanel" aria-labelledby="custom-tabs-four-review-tab">
-                      <?php $pr = $this->Menu_model->get_pstreview($uid);
-                        foreach($pr as $pr){?>
-                        <a href="BDUFunnel/<?=$pr->bdid?>"><div class="list-group-item list-group-item-action">
-                           <span class="mr-3 align-items-center">
-                              <i class="fa-solid fa-circle"></i>
-                           </span>
-                           <span class="flex">
-                               <strong class="text-secondary mr-1"><?=$pr->meetinglink?></strong><br>
-                               <small class="text-muted">BD Name :- <?=$pr->bdid?></small>
-                               <small class="text-muted">Date Time :- <?=$pr->sdatet?></small>
-                            </span>
-                            <span class="text-right">
-                                <i class="fa-solid fa-forward"></i>
-                            </span>
-                        </div></a>
-                      <?php } ?>
-                  </div>
-                  
-                  <div class="tab-pane fade" id="custom-tabs-four-barg" role="tabpanel" aria-labelledby="custom-tabs-four-barg-tab">
-                      
-                        <div class="list-group-item list-group-item-action">
-                            <?php 
-                            foreach($barg as $brg){
-                                $bs = $brg->status;?>
-                                <?php if($bs=='Pending'){?>
-                                    <button type="button" value="<?=$brg->id?>" class="btn btn-success" id="startm">Start Meeting</button>
-                                <?php }if($bs=='Start'){?>
-                                    <button type="button" value="<?=$brg->id?>" class="btn btn-info" id="closem">Close Meeting</button>
-                            <?php }} ?>
-                        </div>
-                        <div class="list-group-item list-group-item-action">
-                            <?php foreach($barg as $br){if($br->status=='RPClose'){;?>
-                            <a href="BMNewLead/<?=$br->id?>"><?=$br->company_name?><button type="button" class="btn btn-danger">Create New Lead</button></a>
-                            <?php }} ?>
-                        </div>
-                  </div>
+                            <div class="list-group-item list-group-item-action">
+                                <?php 
+                                foreach($barg as $brg){
+                                    $bs = $brg->status;?>
+                                    <?php if($bs=='Pending'){?>
+                                        <button type="button" value="<?=$brg->id?>" class="btn btn-success" id="startm">Start Meeting</button>
+                                    <?php }if($bs=='Start'){?>
+                                        <button type="button" value="<?=$brg->id?>" class="btn btn-info" id="closem">Close Meeting</button>
+                                <?php }} ?>
+                            </div>
+                            <div class="list-group-item list-group-item-action">
+                                <?php foreach($barg as $br){if($br->status=='RPClose'){;?>
+                                <a href="BMNewLead/<?=$br->id?>"><?=$br->company_name?><button type="button" class="btn btn-danger">Create New Lead</button></a>
+                                <?php }} ?>
+                            </div>
+                    </div>
+                    </div>
                 </div>
-            </div>
               <!-- /.card -->
             </div><!-- /.card -->
             </div>

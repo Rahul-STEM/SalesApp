@@ -11493,9 +11493,16 @@ public function updateClusterIdByinitID($uid,$tid,$select_cluster){
 
 public function get_userForTask($uid,$uyid){
 
+    // $this->db->select('user_id');
+    // $this->db->from('taskcheck_star_rating');
+    // $this->db->where('created_at','active');
+
+
+
     $this->db->select('user_id');
     $this->db->select('name');
     $this->db->from('user_details');
+    // $this->db->join('taskcheck_star_rating','taskcheck_star_rating.user_id=user_details.user_id');
 
     if($uyid == 2){
 
@@ -11515,8 +11522,13 @@ public function get_userForTask($uid,$uyid){
     }
 
     $this->db->where('status','active');
+
+    // $this->db->where('taskcheck_star_rating.user_id NOT IN');
+
+    $this->db->order_by('name','ASC');
     $query = $this->db->get();
-        // echo  $this->db->last_query(); die;
+    // echo  $this->db->last_query(); die;
+
     return $query->result();
 
 }
@@ -11560,6 +11572,7 @@ public function getTasks($id,$date){
     $this->db->where('user_id', $id);
     $this->db->where('CAST(updateddate AS DATE) =', "'$date'", FALSE);
     $this->db->order_by('tce.appointmentdatetime', 'ASC');
+    // $this->db->limit(20);
     // $this->db->where('rremark IS NULL', NULL, FALSE);
 
     $query = $this->db->get();
@@ -11911,9 +11924,10 @@ public function InsertMoMTaskRating($review){
     return $this->db->insert('taskcheck_star_rating', $review);
 }
 
-public function replicate_record($id) {
+public function replicate_record($id,$uid) {
 
     // Fetch the existing record
+    
     $this->db->where('id', $id);
     $query = $this->db->get('tblcallevents');
 
@@ -11921,10 +11935,11 @@ public function replicate_record($id) {
         $existing_record = $query->row_array();
 
         $existing_record['tid'] = $existing_record['id'];
+        $existing_record['sc_ID'] = $uid;
         // Prepare data for the new record
         unset($existing_record['id']); // Remove ID
         unset($existing_record['created_at']); // Example of a field to exclude
-        unset($existing_record['updated_at']); // Another field to exclude
+        // unset($existing_record['updated_at']); // Another field to exclude
 
         // Insert the new record
         $this->db->insert('tblcallevents_taskCheck', $existing_record);
@@ -11942,18 +11957,22 @@ public function replicate_record($id) {
 
 public function get_scteam_tasks($uid){
 
-    $this->db->select('id');
+    $this->db->select('user_id');
     $this->db->from('user_details');
     $this->db->where('sales_co',$uid);
-    // $getSCTeam 
+ 
     $getSCTeam = $this->db->get_compiled_select();
 
-    // var_dump($getSCTeam);die;
+    $date = new DateTime();
+    $date->modify('-1 day');
+    $pdate =  $date->format('Y-m-d');
+
+    $pdate = '2024-09-05';
+
     $this->db->select('id');
     $this->db->from('tblcallevents');
-    $this->db->where_in('user_id',$getSCTeam);
-
-    // $getSCTeamTask = $this->db->get_compiled_select();
+    $this->db->where("user_id IN ($getSCTeam)", NULL, FALSE);
+    $this->db->where('CAST(plandt AS DATE) =', "'$pdate'", FALSE);
 
     $getSCTeamTask = $this->db->get();
     
@@ -11963,19 +11982,32 @@ public function get_scteam_tasks($uid){
 
 public function replicate_scteam_tasks($uid) {
     // Get the tasks for the sales team
-    $tasks = $this->get_scteam_tasks($uid);
-    
-    $new_ids = []; // Array to hold new IDs
+    $currentDate =  date("Y-m-d");
 
-    // Loop through each task and replicate it
-    foreach ($tasks as $task) {
-        $new_id = $this->replicate_record($task['id']);
-        if ($new_id !== false) {
-            $new_ids[] = $new_id; // Store the new ID if successful
+    $this->db->select('id');
+    $this->db->from('tblcallevents_taskCheck');
+    $this->db->where('sc_ID',$uid);
+    $this->db->where('CAST(created_at AS DATE) =', "'$currentDate'", FALSE);
+
+    $query = $this->db->get();
+    if ($query->num_rows() == 0) {
+        // echo $this->db->last_query();die;
+        
+        $tasks = $this->get_scteam_tasks($uid);
+        // var_dump($tasks);die;
+        $new_ids = []; // Array to hold new IDs
+    
+        // Loop through each task and replicate it
+        foreach ($tasks as $task) {
+            $new_id = $this->replicate_record($task['id'],$uid);
+            if ($new_id !== false) {
+                $new_ids[] = $new_id; // Store the new ID if successful
+            }
         }
+    
+        return $new_ids; // Return an array of new IDs
     }
 
-    return $new_ids; // Return an array of new IDs
 }
 // New TaskCheck function <======================== END ==============================>
 

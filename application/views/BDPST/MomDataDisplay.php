@@ -73,32 +73,74 @@
                                       $i=1;
                                       
 
-                                        $identify_school = $momdata[0]->identify_school;
-                                        
-                                        if($identify_school == 'yes'){
-                                            $state = $momdata[0]->identify_school_state;
-                                            $district = $momdata[0]->identify_school_district;
-                                            $noofschool = $momdata[0]->no_of_school;
+                                      $identify_school = $momdata[0]->identify_school;
+                                      if($identify_school == 'yes'){
+                                        $state = $momdata[0]->identify_school_state;
+                                        $district = $momdata[0]->identify_school_district;
+                                        $noofschool = $momdata[0]->no_of_school;
 
-                                            $states = explode(',', $state);
-                                            $districts = explode(',', $district);
-                                            $schoolCounts = explode(',', $noofschool);
+                                        $states = explode(',', $state);
+                                        $districts = explode(',', $district);
+                                        $schoolCounts = explode(',', $noofschool);
 
-                                            // Combine into a single array
-                                            $combinedArray = [];
+                                        // Combine into a single array
+                                        $combinedArray = [];
 
-                                            for ($i = 0; $i < count($states); $i++) {
-                                                $combinedArray[] = [
-                                                    'identify_school_state' => $states[$i],
-                                                    'identify_school_district' => $districts[$i],
-                                                    'no_of_school' => $schoolCounts[$i]
-                                                ];
-                                            }
+                                        for ($i = 0; $i < count($states); $i++) {
+                                            $combinedArray[] = [
+                                                'identify_school_state' => $states[$i],
+                                                'identify_school_district' => $districts[$i],
+                                                'no_of_school' => $schoolCounts[$i]
+                                            ];
                                         }
+                                      }
                                    
-                                     $combinedArraycnt = sizeof($combinedArray);
-                                      // echo "<pre>";
-                                      // print_r($combinedArray);
+                                        $combinedArraycnt = sizeof($combinedArray);
+                                        // echo "<pre>";
+                                        // var_dump($combinedArray);
+                                     
+                                      if($key == 'identify_school_state'){
+                                        $array = explode(',', $value);
+                                        $k=1; foreach($array as $arr){ echo "<span>".$k .' - '.$arr."</span> <hr>"; $k++;}
+                                      }
+                                      if($key == 'identify_school_district'){
+                                        $array = explode(',', $value);
+                                        $k=1; foreach($array as $arr){ echo "<span>".$k .' - '.$arr."</span> <hr>"; $k++;}
+                                      }
+                                      if($key == 'no_of_school'){
+                                        $array = explode(',', $value);
+                                        $k=1; foreach($array as $arr){ echo "<span>".$arr."</span> <hr>"; $k++;}
+                                      }
+
+                                      // getting oldMoM data 
+
+                                      $identify_schoolOld = $momdataOld[0]->identify_school;
+
+                                      if($identify_schoolOld == 'yes'){
+                                        
+                                        $stateOld = $momdataOld[0]->identify_school_state;
+                                        $districtOld = $momdataOld[0]->identify_school_district;
+                                        $noofschoolOld = $momdataOld[0]->no_of_school;
+
+                                        $statesOld = explode(',', $stateOld);
+                                        $districtsOld = explode(',', $districtOld);
+                                        $schoolCountsOld = explode(',', $noofschoolOld);
+
+                                        // Combine into a single array
+                                        $combinedArrayOld = [];
+
+                                        for ($i = 0; $i < count($statesOld); $i++) {
+                                            $combinedArrayOld[] = [
+                                                'identify_school_state' => $statesOld[$i],
+                                                'identify_school_district' => $districtsOld[$i],
+                                                'no_of_school' => $schoolCountsOld[$i]
+                                            ];
+                                        }
+                                      }
+                                   
+                                        $combinedArraycntOld = sizeof($combinedArrayOld);
+                                        echo "<pre>";
+                                        var_dump($combinedArrayOld);
                                      
                                       if($key == 'identify_school_state'){
                                         $array = explode(',', $value);
@@ -144,23 +186,23 @@
                                         $action_name = $action_name[0]->name;
 
                                         foreach ($values as $key => $value):
-                                          if( $key == 'tid'){
-                                            continue;
-                                          }
+                                            if( $key == 'tid'){
+                                                continue;
+                                            }
 
-                                          if($key == 'project_intervention_select'){if($value !== 'Others'){
-                                              unset($values->project_intervention);
-                                          }}
+                                            if($key == 'project_intervention_select'){if($value !== 'Others'){
+                                                unset($values->project_intervention);
+                                            }}
                                           
-                                          if($key == 'client_has_adopted_select'){if($value == 'no'){
-                                              unset($values->client_has_adopted);
-                                          }
+                                            if($key == 'client_has_adopted_select'){if($value == 'no'){
+                                                unset($values->client_has_adopted);
+                                            }
                                         }
-                                          if($key == 'submit_proposal'){if($value == 'no'){
-                                              unset($values->proposal_no_of_school);
-                                              unset($values->proposal_of_budget);
-                                              unset($values->proposal_of_location);
-                                          }
+                                            if($key == 'submit_proposal'){if($value == 'no'){
+                                                unset($values->proposal_no_of_school);
+                                                unset($values->proposal_of_budget);
+                                                unset($values->proposal_of_location);
+                                            }
                                         }
                                      
                                           if($key == 'identify_school')if($value == 'yes'){{

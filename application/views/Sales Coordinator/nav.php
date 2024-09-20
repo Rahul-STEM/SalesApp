@@ -129,7 +129,27 @@
               <p>Dashboard</p>
             </a>
           </li>
-          
+          <li class="nav-item">
+
+                <a class="nav-link" href="<?= base_url(); ?>Management/DayManagementReport">
+                    <i class="fas fa-chart-line nav-icon"></i>
+
+                    <!-- <p>Day Check Report</p> -->
+                    Day Check Report
+                </a>
+
+            </li>
+            <li class="nav-item">
+
+                <a class="nav-link" href="<?= base_url(); ?>Menu/TaskCheck_NewReport">
+                    <i class="fas fa-chart-bar nav-icon"></i>
+
+                    <!-- <p>Task Check Report</p> -->
+                    Task Check Report
+
+                </a>
+
+            </li>
           <li class="nav-item">
             <a href="<?=base_url();?>Menu/LiveTaskTracking" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
@@ -259,9 +279,9 @@
 
 
 
-$(document).ready(function() {
-    trackLocation();
-});
+// $(document).ready(function() {
+//     trackLocation();
+// });
 
 function handleGeolocationError() {
    const bodyElement = document.querySelector("body");
@@ -274,15 +294,15 @@ function handleGeolocationSuccess(position) {
     const contentDiv = document.getElementById("content");
     contentDiv.style.display = "block";
 }
-function getLocation() {
-    if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(handleGeolocationSuccess, handleGeolocationError);
-    } else {
-        const errorMessage = document.getElementById("error-message");
-        errorMessage.style.display = "block";
-    }
-}
-window.onload = getLocation;
+// function getLocation() {
+//     if ("geolocation" in navigator) {
+//         navigator.geolocation.getCurrentPosition(handleGeolocationSuccess, handleGeolocationError);
+//     } else {
+//         const errorMessage = document.getElementById("error-message");
+//         errorMessage.style.display = "block";
+//     }
+// }
+// window.onload = getLocation;
 
 
 
@@ -296,7 +316,7 @@ function startCamera() {
              alert('Error: Camera access permission denied.');
         });
 }
-startCamera();
+// startCamera();
 
 
 

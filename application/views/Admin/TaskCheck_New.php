@@ -1534,12 +1534,6 @@
                     const selectedRadio = event.target;
                     const remarkBox = fieldset.querySelector('.remark-box');
 
-                    // console.log(selectedRadio.value)
-
-                    // Disable the entire fieldset once a radio button is selected
-                    // fieldset.classList.add('disabled-fieldset');
-                    // fieldset.classList.add('disabled-fieldset');
-
                     if (selectedRadio.type === 'radio') {
                         if (parseInt(selectedRadio.value, 10) <= 2) {
                             // Show the remark box

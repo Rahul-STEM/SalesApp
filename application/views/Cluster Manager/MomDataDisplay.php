@@ -71,9 +71,6 @@
                                   <tbody>
                                     <?php 
                                       $i=1;
-<<<<<<< HEAD
-                                     foreach ($momdata as $values):
-=======
                                       
 
                                       $identify_school = $momdata[0]->identify_school;
@@ -119,19 +116,15 @@
 
                                      foreach ($momdata as $values):
 
->>>>>>> stem-sales/main
                                         unset($values->id);
                                         unset($values->reject_remarks);
                                         unset($values->cm_call_task);
                                         unset($values->bd_request_task);
                                         unset($values->school_visit_task);
-<<<<<<< HEAD
-=======
                                         unset($values->pst_call_task);
                                         unset($values->pst_assign);
                                         unset($values->edit_cnt);
 
->>>>>>> stem-sales/main
                                         $getTblCallData = $this->Management_model->get_BDMoM_TBL_Call_Data($values->tid);
                                      
                                         $fwd_date = $getTblCallData[0]->fwd_date;
@@ -150,8 +143,6 @@
                                         $action_name = $action_name[0]->name;
 
                                         foreach ($values as $key => $value):
-<<<<<<< HEAD
-=======
                                           if( $key == 'tid'){
                                             continue;
                                           }
@@ -200,7 +191,6 @@
                                           }
 
                                        
->>>>>>> stem-sales/main
                                      ?>
                                         <tr>
                                             <td><?= $i; ?></td>
@@ -211,35 +201,16 @@
                                             if($key == 'user_id'){echo "BD Name";}
                                             if($key == 'init_cmpid'){echo "Comapny Name";}
                                             if($key == 'actontaken'){echo "Action Taken";}
-<<<<<<< HEAD
-                                            if($key == 'meetingdonewinitiator'){echo "Meeting done with Initiator or infulencer or discision maker of the company";}
-                                            if($key == 'presentation'){echo "Presentation and pitching is done for which offering :";}
-                                            if($key == 'project_intervention_select'){echo "What is the client's thematic Area for Project Intervention in the current financial Year";}
-                                            if($key == 'project_intervention'){echo "What is the client's Other thematic Area for Project Intervention in the current financial Year";}
-
-=======
                                             if($key == 'meetingdonewinitiator'){echo "Meeting done with Initiator or influencer and decision maker of the company";}
                                             if($key == 'presentation'){echo "Presentation and pitching is done for which offering :";}
                                             if($key == 'project_intervention_select'){echo "What is the client's thematic Area for Project Intervention in the current financial Year";}
                                          
                                             if($key == 'project_intervention'){echo "What is the client's Other thematic Area for Project Intervention in the current financial Year";}
                                             
->>>>>>> stem-sales/main
                                             if($key == 'client_has_adopted_select'){echo "Does the client has adopted any schools ?";}
                                             if($key == 'client_has_adopted'){echo "Specify details of client has adopted any schools";}
                                             if($key == 'approving_autorities'){echo "Who are the approving autorities of the proposal ?";}
                                             if($key == 'budget_for_cfyear'){echo "What is the left over budget for the current financial year ?";}
-<<<<<<< HEAD
-                                            if($key == 'fund_sanstion_limit'){echo "what is the fund sanstion limit at their level ?";}
-                                            if($key == 'other_specific_remarks'){echo "Any other specific remarks regards to the meeting ?";}
-                                            if($key == 'submit_proposal'){echo "Do we need to submit the proposal ?";}
-                                            if($key == 'proposal_no_of_school'){echo "Number of school for Proposal";}
-                                            if($key == 'proposal_of_budget'){echo "Budget of Proposal";}
-                                            if($key == 'identify_school'){echo "Do we need to identify school ?";}
-                                            if($key == 'identify_school_state'){echo "Name of State to identify school";}
-                                            if($key == 'identify_school_district'){echo "Name of District to identify school";}
-                                            if($key == 'no_of_school'){echo "Number of identify school";}
-=======
                                             if($key == 'fund_sanstion_limit'){echo "what is the fund sanction limit at their level ?";}
                                             if($key == 'other_specific_remarks'){echo "Any other specific remarks regards to the meeting ?";}
                                             if($key == 'submit_proposal'){echo "Do we need to submit the proposal ?";}
@@ -250,17 +221,13 @@
                                             if($key == 'identify_school_state'){
                                               echo "Name of identify school";
                                             }
->>>>>>> stem-sales/main
                                             if($key == 'permission_letter'){echo "School permission letter required ?";}
                                             if($key == 'permission_letter_rech'){echo "Letter should be address to whom in the organization, along with Name and designation and Location";}
                                             if($key == 'Letter_organization_name'){echo "Letter Organization Name";}
                                             if($key == 'Letter_organization_designation'){echo "Organization Designation Name";}
                                             if($key == 'Letter_organization_location'){echo "Organization Location Name";}
                                             if($key == 'client_int_school_visit'){echo "Client is interested for School Visit ?";}
-<<<<<<< HEAD
-=======
                                             if($key == 'client_int_type_project'){echo "Type of project ?";}
->>>>>>> stem-sales/main
                                             if($key == 'client_int_school_date'){echo "Date for Client is interested for School Visit ?";}
                                             if($key == 'client_int_school_state'){echo "State for Client is interested for School Visit ?";}
                                             if($key == 'client_int_school_district'){echo "District for Client is interested for School Visit ?";}
@@ -271,12 +238,8 @@
                                             if($key == 'cdate'){echo "Submit Date";}
                                             if($key == 'approved_status'){echo "Approved Status";}
                                             if($key == 'approved_by'){echo "Approved By";}
-<<<<<<< HEAD
-
-=======
                                             if($key == 'approved_date'){echo "Approved Date";}
                                            
->>>>>>> stem-sales/main
 
                                              ?></td>
                                             <td><?php 
@@ -288,16 +251,11 @@
                                             if($key == 'actontaken'){echo $value;}
                                             if($key == 'meetingdonewinitiator'){echo $value;}
                                             if($key == 'presentation'){echo $value;}
-<<<<<<< HEAD
-                                            if($key == 'project_intervention_select'){echo $value;}
-                                            if($key == 'project_intervention'){echo $value;}
-=======
                                             
                                             if($key == 'project_intervention_select'){echo $value;}
                                             if($key == 'project_intervention'){echo $value;}
 
 
->>>>>>> stem-sales/main
                                             if($key == 'client_has_adopted_select'){echo $value;}
                                             if($key == 'client_has_adopted'){echo $value;}
                                             if($key == 'approving_autorities'){echo $value;}
@@ -307,12 +265,6 @@
                                             if($key == 'submit_proposal'){echo $value;}
                                             if($key == 'proposal_no_of_school'){echo $value;}
                                             if($key == 'proposal_of_budget'){echo $value;}
-<<<<<<< HEAD
-                                            if($key == 'identify_school'){echo $value;}
-                                            if($key == 'identify_school_state'){echo $value;}
-                                            if($key == 'identify_school_district'){echo $value;}
-                                            if($key == 'no_of_school'){echo $value;}
-=======
                                             if($key == 'proposal_of_location'){echo $value;}
                                             if($key == 'identify_school'){echo $value;}
 
@@ -324,17 +276,13 @@
                                               }
                                             }
                                             
->>>>>>> stem-sales/main
                                             if($key == 'permission_letter'){echo $value;}
                                             if($key == 'permission_letter_rech'){echo $value;}
                                             if($key == 'Letter_organization_name'){echo $value;}
                                             if($key == 'Letter_organization_designation'){echo $value;}
                                             if($key == 'Letter_organization_location'){echo $value;}
                                             if($key == 'client_int_school_visit'){echo $value;}
-<<<<<<< HEAD
-=======
                                             if($key == 'client_int_type_project'){echo $value;}
->>>>>>> stem-sales/main
                                             if($key == 'client_int_school_date'){echo $value;}
                                             if($key == 'client_int_school_state'){echo $value;}
                                             if($key == 'client_int_school_district'){echo $value;}
@@ -343,10 +291,6 @@
                                             if($key == 'rpmmom'){echo $value;}
                                             if($key == 'partner'){echo $value;}
                                             if($key == 'cdate'){echo $value;}
-<<<<<<< HEAD
-                                            if($key == 'approved_status'){echo $value;}
-                                            if($key == 'approved_by'){echo $value;}
-=======
                                             if($key == 'approved_status'){
                                               if($value == ''){
                                                 echo "<span class='bg-warning p-2'>Pending</span>";
@@ -365,7 +309,6 @@
                                             }
                                               if($key == 'approved_date'){echo $value;}
                                            
->>>>>>> stem-sales/main
                                             
                                             ?></td>
                                         </tr>

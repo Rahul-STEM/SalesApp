@@ -56,7 +56,6 @@
                   <div class="card-header bg-info">
                     <h3 class="text-center">MINUTES OF MEETING (MoM Status)</h3>
                   </div>
-                   
                   <div class="card-body">
                     <div class="container-fluid body-content">
                       <div class="page-header">
@@ -68,7 +67,6 @@
                                   <thead>
                                     <tr>
                                       <th>S.No</th>
-                                    
                                       <th>BD Name</th>
                                       <th>Total MOM</th>
                                       <th>Total Pending MOM</th>
@@ -89,11 +87,9 @@
                                         $mom_Data_Reject_cnt = sizeof($mom_Pending_Data);
                                         $mom_Data_total_cnt = sizeof($mom_Total_Data);
                                         $mom_Data_appr_cnt = sizeof($mom_appr_Data);
-                        
                                        ?>
                                     <tr>
                                       <td><?=$i?></td>
-                                   
                                       <td><?=$dt->name?></td>
                                       <td> <a href="<?=base_url().'Management/TotalMomData/'.$dt->user_id.'/'.$cdate;?>"> <?=$mom_Data_total_cnt ?></a></td>
                                       <td> <a href="<?=base_url().'Management/MomData/'.$dt->user_id.'/'.$cdate;?>"> <?=$mom_Datacnt ?></a></td>

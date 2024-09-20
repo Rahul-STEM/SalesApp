@@ -1561,21 +1561,23 @@ if($type_id == 3){
                         <?php if($type_id ==3){ ?>
                         <div class="mt-4">
                             <select class="form-control" name="reviewtype" required="" id="reviewtype">
-                                <option value="Self Weekly">Self Weekly</option>
-                                <option value="Self Fortnightly">Self Fortnightly</option>
-                                <option value="Self Monthly">Self Monthly</option>
-                                <option value="Self Quarterly">Self Quarterly</option>
+                              <?php 
+                              $revtype = $this->Menu_model->GetReviewType(2);
+                              foreach($revtype as $rtype):
+                              ?>
+                                <option value="<?= $rtype->name; ?>"> <?= $rtype->name; ?></option>
+                                <?php endforeach; ?> 
                             </select>
                         </div>
                         <?php }else if($type_id ==13 || $type_id ==4){ ?>
                           <div class="mt-4">
                             <select class="form-control" name="reviewtype" required="" id="reviewtype">
-                                <option value="Roaster">Roaster</option>
-                                <option value="Weekly">Weekly</option>
-                                <option value="Fortnightly">Fortnightly</option>
-                                <option value="Monthly">Monthly</option>
-                                <option value="Querterly">Querterly</option>
-                                <option value="Self Review">Self Review</option>
+                            <?php 
+                              $revtype = $this->Menu_model->GetReviewType(1);
+                              foreach($revtype as $rtype):
+                              ?>
+                                <option value="<?= $rtype->name; ?>"> <?= $rtype->name; ?></option>
+                                <?php endforeach; ?> 
                             </select>
                         </div>
                         <?php }?>
@@ -3452,6 +3454,7 @@ if($type_id == 3){
                             $('#ntppose').show();
                             $('#meeting-time').show();
                             $('#planbtn1').show();
+                            $('#ntactionnew option[value="4"]').first().remove();
                           var newOption = $('<option>', {
                               value: '4',
                               text: 'Barg in Meeting',
@@ -3464,6 +3467,7 @@ if($type_id == 3){
                           }
                           });
                             }else if(bcytpe == 'Other'){
+                             
                               $("#taskplanningimg").hide();
                               $("#maintaskcard").show();
                               $("#selectcompany").hide();
@@ -3475,7 +3479,7 @@ if($type_id == 3){
                               $('#ntppose').show();
                               $('#meeting-time').show();
                               $('#planbtn1').show();
-                              
+                              $('#ntactionnew option[value="4"]').first().remove();
                               var newOption = $('<option>', {
                               value: '4',
                               text: 'Barg in Meeting',

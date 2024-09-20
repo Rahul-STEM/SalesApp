@@ -11908,10 +11908,9 @@ public function CompanyThatBDHasNoWorkedInDays($uid,$days,$status){
 // Review Start 
 public function GetFirstTimeReviewInYear($uid,$inid,$year){
     $aprilFirst = "$year-04-01";
-    $query=$this->db->query("SELECT * FROM `allreviewdata` 
+    $query=$this->db->query("SELECT * FROM `main_review` 
           WHERE inid = '$inid' 
-          AND YEAR(sdatet) = '$year' 
-          AND sdatet >= '$aprilFirst'");
+          AND sdate >= '$aprilFirst'");
     return $query->result();
 }
 public function GetCategories(){
@@ -12327,16 +12326,32 @@ public function createBargMeetingWithClusterId($uid,$bmdate,$select_cluster){
     $query=$this->db->query("update barginmeeting set cid='$cid',ccid='$ccid',inid='$inid',tid='$ntid' WHERE id='$bmid'");
 }
 
-// Review Chnages Start
+
+// Review Changes Start
 
 public function getReviewByRID($rid){
     $query=$this->db->query("SELECT * FROM allreview WHERE id='$rid'");
     return $query->result();
 }
 public function getReviewedCMP($rev_startt,$cdatetime,$bdid,$reviewtype){
+    
     $query=$this->db->query("SELECT * FROM `allreviewdata` WHERE bdid = '$bdid' AND sdatet BETWEEN '$rev_startt' AND '$cdatetime' AND reviewtype ='$reviewtype' ");
     return $query->result();
 }
+public function getReviewedCMPNew($rev_startt,$cdatetime,$bdid,$reviewtype){
+    $query=$this->db->query("SELECT * FROM `main_review` WHERE for_uid = '$bdid' AND sdate BETWEEN '$rev_startt' AND '$cdatetime' AND rtype ='$reviewtype' ");
+    return $query->result();
+}
+public function getReviewedCMPHalfYearly(){
+    $year = date("Y");
+    $month = 4;
+    $day = 1;
+    $date = new DateTime("$year-$month-$day");
+    $formatted_date = $date->format('Y-m-d');
+    $query=$this->db->query("SELECT inid FROM `main_review` WHERE  DATE(sdate) > '$formatted_date'");
+    return $query->result();
+}
+
 public function getCompanyContact($cid,$type){
     $query=$this->db->query("SELECT * FROM `company_contact_master` WHERE `company_id` = '$cid' AND type = '$type'");
     return $query->result();
@@ -12362,5 +12377,142 @@ public function GetTodaysApprovedSpecialRequestforLeave($uid,$tdate){
     $query=$this->db->query("SELECT * FROM `special_request_for_leave` WHERE date='$tdate' AND user_id = '$uid' AND approve_status = 'Approved'");
     return $query->result();
 }
+
+public function GetReviewType($typeid){
+    $query=$this->db->query("SELECT * FROM `review_type` WHERE type_id = '$typeid'");
+    return $query->result();
+}
+public function get_cmpdbybd_new($stid,$bdid,$fdate){
+    $query=$this->db->query("SELECT *,init_call.id inid from init_call Left JOIN company_master ON company_master.id=init_call.cmpid_id where mainbd='$bdid' and cstatus='$stid'");
+    return $query->result();
+}
+
+public function InsertCompanyRevviewData($rid,$ntid,$inid,$sdate,$by_uid,$for_uid,$csid,$exsid,$exdate,$cdate,$remarks,$rtype){
+
+    $data = array(
+        'rid'      => $rid,
+        'ntid'     => $ntid,
+        'inid'     => $inid,
+        'sdate'    => $sdate,
+        'by_uid'   => $by_uid,
+        'for_uid'  => $for_uid,
+        'csid'     => $csid,
+        'exsid'    => $exsid,
+        'exdate'   => $cdate,
+        'cdate'    => $cdate,
+        'remarks'    => $remarks,
+        'rtype'    => $rtype,
+    );
+    
+    $this->db->insert('main_review', $data);
+    $insert_id = $this->db->insert_id();
+    return $insert_id;
+}
+
+public function InsertRevviewData($fdata){
+    $data = array(
+        'main_rid'  => $fdata[0],
+        'question'  => $fdata[1],
+        'ans1'      => $fdata[2],
+        'ans2'      => $fdata[3],
+        'ans3'      => $fdata[4],
+        'ans4'      => $fdata[4],
+        'ans5'      => $fdata[5]
+    );
+    $this->db->insert('review_answer', $data);
+}
+
+public function CreateNewTask($ntdate,$ntaction,$bdid,$inid,$purposeid,$byuid,$reviewtype){
+   
+        $tdatet= date('Y-m-d H:i:s');
+        $query=$this->db->query("SELECT * FROM init_call where id='$inid'");
+        $data = $query->result();
+        $stid = $data[0]->cstatus;
+        $cmpid_id = $data[0]->cmpid_id;
+        $cmpDataq=$this->db->query("SELECT * FROM `company_contact_master` WHERE company_id = '$cmpid_id'");
+        $cmpData = $cmpDataq->result();
+        $ccid = $cmpData[0]->id;
+        $cmp_data = $this->Menu_model->get_cmpbyinid($inid);
+        $cmp_name = $cmp_data[0]->compname;
+      
+        $query=$this->db->query("SELECT max(id) mid FROM tblcallevents where cid_id='$inid'");
+        $data1 = $query->result();
+        $mid = $data1[0]->mid;
+
+    if($ntaction == 3 || $ntaction == 4){
+        $tasktdata = array(
+            'lastCFID'              => '0',
+            'nextCFID'              => '0',
+            'purpose_achieved'      => 'no',
+            'fwd_date'              => $ntdate,
+            'actontaken'            => 'no',
+            'nextaction'            => 'Will Collect Data by RP Meeting',
+            'mom_received'          => 'no',
+            'appointmentdatetime'   => $ntdate,
+            'actiontype_id'         => $ntaction,
+            'assignedto_id'         => $bdid,
+            'cid_id'                => $inid,
+            'purpose_id'            => $purposeid,
+            'remarks'               => 'Will Collect Data by RP Meeting',
+            'status_id'             => '1',
+            'user_id'               => $byuid,
+            'date'                  => $ntdate,
+            'updateddate'           => $ntdate,
+            'updation_data_type'    => 'update',
+            'plan'                  => '1',
+            'reviewtype'            => $reviewtype,
+            'approved_status'       => 1,
+            'approved_by'           => $bdid
+        );
+        
+        $this->db->insert('tblcallevents',$tasktdata);
+        $cntid = $this->db->insert_id();
+    
+        $meeting_data = array(
+            'storedt' => $ntdate,
+            'user_id' => $bdid,
+            'cid'     => $cmpid_id,
+            'ccid'    => $ccid,
+            'inid'    => $inid,
+            'tid'     => $cntid,
+            'company_name' => $cmp_name,
+            'approved_status'       => 1,
+            'approved_by'           => $bdid
+        );
+        
+        $this->db->insert('barginmeeting', $meeting_data);
+        $bmid = $this->db->insert_id();
+        $insert_id  = $cntid;
+    }else{
+        $createtask_data = array(
+            'lastCFID'              => '0',
+            'nextCFID'              => '0',
+            'remarks'               => '',
+            'plan'                  => '1',
+            'fwd_date'              => $ntdate,
+            'appointmentdatetime'   => $ntdate,
+            'actiontype_id'         => $ntaction,
+            'purpose_id'            => '127',
+            'assignedto_id'         => $bdid,
+            'cid_id'                => $inid,
+            'status_id'             => $stid,
+            'user_id'               => $bdid,
+            'date'                  => $ntdate,
+            'updateddate'           => $ntdate,
+            'reviewtype'            => $reviewtype,
+            'approved_status'       => 1,
+            'approved_by'           => $bdid
+        );
+        $this->db->insert('tblcallevents', $createtask_data);
+        $insert_id = $this->db->insert_id();
+    }
+
+   return $insert_id;
+}
+
+
+
+
+
 
 }

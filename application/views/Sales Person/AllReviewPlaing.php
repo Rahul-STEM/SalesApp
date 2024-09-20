@@ -52,6 +52,9 @@
 span.pccolor {
   color: #0830b1;
 }
+#optionCountCompany{
+  font-size: 12px;
+}
     </style>
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -190,6 +193,7 @@ span.pccolor {
                         <lable>note: showing only those companies which are not involved PST</lable>
                         <select class="form-control" name="inid" required="" id="inid">
                         </select>
+                        <p id="optionCountCompany"></p>
                         <div class="invalid-feedback">Please Select Status First.</div>
                         <div class="valid-feedback">Looks good!</div>
                       </div>
@@ -220,7 +224,7 @@ span.pccolor {
                  
                 </div>
               </div>
-              <div id="accordion">
+              <!-- <div id="accordion">
                 <div class="card">
                   <div class="card-header" id="headingOne">
                     <h5 class="mb-0">
@@ -235,7 +239,7 @@ span.pccolor {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
               
             </div>
             <div class="col-sm-12 col-md-12 col-lg-12 m-auto">
@@ -247,10 +251,6 @@ span.pccolor {
                     <div class="was-validated m-3">
                       <div class="card-body box-profile" id="cmpdata">
                       </div>
-                      <div class="form-group">
-                        <textarea class="form-control" name="remark" placeholder="Review Remark..."  required=""></textarea>
-                      </div>
-                      <hr>
                       <input type="hidden" name="pstuid" value="<?=$uid?>">
                       <input type="hidden" name="bduid" value="<?=$bdid?>">
                       <input type="hidden" name="rid" value="<?=$revst[0]->rid;?>">
@@ -736,6 +736,9 @@ span.pccolor {
                           </div>
                         </div>
                       </div>
+                      <div class="form-group">
+                          <textarea class="form-control" name="remark" placeholder="Review Remark..."  required=""></textarea>
+                      </div>
                       <hr>
                       <div class="card p-2 create_task_bg pb-4" id="rosterhide">
                         <center>
@@ -776,7 +779,7 @@ span.pccolor {
                 </div>
               </div>
             </div>
-            <div class="col-sm col-md-12 col-lg-12 m-auto">
+            <div class="col-sm col-md-12 col-lg-12 m-auto" id="mainlogtable">
               <div class="card card-primary card-outline">
                 <div class="card-body box-profile">
                   <div class="table-responsive">
@@ -840,6 +843,8 @@ span.pccolor {
             $("#slct_current_partner_type").hide();
             $("#websiteisright_card").hide();
             $("#slct_cluster_card").hide();
+
+            $("#mainlogtable").hide();
         
         });
         
@@ -945,7 +950,7 @@ span.pccolor {
       });
       $('#slct_partner_type').on('change', function() {
           var val = this.value;
-          if (val == 'no') {
+          if (val == 'yes') {
               $("#slct_current_partner_type").show();
               $("#slct_current_partner_type select").attr('required', true);
           } else {
@@ -1158,7 +1163,6 @@ span.pccolor {
           
         }
         
-        
         $('#statusid').on('change', function b() {
         var review_id = document.getElementById("slsct_review_id").value;
         var pstid = document.getElementById("pstid").value;
@@ -1178,6 +1182,16 @@ span.pccolor {
         cache: false,
         success: function a(result){
         $("#inid").html(result);
+        var optionCount = $('#inid option').length;
+        var optionCount = optionCount -1;
+        $("#optionCountCompany").text("Total Company is: " + optionCount);
+        if(optionCount == 0){
+          $("#optionCountCompany").css('color', 'red');
+        }else{
+          $("#optionCountCompany").css('color', 'green');
+        }
+        $('#inid').css('color', 'green');
+        $('#inid option').css('color', 'green');
         }
         });
         });
@@ -1196,19 +1210,19 @@ span.pccolor {
         var uid = '<?=$uid?>';
         var inid = document.getElementById("inid").value;
         var fdate = document.getElementById("fdate").value;
-        $.ajax({
-        url:'<?=base_url();?>Menu/getgraphlog',
-        type: "POST",
-        data: {
-        inid: inid,
-        fdate: fdate,
-        uid: uid
-        },
-        cache: false,
-        success: function a(result){
-        $("#graphlog").html(result);
-        }
-        });
+        // $.ajax({
+        // url:'<?=base_url();?>Menu/getgraphlog',
+        // type: "POST",
+        // data: {
+        // inid: inid,
+        // fdate: fdate,
+        // uid: uid
+        // },
+        // cache: false,
+        // success: function a(result){
+        // $("#graphlog").html(result);
+        // }
+        // });
         
         $.ajax({
         url:'<?=base_url();?>Menu/CheckFirstTimeReviewInYear',
@@ -1258,7 +1272,7 @@ span.pccolor {
             $("#cmpmanytime").hide();
             $("#review_time").val('First Time');
             $("#mainformbtn").val('FirstTime');
-        
+            $("#mainlogtable").show();
             $.ajax({
             url:'<?=base_url();?>Menu/GetCompnayDetailsUsiingInit',
             type: "POST",
@@ -1377,6 +1391,8 @@ span.pccolor {
             $("#cmpmanytime").show();
             $("#review_time").val('Many Time');
             $("#mainformbtn").val('ManyTime');
+            $("#mainlogtable").hide();
+
             $.ajax({
             url:'<?=base_url();?>Menu/GetCompnayDetailsUsiingInit',
             type: "POST",
@@ -1437,7 +1453,8 @@ span.pccolor {
         });
         
 
-
+        var rtype = document.getElementById("rtype").value;
+        // alert(rtype);
         $('#inid').on('change', function b() {
         var inid = document.getElementById("inid").value;
         var fdate = document.getElementById("fdate").value;
@@ -1446,7 +1463,8 @@ span.pccolor {
         type: "POST",
         data: {
         inid: inid,
-        fdate: fdate
+        fdate: fdate,
+        rtype: rtype
         },
         cache: false,
         success: function a(result){
@@ -1458,7 +1476,7 @@ span.pccolor {
         
         $('#inid').on('change', function b() {
     
-        var rtype = document.getElementById("rtype").value;
+          var rtype = document.getElementById("rtype").value;
         if(rtype=='Roaster'){
               $("#rosterhide").hide();
               $("#taskupdate").show();
@@ -1479,12 +1497,15 @@ span.pccolor {
             
         var inid = document.getElementById("inid").value;
         var fdate = document.getElementById("fdate").value;
+        var rtype = document.getElementById("rtype").value;
+     
         $.ajax({
         url:'<?=base_url();?>Menu/getcmplogs',
         type: "POST",
         data: {
         inid: inid,
-        fdate: fdate
+        fdate: fdate,
+        rtype: rtype
         },
         cache: false,
         success: function a(result){

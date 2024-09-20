@@ -10047,6 +10047,101 @@ public function Dashboard(){
         redirect('Menu/AllReviewPlaing/');
     }
     public function bdrtaskc(){
+
+        $this->load->model('Menu_model');
+        $this->load->library('session');
+       
+        $rtype          = $this->input->post('rtype');
+        $ntstatus       = $this->input->post('ntstatus');
+        $initid         = $this->input->post('cid');
+        $pstuid         = $this->input->post('pstuid');
+        $bduid          = $this->input->post('bduid');
+        $rid            = $this->input->post('rid');
+        $review_time    = $this->input->post('review_time');
+
+        $remarks        = $this->input->post('remark');
+        $ntdate         = $this->input->post('ntdate');
+        $ntaction       = $this->input->post('ntaction');
+        $ntppose        = $this->input->post('ntppose');
+        $exsid          = $this->input->post('exsid');
+        $exdate         = $this->input->post('exdate');
+
+
+        $startDate      = date("Y-m-d H:i:s");
+        $cdate          = date("Y-m-d H:i:s");
+        $csid           = $ntstatus;
+        if($rtype !== 'Roaster'){
+        $ntid = $this->Menu_model->CreateNewTask($ntdate,$ntaction,$bduid,$initid,$ntppose,$pstuid,$rtype);
+
+        $mrid = $this->Menu_model->InsertCompanyRevviewData($rid,$ntid,$initid,$startDate,$pstuid,$bduid,$csid,$exsid,$exdate,$cdate,$remarks,$rtype);
+
+        if($review_time == 'First Time'){
+
+            $companyright           = $this->input->post('companyright');
+            $address_right          = $this->input->post('company_address_right');
+            $company_city           = $this->input->post('company_city_right');
+            $company_State          = $this->input->post('company_State_right');
+            $company_country        = $this->input->post('company_country_right');
+            $primary_contact        = $this->input->post('company_primary_contact_right');
+            $secondary_contact      = $this->input->post('company_secondary_contact_right');
+            $company_status_right   = $this->input->post('company_status_right');
+            $delete_this_company    = $this->input->post('delete_this_company');
+            $change_partner_ype     = $this->input->post('change_partner_ype');
+            $travel_cluster         = $this->input->post('travel_cluster');
+            $csrbudget              = $this->input->post('csrbudget');
+            $website_is_right       = $this->input->post('website_is_right');
+            $potential              = $this->input->post('potential');
+            $topspender             = $this->input->post('topspender');
+            $pkeyclient             = $this->input->post('pkeyclient');
+            $priorityclient         = $this->input->post('priorityclient');
+            $upsellclient           = $this->input->post('upsellclient');
+            $focusyclient           = $this->input->post('focusyclient');
+
+            function ensure_five_elements($array) {
+                return array_pad($array, 5, '');
+            }
+
+            $all_data = [
+                    'companyright'               => ensure_five_elements($companyright),
+                    'address_right'              => ensure_five_elements($address_right),
+                    'company_city'               => ensure_five_elements($company_city),
+                    'company_State'              => ensure_five_elements($company_State),
+                    'company_country'            => ensure_five_elements($company_country),
+                    'primary_contact'            => ensure_five_elements($primary_contact),
+                    'secondary_contact'          => ensure_five_elements($secondary_contact),
+                    'company_status_right'       => ensure_five_elements($company_status_right),
+                    'delete_this_company'        => ensure_five_elements($delete_this_company),
+                    'change_partner_ype'         => ensure_five_elements($change_partner_ype),
+                    'travel_cluster'             => ensure_five_elements($travel_cluster),
+                    'csrbudget'                  => ensure_five_elements($csrbudget),
+                    'website_is_right'           => ensure_five_elements($website_is_right),
+                    'potential'                  => ensure_five_elements($potential),
+                    'topspender'                 => ensure_five_elements($topspender),
+                    'pkeyclient'                 => ensure_five_elements($pkeyclient),
+                    'priorityclient'             => ensure_five_elements($priorityclient),
+                    'upsellclient'               => ensure_five_elements($upsellclient),
+                    'focusyclient'               => ensure_five_elements($focusyclient)
+                ];
+
+                foreach($all_data as $fdata){
+                    array_unshift($fdata, $mrid);
+                    $this->Menu_model->InsertRevviewData($fdata);
+                }
+        }
+
+        $this->session->set_flashdata('success_message','Review Done Successfully !!');
+
+    }else{
+        echo "Rostar Review";
+        dd($_POST);
+    }
+
+    redirect('Menu/AllReviewPlaing/');
+
+      
+        dd($_POST);
+    
+
         $rid=$_POST['rid'];
         $pstuid=$_POST['pstuid'];
         $ntaction=$_POST['ntaction'];
@@ -11884,17 +11979,41 @@ public function Dashboard(){
         $rev_startt =   $revdata[0]->startt;
         $reviewtype =   $revdata[0]->reviewtype;
         $cdatetime  =   date("Y-m-d H:i:s");
-
-        $revcmp     =   $this->Menu_model->getReviewedCMP($rev_startt,$cdatetime,$bdid,$reviewtype);
+        
 
         $cmp=$this->Menu_model->get_cmpdbybd($stid,$bdid,$fdate);
+
+        if($reviewtype =='Self Half Yearly' || $reviewtype =='Half Yearly'){
+            $revcmp     =   $this->Menu_model->getReviewedCMPHalfYearly();
+           
             function filterArray($array1, $array2) {
                 $inidValues = array_column($array1, 'inid');
                 return array_filter($array2, function($item) use ($inidValues) {
                     return !in_array($item->inid, $inidValues);
                 });
             }
-        $result = filterArray($revcmp, $cmp);
+            $result = filterArray($revcmp, $cmp);
+        }else{
+            // $revcmp     =   $this->Menu_model->getReviewedCMP($rev_startt,$cdatetime,$bdid,$reviewtype);
+            $revcmp     =   $this->Menu_model->getReviewedCMPHalfYearly();
+            function filterArray($array1, $array2) {
+                $inidValues = array_column($array1, 'inid');
+                return array_filter($array2, function($item) use ($inidValues) {
+                    return in_array($item->inid, $inidValues);
+                });
+            }
+            $result = filterArray($revcmp, $cmp);
+
+            // $revcmp_done     =   $this->Menu_model->getReviewedCMPNew($rev_startt,$cdatetime,$bdid,$reviewtype);
+            // $revcmp_done     =   $this->Menu_model->getReviewedCMP($rev_startt,$cdatetime,$bdid,$reviewtype);
+
+
+        }
+        
+       
+ 
+
+        
         echo '<option value="">Select Company</option>';
         foreach($result as $dt){
              echo  $data = '<option value='.$dt->inid.'>'.$dt->compname.'</option>';
@@ -12263,8 +12382,17 @@ public function Dashboard(){
     <?php
     }
     public function getcmpnlog(){
+
         $inid = $this->input->post('inid');
         $fdate = $this->input->post('fdate');
+        $rtype = $this->input->post('rtype');
+
+        if($rtype == 'Self Half Yearly' || $rtype == 'Half Yearly'){
+            $currentDate = new DateTime();
+            $currentDate->modify('-6 months');
+            $fdate = $currentDate->format('Y-m-d');
+        }
+
         $this->load->model('Menu_model');
         $cmp=$this->Menu_model->get_cmpnlog($inid);
         $cmptd=$this->Menu_model->get_cmptd($inid,$fdate);
@@ -12293,7 +12421,17 @@ public function Dashboard(){
     public function getcmplogs(){
         $inid = $this->input->post('inid');
         $fdate = $this->input->post('fdate');
+        $rtype = $this->input->post('rtype');
+
         $this->load->model('Menu_model');
+
+        if($rtype == 'Self Half Yearly' || $rtype == 'Half Yearly'){
+            $currentDate = new DateTime();
+            $currentDate->modify('-6 months');
+            $fdate = $currentDate->format('Y-m-d');
+        }
+
+
         $logdetail=$this->Menu_model->get_logdetail($inid,$fdate);
         $i=1;
         foreach($logdetail as $logs){

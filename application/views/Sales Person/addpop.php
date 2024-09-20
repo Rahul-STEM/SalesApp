@@ -1374,8 +1374,8 @@ date_default_timezone_set("Asia/Kolkata");
                                 document.getElementById("yaction_id").value = actiontype_id;
                                 document.getElementById("cmpid").value = cmpid;
                                 document.getElementById("tidd").value = tidd;
-                                document.getElementById("clink").href = "tel:+91"+phoneno;
-                                document.getElementById("wlink").href = "https://wa.me/91"+phoneno;
+                                // document.getElementById("clink").href = "tel:+91"+phoneno;
+                                // document.getElementById("wlink").href = "https://wa.me/91"+phoneno;
                                 document.getElementById("glink").href = "mailto:"+emailid;
                                 document.getElementById("cmplink").href = "CompanyDetails/"+cmid;
                                 //  alert(ctname);
@@ -1648,6 +1648,11 @@ date_default_timezone_set("Asia/Kolkata");
                                 });
                                 
                                 $('#clink').click(function(){
+                                  var isMobile = window.orientation > -1;
+                                    if (isMobile != 'Mobile') {
+                                        alert('You need to perform and update this task from mobile..!!');
+                                        return false;
+                                    }
                                 var tid = document.getElementById("tidd").value;
                                 $.ajax({
                                 url:'<?=base_url();?>Menu/indtime',

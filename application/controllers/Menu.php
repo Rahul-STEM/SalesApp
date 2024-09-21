@@ -12034,39 +12034,42 @@ public function Dashboard(){
                 });
             }
             $result = filterArray3($revcmp, $cmp);
+
+            if($reviewtype == 'Self Weekly' || $reviewtype == 'Weekly'){
+                $cdate = date("Y-m-d", strtotime("-7 days", strtotime($rev_startt)));
+            }
+            if($reviewtype == 'Self Fortnightly' || $reviewtype == 'Fortnightly'){
+                $cdate = date("Y-m-d", strtotime("-15 days", strtotime($rev_startt)));
+            }
+            if($reviewtype == 'Self Monthly' || $reviewtype == 'Monthly'){
+                $cdate = date("Y-m-d", strtotime("-30 days", strtotime($rev_startt)));
+            }
+            if($reviewtype == 'Self Quarterly' || $reviewtype == 'Querterly'){
+                $cdate = date("Y-m-d", strtotime("-90 days", strtotime($rev_startt)));
+            }
+    
+            $init_ids = '';
+            foreach($result as $dt){
+                $init_ids .= $dt->inid.',';
+           }
+           $revinit_ids = rtrim($init_ids, ',');
+           $user_id = $uid;
+           $revdcmp  =   $this->Menu_model->CheckReviewDoneorNotByUser($user_id,$cdate,$revinit_ids,$reviewtype);
+           
+           function filterArray4($array1, $array2) {
+            $inidValues = array_column($array1, 'inid');
+            return array_filter($array2, function($item) use ($inidValues) {
+                return !in_array($item->inid, $inidValues);
+            });
+        }
+        $result = filterArray4($revdcmp, $result);
+
+
         }
         
-        if($reviewtype == 'Self Weekly' || $reviewtype == 'Weekly'){
-            $cdate = date("Y-m-d", strtotime("-7 days", strtotime($rev_startt)));
-        }
-        if($reviewtype == 'Self Fortnightly' || $reviewtype == 'Fortnightly'){
-            $cdate = date("Y-m-d", strtotime("-15 days", strtotime($rev_startt)));
-        }
-        if($reviewtype == 'Self Monthly' || $reviewtype == 'Monthly'){
-            $cdate = date("Y-m-d", strtotime("-30 days", strtotime($rev_startt)));
-        }
-        if($reviewtype == 'Self Quarterly' || $reviewtype == 'Querterly'){
-            $cdate = date("Y-m-d", strtotime("-90 days", strtotime($rev_startt)));
-        }
-
-        $init_ids = '';
-        foreach($result as $dt){
-            $init_ids .= $dt->inid.',';
-       }
-       $revinit_ids = rtrim($init_ids, ',');
-       $user_id = $uid;
-       $revdcmp  =   $this->Menu_model->CheckReviewDoneorNotByUser($user_id,$cdate,$revinit_ids,$reviewtype);
-       
-       function filterArray4($array1, $array2) {
-        $inidValues = array_column($array1, 'inid');
-        return array_filter($array2, function($item) use ($inidValues) {
-            return !in_array($item->inid, $inidValues);
-        });
-    }
-    $result1 = filterArray4($revdcmp, $result);
 
         echo '<option value="">Select Company</option>';
-        foreach($result1 as $dt){
+        foreach($result as $dt){
              echo  $data = '<option value='.$dt->inid.'>'.$dt->compname.'</option>';
         }
     }

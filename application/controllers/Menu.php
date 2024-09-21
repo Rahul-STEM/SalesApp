@@ -10058,7 +10058,6 @@ public function Dashboard(){
         $bduid          = $this->input->post('bduid');
         $rid            = $this->input->post('rid');
         $review_time    = $this->input->post('review_time');
-
         $remarks        = $this->input->post('remark');
         $ntdate         = $this->input->post('ntdate');
         $ntaction       = $this->input->post('ntaction');
@@ -10070,10 +10069,14 @@ public function Dashboard(){
         $startDate      = date("Y-m-d H:i:s");
         $cdate          = date("Y-m-d H:i:s");
         $csid           = $ntstatus;
+
         if($rtype !== 'Roaster'){
         $ntid = $this->Menu_model->CreateNewTask($ntdate,$ntaction,$bduid,$initid,$ntppose,$pstuid,$rtype);
-
         $mrid = $this->Menu_model->InsertCompanyRevviewData($rid,$ntid,$initid,$startDate,$pstuid,$bduid,$csid,$exsid,$exdate,$cdate,$remarks,$rtype);
+        function ensure_five_elements($array) {
+            return array_pad($array, 5, '');
+        }
+
 
         if($review_time == 'First Time'){
 
@@ -10096,10 +10099,6 @@ public function Dashboard(){
             $priorityclient         = $this->input->post('priorityclient');
             $upsellclient           = $this->input->post('upsellclient');
             $focusyclient           = $this->input->post('focusyclient');
-
-            function ensure_five_elements($array) {
-                return array_pad($array, 5, '');
-            }
 
             $all_data = [
                     'companyright'               => ensure_five_elements($companyright),
@@ -10129,6 +10128,34 @@ public function Dashboard(){
                 }
         }
 
+  
+        // Task Releted log Start 
+
+        $log_data = [
+            'total_Logs'                 => ensure_five_elements($this->input->post('total_Logs')),
+            'how_many_calls'             => ensure_five_elements($this->input->post('how_many_calls')),
+            'how_many_emails'            => ensure_five_elements($this->input->post('how_many_emails')),
+            'scheduled_meetings'         => ensure_five_elements($this->input->post('scheduled_meetings')),
+            'barg_in_meetings'           => ensure_five_elements($this->input->post('barg_in_meetings')),
+            'whatsapp_activity'          => ensure_five_elements($this->input->post('whatsapp_activity')),
+            'mom_done'                   => ensure_five_elements($this->input->post('mom_done')),
+            'proposal_done'              => ensure_five_elements($this->input->post('proposal_done')),
+            'how_many_research'          => ensure_five_elements($this->input->post('how_many_research')),
+            'status_change_by_cluster'   => ensure_five_elements($this->input->post('task_done_by_cluster')),
+            'status_change_by_cluster'   => ensure_five_elements($this->input->post('status_change_by_cluster')),
+            'task_done_by_pst'           => ensure_five_elements($this->input->post('task_done_by_pst')),
+            'status_change_by_pst'       => ensure_five_elements($this->input->post('status_change_by_pst')),
+            'task_frequency'             => ensure_five_elements($this->input->post('task_frequency')),
+            'intervention_or_suppert'    => ensure_five_elements($this->input->post('intervention_or_suppert'))
+        ];
+
+        foreach($log_data as $ldata){
+            array_unshift($ldata, $mrid);
+            $this->Menu_model->InsertRevviewData($ldata);
+        }
+        // Task Releted log End
+
+        // dd($_POST);
         $this->session->set_flashdata('success_message','Review Done Successfully !!');
 
     }else{
@@ -11967,6 +11994,11 @@ public function Dashboard(){
     }
     public function getcmpdbybd(){
 
+        $user           = $this->session->userdata('user');
+        $data['user']   = $user;
+        $uid            = $user['user_id'];
+        $uyid           =  $user['type_id'];
+
         $stid       = $this->input->post('stid');
         $bdid       = $this->input->post('bdid');
         $fdate      = $this->input->post('fdate');
@@ -11994,28 +12026,47 @@ public function Dashboard(){
             }
             $result = filterArray($revcmp, $cmp);
         }else{
-            // $revcmp     =   $this->Menu_model->getReviewedCMP($rev_startt,$cdatetime,$bdid,$reviewtype);
             $revcmp     =   $this->Menu_model->getReviewedCMPHalfYearly();
-            function filterArray($array1, $array2) {
+            function filterArray3($array1, $array2) {
                 $inidValues = array_column($array1, 'inid');
                 return array_filter($array2, function($item) use ($inidValues) {
                     return in_array($item->inid, $inidValues);
                 });
             }
-            $result = filterArray($revcmp, $cmp);
-
-            // $revcmp_done     =   $this->Menu_model->getReviewedCMPNew($rev_startt,$cdatetime,$bdid,$reviewtype);
-            // $revcmp_done     =   $this->Menu_model->getReviewedCMP($rev_startt,$cdatetime,$bdid,$reviewtype);
-
-
+            $result = filterArray3($revcmp, $cmp);
         }
         
-       
- 
+        if($reviewtype == 'Self Weekly' || $reviewtype == 'Weekly'){
+            $cdate = date("Y-m-d", strtotime("-7 days", strtotime($rev_startt)));
+        }
+        if($reviewtype == 'Self Fortnightly' || $reviewtype == 'Fortnightly'){
+            $cdate = date("Y-m-d", strtotime("-15 days", strtotime($rev_startt)));
+        }
+        if($reviewtype == 'Self Monthly' || $reviewtype == 'Monthly'){
+            $cdate = date("Y-m-d", strtotime("-30 days", strtotime($rev_startt)));
+        }
+        if($reviewtype == 'Self Quarterly' || $reviewtype == 'Querterly'){
+            $cdate = date("Y-m-d", strtotime("-90 days", strtotime($rev_startt)));
+        }
 
-        
-        echo '<option value="">Select Company</option>';
+        $init_ids = '';
         foreach($result as $dt){
+            $init_ids .= $dt->inid.',';
+       }
+       $revinit_ids = rtrim($init_ids, ',');
+       $user_id = $uid;
+       $revdcmp  =   $this->Menu_model->CheckReviewDoneorNotByUser($user_id,$cdate,$revinit_ids,$reviewtype);
+       
+       function filterArray4($array1, $array2) {
+        $inidValues = array_column($array1, 'inid');
+        return array_filter($array2, function($item) use ($inidValues) {
+            return !in_array($item->inid, $inidValues);
+        });
+    }
+    $result1 = filterArray4($revdcmp, $result);
+
+        echo '<option value="">Select Company</option>';
+        foreach($result1 as $dt){
              echo  $data = '<option value='.$dt->inid.'>'.$dt->compname.'</option>';
         }
     }
@@ -12386,6 +12437,8 @@ public function Dashboard(){
         $inid = $this->input->post('inid');
         $fdate = $this->input->post('fdate');
         $rtype = $this->input->post('rtype');
+        $rtype_id = $this->input->post('rtype_id');
+        $this->load->model('Menu_model');
 
         if($rtype == 'Self Half Yearly' || $rtype == 'Half Yearly'){
             $currentDate = new DateTime();
@@ -12393,9 +12446,31 @@ public function Dashboard(){
             $fdate = $currentDate->format('Y-m-d');
         }
 
-        $this->load->model('Menu_model');
+        if($rtype == 'Self Weekly' || $rtype == 'Weekly'){
+            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+            $start_date = $rdetails[0]->startt; 
+            $fdate = date("Y-m-d", strtotime("-7 days", strtotime($start_date)));
+        }
+
+        if($rtype == 'Self Fortnightly' || $rtype == 'Fortnightly'){
+            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+            $start_date = $rdetails[0]->startt; 
+            $fdate = date("Y-m-d", strtotime("-15 days", strtotime($start_date)));
+        }
+        if($rtype == 'Self Monthly' || $rtype == 'Monthly'){
+            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+            $start_date = $rdetails[0]->startt; 
+            $fdate = date("Y-m-d", strtotime("-30 days", strtotime($start_date)));
+        }
+        if($rtype == 'Self Quarterly' || $rtype == 'Querterly'){
+            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+            $start_date = $rdetails[0]->startt; 
+            $fdate = date("Y-m-d", strtotime("-90 days", strtotime($start_date)));
+        }
+    
         $cmp=$this->Menu_model->get_cmpnlog($inid);
         $cmptd=$this->Menu_model->get_cmptd($inid,$fdate);
+        // echo $this->db->last_query();
         $cmpptd=$this->Menu_model->get_cmpptd($inid);
         echo '<h5><b><a target="_blank" href="'.base_url().'Menu/CompanyDetails/'.$cmp[0]->cid.'">'.$cmp[0]->compname.'</a></b></h5>';
         echo '<lable><b>Current Status: '.$cmp[0]->csstatus.'</b></lable><br>';
@@ -12419,9 +12494,11 @@ public function Dashboard(){
         if($cmptd[0]->t>0){echo '<lable><b>Action Yes with Purpose Yes: '.$cmptd[0]->t.'</b></lable></br>';}
     }
     public function getcmplogs(){
-        $inid = $this->input->post('inid');
-        $fdate = $this->input->post('fdate');
-        $rtype = $this->input->post('rtype');
+   
+        $inid       = $this->input->post('inid');
+        $fdate      = $this->input->post('fdate');
+        $rtype      = $this->input->post('rtype');
+        $rtype_id   = $this->input->post('rtype_id');
 
         $this->load->model('Menu_model');
 
@@ -12431,6 +12508,27 @@ public function Dashboard(){
             $fdate = $currentDate->format('Y-m-d');
         }
 
+        if($rtype == 'Self Weekly' || $rtype == 'Weekly'){
+            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+            $start_date = $rdetails[0]->startt; 
+            $fdate = date("Y-m-d", strtotime("-7 days", strtotime($start_date)));
+        }
+
+        if($rtype == 'Self Fortnightly' || $rtype == 'Fortnightly'){
+            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+            $start_date = $rdetails[0]->startt; 
+            $fdate = date("Y-m-d", strtotime("-15 days", strtotime($start_date)));
+        }
+        if($rtype == 'Self Monthly' || $rtype == 'Monthly'){
+            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+            $start_date = $rdetails[0]->startt; 
+            $fdate = date("Y-m-d", strtotime("-30 days", strtotime($start_date)));
+        }
+        if($rtype == 'Self Quarterly' || $rtype == 'Querterly'){
+            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+            $start_date = $rdetails[0]->startt; 
+            $fdate = date("Y-m-d", strtotime("-90 days", strtotime($start_date)));
+        }
 
         $logdetail=$this->Menu_model->get_logdetail($inid,$fdate);
         $i=1;
@@ -18852,4 +18950,206 @@ public function GetClusterName(){
 }
 
 
+public function getcmpnlogAgainstReviewTask(){
+
+    $inid = $this->input->post('inid');
+    $fdate = $this->input->post('fdate');
+    $rtype = $this->input->post('rtype');
+    $rtype_id = $this->input->post('rtype_id');
+    $this->load->model('Menu_model');
+
+    if($rtype == 'Self Half Yearly' || $rtype == 'Half Yearly'){
+        $currentDate = new DateTime();
+        $currentDate->modify('-6 months');
+        $fdate = $currentDate->format('Y-m-d');
+    }
+
+    if($rtype == 'Self Weekly' || $rtype == 'Weekly'){
+        $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+        $start_date = $rdetails[0]->startt; 
+        $fdate = date("Y-m-d", strtotime("-7 days", strtotime($start_date)));
+    }
+    if($rtype == 'Self Fortnightly' || $rtype == 'Fortnightly'){
+        $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+        $start_date = $rdetails[0]->startt; 
+        $fdate = date("Y-m-d", strtotime("-15 days", strtotime($start_date)));
+    }
+    if($rtype == 'Self Monthly' || $rtype == 'Monthly'){
+        $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+        $start_date = $rdetails[0]->startt; 
+        $fdate = date("Y-m-d", strtotime("-30 days", strtotime($start_date)));
+    }
+    if($rtype == 'Self Quarterly' || $rtype == 'Querterly'){
+        $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+        $start_date = $rdetails[0]->startt; 
+        $fdate = date("Y-m-d", strtotime("-90 days", strtotime($start_date)));
+    }
+
+    $complog = [];
+
+    $cmptd  =   $this->Menu_model->get_cmptd_new($inid,$fdate);
+    // echo $this->db->last_query();
+    $complog['totaltask'] = $cmptd;
+    $data = json_encode($complog);
+    echo $data;
+
+
 }
+
+
+public function getcmpnlogTaskDoneBy(){
+
+    $user            = $this->session->userdata('user');
+    $data['user']    = $user;
+    $uid             = $user['user_id'];
+    $uyid            =  $user['type_id'];
+
+    $inid       = $this->input->post('inid');
+    $fdate      = $this->input->post('fdate');
+    $rtype      = $this->input->post('rtype');
+    $rtype_id   = $this->input->post('rtype_id');
+    $taskdoneby = $this->input->post('taskdoneby');
+
+    $this->load->model('Menu_model');
+
+    if($rtype == 'Self Half Yearly' || $rtype == 'Half Yearly'){
+        $currentDate    = new DateTime();
+        $currentDate->modify('-6 months');
+        $fdate          = $currentDate->format('Y-m-d');
+    }
+
+    if($rtype == 'Self Weekly' || $rtype == 'Weekly'){
+        $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+        $start_date = $rdetails[0]->startt; 
+        $fdate      = date("Y-m-d", strtotime("-7 days", strtotime($start_date)));
+    }
+    if($rtype == 'Self Fortnightly' || $rtype == 'Fortnightly'){
+        $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+        $start_date = $rdetails[0]->startt; 
+        $fdate = date("Y-m-d", strtotime("-15 days", strtotime($start_date)));
+    }
+    if($rtype == 'Self Monthly' || $rtype == 'Monthly'){
+        $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+        $start_date = $rdetails[0]->startt; 
+        $fdate = date("Y-m-d", strtotime("-30 days", strtotime($start_date)));
+    }
+    if($rtype == 'Self Quarterly' || $rtype == 'Querterly'){
+        $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+        $start_date = $rdetails[0]->startt; 
+        $fdate = date("Y-m-d", strtotime("-90 days", strtotime($start_date)));
+    }
+
+    $complog = [];
+
+    $cmpInfo        =   $this->Menu_model->get_cmpnlog($inid);
+    $mainbd         =   $cmpInfo[0]->mainbd;
+
+    $udetail = $this->Menu_model->get_userbyid($mainbd);
+    $type_id = $udetail[0]->type_id;
+
+    if($taskdoneby == 'CLUSTER'){
+        if($type_id == 3){
+            $clm_admid = $udetail[0]->aadmin;
+        }elseif($type_id == 13){
+            $clm_admid = $udetail[0]->user_id;
+        }
+        $cmptd  =   $this->Menu_model->get_cmptd_taskdone_by($clm_admid,$inid,$fdate);
+    }
+    
+    if($taskdoneby == 'PST'){
+        if($type_id == 3){
+            $pst_admid = $udetail[0]->pst_co;
+        }elseif($type_id == 13){
+            $pst_admid = $udetail[0]->pst_co;
+        }elseif($type_id == 4){
+            $pst_admid = $udetail[0]->user_id;
+        }
+        $cmptd  =   $this->Menu_model->get_cmptd_taskdone_by($pst_admid,$inid,$fdate);
+    }
+
+    $complog['totaltask'] = $cmptd;
+    $data = json_encode($complog);
+    echo $data;
+
+}
+
+public function getcmpnlogStatusChnageTaskDoneBy(){
+
+    $user            = $this->session->userdata('user');
+    $data['user']    = $user;
+    $uid             = $user['user_id'];
+    $uyid            =  $user['type_id'];
+
+    $inid       = $this->input->post('inid');
+    $fdate      = $this->input->post('fdate');
+    $rtype      = $this->input->post('rtype');
+    $rtype_id   = $this->input->post('rtype_id');
+    $taskdoneby = $this->input->post('taskdoneby');
+
+    $this->load->model('Menu_model');
+
+    if($rtype == 'Self Half Yearly' || $rtype == 'Half Yearly'){
+        $currentDate    = new DateTime();
+        $currentDate->modify('-6 months');
+        $fdate          = $currentDate->format('Y-m-d');
+    }
+
+    if($rtype == 'Self Weekly' || $rtype == 'Weekly'){
+        $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+        $start_date = $rdetails[0]->startt; 
+        $fdate      = date("Y-m-d", strtotime("-7 days", strtotime($start_date)));
+    }
+    if($rtype == 'Self Fortnightly' || $rtype == 'Fortnightly'){
+        $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+        $start_date = $rdetails[0]->startt; 
+        $fdate = date("Y-m-d", strtotime("-15 days", strtotime($start_date)));
+    }
+    if($rtype == 'Self Monthly' || $rtype == 'Monthly'){
+        $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+        $start_date = $rdetails[0]->startt; 
+        $fdate = date("Y-m-d", strtotime("-30 days", strtotime($start_date)));
+    }
+    if($rtype == 'Self Quarterly' || $rtype == 'Querterly'){
+        $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+        $start_date = $rdetails[0]->startt; 
+        $fdate = date("Y-m-d", strtotime("-90 days", strtotime($start_date)));
+    }
+
+    $complog = [];
+
+    $cmpInfo        =   $this->Menu_model->get_cmpnlog($inid);
+    $mainbd         =   $cmpInfo[0]->mainbd;
+
+    $udetail = $this->Menu_model->get_userbyid($mainbd);
+    $type_id = $udetail[0]->type_id;
+
+    if($taskdoneby == 'CLUSTER'){
+        if($type_id == 3){
+            $clm_admid = $udetail[0]->aadmin;
+        }elseif($type_id == 13){
+            $clm_admid = $udetail[0]->user_id;
+        }
+        $cmptd  =   $this->Menu_model->getCmpStatusChnageTaskDoneBy($clm_admid,$inid,$fdate);
+    }
+    
+    if($taskdoneby == 'PST'){
+        if($type_id == 3){
+            $pst_admid = $udetail[0]->pst_co;
+        }elseif($type_id == 13){
+            $pst_admid = $udetail[0]->pst_co;
+        }elseif($type_id == 4){
+            $pst_admid = $udetail[0]->user_id;
+        }
+        $cmptd  =   $this->Menu_model->getCmpStatusChnageTaskDoneBy($pst_admid,$inid,$fdate);
+    }
+
+    $complog['totaltask'] = $cmptd;
+    $data = json_encode($complog);
+    echo $data;
+
+}
+
+
+}
+
+

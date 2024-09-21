@@ -12352,6 +12352,11 @@ public function getReviewedCMPHalfYearly(){
     return $query->result();
 }
 
+public function CheckReviewDoneorNotByUser($user_id,$cdate,$init_id,$reviewtype){
+    $query=$this->db->query("SELECT * FROM `main_review` WHERE inid IN('$init_id') AND by_uid = '$user_id' AND rtype='$reviewtype' AND cast(cdate as Date) > '$cdate'");
+    return $query->result();
+}
+
 public function getCompanyContact($cid,$type){
     $query=$this->db->query("SELECT * FROM `company_contact_master` WHERE `company_id` = '$cid' AND type = '$type'");
     return $query->result();
@@ -12510,7 +12515,25 @@ public function CreateNewTask($ntdate,$ntaction,$bdid,$inid,$purposeid,$byuid,$r
    return $insert_id;
 }
 
+public function get_cmptd_new($inid,$fdate){
 
+    $query=$this->db->query("SELECT tblcallevents.*, init_call.*, action.name AS actionname, user_details.name AS username, lstatus.name AS lstatusname, cstatus.name AS cstatusname FROM tblcallevents LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id LEFT JOIN action ON tblcallevents.actiontype_id = action.id LEFT JOIN user_details ON user_details.user_id = tblcallevents.assignedto_id LEFT JOIN status AS lstatus ON lstatus.id = init_call.lstatus LEFT JOIN status AS cstatus ON cstatus.id = init_call.cstatus WHERE init_call.id = '$inid' AND CAST(updateddate AS DATE) > '$fdate'");
+
+    return $query->result();
+}
+public function get_cmptd_taskdone_by($uadmid,$inid,$fdate){
+
+    $query=$this->db->query("SELECT tblcallevents.*, init_call.*, action.name AS actionname, user_details.name AS username, lstatus.name AS lstatusname, cstatus.name AS cstatusname FROM tblcallevents LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id LEFT JOIN action ON tblcallevents.actiontype_id = action.id LEFT JOIN user_details ON user_details.user_id = tblcallevents.assignedto_id LEFT JOIN status AS lstatus ON lstatus.id = init_call.lstatus LEFT JOIN status AS cstatus ON cstatus.id = init_call.cstatus WHERE init_call.id = '$inid' AND tblcallevents.assignedto_id = '$uadmid' AND CAST(updateddate AS DATE) > '$fdate'");
+
+    return $query->result();
+}
+
+public function getCmpStatusChnageTaskDoneBy($uadmid,$inid,$fdate){
+
+    $query=$this->db->query("SELECT tblcallevents.*, init_call.*, action.name AS actionname, user_details.name AS username, lstatus.name AS lstatusname, cstatus.name AS cstatusname FROM tblcallevents LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id LEFT JOIN action ON tblcallevents.actiontype_id = action.id LEFT JOIN user_details ON user_details.user_id = tblcallevents.assignedto_id LEFT JOIN status AS lstatus ON lstatus.id = init_call.lstatus LEFT JOIN status AS cstatus ON cstatus.id = init_call.cstatus WHERE init_call.id = '$inid' AND tblcallevents.status_id != tblcallevents.nstatus_id AND tblcallevents.assignedto_id = '$uadmid' AND CAST(updateddate AS DATE) > '$fdate'");
+
+    return $query->result();
+}
 
 
 

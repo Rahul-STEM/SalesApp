@@ -25,36 +25,7 @@
     <!-- summernote -->
     <link rel="stylesheet" href="<?=base_url();?>assets/css/summernote-bs4.min.css">
     <style>
-      div#cmpmanytime {
-      background: aliceblue;
-      padding:10px;
-      }
-      thead {
-    background: black;
-    color: white;
-}
-
-.form-group {
-    font-weight: 700;
-}
-.clrdiff{
-  color: #F5004F;
-}
-.form-group, .create_task_bg  {
-    background: aliceblue;
-    padding: 15px;
-    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
-}
-.form-control.is-valid, .was-validated .form-control:valid {
-    background: none !important;
-    border-radius: 5px;
-}
-span.pccolor {
-  color: #0830b1;
-}
-#optionCountCompany{
-  font-size: 12px;
-}
+ .form-group,p.tasklogp{font-weight:700}.create_task_bg,.form-group,p.tasklogp{box-shadow:rgba(9,30,66,.25) 0 1px 1px,rgba(9,30,66,.13) 0 0 1px 1px}div#cmpmanytime{background:#f0f8ff;padding:10px}thead{background:#000;color:#fff}.clrdiff{color:#f5004f}.create_task_bg,.form-group{background:#f0f8ff;padding:15px}.form-control.is-valid,.was-validated .form-control:valid{background:0 0!important;border-radius:5px}span.pccolor{color:#0830b1}#optionCountCompany{font-size:12px}p.tasklogp{align-items:center;justify-content:center;display:flex;padding:4px;margin:0;background:#faebd7;font-family:math}
     </style>
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -343,8 +314,6 @@ span.pccolor {
                             <?php } ?>
                           </select>
                           </div>
-
-
                           </div>
                    
                           <hr>
@@ -366,7 +335,6 @@ span.pccolor {
                             <br>
                             <input type="text" class="form-control" name="company_primary_contact_right[]" placeholder="Type Person Designation">
                           </div>
-
                           </div>
                           <hr>
                           <div class="form-group">
@@ -387,7 +355,6 @@ span.pccolor {
                             <br>
                             <input type="text" class="form-control" name="company_secondary_contact_right[]" placeholder="Type Person Designation">
                           </div>
-
                           </div>
                         
                         </div>
@@ -438,7 +405,6 @@ span.pccolor {
                         <option value="yes">Yes</option>
                         <option value="no">No</option>
                         </select>
-
                         <div class="form-group mt-2" id="slct_current_partner_type">
                           <select class="form-control" name="change_partner_ype[]" required="">
                             <option value="" selected disabled >Select Partner Type</option>
@@ -448,7 +414,6 @@ span.pccolor {
                             <?php } ?>
                           </select>
                         </div>
-
                         </div>
                         <hr>
                         
@@ -464,7 +429,6 @@ span.pccolor {
                               <option value="no">No</option>
                             </select>
                           </div>
-
                           <div class="form-group mt-2" id="slct_cluster_card">
                           <select class="form-control" name="travel_cluster[]" required="">
                             <option value="" selected disabled >Select Travel Cluster </option>
@@ -609,135 +573,302 @@ span.pccolor {
                               </div>
                       </div>
                       <div id="cmpmanytime">
-                        <div>
-                          <div class="col-12 col-md-12 mb-12">
-                            <label for="validationSample04"> How many task were done</label>
-                            <input type="number" class="form-control" name="how_many_task"> 
-                          </div>
-                          <div class="col-12 col-md-12 mb-12">
-                            <label for="validationSample04"> Is the frequency of the task right? </label>
-                            <select id="frequency_of_the_task" class="form-control" name="frequency_of_the_task" required>
-                              <option selected value="">Select</option>
-                              <option value="yes">Yes</option>
-                              <option value="no">No</option>
-                            </select>
-                          </div>
-                          <div class="col-12 col-md-12 mb-12">
-                            <label for="validationSample04"> Are the type of task right? </label>
-                            <select id="type_of_task" class="form-control" name="type_of_task" required>
-                              <option selected value="">Select</option>
-                              <option value="yes">Yes</option>
-                              <option value="no">No</option>
-                            </select>
-                          </div>
-                          <div class="col-12 col-md-12 mb-12">
-                            <label for="validationSample04"> RP Meeting done (y/n) </label>
-                            <select id="rp_meeting_done" class="form-control" name="rp_meeting_done" required>
-                              <option selected value="">Select</option>
-                              <option value="yes">Yes</option>
-                              <option value="no">No</option>
-                            </select>
-                          </div>
-                          <hr>
-                          <div class="card p-2" style="background: antiquewhite">
-                            <div class="col-12 col-md-12 mb-12" id="mom_done_card">
-                              <label for="validationSample04">write MOM Done (y/n)</label>
-                              <select id="mom_done" class="form-control" name="mom_done" required>
-                                <option selected value="">Select</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                              </select>
-                            </div>
-                            <div class="col-12 col-md-12 mb-12" id="social_networking_done_card">
-                              <label for="validationSample04">Social networking done (y/n)</label>
-                              <select id="social_networking_done" class="form-control" name="social_networking_done" required>
-                                <option selected value="">Select</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                              </select>
-                            </div>
-                            <div class="col-12 col-md-12 mb-12" id="category_right_card">
-                              <label for="validationSample04">Is this category right? (y/n) </label>
-                              <select id="category_right" class="form-control" name="category_right" required>
-                                <option selected value="">Select</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                              </select>
-                            </div>
-                            <div class="col-12 col-md-12 mb-12" id="slct_category_card">
-                              <label for="validationSample02">Select Category</label>
-                              <?php  $category=$this->Menu_model->GetCategories(); ?>
-                              <select id="slct_category" name="slct_category" class="form-control">
-                                <option value="">Select Category</option>
-                                <?php foreach($category as $p){?>
-                                <option value="<?=$p->id?>"><?=$p->name?></option>
-                                <?php }?>
-                              </select>
-                            </div>
-                            <div class="col-12 col-md-12 mb-12" id="current_status_right_card">
-                              <label for="validationSample04">Is this current status right?</label>
-                              <select id="current_status_right" class="form-control" name="current_status_right" required>
-                                <option selected value="">Select</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                              </select>
-                            </div>
-                            <div class="col-12 col-md-12 mb-12" id="many_times_barge_meeting_card">
-                              <label for="validationSample04">How many times barge meeting done?</label>
-                              <select id="many_times_barge_meeting" class="form-control" name="many_times_barge_meeting">
-                                <option selected value="">Select</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                              </select>
-                            </div>
-                            <div class="col-12 col-md-12 mb-12" id="research_prospecting_card">
-                              <label for="validationSample04">Research prospecting ?</label>
-                              <select id="research_prospecting" class="form-control" name="research_prospecting">
-                                <option selected value="">Select</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                              </select>
-                            </div>
-                            <div class="col-12 col-md-12 mb-12" id="base_or_travel_location_card">
-                              <label for="validationSample04">Base location or out station travel?</label>
-                              <select id="base_or_travel_location" class="form-control" name="base_or_travel_location">
-                                <option selected value="">Select</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="col-12 col-md-12 mb-12" id="base_or_travel_location_card">
-                              <label for="validationSample04">Is this Partner Type is right? <span id="partner_type_set"></span></label>
-                              <select id="partner_type_right" class="form-control" name="partner_type_right" required>
-                                <option selected value="">Select</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                              </select>
-                            </div>
-                          <div class="col-12 col-md-12 mb-12" id="slct_partner_type_card">
-                            <label for="validationSample02"> Partner Type </label>
-                            <?php  $partner=$this->Menu_model->get_partner(); ?>
-                            <select id="slct_partner_type" name="slct_partner_type" class="form-control">
-                              <option value="">Select Partner Type</option>
-                              <?php foreach($partner as $p){?>
-                              <option value="<?=$p->id?>"><?=$p->name?></option>
-                              <?php }?>
-                            </select>
-                          </div>
-                          <div class="col-12 col-md-12 mb-12">
-                            <label for="validationSample02">Do you need any intervention or suppert from? </label>
-                            <select id="intervention_or_suppert" name="intervention_or_suppert" class="form-control" required>
-                              <option value="">Select</option>
-                              <option value="Cluster manager">Cluster manager</option>
-                              <option value="PST">PST </option>
-                              <option value="Sales Head">Sales Head</option>
-                            </select>
+                        
+                      </div>
+                    
+                      <div class="card bg-gray p-2 text-center">
+                        <h5>Question Linked With Activity Conversion</h5>
+                      </div>
+                      <hr>
+                      <div class="card">
+                      <div>
+                      <div id="accordion">
+                        <div class="col-12 col-md-12 mb-12 card p-2">
+                          <label for="validationSample04"> Is the total Logs Right ? : <span class="clrdiff" id="total_Logs"></span></label>
+                          <input type="hidden" readonly value="Is the total Logs Right ?" class="form-control" name="total_Logs[]"> 
+                          
+                            <div class="card">
+                            <p class="tasklogp" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                      Check Log
+                                    </p>
+                                <div id="collapseOne" class="collapse" data-parent="#accordion">
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                        <div id="totaltaskdata"></div>
+                                      </div>
+                                  </div>
+                                </div>
+                              </div>
+                          <div class="form-group">
+                              <textarea class="form-control" name="total_Logs[]" placeholder="Review Remark..."  required=""></textarea>
                           </div>
                         </div>
-                      </div>
-                      <div class="form-group">
-                          <textarea class="form-control" name="remark" placeholder="Review Remark..."  required=""></textarea>
+                        <div class="col-12 col-md-12 mb-12 card p-2">
+                          <label for="validationSample04"> How many calls done ? : <span class="clrdiff" id="how_many_calls"></span></label>
+                          <input type="hidden" readonly value="How many calls done ? " class="form-control" name="how_many_calls[]"> 
+                          <div class="card">
+                            <p class="tasklogp" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                      Check Log
+                                    </p>
+                                <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                        <div id="task_how_many_calls"></div>
+                                      </div>
+                                  </div>
+                                </div>
+                          </div>
+                          <div class="form-group">
+                              <textarea class="form-control" name="how_many_calls[]" placeholder="Review Remark..."  required=""></textarea>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-12 mb-12 card p-2">
+                          <label for="validationSample04"> How many emails done ? : <span class="clrdiff" id="totalTasks_email"></span></label>
+                          <input type="hidden" readonly value="How many emails done ?" class="form-control" name="how_many_emails[]"> 
+                          <div class="card">
+                            <p class="tasklogp" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                      Check Log
+                                    </p>
+                                <div id="collapseThree" class="collapse" data-parent="#accordion">
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                        <div id="task_how_many_email"></div>
+                                      </div>
+                                  </div>
+                                </div>
+                          </div>
+                          <div class="form-group">
+                              <textarea class="form-control" name="how_many_emails[]" placeholder="Review Remark..."  required=""></textarea>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-12 mb-12 card p-2">
+                          <label for="validationSample04"> Scheduled meetings done ? : <span class="clrdiff" id="scheduled_meetings_cnt"></span></label>
+                          <input type="hidden" readonly value="Scheduled meetings done ?" class="form-control" name="scheduled_meetings[]"> 
+                          <div class="card">
+                            <p class="tasklogp" data-toggle="collapse" data-target="#collapsefour" aria-expanded="true" aria-controls="collapsefour">
+                                      Check Log
+                                    </p>
+                                <div id="collapsefour" class="collapse" data-parent="#accordion">
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                        <div id="scheduled_meetings_table"></div>
+                                      </div>
+                                  </div>
+                                </div>
+                          </div>
+                          <div class="form-group">
+                              <textarea class="form-control" name="scheduled_meetings[]" placeholder="Review Remark..."  required=""></textarea>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-12 mb-12 card p-2">
+                          <label for="validationSample04"> Barg-in meetings done ? : <span class="clrdiff" id="barg_in_meetings_cnt"></span> </label>
+                          <input type="hidden" readonly value="Barg-in meetings done ?" class="form-control" name="barg_in_meetings[]"> 
+                          <div class="card">
+                            <p class="tasklogp" data-toggle="collapse" data-target="#collapsefive" aria-expanded="true" aria-controls="collapsefive">
+                                      Check Log
+                                    </p>
+                                <div id="collapsefive" class="collapse" data-parent="#accordion">
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                        <div id="barg_in_meetings_table"></div>
+                                      </div>
+                                  </div>
+                                </div>
+                          </div>
+                          <div class="form-group">
+                              <textarea class="form-control" name="barg_in_meetings[]" placeholder="Review Remark..."  required=""></textarea>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-12 mb-12 card p-2">
+                          <label for="validationSample04">Whatsapp Activity done ? : <span class="clrdiff" id="whatsapp_activity_cnt"></span></label>
+                          <input type="hidden" readonly value="Whatsapp Activity done ?" class="form-control" name="whatsapp_activity[]"> 
+                          <div class="card">
+                            <p class="tasklogp" data-toggle="collapse" data-target="#collapsesix" aria-expanded="true" aria-controls="collapsesix">
+                                      Check Log
+                                    </p>
+                                <div id="collapsesix" class="collapse" data-parent="#accordion">
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                        <div id="whatsapp_activity_table"></div>
+                                      </div>
+                                  </div>
+                                </div>
+                          </div>
+                          <div class="form-group">
+                              <textarea class="form-control" name="whatsapp_activity[]" placeholder="Review Remark..."  required=""></textarea>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-12 mb-12 card p-2">
+                          <label for="validationSample04">Social networking done ? : <span class="clrdiff" id="social_networking_cnt"></span></label>
+                          <input type="hidden" readonly value="Social networking done ?" class="form-control" name="social_networking[]"> 
+                          <div class="card">
+                            <p class="tasklogp" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+                                      Check Log
+                                    </p>
+                                <div id="collapseSeven" class="collapse" data-parent="#accordion">
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                        <div id="social_networking_table"></div>
+                                      </div>
+                                  </div>
+                                </div>
+                          </div>
+                          <div class="form-group">
+                              <textarea class="form-control" name="social_networking[]" placeholder="Review Remark..."  required=""></textarea>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-12 mb-12 card p-2">
+                          <label for="validationSample04">MOMs Done ? : <span class="clrdiff" id="mom_done_cnt"></span></label>
+                          <input type="hidden" readonly value="MOMs Done ?" class="form-control" name="mom_done[]"> 
+                          <div class="card">
+                            <p class="tasklogp" data-toggle="collapse" data-target="#collapseEight" aria-expanded="true" aria-controls="collapseEight">
+                                      Check Log
+                                    </p>
+                                <div id="collapseEight" class="collapse" data-parent="#accordion">
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                        <div id="mom_done_table"></div>
+                                      </div>
+                                  </div>
+                                </div>
+                          </div>
+                          <div class="form-group">
+                              <textarea class="form-control" name="mom_done[]" placeholder="Review Remark..."  required=""></textarea>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-12 mb-12 card p-2">
+                          <label for="validationSample04">Proposal Done ? : <span class="clrdiff" id="proposal_done_cnt"></span></label>
+                          <input type="hidden" readonly value="Proposal Done ?" class="form-control" name="proposal_done[]"> 
+                          <div class="card">
+                            <p class="tasklogp" data-toggle="collapse" data-target="#collapseNine" aria-expanded="true" aria-controls="collapseNine">
+                                      Check Log
+                                    </p>
+                                <div id="collapseNine" class="collapse" data-parent="#accordion">
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                        <div id="proposal_done_table"></div>
+                                      </div>
+                                  </div>
+                                </div>
+                          </div>
+                          <div class="form-group">
+                              <textarea class="form-control" name="proposal_done[]" placeholder="Review Remark..."  required=""></textarea>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-12 mb-12 card p-2">
+                          <label for="validationSample04">How many research tasks done ? : <span class="clrdiff" id="how_many_research_cnt"></span></label>
+                          <input type="hidden" readonly value="Proposal written?" class="form-control" name="how_many_research[]"> 
+                          <div class="card">
+                            <p class="tasklogp" data-toggle="collapse" data-target="#collapseTen" aria-expanded="true" aria-controls="collapseTen">
+                                      Check Log
+                                    </p>
+                                <div id="collapseTen" class="collapse" data-parent="#accordion">
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                        <div id="how_many_research_table"></div>
+                                      </div>
+                                  </div>
+                                </div>
+                          </div>
+                          <div class="form-group">
+                              <textarea class="form-control" name="how_many_research[]" placeholder="Review Remark..."  required=""></textarea>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-12 mb-12 card p-2">
+                          <label for="validationSample04">How many task done by Cluster Manager? : <span class="clrdiff" id="task_done_by_cluster_cnt"></span> </label>
+                          <input type="hidden" readonly value="How many task done by Cluster ?" class="form-control" name="task_done_by_cluster[]"> 
+                          <div class="card">
+                            <p class="tasklogp" data-toggle="collapse" data-target="#collapseEleven" aria-expanded="true" aria-controls="collapseEleven">
+                                      Check Log
+                                    </p>
+                                <div id="collapseEleven" class="collapse" data-parent="#accordion">
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                        <div id="task_done_by_cluster_table"></div>
+                                      </div>
+                                  </div>
+                                </div>
+                          </div>
+                          <div class="form-group">
+                              <textarea class="form-control" name="task_done_by_cluster[]" placeholder="Review Remark..."  required=""></textarea>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-12 mb-12 card p-2">
+                          <label for="validationSample04">How much has the cluster Manager is status changed? : <span class="clrdiff" id="status_change_by_cluster_cnt">0</span> </label>
+                          <input type="hidden" readonly value="How much has the cluster's status changed?" class="form-control" name="status_change_by_cluster[]"> 
+                          <div class="card">
+                            <p class="tasklogp" data-toggle="collapse" data-target="#collapsethrtten" aria-expanded="true" aria-controls="collapsethrtten">
+                                      Check Log
+                                    </p>
+                                <div id="collapsethrtten" class="collapse" data-parent="#accordion">
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                        <div id="status_change_by_cluster_table"></div>
+                                      </div>
+                                  </div>
+                                </div>
+                          </div>
+                          <div class="form-group">
+                              <textarea class="form-control" name="status_change_by_cluster[]" placeholder="Review Remark..."  required=""></textarea>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-12 mb-12 card p-2">
+                          <label for="validationSample04">How many task done by PST ? : <span class="clrdiff" id="task_done_by_pst_cnt"></span> </label>
+                          <input type="hidden" readonly value="How many task done by PST ?" class="form-control" name="task_done_by_pst[]"> 
+                          <div class="card">
+                            <p class="tasklogp" data-toggle="collapse" data-target="#collapseTwelve" aria-expanded="true" aria-controls="collapseTwelve">
+                                      Check Log
+                                    </p>
+                                <div id="collapseTwelve" class="collapse" data-parent="#accordion">
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                        <div id="task_done_by_pst_table"></div>
+                                      </div>
+                                  </div>
+                                </div>
+                          </div>
+                          <div class="form-group">
+                              <textarea class="form-control" name="task_done_by_pst[]" placeholder="Review Remark..."  required=""></textarea>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-12 mb-12 card p-2">
+                          <label for="validationSample04">How much has the PST's status changed? : <span class="clrdiff" id="status_change_by_pst_cnt">0</span></label>
+                          <input type="hidden" readonly value="How much has the PST's status changed?" class="form-control" name="status_change_by_pst[]"> 
+                          <div class="card">
+                            <p class="tasklogp" data-toggle="collapse" data-target="#collapseTwelve" aria-expanded="true" aria-controls="collapseTwelve">
+                                      Check Log
+                                    </p>
+                                <div id="collapseTwelve" class="collapse" data-parent="#accordion">
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                        <div id="status_change_by_pst_table"></div>
+                                      </div>
+                                  </div>
+                                </div>
+                          </div>
+                          <div class="form-group">
+                              <textarea class="form-control" name="status_change_by_pst[]" placeholder="Review Remark..."  required=""></textarea>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-12 mb-12 card p-5" style="background: cornsilk;">
+                          <label for="validationSample04"> Is the frequency of the task right? </label>
+                          <input type="hidden" readonly value="Is the frequency of the task right?" class="form-control" name="task_frequency[]"> 
+                          <select id="frequency_of_the_task" class="form-control" name="task_frequency[]" required>
+                            <option selected value="">Select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
+                          <label for="validationSample02">Do you need any intervention or suppert from? </label>
+                          <input type="hidden" readonly value="Do you need any intervention or suppert from?" class="form-control" name="intervention_or_suppert[]"> 
+                          <select id="intervention_or_suppert" name="intervention_or_suppert[]" class="form-control" required>
+                            <option value="">Select</option>
+                            <option value="Cluster manager">Cluster manager</option>
+                            <option value="PST">PST </option>
+                            <option value="Sales Head">Sales Head</option>
+                          </select>
+                        </div>
+                        </div>
+                        </div>
                       </div>
                       <hr>
                       <div class="card p-2 create_task_bg pb-4" id="rosterhide">
@@ -770,9 +901,14 @@ span.pccolor {
                         <lable>Expected Date</lable>
                         <input type="date" id="exdate" name="exdate" value="" class="form-control" required="" min="<?=date('Y-m-d');?>">
                       </div>
+                      <hr>
                       <div class="form-group text-center mt-3">
-                        <!-- <button type="submit" class="btn btn-success" onclick="this.form.submit(); this.disabled = true;">Submit</button> -->
-                        <button type="submit" class="btn btn-success" id="mainformbtn" value="">Submit</button>
+                          <textarea class="form-control" name="remark" placeholder="Review Remark..."  required=""></textarea>
+                        
+                        <br>
+                      <!-- <div class="form-group text-center mt-3" style="background: cadetblue; border-radius: 50px;"> -->
+                   
+                        <button type="submit" class="btn btn-success" onclick="return confirm('Are you sure you want to submit this review form');" id="mainformbtn" value="">Submit</button>
                       </div>
                     </div>
                   </form>
@@ -820,17 +956,16 @@ span.pccolor {
             $("#loadcompinfo").hide();
             
            
-            $("#many_times_barge_meeting_card").hide();
-            $("#research_prospecting_card").hide();
-            $("#base_or_travel_location_card").hide();
-            $("#slct_category_card").hide();
+            // $("#many_times_barge_meeting_card").hide();
+            // $("#research_prospecting_card").hide();
+            // $("#base_or_travel_location_card").hide();
+            // $("#slct_category_card").hide();
         
-            $("#mom_done_card").hide();
-            $("#social_networking_done_card").hide();
-            $("#category_right_card").hide();
-            $("#current_status_right_card").hide();
-            $("#slct_partner_type_card").hide();
-
+            // $("#mom_done_card").hide();
+            // $("#social_networking_done_card").hide();
+            // $("#category_right_card").hide();
+            // $("#current_status_right_card").hide();
+            // $("#slct_partner_type_card").hide();
             $("#slctCountry").hide();
             $("#slctState").hide();
             $("#slctCity").hide();
@@ -843,7 +978,6 @@ span.pccolor {
             $("#slct_current_partner_type").hide();
             $("#websiteisright_card").hide();
             $("#slct_cluster_card").hide();
-
             $("#mainlogtable").hide();
         
         });
@@ -855,7 +989,6 @@ span.pccolor {
             if(val=='Other'){document.getElementById("otherremark1").readOnly = false;}else{
             document.getElementById("otherremark1").value=val;document.getElementById("otherremark1").readOnly = true;}
         });
-
         $('#user_slct_city').on('change', function() {
           var val = this.value;
           if(val == 'no'){
@@ -897,7 +1030,6 @@ span.pccolor {
               $("#primarycontact_person").hide();
           }
       });
-
       $('#secondary_contact_slct').on('change', function() {
           var val = this.value;
           if (val == 'no') {
@@ -978,35 +1110,32 @@ span.pccolor {
               $("#slct_cluster_card").hide();
           }
       });
-
-
-
         
-        $('#rp_meeting_done').on('change', function b() {
-            var val = this.value;
-           if(val =='yes'){
+        // $('#rp_meeting_done').on('change', function b() {
+        //     var val = this.value;
+        //    if(val =='yes'){
         
-            $("#rp_meeting_done_yes").show();
-            $("#mom_done_card").show();
-            $("#social_networking_done_card").show();
-            $("#category_right_card").show();
-            $("#current_status_right_card").show();
+        //     $("#rp_meeting_done_yes").show();
+        //     $("#mom_done_card").show();
+        //     $("#social_networking_done_card").show();
+        //     $("#category_right_card").show();
+        //     $("#current_status_right_card").show();
         
-            $("#many_times_barge_meeting_card").hide();
-            $("#research_prospecting_card").hide();
-            $("#base_or_travel_location_card").hide();
-           }
-           if(val =='no'){
-            $("#mom_done_card").hide();
-            $("#social_networking_done_card").show();
-            $("#category_right_card").show();
-            $("#current_status_right_card").show();
-            $("#many_times_barge_meeting_card").show();
-            $("#research_prospecting_card").show();
-            $("#base_or_travel_location_card").show();
-           }
+        //     $("#many_times_barge_meeting_card").hide();
+        //     $("#research_prospecting_card").hide();
+        //     $("#base_or_travel_location_card").hide();
+        //    }
+        //    if(val =='no'){
+        //     $("#mom_done_card").hide();
+        //     $("#social_networking_done_card").show();
+        //     $("#category_right_card").show();
+        //     $("#current_status_right_card").show();
+        //     $("#many_times_barge_meeting_card").show();
+        //     $("#research_prospecting_card").show();
+        //     $("#base_or_travel_location_card").show();
+        //    }
            
-        });
+        // });
         
         
         
@@ -1259,10 +1388,6 @@ span.pccolor {
                 $("#expected_status").text(expet_status_name);
                 $("#expected_date").text(expet_status_date);
                 $("#current_status").text(current_status_name);
-                // console.log(result);
-                // console.log(expet_status_name);
-                // console.log(expet_status_date);
-                // console.log(current_status_name);
             }
             });
               
@@ -1272,7 +1397,7 @@ span.pccolor {
             $("#cmpmanytime").hide();
             $("#review_time").val('First Time');
             $("#mainformbtn").val('FirstTime');
-            $("#mainlogtable").show();
+            $("#mainlogtable").hide();
             $.ajax({
             url:'<?=base_url();?>Menu/GetCompnayDetailsUsiingInit',
             type: "POST",
@@ -1308,7 +1433,6 @@ span.pccolor {
                 $("#ccity").text((city !== '')? city : 'NA');
                 $("#cstate").text((state !== '')? state : 'NA');
                 $("#ccountry").text((country !== '')? country : 'NA');
-
                 $("#csr_budget").text(budget);
                 $("#number_of_schools").text((noofschools != 0)? noofschools : 'NA');
                 $("#website_is_right").text((website !== '')? website : 'NA');
@@ -1318,7 +1442,6 @@ span.pccolor {
                 $("#priority_client").text((priorityc !== '')? priorityc : 'NA');
                 $("#upsell_client").text((upsell_client !== '')? upsell_client : 'NA');
                 $("#focus_funnel").text((focus_funnel !== '')? focus_funnel : 'NA');
-
                 $.ajax({
                 url:'<?=base_url();?>Menu/GetCompanyPrimaryContact',
                 type: "POST",
@@ -1331,7 +1454,6 @@ span.pccolor {
                   $("#primary_contact").html(result);
                 }
               });
-
               $.ajax({
                 url:'<?=base_url();?>Menu/GetCompanyPrimaryContact',
                 type: "POST",
@@ -1344,7 +1466,6 @@ span.pccolor {
                   $("#secondary_contact").html(result);
                 }
               });
-
       
               $.ajax({
                 url:'<?=base_url();?>Menu/GetStatusName',
@@ -1379,10 +1500,6 @@ span.pccolor {
                   $("#curremt_clustername").html(result);
                 }
               });
-
-
-                // console.log(companyName);
-                console.log(result);
             }
             });
         
@@ -1392,7 +1509,6 @@ span.pccolor {
             $("#review_time").val('Many Time');
             $("#mainformbtn").val('ManyTime');
             $("#mainlogtable").hide();
-
             $.ajax({
             url:'<?=base_url();?>Menu/GetCompnayDetailsUsiingInit',
             type: "POST",
@@ -1441,7 +1557,7 @@ span.pccolor {
         
         $("#mainformbtn").click(function() {
           var buttonValue = $(this).val(); 
-          alert(buttonValue);
+          
           if (buttonValue === 'FirstTime') {
             // $("#cmpfirsttime input, #cmpfirsttime select, #cmpfirsttime textarea").attr('required', 'required');
             $("#cmpmanytime input, #cmpmanytime select, #cmpmanytime textarea").removeAttr('required');
@@ -1452,8 +1568,8 @@ span.pccolor {
           }
         });
         
-
         var rtype = document.getElementById("rtype").value;
+        var rtype_id = document.getElementById("slsct_review_id").value;
         // alert(rtype);
         $('#inid').on('change', function b() {
         var inid = document.getElementById("inid").value;
@@ -1464,7 +1580,8 @@ span.pccolor {
         data: {
         inid: inid,
         fdate: fdate,
-        rtype: rtype
+        rtype: rtype,
+        rtype_id: rtype_id
         },
         cache: false,
         success: function a(result){
@@ -1477,6 +1594,7 @@ span.pccolor {
         $('#inid').on('change', function b() {
     
           var rtype = document.getElementById("rtype").value;
+        
         if(rtype=='Roaster'){
               $("#rosterhide").hide();
               $("#taskupdate").show();
@@ -1498,18 +1616,509 @@ span.pccolor {
         var inid = document.getElementById("inid").value;
         var fdate = document.getElementById("fdate").value;
         var rtype = document.getElementById("rtype").value;
-     
+        var rtype_id = document.getElementById("slsct_review_id").value;
         $.ajax({
         url:'<?=base_url();?>Menu/getcmplogs',
         type: "POST",
         data: {
         inid: inid,
         fdate: fdate,
-        rtype: rtype
+        rtype: rtype,
+        rtype_id: rtype_id
         },
         cache: false,
         success: function a(result){
         $("#cmplogs").html(result);
+        }
+        });
+        $.ajax({
+        url:'<?=base_url();?>Menu/getcmpnlogAgainstReviewTask',
+        type: "POST",
+        data: {
+        inid: inid,
+        fdate: fdate,
+        rtype: rtype,
+        rtype_id: rtype_id
+        },
+        cache: false,
+        success: function a(result){
+          const jsonData = JSON.parse(result);
+          // Total Task Data  Start
+          const totalTasks = jsonData.totaltask.length;
+          let tableContent = "<table id='example2' class='table' border='1'><thead class='thead-dark'><tr><th>Sr. No</th><th>Task</th><th>Action Taken</th><th>Purpose Achieved</th><th>Created Date</th><th>Updated Date</th><th>User Name</th><th>Last Status</th><th>Current Status Status</th></tr></thead>";
+          var counter = 1;
+            jsonData.totaltask.forEach(task => {
+                tableContent += `<tr>
+                  <td>${counter++}</td>
+                  <td>${task.actionname}</td>
+                  <td>${task.actontaken}</td>
+                  <td>${task.purpose_achieved}</td>
+                  <td>${task.appointmentdatetime}</td>
+                  <td>${task.updated_at}</td>
+                  <td>${task.username}</td>
+                  <td>${task.lstatusname}</td>
+                  <td>${task.cstatusname}</td>
+                </tr>`;
+              });
+              tableContent += "</table>";
+              $("#total_Logs").text(totalTasks)
+              document.getElementById("totaltaskdata").innerHTML = `${tableContent}`;
+              $("#example2").DataTable({
+              "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
+              "buttons": ["excel", "pdf"]
+              }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+            // Total Task Data  End
+            // Call Log Data Start
+            const filteredTasks_call = jsonData.totaltask.filter(task => task.actiontype_id === "1");
+            const totalTasks_call = filteredTasks_call.length;
+            if(totalTasks_call > 0){
+          let tableContent_call = "<table id='example3' class='table' border='1'><thead class='thead-dark'><tr><th>Sr. No</th><th>Task</th><th>Action Taken</th><th>Purpose Achieved</th><th>Created Date</th><th>Updated Date</th><th>User Name</th><th>Last Status</th><th>Current Status Status</th></tr></thead>";
+          var counter = 1;
+          filteredTasks_call.forEach(task => {
+              tableContent_call += `<tr>
+                  <td>${counter++}</td>
+                  <td>${task.actionname}</td>
+                  <td>${task.actontaken}</td>
+                  <td>${task.purpose_achieved}</td>
+                  <td>${task.appointmentdatetime}</td>
+                  <td>${task.updated_at}</td>
+                  <td>${task.username}</td>
+                  <td>${task.lstatusname}</td>
+                  <td>${task.cstatusname}</td>
+                </tr>`;
+              });
+              tableContent_call += "</table>";
+              $("#how_many_calls").text(totalTasks_call)
+              document.getElementById("task_how_many_calls").innerHTML = `${tableContent_call}`;
+              $("#example3").DataTable({
+              "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
+              "buttons": ["excel", "pdf"]
+              }).buttons().container().appendTo('#example3_wrapper .col-md-6:eq(0)');
+            }else{
+              $("#how_many_calls").text(0)
+            }
+            // Call Log Data Close
+          // Email Log Data Start
+          const filteredTasks_email = jsonData.totaltask.filter(task => task.actiontype_id === "2");
+          const totalTasks_email = filteredTasks_email.length;
+          if(totalTasks_email > 0){
+          let tableContent_email = "<table id='example4' class='table' border='1'><thead class='thead-dark'><tr><th>Sr. No</th><th>Task</th><th>Action Taken</th><th>Purpose Achieved</th><th>Created Date</th><th>Updated Date</th><th>User Name</th><th>Last Status</th><th>Current Status Status</th></tr></thead>";
+          var counter = 1;
+          filteredTasks_email.forEach(task => {
+              tableContent_email += `<tr>
+                  <td>${counter++}</td>
+                  <td>${task.actionname}</td>
+                  <td>${task.actontaken}</td>
+                  <td>${task.purpose_achieved}</td>
+                  <td>${task.appointmentdatetime}</td>
+                  <td>${task.updated_at}</td>
+                  <td>${task.username}</td>
+                  <td>${task.lstatusname}</td>
+                  <td>${task.cstatusname}</td>
+                </tr>`;
+              });
+              tableContent_email += "</table>";
+              $("#totalTasks_email").text(totalTasks_email)
+              document.getElementById("task_how_many_email").innerHTML = `${tableContent_email}`;
+              $("#example4").DataTable({
+              "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
+              "buttons": ["excel", "pdf"]
+              }).buttons().container().appendTo('#example4_wrapper .col-md-6:eq(0)');
+            }else{
+              $("#totalTasks_email").text(0)
+            }
+            // Email Log Data Close
+          // scheduled_meetings Log Data Start
+          const filteredTasks_sheduled = jsonData.totaltask.filter(task => task.actiontype_id === "3");
+          const totalTasks_shemeet = filteredTasks_sheduled.length;
+          if(totalTasks_shemeet > 0){
+          let tableContent_smeeting = "<table id='example5' class='table' border='1'><thead class='thead-dark'><tr><th>Sr. No</th><th>Task</th><th>Action Taken</th><th>Purpose Achieved</th><th>Created Date</th><th>Updated Date</th><th>User Name</th><th>Last Status</th><th>Current Status Status</th></tr></thead>";
+          var counter = 1;
+          filteredTasks_sheduled.forEach(task => {
+            tableContent_smeeting += `<tr>
+                  <td>${counter++}</td>
+                  <td>${task.actionname}</td>
+                  <td>${task.actontaken}</td>
+                  <td>${task.purpose_achieved}</td>
+                  <td>${task.appointmentdatetime}</td>
+                  <td>${task.updated_at}</td>
+                  <td>${task.username}</td>
+                  <td>${task.lstatusname}</td>
+                  <td>${task.cstatusname}</td>
+                </tr>`;
+              });
+              tableContent_smeeting += "</table>";
+              $("#scheduled_meetings_cnt").text(totalTasks_shemeet)
+              document.getElementById("scheduled_meetings_table").innerHTML = `${tableContent_smeeting}`;
+              $("#example5").DataTable({
+              "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
+              "buttons": ["excel", "pdf"]
+              }).buttons().container().appendTo('#example5_wrapper .col-md-6:eq(0)');
+            }else{
+              $("#scheduled_meetings_cnt").text(0)
+            }
+            // scheduled_meetings Log Data Close
+            // barg_in_meetings Log Data Start
+          const filteredTasks_bargmeet = jsonData.totaltask.filter(task => task.actiontype_id === "4");
+          const totalTasks_bargmeet = filteredTasks_bargmeet.length;
+          if(totalTasks_bargmeet > 0){
+          let tableContent_bargmeet = "<table id='example6' class='table' border='1'><thead class='thead-dark'><tr><th>Sr. No</th><th>Task</th><th>Action Taken</th><th>Purpose Achieved</th><th>Created Date</th><th>Updated Date</th><th>User Name</th><th>Last Status</th><th>Current Status Status</th></tr></thead>";
+          var counter = 1;
+          filteredTasks_bargmeet.forEach(task => {
+            tableContent_bargmeet += `<tr>
+                  <td>${counter++}</td>
+                  <td>${task.actionname}</td>
+                  <td>${task.actontaken}</td>
+                  <td>${task.purpose_achieved}</td>
+                  <td>${task.appointmentdatetime}</td>
+                  <td>${task.updated_at}</td>
+                  <td>${task.username}</td>
+                  <td>${task.lstatusname}</td>
+                  <td>${task.cstatusname}</td>
+                </tr>`;
+              });
+              tableContent_bargmeet += "</table>";
+              $("#barg_in_meetings_cnt").text(totalTasks_bargmeet)
+              document.getElementById("barg_in_meetings_table").innerHTML = `${tableContent_bargmeet}`;
+              $("#example6").DataTable({
+              "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
+              "buttons": ["excel", "pdf"]
+              }).buttons().container().appendTo('#example6_wrapper .col-md-6:eq(0)');
+            }else{
+              $("#barg_in_meetings_cnt").text(0)
+            }
+            // barg_in_meetings Log Data Close
+            
+            // whatsapp_activity Log Data Start
+          const filteredTasks_whatsapp_activity = jsonData.totaltask.filter(task => task.actiontype_id === "5");
+          const totalTasks_whatsapp = filteredTasks_whatsapp_activity.length;
+          if(totalTasks_whatsapp > 0){
+          let tableContent_whatsapp_activity = "<table id='example7' class='table' border='1'><thead class='thead-dark'><tr><th>Sr. No</th><th>Task</th><th>Action Taken</th><th>Purpose Achieved</th><th>Created Date</th><th>Updated Date</th><th>User Name</th><th>Last Status</th><th>Current Status Status</th></tr></thead>";
+          var counter = 1;
+          filteredTasks_whatsapp_activity.forEach(task => {
+            tableContent_whatsapp_activity += `<tr>
+                  <td>${counter++}</td>
+                  <td>${task.actionname}</td>
+                  <td>${task.actontaken}</td>
+                  <td>${task.purpose_achieved}</td>
+                  <td>${task.appointmentdatetime}</td>
+                  <td>${task.updated_at}</td>
+                  <td>${task.username}</td>
+                  <td>${task.lstatusname}</td>
+                  <td>${task.cstatusname}</td>
+                </tr>`;
+              });
+              tableContent_whatsapp_activity += "</table>";
+              $("#whatsapp_activity_cnt").text(totalTasks_whatsapp)
+              document.getElementById("whatsapp_activity_table").innerHTML = `${tableContent_whatsapp_activity}`;
+              $("#example7").DataTable({
+              "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
+              "buttons": ["excel", "pdf"]
+              }).buttons().container().appendTo('#example7_wrapper .col-md-6:eq(0)');
+            }else{
+              $("#whatsapp_activity_cnt").text(0)
+            }
+            // whatsapp_activity Log Data Close
+            // whatsapp_activity Log Data Start
+          const filteredTasks_social_networking = jsonData.totaltask.filter(task => task.actiontype_id === "13");
+          const totalTasks_social_networking = filteredTasks_social_networking.length;
+          if(totalTasks_social_networking > 0){
+          let tableContent_social = "<table id='example8' class='table' border='1'><thead class='thead-dark'><tr><th>Sr. No</th><th>Task</th><th>Action Taken</th><th>Purpose Achieved</th><th>Created Date</th><th>Updated Date</th><th>User Name</th><th>Last Status</th><th>Current Status Status</th></tr></thead>";
+          var counter = 1;
+          filteredTasks_social_networking.forEach(task => {
+            tableContent_social += `<tr>
+                  <td>${counter++}</td>
+                  <td>${task.actionname}</td>
+                  <td>${task.actontaken}</td>
+                  <td>${task.purpose_achieved}</td>
+                  <td>${task.appointmentdatetime}</td>
+                  <td>${task.updated_at}</td>
+                  <td>${task.username}</td>
+                  <td>${task.lstatusname}</td>
+                  <td>${task.cstatusname}</td>
+                </tr>`;
+              });
+              tableContent_social += "</table>";
+              $("#social_networking_cnt").text(totalTasks_whatsapp)
+              document.getElementById("social_networking_table").innerHTML = `${tableContent_social}`;
+              $("#example8").DataTable({
+              "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
+              "buttons": ["excel", "pdf"]
+              }).buttons().container().appendTo('#example8_wrapper .col-md-6:eq(0)');
+            }else{
+              $("#social_networking_cnt").text(0)
+            }
+            // whatsapp_activity Log Data Close
+             // mom_done Log Data Start
+          const filteredTasks_mom_done = jsonData.totaltask.filter(task => task.actiontype_id === "6");
+          const totalTasks_mom_done_cnt = filteredTasks_mom_done.length;
+          if(totalTasks_mom_done_cnt > 0){
+          let tableContent_mom_done = "<table id='example9' class='table' border='1'><thead class='thead-dark'><tr><th>Sr. No</th><th>Task</th><th>Action Taken</th><th>Purpose Achieved</th><th>Created Date</th><th>Updated Date</th><th>User Name</th><th>Last Status</th><th>Current Status Status</th></tr></thead>";
+          var counter = 1;
+          filteredTasks_mom_done.forEach(task => {
+            tableContent_mom_done += `<tr>
+                  <td>${counter++}</td>
+                  <td>${task.actionname}</td>
+                  <td>${task.actontaken}</td>
+                  <td>${task.purpose_achieved}</td>
+                  <td>${task.appointmentdatetime}</td>
+                  <td>${task.updated_at}</td>
+                  <td>${task.username}</td>
+                  <td>${task.lstatusname}</td>
+                  <td>${task.cstatusname}</td>
+                </tr>`;
+              });
+              tableContent_mom_done += "</table>";
+              $("#mom_done_cnt").text(totalTasks_mom_done_cnt)
+              document.getElementById("mom_done_table").innerHTML = `${tableContent_mom_done}`;
+              $("#example9").DataTable({
+              "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
+              "buttons": ["excel", "pdf"]
+              }).buttons().container().appendTo('#example9_wrapper .col-md-6:eq(0)');
+            }else{
+              $("#mom_done_cnt").text(0)
+            }
+            // mom_done Log Data Close
+          // proposal_done Log Data Start
+          const filteredTasks_proposal_done = jsonData.totaltask.filter(task => task.actiontype_id === "7");
+          const totalTasks_proposal_done_cnt = filteredTasks_proposal_done.length;
+          if(totalTasks_proposal_done_cnt > 0){
+          let tableContent_proposal_done = "<table id='example10' class='table' border='1'><thead class='thead-dark'><tr><th>Sr. No</th><th>Task</th><th>Action Taken</th><th>Purpose Achieved</th><th>Created Date</th><th>Updated Date</th><th>User Name</th><th>Last Status</th><th>Current Status Status</th></tr></thead>";
+          var counter = 1;
+          filteredTasks_proposal_done.forEach(task => {
+            tableContent_proposal_done += `<tr>
+                  <td>${counter++}</td>
+                  <td>${task.actionname}</td>
+                  <td>${task.actontaken}</td>
+                  <td>${task.purpose_achieved}</td>
+                  <td>${task.appointmentdatetime}</td>
+                  <td>${task.updated_at}</td>
+                  <td>${task.username}</td>
+                  <td>${task.lstatusname}</td>
+                  <td>${task.cstatusname}</td>
+                </tr>`;
+              });
+              tableContent_proposal_done += "</table>";
+              $("#proposal_done_cnt").text(totalTasks_proposal_done_cnt)
+              document.getElementById("proposal_done_table").innerHTML = `${tableContent_proposal_done}`;
+              $("#example10").DataTable({
+              "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
+              "buttons": ["excel", "pdf"]
+              }).buttons().container().appendTo('#example10_wrapper .col-md-6:eq(0)');
+            }else{
+              $("#proposal_done_cnt").text(0)
+            }
+            // proposal_done Log Data Close
+          // how_many_research Log Data Start
+          const filteredTasks_research_done = jsonData.totaltask.filter(task => task.actiontype_id === "10");
+          const totalTasks_research_done_cnt = filteredTasks_research_done.length;
+          if(totalTasks_research_done_cnt > 0){
+          let tableContent_research_done = "<table id='example11' class='table' border='1'><thead class='thead-dark'><tr><th>Sr. No</th><th>Task</th><th>Action Taken</th><th>Purpose Achieved</th><th>Created Date</th><th>Updated Date</th><th>User Name</th><th>Last Status</th><th>Current Status Status</th></tr></thead>";
+          var counter = 1;
+          filteredTasks_research_done.forEach(task => {
+            tableContent_research_done += `<tr>
+                  <td>${counter++}</td>
+                  <td>${task.actionname}</td>
+                  <td>${task.actontaken}</td>
+                  <td>${task.purpose_achieved}</td>
+                  <td>${task.appointmentdatetime}</td>
+                  <td>${task.updated_at}</td>
+                  <td>${task.username}</td>
+                  <td>${task.lstatusname}</td>
+                  <td>${task.cstatusname}</td>
+                </tr>`;
+              });
+              tableContent_research_done += "</table>";
+              $("#how_many_research_cnt").text(totalTasks_research_done_cnt)
+              document.getElementById("how_many_research_table").innerHTML = `${tableContent_research_done}`;
+              $("#example11").DataTable({
+              "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
+              "buttons": ["excel", "pdf"]
+              }).buttons().container().appendTo('#example11_wrapper .col-md-6:eq(0)');
+            }else{
+              $("#how_many_research_cnt").text(0)
+            }
+            // how_many_research Log Data Close
+      // task_done_by_cluster_cnt Log Data Start
+        $.ajax({
+          url:'<?=base_url();?>Menu/getcmpnlogTaskDoneBy',
+          type: "POST",
+          data: {
+          inid: inid,
+          fdate: fdate,
+          rtype: rtype,
+          taskdoneby: 'CLUSTER'
+          },
+          cache: false,
+          success: function a(result){
+            const jsonData = JSON.parse(result);
+            // Total Task Done BY Cluster Manager Data Start
+            const totalTasks_cluster_done = jsonData.totaltask.length;
+            if(totalTasks_cluster_done > 0){
+            let tableContent_cluster_done = "<table id='example12' class='table' border='1'><thead class='thead-dark'><tr><th>Sr. No</th><th>Task</th><th>Action Taken</th><th>Purpose Achieved</th><th>Created Date</th><th>Updated Date</th><th>User Name</th><th>Last Status</th><th>Current Status Status</th></tr></thead>";
+            var counter = 1;
+              jsonData.totaltask.forEach(task => {
+                tableContent_cluster_done += `<tr>
+                    <td>${counter++}</td>
+                    <td>${task.actionname}</td>
+                    <td>${task.actontaken}</td>
+                    <td>${task.purpose_achieved}</td>
+                    <td>${task.appointmentdatetime}</td>
+                    <td>${task.updated_at}</td>
+                    <td>${task.username}</td>
+                    <td>${task.lstatusname}</td>
+                    <td>${task.cstatusname}</td>
+                  </tr>`;
+                });
+                tableContent_cluster_done += "</table>";
+                $("#task_done_by_cluster_cnt").text(totalTasks_cluster_done)
+                document.getElementById("task_done_by_cluster_table").innerHTML = `${tableContent_cluster_done}`;
+                $("#example12").DataTable({
+                "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
+                "buttons": ["excel", "pdf"]
+                }).buttons().container().appendTo('#example12_wrapper .col-md-6:eq(0)');
+              }else{
+                $("#task_done_by_cluster_cnt").text(0)
+              }
+              // Total Task Done BY Cluster Manager Data End
+          }
+        }); 
+      // task_done_by_cluster_cnt Log Data Close
+       // status_change_by_cluster_cnt Log Data Start
+       $.ajax({
+          url:'<?=base_url();?>Menu/getcmpnlogStatusChnageTaskDoneBy',
+          type: "POST",
+          data: {
+          inid: inid,
+          fdate: fdate,
+          rtype: rtype,
+          taskdoneby: 'CLUSTER',
+          rtype_id: rtype_id
+          },
+          cache: false,
+          success: function a(result){
+            const jsonData = JSON.parse(result);
+            const totalTasks_cluster_status_chnage = jsonData.totaltask.length;
+            if(totalTasks_cluster_status_chnage > 0){
+            let tableContent_cluster_schnage = "<table id='example14' class='table' border='1'><thead class='thead-dark'><tr><th>Sr. No</th><th>Task</th><th>Action Taken</th><th>Purpose Achieved</th><th>Created Date</th><th>Updated Date</th><th>User Name</th><th>Last Status</th><th>Current Status Status</th></tr></thead>";
+            var counter = 1;
+              jsonData.totaltask.forEach(task => {
+                tableContent_cluster_schnage += `<tr>
+                    <td>${counter++}</td>
+                    <td>${task.actionname}</td>
+                    <td>${task.actontaken}</td>
+                    <td>${task.purpose_achieved}</td>
+                    <td>${task.appointmentdatetime}</td>
+                    <td>${task.updated_at}</td>
+                    <td>${task.username}</td>
+                    <td>${task.lstatusname}</td>
+                    <td>${task.cstatusname}</td>
+                  </tr>`;
+                });
+                tableContent_cluster_schnage += "</table>";
+                $("#status_change_by_cluster_cnt").text(totalTasks_cluster_status_chnage)
+                document.getElementById("status_change_by_cluster_table").innerHTML = `${tableContent_cluster_schnage}`;
+                $("#example14").DataTable({
+                "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
+                "buttons": ["excel", "pdf"]
+                }).buttons().container().appendTo('#example14_wrapper .col-md-6:eq(0)');
+              }else{
+                $("#status_change_by_cluster_cnt").text(0)
+              }
+          }
+        }); 
+      // status_change_by_cluster_cnt Log Data Close
+      // task_done_by_pst Log Data Start
+      $.ajax({
+          url:'<?=base_url();?>Menu/getcmpnlogTaskDoneBy',
+          type: "POST",
+          data: {
+          inid: inid,
+          fdate: fdate,
+          rtype: rtype,
+          taskdoneby: 'PST',
+          rtype_id: rtype_id
+          },
+          cache: false,
+          success: function a(result){
+            const jsonData = JSON.parse(result);
+            // Total Task Done BY Cluster Manager Data Start
+            const totalTasks_cluster_done = jsonData.totaltask.length;
+            if(totalTasks_cluster_done > 0){
+            let tableContent_cluster_done = "<table id='example13' class='table' border='1'><thead class='thead-dark'><tr><th>Sr. No</th><th>Task</th><th>Action Taken</th><th>Purpose Achieved</th><th>Created Date</th><th>Updated Date</th><th>User Name</th><th>Last Status</th><th>Current Status Status</th></tr></thead>";
+            var counter = 1;
+              jsonData.totaltask.forEach(task => {
+                tableContent_cluster_done += `<tr>
+                    <td>${counter++}</td>
+                    <td>${task.actionname}</td>
+                    <td>${task.actontaken}</td>
+                    <td>${task.purpose_achieved}</td>
+                    <td>${task.appointmentdatetime}</td>
+                    <td>${task.updated_at}</td>
+                    <td>${task.username}</td>
+                    <td>${task.lstatusname}</td>
+                    <td>${task.cstatusname}</td>
+                  </tr>`;
+                });
+                tableContent_cluster_done += "</table>";
+                $("#task_done_by_pst_cnt").text(totalTasks_cluster_done)
+                document.getElementById("task_done_by_pst_table").innerHTML = `${tableContent_cluster_done}`;
+                $("#example13").DataTable({
+                "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
+                "buttons": ["excel", "pdf"]
+                }).buttons().container().appendTo('#example13_wrapper .col-md-6:eq(0)');
+              }else{
+                $("#task_done_by_pst_cnt").text(0)
+              }
+              // Total Task Done BY Cluster Manager Data End
+          }
+        }); 
+      // task_done_by_pst Log Data Close
+            
+    // status_change_by_pst Log Data Start
+    $.ajax({
+          url:'<?=base_url();?>Menu/getcmpnlogStatusChnageTaskDoneBy',
+          type: "POST",
+          data: {
+          inid: inid,
+          fdate: fdate,
+          rtype: rtype,
+          taskdoneby: 'PST',
+          rtype_id: rtype_id
+          },
+          cache: false,
+          success: function a(result){
+            const jsonData = JSON.parse(result);
+            const totalTasks_pst_status_chnage = jsonData.totaltask.length;
+            if(totalTasks_pst_status_chnage > 0){
+            let tableContent_pst_schnage = "<table id='example15' class='table' border='1'><thead class='thead-dark'><tr><th>Sr. No</th><th>Task</th><th>Action Taken</th><th>Purpose Achieved</th><th>Created Date</th><th>Updated Date</th><th>User Name</th><th>Last Status</th><th>Current Status Status</th></tr></thead>";
+            var counter = 1;
+              jsonData.totaltask.forEach(task => {
+                tableContent_pst_schnage += `<tr>
+                    <td>${counter++}</td>
+                    <td>${task.actionname}</td>
+                    <td>${task.actontaken}</td>
+                    <td>${task.purpose_achieved}</td>
+                    <td>${task.appointmentdatetime}</td>
+                    <td>${task.updated_at}</td>
+                    <td>${task.username}</td>
+                    <td>${task.lstatusname}</td>
+                    <td>${task.cstatusname}</td>
+                  </tr>`;
+                });
+                tableContent_pst_schnage += "</table>";
+                $("#status_change_by_pst_cnt").text(totalTasks_pst_status_chnage)
+                document.getElementById("status_change_by_pst_table").innerHTML = `${tableContent_pst_schnage}`;
+                $("#example15").DataTable({
+                "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
+                "buttons": ["excel", "pdf"]
+                }).buttons().container().appendTo('#example15_wrapper .col-md-6:eq(0)');
+              }else{
+                $("#status_change_by_pst_cnt").text(0)
+              }
+          }
+        }); 
+      // status_change_by_pst Log Data Close
         }
         });
         });
@@ -1604,6 +2213,7 @@ span.pccolor {
       "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
       "buttons": ["excel", "pdf"]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+  
     </script>
   </body>
 </html>

@@ -25,7 +25,7 @@
     <!-- summernote -->
     <link rel="stylesheet" href="<?=base_url();?>assets/css/summernote-bs4.min.css">
     <style>
- .form-group,p.tasklogp{font-weight:700}.create_task_bg,.form-group,p.tasklogp{box-shadow:rgba(9,30,66,.25) 0 1px 1px,rgba(9,30,66,.13) 0 0 1px 1px}div#cmpmanytime{background:#f0f8ff;padding:10px}thead{background:#000;color:#fff}.clrdiff{color:#f5004f}.create_task_bg,.form-group{background:#f0f8ff;padding:15px}.form-control.is-valid,.was-validated .form-control:valid{background:0 0!important;border-radius:5px}span.pccolor{color:#0830b1}#optionCountCompany{font-size:12px}p.tasklogp{align-items:center;justify-content:center;display:flex;padding:4px;margin:0;background:#faebd7;font-family:math}
+ .form-group,p.tasklogp{font-weight:700}.create_task_bg,.form-group,p.tasklogp{box-shadow:rgba(9,30,66,.25) 0 1px 1px,rgba(9,30,66,.13) 0 0 1px 1px}div#cmpmanytime{background:#f0f8ff;padding:10px}thead{background:#000;color:#fff}.clrdiff{color:#f5004f}.create_task_bg,.form-group{background:#f0f8ff;padding:15px}.form-control.is-valid,.was-validated .form-control:valid{background:0 0!important;border-radius:5px}span.pccolor{color:#0830b1}#optionCountCompany{font-size:12px}p.tasklogp{align-items:center;justify-content:center;display:flex;padding:4px;margin:0;background:#faebd7;font-family:math}.card.generatetable.p-3 {background: beige;}
     </style>
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -126,15 +126,26 @@
                   <div class="row">
                     <div class="col-md-6">
                     <div class="was-validated">
-                    <div class="form-group">
+                    <div class="form-group <?php if($revst[0]->reviewtype == 'Roaster'){ echo "mt-5"; } ?>">
                       <input type="hidden" id="slsct_review_id" name="reviewtype" value="<?=$revst[0]->rid;?>">
                       <input type="hidden" name="uidaa" value="<?=$uid?>">
                       <input type="hidden" id="bdid" value="<?=$revst[0]->bdid;?>">
-                      <?php date_default_timezone_set("Asia/Kolkata"); ?>
-                      <input type="date" id="fdate" name="fdate" value="<?=$revst[0]->fixdate;?>" class="form-control" readonly>
+                      <?php 
+                      date_default_timezone_set("Asia/Kolkata"); 
+                      if($revst[0]->reviewtype == 'Roaster'){
+                        $rev_startt = date("Y-m-d");
+                        $revew_fixdate = date("Y-m-d", strtotime("-7 days", strtotime($rev_startt)));
+                      }else{
+                        $revew_fixdate = $revst[0]->fixdate;
+                      }
+
+                      ?>
+                      <input type="date" id="fdate" name="fdate" value="<?= $revew_fixdate; ?>" class="form-control" readonly>
+                    
                       <input type="hidden" id="pstid" value="<?=$uid?>">
                       <div class="invalid-feedback">Please provide Start Date Time.</div>
                       <div class="valid-feedback">Looks good!</div>
+                      <?php  if($revst[0]->reviewtype !== 'Roaster'){ ?>
                       <div class="mt-4">
                         <select class="form-control" id="statusid" name="statusid" required="">
                           <option value="">Select Status</option>
@@ -143,15 +154,18 @@
                             if($typeid == 3 || $typeid == 5){
                                 $status_array = [1,4,5,8];
                             }else if($typeid == 13){
-                                $status_array = [2,3];
+                                if($revst[0]->bdid == $revst[0]->uid){
+                                  $status_array = [1,2,3,4,5,8];
+                                }else{
+                                  $status_array = [2,3];
+                                }
                             }else if($typeid == 4){
                                 $status_array = [6,9,12,13];
                             }else if($typeid == 9){
-                                $status_array = [2,3,6,9,12,13];
+                                $status_array = [2,3,4,5,6,8,9,12,13];
                             }else{
                                 $status_array = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
                             }
-                            
                             $status = $this->Menu_model->get_status(); foreach($status as $st){?>
                           <?php if(in_array($st->id, $status_array)){ ?>
                           <option value="<?=$st->id?>"><?=$st->name?></option>
@@ -160,6 +174,7 @@
                         <div class="invalid-feedback">Please Create Plan First.</div>
                         <div class="valid-feedback">Looks good!</div>
                       </div>
+                    
                       <div class="mt-4">
                         <lable>note: showing only those companies which are not involved PST</lable>
                         <select class="form-control" name="inid" required="" id="inid">
@@ -168,6 +183,38 @@
                         <div class="invalid-feedback">Please Select Status First.</div>
                         <div class="valid-feedback">Looks good!</div>
                       </div>
+                      <?php }else{ 
+                          $user_type = $user['type_id'];
+                          $revtype = $this->Menu_model->GetReviewType(1);
+                          
+                         ?>
+                        <div class="mt-4">
+                        <lable>Select Review : </lable>
+                        <select class="form-control" name="inid" required="" id="inid">
+                        <option value="">Select Review Type</option>
+                          <?php foreach($revtype as $rtype):
+                            if($rtype->name != 'Roaster'):
+                            ?>
+                          <option value="<?= $rtype->name; ?>"><?= $rtype->name; ?></option>
+                          <?php 
+                        endif;
+                        endforeach; ?>
+                        </select>
+                        <p id="optionCountCompany"></p>
+                        <div class="invalid-feedback">Please Select Status First.</div>
+                        <div class="valid-feedback">Looks good!</div>
+                      </div>
+
+                      <div class="mt-4">
+                        <lable>Select Date : </lable>
+                        <select class="form-control" name="reviewdate" required="" id="reviewdate">
+                        </select>
+                        <p id="reviewdatecnt"></p>
+                        <div class="invalid-feedback">Please Select Status First.</div>
+                        <div class="valid-feedback">Looks good!</div>
+                      </div>
+
+                        <?php } ?>
                     </div>
                     <a href="<?=base_url();?>Menu/AllReviewac"><button type="button" class="btn btn-outline-danger">Go to Action wise Review</button></a><br>
                   </div>
@@ -223,7 +270,7 @@
                       <div class="card-body box-profile" id="cmpdata">
                       </div>
                       <input type="hidden" name="pstuid" value="<?=$uid?>">
-                      <input type="hidden" name="bduid" value="<?=$bdid?>">
+                      <input type="hidden" id="slctbduid" name="bduid" value="<?=$bdid?>">
                       <input type="hidden" name="rid" value="<?=$revst[0]->rid;?>">
                       <div id="cmpfirsttime">
                         <input type="hidden" id="review_time" name="review_time" value="">
@@ -551,31 +598,15 @@
                        
                       </div>
                       <div id="rosterform">
-                              <div class="card" id="expeted_status">
-                                <table class="table table-striped thead-dark">
-                                  <thead>
-                                    <th>Review Date</th>
-                                    <th>Review Type</th>
-                                    <th>Expected Status</th>
-                                    <th>Expected Date</th>
-                                    <th>Current Status</th>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <td><span id="review_date"></span></td>
-                                      <td><span id="review_type"></span></td>
-                                      <td><span id="expected_status"></span></td>
-                                      <td><span id="expected_date"></span></td>
-                                      <td><span id="current_status"></span></td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
+                        <hr class="card" id="expeted_status">
+                          <div class="table-responsive">
+                            <div id="rosterReviewData"></div>
+                          </div>
+                        <hr>
+                        </div>
                       </div>
-                      <div id="cmpmanytime">
-                        
-                      </div>
-                    
+                      <div id="cmpmanytime"></div>
+                      <div id="common_review_slct">       
                       <div class="card bg-gray p-2 text-center">
                         <h5>Question Linked With Activity Conversion</h5>
                       </div>
@@ -870,6 +901,7 @@
                         </div>
                         </div>
                       </div>
+                    </div>
                       <hr>
                       <div class="card p-2 create_task_bg pb-4" id="rosterhide">
                         <center>
@@ -902,9 +934,8 @@
                         <input type="date" id="exdate" name="exdate" value="" class="form-control" required="" min="<?=date('Y-m-d');?>">
                       </div>
                       <hr>
-                      <div class="form-group text-center mt-3">
+                      <div class="form-group text-center mt-3" id="reviewmainremarks">
                           <textarea class="form-control" name="remark" placeholder="Review Remark..."  required=""></textarea>
-                        
                         <br>
                       <!-- <div class="form-group text-center mt-3" style="background: cadetblue; border-radius: 50px;"> -->
                    
@@ -979,7 +1010,12 @@
             $("#websiteisright_card").hide();
             $("#slct_cluster_card").hide();
             $("#mainlogtable").hide();
-        
+
+            var rtypeslct = document.getElementById("rtype").value;
+            if(rtypeslct == 'Roaster'){
+              $("#common_review_slct").hide();
+              $("#cmpdata").hide();
+            }
         });
         
         
@@ -1556,15 +1592,22 @@
         
         
         $("#mainformbtn").click(function() {
+          var rtype = document.getElementById("rtype").value;
           var buttonValue = $(this).val(); 
-          
+       
           if (buttonValue === 'FirstTime') {
-            // $("#cmpfirsttime input, #cmpfirsttime select, #cmpfirsttime textarea").attr('required', 'required');
             $("#cmpmanytime input, #cmpmanytime select, #cmpmanytime textarea").removeAttr('required');
           }else if(buttonValue === 'ManyTime'){
-            
             $("#cmpfirsttime input, #cmpfirsttime select, #cmpfirsttime textarea").removeAttr('required');
-            // $("#cmpmanytime input, #cmpmanytime select, #cmpmanytime textarea").attr('required', 'required');
+
+          }
+          if(rtype == 'Roaster'){
+            $("#mainformbtn").val('Roaster');
+            $("#cmpfirsttime input, #cmpfirsttime select, #cmpfirsttime textarea").removeAttr('required');
+            $("#common_review_slct input, #common_review_slct select, #common_review_slct textarea").removeAttr('required');
+            $("#rosterhide input, #rosterhide select, #rosterhide textarea").removeAttr('required');
+            $("#cmpmanytime input, #cmpmanytime select, #cmpmanytime textarea").removeAttr('required');
+            
           }
         });
         
@@ -1598,11 +1641,6 @@
         if(rtype=='Roaster'){
               $("#rosterhide").hide();
               $("#taskupdate").show();
-              document.getElementById("ntaction").required = false;
-              document.getElementById("ntdate").required = false;
-              document.getElementById("ntppose").required = false;
-              document.getElementById("exsid").required = false;
-              document.getElementById("exdate").required = false;
         }else{
               $("#rosterhide").show();
               $("#taskupdate").hide();
@@ -1617,6 +1655,9 @@
         var fdate = document.getElementById("fdate").value;
         var rtype = document.getElementById("rtype").value;
         var rtype_id = document.getElementById("slsct_review_id").value;
+
+      if(rtype !=='Roaster'){
+
         $.ajax({
         url:'<?=base_url();?>Menu/getcmplogs',
         type: "POST",
@@ -2121,10 +2162,175 @@
       // status_change_by_pst Log Data Close
         }
         });
+      }else{
+    
+        var slctbduid = $("#slctbduid").val();
+
+        $.ajax({
+                url:'<?=base_url();?>Menu/GetReviewBySCDate',
+                type: "POST",
+                data: {
+                review: inid,
+                bduid:slctbduid
+                },
+                cache: false,
+                success: function a(result){
+                  $("#reviewdate").html(result);
+                  var optionCount = $('#reviewdate').find('option').length;
+                        optionCount = optionCount-1;
+                        $("#reviewdatecnt").text('Total Date :'+ optionCount);
+                }
+              });
+
+              $('#reviewdate').on('change', function() {
+                var reviewdate_id = $(this).val();
+
+                $.ajax({
+                url:'<?=base_url();?>Menu/GetReviewByReview',
+                type: "POST",
+                data: {
+                review: reviewdate_id,
+                bduid:slctbduid
+                },
+                cache: false,
+                success: function a(result){
+                  $("#rosterReviewData").html("");
+                  const jsonData = JSON.parse(result);
+                    const revcnt = jsonData.totaltask.length;
+                    if (revcnt > 0) {
+                        jsonData.totaltask.forEach((task, index) => {
+                            var tableId = `example${index + 1}`;
+                            var taskIndex = index + 1; // Index starting from 1
+                            var tableContent_roaster = `<div class='card generatetable p-3'>
+                                <table id='${tableId}' class='table' border='1'>
+                                    <thead class='thead-dark'>
+                                        <tr>
+                                            <th>Sr. No</th>
+                                            <th>Company Name</th>
+                                            <th>Review Task</th>
+                                            <th>Action Taken</th>
+                                            <th>Purpose Achieved</th>
+                                            <th>Expected Status</th>
+                                            <th>Expected Date</th>
+                                            <th>Task Date</th>
+                                            <th>User Name</th>
+                                            <th>Last Status</th>
+                                            <th>Current Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>${task.compname}</td>
+                                            <td>${task.name}</td>
+                                            <td>${task.actontaken}</td>
+                                            <td>${task.purpose_achieved}</td>
+                                            <td>${task.exp_status}</td>
+                                            <td>${task.exdate}</td>
+                                            <td>${task.appointmentdatetime}</td>
+                                            <td>${task.username}</td>
+                                            <td>${task.lstatusname}</td>
+                                            <td>${task.cstatusname}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br/>`;
+
+                            // Add the HTML block below each table with unique names
+                            var additionalHtml = `
+                                <div class="row">
+                                    <div class="col-6 col-md-6 mb-12 card p-2">
+                                  
+                                        <label for="validationSample04">Is the Task Action Complete?</label>
+                                        <input type="hidden" readonly="" value="${task.id}" class="form-control" name="roster_task_action_${taskIndex}[]"> 
+                                        <input type="hidden" readonly="" value="Is the Task Action Complete?" class="form-control" name="roster_task_action_${taskIndex}[]"> 
+                                        <div class="form-group">
+                                            <textarea class="form-control" name="roster_task_action_${taskIndex}[]" placeholder="Review Remark..." required=""></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-6 mb-12 card p-2">
+                                          <label for="validationSample04">Is the Expected Status Achieved Or Not? </label>
+                                           <input type="hidden" readonly="" value="${task.id}" class="form-control" name="roster_task_status_${taskIndex}[]">
+                                          <input type="hidden" readonly="" value="Is the Expected Status Achieved Or Not?" class="form-control" name="roster_task_status_${taskIndex}[]">
+                                          <div class="form-group">
+                                              <textarea class="form-control" name="roster_task_status_${taskIndex}[]" placeholder="Review Remark..." required=""></textarea>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <br/></div>`; // Add a line break after each block
+
+                              // Append the table and additional HTML to the div with id 'rosterReviewData'
+                              $("#rosterReviewData").append(tableContent_roaster + additionalHtml);
+
+                              // Initialize DataTables for each table
+                              $(`#${tableId}`).DataTable({
+                                  "responsive": false, 
+                                  "lengthChange": false, 
+                                  "autoWidth": false, 
+                                  'pageLength': 5,
+                                  "paging": false, // Disable pagination
+                                  "searching": false, // Disable searching
+                                  "buttons": ["excel", "pdf"]
+                              }).buttons().container().appendTo(`#${tableId}_wrapper .col-md-6:eq(0)`);
+                          });
+                      }
+                }
+            });
+               
+              });
+
+
+      }
+
+        
+
+
+
+
+
+
+
+
+
+
+
         });
         
+
+       
+
         
         $('#ntaction').on('change', function f() {
+
+        var rtype = document.getElementById("rtype").value;
+        if(rtype=='Roaster'){
+          var main_review_id = $("#inid").val();
+          $.ajax({
+                url:'<?=base_url();?>Menu/GetCureentStatusByRevID',
+                type: "POST",
+                data: {
+                mid: main_review_id,
+                },
+                cache: false,
+                success: function a(result){
+                var sid = result;
+            
+                var aid = document.getElementById("ntaction").value;
+                $.ajax({
+                    url:'<?=base_url();?>Menu/getpurpose',
+                    type: "POST",
+                    data: {
+                    sid: sid,
+                    aid: aid
+                    },
+                    cache: false,
+                    success: function a(result){
+                    $("#ntppose").html(result);
+                    }
+                });
+                }
+            });
+          }else{
             var sid = document.getElementById("ntstatus").value;
             var aid = document.getElementById("ntaction").value;
             $.ajax({
@@ -2139,6 +2345,9 @@
                 $("#ntppose").html(result);
                 }
             });
+          }
+           
+          
         });
         
         

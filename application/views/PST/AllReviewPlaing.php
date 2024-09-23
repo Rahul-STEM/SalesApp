@@ -2278,27 +2278,8 @@
             });
                
               });
-
-
       }
-
-        
-
-
-
-
-
-
-
-
-
-
-
         });
-        
-
-       
-
         
         $('#ntaction').on('change', function f() {
 
@@ -2346,11 +2327,7 @@
                 }
             });
           }
-           
-          
         });
-        
-        
       </script>
       <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->

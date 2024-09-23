@@ -12352,8 +12352,17 @@ public function getReviewedCMPHalfYearly(){
     return $query->result();
 }
 
+public function getMainReviewByMID($mid){
+    $query=$this->db->query("SELECT * FROM main_review WHERE id='$mid'");
+    return $query->result();
+}
+
 public function CheckReviewDoneorNotByUser($user_id,$cdate,$init_id,$reviewtype){
     $query=$this->db->query("SELECT * FROM `main_review` WHERE inid IN('$init_id') AND by_uid = '$user_id' AND rtype='$reviewtype' AND cast(cdate as Date) > '$cdate'");
+    return $query->result();
+}
+public function GetRosterReviewCompany(){
+    $query=$this->db->query("SELECT main_review.id as mid,main_review.inid,company_master.compname,main_review.rtype,main_review.sdate,main_review.cdate FROM `main_review` LEFT JOIN init_call on main_review.inid = init_call.id LEFT JOIN company_master ON init_call.cmpid_id = company_master.id WHERE main_review.roster_done ='';");
     return $query->result();
 }
 
@@ -12535,7 +12544,44 @@ public function getCmpStatusChnageTaskDoneBy($uadmid,$inid,$fdate){
     return $query->result();
 }
 
+public function getMainReviewBy_ALL($review,$bduid){
 
+        // if($review == 'Self Half Yearly' || $review == 'Half Yearly'){
+        //     $review ="mr.rtype = 'Self Half Yearly' OR mr.rtype = 'Half Yearly'";
+        // }elseif($review == 'Self Weekly' || $review == 'Weekly'){
+        //     $review ="mr.rtype = 'Self Weekly' OR mr.rtype = 'Weekly'";
+        // }elseif($review == 'Self Fortnightly' || $review == 'Fortnightly'){
+        //     $review ="mr.rtype = 'Self Fortnightly' OR mr.rtype = 'Fortnightly'";
+        // }elseif($review == 'Self Monthly' || $review == 'Monthly'){
+        //     $review ="mr.rtype = 'Self Monthly' OR mr.rtype = 'Monthly'";
+        // }elseif($review == 'Self Quarterly' || $review == 'Querterly'){
+        //     $review ="mr.rtype = 'Self Quarterly' OR mr.rtype = 'Querterly'";
+        // }
 
+        $query=$this->db->query("SELECT mr.*, init_call.cstatus, company_master.compname, tblcallevents.actontaken, tblcallevents.purpose_achieved, lstatus.name AS lstatusname, cstatus.name AS cstatusname, exstatus.name AS exp_status, action.name, tblcallevents.appointmentdatetime, user_details.name AS username FROM `main_review` AS mr LEFT JOIN init_call ON mr.inid = init_call.id LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN tblcallevents ON tblcallevents.id = mr.ntid LEFT JOIN status AS lstatus ON lstatus.id = init_call.lstatus LEFT JOIN status AS cstatus ON cstatus.id = init_call.cstatus LEFT JOIN status AS exstatus ON exstatus.id = mr.exsid LEFT JOIN action ON action.id = tblcallevents.actiontype_id LEFT JOIN user_details ON user_details.user_id = tblcallevents.assignedto_id WHERE mr.rid ='$review' AND mr.for_uid = '$bduid' and mr.roster_done = ''");
+       
+    return $query->result();
+}
+
+public function getMainReviewDate($review,$bduid){
+
+    if($review == 'Self Half Yearly' || $review == 'Half Yearly'){
+        $review ="'Self Half Yearly', 'Half Yearly'";
+    }elseif($review == 'Self Weekly' || $review == 'Weekly'){
+        $review ="'Self Weekly', 'Weekly'";
+    }elseif($review == 'Self Fortnightly' || $review == 'Fortnightly'){
+        $review ="'Self Fortnightly', 'Fortnightly'";
+    }elseif($review == 'Self Monthly' || $review == 'Monthly'){
+        $review ="'Self Monthly', 'Monthly'";
+    }elseif($review == 'Self Quarterly' || $review == 'Querterly'){
+        $review ="'Self Quarterly', 'Querterly'";
+    }
+    $query=$this->db->query("SELECT id, startt, closet FROM `allreview` WHERE reviewtype IN ($review) AND bdid = '$bduid' AND YEAR(startt) = YEAR(CURDATE()) ORDER BY ID DESC");
+    return $query->result();
+}
+
+public function UpdateRosterDone($mrid){
+    $query=$this->db->query("UPDATE main_review SET roster_done='1' WHERE id = '$mrid'");
+}
 
 }

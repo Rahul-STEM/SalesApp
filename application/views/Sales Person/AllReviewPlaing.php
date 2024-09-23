@@ -589,7 +589,7 @@
                           
                             <div class="card">
                             <p class="tasklogp" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                      Check Log
+                                      Check total Log
                                     </p>
                                 <div id="collapseOne" class="collapse" data-parent="#accordion">
                                   <div class="card-body">
@@ -608,7 +608,7 @@
                           <input type="hidden" readonly value="How many calls done ? " class="form-control" name="how_many_calls[]"> 
                           <div class="card">
                             <p class="tasklogp" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                                      Check Log
+                                      Check calls Log
                                     </p>
                                 <div id="collapseTwo" class="collapse" data-parent="#accordion">
                                   <div class="card-body">
@@ -627,7 +627,7 @@
                           <input type="hidden" readonly value="How many emails done ?" class="form-control" name="how_many_emails[]"> 
                           <div class="card">
                             <p class="tasklogp" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-                                      Check Log
+                                      Check emails Log
                                     </p>
                                 <div id="collapseThree" class="collapse" data-parent="#accordion">
                                   <div class="card-body">
@@ -646,7 +646,7 @@
                           <input type="hidden" readonly value="Scheduled meetings done ?" class="form-control" name="scheduled_meetings[]"> 
                           <div class="card">
                             <p class="tasklogp" data-toggle="collapse" data-target="#collapsefour" aria-expanded="true" aria-controls="collapsefour">
-                                      Check Log
+                                      Check Scheduled meetings Log
                                     </p>
                                 <div id="collapsefour" class="collapse" data-parent="#accordion">
                                   <div class="card-body">
@@ -665,7 +665,7 @@
                           <input type="hidden" readonly value="Barg-in meetings done ?" class="form-control" name="barg_in_meetings[]"> 
                           <div class="card">
                             <p class="tasklogp" data-toggle="collapse" data-target="#collapsefive" aria-expanded="true" aria-controls="collapsefive">
-                                      Check Log
+                                      Check Barg-in meetings Log
                                     </p>
                                 <div id="collapsefive" class="collapse" data-parent="#accordion">
                                   <div class="card-body">
@@ -684,7 +684,7 @@
                           <input type="hidden" readonly value="Whatsapp Activity done ?" class="form-control" name="whatsapp_activity[]"> 
                           <div class="card">
                             <p class="tasklogp" data-toggle="collapse" data-target="#collapsesix" aria-expanded="true" aria-controls="collapsesix">
-                                      Check Log
+                                      Check Whatsapp Activity Log
                                     </p>
                                 <div id="collapsesix" class="collapse" data-parent="#accordion">
                                   <div class="card-body">
@@ -703,7 +703,7 @@
                           <input type="hidden" readonly value="Social networking done ?" class="form-control" name="social_networking[]"> 
                           <div class="card">
                             <p class="tasklogp" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
-                                      Check Log
+                                      Check Social networking Log
                                     </p>
                                 <div id="collapseSeven" class="collapse" data-parent="#accordion">
                                   <div class="card-body">
@@ -722,7 +722,7 @@
                           <input type="hidden" readonly value="MOMs Done ?" class="form-control" name="mom_done[]"> 
                           <div class="card">
                             <p class="tasklogp" data-toggle="collapse" data-target="#collapseEight" aria-expanded="true" aria-controls="collapseEight">
-                                      Check Log
+                                      Check MOMs Log
                                     </p>
                                 <div id="collapseEight" class="collapse" data-parent="#accordion">
                                   <div class="card-body">
@@ -741,7 +741,7 @@
                           <input type="hidden" readonly value="Proposal Done ?" class="form-control" name="proposal_done[]"> 
                           <div class="card">
                             <p class="tasklogp" data-toggle="collapse" data-target="#collapseNine" aria-expanded="true" aria-controls="collapseNine">
-                                      Check Log
+                                      Check Proposal Log
                                     </p>
                                 <div id="collapseNine" class="collapse" data-parent="#accordion">
                                   <div class="card-body">
@@ -760,7 +760,7 @@
                           <input type="hidden" readonly value="Proposal written?" class="form-control" name="how_many_research[]"> 
                           <div class="card">
                             <p class="tasklogp" data-toggle="collapse" data-target="#collapseTen" aria-expanded="true" aria-controls="collapseTen">
-                                      Check Log
+                                      Check Research Log
                                     </p>
                                 <div id="collapseTen" class="collapse" data-parent="#accordion">
                                   <div class="card-body">

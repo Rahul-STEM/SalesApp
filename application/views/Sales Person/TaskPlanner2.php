@@ -686,7 +686,7 @@ if($type_id == 3){
 
                       $reviewtask  = $this->Menu_model->GetTommrowReviewTask($uid);
                       $reviewtaskcnt = sizeof($reviewtask);
-                      $planbutnotinitedcnt = 0;
+                      // $planbutnotinitedcnt = 0;
                       // $reviewtaskcnt = 0;
                       ?>
                     <?php if($planbutnotinitedcnt > 0 && $adate !== date("Y-m-d")){ ?>

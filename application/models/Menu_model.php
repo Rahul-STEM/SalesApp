@@ -3517,7 +3517,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         return $query->result();
     }
       public function getTotalUserTaskDetailsOnPlanner($uid,$tdate){
-        $query=$this->db->query("SELECT tblcallevents.*,status.name,action.name aname,status.color,status.clr,init_call.cstatus cstatus,(SELECT name from status WHERE id=cstatus) csname, (select init_call.cmpid_id from init_call WHERE id=tblcallevents.cid_id) as cmpid_id,(select company_master.compname from company_master WHERE id=cmpid_id) as compname, (select company_master.id from company_master WHERE id=cmpid_id) as cid FROM tblcallevents left JOIN action ON action.id=tblcallevents.actiontype_id left JOIN init_call ON init_call.id=tblcallevents.cid_id left JOIN status ON status.id=init_call.cstatus WHERE user_id='$uid' and cast(appointmentdatetime AS DATE)='$tdate' and plan=1 and autotask =0");
+        $query=$this->db->query("SELECT tblcallevents.*,status.name,action.name aname,status.color,status.clr,init_call.cstatus cstatus,(SELECT name from status WHERE id=cstatus) csname, (select init_call.cmpid_id from init_call WHERE id=tblcallevents.cid_id) as cmpid_id,(select company_master.compname from company_master WHERE id=cmpid_id) as compname, (select company_master.id from company_master WHERE id=cmpid_id) as cid FROM tblcallevents left JOIN action ON action.id=tblcallevents.actiontype_id left JOIN init_call ON init_call.id=tblcallevents.cid_id left JOIN status ON status.id=init_call.cstatus WHERE user_id='$uid' and cast(appointmentdatetime AS DATE)='$tdate' and plan=1 and autotask =0 ORDER BY tblcallevents.appointmentdatetime");
         return $query->result();
     }
     public function get_totaltPendingAutoTaskdetails($uid){
@@ -7529,7 +7529,15 @@ WHERE plan = '1'  and nextCFID='0' and actiontype_id='$aid' and status_id='$stid
         return $query->result();
     }
     public function GetAllCompanyByUserID($uid){
-        $query=$this->db->query("SELECT init_call.id inid,company_master.compname compname,company_master.id com_id,partner_master.name pname FROM init_call LEFT JOIN company_master ON company_master.id=init_call.cmpid_id LEFT join partner_master ON partner_master.id=company_master.partnerType_id WHERE init_call.mainbd='$uid' and cstatus!=''");
+
+        $utype = $this->Menu_model->get_userbyid($uid);
+        $utype = $utype[0]->type_id;
+        if($utype == 4){
+            $text = "init_call.apst='$uid'";
+        }else{
+            $text = "init_call.mainbd='$uid'";
+        }
+        $query=$this->db->query("SELECT init_call.id inid,company_master.compname compname,company_master.id com_id,partner_master.name pname FROM init_call LEFT JOIN company_master ON company_master.id=init_call.cmpid_id LEFT join partner_master ON partner_master.id=company_master.partnerType_id WHERE $text and cstatus!=''");
         return $query->result();
     }
     public function get_user_cmp_cid($company_val,$uid){
@@ -12327,7 +12335,12 @@ public function createBargMeetingWithClusterId($uid,$bmdate,$select_cluster){
 }
 
 
-// Review Changes Start
+
+
+
+
+
+// Review Changes Start - Deepak
 
 public function getReviewByRID($rid){
     $query=$this->db->query("SELECT * FROM allreview WHERE id='$rid'");
@@ -12546,19 +12559,7 @@ public function getCmpStatusChnageTaskDoneBy($uadmid,$inid,$fdate){
 
 public function getMainReviewBy_ALL($review,$bduid){
 
-        // if($review == 'Self Half Yearly' || $review == 'Half Yearly'){
-        //     $review ="mr.rtype = 'Self Half Yearly' OR mr.rtype = 'Half Yearly'";
-        // }elseif($review == 'Self Weekly' || $review == 'Weekly'){
-        //     $review ="mr.rtype = 'Self Weekly' OR mr.rtype = 'Weekly'";
-        // }elseif($review == 'Self Fortnightly' || $review == 'Fortnightly'){
-        //     $review ="mr.rtype = 'Self Fortnightly' OR mr.rtype = 'Fortnightly'";
-        // }elseif($review == 'Self Monthly' || $review == 'Monthly'){
-        //     $review ="mr.rtype = 'Self Monthly' OR mr.rtype = 'Monthly'";
-        // }elseif($review == 'Self Quarterly' || $review == 'Querterly'){
-        //     $review ="mr.rtype = 'Self Quarterly' OR mr.rtype = 'Querterly'";
-        // }
-
-        $query=$this->db->query("SELECT mr.*, init_call.cstatus, company_master.compname, tblcallevents.actontaken, tblcallevents.purpose_achieved, lstatus.name AS lstatusname, cstatus.name AS cstatusname, exstatus.name AS exp_status, action.name, tblcallevents.appointmentdatetime, user_details.name AS username FROM `main_review` AS mr LEFT JOIN init_call ON mr.inid = init_call.id LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN tblcallevents ON tblcallevents.id = mr.ntid LEFT JOIN status AS lstatus ON lstatus.id = init_call.lstatus LEFT JOIN status AS cstatus ON cstatus.id = init_call.cstatus LEFT JOIN status AS exstatus ON exstatus.id = mr.exsid LEFT JOIN action ON action.id = tblcallevents.actiontype_id LEFT JOIN user_details ON user_details.user_id = tblcallevents.assignedto_id WHERE mr.rid ='$review' AND mr.for_uid = '$bduid' and mr.roster_done = ''");
+        $query=$this->db->query("SELECT mr.*, init_call.cstatus, company_master.compname, tblcallevents.actontaken, tblcallevents.purpose_achieved, lstatus.name AS lstatusname, cstatus.name AS cstatusname, exstatus.name AS exp_status, action.name, tblcallevents.appointmentdatetime, user_details.name AS username FROM `main_review` AS mr LEFT JOIN init_call ON mr.inid = init_call.id LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN tblcallevents ON tblcallevents.id = mr.ntid LEFT JOIN status AS lstatus ON lstatus.id = init_call.lstatus LEFT JOIN status AS cstatus ON cstatus.id = init_call.cstatus LEFT JOIN status AS exstatus ON exstatus.id = mr.exsid LEFT JOIN action ON action.id = tblcallevents.actiontype_id LEFT JOIN user_details ON user_details.user_id = tblcallevents.assignedto_id WHERE mr.rid ='$review' AND mr.for_uid = '$bduid'");
        
     return $query->result();
 }
@@ -12583,5 +12584,33 @@ public function getMainReviewDate($review,$bduid){
 public function UpdateRosterDone($mrid){
     $query=$this->db->query("UPDATE main_review SET roster_done='1' WHERE id = '$mrid'");
 }
+
+public function GetTommrowReviewTask($bduid){
+    $query=$this->db->query("SELECT main_review.*, company_master.compname,tce.actiontype_id FROM `main_review` LEFT JOIN tblcallevents as tce ON tce.id = main_review.ntid LEFT JOIN init_call ON init_call.id = main_review.inid LEFT JOIN company_master ON company_master.id = init_call.cmpid_id WHERE main_review.for_uid = '$bduid' AND main_review.taskplan = 0 AND tce.nextCFID = 0 AND tce.actontaken = 'no' AND tce.purpose_achieved = 'no' AND CAST(tce.appointmentdatetime AS Date) = CURDATE() + INTERVAL 1 DAY");
+    return $query->result();
+}
+
+
+public function GetTommrowReviewTaskBYActionID($actionid,$bduid){
+    $query=$this->db->query("SELECT main_review.*, company_master.compname,tce.actiontype_id FROM `main_review` LEFT JOIN tblcallevents as tce ON tce.id = main_review.ntid LEFT JOIN init_call ON init_call.id = main_review.inid LEFT JOIN company_master ON company_master.id = init_call.cmpid_id WHERE main_review.for_uid = '$bduid' AND main_review.taskplan = 0 AND tce.nextCFID = 0 AND tce.actontaken = 'no' AND tce.purpose_achieved = 'no' AND tce.actiontype_id = '$actionid' AND CAST(tce.appointmentdatetime AS Date) = CURDATE() + INTERVAL 1 DAY");
+    return $query->result();
+}
+
+// Close Review Changes - Deepak
+// Planner Changes 
+public function getUserTotalTaskTimeForTodays($uid,$tdate){
+    $query=$this->db->query("SELECT (COUNT(CASE WHEN actiontype_id = 1 THEN 1 END) * 5 + COUNT(CASE WHEN actiontype_id = 2 THEN 1 END) * 10 + COUNT(CASE WHEN actiontype_id = 3 THEN 1 END) * 30 + COUNT(CASE WHEN actiontype_id = 4 THEN 1 END) * 30 + COUNT(CASE WHEN actiontype_id = 5 THEN 1 END) * 5 + COUNT(CASE WHEN actiontype_id = 6 THEN 1 END) * 10 + COUNT(CASE WHEN actiontype_id = 7 THEN 1 END) * 15 + COUNT(CASE WHEN actiontype_id = 8 THEN 1 END) * 5 + COUNT(CASE WHEN actiontype_id = 9 THEN 1 END) * 5 + COUNT(CASE WHEN actiontype_id = 10 THEN 1 END) * 5 + COUNT(CASE WHEN actiontype_id = 11 THEN 1 END) * 2 + COUNT(CASE WHEN actiontype_id = 12 THEN 1 END) * 30 + COUNT(CASE WHEN actiontype_id = 13 THEN 1 END) * 2 + COUNT(CASE WHEN actiontype_id = 14 THEN 1 END) * 2 + COUNT(CASE WHEN actiontype_id = 17 THEN 1 END) * 30) AS ttime FROM tblcallevents WHERE plan = '1' AND assignedto_id = '$uid' AND CAST(appointmentdatetime AS DATE) = '$tdate' and autotask=0");
+    return $query->result();
+}
+
+public function GetPendingReviewForPlan($uid){
+    $query=$this->db->query("SELECT 'Half Yearly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `bdid` = '$uid' AND reviewtype IN ('Self Half Yearly', 'Half Yearly') AND `plant` BETWEEN CURDATE() - INTERVAL 6 MONTH AND CURDATE() UNION ALL SELECT 'Weekly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `bdid` = '$uid' AND reviewtype IN ('Self Weekly', 'Weekly') AND `plant` BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE() UNION ALL SELECT 'Fortnightly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `bdid` = '$uid' AND reviewtype IN ('Self Fortnightly', 'Fortnightly') AND `plant` BETWEEN CURDATE() - INTERVAL 15 DAY AND CURDATE() UNION ALL SELECT 'Monthly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `bdid` = '$uid' AND reviewtype IN ('Self Monthly', 'Monthly') AND `plant` BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() UNION ALL SELECT 'Quarterly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `bdid` = '$uid' AND reviewtype IN ('Self Quarterly', 'Querterly') AND `plant` BETWEEN CURDATE() - INTERVAL 3 MONTH AND CURDATE()");
+    return $query->result();
+}
+
+
+
+
+
 
 }

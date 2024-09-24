@@ -268,6 +268,76 @@ if($type_id == 3){
           #plandate{width:300px;}.setpaldate{display:flex;}.planerdflex{align-items: center; justify-content: center; display: flex;}
         </style>
         <div class="container-fluid">
+        <?php
+
+        $totalttaskdata = $this->Menu_model->getUserTotalTaskTimeForTodays($uid,$adate);
+        $totalttasktime = $totalttaskdata[0]->ttime;
+       
+        $lunchtime      = 30;      // Lunch Time 45 Miniute
+        $autoTasktime   = 90;  // 90 Minutes For Auto Task
+        $topp           = 60; // 60 Minutes For Tommorow Planner Planning
+        $texpense_time  = $lunchtime + $autoTasktime + $topp; // totol expense time
+        $nine_hours_planning =540; // 9 hours Planning = 9* 60 = 540 Minutes 
+        $userplanetime = $nine_hours_planning - $texpense_time; // total plan time  - 345 minutes
+        $plannerremTime = $userplanetime - $taskplanmincount; 
+       
+        if($totalttasktime >= $plannerremTime){
+          $hours_tasktime = floor($totalttasktime / 60);
+          $remainingMinutes_tasktime = $totalttasktime % 60;
+          $timetexts =  "$hours_tasktime hours and $remainingMinutes_tasktime minutes";
+          $timecolor = "green";
+        }else{
+          $remaintaktimeis = $plannerremTime - $totalttasktime;
+          $hours_tasktime = floor($totalttasktime / 60);;
+          $remainingMinutes_tasktime = $totalttasktime % 60;
+          $timetexts = "$hours_tasktime hours and $remainingMinutes_tasktime minutes";
+          $timecolor = "red";
+        }
+        ?>
+
+        <div card="card card3444 text-center">
+          <center>
+            <div class="text-effect" data-content="<?= $timetexts ?>" style="background:green;color:white;">
+              <span class="text-uppercase">Planned Time : <?= $timetexts ?></span>
+            </div>
+            <?php if($timecolor == "red"){ ?>
+            <div class="text-effect1 mb-2 mt-1">
+              <span class="text-capitalize font-weight-bold">
+                <?php 
+               $hours_tasktime = floor($remaintaktimeis / 60);;
+               $remainingMinutes_tasktime = $remaintaktimeis % 60;
+               $remaintaktime_is = "$hours_tasktime hours and $remainingMinutes_tasktime minutes";
+                echo "<mark> Remaining Time to Enable Task Approval Feature :<span class='remening_time_cnt'> ".$remaintaktime_is."<span></mark>";
+              ?></span>
+            </div>
+            <?php } ?>
+          </center>
+        </div>
+        <style>
+        .text-effect{
+            color: <?= $timecolor; ?>;
+            font-family: 'Dosis', sans-serif;
+            font-size:24px;
+            font-weight: 700;
+            text-align: center;
+            position: relative;
+        }
+        .remening_time_cnt{color:red;}
+        mark{background:yellow;padding:4px;}
+        @media only screen and (max-width: 990px){
+            .text-effect{ font-size: 24px; }
+        }
+        @media only screen and (max-width: 767px){
+            .text-effect{ font-size: 22px; }
+        }
+        @media only screen and (max-width: 576px){
+            .text-effect{ font-size: 20px; }
+        }
+        </style>
+        <marquee class="p-2 mt-1" width="100%"  onMouseOver="this.stop()" onMouseOut="this.start()" behavior="left" bgcolor="pink">
+        <h6> Lunch Time : <?= $lunchtime ?>  Miniute || Auto Task Time : <?= $autoTasktime?> Minutes || Tommorow Planner Planning : <?=$topp ?>  Minutes || 9 hours Planning = 9* 60 = 540 Minutes || Total Time For (Lunch + Auto Task + Tommorow Planner) : <?=$texpense_time?>  Minutes || Task Planner Should be <?php echo 540 - $texpense_time;?> Minutes</h6>
+      </marquee>
+
           <div class="card p-2 bg-primary">
             <div class="row">
               <div class="col-md-4 planerdflex">
@@ -515,7 +585,7 @@ if($type_id == 3){
                     </div>
                   </div>
                 </div>
-               <center> <hr class="hrclass" style="width: 600px;"/></center>
+               <center> <hr class="hrclass"/></center>
                 <div class="row">
                 <div class="justify-content-center col-md-8" id="planningStartbtn" >
                  <div class="card" style="min-height:100px;align-items: center; justify-content: center; display: flex;" >
@@ -613,7 +683,11 @@ if($type_id == 3){
  
                       $getpendSize = sizeof($getPendingTask);
                       $getoldPendingTaskcnt = sizeof($getoldPendingTask);
-                      
+
+                      $reviewtask  = $this->Menu_model->GetTommrowReviewTask($uid);
+                      $reviewtaskcnt = sizeof($reviewtask);
+                      // $planbutnotinitedcnt = 0;
+                      // $reviewtaskcnt = 0;
                       ?>
                     <?php if($planbutnotinitedcnt > 0 && $adate !== date("Y-m-d")){ ?>
                       <div class="form-check">
@@ -622,7 +696,15 @@ if($type_id == 3){
                           <span style="color:red;" data-toggle="tooltip" data-placement="left" title="This filter is active due to If user have any Today's pending task (User Planned But Not Initiated) " >Today's Pending Task - Plan But Not Initiated (<?= $getpendSize; ?>)</span>
                         </label>
                         </div>
-                        <?php } else{?>
+                        <?php }elseif($reviewtaskcnt > 0 && $adate !== date("Y-m-d")){
+                            $revew_color = "class='text-danger'";
+                            ?>
+                            <div class="form-check" id="review_target_date_filter">
+                              <label class="form-check-label custom-radio-label">
+                              <input type="radio" class="form-check-input" name="optradio" value="Review Target Date" > <span <?= $revew_color ?>> Review Target Date <?= '('.$reviewtaskcnt.')' ?></span>
+                              </label>
+                            </div>
+                        <?php }else{?>
                           <?php if($oldPendTaskcnt > 0){ ?>
                           <div class="form-check">
                           <label class="form-check-label custom-radio-label">
@@ -834,11 +916,6 @@ if($type_id == 3){
                           <input type="radio" class="form-check-input" name="optradio" value="PST Assign" >Other Assign
                           </label>
                         </div> -->
-                        <div class="form-check" id="review_target_date_filter">
-                          <label class="form-check-label custom-radio-label">
-                          <input type="radio" class="form-check-input" name="optradio" value="Review Target Date" > Review Target Date
-                          </label>
-                        </div>
                         <div class="form-check" id="review_planning_filter">
                           <label class="form-check-label custom-radio-label">
                           <input type="radio" class="form-check-input" name="optradio" value="Review Planning">  Review Planning
@@ -950,6 +1027,8 @@ if($type_id == 3){
                           $allStatus = $this->Menu_model->get_status();
                           ?>
                         <input type="hidden" name="selectbyuser" id="selectbyuser" value="">
+
+                        
                         <div class="form-group" id="selectstatus" >
                           <lable class="text-left">Select Company Status : </lable>
                           <select class="form-control" id="selectstatusbyuser">
@@ -982,6 +1061,8 @@ if($type_id == 3){
                           <option value="yes">Yes</option>
                           <option value="no">No</option>
                         </select>
+
+
                       </div>
                     </div>
                     <div id="actionnotplaned" class="card p-4" >
@@ -1465,8 +1546,37 @@ if($type_id == 3){
                           <option value="no">No</option>
                         </select>
                     </div>
-                    <div id="reviewTargetDate" class="card p-4" >
-                    <div class="form-group" id="reviewTargetreviewtype" >
+                    <div id="reviewTargetDate" class="card p-4">
+                      <?php 
+                          $reviewtask  = $this->Menu_model->GetTommrowReviewTask($uid);
+                          $reviewtaskcnt = sizeof($reviewtask);
+                      ?>
+                      
+                      <div class="form-group" id="reviewTargetreviewtype">
+                          <label>Review Task/Action </label>
+                          <select id="reviewTargetreviewtypeData" class="form-control" name="task_action">
+                            <option value="">Select Task</option>
+                                <?php 
+                                $groupedByActionTypes_rev = [];
+                                foreach ($reviewtask as $objects) {
+                                    $actionTypeId = $objects->actiontype_id;
+                                    if (!isset($groupedByActionTypes_rev[$actionTypeId])) {
+                                        $groupedByActionTypes_rev[$actionTypeId] = [];
+                                    }
+                                    $groupedByActionTypes_rev[$actionTypeId][] = $objects;
+                                }
+                                ?>
+                            <?php 
+                              foreach($groupedByActionTypes_rev as $key => $rev_totaskData){
+                                $getaction_name = $this->Menu_model->get_actionbyid($key)[0]->name;
+                                $getaction_namecnts = sizeof($rev_totaskData);
+                                echo "<option value='$key'>$getaction_name($getaction_namecnts)</options>";
+                              }
+                            ?>
+                          </select>
+                        </div>
+
+                    <!-- <div class="form-group" id="reviewTargetreviewtype" >
                         <select class="form-control" name="reviewtype" required="" id="reviewTargetreviewtypeData">
                         <option selected disabled>Select Review Time</option>
                             <option value="Self Weekly">Weekly</option>
@@ -1483,7 +1593,8 @@ if($type_id == 3){
                             <option value="Cluster Review">Cluster Review</option>
                             <option value="PST Review">PST Review</option>
                         </select>
-                    </div>
+                    </div> -->
+
                     </div>
                           <div id="auto_assign" class="card p-4" >
                             <div class="form-group">
@@ -1725,7 +1836,16 @@ if($type_id == 3){
                           </div>
                           <input type="hidden" class="form-control" value="" id="selectby" name="selectby">
                           <input type="hidden" class="form-control" value="" id="check_data" name="check_data">
-                          <center><button class="btn btn-primary m-3" type="submit" id="planbtn1">Submit</button></center>
+                          <?php 
+                          if($timecolor == "red"){
+                            $button_text = "Submit";
+                          }elseif($timecolor == "green"){
+                            $button_text = "Request For Approval";
+                          }else{
+                            $button_text = "Submit";
+                          }
+                          ?>
+                          <center><button class="btn btn-primary m-3" type="submit" id="planbtn1"><?= $button_text; ?></button></center>
                         </div>
                       </form>
                     </div>
@@ -1919,7 +2039,7 @@ if($type_id == 3){
                     </div>
                     <script>
                       <?php 
-                      $totaltaktimep = $this->Menu_model->get_totaltaktimep($uid,$adate); 
+                      $totaltaktimep = $this->Menu_model->getUserTotalTaskTimeForTodays($uid,$adate); 
                       $ttime = $totaltaktimep[0]->ttime; 
                       $ttime = $ttime/60;
                       $getPlannerSession = $this->Menu_model->GetPlannerSession($uid);
@@ -1944,6 +2064,7 @@ if($type_id == 3){
                        }
                        ?>
                     </script>
+                   
                     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
                     <script type="text/javascript">
                       google.charts.load('current', {'packages':['gauge']});
@@ -2144,7 +2265,6 @@ if($type_id == 3){
         var formattedTime = hours + ':' + minutes + ':' + seconds;
         var starttime = $('#timeslot-alloted_s').val();
         var endtime = $('#timeslot-alloted_e').val();
-        // alert(starttime);
         var startMs = convertToMilliseconds($('#timeslot-alloted_s').val());
         var endMs = convertToMilliseconds($('#timeslot-alloted_e').val());
         var enteredMs = convertToMilliseconds(enteredTime);
@@ -2309,7 +2429,7 @@ if($type_id == 3){
                             $('#becauseofTPM_TaskDatacard').hide();
                             $('#becauseofTPM_TaskDatacard_new').hide();
                             $('#selectcompanyname').show();
-                            $("#selectstatus").show();
+                            $("#selectstatus").hide();
                         $("#selectcompanybyuser").html('');
                           $.ajax({
                           url:'<?=base_url();?>Menu/getownfunnel',
@@ -2436,7 +2556,7 @@ if($type_id == 3){
                         });
                     }else{
                       $('#selectcompanyname').show();
-                      $("#selectstatus").show();
+                      $("#selectstatus").hide();
                     }
                     $("#maintaskcard").hide();
                     $("#actionPlanned").show();
@@ -2469,14 +2589,13 @@ if($type_id == 3){
                               },
                               cache: false,
                               success: function a(result){
-                              // alert(result);
                               $("#maintaskcard").show();    
                               $("#selectcompanybyuser").html(result);
                               $("#selectcompanybyuser").show();
                               var optionCount = $('#selectcompanybyuser').find('option').length;
                               optionCount = optionCount-1;
                               $("#totalcompany").text('Total Company :'+ optionCount);
-                              $("#tasktaction").show();
+                              // $("#tasktaction").show();
                               $("#tptime").val('');
                               $("#tptime").show();
                               $('#ntactionnew').show();
@@ -2922,7 +3041,6 @@ if($type_id == 3){
                     }
                     });
                 }else{
-                    // alert("Please Chhose Right Action");
                 }
                   });
                 }else{
@@ -4423,12 +4541,14 @@ if($type_id == 3){
                         $('#taskaction_card_area').hide();
                         $('#taskActionbyuserCard').hide();
                         $('#taskPurposebyuserCard').hide();
+
                         $('#reviewTargetreviewtypeData').on('change', function() {
                         var getreviewtype = $(this).val();
+
                         $("#daysByTask").show();
                         $("#selectcompanybyuser").html('');
                         $.ajax({
-                        url:'<?=base_url();?>Menu/getcmp_getreviewtype',
+                        url:'<?=base_url();?>Menu/getcmp_getreviewtype_new',
                         type: "POST",
                         data: {
                         getreviewtype: getreviewtype,
@@ -4436,22 +4556,32 @@ if($type_id == 3){
                         },
                         cache: false,
                         success: function a(result){
+
                         $("#maintaskcard").show();    
                         $("#selectcompanybyuser").html(result);
                         $("#selectcompanybyuser").show();
                         var optionCount = $('#selectcompanybyuser').find('option').length;
                         optionCount = optionCount-1;
                         $("#totalcompany").text('Total Company :'+ optionCount);
-                        $("#tasktaction").show();
-                        $("#tptime").val('');
                         $("#tptime").show();
                         $('#ntactionnew').show();
                         $('#ntppose').show();
                         $('#meeting-time').show();
                         $('#planbtn1').show();
-                        $('#reviewTargetReviewSelf').show();
-                        // $('#reviewTargetDate_typeoftaskCard').show();
+                        $('#ntactionnew').hide();
+                        $('#ntppose').hide();
                         $("#taskplanningimg").hide();
+                        $('#planbtn1').click(function() {
+                                var newValue = '0';
+                                var newText = 'Pending Task Action';
+                                $('#ntactionnew').append(new Option(newText, newValue));
+                                $('#ntppose').append(new Option(newText, newValue));
+                                $('#ntactionnew').val(newValue);
+                                $('#ntppose').val(newValue);   
+                            });
+                        // $('#reviewTargetReviewSelf').show();
+                        // $('#reviewTargetDate_typeoftaskCard').show();
+                        // $("#taskplanningimg").hide();
                         }
                         });
                     });
@@ -5384,6 +5514,35 @@ $(document).ready(function(){
                 alert("You can't go back to the previous page!");
             }); 
             window.history.pushState(null, null, window.location.href);
+
+
+  
+    // Start Add Condtions to diabledd Available get time 
+    var currentTime = new Date();
+    var currentHour = currentTime.getHours();
+    var currentMinutes = currentTime.getMinutes();
+    // Loop through each option in the dropdown
+    $('#getAvailableTime option').each(function() {
+        var timeRange = $(this).text().trim();
+        
+        // Extract the start time from the option text (e.g., "10:00 AM")
+        var timeParts = timeRange.split('To')[0].trim().split(':');
+        var hour = parseInt(timeParts[0]);
+        var period = timeRange.split(' ')[1].trim();
+        
+        // Convert to 24-hour format if needed
+        if (period === 'PM' && hour !== 12) {
+            hour += 12;
+        } else if (period === 'AM' && hour === 12) {
+            hour = 0;
+        }
+        // Disable the option if the time has passed
+        if (hour < currentHour || (hour === currentHour && parseInt(timeParts[1]) <= currentMinutes)) {
+            $(this).prop('disabled', true);
+        }
+    });
+    // End Condtions to diabledd Available get time 
+
 });
 </script>
       <!-- /.row (main row) -->
@@ -5452,7 +5611,7 @@ $(document).ready(function(){
     <script src="<?=base_url();?>assets/js/dashboard.js"></script>
     <script>
 $("#example1").DataTable({
-"responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
+"responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 3,
 "buttons": ["excel", "pdf"]
 }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 $("#example10").DataTable({

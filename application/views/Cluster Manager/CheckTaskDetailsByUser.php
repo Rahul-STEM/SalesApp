@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -38,7 +37,6 @@
     justify-content: right;
     display: flex;
 }
-
 .formselect {
     margin-top: 10px;
 }
@@ -62,7 +60,6 @@ span.tsby {
         <!-- Content Header (Page header) -->
         <div class="content-header">
           <div class="container-fluid">
-
             <?php if ($this->session->flashdata('success_message')): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
               <strong> <?php echo $this->session->flashdata('success_message'); ?></strong>
@@ -71,7 +68,6 @@ span.tsby {
               </button>
             </div>
             <?php endif; ?>
-
             <?php if ($this->session->flashdata('error_message')): ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
               <strong> <?php echo $this->session->flashdata('error_message'); ?></strong>
@@ -80,7 +76,6 @@ span.tsby {
               </button>
             </div>
             <?php endif; ?>
-
             <div class="row mb-2">
               <div class="col-sm-6">
                 <h4 class="m-0"> <i>Plan Task Details</i> </h4>
@@ -132,9 +127,7 @@ span.tsby {
                                         $rejetbutnta ='';
                                         $rejetbutnau ='';
                                         $rejetbutnasd ='';
-
                                         foreach($totalttaskdata as $taskdata){ 
-
                                         if($taskdata->approved_status == 1 ) {
                                           $apprvtask +=1;
                                         }
@@ -177,7 +170,6 @@ span.tsby {
                                         $nine_hours_planning =540; // 9 hours Planning = 9* 60 = 540 Minutes 
                                         $userplanetime = $nine_hours_planning - $texpense_time; // total plan time  - 345 minutes
                                         $plannerremTime = $userplanetime - $taskplanmincount;
-
                                         $srlData = $this->Menu_model->GetTodaysApprovedSpecialRequestforLeave($tuser_uid,$taskdate);
                                         // dd($srlData);
                                        ?>
@@ -212,8 +204,6 @@ span.tsby {
                                     <?php }else{
                                       $background = 'bg-danger';
                                     } ?>
-
-
                                   <?php if($taskplanmincount <= $userplanetime){  ?>         
                                   <marquee class="p-2 mt-1 <?=$background?>"  onMouseOver="this.stop()" onMouseOut="this.start()" width="100%" behavior="left" bgcolor="pink">
                                     <h6> 
@@ -249,7 +239,6 @@ span.tsby {
                                        </p>
                                     </div>
                                  
-
                                     
                                       <?php 
                                       $planSessionData  = $this->Menu_model->TodaysPlannerSession($tuser_uid);
@@ -284,12 +273,9 @@ span.tsby {
                                       </div>
                                       <!-- <div class="col-md-4">
                                         <div class="card p-2 bg-info m-1 flexitemscenter">
-
                                         </div>
                                       </div> -->
-
                                       </div>
-
                                       <style>
                                         .card.p-2.bg-info.m-1.flexitemscenter {
                                           height: 90px;
@@ -298,9 +284,6 @@ span.tsby {
                                           display: flex;
                                       }
                                       </style>
-
-
-
                                     <div class="card p-2 <?= $background?>">
                                         <div class="row">
                                       
@@ -318,7 +301,6 @@ span.tsby {
                                             ?>
                                             <p>User Plan Time : <?php  echo "$upchours hours and $upcremainingMinutes minutes."; ?></p>
                                           </div>
-
                                           <div class="col-md-4">
                                             <?php 
                                              $uprhours = floor( $plannerremTime / 60);
@@ -332,8 +314,6 @@ span.tsby {
                                           </div>
                                         </div>
                                     </div>
-
-
                                 <div class="table-responsive">
                                   <div class="table-responsive">
                                     <div class="pdf-viwer">
@@ -366,11 +346,9 @@ span.tsby {
                                                   if($taskdata->approved_status == 1 ) {
                                                         continue;
                                                     }
-
                                                     if($taskdata->approved_status == 0 && $taskdata->self_assign !=='') {
                                                       continue;
                                                   }
-
                                                     $taid = $taskdata->actiontype_id;
                                                     $tblId = $taskdata->id;
                                                     $taid = $this->Menu_model->get_actionbyid($taid);
@@ -386,7 +364,6 @@ span.tsby {
                                                     $selectby = $taskdata->selectby;
                                                     $rimbyname = $this->Menu_model->get_userbyid($rimby);
                                                     $time = date('h:i a', strtotime($time));
-
                                                     $taskuser = $this->Menu_model->get_userbyid($assignedto_id);
                                                     $taskuname = $taskuser[0]->name;
                 
@@ -425,10 +402,8 @@ span.tsby {
                                                      <?php /*
                                                     <td>
                                                         <?php 
-
                                                         if (is_array($filter_by)) : ?>
                                                             <?php foreach ($filter_by as $key => $value) :
-
                                                                if($key == 'Plan_BY'){
                                                                 echo $value."<br/>";
                                                               }elseif($key == 'Filter_By'){
@@ -611,7 +586,6 @@ span.tsby {
               <script src="<?=base_url();?>assets/js/adminlte.js"></script>
               <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
               <script src="<?=base_url();?>assets/js/dashboard.js"></script>
-
               <script>
                 $(document).ready(function() {
                     $("#example1").DataTable({
@@ -625,14 +599,12 @@ span.tsby {
                             // Add more columns if needed
                         ]
                     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
                     // $('#self_assign').on('click', function() {
                     //     $(this).hide();
                     //     window.location.href = '<?= base_url(); ?>Menu/selfAssign/<?= $tblId ?>/1/<?= $taskdate ?>';
                     // });
                 });
                 </script>
-
               <script type='text/javascript'>
               function RejectButton(mid,id,val){
               $('#exampleModalCenter'+mid).modal('show');
@@ -643,7 +615,6 @@ span.tsby {
               $('#exampleModalCenterdata').modal('show');
               $('#rejectid').val(id);
               }
-
               $('#plandate').val($dt);
               </script>
             </body>

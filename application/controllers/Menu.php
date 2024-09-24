@@ -10065,12 +10065,10 @@ public function Dashboard(){
         $exsid          = $this->input->post('exsid');
         $exdate         = $this->input->post('exdate');
 
-
         $startDate      = date("Y-m-d H:i:s");
         $cdate          = date("Y-m-d H:i:s");
         $csid           = $ntstatus;
      
-        
         function ensure_five_elements($array) {
             return array_pad($array, 5, '');
         }
@@ -10158,14 +10156,11 @@ public function Dashboard(){
 
     }else{
 
-        // $ntid = $this->Menu_model->CreateNewTask($ntdate,$ntaction,$bduid,$initid,$ntppose,$pstuid,$rtype);
-
         $exdate = '';
         $exsid = '';
         $csid = '';
         $ntid = '';
 
-       
         $roasterrcnt = $this->input->post('roster_company_cnt');
 
         $result = [];
@@ -10192,92 +10187,6 @@ public function Dashboard(){
     
     redirect('Menu/AllReviewPlaing/');
 
-    // die("Stem");
-
-    //     $rid=$_POST['rid'];
-    //     $pstuid=$_POST['pstuid'];
-    //     $ntaction=$_POST['ntaction'];
-    //     $ntdate=$_POST['ntdate'];
-    //     $bdid=$_POST['bduid'];
-    //     $inid=$_POST['cid'];
-    //     $remark=$_POST['remark'];
-    //     $exsid=$_POST['exsid'];
-    //     $exdate=$_POST['exdate'];
-    //     $rtype = $_POST['rtype'];
-    //     $potential = $_POST['potential'];
-    //     $ans1 = $_POST['ans1'];
-    //     $ans2 = $_POST['ans2'];
-    //     $ans3 = $_POST['ans3'];
-    //     $ans4 = $_POST['ans4'];
-    //     $csrbudget = $_POST['csrbudget'];
-    //     $bdscholl = $_POST['bdscholl'];
-    //     $requeststatus = $_POST['requeststatus'];
-    //     $taskupdate = "NO";
-    //     $deletef = $_POST['deletef'];
-    //     $patnertype = $_POST['patnertype'];
-    //     $topspender = $_POST['topspender'];
-    //     $keyclient = $_POST['keyclient'];
-    //     $pkeyclient = $_POST['pkeyclient'];
-    //     $priorityclient = $_POST['priorityclient'];
-    //     $upsellclient = $_POST['upsellclient'];
-    //     $focusyclient = $_POST['focusyclient'];
-    //     $travelcluster = $_POST['travelcluster'];
-    //     $cluster_id = $_POST['cluster_id'];
-    //     $review_time = $_POST['review_time'];
-    //     $this->load->model('Menu_model');
-    //     $this->load->library('session');
-
-    //     dd($_POST);
-       
-    //     if($rtype == 'Roaster'){
-    //         $this->Menu_model->all_bdrremark($deletef,$patnertype,$topspender,$keyclient,$pkeyclient,$priorityclient,$upsellclient,$focusyclient,$rid,$inid,$bdid,$remark,$ntdate,$ntaction,$pstuid,$exsid,$exdate,$rtype,$taskupdate,$potential,$ans1,$ans2,$ans3,$ans4,$requeststatus,$csrbudget,$bdscholl,$travelcluster,$cluster_id);
-    //         $this->session->set_flashdata('success_message','Review Done SuccessFully !');
-    //         redirect('Menu/AllReviewPlaing/');
-    //     }
-    //     if($review_time == 'First Time'){
-    //         $this->Menu_model->all_bdrremark($deletef,$patnertype,$topspender,$keyclient,$pkeyclient,$priorityclient,$upsellclient,$focusyclient,$rid,$inid,$bdid,$remark,$ntdate,$ntaction,$pstuid,$exsid,$exdate,$rtype,$taskupdate,$potential,$ans1,$ans2,$ans3,$ans4,$requeststatus,$csrbudget,$bdscholl,$travelcluster,$cluster_id);
-    //         $this->session->set_flashdata('success_message','Review Done SuccessFully !');
-    //         redirect('Menu/AllReviewPlaing/');
-    //     }
-    //     if($review_time == 'Many Time'){
-    //         $ex_status_id   = $_POST['exsid'];
-    //         $exdate         = $_POST['exdate'];
-    //         $ntaction       = $_POST['ntaction'];
-    //         $ntppose        = $_POST['ntppose'];
-    //         $ntdate         = $_POST['ntdate'];
-    //         $sdate = date("Y-m-d H:i:s");
-    //         $data = array(
-    //             'sdatet'                  => $sdate,
-    //             'user_id'                 => $pstuid,
-    //             'bdid'                    => $bdid,
-    //             'remark'                  => $remark,
-    //             'inid'                    => $inid,
-    //             'how_many_task'           => $this->input->post('how_many_task'),
-    //             'frequency_of_the_task'   => $this->input->post('frequency_of_the_task'),
-    //             'type_of_task'            => $this->input->post('type_of_task'),
-    //             'rp_meeting_done'         => $this->input->post('rp_meeting_done'),
-    //             'mom_done'                => $this->input->post('mom_done'),
-    //             'social_networking_done'  => $this->input->post('social_networking_done'),
-    //             'category_right'          => $this->input->post('category_right'),
-    //             'slct_category'           => $this->input->post('slct_category'),
-    //             'current_status_right'    => $this->input->post('current_status_right'),
-    //             'many_times_barge_meeting'=> $this->input->post('many_times_barge_meeting'),
-    //             'research_prospecting'    => $this->input->post('research_prospecting'),
-    //             'base_or_travel_location' => $this->input->post('base_or_travel_location'),
-    //             'partner_type_right'            => $this->input->post('partner_type_right'),
-    //             'partner_type'            => $this->input->post('slct_partner_type'),
-    //             'suppert'                 => $this->input->post('intervention_or_suppert'),
-    //             'rtype'                   => $this->input->post('rtype'),
-    //             'ex_status_id'            => $this->input->post('exsid'),
-    //             'exdate'                  => $this->input->post('exdate')
-    //         );
-            
-           
-    //         $this->Menu_model->InsterManyTimeReview($rid,$inid,$pstuid,$bdid,$remark,$ntdate,$ntaction,$rtype,$taskupdate,$data);
-    //         $this->session->set_flashdata('success_message','Review Done SuccessFully !');
-    //         redirect('Menu/AllReviewPlaing/');
-    //     }
-       
     }
     public function tsetting(){
         $bdid=$_POST['bdid'];
@@ -16086,7 +15995,7 @@ public function addplantask12(){
     $this->load->model('Menu_model');
     $this->load->model('Management_model');
     $this->load->library('session');
-  
+    
     $user = $this->session->userdata('user');
     $data['user'] = $user;
     $uid = $user['user_id'];
@@ -16197,15 +16106,10 @@ public function addplantask12(){
     $statusIndex = null;
     $actionIndex = null;
  
-     //echo"<pre>data ";print_r($data);
- 
- 
      foreach($data as $key => $value){
          if(isset($value) && !empty($value)){
              $selectedFields[$key] = $value;
-            //echo"<pre>selectedFields inside loop ";print_r($selectedFields);
-            //echo 'here'.$value;
- 
+
             if ($value == 'A-yes' || $value == 'A-no') {
                  $selectedFields['Action'] = $value;
              }
@@ -16215,7 +16119,6 @@ public function addplantask12(){
  
              if(($key != 'partnertype_select') && ($key != 'partnertype_planbutData')){
                  if (is_numeric($value)) {
-                     //echo $value;
                      if ($statusId == null)  {
                          $statusId = $value;
                          $statusArr = $this->Menu_model->get_statusbyid($statusId);
@@ -16227,7 +16130,6 @@ public function addplantask12(){
                          $actionArr = $this->Menu_model->get_actionbyid($actionId);
                          $actionName = $actionArr[0]->name ? $actionId:'NULL';
                          $selectedFields['task'] = $actionName;
-         
                      }
                  }
              }
@@ -16235,7 +16137,6 @@ public function addplantask12(){
                  $partner = $this->Menu_model->get_partnerbyid($value);
                  $partnername = $partner[0]->name;
                  $selectedFields['Partner'] = $partnername;
-                 //echo $partnername;
              }
             
          }
@@ -16352,19 +16253,14 @@ public function addplantask12(){
              $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime',`plan_change`='0', `selectby`='$selectby' WHERE  id = $tid");
         
          } else if($selectby == 'Review Target Date'){
-       if(date("Y-m-d") !== $pdate){
-            if($pendingTodaysTaskcnt > 0){
-                $this->session->set_flashdata('success_message_plan',' First Plan Your Todays Pending Task]');
-                redirect('Menu/TaskPlanner2/'.$pdate);
-            }
-       }elseif(date("Y-m-d") == $pdate){
-        if($pendingOldTaskcnt > 0){
-            $this->session->set_flashdata('success_message_plan',' First Plan Your Yesterday Pending Task]');
-            redirect('Menu/TaskPlanner2/'.$pdate);
-        }
-    }    
-        
-        $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `selectby`='$selectby' WHERE  id = $tid");
+            
+            $sact_type = $this->Menu_model->SelectTaskBYTid($tid);
+            if($sact_type ==4 || $sact_type == 17 || $sact_type == 3){ 
+                $this->Menu_model->updateBarginmeetingAfterPlanChnage($tid,$new_datetime);
+               }
+            $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime',`plan_change`='0', `selectby`='$selectby' WHERE  id = $tid");
+            $query =  $this->db->query("UPDATE `main_review` SET `taskplan`='1' WHERE `ntid` = '$tid'");
+
         }else{
     if(date("Y-m-d") !== $pdate){     
         if($pendingTodaysTaskcnt > 0){
@@ -16391,7 +16287,6 @@ public function addplantask12(){
         }
         $k++;
      }
-     
     $this->session->set_flashdata('success_message_plan',' Task Planned Successfully !!');
     redirect('Menu/TaskPlanner2/'.$pdate);
 }
@@ -18928,7 +18823,21 @@ public function TestPage(){
     }
 }
 
-// Start Review Changes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Start Review Changes - Deepak
 public function GetCompanyPrimaryContact(){
 
     $user = $this->session->userdata('user');
@@ -19203,7 +19112,6 @@ public function GetReviewByReview(){
     $bduid       = $this->input->post('bduid');
     $this->load->model('Menu_model');
     $middata  =   $this->Menu_model->getMainReviewBy_ALL($review,$bduid);
-
     $revlog['totaltask'] = $middata;
     $data = json_encode($revlog);
     echo $data;
@@ -19220,7 +19128,6 @@ public function GetReviewBySCDate(){
 
     $this->load->model('Menu_model');
     $revdate  =   $this->Menu_model->getMainReviewDate($review,$bduid);
-   
     $html = '<option value="">Select Date</option>';
 
         foreach($revdate as $date){
@@ -19231,18 +19138,78 @@ public function GetReviewBySCDate(){
                 $closet = date('Y-m-d', strtotime($date->closet));
             }
             $id = $date->id;
-       $html .= '<option style="color: #d90d2b;" value="' . $id.'">'.$id.' - '.$closet .'</option>';
+            $middata  =   $this->Menu_model->getMainReviewBy_ALL($id,$bduid);
+            $middatacnt = sizeof($middata);
+       $html .= '<option style="color: #d90d2b;" value="' . $id.'">'.$closet .' ('.$middatacnt.')</option>';
         }
         echo $html;
-
-
-          
-    
 }
 
 
+public function getcmp_getreviewtype_new(){
 
+    $user            = $this->session->userdata('user');
+    $data['user']    = $user;
+    $uid             = $user['user_id'];
+    $uyid            =  $user['type_id'];
 
+    $actionid = $this->input->post('getreviewtype');
+    $curuid      = $this->input->post('uid');
+    $this->load->model('Menu_model');
+    $cmp = $this->Menu_model->GetTommrowReviewTaskBYActionID($actionid,$curuid);
+    echo '<option value="">Select Company</option>';
+    foreach($cmp as $cmp){
+        
+        $rtype          = $cmp->rtype;
+        $cdate          = $cmp->cdate;
+        $exsid          = $cmp->exsid;
+        $exdate         = $cmp->exdate;
+        $inid           = $cmp->inid;
+        $cmpStatus      = $this->Menu_model->get_statusbyid($exsid);
+        $cmpStatusname  = $cmpStatus[0]->name;
+        $cominfo        = $this->Menu_model->get_cmpbyinid($inid);
+        $comp_cstatus   = $cominfo[0]->cstatus;
+        $by_uid         = $cmp->by_uid;
+
+        $cmpStatusn      = $this->Menu_model->get_statusbyid($comp_cstatus);
+        $cmpExpStatusname  = $cmpStatusn[0]->name;
+
+        if($by_uid == $uid){
+            $by_uidname = "Self";
+        }else{
+            $udetail = $this->Menu_model->get_userbyid($by_uid);
+            $by_uidname = $udetail[0]->name;
+        }
+        ?>
+        <option style="color: #d90d2b;" value="<?=$cmp->ntid;?>" title="<?=$cmp->compname?> (<?= $rtype; ?>) - (<?= $by_uidname; ?>) - Review Date - <?= $cdate ?> - Target Status - <?= $cmpStatusname ?>- Current Status - <?= $cmpExpStatusname ?> - Target Date - <?= $exdate  ?> ">
+            <?=$cmp->compname?> (<?= $rtype; ?>) - (<?= $by_uidname; ?>)
+        </option>
+    <?php
+    }
+}
+// Close Review Changes - Deepak
+
+public function GetPendingReviewForPlan(){
+
+    $user            = $this->session->userdata('user');
+    $data['user']    = $user;
+    $uid             = $user['user_id'];
+    $uyid            =  $user['type_id'];
+
+    $this->load->model('Menu_model');
+    $reviews = $this->Menu_model->GetPendingReviewForPlan($uid);
+    $filtered_reviews = array_filter($reviews, function($review) {
+        return $review->review_count == 0;
+    });
+
+    $message = '';
+    foreach($filtered_reviews as $filter){
+        $message .= 'Plan 1 '.$filter->review_period ." Review First ! <br/>";
+        $message .= 'Plan 1 '.$filter->review_period ." Review First !<br/>";
+    }
+    return $message;
+    
+}
 
 }
 

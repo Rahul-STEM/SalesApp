@@ -12604,10 +12604,22 @@ public function getUserTotalTaskTimeForTodays($uid,$tdate){
 }
 
 public function GetPendingReviewForPlan($uid){
-    $query=$this->db->query("SELECT 'Half Yearly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `bdid` = '$uid' AND reviewtype IN ('Self Half Yearly', 'Half Yearly') AND `plant` BETWEEN CURDATE() - INTERVAL 6 MONTH AND CURDATE() UNION ALL SELECT 'Weekly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `bdid` = '$uid' AND reviewtype IN ('Self Weekly', 'Weekly') AND `plant` BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE() UNION ALL SELECT 'Fortnightly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `bdid` = '$uid' AND reviewtype IN ('Self Fortnightly', 'Fortnightly') AND `plant` BETWEEN CURDATE() - INTERVAL 15 DAY AND CURDATE() UNION ALL SELECT 'Monthly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `bdid` = '$uid' AND reviewtype IN ('Self Monthly', 'Monthly') AND `plant` BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() UNION ALL SELECT 'Quarterly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `bdid` = '$uid' AND reviewtype IN ('Self Quarterly', 'Querterly') AND `plant` BETWEEN CURDATE() - INTERVAL 3 MONTH AND CURDATE()");
+
+    $udetail = $this->Menu_model->get_userbyid($uid);
+    $type_id = $udetail[0]->type_id;
+    if($type_id == 3){
+        $query=$this->db->query("SELECT 'Half Yearly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Half Yearly', 'Half Yearly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 6 MONTH AND CURDATE() UNION ALL SELECT 'Weekly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Weekly', 'Weekly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE() UNION ALL SELECT 'Fortnightly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Fortnightly', 'Fortnightly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 15 DAY AND CURDATE() UNION ALL SELECT 'Monthly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Monthly', 'Monthly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() UNION ALL SELECT 'Quarterly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Quarterly','Quarterly', 'Querterly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 3 MONTH AND CURDATE()");
+    }else{
+        $query=$this->db->query("SELECT 'Half Yearly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Half Yearly', 'Half Yearly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 6 MONTH AND CURDATE() UNION ALL SELECT 'Weekly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Weekly', 'Weekly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE() UNION ALL SELECT 'Fortnightly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Fortnightly', 'Fortnightly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 15 DAY AND CURDATE() UNION ALL SELECT 'Monthly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Monthly', 'Monthly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() UNION ALL SELECT 'Quarterly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Quarterly','Quarterly', 'Querterly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 3 MONTH AND CURDATE() UNION ALL SELECT 'Self Review' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Review') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() UNION ALL SELECT 'Roaster' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Roaster') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE()");
+    }
+   
     return $query->result();
 }
 
+public function GetTodaysPlannerRequest($uid){
+    $query=$this->db->query("SELECT * FROM `task_plan_for_today` WHERE user_id = '$uid' AND approvel_status = 'Approved' AND `date` = CURDATE() ORDER BY `id` DESC");
+    return $query->result();
+}
 
 
 

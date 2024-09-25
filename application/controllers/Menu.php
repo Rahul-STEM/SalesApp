@@ -4323,9 +4323,10 @@ class Menu extends CI_Controller {
         $data['user'] = $user;
         $uid = $user['user_id'];
         if($type == 'Approve'){
-            $status = "Approved";
-            $reamrks = "Approved By ".$user['name'];
-            $query =  $this->db->query("UPDATE `task_plan_for_today` SET `approvel_status`='$status',`remarks`='$reamrks' WHERE id = $id");
+            $status     = "Approved";
+            $reamrks    = "Approved By ".$user['name'];
+            $apr_time   = date("Y-m-d H:i:s");
+            $query =  $this->db->query("UPDATE `task_plan_for_today` SET `approvel_status`='$status',`apr_time`='$apr_time',`remarks`='$reamrks' WHERE id = $id");
             redirect("Menu/TodaysTaskApprovelRequest");
         }else{
             redirect('Menu/main');
@@ -18650,7 +18651,6 @@ public function getTaskAvailableTime(){
     }
 
 $slotdata =   $this->Menu_model->CheckTodaysTaskAvilableTime($user_id,$time1,$time2,$sdate);
-// echo $this->db->last_query();
 
 $appointmentDates = array_column($slotdata, 'appointmentdatetime');
 $filteredTimes = array_filter($slotdata, function($item) use ($appointmentDates) {
@@ -18677,9 +18677,7 @@ if($slotrees == 0){
             $html .= $span;
         }
     }
-    
 }
-
 echo $html;
 
 }
@@ -18718,7 +18716,6 @@ public function getTaskPlannedTime(){
 
 $slotdata =   $this->Menu_model->GetBookedSlot($user_id,$time1,$time2,$sdate);
 
-// echo $this->db->last_query();
 $slotrees = sizeof($slotdata);
 
 $html = '';
@@ -18803,8 +18800,6 @@ public function CheckTaskPlanningTime(){
     }
 }
 
-
-
 public function TestPage(){
     date_default_timezone_set("Asia/Calcutta");
     $tdate=date('Y-m-d H:i:s');
@@ -18822,15 +18817,6 @@ public function TestPage(){
         redirect('Menu/main');
     }
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -19189,27 +19175,123 @@ public function getcmp_getreviewtype_new(){
 }
 // Close Review Changes - Deepak
 
-public function GetPendingReviewForPlan(){
+// Start Review Planning  - Deepak
+public function GetPendingReviewForPlanUser(){
 
     $user            = $this->session->userdata('user');
     $data['user']    = $user;
     $uid             = $user['user_id'];
-    $uyid            =  $user['type_id'];
+    $uyid            = $user['type_id'];
 
     $this->load->model('Menu_model');
-    $reviews = $this->Menu_model->GetPendingReviewForPlan($uid);
-    $filtered_reviews = array_filter($reviews, function($review) {
+    $reviewCounts = $this->Menu_model->GetPendingReviewForPlan($uid);
+    $filtered_reviews = array_filter($reviewCounts, function($review) {
         return $review->review_count == 0;
     });
-
-    $message = '';
-    foreach($filtered_reviews as $filter){
-        $message .= 'Plan 1 '.$filter->review_period ." Review First ! <br/>";
-        $message .= 'Plan 1 '.$filter->review_period ." Review First !<br/>";
+    $pending_review_Count = sizeof($filtered_reviews);
+    $options = '<option> Select Review </option>';
+    if($pending_review_Count > 0){
+        $cssClass = 'class="text-danger font-weight-bold"';
+        foreach($filtered_reviews as $item1){
+            $options .= '<option value="'.$item1->review_period.'" ' . $cssClass . '>' . $item1->review_period . ' (' . $item1->review_count . ' reviews)</option>';
+        }
+        echo $options;
+    }else{
+        if($uyid == 3){
+            $reviewTypes = $this->Menu_model->GetReviewType(2);
+                foreach ($reviewTypes as $item1) {
+                    $periodName = str_replace('Self ', '', $item1->name);
+                    $reviewCount = 0;
+                    foreach ($reviewCounts as $item2) {
+                        if ($item2->review_period == $periodName) {
+                            $reviewCount = $item2->review_count;
+                            break;
+                        }
+                    }
+                    $options .= '<option value="'.$item1->name .'">' . $item1->name . ' (' . $reviewCount . ' reviews)</option>';
+                }
+        }else{
+            $reviewTypes = $this->Menu_model->GetReviewType(1);
+            $reviewCountMap = [];
+            foreach ($reviewCounts as $review) {
+                $reviewCountMap[$review->review_period] = $review->review_count;
+            }
+            // Generate select options
+            foreach ($reviewTypes as $type) {
+                $reviewCount = isset($reviewCountMap[$type->name]) ? $reviewCountMap[$type->name] : 0;
+                $options .= '<option value="'.$type->name.'">' . $type->name . ' (' . $reviewCount . ' reviews)</option>';
+            }
+        }
+        echo $options;
     }
-    return $message;
-    
 }
+
+// Close Review Planning 
+
+
+
+public function TodaysPlannerRequest(){
+
+    $user            = $this->session->userdata('user');
+    $data['user']    = $user;
+    $uid             = $user['user_id'];
+    $uyid            = $user['type_id'];
+    date_default_timezone_set("Asia/Calcutta"); 
+    $this->load->model('Menu_model');
+
+    $request    = $this->Menu_model->GetTodaysPlannerRequest($uid);
+    $apr_time   = $request[0]->apr_time;
+    $start_time = date("Y-m-d").' 10:00:00';
+
+    $initialTime = $apr_time;
+    $dateTime = new DateTime($initialTime);
+    $dateTime->modify('+60 minutes');
+    $newTime = $dateTime->format('Y-m-d H:i:s');
+
+    $task_init_time = date('H:i:s', strtotime($newTime));
+
+    $timestamp_apr = strtotime($apr_time);
+    $approved_time = date('H:i:s', $timestamp_apr);
+
+    $dataarr = [];
+    $dataarr['apr_time'] = $approved_time;
+    $dataarr['init_time'] = $task_init_time;
+
+    $datjson = json_encode($dataarr);
+    echo $datjson;
+    /*
+    $timestamp1 = strtotime($start_time);
+    $timestamp2 = strtotime($apr_time);
+    $timeDifferenceInSeconds = $timestamp2 - $timestamp1;
+    $timeDifference_late = round($timeDifferenceInSeconds / 60);
+
+    $remaing_time = date("Y-m-d").' 17:00:00';
+
+    $timestamp1_remain = strtotime($apr_time);
+    $timestamp2_remain = strtotime($remaing_time);
+    $timeDifferenceInSeconds_remain = $timestamp2_remain - $timestamp1_remain;
+    $timeDifference_remain   = abs(round($timeDifferenceInSeconds_remain / 60));
+
+    echo "Late = ". $timeDifference_late."<br/>";
+    echo "Remaing = ". $timeDifference_remain."<br/>";
+
+    $totalttaskdata = $this->Menu_model->getUserTotalTaskTimeForTodays($uid,date("Y-m-d"));
+    $totalttasktime = $totalttaskdata[0]->ttime;
+
+    echo "TotalPlannedTime = ". $totalttasktime."<br/>";
+    $remainexacttime = abs($totalttasktime - $timeDifference_late);
+  
+    echo $remainexacttime;
+    */
+
+
+
+}
+
+
+
+
+
 
 }
 

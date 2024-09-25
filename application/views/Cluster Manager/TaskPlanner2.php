@@ -269,7 +269,6 @@ if($type_id == 3){
         </style>
         <div class="container-fluid">
         <?php
-
         $totalttaskdata = $this->Menu_model->getUserTotalTaskTimeForTodays($uid,$adate);
         $totalttasktime = $totalttaskdata[0]->ttime;
        
@@ -294,14 +293,13 @@ if($type_id == 3){
           $timecolor = "red";
         }
         ?>
-
         <div card="card card3444 text-center">
           <center>
             <div class="text-effect" data-content="<?= $timetexts ?>" style="background:green;color:white;">
               <span class="text-uppercase">Planned Time : <?= $timetexts ?></span>
             </div>
             <?php if($timecolor == "red"){ ?>
-            <div class="text-effect1 mb-2 mt-1">
+            <div class="text-effect1 mb-1 mt-1">
               <span class="text-capitalize font-weight-bold">
                 <?php 
                $hours_tasktime = floor($remaintaktimeis / 60);;
@@ -337,7 +335,6 @@ if($type_id == 3){
         <marquee class="p-2 mt-1" width="100%"  onMouseOver="this.stop()" onMouseOut="this.start()" behavior="left" bgcolor="pink">
         <h6> Lunch Time : <?= $lunchtime ?>  Miniute || Auto Task Time : <?= $autoTasktime?> Minutes || Tommorow Planner Planning : <?=$topp ?>  Minutes || 9 hours Planning = 9* 60 = 540 Minutes || Total Time For (Lunch + Auto Task + Tommorow Planner) : <?=$texpense_time?>  Minutes || Task Planner Should be <?php echo 540 - $texpense_time;?> Minutes</h6>
       </marquee>
-
           <div class="card p-2 bg-primary">
             <div class="row">
               <div class="col-md-4 planerdflex">
@@ -683,11 +680,17 @@ if($type_id == 3){
  
                       $getpendSize = sizeof($getPendingTask);
                       $getoldPendingTaskcnt = sizeof($getoldPendingTask);
-
                       $reviewtask  = $this->Menu_model->GetTommrowReviewTask($uid);
                       $reviewtaskcnt = sizeof($reviewtask);
+                     
+                      $reviews = $this->Menu_model->GetPendingReviewForPlan($uid);
+                      $filtered_reviews = array_filter($reviews, function($review) {
+                          return $review->review_count == 0;
+                      });
+                      $reviewCount = sizeof($filtered_reviews);
                       // $planbutnotinitedcnt = 0;
                       // $reviewtaskcnt = 0;
+                      // $reviewCount = 0;
                       ?>
                     <?php if($planbutnotinitedcnt > 0 && $adate !== date("Y-m-d")){ ?>
                       <div class="form-check">
@@ -712,7 +715,13 @@ if($type_id == 3){
                           <span style="color:red;" data-toggle="tooltip" data-placement="left" title="This filter is active due to If user have any old pending task (User Planned But Not Completed) ">Old Pending Task (<?= $getoldPendingTaskcnt; ?>)</span>
                         </label>
                         </div>
-                        <?php }else{ ?>
+                        <?php }elseif($reviewCount > 0){  $cssClass = 'class="text-danger"'; ?>
+                            <div class="form-check" id="review_planning_filter">
+                              <label class="form-check-label custom-radio-label">
+                              <input type="radio" class="form-check-input" name="optradio" value="Review Planning"> <span <?= $cssClass; ?>>Review Planning (<?= $reviewCount; ?>)</span> 
+                              </label>
+                            </div>
+                          <?php }else{ ?>
                     <?php 
                        $days = 8;
                        if($type_id ==3){
@@ -916,9 +925,17 @@ if($type_id == 3){
                           <input type="radio" class="form-check-input" name="optradio" value="PST Assign" >Other Assign
                           </label>
                         </div> -->
+                        <?php 
+                        $reviews = $this->Menu_model->GetPendingReviewForPlan($uid);
+                        $filtered_reviews = array_filter($reviews, function($review) {
+                            return $review->review_count == 0;
+                        });
+                        $reviewCount = sizeof($filtered_reviews);
+                        $cssClass = ($reviewCount > 0) ? 'class="text-danger"' : '';
+                        ?>
                         <div class="form-check" id="review_planning_filter">
                           <label class="form-check-label custom-radio-label">
-                          <input type="radio" class="form-check-input" name="optradio" value="Review Planning">  Review Planning
+                          <input type="radio" class="form-check-input" name="optradio" value="Review Planning"> <span <?= $cssClass; ?>>Review Planning</span> 
                           </label>
                         </div>
                         <?php  } }}?>
@@ -1027,7 +1044,6 @@ if($type_id == 3){
                           $allStatus = $this->Menu_model->get_status();
                           ?>
                         <input type="hidden" name="selectbyuser" id="selectbyuser" value="">
-
                         
                         <div class="form-group" id="selectstatus" >
                           <lable class="text-left">Select Company Status : </lable>
@@ -1061,8 +1077,6 @@ if($type_id == 3){
                           <option value="yes">Yes</option>
                           <option value="no">No</option>
                         </select>
-
-
                       </div>
                     </div>
                     <div id="actionnotplaned" class="card p-4" >
@@ -1177,6 +1191,7 @@ if($type_id == 3){
                           <!-- <option value="keycompany">Key Company</option> -->
                           <option value="pkclient">P Key Client</option>
                         </select>
+                        <small><span id="slcategorycompanys"></span></small>
                       </div>
                       <div class="form-group" id="statusfiltercardCategory">
                         <label>Select Status</label>
@@ -1575,7 +1590,6 @@ if($type_id == 3){
                             ?>
                           </select>
                         </div>
-
                     <!-- <div class="form-group" id="reviewTargetreviewtype" >
                         <select class="form-control" name="reviewtype" required="" id="reviewTargetreviewtypeData">
                         <option selected disabled>Select Review Time</option>
@@ -1594,7 +1608,6 @@ if($type_id == 3){
                             <option value="PST Review">PST Review</option>
                         </select>
                     </div> -->
-
                     </div>
                           <div id="auto_assign" class="card p-4" >
                             <div class="form-group">
@@ -1669,29 +1682,10 @@ if($type_id == 3){
                         <input type="time" id="review_plantime"  name="review_plantime" class="form-control" required="">
                         <div class="invalid-feedback text-white"> * Please provide Plan Date Time.</div>
                         <div class="valid-feedback">Looks good!</div>
-                        <?php if($type_id ==3){ ?>
                         <div class="mt-4">
                             <select class="form-control" name="reviewtype" required="" id="reviewtype">
-                              <?php 
-                              $revtype = $this->Menu_model->GetReviewType(2);
-                              foreach($revtype as $rtype):
-                              ?>
-                                <option value="<?= $rtype->name; ?>"> <?= $rtype->name; ?></option>
-                                <?php endforeach; ?> 
                             </select>
                         </div>
-                        <?php }else if($type_id ==13 || $type_id ==4){ ?>
-                          <div class="mt-4">
-                            <select class="form-control" name="reviewtype" required="" id="reviewtype">
-                            <?php 
-                              $revtype = $this->Menu_model->GetReviewType(1);
-                              foreach($revtype as $rtype):
-                              ?>
-                                <option value="<?= $rtype->name; ?>"> <?= $rtype->name; ?></option>
-                                <?php endforeach; ?> 
-                            </select>
-                        </div>
-                        <?php }?>
                         <!-- <input type="checkbox" id="myCheckbox" onclick="myFunction()">
                         <label>Do You Want to Change Period Time Frame.</label><br> -->
                         
@@ -2028,6 +2022,31 @@ if($type_id == 3){
                     </div>
                   </div>
                   <?php } ?>
+                  <?php if($reviewCount > 0):
+                    ?>
+                  <div class="card col-lg-12 col-sm-12">
+                    <div class="table-responsive mt-2">
+                    <table id="example45" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead class="bg-danger">
+                            <tr>
+                                <th class="bg-danger">S.No</th>
+                                <th class="bg-danger">Review Period</th>
+                                <th class="bg-danger">Review Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          <?php $xy = 1; foreach($filtered_reviews as $frevews): ?>
+                            <tr>
+                                <td><?= $xy; ?></td>
+                                <td><?= $frevews->review_period; ?></td>
+                                <td><?= $frevews->review_count; ?></td>
+                            </tr>
+                            <?php $xy++; endforeach; ?>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                <?php endif; ?>
                   <div class="card col-lg-12 col-sm-12" id="content">
                     <div class="row mt-2">
                       <div class="text-center"> <b><i>Total Time Spent in Task Planning : <?php echo $planSessionmin == '' ? "00:00:00" : $planSessionmin; ?></i></b></div>
@@ -3084,6 +3103,7 @@ if($type_id == 3){
                         var optionCount = $('#selectcompanybyuser').find('option').length;
                         // optionCount = optionCount-1;
                         $("#totalcompany").text('Total Company :'+ optionCount);
+                        $("#slcategorycompanys").text('Total Company :'+ optionCount);
                         $("#tasktaction").hide();
         
                         $("#tptime").val('');
@@ -4541,10 +4561,8 @@ if($type_id == 3){
                         $('#taskaction_card_area').hide();
                         $('#taskActionbyuserCard').hide();
                         $('#taskPurposebyuserCard').hide();
-
                         $('#reviewTargetreviewtypeData').on('change', function() {
                         var getreviewtype = $(this).val();
-
                         $("#daysByTask").show();
                         $("#selectcompanybyuser").html('');
                         $.ajax({
@@ -4556,7 +4574,6 @@ if($type_id == 3){
                         },
                         cache: false,
                         success: function a(result){
-
                         $("#maintaskcard").show();    
                         $("#selectcompanybyuser").html(result);
                         $("#selectcompanybyuser").show();
@@ -5514,8 +5531,6 @@ $(document).ready(function(){
                 alert("You can't go back to the previous page!");
             }); 
             window.history.pushState(null, null, window.location.href);
-
-
   
     // Start Add Condtions to diabledd Available get time 
     var currentTime = new Date();
@@ -5542,7 +5557,17 @@ $(document).ready(function(){
         }
     });
     // End Condtions to diabledd Available get time 
-
+    $.ajax({
+        url:'<?=base_url();?>Menu/GetPendingReviewForPlanUser',
+        type: "POST",
+        data: {
+          review: 'review',
+        },
+        cache: false,
+        success: function a(result){
+          $("#reviewtype").html(result);
+        }
+        });
 });
 </script>
       <!-- /.row (main row) -->
@@ -5619,9 +5644,13 @@ $("#example10").DataTable({
 "buttons": ["excel", "pdf"]
 }).buttons().container().appendTo('#example10_wrapper .col-md-6:eq(0)');
 $("#example4").DataTable({
-"responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 10,
+"responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
 "buttons": ["excel", "pdf"]
 }).buttons().container().appendTo('#example4_wrapper .col-md-6:eq(0)');
+$("#example45").DataTable({
+"responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
+"buttons": ["excel", "pdf"]
+}).buttons().container().appendTo('#example45_wrapper .col-md-6:eq(0)');
     </script>
   </body>
 </html>

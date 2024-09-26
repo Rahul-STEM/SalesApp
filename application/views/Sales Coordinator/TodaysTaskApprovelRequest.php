@@ -142,6 +142,8 @@
                                   <tbody>
                                      <?php 
                                      $j =1;
+                                     $curdate = date("Y-m-d");
+                                     $getreqData = $this->Menu_model->GetTodaysPlannerRequestINAdmin($uid,$curdate);
                                      foreach($getreqData as $data){ ?>
                                     <tr>
                                       <th><?= $j ?></th>

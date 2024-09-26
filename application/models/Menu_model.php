@@ -12622,7 +12622,19 @@ public function GetTodaysPlannerRequest($uid){
 }
 
 
+public function GetTodaysPlannerRequestINAdmin($uid,$adate){
+    $query=$this->db->query("SELECT * FROM `task_plan_for_today` LEFT JOIN user_details on user_details.sales_co = '$uid' WHERE user_details.user_id = task_plan_for_today.user_id AND task_plan_for_today.date = '$adate'");
+    return $query->result();
+}
 
 
+public function GetOnlyPSTInSC($uid){
+    $query=$this->db->query("SELECT *  FROM `user_details` WHERE sales_co = '$uid' AND type_id = 4");
+    return $query->result();
+}
+public function GetOnlyCLusterInPST($uid){
+    $query=$this->db->query("SELECT *  FROM `user_details` WHERE pst_co = '$uid' AND type_id = 13");
+    return $query->result();
+}
 
 }

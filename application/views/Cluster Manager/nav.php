@@ -229,7 +229,12 @@
                     <p>Our MoM Status </p>
                     </a>
                 </li>
-            
+                <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/UserTaskViewPage" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Our Todays Task Status</p>
+                    </a>
+                </li>
                 
                 <li class="nav-item">
                     <a href="<?=base_url();?>Menu/assignpst" class="nav-link">
@@ -237,6 +242,7 @@
                         <p>RP Check</p>
                     </a>
                 </li>
+               
                 
                 <!--<li class="nav-item">-->
                 <!--  <a href="<?=base_url();?>Menu/AddFAQ" class="nav-link">-->

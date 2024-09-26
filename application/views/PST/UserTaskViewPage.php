@@ -116,7 +116,7 @@ span.tsby {
                       foreach($totalttaskdata as $taskdata){ 
                           $actiontype_id = $taskdata->actiontype_id;
                           $status = $taskdata->approved_status;
-                          // if($status !=0){
+                        // if($status !=0){
                           if($actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==1 || $actiontype_id ==10 || $actiontype_id ==15){
                               $taskplanmincount += 5;
                           }else if($actiontype_id ==2 || $actiontype_id ==6){
@@ -449,7 +449,9 @@ span.tsby {
                                                       }
                                                        ?></td>
                                                       <td>
-                                                      <?php if($selfAssign == 1){?>
+                                                      <?php 
+                                                    
+                                                      if($selfAssign == 1){?>
                                                           <div>                                                         
                                                           <button type="button" class="btn btn-primary" onclick="window.location.href='<?= base_url(); ?>Menu/selfTaskAssignPage/<?= $tblId ?>'">Self Assign task</button>
                                                           </div>

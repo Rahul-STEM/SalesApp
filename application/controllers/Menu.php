@@ -19245,7 +19245,7 @@ public function TodaysPlannerRequest(){
 
     $initialTime = $apr_time;
     $dateTime = new DateTime($initialTime);
-    $dateTime->modify('+60 minutes');
+    $dateTime->modify('+90 minutes');
     $newTime = $dateTime->format('Y-m-d H:i:s');
 
     $task_init_time = date('H:i:s', strtotime($newTime));
@@ -19253,38 +19253,19 @@ public function TodaysPlannerRequest(){
     $timestamp_apr = strtotime($apr_time);
     $approved_time = date('H:i:s', $timestamp_apr);
 
+
+    $approved_time = new DateTime($approved_time);
+    $approved_time = $approved_time->format('H:i');
+
+    $task_init_time = new DateTime($task_init_time);
+    $task_init_time = $task_init_time->format('H:i');
+
     $dataarr = [];
     $dataarr['apr_time'] = $approved_time;
     $dataarr['init_time'] = $task_init_time;
 
     $datjson = json_encode($dataarr);
     echo $datjson;
-    /*
-    $timestamp1 = strtotime($start_time);
-    $timestamp2 = strtotime($apr_time);
-    $timeDifferenceInSeconds = $timestamp2 - $timestamp1;
-    $timeDifference_late = round($timeDifferenceInSeconds / 60);
-
-    $remaing_time = date("Y-m-d").' 17:00:00';
-
-    $timestamp1_remain = strtotime($apr_time);
-    $timestamp2_remain = strtotime($remaing_time);
-    $timeDifferenceInSeconds_remain = $timestamp2_remain - $timestamp1_remain;
-    $timeDifference_remain   = abs(round($timeDifferenceInSeconds_remain / 60));
-
-    echo "Late = ". $timeDifference_late."<br/>";
-    echo "Remaing = ". $timeDifference_remain."<br/>";
-
-    $totalttaskdata = $this->Menu_model->getUserTotalTaskTimeForTodays($uid,date("Y-m-d"));
-    $totalttasktime = $totalttaskdata[0]->ttime;
-
-    echo "TotalPlannedTime = ". $totalttasktime."<br/>";
-    $remainexacttime = abs($totalttasktime - $timeDifference_late);
-  
-    echo $remainexacttime;
-    */
-
-
 
 }
 

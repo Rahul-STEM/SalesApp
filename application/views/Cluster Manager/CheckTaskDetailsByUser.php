@@ -162,7 +162,8 @@ span.tsby {
                                           // }
                                         }
                                         
-                 
+                                        $exactplanedtime = $taskplanmincount;
+                                    
                                         $lunchtime      = 30;      // Lunch Time 45 Miniute
                                         $autoTasktime   = 90;  // 90 Minutes For Auto Task
                                         $topp           = 60; // 60 Minutes For Tommorow Planner Planning
@@ -171,22 +172,61 @@ span.tsby {
                                         $userplanetime = $nine_hours_planning - $texpense_time; // total plan time  - 345 minutes
                                         $plannerremTime = $userplanetime - $taskplanmincount;
                                         $srlData = $this->Menu_model->GetTodaysApprovedSpecialRequestforLeave($tuser_uid,$taskdate);
-                                        // dd($srlData);
+                                       
                                        ?>
                              
                               <form method="post" action="<?=base_url();?>Menu/approveDailyTask">
                               <fieldset>
                                  <div class="card">
                                   
-                                  <!-- <div class="col-md-4"> 
-                                    <div class="dateform text-left">
-                                    <form method="post" action="<?=base_url();?>Menu/CheckTaskDetailsByUser">
-                                        <input type="date" class="form-control m-2" name="adate" value="<?=$adate?>"  id="plandate"  max="<?= date('Y-m-d') ?>">
-                                        <input type="submit" class="btn btn-warning m-2" value="Set Date">
-                                    </form>
-                                    </div>
-                                  </div> -->
                                   <?php 
+                                    $request    = $this->Menu_model->GetTodaysPlannerRequest($tuser_uid);
+                                    $requestcnt = sizeof($request);
+                                    if($requestcnt > 0){
+                                    $apr_time       = $request[0]->apr_time;
+                                    $request_time   = $request[0]->created_at;
+                                    
+                                    $req_datetime1  = new DateTime($request_time);
+                                    $req_datetime2  = new DateTime($apr_time);
+                                    // Calculate the difference in request approved
+                                    $req_interval   = $req_datetime1->diff($req_datetime2);
+                                    // Get the difference in hours and minutes in request approved
+                                    $apr_hours      = $req_interval->h + ($req_interval->days * 24); // Total hours
+                                    $apr_minutes    = $req_interval->i; // Remaining minutes
+                                    $reqlateapr     = "$apr_hours hours and $apr_minutes minutes";
+
+                                    $tsk_initialTime    = $apr_time;
+                                    $tsk_dateTime       = new DateTime($tsk_initialTime);
+                                    $tsk_dateTime->modify('+60 minutes');
+                                    $tskinittime        = $tsk_dateTime->format('Y-m-d H:i:s');
+
+                                    $alertmessage = 'Planner request approved time is : '.$apr_time .', and user planner time is 1 hour. Based on this time, user need to plan the task after '.$tskinittime .'.';
+
+                                    if(!is_null($apr_time)):
+                                    $dateTime = new DateTime($apr_time);
+                                    $dateTime->modify('+60 minutes');
+                                    $newTime = $dateTime->format('Y-m-d H:i:s');
+                         
+                                    $todaysDateTime = date("Y-m-d") . ' 10:00:00';
+                                    $todaysDateTime = DateTime::createFromFormat('Y-m-d H:i:s', $todaysDateTime); // Corrected format string
+                                    $apr_times = $apr_time;
+                                    $apr_time = new DateTime($apr_time);
+                                    $interval = $todaysDateTime->diff($apr_time);
+                                    
+                                    // Get the difference in total minutes
+                                    $diffInMinutes = ($interval->h * 60) + $interval->i;
+                                    
+                                    $rmautoTasktime = 30;
+                               
+                                    $plannerremTime = $plannerremTime - $diffInMinutes;
+                                    $plannerremTime = $plannerremTime + $rmautoTasktime;
+
+                                    $userplanetime = $userplanetime - $diffInMinutes;
+                                    $userplanetime = $userplanetime + $rmautoTasktime;
+
+                                    endif;
+                                  }
+                        
                                   if($taskplanmincount >= $userplanetime){    
                                     $background = 'bg-success';                           
                                   ?>
@@ -220,7 +260,9 @@ span.tsby {
                                   </marquee>
                                  <hr>
                                 
-                                    <div class="text-center p-2 bg-info">
+                                 <div class="row">
+                                  <div class="col-md-12">
+                                  <div class="text-center p-2 bg-info">
                                        <h5><i>Task Plan By - 
                                         <?php 
                                         $dt = $taskdate; 
@@ -231,13 +273,49 @@ span.tsby {
                                        <p>
                                         <b>
                                           <?php
-                                          $hours = floor($taskplanmincount / 60);
-                                          $remainingMinutes = $taskplanmincount % 60;
+                                          $hours = floor($exactplanedtime / 60);
+                                          $remainingMinutes = $exactplanedtime % 60;
                                           echo " User Planned $hours hours and $remainingMinutes minutes.";
                                             ?>
                                         </b>
                                        </p>
                                     </div>
+                                    <hr>
+                                  </div>
+                                 </div>
+                                  <?php  if($requestcnt > 0){ 
+                                     if(!is_null($apr_time)){
+                                    ?>
+                                 <div class="row">
+                                   <div class="col-md-4">
+                                      <div class="card bg-info">
+                                        <div class="card-header text-center">
+                                          <h6>Planner Request Time :</h6>
+                                          <span><?= $request_time; ?></span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <div class="card bg-success">
+                                        <div class="card-header text-center">
+                                          <h6>Planner Approved Time :</h6>
+                                          <span><?= $apr_times; ?></span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <div class="card bg-danger">
+                                        <div class="card-header text-center">
+                                          <h6>Late Approved Time:</h6>
+                                          <span><?= $reqlateapr; ?></span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <marquee class="p-2 mt-1" width="100%"  onMouseOver="this.stop()" onMouseOut="this.start()" behavior="left" bgcolor="pink">
+                                    <small><span><?= $alertmessage; ?></span></small>
+                                  </marquee>
+                                   </div>
+                                   <?php }} ?>
                                  
                                     
                                       <?php 
@@ -245,15 +323,6 @@ span.tsby {
                                       $planSessionmin  = $this->Menu_model->TodaysTotalsPlannerSessioninMinute($tuser_uid);
                                       ?>
                                       <div class="row mt-2 mb-2">
-                                        <?php 
-                                          // $apprvtask = '';
-                                          // $rejecttask ='';
-                                          // $rejetbutnta ='';
-                                          // $rejetbutnau ='';
-                                          // $rejetbutnasd ='';
-                                          // echo $rejecttask;
-                                        
-                                        ?>
                                       <div class="col-md-6">
                                         <div class="card p-2 bg-info m-1 flexitemscenter">
                                             <div  class="text-center">
@@ -296,8 +365,8 @@ span.tsby {
                                           </div>
                                           <div class="col-md-4">
                                             <?php 
-                                             $upchours = floor($taskplanmincount / 60);
-                                             $upcremainingMinutes = $taskplanmincount % 60;
+                                             $upchours = floor($exactplanedtime / 60);
+                                             $upcremainingMinutes = $exactplanedtime % 60;
                                             ?>
                                             <p>User Plan Time : <?php  echo "$upchours hours and $upcremainingMinutes minutes."; ?></p>
                                           </div>

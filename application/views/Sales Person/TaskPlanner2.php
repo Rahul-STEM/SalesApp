@@ -140,7 +140,6 @@
                     input.value = "";
                     
                   }
-                    // console.log(result);
                     }
                 });
            }
@@ -279,6 +278,46 @@ if($type_id == 3){
         $nine_hours_planning =540; // 9 hours Planning = 9* 60 = 540 Minutes 
         $userplanetime = $nine_hours_planning - $texpense_time; // total plan time  - 345 minutes
         $plannerremTime = $userplanetime - $taskplanmincount; 
+        $plrequest    = $this->Menu_model->GetTodaysPlannerRequest($uid);
+        $plrequestcnt = sizeof($plrequest);
+        if($plrequestcnt > 0){
+        $apr_time       = $plrequest[0]->apr_time;
+        $request_time   = $plrequest[0]->created_at;
+        
+        $req_datetime1  = new DateTime($request_time);
+        $req_datetime2  = new DateTime($apr_time);
+        // Calculate the difference in request approved
+        $req_interval   = $req_datetime1->diff($req_datetime2);
+        // Get the difference in hours and minutes in request approved
+        $apr_hours      = $req_interval->h + ($req_interval->days * 24); // Total hours
+        $apr_minutes    = $req_interval->i; // Remaining minutes
+        $reqlateapr     = "$apr_hours hours and $apr_minutes minutes";
+        $tsk_initialTime    = $apr_time;
+        $tsk_dateTime       = new DateTime($tsk_initialTime);
+        $tsk_dateTime->modify('+60 minutes');
+        $tskinittime        = $tsk_dateTime->format('Y-m-d H:i:s');
+        $alertmessage = 'Your Planner request approved time is : '.$apr_time .', and user planner time is 1 hour. Based on this time, user need to plan the task after '.$tskinittime .'.';
+        if(!is_null($apr_time)):
+        $dateTime = new DateTime($apr_time);
+        $dateTime->modify('+60 minutes');
+        $newTime = $dateTime->format('Y-m-d H:i:s');
+        $todaysDateTime = date("Y-m-d") . ' 10:00:00';
+        $todaysDateTime = DateTime::createFromFormat('Y-m-d H:i:s', $todaysDateTime); // Corrected format string
+        $apr_times = $apr_time;
+        $apr_time = new DateTime($apr_time);
+        $interval = $todaysDateTime->diff($apr_time);
+        
+        // Get the difference in total minutes
+        $diffInMinutes = ($interval->h * 60) + $interval->i;
+        
+        $rmautoTasktime = 30;
+   
+        $plannerremTime = $plannerremTime - $diffInMinutes;
+        $plannerremTime = $plannerremTime + $rmautoTasktime;
+        $userplanetime = $userplanetime - $diffInMinutes;
+        $userplanetime = $userplanetime + $rmautoTasktime;
+        endif;
+      }
        
         if($totalttasktime >= $plannerremTime){
           $hours_tasktime = floor($totalttasktime / 60);
@@ -334,6 +373,9 @@ if($type_id == 3){
         </style>
         <marquee class="p-2 mt-1" width="100%"  onMouseOver="this.stop()" onMouseOut="this.start()" behavior="left" bgcolor="pink">
         <h6> Lunch Time : <?= $lunchtime ?>  Miniute || Auto Task Time : <?= $autoTasktime?> Minutes || Tommorow Planner Planning : <?=$topp ?>  Minutes || 9 hours Planning = 9* 60 = 540 Minutes || Total Time For (Lunch + Auto Task + Tommorow Planner) : <?=$texpense_time?>  Minutes || Task Planner Should be <?php echo 540 - $texpense_time;?> Minutes</h6>
+      </marquee>
+      <marquee class="p-2 mt-1" width="100%"  onMouseOver="this.stop()" onMouseOut="this.start()" behavior="left" bgcolor="pink">
+        <small><span><?= $alertmessage; ?></span></small>
       </marquee>
           <div class="card p-2 bg-primary">
             <div class="row">
@@ -2014,7 +2056,6 @@ if($type_id == 3){
                                         }
                                         ?>
                                         </td>
-                                      
                                     </tr>
                                     <?php $i++; } }} ?>
                             </tbody>
@@ -2047,6 +2088,43 @@ if($type_id == 3){
                     </div>
                 </div>
                 <?php endif; ?>
+                <?php  if($plrequestcnt > 0){ 
+                                     if(!is_null($apr_time)){
+                                    ?>
+                                 <div class="row mb-2 mt-2">
+                                   <div class="col-md-4">
+                                      <div class="card bg-info">
+                                        <div class="card-header text-center">
+                                          <h6>Planner Request Time :</h6>
+                                          <span><?= $request_time; ?></span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <div class="card bg-success">
+                                        <div class="card-header text-center">
+                                          <h6>Planner Approved Time :</h6>
+                                          <span><?php 
+                                          if($apr_times == ''){
+                                            echo 'Pending';
+                                          }else{
+                                            echo $apr_times;
+                                          }
+                                          ?></span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <div class="card bg-danger">
+                                        <div class="card-header text-center">
+                                          <h6>Late Approved Time:</h6>
+                                          <span><?= $reqlateapr; ?></span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                                   </div>
+                                   <?php }} ?>
                   <div class="card col-lg-12 col-sm-12" id="content">
                     <div class="row mt-2">
                       <div class="text-center"> <b><i>Total Time Spent in Task Planning : <?php echo $planSessionmin == '' ? "00:00:00" : $planSessionmin; ?></i></b></div>
@@ -5287,21 +5365,15 @@ if($type_id == 3){
           const day = String(getcurrentDate.getDate()).padStart(2, '0');
           const formattedDate = `${year}-${month}-${day}`;
           if(slctplanddate == formattedDate){
-
-
             $('#meeting-time').on('change', function() {
             const meetingTime = $(this).val();
             const now = new Date();
             const currentHours = now.getHours();
             const currentMinutes = now.getMinutes();
-
             const currentTotalMinutes = currentHours * 60 + currentMinutes;
             const [meetingHours, meetingMinutes] = meetingTime.split(':').map(Number);
             var meetingTotalMinutes = meetingHours * 60 + meetingMinutes;
-             // alert(meetingTotalMinutes); // 689 
-             // alert(currentTotalMinutes);  // 1097
-            // Check if the meeting time is in the past
-            //var meetingTotalMinutes = 1200;
+   
             if (meetingTotalMinutes < currentTotalMinutes) {
                 alert("The meeting time cannot be in the past.");
                 $(this).val('');
@@ -5315,37 +5387,22 @@ if($type_id == 3){
                   },
                   cache: false,
                   success: function a(result){
-                    if (meetingTime < result) { 
-
-                      var data = JSON.parse(result);
-                      var initTime = data.init_time;
-                      var apr_time = data.apr_time;
+                    var data = JSON.parse(result);
+                    var initTime = data.init_time;
+                    var apr_time = data.apr_time;
+                    if(meetingTime !== ''){
+                      if (meetingTime < initTime) { 
                       var alertmessage = 'Your planner approved time is :'+apr_time +', and your planner time is 1 hour. Based on this time, you need to plan the task after'+initTime+'.';
-                         // alert('The entered time is below ' + initTime + '!');
                           alert(alertmessage);
-                          $(this).val('');
+                          $('#meeting-time').val('');
                       }
+                    }
+                    
                   }
                   });
             }
             });
-
-               // document.getElementById('meeting-time').addEventListener('change', function() {
-               // var inputTime = this.value; // Get the selected time
-               // var currentTime = new Date(); // Get the current time
-               // var currentHours = currentTime.getHours().toString().padStart(2, '0'); // Get current hour in HH format
-                //var currentMinutes = currentTime.getMinutes().toString().padStart(2, '0'); // Get current minutes in MM format
-                //var currentTimeString = `${currentHours}:${currentMinutes}`; // Current time in HH:MM format
-                // if (inputTime < currentTimeString) {      
-                //     alert('Selected time is earlier than the current time.');
-                //     $('#meeting-time').val('');
-                // }
-            //});
-
-
           }
-            
-      
           });
       </script>
       <style>

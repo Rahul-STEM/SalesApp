@@ -203,6 +203,18 @@
               <p>Day Close Check</p>
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="<?=base_url();?>/Menu/TodaysTaskApprovelRequest" >
+              <i class="far fa-circle nav-icon"></i>
+              <p>Planner Approvel Request</p>
+            </a>
+          </li>
+          <li class="nav-item">
+              <a href="<?=base_url();?>Menu/PlannerTaskApprovelPage" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Planner Task Approvel</p>
+              </a>
+          </li>
           
           <li class="nav-item">
             <a href="<?=base_url();?>Menu/SpecialRequestForLeaveSomeTimeData" class="nav-link">
@@ -228,12 +240,7 @@
               <p>Day Management System</p>
             </a>
           </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="<?=base_url();?>/Menu/TodaysTaskApprovelRequest" >
-              <i class="far fa-circle nav-icon"></i>
-              <p>Todays Task Approvel Request</p>
-            </a>
-          </li> -->
+        
           
           <li class="nav-item">
             <a href="<?=base_url();?>Menu/TaskCheck" class="nav-link">

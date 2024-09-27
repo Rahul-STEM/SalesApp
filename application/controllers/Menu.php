@@ -12,6 +12,9 @@ class Menu extends CI_Controller {
         $this->load->view('index');
         $this->load->helper('SameStatusTillDate_helper');
 
+        $this->load->helper('funnel_helper');
+
+
     }
 
     public function logout(){
@@ -252,6 +255,8 @@ class Menu extends CI_Controller {
         }
         $sd=$sdate;
         $ed=$edate;
+        $sd='2024-08-27';
+        $ed='2024-08-27';
         $sdate = new DateTime($sdate);
         $edate = new DateTime($edate);
 
@@ -4754,6 +4759,7 @@ class Menu extends CI_Controller {
 
         $this->db->query("INSERT INTO `task_plan_for_today`(`user_id`,`admin_id`, `date`, `request_remarks`,`taskcnt`,`would_you_want`) VALUES ('$uid','$auid','$setdatebyuser','$requestForTodaysTaskPlan','$taskcnt','$would_you_want')");
 
+        echo $this->db->last_query();die;
         $this->load->library('session');
         $this->session->set_flashdata('success_message', 'Your request has been successfully sent to the administrator. Please wait for approval.');
          redirect("Menu/TaskPlanner/".date('Y-m-d'));
@@ -9149,6 +9155,29 @@ class Menu extends CI_Controller {
         }
     }
 
+    public function getSameStatusLog($statusId,$cmpId,$cdate,$taskId){
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+
+        // $userId = '100192';
+        // $tdate = '2024-07-20';
+        // var_dump($_POST);die;
+        $taskslog = $this->Menu_model->getSameStatusLog($statusId,$cmpId,$cdate,$taskId);
+        // print_r($getTasks);die;
+        // echo $this->db->last_query();
+        if(!empty($user)){
+            $this->load->view('include/header');
+            $this->load->view($dep_name.'/SameStatuslog',['uid'=>$uid,'user'=>$user,'taskslog'=>$taskslog]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
     
     // New TaskCheck <=========================================== END ==================================>
 
@@ -9168,7 +9197,7 @@ class Menu extends CI_Controller {
         $uyid =  $user['type_id'];
         $myid = $uid;
 
-
+        // echo 'hii';die;
         if($uid=='100103'){$uid=45;}
         if($uid=='100149'){$uid=45;}
         if($uid=='100142'){$uid=2;}
@@ -9202,7 +9231,14 @@ class Menu extends CI_Controller {
         $autotasktimenew=$this->Menu_model->autotasktimenew($uid,$tdate);
         $positive=$this->Menu_model->get_positive();
         $vpositive=$this->Menu_model->get_vpositive();
+        
+        $tdate = '2024-07-20';
 
+        $selected_users = '';
+
+        $sDate = $eDate =  '';
+
+        $TeamDayTasks = $this->Menu_model->getTeamTasksDashboard($uid,$tdate,$sDate=null,$eDate=null,$selected_users=null);
         // New functions <==== START ====>
 
         $roles = $this->Menu_model->getRoles($id=null);
@@ -9235,7 +9271,7 @@ class Menu extends CI_Controller {
         $pstc=$this->Menu_model->get_pstc($uid);
    
         if(!empty($user)){
-            $this->load->view($dep_name.'/index_New',['myid'=>$myid,'ttdone'=>$ttdone,'upt'=>$upt,'user'=>$user,'fr'=>$fr,'callr'=>$callr,'emailr'=>$emailr,'meetingr'=>$meetingr,'pendingt'=>$pendingt,'totalt'=>$totalt,'patc'=>$patc,'tatc'=>$tatc,'pate'=>$pate,'tate'=>$tate,'patm'=>$patm,'tatm'=>$tatm,'sc'=>$sc,'tptask'=>$tptask,'ttd'=>$ttd,'barg'=>$barg,'uid'=>$uid,'pstc'=>$pstc,'poc'=>$poc,'vpoc'=>$vpoc,'tnos'=>$tnos,'revenue'=>$revenue,'tsww'=>$tsww,'bdc'=>$bdc,'tdate'=>$tdate,'autotasktimenew'=>$autotasktimenew,'mbdc'=>$mbdc,'roles'=>$roles,'zones'=>$zones]);
+            $this->load->view($dep_name.'/index_New',['myid'=>$myid,'ttdone'=>$ttdone,'upt'=>$upt,'user'=>$user,'fr'=>$fr,'callr'=>$callr,'emailr'=>$emailr,'meetingr'=>$meetingr,'pendingt'=>$pendingt,'totalt'=>$totalt,'patc'=>$patc,'tatc'=>$tatc,'pate'=>$pate,'tate'=>$tate,'patm'=>$patm,'tatm'=>$tatm,'sc'=>$sc,'tptask'=>$tptask,'ttd'=>$ttd,'barg'=>$barg,'uid'=>$uid,'pstc'=>$pstc,'poc'=>$poc,'vpoc'=>$vpoc,'tnos'=>$tnos,'revenue'=>$revenue,'tsww'=>$tsww,'bdc'=>$bdc,'tdate'=>$tdate,'autotasktimenew'=>$autotasktimenew,'mbdc'=>$mbdc,'roles'=>$roles,'zones'=>$zones,'TeamDayTasks'=>$TeamDayTasks]);
         }else{
             redirect('Menu/main');
         }
@@ -9311,9 +9347,13 @@ class Menu extends CI_Controller {
             $startDate = $_POST['FromDate'];
             $endDate = $_POST['EndDate'];
 
-        }else{
-            $startDate = date('Y-m-d');
-            $endDate = date('Y-m-d');
+        }
+        else{
+            // $startDate = date('Y-m-d');
+            // $endDate =  date('Y-m-d');
+
+            $startDate = '2024-07-20';
+            $endDate = '2024-07-20';
         }
 
         $sd =$startDate;
@@ -9321,6 +9361,107 @@ class Menu extends CI_Controller {
         // echo $sd;
         // echo $ed;
         // die;
+
+        if (isset($_POST['userType'])) {
+
+            $userType = array_filter($_POST['userType'], function ($value) {
+                return $value !== 'select_all';
+            });
+
+        } else {
+
+            $userType = [];
+        }
+
+        if (isset($_POST['user'])) {
+
+            $users = array_filter($_POST['user'], function ($value) {
+                return $value !== 'select_all';
+            });
+
+        } else {
+
+            $users = [];
+        }
+
+        // var_dump($users);die;
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+
+        $roles = $this->Menu_model->getRoles($dt[0]->id);
+
+        $tdate = '2024-07-20';
+
+        // echo $atid;die;
+        $mtdata = $this->Menu_model->get_bwdalltaskdbyad_New($code,$atid,$bdid,$tdate,$sd,$ed,$users);
+
+        // $tdate = date('Y-m-d');
+        $getCountData = $this->Menu_model->getTeamTasks($uid,$tdate,$sd,$ed,$users);
+        // var_dump($getCountData);die;
+        $mappedData = new stdClass();
+        // $mappedData->id_1 = $getCountData[0]->TotalTasks;
+        $mappedData->id_2 = $getCountData[0]->TotalPending;
+        $mappedData->id_3 = $getCountData[0]->TotalCompleted;
+
+
+        $formattedData = new stdClass();
+
+        // $formattedData->lable = 'TotalTasks'; // Sample name
+        // $formattedData->count =  $mappedData->id_1; // Sample color
+        // $formattedData->id = '1';        // Sample ID
+
+        // Create an array to hold the final result
+        $result = [];
+        $result[] = $formattedData;
+
+        $result[] = new stdClass();
+        $result[1]->lable = 'TotalPending';
+        $result[1]->count = $mappedData->id_2; // Another color example
+        $result[1]->id = '2';
+
+        $result[] = new stdClass();
+        $result[2]->lable = 'TotalCompleted';
+        $result[2]->count = $mappedData->id_3; // Another color example
+        $result[2]->id = '3';
+        
+        // var_dump($result);die;
+        if(!empty($user)){
+            $this->load->view($dep_name.'/ATaskDetail_New',['uid'=>$uid,'user'=>$user,'atid'=>$atid,'sd'=>$sd,'ed'=>$ed,'code'=>$code,'bdid'=>$bdid,'mtdata'=>$mtdata,'getCountData'=>$result,'roles'=>$roles,'Selected_userType' => $userType,'selected_users' => $users,]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+
+    public function GetTaskByStatus(){
+
+        // $stid = isset($_POST['id']) ? $_POST['id'] : null;
+        // $sdate = isset($_POST['sdate']) ? $_POST['sdate'] : null;
+        // $edate = isset($_POST['edate']) ? $_POST['edate'] : null;
+
+        // $tdate = date('Y-m-d');
+
+        $tdate = '2024-07-20';
+
+        $stid = isset($_POST['id']) ? $_POST['id'] : null;
+        $sdate = isset($_POST['sdate']) ? $_POST['sdate'] : $tdate;
+        $edate = isset($_POST['edate']) ? $_POST['edate'] : $tdate;
+        
+        $selected_userType = isset($_POST['selected_userType']) ? $_POST['selected_userType'] : null;
+        $selected_users = isset($_POST['Selected_users']) ? $_POST['Selected_users'] : null;
+        $selected_userType = (array) json_decode($selected_userType);
+        // var_dump($selected_users);die;
+        $selected_users = (array)json_decode($selected_users);
+
+        // $selected_cluster = isset($_POST['selected_cluster']) ? $_POST['selected_cluster'] : null;
+        // $selected_cluster = (array) json_decode($selected_cluster);
+        // var_dump($selected_users);die;
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -9329,17 +9470,127 @@ class Menu extends CI_Controller {
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
 
-        $mtdata = $this->Menu_model->get_bwdalltaskdbyad_New($code,$atid,$bdid,$sd,$ed);
-        // echo $this->db->last_query();die;
-
         $tdate = date('Y-m-d');
-        $getCountData = $this->Menu_model->getTeamTasks($uid,$tdate,$sd,$ed);
+        $this->load->model('Menu_model');
+
+        $mtdata = $this->Menu_model->getTableDataByTaskStatus($uid,$stid,$sdate,$edate,$selected_users);
+
+        $getCountData = $this->Menu_model->getTeamTaskByStatus($uid,$tdate,$sdate,$edate,$selected_users,$stid);
+        
+        // var_dump($getCountData);die;
+        $data = [['Action Type', 'Action Name', 'Total Tasks' ]]; // Define the header
+
+        foreach ($getCountData as $result) {
+
+            $totalTasks = (int)$result->Calls + 
+                (int)$result->Email + 
+                (int)$result->Meeting + 
+                (int)$result->BargeMeeting + 
+                (int)$result->WhatsApp + 
+                (int)$result->MoM + 
+                (int)$result->Proposal;
+
+            $data[] = [
+                $result->actiontype_id, // Action Type ID
+                $result->actionName,     // Action Name
+                $totalTasks              // Total Tasks
+            ];
+        }
+
+        $jsonData = json_encode($data);
+        // echo "<pre>";
+        // var_dump($jsonData);die;
+
+        $roles = '';
+        // $mtdata = '';
+        $atid = '';
+        $bdid = '';
+        $code = '';
+
+
+        // var_dump($jsonData);die;
 
         if(!empty($user)){
-            $this->load->view($dep_name.'/ATaskDetail_New',['uid'=>$uid,'user'=>$user,'atid'=>$atid,'sd'=>$sd,'ed'=>$ed,'code'=>$code,'bdid'=>$bdid,'mtdata'=>$mtdata,'getCountData'=>$getCountData]);
+            $this->load->view($dep_name.'/StatusWiseTask',['uid'=>$uid,'user'=>$user,'atid'=>$atid,'sd'=>$sdate,'ed'=>$edate,'code'=>$code,'bdid'=>$bdid,'mtdata'=>$mtdata,'jsonData'=>$jsonData,'roles'=>$roles,'Selected_userType' => $selected_userType,'selected_users' => $selected_users,'stid'=>$stid]);
         }else{
             redirect('Menu/main');
         }
+
+    }
+
+    public function GetTaskDetails(){
+
+        $this->load->helper('funnel_helper');
+        // $tdate = date('Y-m-d');
+        // var_dump($_POST);die;
+        $tdate = '2024-07-20';
+
+        $stid = isset($_POST['id']) ? $_POST['id'] : null;
+        $sdate = isset($_POST['sdate']) ? $_POST['sdate'] : $tdate;
+        $edate = isset($_POST['edate']) ? $_POST['edate'] : $tdate;
+        
+        $selected_userType = isset($_POST['selected_userType']) ? $_POST['selected_userType'] : null;
+        $selected_users = isset($_POST['Selected_users']) ? $_POST['Selected_users'] : null;
+        $selected_userType = (array) json_decode($selected_userType);
+        $selected_users = (array)json_decode($selected_users);
+
+        // $selected_cluster = isset($_POST['selected_cluster']) ? $_POST['selected_cluster'] : null;
+        // $selected_cluster = (array) json_decode($selected_cluster);
+        // var_dump($selected_users);die;
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+
+        $tdate = date('Y-m-d');
+        $this->load->model('Menu_model');
+
+        $mtdata = $this->Menu_model->getTableDataByTask($uid,$stid,$sdate,$edate,$selected_users);
+
+        // $getCountData = $this->Menu_model->getTeamTaskByStatus($uid,$tdate,$sdate,$edate,$selected_users,$stid);
+        
+        // var_dump($getCountData);die;
+        // $data = [['Action Type', 'Action Name', 'Total Tasks' ]]; // Define the header
+
+        // foreach ($getCountData as $result) {
+
+        //     $totalTasks = (int)$result->Calls + 
+        //         (int)$result->Email + 
+        //         (int)$result->Meeting + 
+        //         (int)$result->BargeMeeting + 
+        //         (int)$result->WhatsApp + 
+        //         (int)$result->MoM + 
+        //         (int)$result->Proposal;
+
+        //     $data[] = [
+        //         $result->actiontype_id, // Action Type ID
+        //         $result->actionName,     // Action Name
+        //         $totalTasks              // Total Tasks
+        //     ];
+        // }
+
+        // $jsonData = json_encode($data);
+        // echo "<pre>";
+        // var_dump($jsonData);die;
+
+        $roles = '';
+        // $mtdata = '';
+        $atid = '';
+        $bdid = '';
+        $code = '';
+        $jsonData = '';
+
+        // var_dump($jsonData);die;
+
+        if(!empty($user)){
+            $this->load->view($dep_name.'/TaskDetails',['uid'=>$uid,'user'=>$user,'atid'=>$atid,'sd'=>$sdate,'ed'=>$edate,'code'=>$code,'bdid'=>$bdid,'mtdata'=>$mtdata,'jsonData'=>$jsonData,'roles'=>$roles,'Selected_userType' => $selected_userType,'selected_users' => $selected_users,'stid'=>$stid]);
+        }else{
+            redirect('Menu/main');
+        }
+
     }
 
     public function companies_New($code,$PSTid=null){
@@ -17862,6 +18113,7 @@ class Menu extends CI_Controller {
                 redirect('Menu/TaskPlanner/'.date("Y-m-d"));
             }else{
                 $this->db->query("INSERT INTO `autotask_time`(`user_id`, `date`, `stime`, `etime`) VALUES ('$uid','$plandatet','$startautotasktime','$endautotasktime')");
+                // echo $this->db->last_query();die;
                 $inid = $this->db->insert_id();
             }
             $this->session->set_flashdata('success_message',' Nice job! You Have Planned For Time For Doing AutoTask');
@@ -18270,20 +18522,20 @@ public function addplantask11(){
     $pendingTask = $this->Menu_model->get_allcmp_planbutnotinited($uid);
     $pendingTaskcnt = sizeof($pendingTask);
 
-     $bdid = $this->input->post('bdid');
-     $tptime = $this->input->post('tptime');
-     $ptime = $this->input->post('ptime');
-     $ntaction = $this->input->post('ntaction');
-     $ntppose = $this->input->post('ntppose');
-     $selectby = $this->input->post('selectby');
-     $pdate = $this->input->post('pdate');
+    $bdid = $this->input->post('bdid');
+    $tptime = $this->input->post('tptime');
+    $ptime = $this->input->post('ptime');
+    $ntaction = $this->input->post('ntaction');
+    $ntppose = $this->input->post('ntppose');
+    $selectby = $this->input->post('selectby');
+    $pdate = $this->input->post('pdate');
 
-     $selectcompanybyuser = $this->input->post('selectcompanybyuser');
+    $selectcompanybyuser = $this->input->post('selectcompanybyuser');
 
-     if(sizeof($selectcompanybyuser) > 3){
+    if(sizeof($selectcompanybyuser) > 3){
         $this->session->set_flashdata('success_message',' You can only have three company plans at a time !!');
         redirect('Menu/TaskPlanner/'.$pdate);
-     }
+    }
 
         // if($bdid == 100095){
             // Start Check Active Task Planner Restrication Set BY Admin 
@@ -18291,6 +18543,7 @@ public function addplantask11(){
             // End Check Active Task Planner Restrication Set BY Admin 
         // }
         
+        // echo $this->d
 
      $totalttaskdata =$this->Menu_model->get_totaltdetailsDatewise($bdid,$pdate);
      

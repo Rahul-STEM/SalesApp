@@ -167,7 +167,7 @@
     </div>
     <!-- /.content-header -->
 <!-- Main content -->
- <?php // var_dump($selectedUser);die; ?>
+ <?php  //var_dump($taskList);die; ?>
     <section class="content">
       <div class="container-fluid">
       <div class="alert alert-success" id="success-message" style="display: none;">Thank you for your rating!</div>
@@ -613,7 +613,7 @@
                                         </td>
                                         
                                         <td><?=$SameStatusSince_1 .' Days';?></td>
-                                        <td><?=$NoOfTaskSinceStatusChange ;?></td>
+                                        <td><a href="<?=base_url().'/Menu/getSameStatusLog/'.$task->Newstatus_id.'/'.$task->cmpid.'/'.$cdate.'/'.$task->tid ?>"> <?=$NoOfTaskSinceStatusChange ;?> </a></td>
                                         <!-- <td></td> -->
                                     </tr>
                                 <?php $i++; } ?>

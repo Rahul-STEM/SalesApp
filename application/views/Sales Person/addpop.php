@@ -18,9 +18,9 @@ date_default_timezone_set("Asia/Kolkata");
               <div class="card-body">
                 Current Task : <lable id="ctname"></lable><br>
                 Last Status :  <lable id="clsname"></lable><br>
-                Last Task Remark : <lable id="cremarks"></lable>
-                Last Task Remark : <lable id="cremarks"></lable>
-                Task Assigned By : <lable id="assignedBy"></lable>
+                Last Task Remark : <lable id="cremarks"></lable><br>
+                <!-- Last Task Remark : <lable id="cremarks"></lable> -->
+                Task Assigned By : <lable id="assignedBy"></lable><br>
                 Task Assigned To : <lable id="assigneTo"></lable>
               </div>
             </div>
@@ -354,7 +354,7 @@ date_default_timezone_set("Asia/Kolkata");
               </div>
             </div>
             <div class="card-footer" id="taskbtn">
-              <button type="submit" class="btn btn-primary mt-3" id="button" onclick="this.form.submit(); this.disabled = true;">Submit</button>
+              <button type="submit" class="btn btn-primary mt-3" id="button" onclick="this.form.submit();">Submit</button>
             </div>
           </form>
         </div>
@@ -1325,6 +1325,8 @@ date_default_timezone_set("Asia/Kolkata");
                                 var clsname = response[0].clsname;
                                 // var cremarks = response[0].cremarks;
                                 var cremarks = response[0].remarks;
+                                var assignedBy = response[0].assignedBy;
+                                var assignedTo = response[0].assignedTo;
                                 var cp = response[0].cp;
                                 var emailid = response[0].emailid;
                                 var phoneno = response[0].phoneno;
@@ -1357,6 +1359,8 @@ date_default_timezone_set("Asia/Kolkata");
                                 document.getElementById("ctname").innerHTML = ctname;
                                 document.getElementById("clsname").innerHTML = clsname;
                                 document.getElementById("cremarks").innerHTML = cremarks;
+                                document.getElementById("assignedBy").innerHTML = assignedBy;
+                                document.getElementById("assignedTo").innerHTML = assignedTo;
                                 document.getElementById("cp").innerHTML = cp;
                                 document.getElementById("emailid").innerHTML = emailid;
                                 document.getElementById("phoneno").innerHTML = phoneno;
@@ -1647,7 +1651,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 $('#clink').click(function(){
                                     var isMobile = window.orientation > -1;
                                     if (isMobile != 'Mobile') {
-                                        alert('You need to perform and update this task from mobile..!!');
+                                        alert('You need to complete and update this task from mobile..!!');
                                         return false;
                                     }
                                     // alert(isMobile ? 'Mobile' : 'Not mobile');

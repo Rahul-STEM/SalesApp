@@ -157,21 +157,7 @@
                                     <div class="tab-content">
                                         <div class="tab-pane fade show active" id="GridView" role="tabpanel" aria-labelledby="nav_GridView">
                                             <div class="card">
-                                                <!-- <div class="card-header">
-                                                    <div class="row">
-                                                        <?php foreach ($FunnelData as $FunnelDataSingle) { ?>
-                                                            <div class="col-md-2 mb-2" >
-                                                                <div class="card card p-2 col-sm m-auto bg-light" data-category="<?= htmlspecialchars($FunnelDataSingle->stname) ?>">
-                                                                    <strong>
-                                                                        <a href="#" style="color:<?=$FunnelDataSingle->stclr?>">
-                                                                            <?=$FunnelDataSingle->stname?> - <?=$FunnelDataSingle->cont?>
-                                                                        </a>
-                                                                    </strong>
-                                                                </div>
-                                                            </div>
-                                                        <?php    }?>
-                                                    </div>
-                                                </div> -->
+                                               
                                                 <div class="card-body">
                                                     <div class="row">
                                                     <?php foreach($TableData as $TableDataGrid){ 
@@ -291,53 +277,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div class="tab-pane fade" id="TabView" role="tabpanel" aria-labelledby="nav_TabView">
-                                            <div class="card card-body">
-                                                <div class="row">
-                                                    <?php
 
-                                                        $arrayselected_partnerType = json_encode($selected_partnerType);
-                                                        $arrayselected_cluster = json_encode($selected_cluster);
-                                                        $arrayselected_user = json_encode($selected_users);
-                                                        $arrayselected_category = json_encode($selected_category);
-                                                        $arrayselected_userType = json_encode($userType);
-           
-                                                    ?>
-                                                    <?php foreach ($FunnelData as $FunnelDataSingle) { 
-
-                                                            $formId = 'hiddenForm_' . htmlspecialchars($FunnelDataSingle->stid);
-                                                        ?>
-                                                        
-                                                        <form id="<?= $formId; ?>" action="<?= base_url(); ?>GraphNew/StatusWiseFunnelData/<?=$FunnelDataSingle->stid?>" method="POST" style="display: none;" target="_blank">
-                                                            <input type="hidden" name="selected_partnerType" value="<?= htmlspecialchars($arrayselected_partnerType); ?>">
-
-                                                            <input type="hidden" name="arrayselected_cluster" value="<?= htmlspecialchars($arrayselected_cluster)?>">
-
-                                                            <input type="hidden" name="arrayselected_user" value="<?=htmlspecialchars($arrayselected_user) ?>">
-
-                                                            <input type="hidden" name="arrayselected_userType" value="<?=htmlspecialchars($arrayselected_userType) ?>">
-
-                                                            <input type="hidden" name="arrayselected_category" value="<?=htmlspecialchars($arrayselected_category) ?>">
-
-                                                            <input type="hidden" name="stid" value="<?= htmlspecialchars($FunnelDataSingle->stid); ?>">
-
-                                                            <input type="hidden" name="sdate" value="<?= htmlspecialchars($sdate); ?>">
-                                                            <input type="hidden" name="edate" value="<?= htmlspecialchars($edate); ?>">
-                                                        </form>
-                                                        <div class="col-md-3 mb-2" >
-                                                            <div class="card card p-3 col-sm m-auto bg-light">
-                                                                <strong>
-                                                                    <a href="javascript:void(0);" onclick="document.getElementById('<?= $formId; ?>').submit();" style="color:<?=$FunnelDataSingle->stclr?>">
-                                                                        <?=$FunnelDataSingle->stname?> - <?=$FunnelDataSingle->cont?>
-                                                                    </a>
-                                                                    
-                                                                </strong>
-                                                            </div>
-                                                        </div>
-                                                    <?php } ?>
-                                                </div>
-                                            </div> 
-                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -350,12 +290,12 @@
     </div>
 
 <script src="https://www.gstatic.com/charts/loader.js"></script>
-<script>
+<!-- <script>
     $("#example1").DataTable({
       "responsive": false, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-</script>
+</script> -->
 
 <!-- <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -450,7 +390,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 foreach($StatusWiseTask as $sw){
                     // var_dump($sw);die;
-                    $url="https://stemapp.in/Menu";
+                    // $url="https://stemapp.in/Menu";
+                    $url="#";
+
                     ?>
                     data.addRow(['<?=$stname?> ( <?=$sw->cont?>)',
 

@@ -79,8 +79,6 @@ class GraphNew extends CI_Controller
     public function FunnelAnalysis()
     {
 
-        // var_dump($_POST);die;
-
         if (isset($_POST['startDate']) && isset($_POST['endDate'])) {
 
             $sdate = $_POST['startDate'];
@@ -172,12 +170,100 @@ class GraphNew extends CI_Controller
         $FunnelData = $this->Graph_Model->getGraphDetails($uid, $userTypeid, $sdate, $edate, $userType, $cluster, $partnerType, $category, $users);
         // var_dump($FunnelData);die;
 
+        if(!empty($_POST['startDate']) && !empty($_POST['endDate'])){
 
-        // var_dump($data);die;
+            $SankeyData = $this->Graph_Model->getSankeyGraphData($uid, $userTypeid, $sdate, $edate, $userType, $cluster, $partnerType, $category, $users);
+
+            $dataLong = [];
+
+            foreach ($SankeyData as $row) {
+                // var_dump($row);die;
+                $dataLong[] = [
+                    'status_id' => $row->fromStatus,
+                    'Newstatus_id' => $row->toStatus,
+                    'value' => $row->count
+                ];
+            }
+            
+            // var_dump($dataLong);die;
+
+            $nodes = array_unique(array_merge(
+                array_column($dataLong, 'status_id'),
+                array_column($dataLong, 'Newstatus_id'),
+                array_column($dataLong, 'value')
+
+            ));
+            
+            // var_dump($nodes);die;
+
+            $dataLongWithIDs = [];
+
+            foreach ($dataLong as $entry) {
+                // var_dump($entry);die;
+                $dataLongWithIDs[] = [
+                    'IDsource' => array_search($entry['status_id'], $nodes),
+                    'IDtarget' => array_search($entry['Newstatus_id'], $nodes),
+                    'IDValue' => array_search($entry['value'], $nodes),
+
+                ];
+            }
+
+        // var_dump($dataLongWithIDs);die;
+
+            
+
+            // foreach ($SankeyData as $row) {
+            //     foreach ($row as $key => $value) {
+            //         // var_dump($row->status_id);die;
+            //         $dataLong[] = ['status_id'=>$row->status_id ,'Newstatus_id'=>$row->nstatus_id];
+
+            //         // if ($key != 'rowname' && $value > 0) {
+            //         //     $dataLong[] = ['status_id'=>$row['status_id'] ,'Newstatus_id'=>$row['nstatus_id']];
+            //         // }
+            //     }
+            // }
+
+            // $nodes = [];
+
+            // foreach ($dataLong as $entry) {
+            //     $nodes[$entry['status_id']] = true;
+            //     $nodes[$entry['Newstatus_id']] = true;
+            // }
+            // $nodes = array_keys($nodes);
+            // var_dump($dataLong);die;
+
+            // Prepare ID mapping
+            // $dataLongWithIDs = [];
+
+            // foreach ($dataLong as $entry) {
+            //     $dataLongWithIDs[] = [
+            //         'IDsource' => array_search($entry['status_id'], $nodes),
+            //         'IDtarget' => array_search($entry['Newstatus_id'], $nodes),
+            //         // 'value' => $entry['value'],
+            //     ];
+            // }
+ 
+            // $linksJson = ($dataLongWithIDs);
+            // $nodesJson = (array_map(function($name) { return ['name' => $name]; }, $nodes));
+
+            $linksJson = $dataLongWithIDs;
+            $nodesJson = array_map(function($name) { return ['name' => $name]; }, $nodes);
+
+            // var_dump($nodesJson);die;
+
+        }else {
+            
+            // $dataLongWithIDs = [];
+            $nodesJson = [];
+            $linksJson = [];
+        }
+
+        // var_dump($nodes);die;
+
         if (!empty($user)) {
             $this->load->view('include/header');
             $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);
-            $this->load->view('Graphs/FunnelAnalysis', ['uid' => $uid, 'user' => $user, 'sdate' => $sdate, 'edate' => $edate, 'TableData' => $TableData, 'roles' => $roles, 'partner_type' => $partner_type, 'clusters' => $get_cluster, 'FunnelData' => $FunnelData, 'selected_partnerType' => $partnerType, 'selected_category' => $category, 'selected_cluster' => $cluster, 'selected_users' => $users, 'userType' => $userType]);
+            $this->load->view('Graphs/FunnelAnalysis', ['uid' => $uid, 'user' => $user, 'sdate' => $sdate, 'edate' => $edate, 'TableData' => $TableData, 'roles' => $roles, 'partner_type' => $partner_type, 'clusters' => $get_cluster, 'FunnelData' => $FunnelData, 'selected_partnerType' => $partnerType, 'selected_category' => $category, 'selected_cluster' => $cluster, 'selected_users' => $users, 'userType' => $userType,'linksJson' => $linksJson,'nodesJson' => $nodesJson]);
             $this->load->view('include/footer');
         } else {
             redirect('Menu/main');
@@ -203,7 +289,7 @@ class GraphNew extends CI_Controller
         $selected_users = (array) json_decode($selected_users);
         $selected_category = (array) json_decode($selected_category);
         
-        // var_dump(($selected_cluster));die;
+        var_dump(($selected_users));die;
 
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -1029,8 +1115,6 @@ class GraphNew extends CI_Controller
     //     }
     // }
 
-
-
     public function ActionWiseFunnelAnalysis()
     {
 
@@ -1206,7 +1290,6 @@ class GraphNew extends CI_Controller
             $users = [];
         }
 
-
         if (isset($_POST['partnerType'])) {
 
             $partnerType = array_filter($_POST['partnerType'], function ($value) {
@@ -1231,9 +1314,28 @@ class GraphNew extends CI_Controller
             $category = [];
         }
 
+        if (isset($_POST['status'])) {
+
+            $status = $_POST['status'];
+           
+            // $category = implode(',', ($category));
+
+        } else {
+
+            $status = '';
+        }
+
         $actionType = isset($_POST['action']) ? $_POST['action'] : null;
-        $purposeType = isset($_POST['purpose']) ? $_POST['purpose'] : 'no';
-        
+        $purposeType = isset($_POST['purpose']) ? $_POST['purpose'] : null;
+
+        if ($status == '1') {
+
+            $actionType = 'yes';
+            $purposeType = 'yes';
+
+        }
+
+        // var_dump($purposeType);die;
         // $actionType = $this->input->post('action');
         // $purposeType = $this->input->post('purpose');
 
@@ -1254,13 +1356,15 @@ class GraphNew extends CI_Controller
 
         $get_action = $this->Graph_Model->getAction();
 
-        // $TableData = $this->Graph_Model->ActionWiseTableDetails($uid, $sdate, $edate, $category, $partnerType, $userType, $cluster, $users,  $userTypeid, $action);
+        $currentDate = new DateTime();
+        $month = date('m');
 
-        // public function ActionWiseTableDetails($uid,$sdate,$edate,$selected_category,$selected_partnerType,$selected_userType,$selected_cluster,$selected_users,$userTypeid,$action)
-        // $FunnelData = $this->Graph_Model->getGraphDetails($uid, $userTypeid, $sdate, $edate, $userType, $cluster, $partnerType, $category, $users);
-        // var_dump($TableData);die;
+        $financialYear = ($currentDate->format('m') >= 4) ? $currentDate->format('Y') : ($currentDate->format('Y') - 1);
 
-        $FunnelData = '';$TableData='';
+        $TableData = $this->Graph_Model->APTableDetails($uid,$sdate,$edate,$category,$partnerType,$userType,$users,$userTypeid,$actionType,$purposeType,$status);
+
+        $FunnelData = '';
+
         if (!empty($user)) {
 
             $this->load->view('include/header');
@@ -1272,4 +1376,203 @@ class GraphNew extends CI_Controller
             redirect('Menu/main');
         }
     }
+
+    public function TimeSlotWiseTaskAnalysis(){
+
+
+        if (isset($_POST['startDate']) && isset($_POST['endDate'])) {
+
+            $sdate = $_POST['startDate'];
+            $edate = $_POST['endDate'];
+        } else {
+            $sdate = date('Y-m-d');
+            $edate = date('Y-m-d');
+        }
+
+        if (isset($_POST['userType'])) {
+
+            $userType = array_filter($_POST['userType'], function ($value) {
+                return $value !== 'select_all';
+            });
+
+        } else {
+
+            $userType = [];
+        }
+
+        if (isset($_POST['cluster'])) {
+
+            $cluster = array_filter($_POST['cluster'], function ($value) {
+                return $value !== 'select_all';
+            });
+
+            $cluster = implode(',', ($cluster));
+        } else {
+
+            $cluster = [];
+        }
+
+        if (isset($_POST['user'])) {
+
+            $users = array_filter($_POST['user'], function ($value) {
+                return $value !== 'select_all';
+            });
+
+        } else {
+
+            $users = [];
+        }
+
+        if (isset($_POST['partnerType'])) {
+
+            $partnerType = array_filter($_POST['partnerType'], function ($value) {
+                return $value !== 'select_all';
+            });
+
+        } else {
+
+            $partnerType = [];
+        }
+
+        if (isset($_POST['category'])) {
+
+            $category = array_filter($_POST['category'], function ($value) {
+                return $value !== 'select_all';
+            });
+        } else {
+
+            $category = [];
+        }
+
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $userTypeid = $user['type_id'];
+        $dt = $this->Graph_Model->get_utype($userTypeid);
+        $dep_name = $dt[0]->name;
+
+
+        $roles = $this->Graph_Model->getRoles($dt[0]->id);
+
+        $partner_type = $this->Graph_Model->getPartnerType();
+
+        $get_cluster = $this->Graph_Model->get_clusters();
+
+        $TableData =  $FunnelData = [];
+        
+        $TableData =  $this->Graph_Model->getTimeSlotWiseTaskTable($users,$userType,$sdate,$edate,$partnerType,$category);
+        // var_dump($TableData);die;
+        if (!empty($user)) {
+
+            $this->load->view('include/header');
+            $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);
+            $this->load->view('Graphs/TimeWiseTaskGraph', ['uid' => $uid, 'user' => $user, 'sdate' => $sdate, 'edate' => $edate, 'TableData' => $TableData, 'userTypeid' => $userTypeid, 'roles' => $roles, 'partner_type' => $partner_type, 'clusters' => $get_cluster, 'FunnelData' => $FunnelData, 'selected_partnerType' => $partnerType, 'selected_category' => $category, 'selected_cluster' => $cluster,  'selected_users' => $users, 'Selected_userType' => $userType, ]);
+            $this->load->view('include/footer');
+        } else {
+
+            redirect('Menu/main');
+        }
+    }
+
+    public function ActionWiseTaskConversion(){
+
+
+        if (isset($_POST['startDate']) && isset($_POST['endDate'])) {
+
+            $sdate = $_POST['startDate'];
+            $edate = $_POST['endDate'];
+        } else {
+            $sdate = date('Y-m-d');
+            $edate = date('Y-m-d');
+        }
+
+        if (isset($_POST['userType'])) {
+
+            $userType = array_filter($_POST['userType'], function ($value) {
+                return $value !== 'select_all';
+            });
+
+            // $userType = implode(',', ($userType));
+
+        } else {
+
+            $userType = [];
+        }
+
+        if (isset($_POST['cluster'])) {
+
+            $cluster = array_filter($_POST['cluster'], function ($value) {
+                return $value !== 'select_all';
+            });
+
+            $cluster = implode(',', ($cluster));
+        } else {
+
+            $cluster = [];
+        }
+
+        if (isset($_POST['user'])) {
+
+            $users = array_filter($_POST['user'], function ($value) {
+                return $value !== 'select_all';
+            });
+
+        } else {
+
+            $users = [];
+        }
+
+        if (isset($_POST['partnerType'])) {
+
+            $partnerType = array_filter($_POST['partnerType'], function ($value) {
+                return $value !== 'select_all';
+            });
+
+        } else {
+
+            $partnerType = [];
+        }
+
+        if (isset($_POST['category'])) {
+
+            $category = array_filter($_POST['category'], function ($value) {
+                return $value !== 'select_all';
+            });
+        } else {
+
+            $category = [];
+        }
+
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $userTypeid = $user['type_id'];
+        $dt = $this->Graph_Model->get_utype($userTypeid);
+        $dep_name = $dt[0]->name;
+
+
+        $roles = $this->Graph_Model->getRoles($dt[0]->id);
+
+        $partner_type = $this->Graph_Model->getPartnerType();
+
+        $get_cluster = $this->Graph_Model->get_clusters();
+
+        $TableData =  $FunnelData = [];
+        
+        $TableData =  $this->Graph_Model->getActionWiseTaskConversionTable($users,$userType,$sdate,$edate,$partnerType,$category);
+        // var_dump($TableData);die;
+        if (!empty($user)) {
+
+            $this->load->view('include/header');
+            $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);
+            $this->load->view('Graphs/ActionWiseTaskConversion', ['uid' => $uid, 'user' => $user, 'sdate' => $sdate, 'edate' => $edate, 'TableData' => $TableData, 'userTypeid' => $userTypeid, 'roles' => $roles, 'partner_type' => $partner_type, 'clusters' => $get_cluster, 'FunnelData' => $FunnelData, 'selected_partnerType' => $partnerType, 'selected_category' => $category, 'selected_cluster' => $cluster,  'selected_users' => $users, 'Selected_userType' => $userType, ]);
+            $this->load->view('include/footer');
+        } else {
+
+            redirect('Menu/main');
+        }
+    }
+
 }

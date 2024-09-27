@@ -126,7 +126,10 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <p class="text-center text-secondary font-weight-bold">Team Detail</p>
+                                    <!-- <p class="text-center text-secondary font-weight-bold">Team Detail</p> -->
+                                    <center>
+                                        <h5>Team Detail</h5>
+                                    </center>
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
@@ -147,10 +150,6 @@
                                                             
                                                         </div>
                                                     </div>
-                                                    <?php 
-                                                    
-                                                    
-                                                    ?>
                                                     <div class="col-md-3">
                                                         <div class="form-group">
                                                             <label>Select Role</label>
@@ -159,7 +158,9 @@
                                                                 <?php foreach($roles as $r) {
 
                                                                 ?>
-                                                                <option value="<?= $r->id ?>"><?= $r->name ?></option>
+                                                                <option value="<?= $r->id ?>" <?= in_array($r->id, $postUserType) ? 'selected' : '' ?>><?= $r->name ?></option>
+
+                                                                <!-- <option value="<?= $r->id ?>"><?= $r->name ?></option> -->
                                                                 <?php } ?>
                                                             </select>
                                                         </div>
@@ -193,7 +194,9 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <p class="text-center text-secondary font-weight-bold">Team Details Graph View</p>
+                                    <center>
+                                        <h6>Team Day Start and End Analysis</h6>
+                                    </center>
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
@@ -223,7 +226,7 @@
                                                                 <th>Close Day @</th>
                                                                 <th>Close selfie</th>
                                                                 <th>Close Location</th>
-                                                                <th>Close Review</th>
+                                                                <!-- <th>Close Review</th> -->
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -235,12 +238,8 @@
                                                             <tr>
                                                                 <td><?=$i?></td>
                                                                 <td><?=$dt->bdname?></td>
-                                                                <td>
-                                                                    <?php 
-                                                                    if($dt->wffo==1){echo 'Work From Office';}
-                                                                    if($dt->wffo==2){echo 'Work From Field';}
-                                                                    if($dt->wffo==3){echo 'Work From Field+Office';}?></td>
-                                                                    <td><?= $dt->sdate?></td>
+                                                                <td><?=$dt->TYPE?></td>
+                                                                <td><?= $dt->sdate?></td>
                                                                 <td><?=$dt->start?></td>
                                                                 <td>
                                                                     <img src="<?=base_url();?><?=$dt->usimg?>" alt="image not found" style="width:100px;" >
@@ -259,7 +258,7 @@
                                                                 <td>
                                                                     <a href="https://www.google.com/maps?q=<?=$dt->clatitude?>,<?=$dt->clongitude?>"><i class="fas fa-map-marker-alt" style="font-size:36px" aria-hidden="true"></i></a>
                                                                 </td>
-                                                                <td><?=$dt->ccomment?><hr><?=$dt->queansc?></td>
+                                                                <!-- <td><?=$dt->ccomment?><hr><?=$dt->queansc?></td> -->
                                                             </tr>
                                                             <?php $i++;} ?>
                                                         </tbody>
@@ -290,10 +289,6 @@
     <!-- /.container-fluid -->
 
     </section>
-
-
-
-
 
     <footer class="main-footer">
 
@@ -426,10 +421,11 @@
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
 </script>
-<script>
+
+<!-- <script>
     // Assuming $count is the PHP variable containing your data array
     const count = <?php echo json_encode($count); ?>;
-    console.log(count);
+    // console.log(count);
 
     // Extract labels and data from the count array
     const labels = count.map(item => item.status_description);
@@ -468,7 +464,86 @@
         const ctx = document.getElementById('donutChart').getContext('2d');
         new Chart(ctx, config);
     };
-</script>
+</script> -->
+
+
+<script>
+    <?php 
+    
+    $sd="2023-09-26";
+    $ed=date('Y-m-d');?>
+    
+        var combinedData1 = {
+
+            labels: [
+                    <?php $workFrom = userWorkFrom(); 
+                    foreach($workFrom as $workFromsignle){?>'<?=$workFromsignle->TYPE?>', <?php } ?>
+                ],
+            datasets: [
+                {
+                    label: 'Actual Day Start',
+                    backgroundColor: ['red','red','red','red','red','red','red','red','red','red','red','red','red','red'],
+                    data: [
+                        <?php 
+                            $workFrom = userWorkFrom(); $i=1; 
+                            foreach($workFrom as $workFromsignle){ 
+
+                                $id = $workFromsignle->ID;
+
+                                $task = actualDayStartFrom($uid,$startDate,$endDate,$tdate,$postUserType,$postUsers,$id);
+
+                                foreach($task as $ts){
+                        ?>
+                                    <?=$ts->wffo_count?>,
+                        <?php }} ?>],
+                        stack: 'Stack 0'
+                        
+                },
+                {
+                    label: 'Planned Day Start',
+                    backgroundColor: ['green','green','green','green','green'],
+                    data: [
+                        <?php 
+                            $workFrom = userWorkFrom(); $i=1; 
+                            foreach($workFrom as $workFromsignle){ 
+
+                                $id = $workFromsignle->ID;
+
+                                $task = plannedDayStartFrom($uid,$startDate,$endDate,$tdate,$postUserType,$postUsers,$id);
+
+                                foreach($task as $ts){
+                        ?>
+                                    <?=$ts->wffo_count?>,
+                        <?php }} ?>],
+                        stack: 'Stack 1'
+                        
+                },
+            ]
+        };
+
+        var combinedCtx = document.getElementById("donutChart").getContext('2d');
+        var combinedChart = new Chart(combinedCtx, {
+            type: 'bar',
+            data: combinedData1,
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Team Day Start and Close Analysis'
+                    },
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        beginAtZero: true,
+                    }
+                }
+            }
+        });
+    </script>
+
 
 <script>
     $(document).ready(function() {

@@ -18,6 +18,8 @@ class Dashboard extends Menu {
         $this->load->model('Menu_model');
         $this->load->model('Management_model');
 
+        $this->load->helper('funnel_helper');
+
         $this->user = $this->session->userdata('user');
         $this->uid = $this->user['user_id'];
         $this->uyid =  $this->user['type_id'];
@@ -127,34 +129,41 @@ class Dashboard extends Menu {
         $data['user'] = $user;
         $uid = $user['user_id'];
         // var_dump($user); die;
-        if($user['type_id'] == 2){
+        // if($user['type_id'] == 2){
 
-            $user_new = $this->db->select('*')->from('user_details')->where_in('type_id', $RoleId)->where(['status'=>'active','admin_id'=>$uid])->or_where('aadmin', $uid)->or_where('badmin', $uid)->get()->result();
-        }
-        elseif ($user['type_id'] == 4) {
-
-            $user_new = $this->db->select('*')->from('user_details')->where(['status'=>'active','pst_co'=>$uid])->get()->result();
-
-        }elseif ($user['type_id'] == 9) {
-
-            $user_new = $this->db->select('*')->from('user_details')->where(['status'=>'active','aadmin'=>$uid])->get()->result();
-            
-        }
-        
-        // ($user['type_id'] == 4){
-        //     // if($RoleId == 3){
-        //     //     $user_new = $this->db->select('*')->from('user_details')->where_in('type_id', $RoleId)->where([ 'status'=>'active','badmin'=>$uid])->get()->result();
-        //     // }else{
-        //     //     $user_new = $this->db->select('*')->from('user_details')->where(['status'=>'active','pst_co'=>$uid])->get()->result();
-        //     // }
-        //     $user_new = $this->db->select('*')->from('user_details')->where(['status'=>'active','pst_co'=>$uid])->get()->result();
+        //     $user_new = $this->db->select('*')->from('user_details')->where_in('type_id', $RoleId)->where(['status'=>'active','admin_id'=>$uid])->or_where('aadmin', $uid)->or_where('badmin', $uid)->get()->result();
         // }
-        // echo $this->db->last_query(); exit;
-        // echo  $data = '<option value="">Select User</option>';
-        echo $data = '<option value="select_all">Select All</option>';
-        foreach($user_new as $d){
-            echo  $data = '<option value='.$d->user_id.'>'.$d->name.'</option>';
-        }
+        // elseif ($user['type_id'] == 4) {
+
+        //     $user_new = $this->db->select('*')->from('user_details')->where(['status'=>'active','pst_co'=>$uid])->get()->result();
+
+        // }elseif ($user['type_id'] == 9) {
+
+        //     $user_new = $this->db->select('*')->from('user_details')->where(['status'=>'active','aadmin'=>$uid])->get()->result();
+            
+        // }
+
+        // $user_new = $this->db->select('*')->from('user_details')->where_in(['status'=>'active','type_id'=>$RoleId])->get()->result();
+
+
+            $this->db->select('*');
+            $this->db->from('user_details');
+            $this->db->where('status', 'active');
+            $this->db->where_in('type_id', $RoleId);
+            $this->db->order_by('name','ASC');
+
+            $query = $this->db->get(); 
+            // echo $this->db->last_query();die;
+            $user_new =  $query->result();
+            // $user_new =   $this->db->result();
+            // var_dump($user_new);die;
+
+            echo $data = '<option value="select_all">Select All</option>';
+
+            foreach($user_new as $d){
+                
+                echo  $data = '<option value='.$d->user_id.'>'.$d->name.'</option>';
+            }
     }
 
     public function BDDayDetail_New($tdate,$code){
@@ -219,18 +228,20 @@ class Dashboard extends Menu {
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
+        
         $mdata = $this->Menu_model->get_BDdaydbyadNew($uid,$startDate,$endDate,$code,$tdate,$postUserType,$postUsers);
-        // var_dump($mdata);die;
+
         $getWorkLocationCounts = $this->Menu_model->getWorkLocationCount($uid,$startDate,$endDate,$tdate,$postUserType,$postUsers);
+        // var_dump($mdata);die;
 
         $roles = $this->Menu_model->getRoles($dt[0]->id);
         // var_dump($roles);die;
-        $this->load->view('Admin/BDDayDetail_New',['user'=>$user,'mdata'=>$mdata,'count'=>$getWorkLocationCounts,'uid'=>$uid,'tdate'=>$tdate,'code'=>$code,'startDate'=>$sDate,'endDate'=>$eDate,'roles'=>$roles,'userType'=>$dt[0]->id]);
+        $this->load->view('Admin/BDDayDetail_New',['user'=>$user,'mdata'=>$mdata,'count'=>$getWorkLocationCounts,'uid'=>$uid,'tdate'=>$tdate,'code'=>$code,'startDate'=>$sDate,'endDate'=>$eDate,'roles'=>$roles,'postUsers'=>$postUsers,'postUserType'=>$postUserType,'userType'=>$dt[0]->id]);
     }
 
     public function ATaskDetail_New($code,$bdid,$atid,$sd,$ed){
         
-        // var_dump($atid);die;
+        // var_dump($ed);die;
         $startDate = '';
         $endDate = '';
         if(isset($_POST['FromDate']) && isset($_POST['EndDate'])){
@@ -248,6 +259,29 @@ class Dashboard extends Menu {
         // echo $sd;
         // echo $ed;
         // die;
+
+        if (isset($_POST['userType'])) {
+
+            $userType = array_filter($_POST['userType'], function ($value) {
+                return $value !== 'select_all';
+            });
+
+        } else {
+
+            $userType = [];
+        }
+
+        if (isset($_POST['user'])) {
+
+            $users = array_filter($_POST['user'], function ($value) {
+                return $value !== 'select_all';
+            });
+
+        } else {
+
+            $users = [];
+        }
+
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -256,14 +290,43 @@ class Dashboard extends Menu {
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
 
+        $roles = $this->Menu_model->getRoles($dt[0]->id);
+
+
         $mtdata = $this->Menu_model->get_bwdalltaskdbyad_New($code,$atid,$bdid,$sd,$ed);
-        // var_dump($mtdata);die;
-        $tdate = date('Y-m-d');
-        $getCountData = $this->Menu_model->getTeamTasks($uid,$tdate,$sd,$ed);
         // echo $this->db->last_query();die;
 
+        $tdate = date('Y-m-d');
+        $getCountData = $this->Menu_model->getTeamTasksDashboard($uid,$tdate,$sd,$ed,$users);
+
+        $mappedData = new stdClass();
+        $mappedData->id_1 = $getCountData[0]->TotalTasks;
+        $mappedData->id_2 = $getCountData[0]->TotalPending;
+        $mappedData->id_3 = $getCountData[0]->TotalCompleted;
+
+
+        $formattedData = new stdClass();
+        $formattedData->lable = 'TotalTasks'; // Sample name
+        $formattedData->count =  $mappedData->id_1; // Sample color
+        $formattedData->id = '1';        // Sample ID
+
+        // Create an array to hold the final result
+        $result = [];
+        $result[] = $formattedData;
+
+        $result[] = new stdClass();
+        $result[1]->lable = 'TotalPending';
+        $result[1]->count = $mappedData->id_2; // Another color example
+        $result[1]->id = '2';
+
+        $result[] = new stdClass();
+        $result[2]->lable = 'TotalCompleted';
+        $result[2]->count = $mappedData->id_3; // Another color example
+        $result[2]->id = '3';
+        
+        // var_dump($result);die;
         if(!empty($user)){
-            $this->load->view($dep_name.'/ATaskDetail_New',['uid'=>$uid,'user'=>$user,'atid'=>$atid,'sd'=>$sd,'ed'=>$ed,'code'=>$code,'bdid'=>$bdid,'mtdata'=>$mtdata,'getCountData'=>$getCountData]);
+            $this->load->view($dep_name.'/ATaskDetail_New',['uid'=>$uid,'user'=>$user,'atid'=>$atid,'sd'=>$sd,'ed'=>$ed,'code'=>$code,'bdid'=>$bdid,'mtdata'=>$mtdata,'getCountData'=>$result,'roles'=>$roles,'Selected_userType' => $userType,'selected_users' => $users,]);
         }else{
             redirect('Menu/main');
         }

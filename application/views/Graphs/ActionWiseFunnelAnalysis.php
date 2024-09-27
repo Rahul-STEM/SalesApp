@@ -221,7 +221,7 @@
                                                             </div>
                                                         </div>
                                                     <?php } ?>
-                                                </div>
+                                                    </div>
                                                 </div>
                                             </div>  
                                         </div>
@@ -336,22 +336,22 @@
           };
         
           var chart = new google.visualization.ColumnChart(document.getElementById('ActionWiseTaskChart'));
-          google.visualization.events.addListener(chart, 'select', function() {
-            var selection = chart.getSelection();
-            if (selection.length > 0) {
-              var rowIndex = selection[0].row;
-              var hyperlink = data.getValue(rowIndex, 23);
-              if (hyperlink) {
-                window.location.href = hyperlink;
-              }
-            }
-          });
+            // google.visualization.events.addListener(chart, 'select', function() {
+            //     var selection = chart.getSelection();
+            //     if (selection.length > 0) {
+            //     var rowIndex = selection[0].row;
+            //     var hyperlink = data.getValue(rowIndex, 2);
+            //     if (hyperlink) {
+            //         window.location.href = hyperlink;
+            //     }
+            //     }
+            // });
         
           chart.draw(data, options_fullStacked);
         }
     
     
-  </script>
+</script>
 
 <script>
     $("#example1").DataTable({

@@ -35,11 +35,6 @@
 }
   </style>
 </head>
-
-<?php 
-
-// echo $atid;die;
-?>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
@@ -80,22 +75,23 @@
             <div class="card">
                 <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->
                 <div class="card-body">
-                    <form action="<?=base_url();?>Menu/ATaskDetail_New/<?=$code?>/<?=$uid?>/<?=$atid?>/<?=$sd?>/<?=$ed?>" method="post">
+                    <form action="<?=base_url();?>Menu/ATaskDetail_New/<?=$code?>/<?=$uid?>/<?=$atid?>/<?=$sd?>/<?=$sd?>/0" method="post">
                         <div class="row">
-                            <div class="col-md-3">
+                            <!-- <div class="col-md-3">
                                 <div class="form-group">
                                     <label>From Date</label>
                                     <input type="date" class="form-control" name="FromDate" id="FromDate" value="<?=$sd?>" required>
                                 </div>
-                            </div>
-                            <div class="col-md-3">
+                            </div> -->
+
+                            <!-- <div class="col-md-3">
                                 <div class="form-group">
                                     <label>To Date</label>
                                     <input type="date" class="form-control" name="EndDate" id="EndDate" value="<?=$ed?>" required>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-3">
+                            <!-- <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Select Role</label>
                                     <select class="custom-select rounded-0" name="userType[]" id="userType" multiple>
@@ -106,9 +102,9 @@
                                         <?php } ?>
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
                             
-                            <div class="col-md-3">
+                            <!-- <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Select User</label>
                                     <select id="user" class="custom-select rounded-0" name="user[]" data-live-search="true" multiple required>
@@ -116,13 +112,13 @@
 
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary">Filter</button>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </form>
                     
@@ -133,14 +129,10 @@
                 <div class="card-header"><h3 class="text-center"><center><b>
                 <?php 
 
-                    if ($code == 4) {
-                        $status = 'Total';
-                    }elseif ($code == 5) {
+                    if ($stid == 2) {
                         $status = 'Pending';
-                    }elseif ($code == 6) {
+                    }elseif ($stid == 3) {
                         $status = 'Completed';
-                    }else{
-                        $status = '';
                     }
                 
                 ?>    
@@ -169,11 +161,11 @@
                                                 <th>BD Name</th>
                                                 <th>Company Name</th>
                                                 <th>Plan Time</th>
-                                                <th>Initiated Time</th>
-                                                <th>Plan and Initiated Time Diff</th>
-                                                <th>Completed Time</th>
-                                                <th>Plan and Completed Time Diff</th>
-                                                <th>Initiated and Completed Time Diff</th>
+                                                <!-- <th>Initiated Time</th> -->
+                                                <!-- <th>Plan and Initiated Time Diff</th> -->
+                                                <!-- <th>Completed Time</th> -->
+                                                <!-- <th>Plan and Completed Time Diff</th>
+                                                <th>Initiated and Completed Time Diff</th> -->
                                                 <th>Last_Task Date</th>
                                                 <th>Current_Task Date</th>
                                                 <th>Current task planned after time difference</th>
@@ -185,7 +177,6 @@
                                                 <th>Current_Status</th>
                                                 <th>Action Taken</th>
                                                 <th>Purpose Achieved</th>
-                                                <!-- <th>Review Remark</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -219,11 +210,11 @@
                                             <td><?=$bdname[0]->name?></td>
                                             <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$inid[0]->cmpid_id?>"><?=$mtd[0]->compname?></a></td>
                                             <td><?=date('d-m-Y h:i A', strtotime($pltime = $md->appointmentdatetime));?></td>
-                                            <td><?=date('d-m-Y h:i A', strtotime($intime = $md->initiateddt));?></td>
-                                            <td><?=$this->Menu_model->timediff($pltime,$intime)?></td>
-                                            <td><?=date('d-m-Y h:i A', strtotime($uptime = $md->updateddate));?></td>
-                                            <td><?=$this->Menu_model->timediff($pltime,$uptime)?></td>
-                                            <td><?=$this->Menu_model->timediff($intime,$uptime)?></td>
+                                            <!-- <td><?=date('d-m-Y h:i A', strtotime($intime = $md->initiateddt));?></td> -->
+                                            <!-- <td><?=$this->Menu_model->timediff($pltime,$intime)?></td> -->
+                                            <!-- <td><?=date('d-m-Y h:i A', strtotime($uptime = $md->updateddate));?></td> -->
+                                            <!-- <td><?=$this->Menu_model->timediff($pltime,$uptime)?></td> -->
+                                            <!-- <td><?=$this->Menu_model->timediff($intime,$uptime)?></td> -->
                                             <td><?=$nltime?></td>
                                             <td><?=$nctime?></td>
                                             <td><?php if($ctime!=''){echo $this->Menu_model->timediff($ltime,$ctime);}?></td>
@@ -235,14 +226,13 @@
                                             <td><?=$s2?></td>
                                             <td><?=$mtd[0]->actontaken?></td>
                                             <td><?=$mtd[0]->purpose_achieved?></td>
-                                            <!-- <td><?=$md->rremark?><hr><?=$md->star?> Star</td> -->
                                         </tr>
                                         <?php $i++;} ?>
                                     </tbody>
                                     </table> 
                                 </div>
                                 </div>
-                                    </form>            <!--END OF FORM ^^-->
+                                    </form>            
                             </fieldset>
                             
                         </div>
@@ -331,110 +321,41 @@
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 </script>
 
-
-<script>
-    // Assuming $count is the PHP variable containing your data array
-    // const count = <?php // echo json_encode($getCountData); ?>;
-    
-    // // Define chart data and configuration
-    // const data = {
-    //     labels: Object.keys(count[0]),
-    //     datasets: [{
-    //         data: Object.values(count[0]),
-    //         backgroundColor: [
-    //             '#FF5733', '#33FF57', '#3357FF', '#F3FF33', '#FF33A8', '#8E44AD',
-    //             '#3498DB', '#F1C40F', '#B9B9B9', '#C7D3C6','#2ECC71','#E74C3C',
-    //         ]
-    //     }]
-    // };
-
-    // const config = {
-    //     type: 'pie', // Change to 'pie'
-    //     data: data,
-    //     options: {
-    //         responsive: true,
-    //         // is3D:true
-    //         plugins: {
-    //             legend: {
-    //                 position: 'top',
-    //             },
-    //             title: {
-    //                 display: true,
-    //                 text: 'Your Chart Title Here' // Add an appropriate title
-    //             }
-    //         }
-    //     }
-    // };
-
-    // Render the chart
-    // window.onload = function() {
-    //     const ctx = document.getElementById('TaskChart').getContext('3d');
-    //     const chart = new Chart(ctx, config);
-
-
-    //     ctx.canvas.onclick = function(evt) {
-    //         const activePoints = chart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, false);
-    //         if (activePoints.length) {
-    //             const clickedIndex = activePoints[0].index;
-
-    //             // Make sure clickedIndex is valid
-    //             if (clickedIndex >= 0 && clickedIndex < chart.data.labels.length) {
-    //                 const label = chart.data.labels[clickedIndex];
-    //                 const value = chart.data.datasets[0].data[clickedIndex];
-
-    //                 // Trigger your desired action here
-    //                 console.log(`You selected ${label}: ${value}`);
-    //                 // You can also show an alert or redirect
-    //                 // alert(`You selected ${label}: ${value}`);
-    //             } else {
-    //                 console.error('Invalid index clicked:', clickedIndex);
-    //             }
-    //         }
-    //     };
-    // };
-    
-</script>
-
 <script src="https://www.gstatic.com/charts/loader.js"></script>
-<script>
 
+<script>
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
 
-    function drawChart(){
+    function drawChart() {
 
-        const countArray = <?php echo json_encode($getCountData); ?>;
+        
+        const chartData = JSON.parse('<?php echo $jsonData; ?>');
+
         var selected_users = <?php echo json_encode($selected_users); ?>;
         var sdate = <?php echo json_encode($sd); ?>;
         var edate = <?php echo json_encode($ed); ?>;
         var selected_userType = <?php echo json_encode($Selected_userType); ?>;
 
-        console.log(selected_users);
 
-        const filteredData = countArray.filter(item => item.lable && item.count && item.id);
+        // console.log(chartData);
+        // alert(sdate);
+        const dataArray = [['Action Name', 'Total Tasks', 'Action Type']]; // Header row
 
-        // Prepare the labels, dataValues, and stid arrays
-        const labels = filteredData.map(item => item.lable);
-        const dataValues = filteredData.map(item => Number(item.count));
-        const stid = filteredData.map(item => Number(item.id));
-
-        // const stid = [1, 2, 3]; // Assuming you want unique IDs for each status
-        // console.log(labels);
-
-        const dataArray = [ ['Lable', 'Count','ID'] ];
-
-        for (let i = 0; i < labels.length; i++) {
-
-            dataArray.push([labels[i], dataValues[i], stid[i]]);
+        for (let i = 1; i < chartData.length; i++) {
+            const item = chartData[i];
+            if (item.length === 3) {
+                dataArray.push([item[1], item[2], item[0]]);
+            } else {
+                console.error('Invalid item:', item);
+            }
         }
 
-        // Create a DataTable for Google Charts
         const data = google.visualization.arrayToDataTable(dataArray);
-
-        // Define chart options
+        
         const options = {
-            title: 'Status Wise Funnel Graph',
-            is3D: true
+            title: 'Total Tasks by Action Type',
+            is3D: true,
         };
 
         const chart = new google.visualization.PieChart(document.getElementById('TaskChart'));
@@ -446,10 +367,12 @@
 
                 var stid = data.getValue(selection.row, 2);
                 // console.log(stid);
+                alert(selected_users);
+                return false;
 
                 var form = document.createElement('form');
                 form.method = 'POST'; // Use POST method
-                form.action = '<?=base_url();?>Menu/GetTaskByStatus';
+                form.action = '<?=base_url();?>Menu/GetTaskDetails';
                 form.target = '_blank';
 
                 var inputStid = document.createElement('input');
@@ -492,11 +415,9 @@
 
         });
 
+
         chart.draw(data, options);
     }
-
-
-
 </script>
 
 <script>

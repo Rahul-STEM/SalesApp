@@ -19,6 +19,11 @@
     border-radius: 0.25rem; /* Optional: Rounded corners */
 }
 </style>
+<style type="text/css">      
+      html, body, #container { 
+        width: 100%; height: 100%; margin: 0; padding: 0; 
+      } 
+    </style>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -152,6 +157,8 @@
                             <div class="card card-body">
                                 <div id="StatusWisePieChart" style="width: 100%; height: 400px;"></div>
 
+                                <div id="container" style="width: 100%; height: 400px;"></div>
+                                
                                 <hr>
 
                                 <div id="StatusWisePieChart1">
@@ -356,6 +363,7 @@
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 </script>
 
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Get all category cards
@@ -386,6 +394,7 @@ document.addEventListener('DOMContentLoaded', function() {
     filterItemsByCategory('All');
 });
 </script>
+
 
 <script>
     google.charts.load('current', {'packages':['corechart']});
@@ -521,6 +530,233 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 </script>
 
+
+<!-- <script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-sankey/0.12.3/d3-sankey.v0.12.3.min.js"></script> -->
+
+
+<!-- <script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-core.min.js"></script>
+<script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-sankey.min.js"></script> -->
+
+
+<script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-bundle.min.js"></script>
+
+
+<!-- <script>
+      anychart.onDocumentReady(function () {
+  
+        // add data
+        const data = [
+          {from: "First Class", to: "Child", value: 6},
+          {from: "Second Class", to: "Child", value: 24},
+          {from: "Third Class", to: "Child", value: 79},
+          {from: "Crew", to: "Child", value: 0},
+          {from: "First Class", to: "Adult", value: 319},
+          {from: "Second Class", to: "Adult", value: 261},
+          {from: "Third Class", to: "Adult", value: 627},
+          {from: "Crew", to: "Adult", value: 885},
+          {from: "Child", to: "Female", value: 45},
+          {from: "Child", to: "Male", value: 64},
+          {from: "Adult", to: "Female", value: 425},
+          {from: "Adult", to: "Male", value: 1667},
+          {from: "Female", to: "Survived", value: 344},
+          {from: "Female", to: "Perished", value: 126},
+          {from: "Male", to: "Survived", value: 367},
+          {from: "Male", to: "Perished", value: 1364}
+        ];
+  
+        // create a sankey diagram instance
+        let chart = anychart.sankey();
+
+        // load the data to the sankey diagram instance
+        chart.data(data);
+
+        // set the chart's padding
+        // chart.padding(20, 40);
+        // chart.height(1000)
+        // add a title
+        chart.title('Titanic Survivors');
+  
+        // set the chart container id
+        chart.container("container");
+
+        // draw the chart
+        chart.draw();
+  
+      });
+    </script> -->
+
+
+<!-- <script>
+    anychart.onDocumentReady(function () {
+        // Get nodes and links data from PHP
+        const nodes = <?php echo json_encode($nodesJson); ?>;
+        const links = <?php echo json_encode($linksJson); ?>;
+
+        // Check if links is an array
+        if (!Array.isArray(links)) {
+            console.error("Links is not an array:", links);
+            return;
+        }
+
+        // Prepare the data for AnyChart
+        // const data = links.map(link => {
+
+        //     const sourceNode = nodes[link.IDsource];
+        //     const targetNode = nodes[link.IDtarget];
+
+        //     // Check if both source and target nodes are defined
+        //     if (!sourceNode || !targetNode) {
+        //         console.error("Invalid source or target node:", link);
+        //         return null; // Skip invalid entries
+        //     }
+
+        //     // Assuming IDValue should be a property directly in link
+        //     const value = link.IDValue || 0; // Ensure value is defined
+
+        //     return {
+        //         from: sourceNode.name,
+        //         to: targetNode.name,
+        //         value: value
+        //     };
+
+        // }).filter(item => item !== null); // Filter out any null entries
+
+        
+
+        // console.log("Prepared Data for Sankey:", data);
+
+        // // Create a Sankey diagram instance
+        // let chart = anychart.sankey();
+
+        // // Load the data into the Sankey diagram instance
+        // chart.data(data);
+
+        // // Add a title
+        // chart.title('Status Wise Sankey Chart');
+
+        // // Set the chart container id
+        // chart.container("container");
+
+        // // Draw the chart
+        // chart.draw();
+    });
+</script> -->
+
+
+<!-- <script>
+    anychart.onDocumentReady(function () {
+  
+    // Get nodes and links data from PHP
+        const nodes = <?php // echo json_encode($nodesJson); ?>;
+        const links = <?php // echo json_encode($linksJson); ?>;
+
+    // console.log("links:", links);
+    // Prepare the data for AnyChart
+        if (!Array.isArray(links)) {
+        console.error("Links is not an array:", links);
+        return;
+        }
+
+    // Prepare the data for AnyChart
+        const data = links.map(link => {
+
+            const sourceNode = nodes[link.IDsource];
+            const targetNode = nodes[link.IDtarget];
+
+
+            // Check if both source and target nodes are defined
+            return {
+                from: sourceNode.name,
+                to: targetNode.name,
+                value: link.IDValue || 0 
+            };
+        }).filter(item => item !== null); // Filter out any null entries
+
+        console.log("data", data);
+
+        // Create a sankey diagram instance
+        let chart = anychart.sankey();
+
+        // Load the data to the sankey diagram instance
+        chart.data(data);
+
+        // Add a title
+        chart.title('Status Wise Sankey Chart');
+
+        // Set the chart container id
+        chart.container("container");
+        // Draw the chart
+        chart.draw();
+    });
+</script> -->
+
+
+<!-- <script>
+    const nodes = <?php // echo $nodesJson; ?>;
+    const links = <?php // echo $linksJson; ?>;
+
+    // console.log(nodes);
+    // Set the dimensions and margins of the diagram
+    const margin = {top: 10, right: 30, bottom: 30, left: 40},
+          width = 800 - margin.left - margin.right,
+          height = 600 - margin.top - margin.bottom;
+
+    const svg = d3.select("#StatusWiseSankeyChart").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    const sankey = d3.sankey()
+        .nodeWidth(40)
+        .nodePadding(20)
+        .size([width, height]);
+
+    const path = sankey.link();
+
+    // Create the sankey diagram
+    const graph = {nodes: nodes, links: links};
+
+    sankey(graph);
+
+    // Add in the links
+    const link = svg.append("g").selectAll(".link")
+        .data(graph.links)
+      .enter().append("path")
+        .attr("class", "link")
+        .attr("d", path)
+        .style("stroke-width", d => Math.max(1, d.value))
+        .style("fill", "none")
+        .style("stroke", "#000");
+
+    // Add the node rectangles
+    const node = svg.append("g").selectAll(".node")
+        .data(graph.nodes)
+      .enter().append("g")
+        .attr("class", "node")
+        .attr("transform", d => "translate(" + d.x0 + "," + d.y0 + ")");
+
+    node.append("rect")
+        .attr("height", d => d.y1 - d.y0)
+        .attr("width", sankey.nodeWidth())
+        .style("fill", "#aaa")
+        .append("title")
+        .text(d => d.name);
+
+    // Add the node text labels
+    node.append("text")
+        .attr("x", -6)
+        .attr("y", d => (d.y1 + d.y0) / 2)
+        .attr("dy", "0.35em")
+        .attr("text-anchor", "end")
+        .text(d => d.name)
+      .filter(d => d.x0 < width / 2)
+        .attr("x", 6 + sankey.nodeWidth())
+        .attr("text-anchor", "start");
+</script> -->
+
+
 <script>
     // Function to handle radio button change
     function handleRadioChange() {
@@ -551,6 +787,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 </script>
+
 
 <script>
     $(document).ready(function() {
@@ -676,5 +913,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
     });
 </script>
-<!--  -->
+
+
 

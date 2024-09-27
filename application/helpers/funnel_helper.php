@@ -115,7 +115,139 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	        return $DataSet;
 	    }
 	}
+
+
+	if (!function_exists('getTaskNameById')) {
+	    function getTaskNameById($id){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Menu_model');
+	        $DataSet = $CI->Menu_model->getTaskNameById($id);
+            
+	        return $DataSet;
+	    }
+	}
+
+	if (!function_exists('get_timeslot')) {
+	    function get_timeslot(){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Menu_model');
+	        $DataSet = $CI->Menu_model->get_timeslot();
+            
+	        return $DataSet;
+	    }
+	}
+
+	if (!function_exists('get_taskplannedSlotwise')) {
+	    function get_taskplannedSlotwise($selected_users,$Selected_userType,$sdate,$edate,$t1,$t2,$selected_partnerType,$selected_category){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Graph_model');
+	        $DataSet = $CI->Graph_model->get_taskplannedSlotwise($selected_users,$Selected_userType,$sdate,$edate,$t1,$t2,$selected_partnerType,$selected_category);
+            
+	        return $DataSet;
+	    }
+	}
+
+	if (!function_exists('get_taskinitiatedSlotwise')) {
+	    function get_taskinitiatedSlotwise($selected_users,$Selected_userType,$sdate,$edate,$t1,$t2,$selected_partnerType,$selected_category){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Graph_model');
+	        $DataSet = $CI->Graph_model->get_taskinitiatedSlotwise($selected_users,$Selected_userType,$sdate,$edate,$t1,$t2,$selected_partnerType,$selected_category);
+            
+	        return $DataSet;
+	    }
+	}
+
+	if (!function_exists('get_taskupdatedSlotwise')) {
+	    function get_taskupdatedSlotwise($selected_users,$Selected_userType,$sdate,$edate,$t1,$t2,$selected_partnerType,$selected_category){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Graph_model');
+	        $DataSet = $CI->Graph_model->get_taskupdatedSlotwise($selected_users,$Selected_userType,$sdate,$edate,$t1,$t2,$selected_partnerType,$selected_category);
+            
+	        return $DataSet;
+	    }
+	}
 	
+	if (!function_exists('userWorkFrom')) {
+	    function userWorkFrom(){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Menu_model');
+	        $DataSet = $CI->Menu_model->userWorkFrom();
+            
+	        return $DataSet;
+	    }
+	}
+
+	if (!function_exists('actualDayStartFrom')) {
+	    function actualDayStartFrom($uid,$startDate,$endDate,$tdate,$postUserType,$postUsers,$id){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Menu_model');
+	        $DataSet = $CI->Menu_model->actualDayStartFrom($uid,$startDate,$endDate,$tdate,$postUserType,$postUsers,$id);
+            
+	        return $DataSet;
+	    }
+	}
+
+	if (!function_exists('plannedDayStartFrom')) {
+	    function plannedDayStartFrom($uid,$startDate,$endDate,$tdate,$postUserType,$postUsers,$id){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Menu_model');
+	        $DataSet = $CI->Menu_model->plannedDayStartFrom($uid,$startDate,$endDate,$tdate,$postUserType,$postUsers,$id);
+            
+	        return $DataSet;
+	    }
+	}
+
+	if (!function_exists('get_status')) {
+	    function getAction(){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Menu_model');
+	        $DataSet = $CI->Menu_model->getAction();
+            
+	        return $DataSet;
+	    }
+	}
+
+	if (!function_exists('getTaskTypeConversion')) {
+	    function getTaskTypeConversion($uid,$startDate,$endDate,$action_id,$userType,$users){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Graph_model');
+	        $DataSet = $CI->Graph_model->get_taskTypeConversion($uid,$startDate,$endDate,$action_id,$userType,$users);
+            
+	        return $DataSet;
+	    }
+	}
+
+	if (!function_exists('getStatus')) {
+	    function getStatus(){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Graph_model');
+	        $DataSet = $CI->Graph_model->getStatus();
+            
+	        return $DataSet;
+	    }
+	}
+
+	if (!function_exists('get_taskTypeConversionByStatus')) {
+	    function get_taskTypeConversionByStatus($uid,$startDate,$endDate,$action_id,$stid,$Selected_userType,$selected_users){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Graph_model');
+	        $DataSet = $CI->Graph_model->get_taskTypeConversionByStatus($uid,$startDate,$endDate,$action_id,$stid,$Selected_userType,$selected_users);
+            
+	        return $DataSet;
+	    }
+	}
 
 
 ?>

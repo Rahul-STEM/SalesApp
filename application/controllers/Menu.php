@@ -4327,6 +4327,7 @@ class Menu extends CI_Controller {
             $reamrks    = "Approved By ".$user['name'];
             $apr_time   = date("Y-m-d H:i:s");
             $query =  $this->db->query("UPDATE `task_plan_for_today` SET `approvel_status`='$status',`apr_time`='$apr_time',`remarks`='$reamrks' WHERE id = $id");
+       
             redirect("Menu/TodaysTaskApprovelRequest");
         }else{
             redirect('Menu/main');
@@ -4795,6 +4796,7 @@ public function Dashboard(){
         $tatm=$this->Menu_model->get_tat($atid,$uid,$tdate);
         $pendingt=$this->Menu_model->get_pendingt($uid,$tdate);
         $totalt=$this->Menu_model->get_totalt($myid,$tdate);
+   
         $ttdone=$this->Menu_model->get_ttdone($uid,$tdate);
         $ttd=$this->Menu_model->get_totaltd($uid,$tdate);
         $upt=$this->Menu_model->get_unplant($uid,$tdate);
@@ -17922,15 +17924,37 @@ public function addcompany_new(){
     $potential_company=$this->input->post('potential_company');
     $clusterid      =   $this->input->post('cluster');
     $cstatusid      =   $this->input->post('cstatusid');
+
     $openrpem       =   $this->input->post('openrpem');
     $reachout       =   $this->input->post('reachout');
     $tentative      =   $this->input->post('tentative');
     $positivenap    =   $this->input->post('positivenap');
     $verypositive   =   $this->input->post('verypositive');
     $closure        =   $this->input->post('closure');
+    
     $init_id        =   $this->input->post('init_id');
+    $initData       = $this->Menu_model->get_initcallbyiid($init_id);
+
+    $new_lead          = $initData[0]->new_lead;
+    $is_admin_approved = $initData[0]->is_admin_approved;
+               
+   if($new_lead == 1 && $is_admin_approved ==2){
+
+    $openrpem       =   $initData[0]->open;
+    $reachout       =   $initData[0]->reachout;
+    $tentative      =   $initData[0]->positive;
+    $positivenap    =   $initData[0]->positivenap;
+    $verypositive   =   $initData[0]->tentative;
+    $closure        =   $initData[0]->closure;
+
+   }
+
     $this->load->model('Menu_model');
     $id=$this->Menu_model->submit_company_new($uid,$compname, $website, $country, $city, $state, $draft, $address, $ctype, $budget, $compconname, $emailid, $phoneno, $draftop, $designation, $top_spender,$upsell_client,$focus_funnel,$key_company,$potential_company,$openrpem,$reachout,$verypositive,$positivenap,$tentative,$closure,$clusterid,$cstatusid,$init_id);
+
+    $this->load->library('session');
+    $this->session->set_flashdata('success_message', 'Lead Update SuccessFully.');
+
     redirect('Menu/Dashboard');
 }
 // Get Slef Assign Task
@@ -19270,7 +19294,83 @@ public function TodaysPlannerRequest(){
 }
 
 
+// Check Add New Lead Data
 
+public function CheckAddNewLeadData($taskid){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $date = date("Y-m-d");
+
+    $tdata      = $this->Menu_model->get_tbldata($taskid);
+    $init_id    = $tdata[0]->cid_id;
+
+    $idata      = $this->Menu_model->get_initcallbyiid($init_id);
+    $mcid       = $idata[0]->cmpid_id;
+    $mcdata     = $this->Menu_model->get_cdbyid($mcid);
+
+    $ccdata     = $this->Menu_model->get_ccdbypid($mcid);
+
+
+    $this->load->view($dep_name.'/CheckAddNewLeadData',['user'=>$user,'uid'=>$uid,'taskData'=>$tdata,'initData'=>$idata,'cData'=>$mcdata,'ccData'=>$ccdata]);
+}
+
+public function UpdateCompanyAfterLeadCheck(){
+
+    $user            = $this->session->userdata('user');
+    $data['user']    = $user;
+    $uid             = $user['user_id'];
+    $uyid            =  $user['type_id'];
+
+    $this->load->model('Menu_model');
+
+    $status = $this->input->post('status');
+    
+    if($status == 'Reject'){
+        $rejectid       = $this->input->post('rejectid');
+        $rejectreamrk   = $this->input->post('rejectreamrk');
+
+        $data = array(
+            'is_admin_approved' => 2,
+            'apr_by' => $uid,
+            'reject_remarks' => $rejectreamrk
+        );
+        $this->db->where('id', $rejectid);
+        $this->db->update('init_call', $data);
+
+        $this->load->library('session');
+        $this->session->set_flashdata('success_message','Add New Lead Send To ReUpdate Successfully !');
+        redirect('Menu/Dashboard');
+
+    }
+}
+public function CompanyApproredAfterNewLead($initid){
+
+    $user            = $this->session->userdata('user');
+    $data['user']    = $user;
+    $uid             = $user['user_id'];
+    $uyid            =  $user['type_id'];
+
+    $this->load->model('Menu_model');
+
+    $data = array(
+        'is_admin_approved' => 1,
+        'apr_by' => $uid,
+        'reject_remarks' => 'Approved'
+    );
+    $this->db->where('id', $initid);
+    $this->db->update('init_call', $data);
+
+    $this->load->library('session');
+    $this->session->set_flashdata('success_message','Add New Lead Approved Successfully !');
+    redirect('Menu/Dashboard');
+
+
+}
 
 
 

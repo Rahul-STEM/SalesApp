@@ -5376,7 +5376,7 @@ if($type_id == 3){
    
             if (meetingTotalMinutes < currentTotalMinutes) {
                 alert("The meeting time cannot be in the past.");
-                $(this).val('');
+                // $(this).val('');
             }else{
               $.ajax({
                   url:'<?=base_url();?>Menu/TodaysPlannerRequest',

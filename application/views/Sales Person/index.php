@@ -2001,18 +2001,49 @@ $dataPoints2 = array(
 
                   </div>
 
-            <div class="card card-primary card-outline card-outline-tabs">
-                <?php $ptd = $this->Menu_model->get_tptd($uid,$tdate);
-                $ptsd = $this->Menu_model->get_tptsd($uid,$tdate);?>
-              <div class="card-header text-center bg-info"><b>Created Pending Task to be Schedule</b></div>
-              <div class="card-header text-center bg-light"><b>
-              Total Task <?=$ptd[0]->ab?> | Call(<?=$ptd[0]->a?>) | Email(<?=$ptd[0]->b?>) | Whatsapp(<?=$ptd[0]->e?>) | Meeting(<?=$ptd[0]->c+$ptd[0]->d?>) | MOM(<?=$ptd[0]->f?>) | Proposal(<?=$ptd[0]->g?>)
-              </b></div>
-              <div class="card-header text-center bg-light"><b>
-              Open(<?=$ptsd[0]->a?>) | Open RPEM(<?=$ptsd[0]->b?>) | Rechaout(<?=$ptsd[0]->c?>) | Tentative(<?=$ptsd[0]->d?>) | WDL(<?=$ptsd[0]->e?>) | NI(<?=$ptsd[0]->f?>) | TTD(<?=$ptsd[0]->g?>) | WNO(<?=$ptsd[0]->h?>) | Positive(<?=$ptsd[0]->i?>) | Very Positive(<?=$ptsd[0]->j?>) | Closure(<?=$ptsd[0]->k?>)
-              </b></div>
-         
-                </div>
+       
+                <?php 
+                      $newleads = $this->Menu_model->GetReUpdateNewLeadComapny($uid);
+                
+                       $newleadscnt = sizeof($newleads);
+                      if($newleadscnt > 0){ ?>
+                       <div class="card">
+                        <div class="card-header text-center">
+                          <h6>REUPDATE ADD NEW LEAD (<?= $newleadscnt; ?>)</h6>
+                        </div>
+                        <?php 
+                          $y = 1; foreach($newleads as $newlead):
+                          $apr_bys        = $newlead->apr_by;
+                          $aprudetail     = $this->Menu_model->get_userbyid($apr_bys);
+                          $aprudetailname = $aprudetail[0]->name;
+                          ?>
+                          <div class="card-body-addnewlead">
+                           Company Name :  <span class="newlead_cmpname"><?= $newlead->compname; ?></span> <br>
+                            Reject Remarks : <span class="newlead_uname"><?= $newlead->reject_remarks; ?></span><br>
+                            Reject BY : <span class="newlead_uname"><?= $aprudetailname; ?></span> <br>
+                            <center><a href="<?= base_url() . "Menu/AddNewLead/" . $newlead->id ?>">Update</a></center>
+                          </div>
+                        <?php $y++; endforeach; ?>
+                       </div>  
+                     <?php } ?>
+                     <style>
+                .card-body-addnewlead {
+                      padding: 4px 10px;
+                      margin: 4px;
+                      border-bottom: 1px solid darkred;
+                      color: white;
+                      font-weight: 500;
+                      font-size: 13px;
+                      background-color: darkred;
+                  }
+                  .card-body-addnewlead:hover{
+                    background-color: darkred;
+                    color:white;
+                    transition: 0.2s ease-in-out;
+                  }
+               </style>
+
+
 
 
          

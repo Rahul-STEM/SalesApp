@@ -116,7 +116,20 @@ overflow-x: auto;
     background: #c5eb4d !important;
     font-weight: 500;
 }
-  </style>
+.card-body-addnewlead {
+    padding: 4px 10px;
+    margin: 4px;
+    border-bottom: 1px solid darkgreen;
+    color: green;
+    font-weight: 500;
+    font-size: 13px;
+}
+.card-body-addnewlead:hover{
+  background-color: darkgreen;
+  color:white;
+  transition: 0.2s ease-in-out;
+}
+</style>
   
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -1976,11 +1989,29 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                         </div>
                       <?php } ?>
                       </div>
-                      <?php } ?>
-                      
+                      <?php } ?> 
                 </div>
 
+               
+                <?php 
+                      $newleads = $this->Menu_model->GetAddNewLeadComapny($uid);
+                      $newleadscnt = sizeof($newleads);
+                      if($newleadscnt > 0){ ?>
+                       <div class="card">
+                        <div class="card-header text-center">
+                          <h6>ADD NEW LEAD (<?= $newleadscnt; ?>)</h6>
+                        </div>
+                        <?php $y = 1; foreach($newleads as $newlead): ?>
+                          <div class="card-body-addnewlead">
+                           <span><?= $y;?></span>). <span class="newlead_cmpname"><?= $newlead->compname; ?> - </span>
+                            <span class="newlead_uname"><?= $newlead->name; ?></span> - 
+                            <a href="<?= base_url() . "Menu/CheckAddNewLeadData/" . $newlead->taskid ?>">Check</a>
 
+                          </div>
+                        <?php $y++; endforeach; ?>
+                       </div>  
+                     <?php } ?>
+                   
 <!-- Modal -->
 <div class="modal fade" id="exampleModalReminder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">

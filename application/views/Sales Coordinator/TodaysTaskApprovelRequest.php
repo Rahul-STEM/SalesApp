@@ -167,8 +167,8 @@
                                                 if($data->approvel_status == ''){ ?>
                                        
                                         <div>
-                                                  <p><a href="<?=base_url();?>Menu/TodaysTaskapprove/<?= $data->id?>/Approve" class="btn btn-success mr-2" onclick="return confirm('Are you sure you want to Approved id?');" >Approve</a></p>
-                                                  <p><button type="button" class="btn btn-primary"  onclick="Reject(<?= $j ?>,<?= $data->id?>,'Reject')">Reject</button></p>
+                                                  <p><a href="<?=base_url();?>Menu/TodaysTaskapprove/<?= $data->mid?>/Approve" class="btn btn-success mr-2" onclick="return confirm('Are you sure you want to Approved id?');" >Approve</a></p>
+                                                  <p><button type="button" class="btn btn-primary"  onclick="Reject(<?= $j ?>,<?= $data->mid?>,'Reject')">Reject</button></p>
                                                 </div>
                                        
                                                 <?php }else if($data->approvel_status == 'Approved'){ ?>

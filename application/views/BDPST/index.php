@@ -62,7 +62,20 @@ overflow-x: auto;
             width: 100%; /* Set the desired width */
         }
 
-  </style>
+.card-body-addnewlead {
+      padding: 4px 10px;
+      margin: 4px;
+      border-bottom: 1px solid darkgreen;
+      color: green;
+      font-weight: 500;
+      font-size: 13px;
+  }
+  .card-body-addnewlead:hover{
+    background-color: darkgreen;
+    color:white;
+    transition: 0.2s ease-in-out;
+  }
+</style>
   
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -1355,31 +1368,27 @@ $teamfu = $this->Menu_model->get_mbdcbyaaid($uid);
                 </div>
                 
                 
-                <div class="card card-primary card-outline card-outline-tabs">
-                <?php $patd = $this->Menu_model->get_atptd($uid,$tdate);
-                      $patsd = $this->Menu_model->get_atptsd($uid,$tdate);
-                ?>
-              <div class="card-header text-center bg-info"><b>Auto Pending Task to be Schedule</b></div>
-              <div class="card-header text-center bg-light"><b>
-              Total Task <?=$patd[0]->ab?> | Call(<?=$patd[0]->a?>) | Email(<?=$patd[0]->b?>) | Whatsapp(<?=$patd[0]->e?>) | Meeting(<?=$patd[0]->c+$patd[0]->d?>) | MOM(<?=$patd[0]->f?>) | Proposal(<?=$patd[0]->g?>)
-              </b></div>
-              <div class="card-header text-center bg-light"><b>
-              Open(<?=$patsd[0]->a?>) | Open RPEM(<?=$patsd[0]->b?>) | Rechaout(<?=$patsd[0]->c?>) | Tentative(<?=$patsd[0]->d?>) | WDL(<?=$patsd[0]->e?>) | NI(<?=$patsd[0]->f?>) | TTD(<?=$patsd[0]->g?>) | WNO(<?=$patsd[0]->h?>) | Positive(<?=$patsd[0]->i?>) | Very Positive(<?=$patsd[0]->j?>) | Closure(<?=$patsd[0]->k?>)
-              </b></div>
-              <div class="card-body">
-                    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
-                        <ul id="myUL">
-                            <?php $ai=0;foreach($totalt as $tt){if($tt->plan==0){if($tt->autotask==0){?>
-                          <li><a>
-                           <?=$tt->aname?> | 
-                           <strong class="text-secondary"><?=$tt->compname?> | <b style="color:<?=$tt->color?>"><?=$tt->csname?></b></strong>
-                           <button id="add_plan<?=$ai?>" value="<?=$tt->id?>">Plan</button>
-                          </a>
-                          
-                          </li><?php $ai++;}}} ?>
-                        </ul>
-                  </div>
-                </div>
+                <?php 
+                      $newleads = $this->Menu_model->GetAddNewLeadComapny($uid);
+                      $newleadscnt = sizeof($newleads);
+                      if($newleadscnt > 0){ ?>
+                       <div class="card">
+                        <div class="card-header text-center">
+                          <h6>ADD NEW LEAD (<?= $newleadscnt; ?>)</h6>
+                        </div>
+                        <?php $y = 1; foreach($newleads as $newlead): ?>
+                          <div class="card-body-addnewlead">
+                           <span><?= $y;?></span>). <span class="newlead_cmpname"><?= $newlead->compname; ?> - </span>
+                            <span class="newlead_uname"><?= $newlead->name; ?></span> - 
+                            <a href="<?= base_url() . "Menu/CheckAddNewLeadData/" . $newlead->taskid ?>">Check</a>
+
+                          </div>
+                        <?php $y++; endforeach; ?>
+                       </div>  
+                     <?php } ?>
+                    
+                
+              
             
             
               

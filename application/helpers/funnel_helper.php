@@ -295,5 +295,48 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	    }
 	}
 
+	if (!function_exists('get_bdRequest')) {
+	    function get_bdRequest(){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Graph_model');
+	        $DataSet = $CI->Graph_model->get_bdRequest();
+            
+	        return $DataSet;
+	    }
+	}
+
+	if (!function_exists('get_bdRequestByType')) {
+	    function get_bdRequestByType($sdate,$edate,$selected_users,$rtype){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Graph_model');
+	        $DataSet = $CI->Graph_model->get_bdRequestByType($sdate,$edate,$selected_users,$rtype);
+            
+	        return $DataSet;
+	    }
+	}
+
+	if (!function_exists('get_bdRequestByTypeandStage')) {
+	    function get_bdRequestByTypeandStage($sdate,$edate,$selected_users,$rtype,$j){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Graph_model');
+	        $DataSet = $CI->Graph_model->get_bdRequestByTypeandStage($sdate,$edate,$selected_users,$rtype,$j);
+            
+	        return $DataSet;
+	    }
+	}
+
+	if (!function_exists('get_RIDDayWise')) {
+	    function get_RIDDayWise($sdate,$edate,$selected_user,$status){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Graph_model');
+	        $DataSet = $CI->Graph_model->get_RIDDayWise($sdate,$edate,$selected_user,$status);
+            
+	        return $DataSet;
+	    }
+	}
 
 ?>

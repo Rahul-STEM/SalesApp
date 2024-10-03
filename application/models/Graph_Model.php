@@ -3914,7 +3914,6 @@ class Graph_Model extends CI_Model
         return $query->result();
     }
 
-
     public function getTableDataTaskWiseDetail($selectedaction, $sdate, $edate, $selected_users, $selected_category, $selected_partnerType,$selected_userType,$actionAP)
     {
 
@@ -4031,5 +4030,221 @@ class Graph_Model extends CI_Model
         // echo $this->db->last_query();die;
         return $query->result();
     }
+
+    public function get_bdRequest(){
+
+        $db3 = $this->load->database('db3', TRUE);
+
+        $query=$db3->query("SELECT DISTINCT `request_type` FROM bdrequest");
+        return $query->result();
+
+    }
+
+    public function get_bdRequestByType($sdate,$edate,$selected_users,$rtype){
+
+        $db3 = $this->load->database('db3', TRUE);
+
+        // var_dump($selected_users);die;
+        $db3->select('COUNT(*) count');
+        
+        $db3->from('bdrequest');
+
+        if (!empty($selected_users)) {
+
+            $db3->where_in('bd_id', $selected_users);
+        }
+
+        $db3->where('request_type', $rtype);
+        $db3->where('CAST(sdatet AS DATE) >=', $sdate);
+        $db3->where('CAST(sdatet AS DATE) <=', $edate);
+
+        $query = $db3->get();
+
+        return $query->result();
+    }
+
+    public function get_bdRequestByTypeandStage($sdate,$edate,$selected_users,$rtype,$j){
+        
+        $db3 = $this->load->database('db3', TRUE);
+        
+        if($j==0){
+
+            $db3->select('COUNT(*) count');
+            $db3->from('bdrequest');
+            if (!empty($selected_users)) {
+
+                $db3->where_in('bd_id', $selected_users);
+            }
+
+            // $db3->where_in('bd_id',$selected_users);
+            $db3->where_in('request_type',$rtype);
+            // $db3->where_not_in('id',"SELECT tid FROM bdtask");
+            $db3->where('id NOT IN (SELECT tid FROM bdtask)', NULL, FALSE);
+
+            $query = $db3->get();
+
+            return $query->result();
+        }
+
+        if($j==1){
+            // echo "hii";die;
+
+            if (empty($selected_users)) {
+                return []; // Handle the case where no users are selected
+            }
+            
+            // Start building the main query
+            $db3->select('COUNT(DISTINCT bdtask.tid) AS count');
+            $db3->from('bdtask');
+            
+            // Join with bdrequest to filter by bd_id and request_type
+            $db3->join('bdrequest', 'bdrequest.id = bdtask.tid', 'inner'); // Adjust the join condition as necessary
+            
+            // Add conditions
+            $db3->where_in('bdrequest.bd_id', $selected_users);
+            $db3->where('bdrequest.request_type', $rtype);
+            $db3->where('bdtask.startt IS NULL');
+
+            $db3->where('CAST(bdrequest.sdatet AS DATE) >=', $sdate);
+            $db3->where('CAST(bdrequest.sdatet AS DATE) <=', $edate);
+
+            $query = $db3->get();
+            // echo $db3->last_query();die;
+            return $query->result();
+        }
+
+        if($j==2){
+
+            if (empty($selected_users)) {
+                return []; // Handle the case where no users are selected
+            }
+            
+            // Start building the main query
+            $db3->select('COUNT(DISTINCT bdtask.tid) AS count');
+            $db3->from('bdtask');
+            
+            // Join with bdrequest to filter by bd_id and request_type
+            $db3->join('bdrequest', 'bdrequest.id = bdtask.tid', 'inner');
+            
+            // Add conditions
+            $db3->where_in('bdrequest.bd_id', $selected_users);
+            $db3->where('bdrequest.request_type', $rtype);
+            $db3->where('bdtask.startt IS NOT NULL');
+            $db3->where('bdtask.closet IS NULL');
+
+            $db3->where('CAST(bdtask.sdatet AS DATE) >=', $sdate);
+            $db3->where('CAST(bdtask.sdatet AS DATE) <=', $edate);
+
+            // Execute the query
+            $query = $db3->get();
+            return $query->result();
+        }
+        if($j==3){
+
+            if (empty($selected_users)) {
+                return []; // Handle the case where no users are selected
+            }
+            
+            // Start building the main query
+            $db3->select('COUNT(*) AS count');
+            $db3->from('bdrequest');
+            
+            // Join with bdtask
+            $db3->join('bdtask', 'bdtask.tid = bdrequest.id', 'inner');
+            
+            // Add filtering conditions
+            $db3->where_in('bdrequest.bd_id', $selected_users);
+            $db3->where('bdrequest.request_type', $rtype);
+            $db3->where('bdtask.startt IS NOT NULL');
+            $db3->where('bdtask.closet IS NOT NULL');
+            $db3->where('bdrequest.status', '0'); // Assuming status is from bdrequest
+
+            $db3->where('CAST(bdrequest.sdatet AS DATE) >=', $sdate);
+            $db3->where('CAST(bdrequest.sdatet AS DATE) <=', $edate);
+            // Execute the query
+            $query = $db3->get();
+
+            
+            return $query->result();
+        }
+
+        // return $query->result();
+    }
+
+    public function get_bdRequestTableData($users,$sdate,$edate){
+        $db3 = $this->load->database('db3', TRUE);
+
+
+        $db3->select('bdrequest.*, GROUP_CONCAT(user_detail.fullname) AS pia');
+        $db3->from('bdrequest');
+
+        // Join with bdtask and user_detail
+        $db3->join('bdtask', 'bdtask.tid = bdrequest.id', 'left'); // Left join to get all bdrequest records
+        $db3->join('user_detail', 'user_detail.id = bdtask.uid', 'left'); // Left join to get user details
+
+        // Add filtering conditions
+        // $db3->where_in('bdrequest.request_type', "SELECT DISTINCT `request_type` FROM bdrequest");
+        $db3->where('bdrequest.request_type IN (SELECT DISTINCT request_type FROM bdrequest)', NULL, FALSE);
+
+        if (!empty($users)) {
+            # code...
+            $db3->where_in('bdrequest.bd_id', $users);
+        }
+
+        // Group by bdrequest.id to ensure GROUP_CONCAT works correctly
+        $db3->group_by('bdrequest.id');
+
+        // Order by sdatet
+        $db3->order_by('bdrequest.sdatet', 'DESC');
+
+        // Execute the query
+        $query = $db3->get();
+        // echo $db3->last_query();die;
+
+        return $query->result();
+    }
+
+    public function get_RIDDayWise($sdate,$edate,$selected_user,$selected_status){
+
+        $db3 = $this->load->database('db3', TRUE);
+
+        $db3->select("CASE 
+                        WHEN DATEDIFF(CURDATE(), replacereq.sdatet) < 5 THEN 'Less than 5 days' 
+                        WHEN DATEDIFF(CURDATE(), replacereq.sdatet) = 5 THEN '5 days' 
+                        WHEN DATEDIFF(CURDATE(), replacereq.sdatet) <= 10 THEN '10 days' 
+                        WHEN DATEDIFF(CURDATE(), replacereq.sdatet) <= 20 THEN '20 days' 
+                        WHEN DATEDIFF(CURDATE(), replacereq.sdatet) <= 30 THEN '30 days' 
+                        WHEN DATEDIFF(CURDATE(), replacereq.sdatet) <= 60 THEN '60 days' 
+                        WHEN DATEDIFF(CURDATE(), replacereq.sdatet) <= 120 THEN '120 days' 
+                        WHEN DATEDIFF(CURDATE(), replacereq.sdatet) <= 180 THEN '180 days' 
+                        ELSE 'More than 180 days' 
+                        END AS day_category, 
+                    COUNT(*) AS count");
+            
+              $db3->from('replacereq');
+
+            // Join with spd and client_handover
+            $db3->join('spd', 'spd.id = replacereq.sid', 'left');
+            $db3->join('client_handover', 'client_handover.projectcode = spd.project_code', 'left');
+
+            $db3->where_in('client_handover.bd_id', $selected_user);
+
+            if(!empty($selected_status)){
+
+                $db3->where('replacereq.status', $selected_status);
+            }
+
+            $db3->where('CAST(replacereq.sdatet AS DATE) >=', $sdate);
+            $db3->where('CAST(replacereq.sdatet AS DATE) <=', $edate);
+            // Group by the case statement result
+            $db3->group_by('day_category');
+
+            // Execute the query
+            $query = $db3->get();
+
+            // echo $db3->last_query();die;
+            return $query->result();
+    }
+
 
 }

@@ -1765,4 +1765,130 @@ class GraphNew extends CI_Controller
 
     }
 
+    public function BDRequest(){
+
+        // var_dump($_POST);die;
+        if (isset($_POST['startDate']) && isset($_POST['endDate'])) {
+
+            $sdate = $_POST['startDate'];
+            $edate = $_POST['endDate'];
+        } else {
+            $sdate = date('Y-m-d');
+            $edate = date('Y-m-d');
+        }
+
+        if (isset($_POST['userType'])) {
+
+            $userType = array_filter($_POST['userType'], function ($value) {
+                return $value !== 'select_all';
+            });
+
+        } else {
+
+            $userType = [];
+        }
+
+        if (isset($_POST['user'])) {
+
+            $users = array_filter($_POST['user'], function ($value) {
+                return $value !== 'select_all';
+            });
+
+        } else {
+
+            $users = [];
+        }
+  
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $userTypeid = $user['type_id'];
+        $dt = $this->Graph_Model->get_utype($userTypeid);
+        $dep_name = $dt[0]->name;
+
+
+        $roles = $this->Graph_Model->getRoles($dt[0]->id);
+
+        $TableData =  $this->Graph_Model->get_bdRequestTableData($users,$sdate,$edate);
+        // var_dump($selectedAction);die;
+
+        // $get
+        if (!empty($user)) {
+
+            $this->load->view('include/header');
+            $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);
+            $this->load->view('Graphs/BDRequest', ['uid' => $uid, 'user' => $user, 'sdate' => $sdate, 'edate' => $edate, 'TableData' => $TableData, 'userTypeid' => $userTypeid, 'roles' => $roles,  'selected_users' => $users, 'Selected_userType' => $userType,]);
+            $this->load->view('include/footer');
+        } else {
+
+            redirect('Menu/main');
+        }
+    }
+
+    public function PendingRIDDayWise(){
+
+        // var_dump($_POST);die;
+        if (isset($_POST['startDate']) && isset($_POST['endDate'])) {
+
+            $sdate = $_POST['startDate'];
+            $edate = $_POST['endDate'];
+        } else {
+            $sdate = date('Y-m-d');
+            $edate = date('Y-m-d');
+        }
+
+        if (isset($_POST['userType'])) {
+
+            $userType = array_filter($_POST['userType'], function ($value) {
+                return $value !== 'select_all';});
+
+        }else{
+
+            $userType = [];
+        }
+        
+        if (isset($_POST['user'])) {
+
+            $users = array_filter($_POST['user'], function ($value) {
+                return $value !== 'select_all';});
+
+        }else{
+            $users = [];
+        }
+        
+        if (isset($_POST['status'])) {
+
+            $status = $_POST['status'];
+
+        } else {
+            $status = '';
+        }
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $userTypeid = $user['type_id'];
+        $dt = $this->Graph_Model->get_utype($userTypeid);
+        $dep_name = $dt[0]->name;
+
+
+        $roles = $this->Graph_Model->getRoles($dt[0]->id);
+
+        // $TableData =  $this->Graph_Model->get_bdRequestTableData($users,$sdate,$edate);
+        // var_dump($selectedAction);die;
+        $TableData = [];
+        // $get
+        if (!empty($user)) {
+
+            $this->load->view('include/header');
+            $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);
+            $this->load->view('Graphs/PendingRIDDayWise', ['uid' => $uid, 'user' => $user, 'sdate' => $sdate, 'edate' => $edate, 'TableData' => $TableData, 'userTypeid' => $userTypeid, 'roles' => $roles,  'selected_users' => $users, 'Selected_userType' => $userType,'status'=>$status]);
+            $this->load->view('include/footer');
+            
+        } else {
+
+            redirect('Menu/main');
+        }
+    }
 }

@@ -672,7 +672,7 @@ google.charts.setOnLoadCallback(drawChart);
                 <?php endforeach; ?>
             ];
 
-    console.log(dataFromServer);
+    // console.log(dataFromServer);
     Highcharts.chart('sankey_basic', {
 
         title: {
@@ -695,25 +695,25 @@ google.charts.setOnLoadCallback(drawChart);
 
             data: [
                  
-                // <?php foreach ($jsonSankeyData as $item): ?>
-                //     ['<?php echo $item[0]; ?>', '<?php echo $item[1]; ?>', <?php echo $item[2]; ?>],
-                // <?php endforeach; ?>
+                <?php foreach ($jsonSankeyData as $item): ?>
+                    ['<?php echo $item[0]; ?>', '<?php echo $item[1]; ?>', <?php echo $item[2]; ?>],
+                <?php endforeach; ?>
 
-                ['Open', 'Reachout', 10],
-                ['Open', 'OPEN RPEM', 33],
-                ['Reachout', 'Will do Later', 5],
-                ['Reachout', 'Not Interested', 3],
-                ['Tentative', 'Will do Later', 3],
-                ['Tentative', 'Positive', 1],
-                ['Tentative', 'TTD-Reachout', 6],
-                ['Tentative', 'Positive-NAP', 4],
-                ['Will do Later', 'OPEN RPEM', 1],
-                ['OPEN RPEM', 'Reachout', 31],
-                ['TTD-Reachout', 'Reachout', 1],
-                ['Positive-NAP', 'Positive', 5]
+                // ['Open', 'Reachout', 10],
+                // ['Open', 'OPEN RPEM', 33],
+                // ['Reachout', 'Will do Later', 5],
+                // ['Reachout', 'Not Interested', 3],
+                // ['Tentative', 'Will do Later', 3],
+                // ['Tentative', 'Positive', 1],
+                // ['Tentative', 'TTD-Reachout', 6],
+                // ['Tentative', 'Positive-NAP', 4],
+                // ['Will do Later', 'OPEN RPEM', 1],
+                // ['OPEN RPEM', 'Reachout', 31],
+                // ['TTD-Reachout', 'Reachout', 1],
+                // ['Positive-NAP', 'Positive', 5]
             ],
             type: 'sankey',
-            name: 'Sankey demo series'
+            name: 'Task Status Variance'
         }]
 
     });

@@ -121,7 +121,7 @@
                 <?php $i++;}} ?>
             ]
         };
-console.log(combinedData1);
+// console.log(combinedData1);
         var combinedCtx = document.getElementById("combinedChartID1").getContext('2d');
         var combinedChart = new Chart(combinedCtx, {
             type: 'bar',

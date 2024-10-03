@@ -8110,6 +8110,7 @@ return "Days: $days, Hours: $hours, Minutes: $minutes, Seconds: $seconds";
 
     public function get_meetingtypewise($uid,$sd,$ed){
         $query=$this->db->query("SELECT remarks,count(*) cont FROM tblcallevents LEFT JOIN status ON status.id=tblcallevents.status_id WHERE remarks!='' and tblcallevents.cid_id IN (Select id from init_call WHERE init_call.mainbd='$uid') and nextCFID!='0' and cast(updateddate as DATE) BETWEEN '$sd' and '$ed' and (actiontype_id='4' or actiontype_id='3') Group By remarks");
+        // echo $this->db->last_query();die;
         return $query->result();
     }
 
@@ -8294,7 +8295,7 @@ return "Days: $days, Hours: $hours, Minutes: $minutes, Seconds: $seconds";
             $sd = '2024-07-01';
     $ed = '2024-07-20';
         $query=$this->db->query("SELECT count(*) cont FROM tblcallevents WHERE user_id='$uid' and nextCFID!='0' and cast(updateddate as DATE) BETWEEN '$sd' and '$ed' and actiontype_id='$ac'");
-        // echo $this->db->last_query();
+        // echo $this->db->last_query();die;
         return $query->result();
     }
 
@@ -8305,7 +8306,10 @@ return "Days: $days, Hours: $hours, Minutes: $minutes, Seconds: $seconds";
 
 
     public function get_tasktypeupdatereview($uid,$sd,$ed,$ac){
+        $sd = '2024-07-01';
+    $ed = '2024-07-20';
         $query=$this->db->query("SELECT count(case WHEN rremark is not null then 1 END) dreview, count(case WHEN rremark is null then 1 END) nreview FROM tblcallevents WHERE user_id='$uid' and nextCFID!='0' and cast(updateddate as DATE) BETWEEN '$sd' and '$ed' and actiontype_id='$ac'");
+        // echo $this->db->last_query();die;
         return $query->result();
     }
 
@@ -13175,6 +13179,17 @@ public function getAction(){
     $this->db->select('*');
     $this->db->from('action');
    
+    $query = $this->db->get();
+    // echo $this->db->last_query();die;
+
+    return $query->result();
+}
+
+public function getActionByID($id){
+
+    $this->db->select('*');
+    $this->db->from('action');
+    $this->db->where('id',$id);
     $query = $this->db->get();
     // echo $this->db->last_query();die;
 

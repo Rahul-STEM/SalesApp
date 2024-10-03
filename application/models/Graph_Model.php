@@ -795,29 +795,26 @@ class Graph_Model extends CI_Model
         }
 
         // echo $userTypeid;die;
-        if ($userTypeid == 2) {
-            //if admin is loggedin
-            $this->db->where('admin_id', $uid);
-        } elseif ($userTypeid == 4) {
-            //if PST is loggedin
-            $this->db->where('pst_co', $uid);
-        } elseif ($userTypeid == 9) {
-            //if BDPST is loggedin
-            $this->db->where('aadmin', $uid);
-        } elseif ($userTypeid == 13) {
-            //if CLM is loggedin
-            $this->db->where('admin_id', $uid);
-        } else {
-            //if BD is loggedin
-            $this->db->where('mainbd', $uid);
-        }
+        // if ($userTypeid == 2) {
+        //     //if admin is loggedin
+        //     $this->db->where('admin_id', $uid);
+        // } elseif ($userTypeid == 4) {
+        //     //if PST is loggedin
+        //     $this->db->where('pst_co', $uid);
+        // } elseif ($userTypeid == 9) {
+        //     //if BDPST is loggedin
+        //     $this->db->where('aadmin', $uid);
+        // } elseif ($userTypeid == 13) {
+        //     //if CLM is loggedin
+        //     $this->db->where('admin_id', $uid);
+        // } else {
+        //     //if BD is loggedin
+        //     $this->db->where('mainbd', $uid);
+        // }
 
+        
         $this->db->where('user_details.status', 'active');
 
-        // $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
-        // $this->db->where('CAST(ic.createDate AS DATE) <=', "'$edate'", FALSE);
-        // $this->db->group_by('status.name');
-        // $this->db->group_by('status.id');
         $this->db->group_by('ic.cmpid_id ');
         $subquery = $this->db->get_compiled_select();
 
@@ -835,6 +832,8 @@ class Graph_Model extends CI_Model
         $this->db->where('CAST(updateddate AS DATE) >=', "'$sdate'", FALSE);
         $this->db->where('CAST(updateddate AS DATE) <=', "'$edate'", FALSE);
         $this->db->where('nstatus_id IS NOT NULL');
+        $this->db->where('nstatus_id !=','status_id');
+
 
         $this->db->group_by(' status_id, nstatus_id');
         $this->db->order_by(' status_id, nstatus_id');
@@ -2410,23 +2409,42 @@ class Graph_Model extends CI_Model
             $this->db->where_in('company_master.partnerType_id', $selected_partnerType);
         }
 
-        if (!empty($selected_users)) {
+        // if (!empty($selected_users)) {
 
-            $this->db->where_in('user_details.aadmin', $selected_users);
+        //     $this->db->where_in('user_details.aadmin', $selected_users);
+        // }
+        // var_dmp($selected_userType);die;
+        if (!empty($selected_userType)) {
+
+            if ($selected_userType == 2) {
+
+                $this->db->where_in('user_details.admin_id', $selected_users);
+    
+            } elseif ($selected_userType == 4) {
+    
+                $this->db->where_in('user_details.pst_co', $selected_users);
+
+            } elseif ($selected_userType == 9 || $selected_userType == 13) {
+    
+                $this->db->where_in('user_details.aadmin', $selected_users);
+
+            } else {
+                $this->db->where_in('user_details.user_id', $selected_users);
+            }
         }
 
-        if ($userTypeid == 2) {
+        // if ($userTypeid == 2) {
 
-            $this->db->where('user_details.admin_id', $uid);
-        } elseif ($userTypeid == 4) {
+        //     $this->db->where('user_details.admin_id', $uid);
+        // } elseif ($userTypeid == 4) {
 
-            $this->db->where_in('pst_co', $uid);
-        } elseif ($userTypeid == 9 || $userTypeid == 13) {
+        //     $this->db->where_in('pst_co', $uid);
+        // } elseif ($userTypeid == 9 || $userTypeid == 13) {
 
-            $this->db->where_in('aadmin', $uid);
-        } else {
-            $this->db->where('user_id', $uid);
-        }
+        //     $this->db->where_in('aadmin', $uid);
+        // } else {
+        //     $this->db->where('user_id', $uid);
+        // }
 
         // $this->db->where('user_details admin_id', $uid);
         $this->db->join('user_details', 'user_details.user_id = init_call.mainbd', 'left');
@@ -2929,9 +2947,6 @@ class Graph_Model extends CI_Model
     }
 
     public function get_taskplannedSlotwise($selected_users,$selected_usersType,$sdate,$edate,$t1,$t2,$selected_partnerType,$selected_category){
-
-        // var_dump($selected_usersType);
-        // $query=$this->db->query("SELECT count(*) cont FROM tblcallevents WHERE user_id='$uid' and  cast(appointmentdatetime as DATE) BETWEEN '$sd' and '$ed' and cast(appointmentdatetime as TIME) BETWEEN '$t1' and '$t2' and plan='1'");
 
         $this->db->select('init_call.id');
         $this->db->from('init_call');
@@ -3523,5 +3538,498 @@ class Graph_Model extends CI_Model
 
     }
 
+    public function getStatusTaskTypeConversion($uid,$startDate,$endDate,$status_id,$userType,$users){
+
+        // $query=$this->db->query("SELECT count(*) cont FROM tblcallevents WHERE user_id='$uid' and nextCFID!='0' and cast(updateddate as DATE) BETWEEN '$sd' and '$ed' and actiontype_id='$ac' and status_id!=nstatus_id");
+        // return $query->result();
+
+
+        $this->db->select("COUNT(*) count");
+    
+        $this->db->from('tblcallevents');
+        $this->db->join('user_details', 'user_details.user_id=tblcallevents.user_id', 'left');
+
+        if (!empty($userType)) {
+            $this->db->group_start();
+
+            foreach ($userType as $singleuserType) {
+                if ($singleuserType == 2) {
+
+                    $this->db->where_in('user_details.admin_id', $users);
+                }
+                else if ($singleuserType == 4) {
+                    $this->db->or_where_in('user_details.pst_co', $users);
+                }
+                else if ($singleuserType == 9 || $singleuserType == 13) {
+                    $this->db->or_where_in('user_details.aadmin', $users);
+                }
+                else{
+
+                    $this->db->where_in('user_details.user_id', $users);
+                }
+            }
+            $this->db->group_end();
+        }
+
+        $this->db->where('nextCFID !=','0');
+        $this->db->where('status_id ',$status_id);
+        // $this->db->where('status_id !=',' nstatus_id');
+
+        $this->db->where('CAST(updateddate AS DATE) BETWEEN "'.$startDate.'" AND "'.$endDate.'"', NULL, FALSE);
+        // LEFT JOIN  ON user_details.user_id=user_day.user_id
+        // $this->db->group_by('wffo');
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+        return $query->result();
+    }
+
+    public function get_StatustaskTypeConversionByStatus($uid,$startDate,$endDate,$status_id,$status_id1,$userType,$users){
+
+        // echo $status_id1;die;
+
+        $this->db->select("COUNT(*) count");
+    
+        $this->db->from('tblcallevents');
+        $this->db->join('user_details', 'user_details.user_id=tblcallevents.user_id', 'left');
+
+        if (!empty($userType)) {
+            $this->db->group_start();
+
+            foreach ($userType as $singleuserType) {
+                if ($singleuserType == 2) {
+
+                    $this->db->where_in('user_details.admin_id', $users);
+                }
+                else if ($singleuserType == 4) {
+                    $this->db->or_where_in('user_details.pst_co', $users);
+                }
+                else if ($singleuserType == 9 || $singleuserType == 13) {
+                    $this->db->or_where_in('user_details.aadmin', $users);
+                }
+                else{
+
+                    $this->db->where_in('user_details.user_id', $users);
+                }
+            }
+            $this->db->group_end();
+        }
+
+        $this->db->where('nextCFID !=','0');
+        $this->db->where('status_id ',$status_id);
+        $this->db->where('status_id !=',' nstatus_id');
+        $this->db->where('nstatus_id ',$status_id1);
+
+
+        $this->db->where('CAST(updateddate AS DATE) BETWEEN "'.$startDate.'" AND "'.$endDate.'"', NULL, FALSE);
+
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+        return $query->result();
+
+    }
+
+    public function getTaskwiseDetails($selected_users,$Selected_userType,$sdate,$edate,$selectedTask,$selected_partnerType,$selected_category){
+
+        // var_dump($selectedTask);die;
+        $this->db->select('init_call.id');
+        $this->db->from('init_call');
+        $this->db->join('company_master', 'company_master.id = init_call.cmpid_id', 'left');
+        $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
+        
+
+        if (!empty($selected_category)) {
+
+            $this->db->group_start();
+
+            foreach ($selected_category as $singleCategory) {
+
+                if ($singleCategory == 'topspender') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+                }
+                if ($singleCategory == 'focus_funnel') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+                }
+                if ($singleCategory == 'upsell_client') {
+
+                    $this->db->or_where('upsell_client', 'yes');
+                }
+                if ($singleCategory == 'keycompany') {
+
+                    $this->db->or_where('keycompany', 'yes');
+                }
+                if ($singleCategory == 'pkclient ') {
+
+                    $this->db->or_where('pkclient', 'yes');
+                }
+                if ($singleCategory == 'priorityc ') {
+
+                    $this->db->or_where('priorityc', 'yes');
+                }
+            }
+
+            $this->db->group_end();
+        }
+
+        if (!empty($selected_partnerType)) {
+
+            $this->db->where_in('company_master.partnerType_id', $selected_partnerType);
+        }
+
+    
+        $subquery = $this->db->get_compiled_select();
+
+        $this->db->select('COUNT(*) as cont');
+        $this->db->select('COUNT(CASE WHEN actontaken = "no" AND purpose_achieved = "no" THEN 1 END) as anpn');
+        $this->db->select('COUNT(CASE WHEN actontaken = "yes" AND purpose_achieved = "no" THEN 1 END) as aypn');
+        $this->db->select('COUNT(CASE WHEN actontaken = "yes" AND purpose_achieved = "yes" THEN 1 END) as aypy');
+        $this->db->from('tblcallevents');
+        $this->db->join('user_details', 'user_details.user_id = tblcallevents.user_id', 'left');
+        $this->db->where("tblcallevents.cid_id IN ($subquery)", null, false);
+
+        if (!empty($Selected_userType)) {
+            $this->db->group_start();
+
+            foreach ($Selected_userType as $singleuserType) {
+                
+                if ($singleuserType == 2) {
+
+                    $this->db->where_in('user_details.admin_id', $selected_users);
+                }
+                else if ($singleuserType == 4) {
+                    $this->db->or_where_in('user_details.pst_co', $selected_users);
+                }
+                else if ($singleuserType == 9 || $singleuserType == 13) {
+                    $this->db->or_where_in('user_details.aadmin', $selected_users);
+                }
+                else{
+
+                    $this->db->where_in('user_details.user_id', $selected_users);
+                }
+            }
+            $this->db->group_end();
+        }
+
+
+        $this->db->where('nextCFID !=', '0');
+        $this->db->where('CAST(updateddate AS DATE) >=', $sdate);
+        $this->db->where('CAST(updateddate AS DATE) <=', $edate);
+        $this->db->where('actiontype_id', $selectedTask);
+        
+        // Execute the query
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+        return $query->result();
+    }
+
+    public function getMeetingwiseDetails($selected_users,$Selected_userType,$sdate,$edate,$selectedmeetingType,$selected_partnerType,$selected_category){
+
+        $this->db->select('init_call.id');
+        $this->db->from('init_call');
+        $this->db->join('company_master', 'company_master.id = init_call.cmpid_id', 'left');
+        $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
+        $this->db->join('user_details', 'user_details.user_id = init_call.mainbd', 'left');
+
+        if (!empty($selected_category)) {
+
+            $this->db->group_start();
+
+            foreach ($selected_category as $singleCategory) {
+
+                if ($singleCategory == 'topspender') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+                }
+                if ($singleCategory == 'focus_funnel') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+                }
+                if ($singleCategory == 'upsell_client') {
+
+                    $this->db->or_where('upsell_client', 'yes');
+                }
+                if ($singleCategory == 'keycompany') {
+
+                    $this->db->or_where('keycompany', 'yes');
+                }
+                if ($singleCategory == 'pkclient ') {
+
+                    $this->db->or_where('pkclient', 'yes');
+                }
+                if ($singleCategory == 'priorityc ') {
+
+                    $this->db->or_where('priorityc', 'yes');
+                }
+            }
+
+            $this->db->group_end();
+        }
+
+        if (!empty($selected_partnerType)) {
+
+            $this->db->where_in('company_master.partnerType_id', $selected_partnerType);
+        }
+
+        if (!empty($Selected_userType)) {
+            $this->db->group_start();
+
+            foreach ($Selected_userType as $singleuserType) {
+                
+                if ($singleuserType == 2) {
+
+                    $this->db->where_in('user_details.admin_id', $selected_users);
+                }
+                else if ($singleuserType == 4) {
+                    $this->db->or_where_in('user_details.pst_co', $selected_users);
+                }
+                else if ($singleuserType == 9 || $singleuserType == 13) {
+                    $this->db->or_where_in('user_details.aadmin', $selected_users);
+                }
+                else{
+
+                    $this->db->where_in('user_details.user_id', $selected_users);
+                }
+            }
+            $this->db->group_end();
+        }
+
+
+        $subquery = $this->db->get_compiled_select();
+
+        // echo $subquery;die;
+
+        $this->db->select('remarks');
+        $this->db->select('COUNT(*) count');
+        $this->db->from('tblcallevents');
+        $this->db->join('status', 'status.id = tblcallevents.status_id', 'left');
+        $this->db->where('remarks !=', '');
+        // $this->db->where('tblcallevents.cid_id IN ('.$subquery.')');
+        $this->db->where("tblcallevents.cid_id IN ($subquery)", null, false); // Note: false prevents escaping
+
+        $this->db->where('nextCFID != ', 0);
+        $this->db->where('actiontype_id', $selectedmeetingType);
+        $this->db->where('CAST(updateddate AS DATE) >=', $sdate);
+        $this->db->where('CAST(updateddate AS DATE) <=', $edate);
+        $this->db->group_by('remarks');
+
+        $query = $this->db->get();
+
+        // echo $this->db->last_query();die;
+        return $query->result();
+
+
+        // $query=$this->db->query("SELECT remarks,count(*) cont FROM tblcallevents LEFT JOIN status ON status.id=tblcallevents.status_id WHERE remarks!='' and tblcallevents.cid_id IN (Select id from init_call WHERE init_call.mainbd='$uid') and nextCFID!='0' and cast(updateddate as DATE) BETWEEN '$sdate' and '$edate' and (actiontype_id='4' or actiontype_id='3') Group By remarks");
+    }
+
+    public function getActionWiseTaskTable($selected_users,$Selected_userType,$sdate,$edate,$selected_partnerType,$selected_category,$selectedAction){
+
+        $this->db->select('tblcallevents.*, company_master.id as cid,company_master.compname as compname, action.clr as aclr, s1.clr as bsclr, s2.clr as asclr, partner_master.clr as pclr, s1.name as bstatus, s1.name as astatus, action.name as acname, user_details.name as uname, partner_master.name as pname');
+        $this->db->from('tblcallevents');
+        $this->db->join('init_call', 'init_call.id = tblcallevents.cid_id', 'left');
+        $this->db->join('status s3', 's3.id = init_call.cstatus', 'left');
+        $this->db->join('user_details', 'user_details.user_id = init_call.mainbd', 'left');
+        $this->db->join('company_master', 'company_master.id = init_call.cmpid_id', 'left');
+        $this->db->join('status s1', 's1.id = tblcallevents.status_id', 'left');
+        $this->db->join('status s2', 's2.id = tblcallevents.nstatus_id', 'left');
+        $this->db->join('action', 'action.id = tblcallevents.actiontype_id', 'left');
+        $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
+
+        if (!empty($selected_category)) {
+
+            $this->db->group_start();
+
+            foreach ($selected_category as $singleCategory) {
+
+                if ($singleCategory == 'topspender') {
+
+                    $this->db->or_where('topspender', 'yes');
+                }
+                if ($singleCategory == 'focus_funnel') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+                }
+                if ($singleCategory == 'upsell_client') {
+
+                    $this->db->or_where('upsell_client', 'yes');
+                }
+                if ($singleCategory == 'keycompany') {
+
+                    $this->db->or_where('keycompany', 'yes');
+                }
+                if ($singleCategory == 'pkclient ') {
+
+                    $this->db->or_where('pkclient', 'yes');
+                }
+                if ($singleCategory == 'priorityc ') {
+
+                    $this->db->or_where('priorityc', 'yes');
+                }
+            }
+
+            $this->db->group_end();
+        }
+
+        if (!empty($selected_partnerType)) {
+
+            $this->db->where_in('company_master.partnerType_id', $selected_partnerType);
+        }
+
+
+        if (!empty($Selected_userType)) {
+            $this->db->group_start();
+
+            foreach ($Selected_userType as $singleuserType) {
+                if ($singleuserType == 2) {
+                    $this->db->where_in('user_details.admin_id', $selected_users);
+                }
+                else if ($singleuserType == 4) {
+                    $this->db->or_where_in('user_details.pst_co', $selected_users);
+                }
+                else if ($singleuserType == 9 || $singleuserType == 13) {
+                    $this->db->or_where_in('user_details.aadmin', $selected_users);
+                }
+                else{
+                    $this->db->where_in('user_details.user_id', $selected_users);
+                }
+            }
+            $this->db->group_end();
+        }
+
+        $this->db->where('CAST(updateddate AS DATE) >=', $sdate);
+        $this->db->where('CAST(updateddate AS DATE) <=', $edate);
+        $this->db->where('actiontype_id', $selectedAction);
+        // $this->db->where('tblcallevents.initiateddt != ', NULL);
+        if ($selectedAction == 3 || $selectedAction == 4) {
+            
+            $this->db->where('remarks !=', '');
+        }
+        $this->db->where('nextCFID !=', '0');
+        // $this->db->where('remarks !=', '');
+        $this->db->order_by('user_details.name', 'ASC');
+        $this->db->order_by('tblcallevents.cid_id', 'DESC');
+        $this->db->order_by('tblcallevents.updateddate', 'ASC');
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+        return $query->result();
+    }
+
+
+    public function getTableDataTaskWiseDetail($selectedaction, $sdate, $edate, $selected_users, $selected_category, $selected_partnerType,$selected_userType,$actionAP)
+    {
+
+        // echo $sdate;die;
+        // var_dump($selected_category);die;
+        $this->db->select('ic.id ic_id');
+        $this->db->select('ic.topspender topspender');
+        $this->db->select('ic.focus_funnel focus_funnel');
+        $this->db->select('ic.upsell_client upsell_client');
+        $this->db->select('ic.keycompany keycompany');
+        $this->db->select('ic.pkclient pkclient');
+        $this->db->select('ic.priorityc priorityc');
+        $this->db->select('status.clr stclr');
+        $this->db->select('status.id stid');
+        $this->db->select('status.name stname');
+        $this->db->select('company_master.compname company_name');
+        $this->db->select('company_master.address company_address');
+        $this->db->select('city.city city');
+        $this->db->select('states.state state');
+        $this->db->select('partner_master.name partner_typeName');
+        $this->db->select('partner_master.id partner_typeID');
+        $this->db->select('partner_master.clr PartnerMasterclr');
+        $this->db->from('init_call ic');
+        $this->db->join('company_master', 'company_master.id = ic.cmpid_id', 'left');
+        $this->db->join('tblcallevents', 'tblcallevents.cid_id = ic.id', 'left');
+
+        $this->db->join('city', 'city.id = company_master.city', 'left');
+        $this->db->join('states', 'states.id = company_master.state', 'left');
+        $this->db->join('partner_master', 'partner_master.id = company_master.partnerType_id', 'left');
+        $this->db->join('status', 'status.id = ic.cstatus', 'left');
+        $this->db->join('user_details', 'user_details.user_id = ic.mainbd', 'left');
+
+        if (!empty($selected_category)) {
+
+            $this->db->group_start();
+
+            foreach ($selected_category as $singleCategory) {
+
+                if ($singleCategory == 'topspender') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+                }
+                if ($singleCategory == 'focus_funnel') {
+
+                    $this->db->or_where('focus_funnel', 'yes');
+                }
+                if ($singleCategory == 'upsell_client') {
+
+                    $this->db->or_where('upsell_client', 'yes');
+                }
+                if ($singleCategory == 'keycompany') {
+
+                    $this->db->or_where('keycompany', 'yes');
+                }
+                if ($singleCategory == 'pkclient ') {
+
+                    $this->db->or_where('pkclient', 'yes');
+                }
+                if ($singleCategory == 'priorityc ') {
+
+                    $this->db->or_where('priorityc', 'yes');
+                }
+            }
+
+            $this->db->group_end();
+        }
+
+        if (!empty($selected_partnerType)) {
+
+            $this->db->where_in('company_master.partnerType_id', $selected_partnerType);
+        }
+
+        // $this->db->where_in('ic.cstatus', $selectedStatus);
+
+        if ($actionAP == 'ANPN') {
+            
+            $this->db->where('actontaken', 'no');
+            $this->db->where('purpose_achieved', 'no');
+
+        }elseif ($actionAP == 'AYPN') {
+            
+            $this->db->where('actontaken', 'yes');
+            $this->db->where('purpose_achieved', 'no');
+
+        }elseif($actionAP == 'AYPY') {
+            
+            $this->db->where('actontaken', 'yes');
+            $this->db->where('purpose_achieved', 'yes');
+        }
+
+        if ($selected_userType == 2) {
+
+            $this->db->where_in('user_details.admin_id', $selected_users);
+        } elseif ($selected_userType == 4) {
+
+            $this->db->where_in('pst_co', $selected_users);
+        } elseif ($selected_userType == 9 || $selected_userType == 13) {
+
+            $this->db->where_in('user_details.aadmin', $selected_users);
+        } else {
+            $this->db->where_in('user_details.user_id', $selected_users);
+        }
+
+        // if (!empty($selected_users)) {
+
+        //     $this->db->where_in('user_details.aadmin', $selected_users);
+        // }
+
+        $this->db->where('CAST(tblcallevents.updateddate AS DATE) >=', "'$sdate'", FALSE);
+        $this->db->where('CAST(tblcallevents.updateddate AS DATE) <=', "'$edate'", FALSE);
+        $this->db->where('tblcallevents.actiontype_id', $selectedaction, FALSE);
+
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+        return $query->result();
+    }
 
 }

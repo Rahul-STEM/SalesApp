@@ -250,4 +250,50 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	}
 
 
+	if (!function_exists('getStatusTaskTypeConversion')) {
+	    function getStatusTaskTypeConversion($uid,$startDate,$endDate,$status_id,$userType,$users){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Graph_model');
+	        $DataSet = $CI->Graph_model->getStatusTaskTypeConversion($uid,$startDate,$endDate,$status_id,$userType,$users);
+            
+	        return $DataSet;
+	    }
+	}
+
+
+	if (!function_exists('get_StatustaskTypeConversionByStatus')) {
+	    function get_StatustaskTypeConversionByStatus($uid,$startDate,$endDate,$status_id,$status_id1,$userType,$users){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Graph_model');
+	        $DataSet = $CI->Graph_model->get_StatustaskTypeConversionByStatus($uid,$startDate,$endDate,$status_id,$status_id1,$userType,$users);
+            
+	        return $DataSet;
+	    }
+	}
+
+	if (!function_exists('getTaskwiseDetails')) {
+	    function getTaskwiseDetails($selected_users,$Selected_userType,$sdate,$edate,$selectedTask,$selected_partnerType,$selected_category){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Graph_model');
+	        $DataSet = $CI->Graph_model->getTaskwiseDetails($selected_users,$Selected_userType,$sdate,$edate,$selectedTask,$selected_partnerType,$selected_category);
+            
+	        return $DataSet;
+	    }
+	}
+
+	if (!function_exists('getMeetingwiseDetails')) {
+	    function getMeetingwiseDetails($selected_users,$Selected_userType,$sdate,$edate,$selectedTask,$selected_partnerType,$selected_category){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Graph_model');
+	        $DataSet = $CI->Graph_model->getMeetingwiseDetails($selected_users,$Selected_userType,$sdate,$edate,$selectedTask,$selected_partnerType,$selected_category);
+            
+	        return $DataSet;
+	    }
+	}
+
+
 ?>

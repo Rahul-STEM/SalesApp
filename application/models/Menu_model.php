@@ -3559,7 +3559,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
     public function get_ttbytime($uid,$tdate,$t1,$t2){
         $utype = $this->Menu_model->get_userbyid($uid);
         $utype = $utype[0]->type_id;
-        if($utype ==3){
+        if($utype ==3 || $utype ==13 || $utype ==4){
             $apr_status = "and approved_status = 1";
         }else{
             $apr_status = '';
@@ -3898,7 +3898,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
     public function get_ttbytimed($uid,$tdate,$t1,$t2){
         $utype = $this->Menu_model->get_userbyid($uid);
         $utype = $utype[0]->type_id;
-        if($utype ==3){
+        if($utype ==3 || $utype ==13 || $utype ==4){
             $apr_status = "and approved_status = 1";
         }else{
             $apr_status = '';
@@ -3977,9 +3977,13 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         }else{
             $apr_status = "";
         }
-
-
           $query=$this->db->query("SELECT COUNT(CASE WHEN actiontype_id=1 THEN actiontype_id END) a, COUNT(CASE WHEN actiontype_id=2 THEN actiontype_id END) b, COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) c, COUNT(CASE WHEN actiontype_id=4 THEN actiontype_id END) d, COUNT(CASE WHEN actiontype_id=5 THEN actiontype_id END) e, COUNT(CASE WHEN actiontype_id=6 THEN actiontype_id END) f, COUNT(CASE WHEN actiontype_id=7 THEN actiontype_id END) g, COUNT(CASE WHEN actiontype_id=8 THEN actiontype_id END) h, COUNT(CASE WHEN actiontype_id=9 THEN actiontype_id END) i, COUNT(CASE WHEN actiontype_id=10 THEN actiontype_id END) j, COUNT(CASE WHEN actiontype_id=11 THEN actiontype_id END) k, COUNT(CASE WHEN actiontype_id=12 THEN actiontype_id END) l,COUNT(CASE WHEN actiontype_id=13 THEN actiontype_id END) m, ( COUNT(CASE WHEN actiontype_id=1 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=2 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=4 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=5 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=6 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=7 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=8 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=9 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=10 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=11 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=12 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=13 THEN actiontype_id END) ) as ab FROM tblcallevents WHERE assignedto_id='$uid' $apr_status AND CAST(appointmentdatetime AS DATE)='$tdate' AND nextCFID=0 AND plan=1");
+        return $query->result();
+    }
+
+    public function get_ttbyd1($uid,$tdate){
+
+          $query=$this->db->query("SELECT COUNT(CASE WHEN actiontype_id=1 THEN actiontype_id END) a, COUNT(CASE WHEN actiontype_id=2 THEN actiontype_id END) b, COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) c, COUNT(CASE WHEN actiontype_id=4 THEN actiontype_id END) d, COUNT(CASE WHEN actiontype_id=5 THEN actiontype_id END) e, COUNT(CASE WHEN actiontype_id=6 THEN actiontype_id END) f, COUNT(CASE WHEN actiontype_id=7 THEN actiontype_id END) g, COUNT(CASE WHEN actiontype_id=8 THEN actiontype_id END) h, COUNT(CASE WHEN actiontype_id=9 THEN actiontype_id END) i, COUNT(CASE WHEN actiontype_id=10 THEN actiontype_id END) j, COUNT(CASE WHEN actiontype_id=11 THEN actiontype_id END) k, COUNT(CASE WHEN actiontype_id=12 THEN actiontype_id END) l,COUNT(CASE WHEN actiontype_id=13 THEN actiontype_id END) m, ( COUNT(CASE WHEN actiontype_id=1 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=2 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=4 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=5 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=6 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=7 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=8 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=9 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=10 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=11 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=12 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=13 THEN actiontype_id END) ) as ab FROM tblcallevents WHERE assignedto_id='$uid' AND CAST(appointmentdatetime AS DATE)='$tdate' AND nextCFID=0 AND plan=1");
         return $query->result();
     }
     public function get_ttbydone($uid,$tdate){
@@ -5067,6 +5071,16 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         return  $smid;
     }
     public function close_rpm($uid,$closem,$caddress,$cpname,$cpdes,$cpno,$cpemail,$lat,$lng,$type,$priority,$cmid,$bmcid,$bmccid,$bminid,$bmtid,$letmeetingsremarks,$updateStatus,$company_as,$company_descri,$potentional_client){
+
+       if($bmtid == ''){
+            $querym =$this->db->query("SELECT *  FROM `barginmeeting` WHERE `id` = '$cmid'");
+            $meetdata = $querym->result();
+            $bmtid = $meetdata[0]->tid;
+            $bmccid = $meetdata[0]->ccid;
+            $bmcid = $meetdata[0]->cid;
+            $bminid = $meetdata[0]->inid;
+       }
+
         $query=$this->db->query("SELECT cstatus,init_call.id inid FROM tblcallevents left join init_call on init_call.id=tblcallevents.cid_id WHERE tblcallevents.id='$bmtid'");
         $data = $query->result();
         $cs = $data[0]->cstatus;
@@ -12619,14 +12633,14 @@ public function getUserTotalTaskTimeForTodays($uid,$tdate){
     return $query->result();
 }
 
-public function GetPendingReviewForPlan($uid){
+public function GetPendingReviewForPlan($uid,$tdate){
 
     $udetail = $this->Menu_model->get_userbyid($uid);
     $type_id = $udetail[0]->type_id;
     if($type_id == 3){
-        $query=$this->db->query("SELECT 'Half Yearly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Half Yearly', 'Half Yearly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 6 MONTH AND CURDATE() UNION ALL SELECT 'Weekly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Weekly', 'Weekly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE() UNION ALL SELECT 'Fortnightly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Fortnightly', 'Fortnightly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 15 DAY AND CURDATE() UNION ALL SELECT 'Monthly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Monthly', 'Monthly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() UNION ALL SELECT 'Quarterly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Quarterly','Quarterly', 'Querterly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 3 MONTH AND CURDATE()");
+        $query=$this->db->query("SELECT 'Half Yearly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Half Yearly', 'Half Yearly') AND Date(`plant`) BETWEEN '$tdate' - INTERVAL 6 MONTH AND '$tdate' UNION ALL SELECT 'Weekly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Weekly', 'Weekly') AND Date(`plant`) BETWEEN '$tdate' - INTERVAL 7 DAY AND '$tdate' UNION ALL SELECT 'Fortnightly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Fortnightly', 'Fortnightly') AND Date(`plant`) BETWEEN '$tdate' - INTERVAL 15 DAY AND '$tdate' UNION ALL SELECT 'Monthly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Monthly', 'Monthly') AND Date(`plant`) BETWEEN '$tdate' - INTERVAL 30 DAY AND '$tdate' UNION ALL SELECT 'Quarterly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Quarterly','Quarterly', 'Querterly') AND Date(`plant`) BETWEEN '$tdate' - INTERVAL 3 MONTH AND '$tdate'");
     }else{
-        $query=$this->db->query("SELECT 'Half Yearly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Half Yearly', 'Half Yearly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 6 MONTH AND CURDATE() UNION ALL SELECT 'Weekly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Weekly', 'Weekly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE() UNION ALL SELECT 'Fortnightly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Fortnightly', 'Fortnightly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 15 DAY AND CURDATE() UNION ALL SELECT 'Monthly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Monthly', 'Monthly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() UNION ALL SELECT 'Quarterly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Quarterly','Quarterly', 'Querterly') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 3 MONTH AND CURDATE() UNION ALL SELECT 'Self Review' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Review') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() UNION ALL SELECT 'Roaster' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Roaster') AND Date(`plant`) BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE()");
+        $query=$this->db->query("SELECT 'Half Yearly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Half Yearly', 'Half Yearly') AND Date(`plant`) BETWEEN '$tdate' - INTERVAL 6 MONTH AND '$tdate' UNION ALL SELECT 'Weekly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Weekly', 'Weekly') AND Date(`plant`) BETWEEN '$tdate' - INTERVAL 7 DAY AND '$tdate' UNION ALL SELECT 'Fortnightly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Fortnightly', 'Fortnightly') AND Date(`plant`) BETWEEN '$tdate' - INTERVAL 15 DAY AND '$tdate' UNION ALL SELECT 'Monthly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Monthly', 'Monthly') AND Date(`plant`) BETWEEN '$tdate' - INTERVAL 30 DAY AND '$tdate' UNION ALL SELECT 'Quarterly' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Quarterly','Quarterly', 'Querterly') AND Date(`plant`) BETWEEN '$tdate' - INTERVAL 3 MONTH AND '$tdate' UNION ALL SELECT 'Self Review' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Self Review') AND Date(`plant`) BETWEEN '$tdate' - INTERVAL 30 DAY AND '$tdate' UNION ALL SELECT 'Roaster' AS review_period, COUNT(*) AS review_count FROM `allreview` WHERE `uid` = '$uid' AND reviewtype IN ('Roaster') AND Date(`plant`) BETWEEN '$tdate' - INTERVAL 7 DAY AND '$tdate'");
     }
    
     return $query->result();
@@ -12674,6 +12688,162 @@ public function GetReUpdateNewLeadComapny($uid){
     $query=$this->db->query("SELECT init_call.*,user_details.name,tblcallevents.actiontype_id,tblcallevents.appointmentdatetime,tblcallevents.id as taskid,company_master.compname FROM `init_call` LEFT JOIN tblcallevents on tblcallevents.cid_id = init_call.id LEFT JOIN company_master on company_master.id = init_call.cmpid_id LEFT JOIN user_details on $text WHERE user_details.user_id = tblcallevents.user_id AND  tblcallevents.actiontype_id = 10 AND tblcallevents.actontaken ='yes' AND tblcallevents.purpose_achieved='yes' AND init_call.new_lead=1 AND is_admin_approved = 2 ORDER by init_call.id DESC");
     return $query->result();
 }
+
+
+
+
+
+//  Start Travel Logic Database
+
+public function InsertCashRequest($uid,$amount,$purpose){
+       
+    $data = array(
+    'user_id'    => $uid, 
+    'date'       => date('Y-m-d H:i:s'), 
+    'cash'     => $amount,
+    'purpose'    => $purpose
+);
+$this->db->insert('travel_advance', $data);
+    }
+    
+public function GetOurCashRequest($uid){
+        $query=$this->db->query("SELECT travel_advance.*, user_details.name FROM travel_advance LEFT JOIN user_details ON user_details.user_id = travel_advance.user_id WHERE travel_advance.user_id = '$uid' order by travel_advance.id DESC");
+        return $query->result();
+    }
+public function GetOurTeamCashRequest($uid){
+        $utype = $this->Menu_model->get_userbyid($uid);
+        $utype = $utype[0]->type_id;
+        if($utype == 13){
+            $text = "user_details.aadmin = '$uid' and user_details.type_id=3";
+        }elseif($utype == 4){
+            $text = "user_details.pst_co = '$uid' and user_details.type_id=13";
+        }elseif($utype == 15){
+            $text = "user_details.sales_co = '$uid' and user_details.type_id= 4";
+        }else{
+            $text = "user_details.admin_id = '$uid'";
+        }
+        $query=$this->db->query("SELECT travel_advance.*, user_details.name FROM travel_advance LEFT JOIN user_details ON user_details.user_id = travel_advance.user_id WHERE $text order by travel_advance.id DESC");
+        return $query->result();
+    }
+    
+public function RejectCashRequest($uid,$rejectid,$rejectreamrk){
+
+    $utype = $this->Menu_model->get_userbyid($uid);
+    $utype = $utype[0]->type_id;
+    if($utype == 13 || $utype == 4 || $utype == 15){
+        $slct_apr_user  = 'cluster_apr';
+        $slct_apr_by    = 'cluster_by';
+        $slct_user_msg  = 'cluster_msg';
+    }elseif($utype == 2){
+        $slct_apr_user  = 'admin_apr';
+        $slct_apr_by    = 'admin_by';
+        $slct_user_msg  = 'admin_msg';
+    }else{
+        $slct_apr_user  = 'account_apr';
+        $slct_apr_by    = 'account_by';
+        $slct_user_msg  = 'account_msg';
+    }
+
+    $data = array(
+        $slct_apr_user  => 2,
+        $slct_apr_by      => $uid,
+        $slct_user_msg    => $rejectreamrk,
+    );
+    $this->db->where('id', $rejectid); 
+    $this->db->update('travel_advance', $data);
+}
+public function ApproveCashRequest($uid,$approveid,$approve_remarks){
+
+    $utype = $this->Menu_model->get_userbyid($uid);
+    $utype = $utype[0]->type_id;
+    if($utype == 13 || $utype == 4 || $utype == 15){
+        $slct_apr_user  = 'cluster_apr';
+        $slct_apr_by    = 'cluster_by';
+        $slct_user_msg  = 'cluster_msg';
+    }elseif($utype == 2){
+        $slct_apr_user  = 'admin_apr';
+        $slct_apr_by    = 'admin_by';
+        $slct_user_msg  = 'admin_msg';
+    }else{
+        $slct_apr_user  = 'account_apr';
+        $slct_apr_by    = 'account_by';
+        $slct_user_msg  = 'account_msg';
+    }
+
+    $data = array(
+        $slct_apr_user  => 1,
+        $slct_apr_by    => $uid,
+        $slct_user_msg    => $approve_remarks,
+    );
+    $this->db->where('id', $approveid); 
+    $this->db->update('travel_advance', $data);
+}
+
+
+public function UpdateUserCashAmmount($apr_uid,$newCash){
+    $data = array(
+        'ucash'  => $newCash,
+    );
+    $this->db->where('user_id', $apr_uid); 
+    $this->db->update('user_details', $data);
+}
+public function GetTravelRequestById($id){
+    $query=$this->db->query("SELECT * FROM `travel_advance` WHERE id = $id");
+    return $query->result();
+}
+
+public function GetTravelRequestInAccount(){
+    $query=$this->db->query("SELECT * FROM `travel_advance` WHERE cluster_apr = 1 AND admin_apr = 1 AND account_apr = 0");
+    return $query->result();
+}
+
+
+public function GetTodaysMeetingsDetails($uid){
+
+    $query=$this->db->query("SELECT barginmeeting.*, barginmeeting.id AS meetid, tcl.* FROM barginmeeting LEFT JOIN tblcallevents AS tcl ON tcl.id = barginmeeting.tid WHERE barginmeeting.user_id = '$uid' AND tcl.actiontype_id IN (3, 4, 17) AND tcl.nextCFID != 0 AND tcl.plan = 1 AND DATE(tcl.appointmentdatetime) = CURDATE() AND tcl.approved_status = 1 AND NOT EXISTS ( SELECT 1 FROM cash_expense WHERE cash_expense.meetid = barginmeeting.id)");
+
+    // $query=$this->db->query("SELECT barginmeeting.*, barginmeeting.id AS meetid, tcl.* FROM barginmeeting LEFT JOIN tblcallevents AS tcl ON tcl.id = barginmeeting.tid WHERE barginmeeting.user_id = '$uid' AND tcl.actiontype_id IN (3, 4, 17) AND tcl.nextCFID != 0 AND tcl.plan = 1 AND DATE(tcl.appointmentdatetime) = CURDATE() AND tcl.approved_status = 1 AND NOT EXISTS ( SELECT 1 FROM cash_expense WHERE cash_expense.meetid = barginmeeting.id limit 1)");
+    return $query->result();
+}
+
+
+public function Addexpensecash($uid,$meet,$expensecash,$bills){
+ 
+        $data = array(
+            'user_id'      => $uid,
+            'meetid'       => $meet,
+            'expense'      => $expensecash,
+            'bills'        => $bills
+        );
+        $this->db->insert('cash_expense', $data);
+
+        $tuser = $this->Menu_model->get_userbyid($uid);
+        $ucash = $tuser[0]->ucash;
+        $ucash = $ucash - $expensecash;
+        
+        $this->db->query("UPDATE `user_details` SET `ucash`='$ucash' WHERE user_id = '$uid'");
+    
+}
+public function GetTeamCashExpense($uid){
+    $utype = $this->Menu_model->get_userbyid($uid);
+        $utype = $utype[0]->type_id;
+        if($utype == 13){
+            $text = "user_details.aadmin = '$uid' and user_details.type_id=3";
+        }elseif($utype == 4){
+            $text = "user_details.pst_co = '$uid' and user_details.type_id=13";
+        }elseif($utype == 15){
+            $text = "user_details.sales_co = '$uid' and user_details.type_id= 4";
+        }else{
+            $text = "user_details.admin_id = '$uid'";
+        }
+        $query=$this->db->query("SELECT cash_expense.*, user_details.name,company_master.compname FROM cash_expense LEFT JOIN user_details ON user_details.user_id = cash_expense.user_id LEFT JOIN barginmeeting ON barginmeeting.id = cash_expense.meetid LEFT JOIN company_master on company_master.id = barginmeeting.cid WHERE $text order by cash_expense.id DESC");
+        return $query->result();
+}
+
+//  End Travel Logic 
+
+
+
 
 
 

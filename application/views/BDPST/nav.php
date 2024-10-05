@@ -202,6 +202,19 @@
               <p>RP Check</p>
             </a>
           </li>
+
+          <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/OurTravelAdvanceRequest" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Our Travel Advance Request</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/CashExpenseReport" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Team Cash Expense Report</p>
+                    </a>
+                </li>
           
           <!--<li class="nav-item">-->
           <!--  <a href="<?=base_url();?>Menu/AddFAQ" class="nav-link">-->

@@ -9,7 +9,12 @@
       </li>
       <li class="nav-item d-none d-sm-inline-block"> 
 <button type="button" class="btn btn-primary" onclick="goBack()">Go Back</button>
-<button type="button" class="btn btn-secondary" onclick="goForward()">Go Forward</button>
+        <?php 
+        $udetail    = $this->Menu_model->get_userbyid($uid);
+        $ucash  = $udetail[0]->ucash;
+        ?>
+        <button type="button" class="btn btn-success"><span><b>Our Cash : <?=$ucash;?> ₹</b></span></button>
+      </li>
       </li>
     </ul>
     <!-- Right navbar links -->
@@ -82,6 +87,11 @@
           <i class="far fa-bell"></i>
           <?php $notify=$this->Menu_model->notify($uid);?>
           <span class="badge badge-warning navbar-badge"><?=sizeof($notify);?></span>
+        </a> 
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="javascript:void(0)"  data-toggle="modal" data-target="#exampleModalCenterspclcashPurchase">
+          <i class="far fa-user"></i>
         </a> 
       </li>
       <li class="nav-item">
@@ -196,6 +206,7 @@
               <p>Add Special Comment On Task (Pending)</p>
             </a>
           </li>
+        
           <li class="nav-item">
             <a href="<?=base_url();?>Menu/AddThanksCommentOnTask" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
@@ -207,9 +218,20 @@
                     <i class="far fa-circle nav-icon"></i>
                     <p>Our Special Request For Leave Some Time </p>
                     </a>
-                </li>
+          </li>
         
-          
+          <li class="nav-item">
+            <a href="<?=base_url();?>Menu/OurTravelAdvanceRequest" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Our Travel Advance Request</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?=base_url();?>Menu/UpdateTodaysMeetingsDetails" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Update Todays Meetings Details</p>
+            </a>
+          </li>
           
           
           

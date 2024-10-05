@@ -725,7 +725,7 @@ if($type_id == 3){
                       $reviewtask  = $this->Menu_model->GetTommrowReviewTask($uid);
                       $reviewtaskcnt = sizeof($reviewtask);
                      
-                      $reviews = $this->Menu_model->GetPendingReviewForPlan($uid);
+                      $reviews = $this->Menu_model->GetPendingReviewForPlan($uid,$adate);
                       $filtered_reviews = array_filter($reviews, function($review) {
                           return $review->review_count == 0;
                       });
@@ -968,7 +968,7 @@ if($type_id == 3){
                           </label>
                         </div> -->
                         <?php 
-                        $reviews = $this->Menu_model->GetPendingReviewForPlan($uid);
+                        $reviews = $this->Menu_model->GetPendingReviewForPlan($uid,$adate);
                         $filtered_reviews = array_filter($reviews, function($review) {
                             return $review->review_count == 0;
                         });
@@ -1348,6 +1348,7 @@ if($type_id == 3){
                             <option value="<?=$a->id?>"><?=$a->name?></option>
                             <?php }} ?>
                           </select>
+                          <small id="meetingrelmsg"></small>
                         </div>
                       </div>
                       <div id="selectbarginCompanyType" class="form-group">
@@ -3563,6 +3564,27 @@ if($type_id == 3){
                     $('#taskPurposebyuserCard').hide();
                     $('#taskActionbyuserCard').hide();
                     $('#status_taskaction').hide();
+                    $.ajax({
+                      url:'<?=base_url();?>Menu/CheckCashIsAvailable',
+                      type: "POST",
+                      data: {
+                        slctactval:'TaskAction',
+                      },
+                      cache: false,
+                      success: function a(result){
+                        if(result == 0){
+                          $('#task_action_filter option[value="3"]').prop('disabled', true);
+                          $('#task_action_filter option[value="4"]').prop('disabled', true);
+                          $('#task_action_filter option[value="17"]').prop('disabled', true);
+                          $('#meetingrelmsg').text('* Please Purchase cash for create meeting task');
+                        }else{
+                          $('#task_action_filter option[value="3"]').prop('disabled', false);
+                          $('#task_action_filter option[value="4"]').prop('disabled', false);
+                          $('#task_action_filter option[value="17"]').prop('disabled', false);
+                          $('#meetingrelmsg').text('');
+                        }
+                      }
+                    });
                     $('#task_action_filter').on('change', function() {
                         $("#taskplanningimg").hide();
                         $("#selectcompanybyuser").html('');
@@ -5376,7 +5398,7 @@ if($type_id == 3){
    
             if (meetingTotalMinutes < currentTotalMinutes) {
                 alert("The meeting time cannot be in the past.");
-                $(this).val('');
+                // $(this).val('');
             }else{
               $.ajax({
                   url:'<?=base_url();?>Menu/TodaysPlannerRequest',
@@ -5663,7 +5685,7 @@ $(document).ready(function(){
         url:'<?=base_url();?>Menu/GetPendingReviewForPlanUser',
         type: "POST",
         data: {
-          review: 'review',
+          review_date: '<?= $adate?>',
         },
         cache: false,
         success: function a(result){

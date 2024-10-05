@@ -140,7 +140,7 @@
                                     $i=1;
                                     foreach($getbdteam as $team): 
                                  
-                                        $ttbydc = $this->Menu_model->get_ttbyd($team->user_id,$sdate);
+                                        $ttbydc = $this->Menu_model->get_ttbyd1($team->user_id,$sdate);
                                         $barg=$this->Menu_model->get_bargdetail1($team->user_id,$sdate);
                                         $totalttaskdata =$this->Menu_model->get_totaltdetails($team->user_id,$sdate);
                                       

@@ -9,7 +9,11 @@
       </li>
       <li class="nav-item d-none d-sm-inline-block"> 
         <button type="button" class="btn btn-primary" onclick="goBack()">Go Back</button>
-<button type="button" class="btn btn-secondary" onclick="goForward()">Go Forward</button>
+        <?php 
+            $udetail    = $this->Menu_model->get_userbyid($uid);
+            $ucash  = $udetail[0]->ucash;
+            ?>
+            <button type="button" class="btn btn-success"><span><b>Our Cash : <?=$ucash;?> ₹</b></span></button>
       </li>
     </ul>
     <!-- Right navbar links -->
@@ -213,11 +217,35 @@
               </a>
           </li>
           <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/OurTeamTravelAdvanceRequest" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Team Travel Advance Request</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/CashExpenseReport" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Team Cash Expense Report</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/OurTravelAdvanceRequest" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Our Travel Advance Request</p>
+                    </a>
+                </li>
+            <li class="nav-item">
                     <a href="<?=base_url();?>Menu/UserTaskViewPage" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Our Todays Task Status</p>
                     </a>
                 </li>
+                <li class="nav-item">
+            <a href="<?=base_url();?>Menu/UpdateTodaysMeetingsDetails" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Update Todays Meetings Details</p>
+            </a>
+          </li>
           <!-- <li class="nav-item">-->
           <!--  <a class="nav-link" href="<?=base_url();?>Menu/cluster" >-->
           <!--    <i class="far fa-circle nav-icon"></i>-->

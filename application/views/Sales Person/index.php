@@ -1877,6 +1877,14 @@ $dataPoints2 = array(
               </div></div></div>
             <div class="col-lg-4 col-sm">
 
+
+            <div class="card p-3">
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenterspclcashPurchase">
+                      <b>Travel Advance</b>
+                  </button>
+                </div>
+
+
             <?php 
                 $plannertime = $this->Menu_model->autotasktimenew($uid,$tdate);
                 $plannertimecnt = sizeof($plannertime);
@@ -1980,18 +1988,33 @@ $dataPoints2 = array(
                           
                         <lable>Todays End Time : </lable>
                         <input type="time" id="meetingtimerequest2" name="end_meeting_time" min="10:00" max="19:00" class="form-control" required=""> 
-                        <!-- <hr>
-                        <div id="taskcounttable">
+                        
+                        <div class="form-group">
+                          <select name="select_funnel" id="selectbarginCompanyType" class="form-control mt-2" required>
+                              <option  selected>Select Funnel</option>
+                              <option value="From Funnel">From Funnel</option>
+                              <option value="Other">Other</option>
+                            </select>
                         </div>
-                        <hr> 
-                         <lable>Tomorrow Start Time : </lable>
-                        <input type="time" id="meetingtimerequest3" name="start_tommorow_task_time" min="10:00" max="19:00" class="form-control" required=""> 
-                        <hr> -->
+                        
+                        <div id="selectmeetingCompany" class="form-group">
+                        <?php $allCmpData = $this->Menu_model->GetAllCompanyByUserID($uid); ?>
+                          <select id="funnel_cmp" name="funnel_cmp[]" class="form-control mt-2" multiple aria-label="multiple select example" required>
+                              <option  selected>Select Company</option>
+                              <?php foreach($allCmpData as $ourcmpData): ?>
+                              <option value="<?= $ourcmpData->inid; ?>"><?= $ourcmpData->compname?></option>
+                              <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div id="selectmeetingCompanyother" class="form-group">
+                        <lable>How Many Barg Meeting :  </lable>
+                          <input type="number"  name="barg_meet" id="barg_meet_num" class="form-control" placeholder="Type Barg Meeting Number" required=""> 
+                        </div>
                         <lable>Purpose For Plan Change : </lable>
                           <textarea name="purpose" class="form-control" placeholder="Please Enter Purpose" required="" ></textarea>
                         </div>
                         <div class="modal-footer text-center" style="background: #2f4f4f;display: inline;" >
-                            <button class="btn btn-primary m-3" type="submit">Send Request For Approval</button>
+                            <button class="btn btn-primary m-3" id="spcl_submit" type="submit">Send Request For Approval</button>
                         </div>
                       </div>
                       </div>
@@ -2000,7 +2023,40 @@ $dataPoints2 = array(
                   </div>
 
                   </div>
-
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenterspclcashPurchase" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+     
+                    <div class="was-validated">
+                      <div class="modal-content">
+                        <div class="modal-header" styel="background: #fbff00;" >
+                          <h5 class="modal-title" id="exampleModalLongTitle">Travel Advance Request </h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body" style="background: darkslategrey;color: white;" >
+                            <form method="POST" action='<?=base_url();?>Menu/CheckCashRequest' enctype="multipart/form-data">
+                                <div class="form-group mb-3">
+                                    <label for="amount">Amount</label>
+                                    <input type="hidden" class="form-control" name="user" value="<?= $username ?>">
+                                    <input type="number" class="form-control" max="7000" name="amount" id="amount" placeholder="Enter amount" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="purpose">Purpose of Request</label>
+                                    <textarea class="form-control" name="purpose" id="purpose" rows="4" placeholder="Enter purpose of request" required></textarea>
+                                </div>
+                           
+                                <div class="form-group text-center">
+                                    <button type="submit" class="btn btn-primary btn-block">Submit Request</button>
+                                </div>
+                            </form>
+                        </div>
+                      </div>
+                      </div>
+                        </form>
+                    </div>
+                  </div>
        
                 <?php 
                       $newleads = $this->Menu_model->GetReUpdateNewLeadComapny($uid);
@@ -2176,7 +2232,104 @@ function toggleDataSeries(e){
 
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="<?=base_url();?>assets/js/dashboard.js"></script>
+<script>
+  $(document).ready(function() {
+   $('#selectmeetingCompany').hide();
+   $('#selectmeetingCompanyother').hide();
+   $('#selectbarginCompanyType').change(function() {
 
+     var meetingtimerequest1 = $('#meetingtimerequest1').val();
+     var meetingtimerequest2 = $('#meetingtimerequest2').val();
+     if (meetingtimerequest1 == '') {
+       $('#selectbarginCompanyType').val('Select Funnel');
+       alert('Please Enter Start Time');
+       return false;
+     }
+     if (meetingtimerequest2 == '') {
+       $('#selectbarginCompanyType').val('Select Funnel');
+       alert('Please Enter End Time');
+       return false;
+     }
+
+     var selectedValue = $(this).val();
+     if (selectedValue == 'From Funnel') {
+       $('#selectmeetingCompany').show();
+       $('#selectmeetingCompanyother').hide();
+     } else {
+       $('#selectmeetingCompany').hide();
+       $('#selectmeetingCompanyother').show();
+     }
+   });
+
+   $('#spcl_submit').on('click', function(event) {
+     event.preventDefault();
+     var slctvalue = $('#selectbarginCompanyType').val();
+     var funnel_cmp = $('#funnel_cmp').val();
+     if (slctvalue == 'Select Funnel') {
+       alert('Please select funnel type');
+       return false;
+     } else {
+       var barg_meet_num = $('#barg_meet_num').val();
+       if (slctvalue == 'From Funnel' && funnel_cmp == 'Select Company') {
+         alert('Please select Comapny');
+         return false;
+       } else if (slctvalue == 'From Funnel' && barg_meet_num !== '') {
+         alert(barg_meet_num);
+       } else {
+         alert('Please Type Number of Meetings');
+         return false;
+       }
+     }
+   });
+
+   $('#funnel_cmp').on('change', function() {
+     var selectedOptions = $(this).find('option:selected');
+     var funnel_cmpdata = $('#funnel_cmp').val();
+     var meetingtimerequest1 = $('#meetingtimerequest1').val();
+     var meetingtimerequest2 = $('#meetingtimerequest2').val();
+     var funnel_cmps = funnel_cmpdata.toString().split(',');
+     var funnel_cmp_cnt = funnel_cmps.length;
+     var minutesDifference = getTimeDifferenceInMinutes(meetingtimerequest1, meetingtimerequest2);
+     var meetingstime = minutesDifference - 30;
+     var meetingscnt = meetingstime / 30;
+     meetingscnt = Math.round(meetingscnt);
+     if (selectedOptions.length > meetingscnt) {
+       $(this).find('option:selected').each(function(index) {
+         if (index >= meetingscnt) {
+           $(this).prop('selected', false);
+         }
+       });
+       alert("Behalf of Time You Enter You Can't Plan More Than " + meetingscnt + " Companies For Meetings.");
+     }
+   });
+
+   $('#barg_meet_num').on('change', function() {
+     var value = parseFloat($(this).val());
+     var meetingtimerequest1 = $('#meetingtimerequest1').val();
+     var meetingtimerequest2 = $('#meetingtimerequest2').val();
+     var minutesDifference = getTimeDifferenceInMinutes(meetingtimerequest1, meetingtimerequest2);
+     var meetingstime = minutesDifference - 30;
+     var meetingscnt = meetingstime / 30;
+     meetingscnt = Math.round(meetingscnt);
+     if (value > meetingscnt) {
+       $('#barg_meet_num').val("");
+       alert("Behalf of Time You Enter You Can't Plan More Than " + meetingscnt + " Companies For Barg Meetings.");
+     }
+   });
+
+   function getTimeDifferenceInMinutes(startTime, endTime) {
+     var start = startTime.split(':');
+     var end = endTime.split(':');
+     var startDate = new Date();
+     startDate.setHours(start[0], start[1], 0);
+     var endDate = new Date();
+     endDate.setHours(end[0], end[1], 0);
+     var difference = endDate - startDate;
+     var differenceInMinutes = Math.floor(difference / (1000 * 60));
+     return differenceInMinutes;
+   }
+ });
+</script>
 
 
 

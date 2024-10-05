@@ -215,6 +215,19 @@
                   <p>Planner Task Approvel</p>
               </a>
           </li>
+          <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/OurTeamTravelAdvanceRequest" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Team Travel Advance Request</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/CashExpenseReport" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Team Cash Expense Report</p>
+                    </a>
+                </li>
           
           <li class="nav-item">
             <a href="<?=base_url();?>Menu/SpecialRequestForLeaveSomeTimeData" class="nav-link">

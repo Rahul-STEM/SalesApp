@@ -3678,9 +3678,16 @@ class Menu extends CI_Controller {
                $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask Before Going Task Planner Page');
                redirect('Menu/Dashboard');
            }else{
-            $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
-            $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
-           } 
+            $meetData = $this->Menu_model->GetTodaysMeetingsDetails($uid);
+            $meetDatacnt = sizeof($meetData);
+                if($meetDatacnt > 0){
+                    $this->session->set_flashdata('error_message','Update '. $meetDatacnt . ' meeting details for today before you end your day.');
+                    redirect("Menu/UpdateTodaysMeetingsDetails");
+                }else{
+                    $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
+                    $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
+                }
+           }
         }else{
             $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
             $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
@@ -6391,6 +6398,7 @@ public function Dashboard(){
         redirect('Menu/Dashboard');
     }
     public function rpmclose(){
+
         $this->load->model('Menu_model');
         $this->load->library('session');
         $priority="";$closem="";$caddress="";$cpname="";$cpdes="";$cpno="";$cpemail="";
@@ -18790,7 +18798,7 @@ public function CheckTaskPlanningTime(){
     $uid            = $user['user_id'];
     $aptime         = $this->Menu_model->GetTodaysAutoTaskANDPlanningTime($uid,date("Y-m-d"));
     $aptimecnt      = sizeof($aptime);
-    $initedtime     = Date("Y-m-d H:i:s");
+    $initedtime     = date("Y-m-d H:i:s");
     $tdate          = date("Y-m-d");
     $user_day       = $this->Menu_model->get_daystarted($uid,date("Y-m-d"));
 
@@ -19207,8 +19215,10 @@ public function GetPendingReviewForPlanUser(){
     $uid             = $user['user_id'];
     $uyid            = $user['type_id'];
 
+    $review_date = $this->input->post('review_date');
+
     $this->load->model('Menu_model');
-    $reviewCounts = $this->Menu_model->GetPendingReviewForPlan($uid);
+    $reviewCounts = $this->Menu_model->GetPendingReviewForPlan($uid,$review_date);
     $filtered_reviews = array_filter($reviewCounts, function($review) {
         return $review->review_count == 0;
     });
@@ -19371,6 +19381,294 @@ public function CompanyApproredAfterNewLead($initid){
 
 
 }
+
+
+//  Start Travel Request Logic 
+public function CheckCashRequest(){
+  
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+    $amount         = $this->input->post('amount');
+    $purpose        = $this->input->post('purpose');
+    $this->load->model('Menu_model');
+    
+    $this->Menu_model->InsertCashRequest($uid,$amount,$purpose);
+    $this->load->library('session');
+    $this->session->set_flashdata('success_message','Travel Advanced Request Sent SuccessFfully.');
+    redirect("Menu/dashboard");
+}
+public function TravelAdavancedReject(){
+  
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+ 
+    $rejectid         = $this->input->post('reject');
+    $rejectreamrk   = $this->input->post('rejectreamrk');
+    $this->load->model('Menu_model');
+    
+    $this->Menu_model->RejectCashRequest($uid,$rejectid,$rejectreamrk);
+    $this->load->library('session');
+    $this->session->set_flashdata('error_message','Travel Advanced Request Rejected SuccessFfully.');
+    redirect("Menu/OurTeamTravelAdvanceRequest");
+}
+public function OurTravelAdvanceRequest(){
+   
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+
+    $ocashreq = $this->Menu_model->GetOurCashRequest($uid);
+    if(!empty($user)){
+        $this->load->view($dep_name.'/OurTravelAdvanceRequest',['uid'=>$uid,'user'=>$user,'ocashreq'=>$ocashreq]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function OurTeamTravelAdvanceRequest(){
+   
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $ocashreq = $this->Menu_model->GetOurTeamCashRequest($uid);
+    if(!empty($user)){
+        $this->load->view($dep_name.'/OurTeamTravelAdvanceRequest',['uid'=>$uid,'user'=>$user,'ocashreq'=>$ocashreq]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function TravelAdavancedApprove(){
+  
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+    $approveid         = $this->input->post('approveid');
+    $approve_remarks   = $this->input->post('approve_remarks');
+    $this->load->model('Menu_model');
+    
+    $aprData            = $this->Menu_model->GetTravelRequestById($approveid);
+    $aprData_user_id    = $aprData[0]->user_id;
+    $aprData_date       = $aprData[0]->date;
+    $aprData_cash       = $aprData[0]->cash;
+    $aprData_purpose    = $aprData[0]->purpose;
+
+    $this->Menu_model->ApproveCashRequest($uid,$approveid,$approve_remarks);
+
+    $this->load->library('session');
+    $this->session->set_flashdata('success_message','Travel Advanced Request Approved SuccessFfully.');
+    redirect("Menu/OurTeamTravelAdvanceRequest");
+}
+public function send_email($reciver_email,$message) {
+    // Load email library
+    $this->load->library('email');
+    // SMTP & email configuration
+    $config = array(
+        'protocol'  => 'smtp',
+        'smtp_host' => 'smtp.example.com',
+        'smtp_user' => 'your_email@example.com',
+        'smtp_pass' => 'your_password',
+        'smtp_port' => 587,
+        'mailtype'  => 'html',
+        'charset'   => 'utf-8',
+        'newline'   => "\r\n"
+    );
+    $this->email->initialize($config);
+    // Email content
+    $this->email->from('your_email@example.com', 'Your Name');
+    $this->email->to('recipient@example.com');
+    $this->email->subject('Email Test');
+    $this->email->message($message);
+    // Send email
+    if ($this->email->send()) {
+        echo 'Email sent successfully.';
+    } else {
+        echo 'Email sending failed.';
+        show_error($this->email->print_debugger());
+    }
+}
+
+
+public function CheckCashIsAvailable(){
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+
+    $udetail    = $this->Menu_model->get_userbyid($uid);
+    $ucash  = $udetail[0]->ucash;
+
+     if($ucash >= 500){
+        echo 1;
+     }else{
+        echo 0;
+     }
+}
+
+public function UpdateTodaysMeetingsDetails(){
+   
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $meetData = $this->Menu_model->GetTodaysMeetingsDetails($uid);
+    if(!empty($user)){
+        $this->load->view($dep_name.'/UpdateTodaysMeetingsDetails',['uid'=>$uid,'user'=>$user,'meetData'=>$meetData]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+
+
+public function AddCashSpentInMeetings(){
+
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+    
+    $meetingids     = $this->input->post('meetingid');
+    $expensecash    = $this->input->post('expensecash');
+
+    $this->load->model('Menu_model');
+    $this->load->library('session');
+
+    $meetingidscnt = sizeof($meetingids);
+
+    $this->load->library('upload');
+
+    $mergedArray = [];
+    foreach ($expensecash as $key => $value) {
+        $mergedArray[$value] = $meetingids[$key];
+    }
+    ksort($mergedArray);
+
+    $i=0; $k=1;
+    foreach($meetingids as $meet){
+        $expense = $expensecash[$i];
+        $images = $_FILES["images$k"];
+        $file_count = count($images['name']);
+        $upload_data = array();
+        $errors = array();
+        $tuser = $this->Menu_model->get_userbyid($uid);
+        $ucash = $tuser[0]->ucash;
+    
+        if($ucash < $expense){
+                $this->session->set_flashdata('error_message','Your Cash is Low !');
+                redirect("Menu/UpdateTodaysMeetingsDetails");
+        }
+        for($l = 0; $l < $file_count; $l++) {
+
+            $_FILES["images$k"]['name'] = $images['name'][$l];
+            $_FILES["images$k"]['type'] = $images['type'][$l];
+            $_FILES["images$k"]['tmp_name'] =$images['tmp_name'][$l];
+            $_FILES["images$k"]['error'] = $images['error'][$l];
+            $_FILES["images$k"]['size'] = $images['size'][$l];
+
+            $uploadPath = 'uploads/meetings/';
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+            $config['upload_path'] = $uploadPath;
+            $config['allowed_types'] = '*';
+            // $config['max_size'] = 2000;
+            $config['encrypt_name'] = TRUE;
+
+            $this->upload->initialize($config);
+
+            if ($this->upload->do_upload("images$k")) {
+                $upload_data[] = $this->upload->data();
+            } else {
+                $errors[] = $this->upload->display_errors();
+            }
+        }
+        if (!empty($upload_data)) {
+            $filename = [];
+            foreach($upload_data as $data){
+                $filename[]= $uploadPath.$data['file_name'];
+            }
+            $bills = json_encode($filename);
+            $this->Menu_model->Addexpensecash($uid,$meet,$expense,$bills);
+        } else {
+            $this->session->set_flashdata('msg', 'Failed to upload images: ' . implode(', ', $errors));
+        }
+        $i++;$k++;
+    }
+    $this->session->set_flashdata('success_message','Meetings expense added successfully!');
+    redirect("Menu/UpdateTodaysMeetingsDetails");
+}
+
+
+public function CashExpenseReport(){
+   
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $cashexpenseData = $this->Menu_model->GetTeamCashExpense($uid);
+ 
+    if(!empty($user)){
+        $this->load->view($dep_name.'/CashExpenseReport',['uid'=>$uid,'user'=>$user,'cashexpenseData'=>$cashexpenseData]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+
+public function CashExpenseReject(){
+
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+    
+    $rejectid       = $this->input->post('reject');
+    $rejectreamrk   = $this->input->post('rejectreamrk');
+
+    $this->load->model('Menu_model');
+    $this->load->library('session');
+    $data = array(
+        'verify' => '2',
+        'verify_by' => $uid,
+        'verify_remarks' => $rejectreamrk
+    );
+    $this->db->where('id', $rejectid);
+    $this->db->update('cash_expense', $data);
+    $this->session->set_flashdata('error_message','Cash Expense Reject successfully!');
+    redirect("Menu/CashExpenseReport");
+}
+
+
+public function CashExpenseApproved($aprid){
+
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+    $reamrk         = "Approved";
+
+    $this->load->model('Menu_model');
+    $this->load->library('session');
+    $data = array(
+        'verify' => '1',
+        'verify_by' => $uid,
+        'verify_remarks' => $reamrk
+    );
+    $this->db->where('id', $aprid);
+    $this->db->update('cash_expense', $data);
+    $this->session->set_flashdata('success_message','Cash Expense Approved successfully!');
+    redirect("Menu/CashExpenseReport");
+}
+
 
 
 

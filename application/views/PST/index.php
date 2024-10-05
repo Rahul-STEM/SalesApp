@@ -1877,7 +1877,11 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
             </div>
         </div></div></div></div>
         <div class="col-lg-4 col-sm">
-            
+        <div class="card p-3">
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenterspclcashPurchase">
+                      <b>Travel Advance</b>
+                  </button>
+                </div>
         <?php 
                 $plannertime = $this->Menu_model->autotasktimenew($uid,$tdate);
                 $plannertimecnt = sizeof($plannertime);
@@ -2032,7 +2036,39 @@ $sca = $this->Menu_model->final_scon1_PST($uid,$tdate,$tdate,0);
                   </div>
 
 
-
+                  <div class="modal fade" id="exampleModalCenterspclcashPurchase" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+     
+                    <div class="was-validated">
+                      <div class="modal-content">
+                        <div class="modal-header" styel="background: #fbff00;" >
+                          <h5 class="modal-title" id="exampleModalLongTitle">Travel Advance Request </h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body" style="background: darkslategrey;color: white;" >
+                            <form method="POST" action='<?=base_url();?>Menu/CheckCashRequest' enctype="multipart/form-data">
+                                <div class="form-group mb-3">
+                                    <label for="amount">Amount</label>
+                                    <input type="hidden" class="form-control" name="user" value="<?= $username ?>">
+                                    <input type="number" class="form-control" name="amount" max="7000" id="amount" placeholder="Enter amount" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="purpose">Purpose of Request</label>
+                                    <textarea class="form-control" name="purpose" id="purpose" rows="4" placeholder="Enter purpose of request" required></textarea>
+                                </div>
+                           
+                                <div class="form-group text-center">
+                                    <button type="submit" class="btn btn-primary btn-block">Submit Request</button>
+                                </div>
+                            </form>
+                        </div>
+                      </div>
+                      </div>
+                        </form>
+                    </div>
+                  </div>
 
 
             <div class="card card-primary card-outline card-outline-tabs">

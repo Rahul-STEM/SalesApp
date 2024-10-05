@@ -124,7 +124,6 @@ padding: 4px;
                     $bills = $data->bills;
                     $decodedArray = json_decode($bills, true);
                     foreach($decodedArray as $bill){ 
-                    
                     $fileUrl = base_url().$bill;
                     $fileExtension = pathinfo($fileUrl, PATHINFO_EXTENSION);
                     if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
@@ -232,7 +231,6 @@ padding: 4px;
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type='text/javascript'>
         function ViewBills(rid,fileUrl){
-
           var fileExtension = fileUrl.split('.').pop().toLowerCase(); 
           if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
               $('#viewbillimage').attr('src', fileUrl).show();

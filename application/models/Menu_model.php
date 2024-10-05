@@ -12692,9 +12692,7 @@ public function GetReUpdateNewLeadComapny($uid){
 
 
 
-
 //  Start Travel Logic Database
-
 public function InsertCashRequest($uid,$amount,$purpose){
        
     $data = array(

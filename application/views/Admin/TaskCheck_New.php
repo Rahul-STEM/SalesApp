@@ -167,7 +167,7 @@
     </div>
     <!-- /.content-header -->
 <!-- Main content -->
- <?php  //var_dump($taskList);die; ?>
+ <?php // var_dump($selectedUser);die; ?>
     <section class="content">
       <div class="container-fluid">
       <div class="alert alert-success" id="success-message" style="display: none;">Thank you for your rating!</div>
@@ -613,7 +613,7 @@
                                         </td>
                                         
                                         <td><?=$SameStatusSince_1 .' Days';?></td>
-                                        <td><a href="<?=base_url().'/Menu/getSameStatusLog/'.$task->Newstatus_id.'/'.$task->cmpid.'/'.$cdate.'/'.$task->tid ?>"> <?=$NoOfTaskSinceStatusChange ;?> </a></td>
+                                        <td><?=$NoOfTaskSinceStatusChange ;?></td>
                                         <!-- <td></td> -->
                                     </tr>
                                 <?php $i++; } ?>
@@ -632,7 +632,7 @@
     </section>
 
 
-        <div class="modal fade bd-example-modal-lg" id="ReviewModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal fade bd-example-modal-lg" id="ReviewModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-primary">
@@ -1020,7 +1020,6 @@
                                         <input type="radio" name="momrat2_10" value="3" id="48_rating_10"><label for="48_rating_10">☆</label>
                                         <input type="radio" name="momrat2_10" value="2" id="47_rating_10"><label for="47_rating_10">☆</label>
                                         <input type="radio" name="momrat2_10" value="1" id="46_rating_10"><label for="46_rating_10">☆</label>
-                                        <br>
                                         <div class="remark-box">
                                             <label for="remark_10">Please provide additional remarks:</label>
                                             <textarea id="remark_10" rows="4" cols="50"></textarea>
@@ -1279,7 +1278,7 @@
         var userId = $rating.closest('.rating').data('userid');
         var question = $rating.closest('.rating').data('question');
         var ratingValue = $rating.val();
-        // alert(ratingValue);
+        alert(ratingValue);
         // console.log("Extracted ID: " + extractedId);
         // alert("Task ID: " + taskId + "\nUser ID: " + userId + "\nExtracted ID: " + extractedId + "\nRating Value: " + ratingValue);
         
@@ -1534,6 +1533,12 @@
 
                     const selectedRadio = event.target;
                     const remarkBox = fieldset.querySelector('.remark-box');
+
+                    // console.log(selectedRadio.value)
+
+                    // Disable the entire fieldset once a radio button is selected
+                    // fieldset.classList.add('disabled-fieldset');
+                    // fieldset.classList.add('disabled-fieldset');
 
                     if (selectedRadio.type === 'radio') {
                         if (parseInt(selectedRadio.value, 10) <= 2) {

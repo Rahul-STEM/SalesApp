@@ -223,7 +223,7 @@
                                 </thead>
                                 <tbody>
                                 <?php 
-                                    $i=1; $nodata = "";
+                                    $i=1; 
                                     foreach($taskList as $task){
 
                                         $getLastActionDetails = getLastActionDetails($task->tid,$task->user_id,$cdate);
@@ -285,6 +285,7 @@
                                         }                                        
                                 ?>
                                     <tr>
+                                        <!-- <td><?= $i; ?></td> -->
                                         <td><?= $task->action_name; ?>
                                             <b><?= $OGTaskType; ?></b> <hr>
                                             <?php
@@ -314,7 +315,6 @@
                                                         <input type="radio" name="rat8_<?= $task->user_id; ?>" value="2" id="37_<?= $task->tid; ?>"><label for="37_<?= $task->tid; ?>">☆</label>
                                                         <input type="radio" name="rat8_<?= $task->user_id; ?>" value="1" id="36_<?= $task->tid; ?>"><label for="36_<?= $task->tid; ?>">☆</label>
                                                     </div>
-                                                    <!-- <input type="hidden" name="" value=""/> -->
 
                                             <?php }else{
                                                 foreach($chkStarRating as $star){
@@ -335,7 +335,8 @@
                                                 }
                                                 echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
                                             }  ?>
-                                        </td>                                                                           
+                                        </td>
+                                                                           
                                         <td ><?= $task->plan_date; ?>
                                             <br><br><hr>
                                             <p class="question">Was Task Planned on time..??</p>
@@ -343,9 +344,7 @@
 
                                                 $chkStarRating = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($task->user_id,'Was Task Planned on time',$task->tid);
                                                 // var_dump($chkStarRating);die;
-                                                if(sizeof($chkStarRating) == 0){ 
-                                                    // $nodata .= $task->tid.",";
-                                                    ?>
+                                                if(sizeof($chkStarRating) == 0){ ?>
 
                                                     <div class="rating" data-question="Was Task Planned on time" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>">
                                                         <input type="radio" name="rat1_<?= $task->user_id; ?>" value="5" id="5_<?= $task->tid; ?>"><label for="5_<?= $task->tid; ?>">☆</label>
@@ -521,13 +520,10 @@
 
                                                 if ($task->actiontype_id == 7 ) {
                                                                                                 
-                                                    $getProposalData = getProposalData($task->tid); 
-                                                    
-                                                    // var_dump($getProposalData);
-                                                    if (!empty($getProposalData )) { ?>
+                                                    $getProposalData = getProposalData($task->tid); ?>
                                                     <br>
                                                     <br>
-                                                    <b>Proposal Remark - </b><?= $getProposalData->pro_remark; ?>
+                                                    <b>Proposal Remark - </b><?= $getProposalData->momStatus; ?>
                                                     <br>
                                                     <br>
                                                     <b>Proposal Status - </b> <?= $getProposalData->pro_status; ?>
@@ -539,10 +535,11 @@
                                                         if ($getProposalData->pro_apr == 1) { ?>
                                                             
                                                             <a href="<?= base_url() . $getProposalData->pro_attachment . '/'?>" class="btn btn-primary" target="_blank">View Document</a>
+
                                             <?php       }
-                                                    } ?>
-                                                     
-                                            <?php   } ?>
+ 
+                                                    }
+                                                ?>
 
                                             <hr>
                                             <p class="question">Was correct remark entered..??</p>
@@ -613,14 +610,13 @@
                                                         }
                                                         echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
                                                     }  ?>
-                                        </td>                                        
+                                        </td>
+                                        
                                         <td><?=$SameStatusSince_1 .' Days';?></td>
                                         <td><?=$NoOfTaskSinceStatusChange ;?></td>
+                                        <!-- <td></td> -->
                                     </tr>
-                                <?php $i++; } 
-                                
-                                // echo $nodata ;
-                                ?>
+                                <?php $i++; } ?>
                                     
                                 </tbody>
                             </table>
@@ -1261,11 +1257,14 @@
     <!-- <script src="<?=base_url();?>assets/js/dashboard.js"></script> -->
 
 <script>
-    // $(document).ready(function() {
-        
-    // });
-
-    // $('#PlannerTable').DataTable();
+    $(document).ready(function() {
+        $("#PlannerTable").DataTable({
+            "responsive": false,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["csv", "excel", "pdf", "print"]
+        });
+    });
 
 </script>
 
@@ -1279,7 +1278,7 @@
         var userId = $rating.closest('.rating').data('userid');
         var question = $rating.closest('.rating').data('question');
         var ratingValue = $rating.val();
-        // alert(ratingValue);
+        alert(ratingValue);
         // console.log("Extracted ID: " + extractedId);
         // alert("Task ID: " + taskId + "\nUser ID: " + userId + "\nExtracted ID: " + extractedId + "\nRating Value: " + ratingValue);
         
@@ -1310,18 +1309,16 @@
                     $('#RatingReviewModal').modal('hide');
                     $('#success-message').show();
 
-                    // location.reload();
+                    $('html, body').animate({
+                        scrollTop: $('#success-message').offset().top
+                    }, 1000);
 
-                    // $('html, body').animate({
-                    //     scrollTop: $('#success-message').offset().top
-                    // }, 1000);
+                    setTimeout(function() {
 
-                    // setTimeout(function() {
-
-                    //     $('#success-message').fadeOut('slow', function() {
-                    //         location.reload();
-                    //     });
-                    // });
+                        $('#success-message').fadeOut('slow', function() {
+                            location.reload();
+                        });
+                    }, 3000);
                 }
             },
             error: function() {
@@ -1433,7 +1430,14 @@
                     if (data.manyreview == 0) {
                         
                         document.getElementById('reviewRemark').textContent = data.remark; 
-
+                        // document.getElementById('TaskUpdate').textContent = data.TaskUpdate; 
+                        // document.getElementById('ReviewPlanTime').textContent = data.reviewPlan_time;
+                        // document.getElementById('ReviewStartTime').textContent = data.reviewStart_time;
+                        // document.getElementById('ReviewEndTime').textContent = data.reviewEnd_time || 'Not Set';
+                        // document.getElementById('modalMomType').textContent = data.momType || 'Not Updated';
+                        // document.getElementById('ReviewType').textContent = data.reviewType;
+                        // document.getElementById('BDName').textContent = data.BDName;
+                        // document.getElementById('meetingFrom').textContent = data.funnel;
                         document.getElementById('FixDate').textContent = data.fixdate;
                         document.getElementById('ExistingStatus').textContent = data.exStatus;
                         document.getElementById('CurrentStatus').textContent = data.currentStatus;
@@ -1529,6 +1533,12 @@
 
                     const selectedRadio = event.target;
                     const remarkBox = fieldset.querySelector('.remark-box');
+
+                    // console.log(selectedRadio.value)
+
+                    // Disable the entire fieldset once a radio button is selected
+                    // fieldset.classList.add('disabled-fieldset');
+                    // fieldset.classList.add('disabled-fieldset');
 
                     if (selectedRadio.type === 'radio') {
                         if (parseInt(selectedRadio.value, 10) <= 2) {
@@ -1742,86 +1752,21 @@
 </script>
 
 <script>
-
     function clearSelectedUser() {
-
-//         const table = document.getElementById('PlannerTable');
-
-// // Check if the 'rating' class exists within the table
-//         const ratingElement = table.querySelector('.rating');
-//         alert(ratingElement)
-//         if (ratingElement.length > 0) {
-//             alert("The 'rating' class is present in the table.");
-//         } else {
-//             alert("The 'rating' class is not present in the table.");
-//         }
-//         return false;
-
-    var closestdiv = $("#PlannerTable").find(".rating").html();
-
-    // alert(closestdiv);
-        if(closestdiv !=""){
-            // alert(closestdiv);
-            alert("You haven't checked all available questions..!!");
-            // return false;
-        }
-        else{
+    // Clear the selected user value
+        if (confirm("Are you sure you want to submit?")) {
             // Clear the selected user value
-                if (confirm("Are you sure you want to submit?")) {
-                    // Clear the selected user value
-                    document.querySelector('select[name="userId"]').selectedIndex = 0; // Reset to the first option
-                    // Optionally, enable the select again
-                    document.querySelector('select[name="userId"]').disabled = false; 
-                    // Reload the page
-                    location.reload(); 
-                    // Submit the form if needed
-                    document.getElementById('taskForm').submit();
-                }
-            }
+            document.querySelector('select[name="userId"]').selectedIndex = 0; // Reset to the first option
+            // Optionally, enable the select again
+            document.querySelector('select[name="userId"]').disabled = false; 
+            // Reload the page
+            location.reload(); 
+            // Submit the form if needed
+            document.getElementById('taskForm').submit();
+        }
+
     }
 </script>
-<!-- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize DataTable
-        var table = $('#PlannerTable').DataTable();
 
-        function checkRatingsAndSubmit() {
-            var rows = table.rows({ search: 'applied' }).data();
-            var hasRating = false;
-
-            // Loop through the rows to check for .rating presence
-            for (var i = 0; i < rows.length; i++) {
-                // Since rows[i] is a plain object, we should use a different way to access .rating
-                var ratingCell = rows[i].rating; // Adjust based on your data structure
-                if (ratingCell) {
-                    hasRating = true;
-                    break; // Exit the loop if we find a rating
-                }
-            }
-
-            if (!hasRating) {
-                if (confirm("Are you sure you want to submit?")) {
-                    // Clear the selected user value
-                    document.querySelector('select[name="userId"]').selectedIndex = 0; // Reset to the first option
-                    // Optionally, enable the select again
-                    document.querySelector('select[name="userId"]').disabled = false; 
-                    // Reload the page
-                    location.reload(); 
-                    // Submit the form if needed
-                    document.getElementById('taskForm').submit();
-                }
-            } else {
-                alert("You haven't checked all available questions..!!");
-                return false;
-            }
-        }
-
-        // Bind the function to a submit event or a button click
-        document.getElementById('yourSubmitButtonId').addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent default form submission
-            checkRatingsAndSubmit();
-        });
-    });
-</script> -->
 </body>
 </html>

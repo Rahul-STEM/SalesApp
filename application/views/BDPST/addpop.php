@@ -382,21 +382,7 @@ date_default_timezone_set("Asia/Kolkata");
 
                                 <div id="bboxa" style="display: none;">
 
-                                    <!--<input list="bcname" name="bcid" class="form-control mt-2" type="text">-->
-
-                                    <!--<datalist id="bcname">-->
-
-                                    <!--    <option value="">Select Company Name</option>-->
-
-                                        <?php// $bdc=$this->Menu_model->get_cmpbybd($uid); 
-
-                                        //foreach($bdc as $bc){?>
-
-                                        <!--<option value="<?=$bc->id?>"><?=$bc->compname?></option>-->
-
-                                        <?php //}?>
-
-                                    <!--</datalist>-->
+                                
 
                                     <br>
 
@@ -1074,7 +1060,7 @@ date_default_timezone_set("Asia/Kolkata");
 
     </div>
 
-   <button type="submit" class="btn btn-primary mt-3" onclick="this.form.submit(); this.disabled = true;">Submit</button>
+    <button type="submit" id="rpmsClick" class="btn btn-primary mt-3">Submit</button>
 
    </form>
 
@@ -1190,9 +1176,8 @@ date_default_timezone_set("Asia/Kolkata");
 
         <select id="priority" name="priority" class="form-control" required>
 
-        <option value="no">Non Priority</option>
-
-        <option value="yes">Priority</option>
+        <option value="no">Non Priority (Will not give business)</option>
+        <option value="yes">Priority (Definitely Will give business)</option>
 
         </select>
 
@@ -2290,7 +2275,9 @@ $('[id^="add_act"]').on('click', function() {
 
              var designation = response[0].designation;
 
-             var cpurpose = response[0].cpurpose;
+            //  var cpurpose = response[0].cpurpose;
+             var cpurpose = response[0].purpose_id;
+
 
              var actiontype_id = response[0].actiontype_id;
 
@@ -2756,4 +2743,15 @@ $('#tplan').click(function(){
 
         } );
 
+</script>
+
+<script>
+  $("#rpmsClick").click(function(){
+var val = $("#bmcname").val();
+  if(val == 'Unknown' || val == ''){
+    alert("* Please Enter Valid Company Name");
+    $('#bmcname').css('border', '1px solid red');
+    return false;
+  }
+});
 </script>

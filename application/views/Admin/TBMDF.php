@@ -96,14 +96,16 @@ foreach($bd as $bd){
                                 <th>S.No.</th>
                                 <th>RP to No RP Convert</th>
                                 <th>BD Name</th>
+                                <th>CIN</th>
                                 <th>Company Name</th>
                                 <th>Photo</th>
-                                <th>Started @</th>
-                                <th>Close @</th>
+                                <th>Started At</th>
+                                <th>Close At</th>
                                 <th>Start Location</th>
                                 <th>Close Location</th>
                                 <th>Fresh-Meeting/Re-Meeting</th>
                                 <th>RP Yes/No</th>
+                                <th>Potential Yes/No</th>
                                 <th>Priority Yes/No</th>
                                 <th>MOM Yes/No</th>
                                 <th>Thanks Mail Yes/No</th>
@@ -121,12 +123,19 @@ foreach($bd as $bd){
                             $cid = $dt->cid;
                             $tid = $dt->tid;
                             $cmpid = $dt->cmpid;
-                            
+                            if($dt->cmpid_id){
+                                $company_id = $dt->cmpid_id;
+                            }
+                            else{
+                                 $company_id = 0;
+                            }
                             $momc = $this->Menu_model->get_momyn($cid,$tid);
                             if($momc){$momc='yes';}else{$momc='no';}
                             $emailc = $this->Menu_model->get_temailyn($cid,$tid);
                             if($emailc){$emailc='yes';}else{$emailc='no';}
-                            $psta = $this->Menu_model->get_psta($cid);
+                            // $psta = $this->Menu_model->get_psta($cid);
+                           
+                                $psta = $dt->apst;
                             if($psta){$psta='yes';}else{$psta='no';}
                             $cmprp = $this->Menu_model->get_meetfr($tid,$cid);
                             $cmrp = $cmprp[0]->cont;
@@ -134,12 +143,15 @@ foreach($bd as $bd){
                             if($cmrp==0){$frmeeting="Fresh-Meeting";}
                             if($cmrp>0){$frmeeting="Re-Meeting";}
                             if($frmeeting=='Fresh-Meeting'){
+                                if($momc == 'yes'){
                             ?>
                             <tr>
                                 <td><?=$i?></td>
                                 <td><button style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;" id="norp<?=$tid?>" value="<?=$tid?>">Click</button></td>
                                 <td><?=$dt->name?></td>
-                                <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$cmpid?>"><?=$dt->company_name?></a><br></td>
+                                <td><?=$company_id?></td>
+                               
+                                <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$company_id?>"><?=$dt->company_name?></a><br></td>
                                 <td>
                                   <img src="<?=base_url();?><?=$dt->cphoto?>" height="200px" alt="image not found">
                                   <a href="<?=base_url();?><?=$dt->cphoto?>"?>Image</a>
@@ -150,12 +162,13 @@ foreach($bd as $bd){
                                 <td><a href="https://www.google.com/maps?q=<?=$dt->clatitude?>,<?=$dt->clongitude?>"><i class="fas fa-map-marker-alt" style="font-size:36px" aria-hidden="true"></i></a></td>
                                 <td><?=$frmeeting?></td>
                                 <td><?=$dt->mtype?></td>
+                                <td><?=$dt->potential?></td>
                                 <td><?=$dt->priority?></td>
                                 <td><?=$momc?></td>
                                 <td><?=$emailc?></td>
                                 <td><?=$psta?></td>
                                 <td><?=$dt->queans?><hr><?=$dt->mcomment?></td>
-                                <?php $i++;}} ?>
+                                <?php $i++;}}}?>
                                 
                                 
                                 
@@ -168,17 +181,25 @@ foreach($bd as $bd){
                                 
                                 
                                 <?php
+                                
                                 $i=1;
                                 foreach($mdata as $dt){
                                 $cid = $dt->cid;
                                 $tid = $dt->tid;
                                 $cmpid = $dt->cmpid;
-                                
+                                $companyid = $dt->companyid;
+                                $companyname = $dt->compname;
+                                if($dt->cmpid_id){
+                                    $company_id = $dt->cmpid_id;
+                                }
+                                else{
+                                     $company_id = 0;
+                                }
                                 $momc = $this->Menu_model->get_momyn($cid,$tid);
                                 if($momc){$momc='yes';}else{$momc='no';}
                                 $emailc = $this->Menu_model->get_temailyn($cid,$tid);
                                 if($emailc){$emailc='yes';}else{$emailc='no';}
-                                $psta = $this->Menu_model->get_psta($cid);
+                                 $psta = $dt->apst;
                                 if($psta){$psta='yes';}else{$psta='no';}
                                 $cmprp = $this->Menu_model->get_meetfr($tid,$cid);
                                 $cmrp = $cmprp[0]->cont;
@@ -186,12 +207,14 @@ foreach($bd as $bd){
                                 if($cmrp==0){$frmeeting="Fresh-Meeting";}
                                 if($cmrp>0){$frmeeting="Re-Meeting";}
                                 if($frmeeting=='Re-Meeting'){
+                                      if($momc == 'yes'){
                                 ?>
                                 <tr>
                                     <td><?=$i?></td>
                                     <td><button style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;" id="norp<?=$tid?>" value="<?=$tid?>">Click</button></td>
                                     <td><?=$dt->name?></td>
-                                    <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$cmpid?>"><?=$dt->company_name?></a><br></td>
+                                     <td><?=$company_id?></td>
+                                    <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$company_id?>"><?=$companyname?></a><br></td>
                                     <td>
                                     <img src="<?=base_url();?><?=$dt->cphoto?>" height="200px" alt="image not found">
                                     <a href="<?=base_url();?><?=$dt->cphoto?>"?>Image</a>
@@ -202,11 +225,14 @@ foreach($bd as $bd){
                                     <td><a href="https://www.google.com/maps?q=<?=$dt->clatitude?>,<?=$dt->clongitude?>"><i class="fas fa-map-marker-alt" style="font-size:36px" aria-hidden="true"></i></a></td>
                                     <td><?=$frmeeting?></td>
                                     <td><?=$dt->mtype?></td>
+                                    <td><?=$dt->potential?></td>
                                     <td><?=$dt->priority?></td>
                                     <td><?=$momc?></td>
                                     <td><?=$emailc?></td>
                                     <td><?=$psta?></td>
-                                    <?php $i++;}} ?>
+                                    <td><?=$dt->queans?><hr><?=$dt->mcomment?></td>
+                                    <?php $i++;}}
+                                    } ?>
                                     
                                     
                                     <?php }elseif($code==12){?>
@@ -218,12 +244,17 @@ foreach($bd as $bd){
                                     $cid = $dt->cid;
                                     $tid = $dt->tid;
                                     $cmpid = $dt->cmpid;
-                                    
+                                    if($dt->cmpid_id){
+                                        $company_id = $dt->cmpid_id;
+                                    }
+                                    else{
+                                         $company_id = 0;
+                                    }
                                     $momc = $this->Menu_model->get_momyn($cid,$tid);
                                     if($momc){$momc='yes';}else{$momc='no';}
                                     $emailc = $this->Menu_model->get_temailyn($cid,$tid);
                                     if($emailc){$emailc='yes';}else{$emailc='no';}
-                                    $psta = $this->Menu_model->get_psta($cid);
+                                     $psta = $dt->apst;
                                     if($psta){$psta='yes';}else{$psta='no';}
                                     $cmprp = $this->Menu_model->get_meetfr($tid,$cid);
                                     $cmrp = $cmprp[0]->cont;
@@ -236,7 +267,8 @@ foreach($bd as $bd){
                                         <td><?=$i?></td>
                                         <td><button style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;" id="norp<?=$tid?>" value="<?=$tid?>">Click</button></td>
                                         <td><?=$dt->name?></td>
-                                        <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$cmpid?>"><?=$dt->company_name?></a><br></td>
+                                         <td><?=$dt->cmpid_id?></td>
+                                        <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$company_id?>"><?=$dt->company_name?></a><br></td>
                                         <td>
                                         <img src="<?=base_url();?><?=$dt->cphoto?>" height="200px" alt="image not found">
                                         <a href="<?=base_url();?><?=$dt->cphoto?>"?>Image</a>
@@ -247,10 +279,12 @@ foreach($bd as $bd){
                                         <td><a href="https://www.google.com/maps?q=<?=$dt->clatitude?>,<?=$dt->clongitude?>"><i class="fas fa-map-marker-alt" style="font-size:36px" aria-hidden="true"></i></a></td>
                                         <td><?=$frmeeting?></td>
                                         <td><?=$dt->mtype?></td>
+                                        <td><?=$dt->potential?></td>
                                         <td><?=$dt->priority?></td>
                                         <td><?=$momc?></td>
                                         <td><?=$emailc?></td>
                                         <td><?=$psta?></td>
+                                        <td><?=$dt->queans?><hr><?=$dt->mcomment?></td>
                                         <?php $i++;}} ?>
                                         <?php }else{?>
                                         <?php
@@ -259,23 +293,31 @@ foreach($bd as $bd){
                                         $cid = $dt->cid;
                                         $tid = $dt->tid;
                                         $cmpid = $dt->cmpid;
+                                        if($dt->cmpid_id){
+                                        $company_id = $dt->cmpid_id;
+                                        }
+                                        else{
+                                             $company_id = 0;
+                                        }
                                         $momc = $this->Menu_model->get_momyn($cid,$tid);
                                         if($momc){$momc='yes';}else{$momc='no';}
                                         $emailc = $this->Menu_model->get_temailyn($cid,$tid);
                                         if($emailc){$emailc='yes';}else{$emailc='no';}
-                                        $psta = $this->Menu_model->get_psta($cid);
+                                         $psta = $dt->apst;
                                         if($psta){$psta='yes';}else{$psta='no';}
                                         $cmprp = $this->Menu_model->get_meetfr($tid,$cid);
                                         $cmrp = $cmprp[0]->cont;
                                         $frmeeting="";
                                         if($cmrp==0){$frmeeting="Fresh-Meeting";}
                                         if($cmrp>0){$frmeeting="Re-Meeting";}
+                                        if($momc =='yes'){
                                         ?>
                                         <tr>
                                             <td><?=$i?></td>
                                             <td><button style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;" id="norp<?=$tid?>" value="<?=$tid?>">Click</button></td>
                                             <td><?=$dt->name?></td>
-                                            <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$cmpid?>"><?=$dt->company_name?></a><br></td>
+                                             <td><?=$company_id?></td>
+                                            <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$company_id?>"><?=$dt->company_name?></a><br></td>
                                             <td>
                                             <img src="<?=base_url();?><?=$dt->cphoto?>" height="200px" alt="image not found">
                                             <a href="<?=base_url();?><?=$dt->cphoto?>"?>Image</a>
@@ -287,13 +329,13 @@ foreach($bd as $bd){
                                             <td><a href="https://www.google.com/maps?q=<?=$dt->clatitude?>,<?=$dt->clongitude?>"><i class="fas fa-map-marker-alt" style="font-size:36px" aria-hidden="true"></i></a></td>
                                             <td><?=$frmeeting?></td>
                                             <td><?=$dt->mtype?></td>
+                                            <td><?=$dt->potential?></td>
                                             <td><?=$dt->priority?></td>
                                             <td><?=$momc?></td>
                                             <td><?=$emailc?></td>
                                             <td><?=$psta?></td>
-                                            <?php $i++;}} ?>
-                                            
-                                            
+                                            <td><?=$dt->queans?><hr><?=$dt->mcomment?></td>
+                                            <?php $i++;}} }?>
                                             
                                             
                                             

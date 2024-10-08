@@ -233,6 +233,15 @@
               </button>
             </div>
             <?php endif; ?>
+             <?php
+              if ($this->session->flashdata('auto_success_message')): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <strong> <?php echo $this->session->flashdata('auto_success_message'); ?></strong>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <?php endif; ?>
             <div class="row mb-2">
               <div class="col-sm-6">
                 <h1 class="m-0"></h1>
@@ -313,9 +322,9 @@
               </div>
             </div>
             <?php }}else if($adate == date("Y-m-d") || $approvel_status == '' || $approvel_status =='Reject'){
-            //  var_dump($reqCount );die;
-              if($reqCount !== 1 && $adate == date("Y-m-d")){
-                
+             
+              if($reqCount == 0 && $adate == date("Y-m-d")){
+              
               ?>
             <div class="card p-2 bg-dark text-center">
               <h5><i>If you want to plan task for todays you need to first approvel.</i></h5>
@@ -335,6 +344,7 @@
             }
 
               if($reqCount == 1 && $approvel_status == '' || $approvel_status =='Reject' ){
+                 
               ?>
             <table class="table table-striped table-dark">
               <thead>
@@ -369,7 +379,7 @@
                 <?php } ?>
               </tbody>
             </table>
-            <?php }else if($getAutoTaskTime ==1 && $reqCount == 1 && $approvel_status == 'Approved' || $adate !== date("Y-m-d")){   
+            <?php }else if($getAutoTaskTime ==1 && $reqCount > 0 && $approvel_status == 'Approved' || $adate !== date("Y-m-d")){   
                if($getAutoTaskTime == 1){
 
                
@@ -545,7 +555,7 @@
                         </div>
                         <hr>
                         <select id="tasktaction" name="tasktaction" class="form-control" >
-                          <option selectedd disbaled >Types of Task</option>
+                          <option selected disabled value="">Types of Task</option>
                           <option value="all">All</option>
                           <?php $action = $this->Menu_model->get_action();
                             foreach($action as $a){if($a->id!=4 && $a->id!=6 && $a->id!=8 && $a->id!=9 && $a->id!=11 && $a->id!=12){
@@ -721,6 +731,38 @@
                       </div>
                     </div>
                     <div id="taskActionCard" class="card p-4">
+
+
+                    <div class="form-group" id="taskaction_card_area">
+                        <div class="form-group">
+                          <label>Task/Action</label>
+                          <select id="task_action_filter" class="form-control" name="task_action_filter">
+                            <option value="">Select Task</option>
+                            <option value="all">All</option>
+                            <?php foreach($action as $a){if($a->id!=9 && $a->id!=15){ ?>
+                            <option value="<?=$a->id?>"><?=$a->name?></option>
+                            <?php }} ?>
+                          </select>
+                        </div>
+                      </div>
+
+
+                      <div id="selectbarginCompanyType" class="form-group">
+                          <select id="bcytpe" name="bcytpe" class="form-control mt-2">
+                              <option value="">Select Bargin Company Type</option>
+                              <option value="From Funnel">From Funnel</option>
+                              <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div id="selectReseachCompanyType" class="form-group">
+                          <select id="researchType" name="researchType" class="form-control mt-2">
+                              <option value="">Select Research Type</option>
+                              <option value="From Funnel">From Funnel</option>
+                              <option value="Other">Other</option>
+                            </select>
+                        </div>
+
                       <div class="form-group" id="status_taskaction_card" >
                         <lable>Select Company Status : </lable>
                         <hr>
@@ -732,7 +774,7 @@
                           <?php endforeach; ?>
                         </select>
                       </div>
-                      <div class="form-group" id="taskaction_card_area">
+                    <!--  <div class="form-group" id="taskaction_card_area">
                         <div class="form-group">
                           <label>Task/Action</label>
                           <select id="task_action_filter" class="form-control" name="task_action_filter">
@@ -745,7 +787,7 @@
                             <?php } ?>
                           </select>
                         </div>
-                      </div>
+                      </div> -->
                       <div class="form-group" id="taskActionbyuserCard">
                         <label>Select Action</label>
                         <select class="form-control" id="taskActionbyuserCardData">
@@ -895,7 +937,7 @@
                         </div>
 
                         <select id="firstQuarter1cstatysDataTask" name="" class="form-control">
-                          <option selectedd disbaled >Types of Task</option>
+                          <option selected disabled value="">Types of Task</option>
                           <option value="all">All</option>
                           <?php $action = $this->Menu_model->get_action();
                             foreach($action as $a){if($a->id!=4 && $a->id!=6 && $a->id!=8 && $a->id!=9 && $a->id!=11 && $a->id!=12){
@@ -978,7 +1020,7 @@
                             </select>
                           </div>
                           <input type="hidden" class="form-control" value="" id="selectby" name="selectby">
-                          <button class="btn btn-primary m-3" type="submit" id="planbtn1">Submit</button>
+                          <center><button class="btn btn-primary m-3" type="submit" id="planbtn1">Submit</button></center>
                         </div>
                       </form>
                     </div>
@@ -1269,6 +1311,7 @@
         
         
                 $(document).ready(function() {
+                 $('#selectcompanyname').hide();
                  $("#selectstatus").hide();
                  $("#daysByTask").hide();
                  $("#selectcompanybyuser").hide();
@@ -1332,9 +1375,13 @@
                  $('#reviewTargetDate_Purpose').hide();
                  $('#reviewTargetReviewSelf').hide();
                  $('#reviewTargetReviewSelf').hide();
-                 
+
         
-        
+        		//  $('.js-example-basic-multiple').select2();
+                 $('#status_taskaction_card').hide();
+                 $('#auto_assign').hide();
+                 $('#selectbarginCompanyType').hide();
+                 $('#selectReseachCompanyType').hide();
             
                  $('.js-example-basic-multiple').select2();
                 //  $("#box6").hide();
@@ -2300,135 +2347,230 @@
                 }
         
                 if(val == 'Task Action'){
+
+var uid = $("#curuserid").val();
+$(".taskselectionarea").hide();
+$('#taskActionCard').show();
+$('#maintaskcard').hide();
+
+$('#taskaction_card_area').show();
+$('#task_action_filter').show();
+
+// $('#taskaction_card_area').hide();
+$('#taskPurposebyuserCard').hide();
+$('#taskActionbyuserCard').hide();
+$('#status_taskaction').hide();
+
+$('#task_action_filter').on('change', function() {
+
+    $("#selectcompanybyuser").html('');
+    $("#totalcompany").text('');
+    var uid = $("#curuserid").val();
+    var tasktaction = $(this).val();
+   if(tasktaction ==10){
+      // alert('Research');
+      $('#selectReseachCompanyType').show();
+      $('#bcytpe').hide();
+      
+      $('#researchType').on('change', function() {
+
+      
+        var researchType = $(this).val();
+
+      if(researchType == 'From Funnel'){
+        $('#maintaskcard').show();
+        $("#selectcompany").show();
+
+        $.ajax({
+          url:'<?=base_url();?>Menu/getstatuscmp',
+          type: "POST",
+          data: {
+          sid:1,
+          uid: uid
+          },
+          cache: false,
+          success: function a(result){
+      
+        $("#maintaskcard").show();
+
+        $("#selectcompanybyuser").html(result);
+        $("#selectcompanybyuser").show();
+        $("#select_cluster").hide();
+
+        var optionCount = $('#selectcompanybyuser').find('option').length;
+        optionCount = optionCount-1;
+        $("#totalcompany").text('Total Company :'+ optionCount);
+        $("#tasktaction").show();
+        $("#tptime").val('');
+        $("#tptime").show();
+        $('#ntactionnew').show();
+        $('#ntppose').show();
+        $('#meeting-time').show();
+        $('#planbtn1').show();
+       
+        $('#ntactionnew option').prop('disabled', true);
+        $('#ntactionnew option[value="10"]').prop('disabled', false).prop('selected', true);
+        $("#ntppose").html("<option value='94'>Research & Data Collection</option>");
+
+          }
+          });
+
+        }
         
-                    var uid = $("#curuserid").val();
-                    $(".taskselectionarea").hide();
-                    $('#taskActionCard').show();
-                    $('#maintaskcard').hide();
-                    $('#status_taskaction_card').show();
+        else if(researchType == 'Other'){
+
+          $("#maintaskcard").show();
+          $("#selectcompany").hide();
+          $("#select_cluster").hide();
+          $("#tasktaction").show();
+          $("#tptime").val('');
+          $("#tptime").show();
+          $('#ntactionnew').show();
+          $('#ntppose').show();
+          $('#meeting-time').show();
+          $('#planbtn1').show();
+          $('#selectcompanybyuser').removeAttr('required');
+          $('#ntactionnew option').prop('disabled', true);
+          $('#ntactionnew option[value="10"]').prop('disabled', false).prop('selected', true);
+          $("#ntppose").html("<option value='94'>Research & Data Collection</option>");
+
+        }
         
-         
-                    $('#taskaction_card_area').hide();
-                    $('#taskPurposebyuserCard').hide();
-                    $('#taskActionbyuserCard').hide();
-        
-                    $('#status_taskaction').on('change', function() {
-                    var selectstatusbyusernotplaned = $(this).val();
-                    $("#selectcompanybyuser").html('');
-                    $("#totalcompany").text('');
-                    var uid = $("#curuserid").val();
-                        $.ajax({
-                        url:'<?=base_url();?>Menu/getstatuscmpnotplaned',
-                        type: "POST",
-                        data: {
-                        sid: selectstatusbyusernotplaned,
-                        uid: uid
-                        },
-                        cache: false,
-                        success: function a(result){
-                        $("#maintaskcard").show();
-                        $("#selectcompanybyuser").html(result);
-                        $("#selectcompanybyuser").show();
-                        var optionCount = $('#selectcompanybyuser').find('option').length;
-                        optionCount = optionCount-1;
-                        $("#totalcompany").text('Total Company :'+ optionCount);
-                        $("#tptime").show();
-                        $('#ntactionnew').show();
-                        $('#ntppose').show();
-                        $('#meeting-time').show();
-                        $('#planbtn1').show();
-                        // $('#daysfiltercard_anp').show();
-                        $('#taskaction_card_area').show();
-                        }
-                        });
-                    });
-        
-        
-                    $('#task_action_filter').on('change', function() {
-                        var tasktaction = $(this).val();
-                        var selectedValue1 = $('#status_taskaction').val();
-                        $.ajax({
-                        url:'<?=base_url();?>Menu/taskactionnotplan_filter',
-                        type: "POST",
-                        data: {
-                        sid: selectedValue1,
-                        tasktaction: tasktaction,
-                        uid: uid
-                        },
-                        cache: false,
-                        success: function a(result){
-                            $("#selectcompanybyuser").html(result);
-                            $("#selectcompanybyuser").show();
-                            var optionCount = $('#selectcompanybyuser').find('option').length;
-                        optionCount = optionCount-1;
-                        $("#totalcompany").text('Total Company :'+ optionCount);
-                        $('#taskActionbyuserCard').show();
-                            }
-                        });
-        
-                        });
-        
-                    $('#taskActionbyuserCardData').on('change', function() {
-                        var taskActionbyuserCardData = $(this).val();
-                        var selectedValue1 = $('#status_taskaction').val();
-                        var tasktaction =  $('#task_action_filter').val();
-                       
-                        $.ajax({
-                        url:'<?=base_url();?>Menu/taskactionnotplan_filter_action',
-                        type: "POST",
-                        data: {
-                        sid: selectedValue1,
-                        tasktaction: tasktaction,
-                        tasktactionData: taskActionbyuserCardData,
-                        uid: uid
-                        },
-                        cache: false,
-                        success: function a(result){
-                            $("#selectcompanybyuser").html(result);
-                            $("#selectcompanybyuser").show();
-                            var optionCount = $('#selectcompanybyuser').find('option').length;
-                        optionCount = optionCount-1;
-                        $("#totalcompany").text('Total Company :'+ optionCount);
-                        $('#taskPurposebyuserCard').show();
-                            }
-                        });
-        
-                        });
-        
-        
-                    $('#taskPurposebyuserCardData').on('change', function() {
-                        var taskPurposebyuserCardData = $(this).val();
-                        var taskActionbyuserCardData =  $('#taskActionbyuserCardData').val();
-                        var selectedValue1 = $('#status_taskaction').val();
-                        var tasktaction =  $('#task_action_filter').val();
-                        
-                       
-                        $.ajax({
-                        url:'<?=base_url();?>Menu/taskactionnotplan_filter_purpose',
-                        type: "POST",
-                        data: {
-                        sid: selectedValue1,
-                        tasktaction: tasktaction,
-                        tasktactionData: taskActionbyuserCardData,
-                        taskPurposeData: taskPurposebyuserCardData,
-                        uid: uid
-                        },
-                        cache: false,
-                        success: function a(result){
-                            $("#selectcompanybyuser").html(result);
-                            $("#selectcompanybyuser").show();
-                            var optionCount = $('#selectcompanybyuser').find('option').length;
-                        optionCount = optionCount-1;
-                        $("#totalcompany").text('Total Company :'+ optionCount);
-                        $('#taskPurposebyuserCard').show();
-                            }
-                        });
-        
-                        });
-                }else{
-                    $('#taskActionCard').hide();
-                }
-        
+    });
+    }else{
+
+      $('#ntactionnew option[value="3"]').remove();
+      $('#ntactionnew option[value="4"]').remove();
+      $('#ntactionnew option[value="17"]').remove();
+      $('#selectbarginCompanyType').hide();
+      $("#select_cluster").hide();
+      $('#selectReseachCompanyType').hide();
+    
+      $('#ntactionnew option').prop('disabled', false);
+
+      $("#ntppose").html("<option value=''>Select Purpose</option>");
+
+        $.ajax({
+        url:'<?=base_url();?>Menu/taskactionnotplan_filter',
+        type: "POST",
+        data: {
+        tasktaction: tasktaction,
+        uid: uid
+        },
+        cache: false,
+        success: function a(result){
+        $("#maintaskcard").show();
+        $("#selectcompanybyuser").html(result);
+        $("#selectcompanybyuser").show();
+        var optionCount = $('#selectcompanybyuser').find('option').length;
+        optionCount = optionCount-1;
+        $("#totalcompany").text('Total Company :'+ optionCount);
+        $("#tptime").show();
+        $('#ntactionnew').show();
+        $('#ntppose').show();
+        $('#meeting-time').show();
+        $('#planbtn1').show();
+        // $('#daysfiltercard_anp').show();
+        $('#status_taskaction_card').show();
+        $('#status_taskaction').show();
+            }
+        });
+    }
+
+   
+
+    });
+
+
+$('#status_taskaction').on('change', function() {
+var selectstatusbyusernotplaned = $(this).val();
+$("#selectcompanybyuser").html('');
+$("#totalcompany").text('');
+var uid = $("#curuserid").val();
+var tasktaction =  $('#task_action_filter').val();
+    $.ajax({
+    url:'<?=base_url();?>Menu/getstatuscmpnotplaned',
+    type: "POST",
+    data: {
+    sid: selectstatusbyusernotplaned,
+    tasktaction: tasktaction,
+    uid: uid
+    },
+    cache: false,
+    success: function a(result){
+  
+        $("#selectcompanybyuser").html(result);
+          $("#selectcompanybyuser").show();
+          var optionCount = $('#selectcompanybyuser').find('option').length;
+      optionCount = optionCount-1;
+      $("#totalcompany").text('Total Company :'+ optionCount);
+      $('#taskActionbyuserCard').show();
+    }
+    });
+});
+
+
+$('#taskActionbyuserCardData').on('change', function() {
+    var taskActionbyuserCardData = $(this).val();
+    var selectedValue1 = $('#status_taskaction').val();
+    var tasktaction =  $('#task_action_filter').val();
+   
+    $.ajax({
+    url:'<?=base_url();?>Menu/taskactionnotplan_filter_action',
+    type: "POST",
+    data: {
+    sid: selectedValue1,
+    tasktaction: tasktaction,
+    tasktactionData: taskActionbyuserCardData,
+    uid: uid
+    },
+    cache: false,
+    success: function a(result){
+        $("#selectcompanybyuser").html(result);
+        $("#selectcompanybyuser").show();
+        var optionCount = $('#selectcompanybyuser').find('option').length;
+    optionCount = optionCount-1;
+    $("#totalcompany").text('Total Company :'+ optionCount);
+    $('#taskPurposebyuserCard').show();
+        }
+    });
+
+    });
+
+
+$('#taskPurposebyuserCardData').on('change', function() {
+    var taskPurposebyuserCardData = $(this).val();
+    var taskActionbyuserCardData =  $('#taskActionbyuserCardData').val();
+    var selectedValue1 = $('#status_taskaction').val();
+    var tasktaction =  $('#task_action_filter').val();
+    
+   
+    $.ajax({
+    url:'<?=base_url();?>Menu/taskactionnotplan_filter_purpose',
+    type: "POST",
+    data: {
+    sid: selectedValue1,
+    tasktaction: tasktaction,
+    tasktactionData: taskActionbyuserCardData,
+    taskPurposeData: taskPurposebyuserCardData,
+    uid: uid
+    },
+    cache: false,
+    success: function a(result){
+        $("#selectcompanybyuser").html(result);
+        $("#selectcompanybyuser").show();
+        var optionCount = $('#selectcompanybyuser').find('option').length;
+    optionCount = optionCount-1;
+    $("#totalcompany").text('Total Company :'+ optionCount);
+    $('#taskPurposebyuserCard').show();
+        }
+    });
+
+    });
+}else{
+$('#taskActionCard').hide();
+}
+
                 if(val =='Partner Type'){
         
                     var uid = $("#curuserid").val();

@@ -113,8 +113,6 @@
                                         foreach($mdata as $dt){
                                             
                                             if ($dt->status == 0) {
-                                                // echo "<pre>";
-                                                // print_r($dt);
                                                 continue;
                                              }
                                             $tid = $dt->id;

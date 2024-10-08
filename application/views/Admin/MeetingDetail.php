@@ -97,7 +97,7 @@ overflow-x: auto;
 <tbody>
 <?php
 $i=1;
-$trpm=0;$tfmeet=0;$trmeet=0;$ttt=0;
+$trpm=0;$tfmeet=0;$trmeet=0;$ttt=0;$tnorpm=0;
 $startTimeStamp = strtotime($sd);
 $endTimeStamp = strtotime($ed);
 $timeDiff = abs($endTimeStamp - $startTimeStamp);
@@ -105,33 +105,41 @@ $numberDays = $timeDiff/86400;
 $numberDays = intval($numberDays);
 
 $bd = $this->Menu_model->get_userbyaid($uid);
-                                  // echo "<pre>";
-                                    // print_r($bd);
+//echo "<pre>";print_r($bd);exit;
+                                
                                     foreach($bd as $bd){
                                     $bdname = $bd->name;
                                     $bdid = $bd->user_id;
                                     $mdata = $this->Menu_model->get_tbmd('1',$bdid,$bdid,$sd,$ed);
-                                    $tt=0;$trp=0;$tfm=0;$trm=0;$pmom=0;$fmeet=0;$rmeet=0;$ymom=0;$nmom=0;$rpm=0;
+                                    
+                                    $tt=0;$trp=0;$tfm=0;$trm=0;$pmom=0;$fmeet=0;$rmeet=0;$ymom=0;$nmom=0;$rpm=0;$norps=0;
+                                   
                                     foreach($mdata as $dt){
                                         $tt++;
                                         $cmpid = $dt->cmpid;
                                         $cid = $dt->cid;
                                         $tid = $dt->tid;
                                         $rp = $this->Menu_model->get_checkrpbytid($tid);
+                                        $norp = $this->Menu_model->get_checkNorpbytid($tid);
                                         if($rp){
                                             $comp = $this->Menu_model->get_bargdetailcid($cmpid);
                                             $cmprp = $this->Menu_model->get_meetfr($tid,$cid);
                                             $cmrp = $cmprp[0]->cont;
                                             $comp = sizeof($comp);
-                                            if($cmrp==0){$fmeet++;}
-                                            if($cmrp>0){$rmeet++;}
-                                            $rpm++;
+                                          
+                                           
+                                           
                                             $momc = $this->Menu_model->get_momyn($cid,$tid);
-                                            if($momc){$momc='yes';$ymom++;}else{$momc='no';$pmom++;$nmom++;}
+                                            if($momc){$momc='yes';$ymom++; $rpm++;   if($cmrp==0){$fmeet++;}  if($cmrp>0){$rmeet++;} }else{$momc='no';$pmom++;$nmom++;}
+                                            
                                         }
+                                        if(!empty($norp)){
+                                            $norpm++;
+                                        }
+                                       
                                         
                                     if($numberDays<6){   
-                                    if($fmeet==1*$numberDays){$remark='Bad performance';$color = 'text-danger';}elseif($fmeet<=$numberDays){$remark='Average Performance';$color = 'text-warning';}else{$remark='Good Performance';$color = 'text-success';}
+                                        if($fmeet==1*$numberDays){$remark='Bad performance';$color = 'text-danger';}elseif($fmeet<=$numberDays){$remark='Average Performance';$color = 'text-warning';}else{$remark='Good Performance';$color = 'text-success';}
                                     }}
 
                                 
@@ -151,29 +159,50 @@ $bd = $this->Menu_model->get_userbyaid($uid);
                                     if($tt>0){
                                     $a = ($fmeet/$tt)*100;
                                     $ratio = sprintf ("%.2f", $a).' %';
+                                    
+                                     $total_meeting_data_per_bd =$this->Menu_model->get_tbmd(4,$bdid,$bdid,$sd,$ed);
+                                  
+                                    //  echo count($total_meeting_data_per_bd);
 ?>
                                     
                                     
                                 <tr>
 <td><?=$i?></td>
 <td><?=$bdname?></td>
-<td><a href='<?=base_url();?>/Menu/TBMD/4/<?=$bdid?>/<?=$sd?>/<?=$ed?>'><?=$tt?> <?php $ttt=$ttt+$tt;?></a></td>
+<td><a href='<?=base_url();?>/Menu/TBMD/4/<?=$bdid?>/<?=$sd?>/<?=$ed?>'><?= $tt;?> <?php $ttt=$ttt+$tt;?></a></td>
 <td><a href='<?=base_url();?>/Menu/TBMDFRP/5/<?=$sd?>/<?=$ed?>/<?=$bdid?>'><?=$rpm?> <?php $trpm=$trpm+$rpm;?></a></td>
+ 
 <td><a href='<?=base_url();?>/Menu/TBMDFRP/10/<?=$sd?>/<?=$ed?>/<?=$bdid?>'><?=$fmeet?> <?php $tfmeet=$tfmeet+$fmeet;?></a></td>
 <td><a href='<?=base_url();?>/Menu/TBMDFRP/11/<?=$sd?>/<?=$ed?>/<?=$bdid?>'><?=$rmeet?> <?php $trmeet=$trmeet+$rmeet;?></a></td>
 <td><a href='<?=base_url();?>/Menu/TBMDFRP/12/<?=$sd?>/<?=$ed?>/<?=$bdid?>'><?=$nmom?></a></td>
 <td class="<?=$color?>"><?=$remark?></td>
 <td><?=$ratio?></td>
                                 </tr>
-<?php $i++;}} ?>
+<?php $i++;} }?>
                             </tbody>
                         </table>
  
-                       
-<b>Total Meeting : <a href="<?=base_url();?>/Menu/Total_Team_Meetings/<?=$uid ?>/<?=$sd?>/<?=$ed?>"><?=$ttt?></a> </b><br>
+     <?php
+     $fresh_rp_meetings         = $this->Menu_model->get_all_bd_Fresh_RP_meetings($uid,$sd,$ed);
+     $fresh_rp_meetings_count   = count($fresh_rp_meetings);
+     $total_team_meeeting       = $this->Menu_model->get_all_bd_meetings($uid,$sd,$ed);
+      $mdata = $this->Menu_model->get_all_bd_No_RP_meetings($uid,$sd,$ed);
+      $tnorpm=count($mdata);  
+   
+     
+     ?>                  
+<b>Total Meeting : <a href="<?=base_url();?>/Menu/Total_Team_Meetings/<?=$uid ?>/<?=$sd?>/<?=$ed?>"><?=$ttt;?></a> </b><br>
 <b>Total RP Meeting : <a href="<?=base_url();?>/Menu/Total_Team_RP_Meeting/<?=$uid ?>/<?=$sd?>/<?=$ed?>"><?=$trpm?></a></b><br>
-<b>Total Fresh : <a href="<?=base_url();?>/Menu/Total_Team_Fresh_Meeting/<?=$uid ?>/<?=$sd?>/<?=$ed?>"><?=$tfmeet?></a></b><br>
+<b>Total No RP Meeting : <a href="<?=base_url();?>/Menu/Total_Team_No_RP_Meeting/<?=$uid ?>/<?=$sd?>/<?=$ed?>"><?php echo $tnorpm;?></a></b><br>
+
+<b>Total Fresh : <a href="<?=base_url();?>/Menu/Total_Team_Fresh_Meeting/<?=$uid ?>/<?=$sd?>/<?=$ed?>"><?php echo $tfmeet;?></a></b><br>
+
 <b>Total Re-meeting : <a href="<?=base_url();?>/Menu/Total_Team_Re_Meeting/<?=$uid ?>/<?=$sd?>/<?=$ed?>"><?=$trmeet?></a></b><br>
+<b>Total Join Meeting : <a href="<?=base_url();?>/Menu/Total_Team_Re_Meeting/<?=$uid ?>/<?=$sd?>/<?=$ed?>">0</a></b><br>
+<b>Total Potential Meeting : <a href="<?=base_url();?>/Menu/Total_Team_Potential_Meeting/<?=$uid ?>/<?=$sd?>/<?=$ed?>">0</a></b><br>
+<b>Total Meetings with Top Spender : <a href="<?=base_url();?>/Menu/Total_Team_Re_Meeting/<?=$uid ?>/<?=$sd?>/<?=$ed?>">0</a></b><br>
+
+
                   </div>
             </div>
 </form>            <!--END OF FORM ^^-->

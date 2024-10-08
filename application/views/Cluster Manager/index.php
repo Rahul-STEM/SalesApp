@@ -116,7 +116,20 @@ overflow-x: auto;
     background: #c5eb4d !important;
     font-weight: 500;
 }
-  </style>
+.card-body-addnewlead {
+    padding: 4px 10px;
+    margin: 4px;
+    border-bottom: 1px solid darkgreen;
+    color: green;
+    font-weight: 500;
+    font-size: 13px;
+}
+.card-body-addnewlead:hover{
+  background-color: darkgreen;
+  color:white;
+  transition: 0.2s ease-in-out;
+}
+</style>
   
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -420,6 +433,7 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                   ?>
                 <center><h5>Total My Funnel </h5></center><hr>
                         <p><a href="pcompanies/0/<?=$uid?>">Total Companies - <b><?=$mc->a?></b></a><hr>
+                        <p><a href="bdcompanies/35/<?=$uid?>">Common Companies - <b><?=$mc->s?></b></a><hr>
                         <p><a href="bdcompanies/1/<?=$uid?>">Open - <b><?=$mc->b?></b></p></a><hr>
                         <p><a href="bdcompanies/8/<?=$uid?>">Open [RPEM] - <b><?=$mc->i?></b></p></a><hr>
                         <p><a href="bdcompanies/2/<?=$uid?>">Reachout - <b><?=$mc->c?></b></p></a><a style="font-size:10px;color:red;margin-left:20px" data-toggle="collapse" href="#collapse7" role="button" aria-expanded="false" aria-controls="collapse7">Read More</a></p><hr>
@@ -666,7 +680,7 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
               <div class="row">
                   <div class="col-lg-12 col-sm">
             <div class="card card-primary card-outline card-outline-tabs">
-                <h4 class="p-3">Today's Task Planned</h4>
+                <h4 class="p-3">Today's Task Calendar</h4>
               <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                   <li class="nav-item">
@@ -719,6 +733,15 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                             ?>
                             <?=$bm?>
                             </span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-taskcheck-tab" data-toggle="pill" href="#custom-tabs-four-taskcheck" role="tab" aria-controls="custom-tabs-taskcheck" aria-selected="false">
+                      <?php 
+                      $gettodaysmom = $this->Menu_model->geTodaysMOMCheckTask($uid,$tdate);
+                      $gettodaysmomcnt = sizeof($gettodaysmom);
+                       ?>
+                    Task Check <span class="badge badge-success"><?=$gettodaysmomcnt;?></span>
                     </a>
                   </li>
                   
@@ -941,6 +964,145 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                   </div>
                                 </div>
                               </div>
+
+
+                              <?php
+                              // print_r(sizeof($autotasktimenew));
+                              // die;
+                              $pentask = sizeof($autotasktimenew);
+                              if($pentask > 0){
+                               $ast1=$autotasktimenew[0]->stime;
+                               $aet2=$autotasktimenew[0]->etime;
+                              ?>
+                              <div class="card">
+                                <div class="card-header bg-primary" id="headingThree33" data-toggle="collapse" data-target="#collapse91912" aria-expanded="false" aria-controls="collapse9121">
+
+                                    <?php 
+                                    $ttbytimedata = $this->Menu_model->get_ttbytimeAutotask($uid,$tdate,$ast1,$aet2);
+                                    $curentDatwv = date("Y-m-d");
+                                    $ted = $this->Menu_model->get_ttbytimedAutotask($uid, $curentDatwv,$ast1,$aet2);
+                                      ?>
+                                      <b>Auto Task - <?= $ast1 ?> to <?= $aet2 ?></b><br>
+                                      Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) | MOM(<?=$ted[0]->f?>) | Proposal(<?=$ted[0]->g?>)
+                                </div>
+                                <div id="collapse91912" class="collapse" aria-labelledby="headingThree33" data-parent="#accordion">
+                                  <div class="card-body">
+                                    <?php
+                                      $atai = 0;
+                                      foreach($ttbytimedata as $ttdata){
+                                      $taid = $ttdata->actiontype_id;
+                                      $taid=$this->Menu_model->get_actionbyid($taid);
+                                      $time = $ttdata->appointmentdatetime;
+                                      $reminder = $ttdata->reminder;
+                                      $time = date('h:i a', strtotime($time));
+                              
+                                    if($ttdata->autotask == 1){
+                                      $style = 'background: antiquewhite;'; 
+                                      $titletask = 'Auto Task';
+                                    }else{
+                                      $style =''; 
+                                      $titletask='';
+                                    }
+                                    
+                                  ?>
+                                  <?php if($ttdata->actiontype_id=='2'){ ?>
+                                    <div class="list-group-item list-group-item-action">
+                                    <button id="add_act<?=$atai?>" value="<?=$ttdata->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                                       <span class="mr-3 align-items-center">
+                                          <i class="fa-solid fa-circle"></i>
+                                       </span>
+                                       <span class="flex"><?=$taid[0]->name?> |
+                                           <strong class="text-secondary mr-1"><?=$ttdata->compname?></strong><br>
+                                           <small class="text-muted">Task Time:- <?=$time?></small>
+                                        </span>
+                                        <span class="p-3" style="color:<?=$ttdata->color?>;"><?=$ttdata->name?>
+                                        </span>
+                                        <span class="text-right">
+                                            <i class="fa-solid fa-forward"></i>
+                                        </span>
+                                        <b><?php if($reminder>0){echo 'Reminder for This Task';}?></b>
+                                        </button>
+                                    </div>
+                                    <?php $atai++; } ?>
+
+                                    <?php if($ttdata->actiontype_id=='6'){ ?>
+                                    <div class="list-group-item list-group-item-action">
+                                    <button id="add_act<?=$atai?>" value="<?=$ttdata->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                                       <span class="mr-3 align-items-center">
+                                          <i class="fa-solid fa-circle"></i>
+                                       </span>
+                                       <span class="flex"><?=$taid[0]->name?> |
+                                           <strong class="text-secondary mr-1"><?=$ttdata->compname?></strong><br>
+                                           <small class="text-muted">Task Time:- <?=$time?></small>
+                                        </span>
+                                        <span class="p-3" style="color:<?=$ttdata->color?>;"><?=$ttdata->name?>
+                                        </span>
+                                        <span class="text-right">
+                                            <i class="fa-solid fa-forward"></i>
+                                        </span>
+                                        <b><?php if($reminder>0){echo 'Reminder for This Task';}?></b>
+                                        </button>
+                                    </div>
+                                    <?php $atai++; }elseif($ttdata->actiontype_id=='1'){ ?>
+                                      <div class="list-group-item list-group-item-action">
+                                    <button id="add_act<?=$atai?>" value="<?=$ttdata->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                                       <span class="mr-3 align-items-center">
+                                          <i class="fa-solid fa-circle"></i>
+                                       </span>
+                                       <span class="flex"><?=$taid[0]->name?> |
+                                           <strong class="text-secondary mr-1"><?=$ttdata->compname?></strong><br>
+                                           <small class="text-muted">Task Time:- <?=$time?></small>
+                                        </span>
+                                        <span class="p-3" style="color:<?=$ttdata->color?>;"><?=$ttdata->name?>
+                                        </span>
+                                        <span class="text-right">
+                                            <i class="fa-solid fa-forward"></i>
+                                        </span>
+                                        <b><?php if($reminder>0){echo 'Reminder for This Task';}?></b>
+                                        </button>
+                                    </div>
+                                    <?php } ?>
+
+
+
+
+
+                                  <?php } ?>
+                                  </div>
+                                </div>
+                              </div>
+                            <?php } ?>
+
+                            <?php 
+                              $user_day_planner  = $this->Menu_model->get_daystarted($uid,date("Y-m-d"));
+                              $pinitiate_time = $user_day_planner[0]->planner_initiate_time;
+                              $textmessage = $pinitiate_time == '' ? "Start" : "Resume";
+                              ?>
+                            <div class="card">
+                                <div class="card-header bg-primary" id="start_planning1" data-toggle="collapse" data-target="#start_planning2" aria-expanded="false" aria-controls="collapse9121">
+                                <b><?= $textmessage; ?> Planning </b>   
+                                </div>
+                                <div id="start_planning2" class="collapse" aria-labelledby="start_planning1" data-parent="#accordion">
+                                  <div class="card-body">
+                                    <div class="list-group-item list-group-item-action ">
+                                    <center>
+                                    <button type="button" class="btn btn-success font-weight-bold" style="padding:6px 70px;" onclick="handleReminderCreation()">
+                                    <?= $textmessage; ?> &nbsp;<i class="fa-solid fa-forward"></i>
+                                    </button>
+                                    </center>
+                                    <!-- <br> -->
+                                    <!-- <hr> -->
+                                    <!-- <button id="add_act6734763254" value="" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                                       <span class="mr-3 align-items-center">
+                                         sdsadsagd
+                                       </span>
+                                    </button> -->
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+
                             </div>
                   </div>
                   <div class="tab-pane fade" id="custom-tabs-four-call" role="tabpanel" aria-labelledby="custom-tabs-four-call-tab">
@@ -1073,6 +1235,79 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                         </div>
                       <?php $aai++;}}} ?>
                   </div>
+
+                  <div class="tab-pane fade" id="custom-tabs-four-taskcheck" role="tabpanel" aria-labelledby="custom-tabs-four-taskcheck-tab">
+                  <div class="card-header text-center bg-light" style="border-radius:unset" >
+            <p>
+              <?php 
+            
+              $groupedByActionTypes = [];
+              foreach ( $gettodaysmom as $objects) {
+                  $actionTypeId = $objects->actiontype_id;
+                  if (!isset($groupedByActionTypes[$actionTypeId])) {
+                      $groupedByActionTypes[$actionTypeId] = [];
+                  }
+                  $groupedByActionTypes[$actionTypeId][] = $objects;
+              }
+
+            foreach ($groupedByActionTypes as $key => $getchk){
+                  $taid=$this->Menu_model->get_actionbyid($key);
+                  $checkname = $taid[0]->name;
+                  $getSize = sizeof($getchk); ?>
+                <a class="btn btn-primary checkingreport" data-toggle="collapse" href="#collapseCheck<?=$key?>" role="button" aria-expanded="false" aria-controls="collapseCheck<?=$key?>">
+                  <?= $checkname.' ('.$getSize.')'; ?>
+                </a>
+          <?php } ?>
+          <?php
+             foreach ($groupedByActionTypes as $key => $checkTasks) { ?> 
+              <div class="collapse multi-collapse"  id="collapseCheck<?=$key?>">
+              <div class="card card-body">
+              <?php 
+              foreach ($checkTasks as $checkTask) {
+                  $ce_tskid = $checkTask->id;
+                  $tskid = $checkTask->actiontype_id;
+                  $reviewtype = $checkTask->reviewtype;
+                  $taid=$this->Menu_model->get_actionbyid($tskid);
+
+                  $time = $checkTask->appointmentdatetime;
+                  $time = date('h:i a', strtotime($time));
+                 
+                  if($tskid == 18){
+                    $reqmom = $this->Menu_model->getRequestMOMBYID($reviewtype);
+                    $reqmom_user = $reqmom[0]->user_id;
+                    $reqmom_uname = $this->Menu_model->get_userbyid($reqmom_user)[0]->name;
+                  }
+                  if($tskid == 19){
+                    $reqmom_uname = '';
+                  }
+              ?>
+              <a href="<?=base_url();?>Management/MomDataCheck/<?=$reviewtype?>/<?=$ce_tskid?>">
+                  <div class="list-group-item list-group-item-action checkrepoData">
+                      <span class="flex-wrap">
+                          <strong class="text-secondary mr-1" style="font-size: 14px;" ><?=$checkTask->compname?> - ( <?= $checkname; ?> )</strong><br>
+                          <small class="text-secondary mr-1"> Request Name - <?=$reqmom_uname?></small><br>
+                          <small class="text-muted">Check Time:- <?=$time?></small>
+                      </span>
+                  </div>
+              </a>
+               <?php  } ?>
+               </div>
+              </div>
+              <?php }  ?>
+            </div>
+            <hr>
+            <style>
+              .checkingreport{
+                margin: 4px;
+              }
+              .checkrepoData{
+                margin: 4px;
+                background: beige;
+                color: white !important;
+              }
+            </style>
+                  </div>
+                 
                   
                   <div class="tab-pane fade" id="custom-tabs-four-barg" role="tabpanel" aria-labelledby="custom-tabs-four-barg-tab">
                       
@@ -1129,6 +1364,10 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                     </div></a>
                             <?php }} ?>
                         </div>
+
+                        
+
+
                   </div>
                 </div>
             </div>
@@ -1204,19 +1443,43 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                       $time = $tt->appointmentdatetime;
                                       $time = date('h:i a', strtotime($time));
                                   ?>
-                                    <div class="list-group-item list-group-item-action">
-                                       <span class="mr-3 align-items-center">
-                                          <i class="fa-solid fa-circle"></i>
-                                       </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
-                                        </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
-                                        <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
+                                   <div class="list-group-item list-group-item-action">
+                                          <span class="mr-3 align-items-center">
+                                              <i class="fa-solid fa-circle"></i>
+                                          </span>
+                                          <span class="flex"><?=$taid[0]->name?> |
+                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <span>Task Time : <?=$time?></span>
+                                            </span> |
+                                            Status : <span style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Action : <?= $tt->actontaken; ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Purpose  : <?= $tt->purpose_achieved; ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Suggestions  : 
+                                            <?php 
+                                             $comment_by = $tt->comment_by;
+                                             if($comment_by !== '' && $comment_by !== NULL){
+                                                  $decode_comments    = base64_decode($tt->comments);
+                                                  $decode_thnkscomments    = base64_decode($tt->thnkscomments);
+                                                  $udetail            = $this->Menu_model->get_userbyid($comment_by);
+                                                  $uname              = $udetail[0]->name;
+                                                  $message = $decode_comments.' - <b>'.$uname.'</b>';
+                                                  echo $message;
+                                              }else{
+                                                  echo $message = '';
+                                              }
+                                            ?>
+                                            </span>
+                                            
                                     </div>
                                   <?php } ?>
                                   
@@ -1240,19 +1503,42 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                       $time = $tt->appointmentdatetime;
                                       $time = date('h:i a', strtotime($time));
                                   ?>
-                                    <div class="list-group-item list-group-item-action">
-                                       <span class="mr-3 align-items-center">
-                                          <i class="fa-solid fa-circle"></i>
-                                       </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
-                                        </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
-                                        <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
+                                   <div class="list-group-item list-group-item-action">
+                                          <span class="mr-3 align-items-center">
+                                              <i class="fa-solid fa-circle"></i>
+                                          </span>
+                                          <span class="flex"><?=$taid[0]->name?> |
+                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <span>Task Time : <?=$time?></span>
+                                            </span> |
+                                            Status : <span style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Action : <?= $tt->actontaken; ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Purpose  : <?= $tt->purpose_achieved; ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Suggestions  : 
+                                            <?php 
+                                             $comment_by = $tt->comment_by;
+                                             if($comment_by !== '' && $comment_by !== NULL){
+                                                  $decode_comments    = base64_decode($tt->comments);
+                                                  $decode_thnkscomments    = base64_decode($tt->thnkscomments);
+                                                  $udetail            = $this->Menu_model->get_userbyid($comment_by);
+                                                  $uname              = $udetail[0]->name;
+                                                  $message = $decode_comments.' - <b>'.$uname.'</b>';
+                                                  echo $message;
+                                              }else{
+                                                  echo $message = '';
+                                              }
+                                            ?>
+                                            </span>
                                     </div>
                                   <?php } ?>
                                   </div>
@@ -1275,19 +1561,42 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                       $time = $tt->appointmentdatetime;
                                       $time = date('h:i a', strtotime($time));
                                   ?>
-                                    <div class="list-group-item list-group-item-action">
-                                       <span class="mr-3 align-items-center">
-                                          <i class="fa-solid fa-circle"></i>
-                                       </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
-                                        </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
-                                        <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
+                                   <div class="list-group-item list-group-item-action">
+                                          <span class="mr-3 align-items-center">
+                                              <i class="fa-solid fa-circle"></i>
+                                          </span>
+                                          <span class="flex"><?=$taid[0]->name?> |
+                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <span>Task Time : <?=$time?></span>
+                                            </span> |
+                                            Status : <span style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Action : <?= $tt->actontaken; ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Purpose  : <?= $tt->purpose_achieved; ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Suggestions  : 
+                                            <?php 
+                                             $comment_by = $tt->comment_by;
+                                             if($comment_by !== '' && $comment_by !== NULL){
+                                                  $decode_comments    = base64_decode($tt->comments);
+                                                  $decode_thnkscomments    = base64_decode($tt->thnkscomments);
+                                                  $udetail            = $this->Menu_model->get_userbyid($comment_by);
+                                                  $uname              = $udetail[0]->name;
+                                                  $message = $decode_comments.' - <b>'.$uname.'</b>';
+                                                  echo $message;
+                                              }else{
+                                                  echo $message = '';
+                                              }
+                                            ?>
+                                            </span>
                                     </div>
                                   <?php } ?>
                                   </div>
@@ -1310,19 +1619,42 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                       $time = $tt->appointmentdatetime;
                                       $time = date('h:i a', strtotime($time));
                                   ?>
-                                    <div class="list-group-item list-group-item-action">
-                                       <span class="mr-3 align-items-center">
-                                          <i class="fa-solid fa-circle"></i>
-                                       </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
-                                        </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
-                                        <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
+                                <div class="list-group-item list-group-item-action">
+                                          <span class="mr-3 align-items-center">
+                                              <i class="fa-solid fa-circle"></i>
+                                          </span>
+                                          <span class="flex"><?=$taid[0]->name?> |
+                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <span>Task Time : <?=$time?></span>
+                                            </span> |
+                                            Status : <span style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Action : <?= $tt->actontaken; ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Purpose  : <?= $tt->purpose_achieved; ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Suggestions  : 
+                                            <?php 
+                                             $comment_by = $tt->comment_by;
+                                             if($comment_by !== '' && $comment_by !== NULL){
+                                                  $decode_comments    = base64_decode($tt->comments);
+                                                  $decode_thnkscomments    = base64_decode($tt->thnkscomments);
+                                                  $udetail            = $this->Menu_model->get_userbyid($comment_by);
+                                                  $uname              = $udetail[0]->name;
+                                                  $message = $decode_comments.' - <b>'.$uname.'</b>';
+                                                  echo $message;
+                                              }else{
+                                                  echo $message = '';
+                                              }
+                                            ?>
+                                            </span>
                                     </div>
                                   <?php } ?>
                                   </div>
@@ -1345,19 +1677,42 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                       $time = $tt->appointmentdatetime;
                                       $time = date('h:i a', strtotime($time));
                                   ?>
-                                    <div class="list-group-item list-group-item-action">
-                                       <span class="mr-3 align-items-center">
-                                          <i class="fa-solid fa-circle"></i>
-                                       </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                           <small class="text-muted">Task Time:- <?=$time?></small>
-                                        </span>
-                                        <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                        </span>
-                                        <span class="text-right">
-                                            <i class="fa-solid fa-forward"></i>
-                                        </span>
+                                   <div class="list-group-item list-group-item-action">
+                                          <span class="mr-3 align-items-center">
+                                              <i class="fa-solid fa-circle"></i>
+                                          </span>
+                                          <span class="flex"><?=$taid[0]->name?> |
+                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <span>Task Time : <?=$time?></span>
+                                            </span> |
+                                            Status : <span style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Action : <?= $tt->actontaken; ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Purpose  : <?= $tt->purpose_achieved; ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Suggestions  : 
+                                            <?php 
+                                             $comment_by = $tt->comment_by;
+                                             if($comment_by !== '' && $comment_by !== NULL){
+                                                  $decode_comments    = base64_decode($tt->comments);
+                                                  $decode_thnkscomments    = base64_decode($tt->thnkscomments);
+                                                  $udetail            = $this->Menu_model->get_userbyid($comment_by);
+                                                  $uname              = $udetail[0]->name;
+                                                  $message = $decode_comments.' - <b>'.$uname.'</b>';
+                                                  echo $message;
+                                              }else{
+                                                  echo $message = '';
+                                              }
+                                            ?>
+                                            </span>
                                     </div>
                                   <?php } ?>
                                   </div>
@@ -1381,11 +1736,80 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                       $time = $tt->appointmentdatetime;
                                       $time = date('h:i a', strtotime($time));
                                    ?>
+                                   <div class="list-group-item list-group-item-action">
+                                          <span class="mr-3 align-items-center">
+                                              <i class="fa-solid fa-circle"></i>
+                                          </span>
+                                          <span class="flex"><?=$taid[0]->name?> |
+                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <span>Task Time : <?=$time?></span>
+                                            </span> |
+                                            Status : <span style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Action : <?= $tt->actontaken; ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Purpose  : <?= $tt->purpose_achieved; ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Remarks  : <?php echo empty($tt->remarks) ? 'NA' : htmlspecialchars($tt->remarks); ?>
+                                            </span> |
+                                            <span class="text-right">
+                                            Suggestions  : 
+                                            <?php 
+                                             $comment_by = $tt->comment_by;
+                                             if($comment_by !== '' && $comment_by !== NULL){
+                                                  $decode_comments    = base64_decode($tt->comments);
+                                                  $decode_thnkscomments    = base64_decode($tt->thnkscomments);
+                                                  $udetail            = $this->Menu_model->get_userbyid($comment_by);
+                                                  $uname              = $udetail[0]->name;
+                                                  $message = $decode_comments.' - <b>'.$uname.'</b>';
+                                                  echo $message;
+                                              }else{
+                                                  echo $message = '';
+                                              }
+                                            ?>
+                                            </span>
+                                    </div>
+                                  <?php } ?>
+                                  </div>
+                                </div>
+                              </div>
+
+
+                              <?php
+                              $pentask = sizeof($autotasktimenew);
+                              if($pentask > 0){
+                               $ast1=$autotasktimenew[0]->stime;
+                               $aet2=$autotasktimenew[0]->etime;
+                              ?>
+                              <div class="card">
+                                <div class="card-header bg-primary" id="headingThree31" data-toggle="collapse" data-target="#collapse9191" aria-expanded="false" aria-controls="collapse9121">
+
+                                    <?php 
+                                    $curddate = date("Y-m-d");
+                                    $ttbytime = $this->Menu_model->get_ttbytimecAutotask1($uid,$tdate,$ast1,$aet2);
+                                    $ted = $this->Menu_model->get_ttbytimedcAutotask($uid,$curddate,$ast1,$aet2);
+                                      ?>
+                                      <b>Auto Task - <?= $ast1 ?> to <?= $aet2 ?></b><br>
+                                      Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) | MOM(<?=$ted[0]->f?>) | Proposal(<?=$ted[0]->g?>)
+                                </div>
+                                <div id="collapse9191" class="collapse" aria-labelledby="headingThree31" data-parent="#accordion">
+                                  <div class="card-body">
+                                   <?php
+                                      foreach($ttbytime as $tt){
+                                      $taid = $tt->actiontype_id;
+                                      $taid=$this->Menu_model->get_actionbyid($taid);
+                                      $time = $tt->appointmentdatetime;
+                                      $time = date('h:i a', strtotime($time));
+                                   ?>
                                     <div class="list-group-item list-group-item-action">
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
-                                       <span class="flex"><?=$taid[0]->name?> | 
+                                       <span class="flex"><?=$taid[0]->name?> |
                                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
@@ -1399,6 +1823,10 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                   </div>
                                 </div>
                               </div>
+<?php } ?>
+
+
+
                             </div>
                   </div>
                   <div class="tab-pane fade" id="custom-tabs-four-call" role="tabpanel" aria-labelledby="custom-tabs-four-call-tab">
@@ -1488,53 +1916,179 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
             </div>
               </div></div></div>
             <div class="col-lg-4 col-sm">
-            <div class="card card-primary card-outline card-outline-tabs">
-                <?php $ptd = $this->Menu_model->get_tptd($uid,$tdate);
-                $ptsd = $this->Menu_model->get_tptsd($uid,$tdate);?>
-              <div class="card-header text-center bg-info"><b>Created Pending Task to be Schedule</b></div>
-              <div class="card-header text-center bg-light"><b>
-              Total Task <?=$ptd[0]->ab?> | Call(<?=$ptd[0]->a?>) | Email(<?=$ptd[0]->b?>) | Whatsapp(<?=$ptd[0]->e?>) | Meeting(<?=$ptd[0]->c+$ptd[0]->d?>) | MOM(<?=$ptd[0]->f?>) | Proposal(<?=$ptd[0]->g?>)
-              </b></div>
-              <div class="card-header text-center bg-light"><b>
-              Open(<?=$ptsd[0]->a?>) | Open RPEM(<?=$ptsd[0]->b?>) | Rechaout(<?=$ptsd[0]->c?>) | Tentative(<?=$ptsd[0]->d?>) | WDL(<?=$ptsd[0]->e?>) | NI(<?=$ptsd[0]->f?>) | TTD(<?=$ptsd[0]->g?>) | WNO(<?=$ptsd[0]->h?>) | Positive(<?=$ptsd[0]->i?>) | Very Positive(<?=$ptsd[0]->j?>) | Closure(<?=$ptsd[0]->k?>)
-              </b></div>
-            
-                </div>
-                
-                
-                <!-- <div class="card card-primary card-outline card-outline-tabs">
-                <?php 
-                // $patd = $this->Menu_model->get_atptd($uid,$tdate);
-                //       $patsd = $this->Menu_model->get_atptsd($uid,$tdate);
-                ?>
-              <div class="card-header text-center bg-info"><b>Auto Pending Task to be Schedule</b></div>
-              <div class="card-header text-center bg-light"><b>
-              Total Task <?=$patd[0]->ab?> | Call(<?=$patd[0]->a?>) | Email(<?=$patd[0]->b?>) | Whatsapp(<?=$patd[0]->e?>) | Meeting(<?=$patd[0]->c+$patd[0]->d?>) | MOM(<?=$patd[0]->f?>) | Proposal(<?=$patd[0]->g?>)
-              </b></div>
-              <div class="card-header text-center bg-light"><b>
-              Open(<?=$patsd[0]->a?>) | Open RPEM(<?=$patsd[0]->b?>) | Rechaout(<?=$patsd[0]->c?>) | Tentative(<?=$patsd[0]->d?>) | WDL(<?=$patsd[0]->e?>) | NI(<?=$patsd[0]->f?>) | TTD(<?=$patsd[0]->g?>) | WNO(<?=$patsd[0]->h?>) | Positive(<?=$patsd[0]->i?>) | Very Positive(<?=$patsd[0]->j?>) | Closure(<?=$patsd[0]->k?>)
-              </b></div>
-              <div class="card-body">
-                    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
-                        <ul id="myUL">
-                            <?php 
-                            // $ai=0;foreach($totalt as $tt){if($tt->plan==0){if($tt->autotask==0){
-                              // ?>
-                          <li><a>
-                           <?=$tt->aname?> | 
-                           <strong class="text-secondary"><?=$tt->compname?> | <b style="color:<?=$tt->color?>"><?=$tt->csname?></b></strong>
-                           <button id="add_plan<?=$ai?>" value="<?=$tt->id?>">Plan</button>
-                          </a>
-                          
-                          </li><?php 
-                          // $ai++;}}} 
-                          ?>
-                        </ul>
+            <?php 
+                $plannertime = $this->Menu_model->autotasktimenew($uid,$tdate);
+                $plannertimecnt = sizeof($plannertime);
+                if($plannertimecnt > 0){
+                  $start_tttpft =  $plannertime[0]->start_tttpft;
+                  $end_tttpft   =  $plannertime[0]->end_tttpft; ?>
+                  <div class="card p-2 text-center bg-success text-white">
+                    <span> <b>Todays Planner Time : <?=$start_tttpft;?> to <?=$end_tttpft;?></b> </span>
                   </div>
-                </div> -->
-            
-            
-              
+                <?php  } ?> 
+                <div class="card p-3">
+                <div class="card p-3">
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenterspclchngreq">
+                      <b>Create a Special Request For Plan Change </b>
+                  </button>
+                </div>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalReminder">
+                Create A Reminder
+              </button>
+
+                    
+              <?php 
+                      $reminderData = $this->Menu_model->GetTodaysTeamReminder($uid);
+                      $reminderDatacnt = sizeof($reminderData);
+                      if($reminderDatacnt > 0){ ?>
+                      <div class="ourreminder">
+                      <hr>
+                      <h6 class='text-center bg-danger p-2 '>Team Reminder</h6>
+                      <hr>
+                      <?php foreach($reminderData as $remi){ ?>
+
+                        <div class="card p-2" style="background: #ffafaf;">
+                        <span class="p-1"> <b>Reminder Name : </b> <?= $remi->name; ?></span>
+                        <span class="p-1"> <b>Reminder Type : </b> <?= $this->Menu_model->remindermessagebyid($remi->type)[0]->message;; ?></span>
+                        <span class="p-1"> <b>Message : </b> <?= $remi->message; ?></span>
+                        <span class="p-1"> <b>Request Time : </b> <?= $remi->created_at; ?></span>
+                        <span class="p-1"> <b>Reminder Acknowledge : </b>
+                        <?php 
+                        if($remi->status == 0){
+                          echo "<span class='p-1 bg-warning btn btn-warning'><a href='".base_url()."Management/ConfirmReminder/".$remi->id."'>Checked</a></span>";
+                        }
+                        ?>
+                        </span>
+                        </div>
+                      <?php } ?>
+                      </div>
+                      <?php } ?>
+                      
+                      <?php 
+                      $reminderData = $this->Menu_model->GetTodaysOurReminder($uid);
+                      $reminderDatacnt = sizeof($reminderData);
+                      if($reminderDatacnt > 0){ ?>
+                      <div class="ourreminder">
+                      <hr>
+                      <h6 class='text-center bg-info p-2'>Our Reminder</h6>
+                      <hr>
+                      <?php foreach($reminderData as $remi){ ?>
+
+                        <div class="card p-2" style="background: azure;">
+                        <span class="p-1"> <b>Reminder Type : </b> <?=  $this->Menu_model->remindermessagebyid($remi->type)[0]->message; ?></span>
+                        <span class="p-1"> <b>Message : </b> <?= $remi->message; ?></span>
+                        <span class="p-1"> <b>Request Time : </b> <?= $remi->created_at; ?></span>
+                        <?php 
+                    if($remi->status == 0){
+                        echo "<span class='p-1'> <b>Reminder Acknowledge : </b><span class='p-1 bg-warning'>Pending</span>";
+                    }else{ ?>
+                        <span class="p-1"> <b>Acknowledge By : </b> <?= $this->Menu_model->get_userbyid($remi->acknowledge_by)[0]->name; ?></span>
+                        <span class="p-1"> <b>Acknowledge Message: </b> <?= $remi->acknowledge_message; ?>
+                   <?php }  ?>
+                        </span>
+                        </div>
+                      <?php } ?>
+                      </div>
+                      <?php } ?> 
+                </div>
+
+               
+                <?php 
+                      $newleads = $this->Menu_model->GetAddNewLeadComapny($uid);
+                      $newleadscnt = sizeof($newleads);
+                      if($newleadscnt > 0){ ?>
+                       <div class="card">
+                        <div class="card-header text-center">
+                          <h6>ADD NEW LEAD (<?= $newleadscnt; ?>)</h6>
+                        </div>
+                        <?php $y = 1; foreach($newleads as $newlead): ?>
+                          <div class="card-body-addnewlead">
+                           <span><?= $y;?></span>). <span class="newlead_cmpname"><?= $newlead->compname; ?> - </span>
+                            <span class="newlead_uname"><?= $newlead->name; ?></span> - 
+                            <a href="<?= base_url() . "Menu/CheckAddNewLeadData/" . $newlead->taskid ?>">Check</a>
+
+                          </div>
+                        <?php $y++; endforeach; ?>
+                       </div>  
+                     <?php } ?>
+                   
+<!-- Modal -->
+<div class="modal fade" id="exampleModalReminder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-center">
+        <h5 class="modal-title" id="exampleModalLabel">Create Reminder</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form action="<?=base_url();?>Management/SendReminder" method="post">
+            <div class="form-group">
+              <label>Select Reminder Type : </label>
+              <select class="form-control" name="reminder_type">
+              <?php 
+                $rmmess = $this->Menu_model->remindermessage();
+                foreach($rmmess as $mess){
+                ?>
+                <option value="<?=$mess->id; ?>"><?=$mess->message; ?></option>
+                  <?php } ?>
+              </select>
+            </div>
+              <div class="form-group">
+                <label>Reminder Message: </label>
+                <textarea class="form-control" name="reminder_message" rows="3"></textarea>
+              </div>
+              <div class="form-group text-center">
+              <button type="submit" class="btn btn-primary">Send Reminder</button>
+              </div>
+          </form>
+      </div>
+   
+    </div>
+  </div>
+</div>
+
+   <!-- Modal -->
+   <div class="modal fade" id="exampleModalCenterspclchngreq" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                    <form method="post" action="<?=base_url();?>Menu/SpecialRequestForLeave">
+                    <div class="was-validated">
+                      <div class="modal-content">
+                        <div class="modal-header" styel="background: #fbff00;" >
+                          <h5 class="modal-title" id="exampleModalLongTitle">Special Request For Plan Change</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body" style="background: darkslategrey;color: white;" >
+                        <input type="hidden" id="pdate" value="<?=$tdate?>" name="pdate" required=""> 
+                          <lable>Todays Start Time : </lable>
+                        <input type="time" id="meetingtimerequest1" name="start_meeting_time" min="10:00" max="19:00" class="form-control" required=""> 
+                          
+                        <lable>Todays End Time : </lable>
+                        <input type="time" id="meetingtimerequest2" name="end_meeting_time" min="10:00" max="19:00" class="form-control" required=""> 
+                        <!-- <hr>
+                        <div id="taskcounttable">
+                        </div>
+                        <hr> 
+                         <lable>Tomorrow Start Time : </lable>
+                        <input type="time" id="meetingtimerequest3" name="start_tommorow_task_time" min="10:00" max="19:00" class="form-control" required=""> 
+                        <hr> -->
+                        <lable>Purpose For Plan Change : </lable>
+                          <textarea name="purpose" class="form-control" placeholder="Please Enter Purpose" required="" ></textarea>
+                        </div>
+                        <div class="modal-footer text-center" style="background: #2f4f4f;display: inline;" >
+                            <button class="btn btn-primary m-3" type="submit">Send Request For Approval</button>
+                        </div>
+                      </div>
+                      </div>
+                        </form>
+                    </div>
+                  </div>
+
+
+                
           </div>
         </div>
 </div>
@@ -1611,6 +2165,34 @@ function toggleDataSeries(e){
 	chart.render();
 }
  
+}
+
+function handleReminderCreation() {
+      
+      $.ajax({
+      url:'<?=base_url();?>Menu/CheckTaskPlanningTime',
+      type: "POST",
+      data: {
+        'checkplantime': 'checkplantime'
+      },
+      cache: false,
+      success: function a(result){
+       
+        if(result =='false'){
+          var redURL = "<?=base_url();?>Menu/TaskPlanner2/<?= date("Y-m-d") ?>";
+          window.location.href = redURL;
+        }else if(result =='true'){
+        
+          <?php 
+          $todaydate = new DateTime();
+          $todaydate->modify('+1 day');
+          $tomorrowDate = $todaydate->format('Y-m-d');
+          ?>
+            var redURL = "<?=base_url();?>Menu/TaskPlanner2/<?= $tomorrowDate; ?>";
+            window.location.href = redURL;
+        }
+      }
+      });
 }
 </script>
 

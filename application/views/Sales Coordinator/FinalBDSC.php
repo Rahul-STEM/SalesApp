@@ -84,10 +84,11 @@
                             <div class="table-responsive">
                                 <div class="pdf-viwer">
                                     <?php 
+                                    // echo $uid;
                                     $udetail = $this->Menu_model->get_userbyid($uid);
                                     // $admid = $udetail[0]->admin_id;
                                     $admid = $udetail[0]->aadmin;
-                                    // echo $admid
+                                   
                                     ?> 
                                     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead>

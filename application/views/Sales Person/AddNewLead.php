@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,7 +44,7 @@
 
 <!-- Navbar -->
 <?php require('nav.php');?>
-<?php require('addlog.php');?>
+<?php //require('addlog.php');?>
 <!-- /.navbar -->
 
 <!-- Content Wrapper. Contains page content -->
@@ -53,7 +54,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">ADD NEW LEAD</h1>
+                    <!-- <h1 class="m-0">ADD NEW LEAD</h1> -->
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -86,12 +87,103 @@
                 </form>
                 <a href="<?=base_url();?>uploads/format/CompanyDetail.xlsx" target="_blank">Download Format</a>
             </div> -->
+            <?php 
+
+    
+                $initData   = $this->Menu_model->get_initcallbyiid($init_id);
+                $mcid       = $initData[0]->cmpid_id;
+                $cData     = $this->Menu_model->get_cdbyid($mcid);
             
+               
+                
+                $topspender       = $initData[0]->topspender;
+                $upsell_client    = $initData[0]->upsell_client;
+                $focus_funnel     = $initData[0]->focus_funnel;
+                $priorityc        = $initData[0]->priorityc;
+                $potential        = $initData[0]->potential;
+                $cluster_id       = $initData[0]->cluster_id;
+                $cstatus          = $initData[0]->cstatus;
+                $draft            = $initData[0]->draft;
+                $new_lead         = $initData[0]->new_lead;
+                $is_admin_approved = $initData[0]->is_admin_approved;
+               
+                if($new_lead == 1 && $is_admin_approved ==2){
+                // dd($initData);
+                $compname         = $cData[0]->compname;
+                $address          = $cData[0]->address;
+                $website          = $cData[0]->website;
+                $budget           = $cData[0]->budget;
+                $city             = $cData[0]->city;
+                $state            = $cData[0]->state;
+                $country          = $cData[0]->country;
+                $partnerType_id   = $cData[0]->partnerType_id;
+
+                $partners          = $this->Menu_model->get_partnerbyid($partnerType_id);
+                $partnername      = $partners[0]->name;
+
+                $cluster          = $this->Menu_model->GetClusterById($cluster_id);
+                $clustername      = $cluster[0]->clustername;
+
+                $keycompany       = $initData[0]->keycompany;
+                $cstatus          = $initData[0]->cstatus;
+
+                $cstatus          = $this->Menu_model->get_statusbyid($cstatus);
+                $cstatusname      =  $cstatus[0]->name;
+
+                $ccData     = $this->Menu_model->get_ccdbypid($mcid);
+              
+     
+                $contactperson    = $ccData[0]->contactperson;
+                $emailid          = $ccData[0]->emailid;
+                $phoneno          = $ccData[0]->phoneno;
+                $designation      = $ccData[0]->designation;
+                $type             = $ccData[0]->type;
+                $mainheadings     = 'Reupdate Lead';
+
+        
+
+                }else{
+                $topspender       = '';
+                $upsell_client    = '';
+                $focus_funnel     = '';
+                $priorityc        = '';
+                $potential        = '';
+                $cluster_id       = '';
+                $new_lead         = '';
+
+
+                $compname         = '';
+                $address          = '';
+                $website          = '';
+                $budget           = '';
+                $city             = '';
+                $state            = '';
+                $country          = '';
+                $partnerType_id   = '';
+
+                $keycompany       = '';
+                $cstatus          = '';
+
+                $contactperson    = '';
+                $emailid          = '';
+                $phoneno          = '';
+                $designation      = '';
+                $type             = '';
+                $draft            = '';
+                $mainheadings     = 'ADD NEW LEAD';
+
+                }
+
+        
+            ?>
             
             
             <!-- form start -->
             <form method="post" action="<?=base_url();?>Menu/addcompany_new">
                 <input type="hidden" name="uid" value="<?=$uid?>">
+                <div class="text-center">
+                    <h2><?= $mainheadings ?></h2> <hr>
+                </div>
                 <div class="form-row">
                     <div class="col-sm-12 col-lg-6 p-3">
                         <div class="was-validated">
@@ -99,13 +191,13 @@
                                 <input type="hidden" name="init_id" value="<?=$init_id?>">
                                 <div class="col-12 col-md-12">
                                     <label for="validationSample01">Company Name</label>
-                                    <input type="text" class="form-control"  placeholder="Company Name" value="" required=""  id="compname" name="compname" >
+                                    <input type="text" class="form-control" value="<?= $compname ?>"  placeholder="Company Name" value="" required=""  id="compname" name="compname" >
                                     <div class="invalid-feedback">Please provide a Company name.</div>
                                     <div class="valid-feedback">Looks good!</div>
                                 </div>
                                 <div class="col-12 col-md-12 mb-12">
                                     <label for="validationSample02">Website Link</label>
-                                    <input type="text" class="form-control" id="website" placeholder="Website Link" name="website"  required="">
+                                    <input type="text" class="form-control" value="<?= $website ?>" id="website" placeholder="Website Link" name="website"  required="">
                                     <div class="invalid-feedback">Please provide a company's website.</div>
                                     <div class="valid-feedback">Looks good!</div>
                                 </div>
@@ -123,8 +215,16 @@
                                     <label for="validationSample04">State</label>
                                     <select name="state" id="id_state" required class="form-control">
                                         <option value="">Select State</option>
-                                        <?php foreach($states as $st){?>
-                                        <option><?=$st->state?></option>
+                                        <?php foreach($states as $st){
+                                            
+                                            if($state == $st->state){
+                                                $selected = 'selected';
+                                            }else{
+                                                $selected = '';
+                                            }
+                                            
+                                            ?>
+                                        <option <?= $selected ?>><?=$st->state?></option>
                                         <?php }?>
                                     </select>
                                     <div class="invalid-feedback">Please provide a valid state.</div>
@@ -142,11 +242,11 @@
                         <div class="form-row">
                             <div class="col-12 col-md-12">
                                 <label for="validationSample01">Draft <sup>optional</sup></label>
-                                <textarea type="text" name="draft" id="draft" class="form-control"  placeholder="Draft" ></textarea>
+                                <textarea type="text" name="draft" id="draft" class="form-control"  placeholder="Draft" ><?= $draft; ?></textarea>
                             </div>
                             <div class="col-12 col-md-12 mb-12">
                                 <label for="validationSample02">Address</label>
-                                <textarea class="form-control" name="address" id="address" placeholder="Full Address" required=""></textarea>
+                                <textarea class="form-control" name="address" id="address" placeholder="Full Address" required=""><?= $address ?></textarea>
                                 <div class="invalid-feedback">Please provide a company's address.</div>
                                 <div class="valid-feedback">Looks good!</div>
                             </div>
@@ -161,8 +261,14 @@
                                     <?php $clusterData = $this->Menu_model->getClusterByUserId($uid);  ?>
                                     <select id="cluster" class="form-control" name="cluster" required>
                                        <option selected disabled>Select Cluster</option>   
-                                       <?php foreach($clusterData as $cdata): ?>
-                                       <option value="<?=$cdata->id?>"><?=$cdata->clustername ?></option>
+                                       <?php foreach($clusterData as $cdata):
+                                        if($cluster_id == $cdata->id){
+                                            $selected = 'selected';
+                                        }else{
+                                            $selected = '';
+                                        }
+                                        ?>
+                                       <option <?= $selected; ?> value="<?=$cdata->id?>"><?=$cdata->clustername ?></option>
                                        <?php endforeach; ?>
                                   </select>
                                     <div class="invalid-feedback">Please add a valid cluster.</div>
@@ -173,14 +279,17 @@
                             <div class="col-12 col-md-12 mb-12">
                                     <label for="validationSample04">Add Status</label>
                                     <select class="form-control" id="statusid" name="cstatusid" onchange="generateTable()">
-                                    <option value="">Select Status</option>
-                                      <option value="1">Open</option>
+                                      <option value="">Select Status</option>
+                                      
+                                      <?php if($new_lead = 1 && $is_admin_approved ==2){ $slctd = 'selected'; }else{ $slctd = '';} ?> 
+                                      
+                                      <option <?= $slctd; ?> value="1">Open</option>
                                       <!-- <option value="8">OPEN RPEM</option> -->
                                     </select>
                                     <div class="invalid-feedback">Please add a valid cluster.</div>
                                     <div class="valid-feedback">Looks good!</div>
                             </div>
-
+                            <?php if($new_lead != 1){ ?> 
                             <table class="table table-striped table-bordered mt-2" cellspacing="0" width="" id="statustablehide">
                                 <thead>
                                     <tr>
@@ -192,7 +301,7 @@
                                   <tbody id="statusTable" >
                                   </tbody>
                                 </table>
-
+                                <?php } ?> 
 
                         </div>
                         <!-- <div class="col-12 col-md-12">
@@ -220,8 +329,14 @@
                                     <label for="validationSample02">Company Type</label>
                                     <select id="ctype" name="ctype" class="form-control" required>
                                         <option value="">Select Partner Type</option>
-                                        <?php foreach($partner as $p){?>
-                                        <option value="<?=$p->id?>"><?=$p->name?></option>
+                                        <?php foreach($partner as $p){
+                                            if($partnerType_id == $p->id){
+                                                $slctd = 'selected';
+                                            }else{
+                                                $slctd = '';
+                                            }
+                                            ?>
+                                        <option <?= $slctd; ?> value="<?=$p->id?>"><?=$p->name?></option>
                                         <?php }?>
                                     </select>
                                     <div class="invalid-feedback">Please provide a valid Company Type.</div>
@@ -229,7 +344,7 @@
                                 </div>
                                 <div class="col-12 col-md-12" id="budgetdiv">
                                     <label for="validationSample01">Budget</label>
-                                    <input type="text" name="budget" class="form-control" id="budget" placeholder="Budget" value="" required=""  >
+                                    <input type="text" value="<?= $budget ?>" name="budget" class="form-control" id="budget" placeholder="Budget" value="" required=""  >
                                     <div class="invalid-feedback">Please provide a Company's budget.</div>
                                     <div class="valid-feedback">Looks good!</div>
                                 </div>
@@ -237,21 +352,21 @@
                             <div class="form-row">
                                 <div class="col-12 col-md-12">
                                     <label for="validationSample01">Contact person name</label>
-                                    <input type="text" class="form-control"  placeholder="Contact person name" value="" required=""  id="compconname" name="compconname" >
+                                    <input type="text" class="form-control" value="<?= $contactperson ?>"  placeholder="Contact person name" value="" required=""  id="compconname" name="compconname" >
                                     <div class="invalid-feedback">Please provide a contact person name.</div>
                                     <div class="valid-feedback">Looks good!</div>
                                 </div>
                                 <div class="form-row">
                                     <div class="col-12 col-md-12 mb-12">
                                         <label for="validationSample01">Designation</label>
-                                        <input type="text" name="designation" class="form-control" id="designation" placeholder="Designation" value="" required=""  >
+                                        <input type="text" value="<?= $designation ?>" name="designation" class="form-control" id="designation" placeholder="Designation" value="" required=""  >
                                         <div class="invalid-feedback">Please provide a designation.</div>
                                         <div class="valid-feedback">Looks good!</div>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-12 mb-12">
                                     <label for="validationSample02">Email ID</label>
-                                    <input type="email" class="form-control" id="emailid" placeholder="Email Id" name="emailid"  required="">
+                                    <input type="email" value="<?= $emailid ?>" class="form-control" id="emailid" placeholder="Email Id" name="emailid"  required="">
                                     <div class="invalid-feedback">Please provide a email id.</div>
                                     <div class="valid-feedback">Looks good!</div>
                                 </div>
@@ -259,7 +374,7 @@
                             <div class="form-row">
                                 <div class="col-12 col-md-12 mb-12">
                                     <label for="validationSample03">Mobile Number</label>
-                                    <input type="number" minlength="10" maxlength="10"  class="form-control" id="phoneno" name="phoneno" placeholder="Mobile Number" required="">
+                                    <input type="number" value="<?= $phoneno ?>" minlength="10" maxlength="10"  class="form-control" id="phoneno" name="phoneno" placeholder="Mobile Number" required="">
                                     <div class="invalid-feedback">Please provide a valid number.</div>
                                     <div class="valid-feedback">Looks good!</div>
                                 </div>

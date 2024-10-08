@@ -48,7 +48,7 @@ overflow-x: auto;
 <div class="container-fluid">
 <div class="row mb-2">
 <div class="col-sm-6">
-<h1 class="m-0">Special Request For Plan Change</h1>
+<h1 class="m-0">Our Special Request For Plan Change</h1>
 </div><!-- /.col -->
 <div class="col-sm-6">
 <ol class="breadcrumb float-sm-right">
@@ -70,7 +70,7 @@ overflow-x: auto;
 </div>
 <!-- /.card-header -->
 <div class="card-body">
-    <div class="container body-content">
+    <div class="body-content">
         <div class="page-header">
             <div class="form-group">
                 <fieldset>
@@ -109,13 +109,12 @@ overflow-x: auto;
                                             <td><?=$req->stime ?></td>
                                             <td><?=$req->etime ?></td>
                                             <td><?=$req->prupose ?></td>
-                                          
                                             <td>
                                             <?php 
                                             if($req->approve_by ==''){
                                                 echo "<span class='p-2 bg-warning'>Pending</span>";
                                                 }else{
-                                                    echo $req->approve_by;
+                                                    echo $this->Menu_model->get_userbyid($req->approve_by)[0]->name;
                                                     }
                                                 ?>
                                             </td>
@@ -228,7 +227,7 @@ $.widget.bridge('uibutton', $.ui.button)
 <script>
 $("#example1").DataTable({
 "responsive": false, "lengthChange": false, "autoWidth": false,
-"buttons": ["csv", "excel", "pdf","colvis"]
+"buttons": ["csv", "excel"]
 }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 </script>
 </body>

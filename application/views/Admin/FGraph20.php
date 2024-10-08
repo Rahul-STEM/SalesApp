@@ -71,59 +71,56 @@
     google.charts.load("current", { packages: ['corechart'] });
     google.charts.setOnLoadCallback(drawChart25);
         function drawChart25() {
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'All Action');
-            data.addColumn('number', 'Call');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Email');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Scheduled Meeting');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Barg in Meeting');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Whatsapp Activity');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Write MOM');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Write Proposal');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Research');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Mail Check');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Social Networking');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn('number', 'Social Activity');
-            data.addColumn({type: 'string', role: 'annotation'});
-            data.addColumn({type: 'string', role: 'annotationText'});
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', 'All Action');
+          data.addColumn('number', 'Call');
+          data.addColumn({type: 'string', role: 'annotation'});
+          data.addColumn('number', 'Email');
+          data.addColumn({type: 'string', role: 'annotation'});
+          data.addColumn('number', 'Scheduled Meeting');
+          data.addColumn({type: 'string', role: 'annotation'});
+          data.addColumn('number', 'Barg in Meeting');
+          data.addColumn({type: 'string', role: 'annotation'});
+          data.addColumn('number', 'Whatsapp Activity');
+          data.addColumn({type: 'string', role: 'annotation'});
+          data.addColumn('number', 'Write MOM');
+          data.addColumn({type: 'string', role: 'annotation'});
+          data.addColumn('number', 'Write Proposal');
+          data.addColumn({type: 'string', role: 'annotation'});
+          data.addColumn('number', 'Research');
+          data.addColumn({type: 'string', role: 'annotation'});
+          data.addColumn('number', 'Mail Check');
+          data.addColumn({type: 'string', role: 'annotation'});
+          data.addColumn('number', 'Social Networking');
+          data.addColumn({type: 'string', role: 'annotation'});
+          data.addColumn('number', 'Social Activity');
+          data.addColumn({type: 'string', role: 'annotation'});
+          data.addColumn({type: 'string', role: 'annotationText'});
         
-            <?php
-            $status = $this->Menu_model->get_status();
-            foreach($status as $st){ 
-                $stid = $st->id;
-                $swtc = $this->Menu_model->get_statuswisetaskandaction($uid,$stid,$sd,$ed);
-                // echo $this->db->last_query();die;
-                foreach($swtc as $sw){
-                    // print_r($sw);die;
-                    // $url="https://stemapp.in/Menu";
-                    $url = '#';
-                ?>
-                data.addRow(['<?=$st->name?> ( <?=$sw->cont?>)',
-                <?=$sw->a?>, '<?php if($sw->a == 0){echo "";}else{ echo $sw->a;}?>',
-                <?=$sw->b?>, '<?php if($sw->b == 0){echo "";}else{ echo $sw->b;}?>',
-                <?=$sw->c?>, '<?php if($sw->c == 0){echo "";}else{ echo $sw->c;}?>',
-                <?=$sw->d?>, '<?php if($sw->d == 0){echo "";}else{ echo $sw->d;}?>',
-                <?=$sw->e?>, '<?php if($sw->e == 0){echo "";}else{ echo $sw->e;}?>',
-                <?=$sw->f?>, '<?php if($sw->f == 0){echo "";}else{ echo $sw->f;}?>',
-                <?=$sw->g?>, '<?php if($sw->g == 0){echo "";}else{ echo $sw->g;}?>',
-                <?=$sw->h?>, '<?php if($sw->h == 0){echo "";}else{ echo $sw->h;}?>',
-                <?=$sw->i?>, '<?php if($sw->i == 0){echo "";}else{ echo $sw->i;}?>',
-                <?=$sw->j?>, '<?php if($sw->j == 0){echo "";}else{ echo $sw->j;}?>',
-                <?=$sw->k?>, '<?php if($sw->k == 0){echo "";}else{ echo $sw->k;}?>','<?=$url?>']);
-                <?php
-                }
+          <?php
+          $status = $this->Menu_model->get_status();
+          foreach($status as $st){ 
+            $stid = $st->id;
+            $swtc = $this->Menu_model->get_statuswisetaskandaction($uid,$stid,$sd,$ed);
+            foreach($swtc as $sw){
+                $url="https://stemapp.in/Menu";
+              ?>
+              data.addRow(['<?=$st->name?> ( <?=$sw->cont?>)',
+              <?=$sw->a?>, '<?php if($sw->a == 0){echo "";}else{ echo $sw->a;}?>',
+              <?=$sw->b?>, '<?php if($sw->b == 0){echo "";}else{ echo $sw->b;}?>',
+              <?=$sw->c?>, '<?php if($sw->c == 0){echo "";}else{ echo $sw->c;}?>',
+              <?=$sw->d?>, '<?php if($sw->d == 0){echo "";}else{ echo $sw->d;}?>',
+              <?=$sw->e?>, '<?php if($sw->e == 0){echo "";}else{ echo $sw->e;}?>',
+              <?=$sw->f?>, '<?php if($sw->f == 0){echo "";}else{ echo $sw->f;}?>',
+              <?=$sw->g?>, '<?php if($sw->g == 0){echo "";}else{ echo $sw->g;}?>',
+              <?=$sw->h?>, '<?php if($sw->h == 0){echo "";}else{ echo $sw->h;}?>',
+              <?=$sw->i?>, '<?php if($sw->i == 0){echo "";}else{ echo $sw->i;}?>',
+              <?=$sw->j?>, '<?php if($sw->j == 0){echo "";}else{ echo $sw->j;}?>',
+              <?=$sw->k?>, '<?php if($sw->k == 0){echo "";}else{ echo $sw->k;}?>','<?=$url?>']);
+              <?php
             }
-            ?>
+          }
+          ?>
         
           var options_fullStacked = {
             isStacked: 'percent',

@@ -180,13 +180,13 @@
 
                                             <th>S.No</th>
 
-                                            <!-- <th>BD ID</th> -->
+                                            <th>BD ID</th>
 
-                                            <th>Name</th>
+                                            <th>BD Name</th>
 
-                                            <!-- <th>User Name</th> -->
+                                            <th>User Name</th>
 
-                                            <!-- <th>Password</th> -->
+                                            <th>Password</th>
 
                                             <th>Email ID</th>
 
@@ -214,13 +214,13 @@
 
                                              <td><?=$i?></td>
 
-                                             <!-- <td><?=$dt->user_id?></td> -->
+                                             <td><?=$dt->user_id?></td>
 
                                              <td><?=$dt->name?></td>
 
-                                             <!-- <td><?=$dt->username?></td> -->
+                                             <td><?=$dt->username?></td>
 
-                                             <!-- <td><?=$dt->password?></td> -->
+                                             <td><?=$dt->password?></td>
 
                                              <td><?=$dt->email?></td>
 

@@ -167,8 +167,7 @@
                                         <td><?=$md->bdexschool?></td>
                                         <td><?=$md->bdexbudget?></td>
                                     </tr></a>
-                                    <?php $i++;}
-                                    } ?>
+                                    <?php $i++;} ?>
                                   </tbody>
                                 </table> 
                             </div>

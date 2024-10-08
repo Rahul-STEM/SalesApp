@@ -17,7 +17,8 @@
                                     <div class="card-body">
                                         Current Task : <lable id="ctname"></lable><br>
                                         Last Status :  <lable id="clsname"></lable><br>
-                                        Last Task Remark : <lable id="cremarks"></lable>
+                                        Last Task Remark : <lable id="cremarks"></lable><br>
+                                        Task Suggestions : <lable id="taskcomments"></lable>
                                     </div>
                                   </div>
                                 </div>
@@ -385,7 +386,7 @@
    <input type="hidden" id="slng" name="lng">
    <input type="hidden" name="startm" value="<?=date('Y-m-d H:i:s')?>">
    <center>Meeting Started at <?=date('H:i:s')?></center>
-   <input type="text" name="company_name" class="form-control p-3 mt-2" placeholder="Comapny Name">
+   <input type="text" name="company_name" class="form-control p-3 mt-2" id="company_name" placeholder="Comapny Name">
    <input type="file" name="cphoto" class="form-control  p-3  mt-2">
    <button type="submit" class="btn btn-primary mt-3" onclick="this.form.submit(); this.disabled = true;">Submit</button>
    </form>
@@ -416,33 +417,40 @@
                                 <div class="col-lg-12 card-form__body card-body">
                                     
    <div >
-   <center><h5>Close Meeting</h5></center><hr>
+   <center><h5 class="bg-info p-2">Close Meeting</h5></center><hr>
    <?=form_open('Menu/rpmclose')?>
-   <input type="text" name="uid" value="<?=$uid?>">
-   <input type="text" name="cmid" value="" id="closemid">
-   <input type="text" id="clat" name="lat">
-   <input type="text" id="clng" name="lng">
-   <input type="text" name="closem" value="<?=date('Y-m-d H:i:s')?>">
-   <center>Meeting Closed at <?=date('H:i:s')?></center>
+   <input type="hidden" name="uid" value="<?=$uid?>">
+   <input type="hidden" name="cmid" value="" id="closemid">
+   <input type="hidden" id="clat" name="lat">
+   <input type="hidden" id="clng" name="lng">
+   <input type="hidden" class="form-control" name="closem" value="<?=date('Y-m-d H:i:s')?>">
+   <center>Meeting Closed at <?=date('H:i:s')?></center> <hr>
     <select name="type" id="RPMorN" class="form-control" required>
         <option value="">Select Type of Meeting</option>
         <option value="Close">No RP Meeting</option>
         <option value="RPClose">RP Meeting</option>
     </select>
+    <hr>
     <div id="RPMbox" style="display:none">
         <input type="text" name="caddress" class="form-control p-3 mt-2" placeholder="Comapny Address">
         <input type="text" name="cpname" class="form-control p-3 mt-2" placeholder="Contact Person Name">
         <input type="text" name="cpdes" class="form-control p-3 mt-2" placeholder="Contact Person Designation">
         <input type="text" name="cpno" class="form-control p-3 mt-2" placeholder="Contact Person Mobile No">
         <input type="text" name="cpemail" class="form-control p-3 mt-2" placeholder="Contact Person Email ID">
+        <hr>
         <select id="priority" name="priority" class="form-control" required>
         <option value="">Select Priority</option>
-        <option value="yes">Priority</option>
-        <option value="no">Non Priority</option>
+        <option value="no">Non Priority (Will not give business)</option>
+        <option value="yes">Priority (Definitely Will give business)</option>
         </select>
+
     </div>
-    
-   
+    <hr>
+    <lable id="letmeetingsremarks">
+      <span class="text-danger">* Please provide details as to why it took you more than 30 minutes.</span>
+      <input type="text" id="remarksInput" placeholder="* Please provide details as to why it took you more than 30 minutes." name="letmeetingsremarks" class="form-control p-3 mt-2">
+    </lable>
+    <hr>
    
    <button type="submit" class="btn btn-primary mt-3" onclick="this.form.submit(); this.disabled = true;">Submit</button>
    </form>
@@ -607,7 +615,7 @@ document.body.addEventListener('change', function (f) {
             $("#ifno").hide();
                 var cstatus = document.getElementById("cstatus").value;
                 $.ajax({
-                url:'<?=base_url();?>Menu/getstatus',
+                url:'<?=base_url();?>Menu/getstatus_new_inPST',
                 type: "POST",
                 data: {
                 cstatus: cstatus
@@ -770,6 +778,67 @@ $('[id^="comp_task"]').on('click', function() {
   });
   
 
+
+  $('[id^="closem"]').on('click', function() {
+                                $('#add_closem').modal('show');
+                                
+                                var id = this.value;
+                           
+                                document.getElementById("closemid").value=id;
+                                $.ajax({
+                                url:'<?=base_url();?>Menu/bmtd',
+                                method: 'post',
+                                data: {id: id},
+                                dataType: 'json',
+                                success: function(response){
+                                var len = response.length;
+                                $('#compname,#cid,#ccid,#inid,#tid').text('');
+                                
+                                if(len > 0){
+                                
+                                var compname = response[0].compname;
+                                var cid = response[0].cid;
+                                var ccid = response[0].ccid;
+                                var inid = response[0].inid;
+                                var tid = response[0].tid;
+                                var address = response[0].address;
+                                var contactperson = response[0].contactperson;
+                                var designation = response[0].designation;
+                                var phoneno = response[0].phoneno;
+                                var emailid = response[0].emailid;
+                               
+                                // Start Meeting 30 minute Conditions
+                                var startm = response[0].startm;
+                                var pastDate = new Date(startm.replace(' ', 'T'));
+                                var currentDate = new Date();
+                                var timeDifference = currentDate - pastDate;
+                                var minutesDifference = Math.floor(timeDifference / (1000 * 60));
+                                
+                                if(minutesDifference > 30){
+                                  $('#letmeetingsremarks').show();
+                                  $('#remarksInput').attr('required', true);
+                                }else{
+                                  $('#letmeetingsremarks').hide();
+                                }
+                                // End Meeting 30 minute Conditions
+                                }
+                                }
+                                });
+                                });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
 
 $('[id^="add_act"]').on('click', function() {
@@ -783,8 +852,9 @@ $('[id^="add_act"]').on('click', function() {
          success: function(response){
            var len = response.length;
            $('#cname,#ctname,#bdname').text('');
+           console.log(response+"==");
            if(len > 0){
-               
+               //console.log(response);
              var cstatus = response[0].cstatus;   
              var ltdate = response[0].ltdate;  
              var comid = response[0].comid;
@@ -796,14 +866,23 @@ $('[id^="add_act"]').on('click', function() {
              var emailid = response[0].emailid;
              var phoneno = response[0].phoneno;
              var designation = response[0].designation;
-             var cpurpose = response[0].cpurpose;
+            //  var cpurpose = response[0].cpurpose;
+             var cpurpose = response[0].purpose_id;
              var action_id = response[0].actiontype_id;
              var nstatus = response[0].status_id;
              var cmpid = response[0].cid_id;
              var tidd = response[0].id;
              var bdname = response[0].bdname;
              var mmom = response[0].mmom;
-
+            
+             $.ajax({
+              url: '<?=base_url();?>Menu/GetTaskComments',
+              type: 'POST',
+              data: { taskid: tidd},
+              success: function(comments_message) {
+                  $("#taskcomments").html(comments_message);
+              }
+          });
 
              var cpurpose_name = '';
             if(cpurpose !==''){
@@ -812,6 +891,7 @@ $('[id^="add_act"]').on('click', function() {
                   type: 'POST',
                   data: { purposeId: cpurpose},
                   success: function(response) {
+                      console.log(response);
                     cpurpose_name = response;
                     document.getElementById("cpurpose").innerHTML = cpurpose_name;
                   }
@@ -865,7 +945,7 @@ $('[id^="add_act"]').on('click', function() {
              document.getElementById("mmom").innerHTML = "";
            }
            if(ctname=='Call'){
-                 $("#taskbox").hide();
+                 $("#taskbox").show();
              }
          }
        });
@@ -898,6 +978,20 @@ $('[id^="add_plan"]').on('click', function() {
     $('#add_startm').modal('show');
     var id = document.getElementById("startm").value;
     document.getElementById("startmid").value=id;
+
+    $.ajax({
+         url:'<?=base_url();?>Menu/GetMeetCompanyInfo',
+         method: 'post',
+         data: {mid: id},
+         dataType: 'json',
+         success: function(response){
+          console.log(response);
+          var compname = response[0].company_name;
+          $('#company_name').val(compname);
+         }
+       });
+
+
   });
   
   
@@ -1103,4 +1197,14 @@ function uploadFile(name){
         .catch( error => {
             console.error( error );
         } );
+</script>
+<script>
+  $("#rpmsClick").click(function(){
+var val = $("#bmcname").val();
+  if(val == 'Unknown' || val == ''){
+    alert("* Please Enter Valid Company Name");
+    $('#bmcname').css('border', '1px solid red');
+    return false;
+  }
+});
 </script>

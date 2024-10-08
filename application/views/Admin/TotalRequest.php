@@ -77,10 +77,12 @@ $bd = $this->Menu_model->get_userbyaid($uid);
         <div class="row">
           <div class="col-12">
                  <div class="card p-5">
-                     <?php foreach($bd as $bd){ 
-                         $urid = $bd->user_id;
+                     <?php foreach($bd as $val){ 
+                         $urid = $val->user_id;
                          $mdata = $this->Menu_model->request_admin_apr($urid);?>
-                     <?php foreach($mdata as $md){?>
+                     <?php foreach($mdata as $md){
+                      //dd($md);
+                      ?>
                         <div class="alert alert-light" role="alert" id="<?=$md->id?>"> 
                             <b><b><?=$md->bd_name?> | <?=$md->request_type?> | <?=$md->cname?> | <?=$md->remark?> | </b>
                             <div class="btn btn-outline-danger" onclick="Approve('<?=$md->id?>');">Approve</div>
@@ -176,18 +178,16 @@ $('#bdrclose').modal('show');
 }
 
 function Approve(id) {
-$.ajax({
-url:'<?=base_url();?>Menu/REQAPR',
-type: "POST",
-data: {
-id: id
-},
-cache: false,
-success: function b(result){
-$("#cinfo").html(result);
-}
-});
-document.getElementById(id).style.display = "none";
+  $.ajax({
+      url:'<?=base_url();?>Menu/REQAPR',
+      type: "POST",
+      data: {id: id},
+      cache: false,
+      success: function b(result){
+      $("#cinfo").html(result);
+    }
+  });
+  document.getElementById(id).style.display = "none";
 }
 
 function Edit(id) {

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="wi$dth=device-wi$dth, initial-scale=1">
 <title>STEM APP | WebAPP</title>
 <!-- Google Font: Source Sans Pro -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
@@ -109,12 +109,13 @@ overflow-x: auto;
               </div>
     </div>
     <div class="col-md-2 flexitems">
-      <a style="margin-top:40px;" class="p-2 bg-primary" href="<?=base_url();?>Menu/pcompanies/0/<?=$uid ?>">↻ Reset</a>
+      <a style="margin-top:40px;" class="btn btn-primary p-2" href="<?=base_url();?>Menu/pcompanies/0/<?=$uid ?>">Reset</a>
     </div>
 </div>
 <!-- /.card-header -->
 <div class="card-body">
     <div class="container-fluid body-content">
+
         <div class="page-header">
             <div class="form-group">
                 <fieldset>

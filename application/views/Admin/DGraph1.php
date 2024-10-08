@@ -74,32 +74,30 @@
         <?php $rstart = $this->Menu_model->get_dmsreview($uid,'2023-09-26');?>
         <?php $dclose = $this->Menu_model->get_dmcloseg($uid,'2023-09-26');?>
         <?php $rclose = $this->Menu_model->get_dmcreview($uid,'2023-09-26');?>
+      var data = google.visualization.arrayToDataTable([
+        ["Day Start", "Time", { role: "style" }],
+        ["My Start (<?=$dstart[0]->mystime?>)", <?=$this->Menu_model->timetomint($dstart[0]->mystime)?>, "#b87333"],
+        ["Avg Start (<?=$dstart[0]->avgstime?>)", <?=$this->Menu_model->timetomint($dstart[0]->avgstime)?>, "silver"],
+        ["Start Review", <?=$this->Menu_model->timetomint($rstart[0]->scomment)?>, "silver"],
+        ["My Close (<?=$dclose[0]->myctime?>)", <?=$this->Menu_model->timetomint($dclose[0]->myctime)?>, "#b87333"],
+        ["Avg Close (<?=$dclose[0]->avgctime?>)", <?=$this->Menu_model->timetomint($dclose[0]->avgctime)?>, "silver"],
+        ["Close Review", <?=$this->Menu_model->timetomint($rclose[0]->ccomment)?>, "silver"],
+      ]);
 
-        var data = google.visualization.arrayToDataTable([
-            ["Day Start", "Time", { role: "style" }],
-            ["My Start (<?=$dstart[0]->mystime?>)", <?=$this->Menu_model->timetomint($dstart[0]->mystime)?>, "#b87333"],
-            ["Avg Start (<?=$dstart[0]->avgstime?>)", <?=$this->Menu_model->timetomint($dstart[0]->avgstime)?>, "silver"],
-            ["Start Review", <?=$this->Menu_model->timetomint($rstart[0]->scomment)?>, "silver"],
-            ["My Close (<?=$dclose[0]->myctime?>)", <?=$this->Menu_model->timetomint($dclose[0]->myctime)?>, "#b87333"],
-            ["Avg Close (<?=$dclose[0]->avgctime?>)", <?=$this->Menu_model->timetomint($dclose[0]->avgctime)?>, "silver"],
-            ["Close Review", <?=$this->Menu_model->timetomint($rclose[0]->ccomment)?>, "silver"],
-        ]);
-
-        console.log(data);
-        var view = new google.visualization.DataView(data);
-        view.setColumns([0, 1,
+      var view = new google.visualization.DataView(data);
+      view.setColumns([0, 1,
                        { calc: "stringify",
                          sourceColumn: 1,
                          type: "string",
                          role: "annotation" },
                        2]);
 
-        var options = {
-            bar: {groupWidth: "95%"},
-            legend: { position: "none" },
-        };
-        var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
-        chart.draw(view, options);
+      var options = {
+        bar: {groupWidth: "95%"},
+        legend: { position: "none" },
+      };
+      var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+      chart.draw(view, options);
   }
   </script>
 

@@ -119,7 +119,7 @@
                                         if($emailc){$emailc='yes';}else{$emailc='no';}
                                         $psta = $this->Menu_model->get_psta($cid);
                                         if($psta){$psta='yes';}else{$psta='no';}
-                                        
+                                       
                                         ?>
                                         
                                     <tr>

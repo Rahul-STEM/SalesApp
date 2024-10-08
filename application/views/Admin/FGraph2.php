@@ -71,71 +71,71 @@
     google.charts.load("current", { packages: ['corechart'] });
     google.charts.setOnLoadCallback(drawChart12);
 
-    // function drawChart12() {
-    //   var data = new google.visualization.DataTable();
-    //   data.addColumn('string', 'City');
-    //   data.addColumn('number', 'No of Company');
-    //   data.addColumn('string', 'id');
-    //   data.addColumn('string', 'uid');
+    function drawChart12() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'City');
+      data.addColumn('number', 'No of Company');
+      data.addColumn('string', 'id');
+      data.addColumn('string', 'uid');
 
-    //   <?php
-    //   $city = $this->Menu_model->get_fannalcitywise($uid);
-    //   foreach ($city as $ci) {
-    //     $cityName = $ci->city . " (" . $ci->cont . ")";
-    //     echo "data.addRow(['$cityName', $ci->cont, '$ci->city', '$uid']);";
-    //   }
-    //   ?>
+      <?php
+      $city = $this->Menu_model->get_fannalcitywise($uid);
+      foreach ($city as $ci) {
+        $cityName = $ci->city . " (" . $ci->cont . ")";
+        echo "data.addRow(['$cityName', $ci->cont, '$ci->city', '$uid']);";
+      }
+      ?>
 
-    //   var options = {
-    //     is3D: true,
-    //   };
+      var options = {
+        is3D: true,
+      };
 
-    //   var chart = new google.visualization.PieChart(document.getElementById('piechart3d3'));
+      var chart = new google.visualization.PieChart(document.getElementById('piechart3d3'));
       
-    //   google.visualization.events.addListener(chart, 'select', chartClickHandler);
+      google.visualization.events.addListener(chart, 'select', chartClickHandler);
 
-    //   chart.draw(data, options);
+      chart.draw(data, options);
       
-    //   function chartClickHandler() {
-    //     var selection = chart.getSelection()[0];
-    //     if (selection) {
-    //       var stid = data.getValue(selection.row, 2);
-    //       var uuid = data.getValue(selection.row, 3);
-    //       var code = 2;
+      function chartClickHandler() {
+        var selection = chart.getSelection()[0];
+        if (selection) {
+          var stid = data.getValue(selection.row, 2);
+          var uuid = data.getValue(selection.row, 3);
+          var code = 2;
           
                
-    //         $.ajax({
-    //         url:'<?=base_url();?>Menu/gdata',
-    //         type: "POST",
-    //         data: {
-    //             stid: stid,
-    //             uuid: uuid,
-    //             code: code
-    //         },
-    //         cache: false,
-    //         success: function a(result){
-    //         $("#grid-view").html(result);
-    //         }
-    //         });
+            $.ajax({
+            url:'<?=base_url();?>Menu/gdata',
+            type: "POST",
+            data: {
+                stid: stid,
+                uuid: uuid,
+                code: code
+            },
+            cache: false,
+            success: function a(result){
+            $("#grid-view").html(result);
+            }
+            });
             
             
-    //         $.ajax({
-    //         url:'<?=base_url();?>Menu/tbdata',
-    //         type: "POST",
-    //         data: {
-    //             stid: stid,
-    //             uuid: uuid,
-    //             code: code
-    //         },
-    //         cache: false,
-    //         success: function a(result){
-    //         $("#tbdata").html(result);
-    //         }
-    //         });
+            $.ajax({
+            url:'<?=base_url();?>Menu/tbdata',
+            type: "POST",
+            data: {
+                stid: stid,
+                uuid: uuid,
+                code: code
+            },
+            cache: false,
+            success: function a(result){
+            $("#tbdata").html(result);
+            }
+            });
           
-    //     }
-    //   }
-    // }
+        }
+      }
+    }
     
     
   </script>

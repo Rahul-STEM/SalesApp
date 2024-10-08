@@ -1,15 +1,7 @@
-<style>
-    .nav-sidebar .nav-treeview {
-    display: none;
-    list-style: none;
-    padding: 0;
-    background-color: darkred;
-}
-</style>
-
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
 
     <!-- Left navbar links -->
+    <ul id="notifications"></ul>
 
     <ul class="navbar-nav">
 
@@ -27,7 +19,7 @@
 
       </li>
 
-      <li class="nav-item d-none d-sm-inline-block"> 
+      <li class="nav-item d-none d-sm-inline-block">
 
         <button type="button" class="btn btn-primary" onclick="goBack()">Go Back</button>
 
@@ -226,8 +218,9 @@
         </div>
 
         <div class="info">
+        <?php $userName=$this->Menu_model->get_userName($uid);?>
 
-          <a href="#" class="d-block">User Name</a>
+          <a href="<?=base_url();?>Menu/myProfile" class="d-block"><?=$userName[0]->name?></a>
 
         </div>
 
@@ -263,47 +256,19 @@
 
           </li>
           
-          <!-- <li class="nav-item dropdown">
+          <li class="nav-item">
 
-            <a href="" class="nav-link dropdown-toggle" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<a href="<?=base_url();?>Menu/DayManagement" class="nav-link">
 
-            <i class="fas fa-chart-line nav-icon"></i>
+  <i class="far fa-circle nav-icon"></i>
 
-            <p></p>
-            Day Check Management
-            </a>
+  <p>Day Management</p>
 
-            <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown1">
+</a>
 
-                <a class="dropdown-item" href="<?= base_url(); ?>Management/CheckingDayManagement_New">Day Check Management</a>
+</li>
 
-                <a class="dropdown-item" href="<?= base_url(); ?>Management/DayManagementReport">Day Check Report</a>
-
-            </div>
-
-          </li> -->
-
-          <!-- <li class="nav-item dropdown">
-
-            <a href="" class="nav-link dropdown-toggle" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-            <i class="fas fa-chart-bar nav-icon"></i>
-
-            <p></p>
-            TaskCheck Management
-            </a>
-
-            <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown2">
-
-              <a class="dropdown-item" href="<?= base_url(); ?>Menu/TaskCheck_New">Task Check Management</a>
-
-              <a class="dropdown-item" href="<?= base_url(); ?>Menu/TaskCheck_NewReport">Task Check Report</a>
-
-            </div>
-
-          </li> -->
-
-            <li class="nav-item">
+          <li class="nav-item">
 
                 <a class="nav-link" href="<?= base_url(); ?>Management/CheckingDayManagement_New">
                     <i class="fas fa-chart-line nav-icon"></i>
@@ -313,9 +278,8 @@
 
                 </a>
 
-            </li>
-
-            <li class="nav-item">
+</li>
+<li class="nav-item">
 
                 <a class="nav-link" href="<?= base_url(); ?>Management/ApproveDayCheckRequest">
                     <i class="fas fa-chart-line nav-icon"></i>
@@ -325,43 +289,40 @@
                 </a>
 
             </li>
+<li class="nav-item">
 
-            <li class="nav-item">
+    <a class="nav-link" href="<?= base_url(); ?>Management/DayManagementReport">
+        <i class="fas fa-chart-line nav-icon"></i>
 
-                <a class="nav-link" href="<?= base_url(); ?>Management/DayManagementReport">
-                    <i class="fas fa-chart-line nav-icon"></i>
+        <!-- <p>Day Check Report</p> -->
+        Day Check Report
+    </a>
 
-                    <!-- <p>Day Check Report</p> -->
-                    Day Check Report
-                </a>
+</li>
 
-            </li>
+<li class="nav-item">
 
-            <li class="nav-item">
+    <a class="nav-link" href="<?= base_url(); ?>Menu/TaskCheck_New">
+        <i class="fas fa-chart-bar nav-icon"></i>
 
-                <a class="nav-link" href="<?= base_url(); ?>Menu/TaskCheck_New">
-                    <i class="fas fa-chart-bar nav-icon"></i>
+        <!-- <p>Task Check Management</p> -->
+        Task Check Management
 
-                    <!-- <p>Task Check Management</p> -->
-                    Task Check Management
+    </a>
 
-                </a>
+</li>
 
-            </li>
+<li class="nav-item">
 
-            <li class="nav-item">
+    <a class="nav-link" href="<?= base_url(); ?>Menu/TaskCheck_NewReport">
+        <i class="fas fa-chart-bar nav-icon"></i>
 
-                <a class="nav-link" href="<?= base_url(); ?>Menu/TaskCheck_NewReport">
-                    <i class="fas fa-chart-bar nav-icon"></i>
+        <!-- <p>Task Check Report</p> -->
+        Task Check Report
 
-                    <!-- <p>Task Check Report</p> -->
-                    Task Check Report
+    </a>
 
-                </a>
-
-            </li>
-
-          <li class="nav-item">
+</li> <li class="nav-item">
 
             <a class="nav-link" href="<?=base_url();?>Menu/NewFunnel" >
 
@@ -373,17 +334,28 @@
 
           </li>
 
-
           <li class="nav-item">
-
-            <a class="nav-link" href="<?=base_url();?>Management/ApproveDayCheckRequest" >
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Approve Day Check Request</p>
-
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                User Management
+                <i class="right fas fa-angle-left"></i>
+              </p>
             </a>
-
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a class="nav-link" href="<?= base_url(); ?>Menu/UserRegistration">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>User Entry Form</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="<?= base_url(); ?>Menu/UserDisplayPage">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>User Details</p>
+                </a>
+              </li>
+            </ul>
           </li>
 
           
@@ -408,12 +380,23 @@
 
           
 
-            <li class="nav-item">
-                <a class="nav-link" href="<?=base_url();?>Menu/NotworkCompanyBDPST" >
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Not Work Company by BDPST</p>
-                </a>
-            </li>
+          <li class="nav-item">
+
+            <a class="nav-link" href="<?=base_url();?>Menu/NotworkCompanyBDPST" >
+
+              <i class="far fa-circle nav-icon"></i>
+
+              <p>Not Work Company by BDPST</p>
+
+            </a>
+
+          </li>
+
+          
+
+          
+
+          
 
           <li class="nav-item">
 
@@ -445,7 +428,7 @@
 
               <i class="far fa-circle nav-icon"></i>
 
-              <p>Task Approvel Request</p>
+              <p>Task Approval Request</p>
 
             </a>
 
@@ -456,22 +439,17 @@
             <a class="nav-link" href="<?=base_url();?>Menu/AllReviewPlaing" >
 
               <i class="far fa-circle nav-icon"></i>
-
               <p>Plan BD Review</p>
-
             </a>
-
           </li>
-
-          
 
            <li class="nav-item">
 
-            <a class="nav-link" href="<?=base_url();?>Menu/Mytarget" >
+            <a class="nav-link" href="<?=base_url();?>Menu/targetVsAchievedData" >
 
               <i class="far fa-circle nav-icon"></i>
 
-              <p>My target</p>
+              <p>Target vs Achived Data Report</p>
 
             </a>
 
@@ -674,8 +652,7 @@
             </a>
 
           </li>
-
-            <li class="nav-item">
+          <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-circle"></i>
               <p>
@@ -822,6 +799,31 @@
             </ul>
             </li>
 
+          <!-- <li class="nav-item dropdown">
+
+            <a href="" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+            <i class="far fa-circle nav-icon"></i>
+
+            <p>Analysis</p>
+
+            </a>
+
+            <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+             <a class="dropdown-item" href="<?= base_url(); ?>Graphs/Fgraphs">FGraph</a>
+             
+              <a class="dropdown-item" href="<?= base_url(); ?>Menu/day">DGraph</a>
+
+              <a class="dropdown-item" href="<?= base_url(); ?>Menu/request">RGraph</a>
+
+              <a class="dropdown-item" href="<?= base_url(); ?>Menu/region">ROGraph</a>
+
+              <a class="dropdown-item" href="<?= base_url(); ?>Menu/task">TGraph</a>
+
+            </div>
+
+          </li> -->
+      
           <!--<li class="nav-item">-->
 
           <!--  <a class="nav-link" href="<?=base_url();?>Menu/AnnualReviewReport" >-->
@@ -883,7 +885,18 @@
             </a>
 
           </li>
-
+          <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/YesterDayDaysCloseRequest" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Day Close Request</p>
+                    </a>
+                </li>
+          <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/NeedYourAttentionsInAdmin" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Need Your Attentions </p>
+                    </a>
+                </li>
           <!--<li class="nav-item">-->
 
           <!--  <a class="nav-link" href="<?=base_url();?>Menu/FAQReport" >-->
@@ -907,8 +920,18 @@
             </a>
 
           </li>
+<!-- 
+          <li class="nav-item">
 
-          
+<a href="<?=base_url();?>Menu/DayManagement" class="nav-link">
+
+  <i class="far fa-circle nav-icon"></i>
+
+  <p>Day Management</p>
+
+</a>
+
+</li> -->
 
           
 
@@ -975,8 +998,8 @@
   
 
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
-<script src="<?=base_url();?>assets/js/jquery.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script> 
 <!-- jQuery UI -->
 <script src="<?=base_url();?>assets/js/jquery-ui.min.js"></script>
 
@@ -1041,8 +1064,7 @@
 <!-- Daterangepicker JS -->
 <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script> 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
 <script> 
 
 
@@ -1051,53 +1073,53 @@
 
 
 
-// $(document).ready(function() {
+$(document).ready(function() {
 
-//     //trackLocation();
+    trackLocation();
 
-// });
+});
 
 
 
-// function handleGeolocationError() {
+function handleGeolocationError() {
 
-//    const bodyElement = document.querySelector("body");
+   const bodyElement = document.querySelector("body");
 
-//    bodyElement.style.display = "none";
+   bodyElement.style.display = "none";
 
-//    alert('Error: Geolocation is not available or location services are turned off.');
+   alert('Error: Geolocation is not available or location services are turned off.');
 
-// }
+}
 
-// function handleGeolocationSuccess(position) {
+function handleGeolocationSuccess(position) {
 
-//     const latitude = position.coords.latitude;
+    const latitude = position.coords.latitude;
 
-//     const longitude = position.coords.longitude;
+    const longitude = position.coords.longitude;
 
-//     const contentDiv = document.getElementById("content");
+    const contentDiv = document.getElementById("content");
 
-//     contentDiv.style.display = "block";
+    contentDiv.style.display = "block";
 
-// }
+}
 
-// function getLocation() {
+function getLocation() {
 
-//     if ("geolocation" in navigator) {
+    if ("geolocation" in navigator) {
 
-//         navigator.geolocation.getCurrentPosition(handleGeolocationSuccess, handleGeolocationError);
+        navigator.geolocation.getCurrentPosition(handleGeolocationSuccess, handleGeolocationError);
 
-//     } else {
+    } else {
 
-//         const errorMessage = document.getElementById("error-message");
+        const errorMessage = document.getElementById("error-message");
 
-//         errorMessage.style.display = "block";
+        errorMessage.style.display = "block";
 
-//     }
+    }
 
-// }
+}
 
-// window.onload = getLocation;
+window.onload = getLocation;
 
 
 
@@ -1125,7 +1147,7 @@ function startCamera() {
 
 }
 
-// startCamera();
+startCamera();
 
 
 
@@ -1135,49 +1157,49 @@ function startCamera() {
 
 
 
-// function trackLocation() {
+function trackLocation() {
 
-//     if ("geolocation" in navigator) {
+    if ("geolocation" in navigator) {
 
-//       navigator.geolocation.getCurrentPosition(
+      navigator.geolocation.getCurrentPosition(
 
-//         function (position) {
+        function (position) {
 
-//           var ur_id = document.getElementById("ur_id").value;
+          var ur_id = document.getElementById("ur_id").value;
 
-//           var latitude = position.coords.latitude;
+          var latitude = position.coords.latitude;
 
-//           var longitude = position.coords.longitude;
+          var longitude = position.coords.longitude;
 
-//             $.ajax({
+            $.ajax({
 
-//                 url:'<?=base_url();?>Menu/store_location',
+                url:'<?=base_url();?>Menu/store_location',
 
-//                  method: 'post',
+                 method: 'post',
 
-//                  data: {latitude: latitude, longitude: longitude, ur_id: ur_id},
+                 data: {latitude: latitude, longitude: longitude, ur_id: ur_id},
 
-//                  success: function(result){
+                 success: function(result){
 
-//                 }
+                }
 
-//             });
+            });
 
-//         },
+        },
 
-//         function (error) {
+        function (error) {
 
-//           console.error("Error getting location: " + error.message);
+          console.error("Error getting location: " + error.message);
 
-//         }
+        }
 
-//       );
+      );
 
-//     } 
+    } 
 
-//     else {console.error("Geolocation is not supported by this browser.");} 
+    else {console.error("Geolocation is not supported by this browser.");} 
 
-// }
+}
 
 
 
@@ -1191,24 +1213,85 @@ function goForward() { window.history.forward(); }
 
     var ur_id = document.getElementById("ur_id").value;
 
-    // $.ajax({
+    $.ajax({
 
-    // url:'<?=base_url();?>Menu/adminpopup',
+    url:'<?=base_url();?>Menu/adminpopup',
 
-    //  method: 'post',
+     method: 'post',
 
-    //  data: {ur_id: ur_id},
+     data: {ur_id: ur_id},
 
-    //  success: function(result){
+     success: function(result){
 
-    //     var res = result;
+        var res = result;
 
-    //     $("#alsmss").html(result);
+        $("#alsmss").html(result);
 
-    // }
+    }
 
-    // });
+    });
+
 
     
+
+</script>
+
+<script>
+  //alert("Fuck");
+  $(document).ready(function() {  
+    //alert("inside");
+    var admin_id = <?=$uid?>;
+    console.log("Admin ID:", admin_id);
+    
+    checkNotifications(admin_id);
+    
+    setInterval(function() {
+        checkNotifications(admin_id); 
+    }, 10000); 
+  });
+
+  function checkNotifications(admin_id) {
+    console.log("Checking notifications for admin_id: " + admin_id);
+    $.ajax({
+        url: '<?=base_url();?>Menu/check_notifications', 
+        method: 'post',
+        dataType: 'json', 
+        data: { admin_id: admin_id },
+        success: function(response) {
+
+            if (response.length > 0) {
+                response.forEach(function(notification) {
+                  //console.log(notification);
+                    alert('New Notification: ' + notification.sms);
+                    markNotificationAsRead(notification.id); 
+                });
+            } else {
+                console.log('No new notifications.');
+            }
+        },
+        error: function(error) {
+            console.error('Error fetching notifications:', error);
+        }
+    });
+  }
+
+  // Function to mark notifications as read
+  function markNotificationAsRead(notificationId) {
+    console.log("Marking notification as read, ID: " + notificationId);
+    $.ajax({
+        url: '<?=base_url();?>Menu/mark_notification_as_read', // Correct endpoint for marking as read
+        method: 'post',
+        data: { id: notificationId },
+        dataType: 'json', // Expecting JSON data
+        success: function() {
+            console.log('Notification marked as read.');
+        },
+        error: function(error) {
+            console.error('Error marking notification as read:', error);
+        }
+    });
+  }
+</script>
+
 
 </script>  

@@ -73,13 +73,7 @@
 
 
     <script>
-    <?php 
-    
-    $sd=date('Y-m-d');$ed=date('Y-m-d');
-    // $sd = '2024-07-01';
-    // $ed = '2024-07-02';
-    
-    ?>
+    <?php $sd=date('Y-m-d');$ed=date('Y-m-d');?>
     
         var combinedData1 = {
             labels: [<?php $action = $this->Menu_model->get_action(); $i=1; foreach($action as $ac){ $acid = $ac->id;?> '<?=$ac->name?>', <?php } ?>],
@@ -121,7 +115,7 @@
                 <?php $i++;}} ?>
             ]
         };
-// console.log(combinedData1);
+
         var combinedCtx = document.getElementById("combinedChartID1").getContext('2d');
         var combinedChart = new Chart(combinedCtx, {
             type: 'bar',

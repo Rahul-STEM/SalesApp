@@ -49,7 +49,37 @@
       marquee.p-2.mt-1 {
       box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
       }
+      #goodmessage{color:green;}
     </style>
+
+<script>
+      function validateTimeInputAuto(event) {
+          const input = event.target;
+          const timeValue = input.value;
+          const minTime = "16:00";
+          const maxTime = "19:00";
+      
+          if (timeValue < minTime || timeValue > maxTime) {
+              alert("Please enter a time between 04:00 PM and 7:00 PM.");
+              input.value = "";
+          }
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+          const timeInput = document.getElementById('start-time');
+          timeInput.setAttribute('min', '16:00');
+          timeInput.setAttribute('max', '19:00');
+          timeInput.addEventListener('change', validateTimeInputAuto);
+      });
+      document.addEventListener('DOMContentLoaded', function() {
+          const timeInput = document.getElementById('end-time');
+          timeInput.setAttribute('min', '16:00');
+          timeInput.setAttribute('max', '19:00');
+          timeInput.addEventListener('change', validateTimeInputAuto);
+      });
+</script>
+
+
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -76,6 +106,10 @@
       </div>
       <!-- /.container-fluid -->
     </div>
+    <?php
+    $tom_autotask_time = sizeof($gettoAutoTaskTime);
+   
+    ?>
     <section class="content">
       <div class="container-fluid">
         <?php
@@ -101,11 +135,11 @@
           $uystart_id = $yestdata[0]->id;
           $uystart = $yestdata[0]->ustart;
           $uyclose = $yestdata[0]->uclose;
-          
+
           // Check Yesterday Day Close or Not
           if ($yestdatacnt == 1) {?>
         <div class="row">
-          <div class="col-sm col-md-10 col-lg-10 m-auto">
+          <div class="col-sm-12 col-md-12 col-lg-12 m-auto">
             <div class="card card-primary card-outline">
               <div class="card-body box-profile">
                 <div class="blink">
@@ -116,25 +150,35 @@
                 </marquee>
                 <hr>
                 <div class="row">
-                  <div class="col-md-4 text-center">
+                  <div class="col-md-3 text-center">
                     <div class="card bg-success p-2">
                       <p>You have Started your Day at </p>
                       <hr>
                       <b><?=$uystart ?></b>
                     </div>
                   </div>
-                  <div class="col-md-4 text-center">
+                  <div class="col-md-3 text-center">
                     <div class="card bg-danger p-2">
                       <p>But you have not closed your day yet.</p>
                       <hr>
                       <b>0000-00-00 00:00:00</b>
                     </div>
                   </div>
-                  <div class="col-md-4 text-center">
+                  <div class="col-md-3 text-center">
                     <div class="card bg-warning p-2">
                       <p>Time diffrence is </p>
                       <hr>
-                      <b><?=$this->Menu_model->timediff($uystart,date('d-m-Y H:m:s'));?></b>
+                      <b><?=$this->Menu_model->timediff($uystart,$ctdate);?></b>
+                    </div>
+                  </div>
+                  <div class="col-md-3 text-center">
+                    <div class="card bg-warning p-2">
+                      <p>Yesterday Pending Task </p>
+                      <hr>
+                      <b><?php 
+                          $getoldPendingTask = $this->Menu_model->get_OLDPendingTask($uid);
+                          echo $getoldPendingTaskcnt = sizeof($getoldPendingTask);
+                      ?></b>
                     </div>
                   </div>
                 </div>
@@ -142,18 +186,25 @@
                 <?php          
                   $getDayCloseRequest = $this->Menu_model->GetDayCloseRequest($uid,$tdate);
                   $getDayCloseRequescnt = sizeof($getDayCloseRequest);
+
                   if($getDayCloseRequescnt  == 0){ ?>
                 <form action="<?=base_url();?>Menu/dayscRequest" method="post" enctype="multipart/form-data">
                   <center>
                     <div class="row">
                       <div class="col">
+
+                      <?php    
+                    $gecurAutoTaskTime = sizeof($gecurAutoTaskTime);
+                    $message = ($gecurAutoTaskTime) ? "selected" : "disabled";
+                    ?>
+
                         <label for="validationServer04" class="form-label">
                         * Why did you not close your day yesterday?
                         </label>
                         <input type="hidden" value="<?= $uystart_id ?>" name="req_id">
                         <select class="form-control is-invalid" id="validationServer04" aria-describedby="validationServer04Feedback" name="would_you_want" required style="width:500px;" >
                           <option selected disabled value="">Choose...</option>
-                          <option value="I was caught up with an urgent task and lost track of time.">I was caught up with an urgent task and lost track of time.</option>
+                          <option <?=$message?> value="I was caught up with an urgent task and lost track of time.">I was caught up with an urgent task and lost track of time.</option>
                           <option value="I encountered unexpected issues that took longer to resolve than planned.">I encountered unexpected issues that took longer to resolve than planned.</option>
                           <option value="I had a personal emergency that required my immediate attention.">I had a personal emergency that required my immediate attention.</option>
                           <option value="I forgot to update the system at the end of the day.">I forgot to update the system at the end of the day.</option>
@@ -161,12 +212,62 @@
                           <option value="I had a backlog of work and wasn't able to finish everything on time.">I had a backlog of work and wasn't able to finish everything on time.</option>
                           <option value="I was working late on a high-priority project and didn't get a chance to update the records.">I was working late on a high-priority project and didn't get a chance to update the records.</option>
                           <option value="I was out of the office and unable to complete the update remotely.">I was out of the office and unable to complete the update remotely.</option>
+                          <option value="We forgot to set our next day planner.">We forgot to set our next day planner</option>
                         </select>
                         <div id="validationServer04Feedback" class="invalid-feedback">
                           * Please select a valid state.
                         </div>
                       </div>
                     </div>
+
+                   
+                    <input type="hidden" name="autotasktimeisset" value="<?=$gecurAutoTaskTime?>">
+                    <?php
+                    if($gecurAutoTaskTime == 0){  ?>
+                      <hr class="hrclass" style="width: 600px;"/>
+                    <div class="card">
+              <div class="card-body" id="mainboxAutoTask1">
+                <h5><i> Today's Auto Task and Planned Time </i></h5>
+                <hr/>
+               
+                <div class="row">
+                  
+                <div class="col-sm-6 col-sm mt-3">
+                <marquee class="p-2 mt-1" width="100%"  onMouseOver="this.stop()" onMouseOut="this.start()" behavior="left" bgcolor="pink">
+                  <h6> Auto task time should be between 4:00 PM to 7:00 PM and maximum duration of 90 minutes. </h6>
+                </marquee>
+
+                  <div class="form-group">
+                    <label for="start-time">Enter Start Time</label>
+                    <input type="time" id="start-time" name="startautotasktime" class="form-control is-invalid" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="end-time">Enter End Time</label>
+                    <input type="time" id="end-time" name="endautotasktime" class="form-control is-invalid" required>
+                  </div>
+                  </div>
+                  <div class="col-sm-6 col-sm mt-3">
+                  <marquee class="p-2 mt-1" width="100%"  onMouseOver="this.stop()" onMouseOut="this.start()" behavior="left" bgcolor="pink">
+                  <h6>Plan Your day for Today,You will get max 1 hour to plan all the tasks for the day.</h6>
+                </marquee>
+                      <div class="form-group">
+                        <label for="end-time">Today's Planner Time start.</label>
+                        <input type="time" readonly id="start_tttpft" name="start_tttpft" class="form-control is-invalid" required>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="end-time">Today's Planner Time End.</label>
+                        <input type="time" readonly id="end_tttpft" name="end_tttpft" class="form-control is-invalid" required>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+    <?php } ?>
+
+
+
                     <hr class="hrclass" style="width: 600px;"/>
                     <div class="mb-3">
                       <label for="requestForTodaysTaskPlan" class="form-label">* Please specify the reason : </label>
@@ -198,10 +299,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <?php $i=1; foreach($getDayCloseRequest as $data){ 
-                        // var_dump($data);
-                        // var_dump($data);
-                        ?>
+                      <?php $i=1; foreach($getDayCloseRequest as $data){ ?>
                       <tr>
                         <td><?= $i; ?></td>
                         <td><?= $this->Menu_model->get_userbyid($data->user_id)[0]->name ?></td>
@@ -279,7 +377,7 @@
         <?php }else{ ?>
         <?php if($do==0){?>
         <div class="row p-3">
-          <div class="col-sm col-md-6 col-lg-6 m-auto">
+          <div class="col-sm col-md-12 col-lg-12 m-auto">
             <div class="card card-primary card-outline">
               <div class="card-body box-profile">
                 <h3 class="text-center">Start Your Day</h3>
@@ -293,10 +391,12 @@
                     <input type="hidden" name="ustart" value="<?=date('Y-d-m H:i:s')?>">
                     <p>You Are Starting Day at <b><?=date('H:i:s');?></b><br><br>
                     <div class="mb-4">
-                      <select class="form-control" name="wffo" style="width:400px" >
-                        <option value="1">Work From Office</option>
-                        <option value="2">Work From Field</option>
-                        <option value="3">Work From Field+Office</option>
+                      <select class="form-control" name="wffo" id="wffo" style="width:400px">
+                      <option value="">Start Your Days</option>
+                        <?php $userdfrom = $this->Menu_model->userworkfrom() ?>
+                            <?php foreach($userdfrom as $udfrom){ ?>
+                            <option value="<?= $udfrom->ID; ?>"><?= $udfrom->TYPE; ?></option>
+                            <?php } ?>
                       </select>
                     </div>
                     <div class="mb-4 d-flex justify-content-center">
@@ -317,14 +417,123 @@
                       <iframe style="width:100%;height:200px;" id="mylocation" src="" frameborder="0" style="border:0" allowfullscreen></iframe>
                     </div>
                   </div>
-                  <div class="form-group text-center">
+                  <p class="form-group text-center">
                     <button type="submit" class="btn btn-success" id="submitButton" >Start Your Day</button>
+                   <center>
+                   <p id="goodmessage"></p>
+                   </center>
                   </div>
                 </form>
+
+
+                <?php 
+                $geturdata = $this->Menu_model->change_user_day_request($uid);
+                $geturdatacnt = sizeof($geturdata);
+                if($geturdatacnt > 0){ ?>
+<hr>
+<div class="card p-5">
+<h5 class="bg-info p-2 text-center">Your Request to change the start your Days</h5>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Want To Start</th>
+            <th>Message</th>
+            <th>Approved By</th>
+            <th>Approval Status</th>
+            <th>Admin Message</th>  
+        </tr>
+    </thead>
+    <tbody>
+        <?php 
+        $i=1;
+        foreach ($geturdata as $row): ?>
+        <tr>
+            <td><?php echo $i; ?></td>
+            <td><?php 
+             $udetail = $this->Menu_model->get_userbyid($row->user_id);
+             $username = $udetail[0]->name;
+             echo $username;
+            ?></td>
+            <td><?php echo $row->date; ?></td>
+            <td><?php 
+            echo $this->Menu_model->userworkfrombyid($row->user_want_start)[0]->TYPE;
+           ?></td>
+            <td><?php echo $row->message; ?></td>
+            <td><?php 
+            if($row->apr_by == 0){
+              echo "<span class='p-1 bg-warning'>Pending</span>";
+            }else{
+              $udetail = $this->Menu_model->get_userbyid($row->apr_by);
+              $admidname = $udetail[0]->name;
+              echo $admidname;
+            }
+            ?></td>
+            <td><?php 
+             if($row->apr_status == 0){
+              echo "<span class='p-1 bg-warning'>Pending</span>";
+            }elseif($row->apr_status == 1){
+              echo "<span class='p-1 bg-success'>Approved</span>";
+            }elseif($row->apr_status == 2){
+              echo "<span class='p-1 bg-danger'>Reject</span>";
+            }
+            ?></td>
+            <td><?php 
+            if($row->amessage == ''){
+              echo "<span class='p-1 bg-warning'>Pending</span>";
+            }else{
+              echo $row->amessage; 
+            }
+            ?></td>
+        </tr>
+        <?php $i++; endforeach; ?>
+    </tbody>
+</table>
+</div>
+               <?php } ?>
+
+
               </div>
             </div>
           </div>
         </div>
+
+
+        <div class="modal fade" id="exampleModalReminder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header bg-info text-center">
+                <h5 class="modal-title" id="exampleModalLabel">Create a request to change the start your Days</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                <p id="changemessage" class="text-danger text-center" ></p>
+                <hr>
+                <form action="<?=base_url();?>Management/SendRequestForDayStartChnage" method="post">
+                <input type="hidden" id="user_want_start" name="user_want_start" class="form-control d-none" />
+                <div class="form-group">
+                <label>Write down why you want to change : </label>
+                <textarea class="form-control" name="message" rows="3"></textarea>
+                </div>
+                <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">Send Request</button>
+                </div>
+                </form>
+                </div>
+
+                </div>
+                </div>
+                </div>
+
+
+
+
     </section>
     <?php } if($do==1){?>
     <section class="content">
@@ -332,6 +541,10 @@
     <div class="row p-3">
     <div class="col-sm col-md-6 col-lg-6 m-auto">
     <div class="card card-primary card-outline">
+
+    <?php 
+    if($tom_autotask_time !== 0 ){
+    ?>
     <div class="card-body box-profile">
     <h3 class="text-center">Close Your Day</h3>
     <hr>
@@ -374,6 +587,10 @@
       // } else{echo "<center><h5 class='text-danger'>Make sure to schedule at least 7 hours of tasks for the next day.<h5></center>";}     
       ?>
     </div>
+
+    <?php  } else{  ?>
+      <h4 class="p-2 text-center" >First Set Your Next Days Planner,Only after that you can close your day</h4>
+<?php  }?>
     </div>
     </div>   
     </div>     
@@ -439,6 +656,96 @@
                   event.preventDefault();
                   return false;
               }
+          });
+
+
+
+          $('#end-time').on('change', function() {
+              var startTime = $('#start-time').val();
+              if (startTime === '') {
+                  alert("Please Enter Start Time");
+                  $('#end-time').val('');
+              } else {
+                  var endTime = $(this).val();
+                  var startTimeMinutes = convertTimeToMinutes(startTime);
+                  var endTimeMinutes = convertTimeToMinutes(endTime);
+                  // Check if the difference is more than 90 minutes
+                  if ((endTimeMinutes - startTimeMinutes) > 90) {
+                      alert('Auto Task Max Time is Only 90 Minutes');
+                      $('#end-time').val('');
+                  }
+              }
+          });
+
+          function convertTimeToMinutes(time) {
+                          var timeParts = time.split(':');
+                          var hours = parseInt(timeParts[0], 10);
+                          var minutes = parseInt(timeParts[1], 10);
+                          return (hours * 60) + minutes;
+                      }
+
+                      $('#end-time').on('change', function() {
+        let endTime = $(this).val();
+
+        if (endTime) {
+            // Convert endTime to a Date object
+            let endDateTime = new Date('1970-01-01T' + endTime + ':00');
+
+            // Increment by 1 minute for start_tttpft
+            // let startDateTime = new Date(endDateTime.getTime() + 1 * 60000);
+            let startDateTime = new Date(endDateTime.getTime() + 0 * 60000);
+            let startHours = ('0' + startDateTime.getHours()).slice(-2);
+            let startMinutes = ('0' + startDateTime.getMinutes()).slice(-2);
+            $('#start_tttpft').val(startHours + ':' + startMinutes);
+
+            // Increment by 1 hour for end_tttpft
+            let endTttPftDateTime = new Date(endDateTime.getTime() + 1 * 3600000);
+            let endTttPftHours = ('0' + endTttPftDateTime.getHours()).slice(-2);
+            let endTttPftMinutes = ('0' + endTttPftDateTime.getMinutes()).slice(-2);
+            $('#end_tttpft').val(endTttPftHours + ':' + endTttPftMinutes);
+        }
+    });
+
+    $('#wffo').on('change', function() {
+              var wffo = $('#wffo').val();
+              $.ajax({
+                url:'<?=base_url();?>Menu/CheckuserDayAccardingPlanner',
+                type: "POST",
+                data: {
+                  wffo: wffo,
+                },
+                cache: false,
+                success: function a(result){
+                  if(result !==''){
+                    var recnt = <?= sizeof($geturdata); ?>;
+                    var recntapr = <?= empty($geturdata[0]->apr_status) ? 0 : $geturdata[0]->apr_status; ?>;
+                    if(recnt == 0){
+                    var selectedText = $('#wffo option:selected').text();
+                    $("#user_want_start").val(wffo);
+                    var result ='You planed to start their day : <b>'+ result+'</b>';
+                    var selectedText = ' But You want to start : <b>'+selectedText+'</b>';
+                    var message = result+selectedText;
+                    $("#changemessage").html(message);
+                    $('#submitButton').prop('disabled', true);
+                    $('#exampleModalReminder').modal('show');
+                    }else{
+                      if(recntapr == 0 || recntapr ==''){
+                        $('#submitButton').prop('disabled', true);
+                        $('#goodmessage').text("* Please Wait !, While Your Request was Approved.").css('color', 'red');
+                      }else if(recntapr == 1){
+                        $('#goodmessage').text("* You are able to change your day because your manager has approved your day change request.").css('color', 'green');
+                        $('#submitButton').prop('disabled', false);
+                      }else if(recntapr == 2){
+                        $('#submitButton').prop('disabled', true);
+                        $('#goodmessage').text("* You are not able to change your day because your manager has reject your day change request.").css('color', 'red');
+                      }
+                    }
+                  }else{
+                    // $('#goodmessage').text("* Good Plan As Your Days According to Planner.").css('color', 'green');
+                    $('#submitButton').prop('disabled', false);
+                  }
+                }
+                });
           });
       });
     </script>

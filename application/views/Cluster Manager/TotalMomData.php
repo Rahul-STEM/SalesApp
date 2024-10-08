@@ -83,11 +83,7 @@
                                     <?php 
                                       $i=1;
                                       $momdata = $this->Management_model->GetTotalSubmitBDMoMData($suid,$tardate);
-<<<<<<< HEAD
                                       echo $str = $this->db->last_query();
-=======
-                                      // echo $str = $this->db->last_query();
->>>>>>> stem-sales/main
                                         foreach($momdata as $dt){
 
                                            $getTblCallData = $this->Management_model->get_BDMoM_TBL_Call_Data($dt->tid);
@@ -165,15 +161,6 @@
                                         <?php if($dt->approved_status == 'Approved'){
                                           echo "<span class='bg-success p-2'> Approved&nbsp;Success </span>";
                                         } ?>
-<<<<<<< HEAD
-=======
-                                         <?php if($dt->approved_status == 'NO RP'){ ?>
-                                        <div>
-                                          <p><?php echo "<span class='bg-danger p-2'>NO RP</span>"; ?></p>
-                                           
-                                        </div>
-                                        <?php }?>
->>>>>>> stem-sales/main
                                         <?php if($dt->approved_status == ''){
                                           echo "<span class='bg-warning p-2'> Pending </span>";
                                         } ?>

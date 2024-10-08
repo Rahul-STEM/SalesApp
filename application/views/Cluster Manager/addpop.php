@@ -18,7 +18,8 @@ date_default_timezone_set("Asia/Kolkata");
               <div class="card-body">
                 Current Task : <lable id="ctname"></lable><br>
                 Last Status :  <lable id="clsname"></lable><br>
-                Last Task Remark : <lable id="cremarks"></lable>
+                Last Task Remark : <lable id="cremarks"></lable><br>
+                Task Suggestions : <lable id="taskcomments"></lable>
               </div>
             </div>
           </div>
@@ -78,18 +79,17 @@ date_default_timezone_set("Asia/Kolkata");
                     <textarea type="text" class="form-control" placeholder="Remark" required></textarea>
                   </div>
                   <div class="p-3 write_mom_section" id="test6" style="display: none;">
-                 
                   <div class="text-center momhbox">
                     <div> <label> <i>MINUTES OF MEETING (MoM)</i> </label>
                     <!-- <hr style="width:200px;"> -->
                   </div>
                   </div>
-
-
-                  <label>Meeting done with Initiator or infulencer or discision maker of the company</label>
+                  
+                  <label>Meeting done with Initiator or influencer and decision maker of the company</label>
                     <select class="form-control" name="meetingdonewinitiator">
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
+                        <option value="Initiator">Initiator</option>
+                        <option value="Influencer">Influencer</option>
+                        <option value="Decision maker">Decision maker</option>
                     </select>
                     <hr>
                     <label>Presentation and pitching is done for which offering :</label>
@@ -100,7 +100,8 @@ date_default_timezone_set("Asia/Kolkata");
                         <option value="Astronomy">Astronomy</option>
                         <option value="DIY">DIY</option>
                         <option value="NSP">NSP</option>
-                        <option value="DIY">Science Lab</option>
+                        <option value="Science Lab">Science Lab</option>
+                        <option value="Smart Class">Smart Class</option>
                     </select>
                     <hr>
                     <input type="hidden" name="momdata" value="momdata">
@@ -124,13 +125,13 @@ date_default_timezone_set("Asia/Kolkata");
                         <option value="yes">Yes</option>
                       </select>
                       <br>
-                      <textarea type="text" class="form-control" name="client_has_adopted" placeholder="Please Specify details of client has adopted any schools"  id="client_has_adoptedText" rows="3"></textarea> 
+                      <textarea type="text" class="form-control" name="client_has_adopted" placeholder="Please specify details of the schools that client has adopted"  id="client_has_adoptedText" rows="3"></textarea> 
                     </div>
 
                     <hr>
                     <div>
                       <label>Who are the approving autorities of the proposal ?</label>
-                      <input type="text" required class="form-control" name="approving_autorities" placeholder="Please Type Name of the officer approving the proposal">
+                      <textarea required class="form-control" name="approving_autorities" placeholder="Please type name and designation of the officer approving the proposal"></textarea>
                     </div>
 
                     <hr>
@@ -141,8 +142,8 @@ date_default_timezone_set("Asia/Kolkata");
 
                     <hr>
                     <div>
-                      <label>what is the fund sanstion limit at their level ?</label>
-                      <input type="number" required class="form-control" name="fund_sanstion_limit" placeholder="Please Type fund sanstion limit at their level">
+                      <label>what is the fund sanction limit at their level ?</label>
+                      <input type="number" required class="form-control" name="fund_sanstion_limit" placeholder="Please Type fund sanction limit at their level">
                     </div>
 
                     <hr>
@@ -163,8 +164,9 @@ date_default_timezone_set("Asia/Kolkata");
                     <small class="text-danger" id="smallProposaltext" > <i>* Proposal should be submitted through NGO/STEM/Govt Body (No of Schools/Location/Budget)</i></small> -->
 
                     <div id="submit_proposal_file" class="identify_school_box">
-                    <input type="text" required class="form-control"name="proposal_no_of_school" placeholder="Number of school for Proposal"> <br>
-                    <input type="text" required class="form-control"name="proposal_of_budget" placeholder="Budget of Proposal"><br>
+                    <input type="text" required class="form-control"name="proposal_no_of_school" placeholder="Proposed number of schools"> <br>
+                    <input type="text" required class="form-control"name="proposal_of_budget" placeholder="Proposed budget"><br>
+                    <input type="text" required class="form-control"name="proposal_of_location" placeholder="Proposed location"><br>
                  
                     </div>
 
@@ -177,12 +179,18 @@ date_default_timezone_set("Asia/Kolkata");
                         <option value="no">No</option>
                         <option value="yes">Yes</option>
                     </select>
+                    
                     <br>
                     <div id="identify_school_box" class="identify_school_box">
-                    <input type="text" required class="form-control"name="identify_school_state" placeholder="Enter Name of State"> <br>
-                    <input type="text" required class="form-control"name="identify_school_district" placeholder="Enter Name of District"><br>
-                    <input type="text" required class="form-control"name="no_of_school" placeholder="Enter No of School">
+                      <div class="text-right mb-2">
+                      <span id="add_field" class="p-2 bg-primary" >+</span>
+                      </div>
+                    <input type="text" required class="form-control"name="identify_school_state[]" placeholder="Enter Name of State"> <br>
+                    <input type="text" required class="form-control"name="identify_school_district[]" placeholder="Enter Name of District"><br>
+                    <input type="text" required class="form-control"name="no_of_school[]" placeholder="Enter No of School">
+                   
                     </div>
+                    
                     </div>
          
                     <hr>
@@ -201,12 +209,12 @@ date_default_timezone_set("Asia/Kolkata");
                     <label>Letter should be address to whom in the organization, along with Name and designation and Location</label>
 
                     <select class="form-control" required name="permission_letter_rech" >
-                        <option value="Through District Administrator"> Through District Administrator</option>
-                        <option value="Directly from School">Directly from School</option>
+                        <option value="NGO">NGO</option>
+                        <option value="STEM">STEM</option>
                     </select>
                     <br>
 
-                    <input type="text" required class="form-control"name="Letter_organization_name" placeholder="Enter Name"> <br>
+                    <input type="text" required class="form-control"name="Letter_organization_name" placeholder="Add Concern person name"> <br>
                     <input type="text" required class="form-control"name="Letter_organization_designation" placeholder="Enter Name of Designation"><br>
                     <input type="text" required class="form-control"name="Letter_organization_location" placeholder="Enter Location">
                     </div>  
@@ -215,12 +223,26 @@ date_default_timezone_set("Asia/Kolkata");
                     <hr>
                     <div>
                     <label>Client is interested for School Visit ?</label>
-                    <select class="form-control" required name="client_int_school_visit" id="client_int_school_select" >
+                    <select class="form-control" required name="client_int_school_visit" id="client_int_school_select">
                         <option value="no">No</option>
                         <option value="yes">Yes</option>
                     </select>
                     <br>
                     <div id="client_int_school_box" class="identify_school_box">
+
+                    <!-- <input type="text" required class="form-control"name="client_int_type_project" placeholder="Add type of project"> -->
+                    <select class="form-control" name="client_int_type_project">
+                      <option selected disabled>Select Type of project</option>
+                      <option value="MSC">MSC</option>
+                      <option value="Tinkering">Tinkering</option>
+                      <option value="Bala">Bala</option>
+                      <option value="Astronomy">Astronomy</option>
+                      <option value="DIY">DIY</option>
+                      <option value="NSP">NSP</option>
+                      <option value="Science Lab">Science Lab</option>
+                      <option value="Smart Class">Smart Class</option>
+                    </select>
+                    <br>
                     <input type="date" required class="form-control"name="client_int_school_date" placeholder="Select Date"> <br>
                     <input type="text" required class="form-control"name="client_int_school_state" placeholder="Enter State"> <br>
                     <input type="text" required class="form-control"name="client_int_school_district" placeholder="Enter Name of District"><br>
@@ -241,7 +263,9 @@ date_default_timezone_set("Asia/Kolkata");
                     <hr>
                     <label>Write Short MOM Remarks</label>
                       <textarea type="text" class="form-control" id="rpmmom" name="rpmmom" rows="3" required></textarea> 
-                  </div>
+                  
+                 
+                    </div>
                   
 
                   </div>
@@ -312,12 +336,12 @@ date_default_timezone_set("Asia/Kolkata");
                       <div class="invalid-feedback">.</div>
                       <div class="valid-feedback">Looks good!</div>
                     </div>
-                    <div class="col-12 col-md-12 mb-12">
+                    <!-- <div class="col-12 col-md-12 mb-12">
                       <label>Next Action Date</label>
                       <input type="date" class="form-control" name='nadate' required>
                       <div class="invalid-feedback">.</div>
                       <div class="valid-feedback">Looks good!</div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
@@ -760,19 +784,6 @@ date_default_timezone_set("Asia/Kolkata");
                                                 <option value="no">Non Priority (Will not give business)</option>
                                                 <option value="yes">Priority (Definitely Will give business)</option>
                                               </select>
-                                              <hr>
-                                              
-                                            <select id="company_as" class="form-control" name="company_as" required>
-                                                <option value="">Select About Company</option>
-                                                <option value="Good Company">Good Company</option>
-                                                <option value="Not a Big Company">Not a Big Company</option>
-                                                <option value="other">Other</option>
-                                            </select>
-
-                                             <div id="aboutCompany">
-                                                <hr><textarea name="company_descri" id="company_descri" class="form-control" placeholder="Write about the company"></textarea><hr>
-                                             </div>
-                                            
                                              <hr>
 
                                              <div class="form-group p-3">
@@ -782,10 +793,16 @@ date_default_timezone_set("Asia/Kolkata");
                                               <input type="radio" id="no" name="potentional_client" value="no" required>
                                               <label for="no">No</label>
                                           </div>
-
-
-
                                             </div>
+                                            <select id="company_as" class="form-control" name="company_as" required>
+                                                  <option value="">Select About Company</option>
+                                                  <option value="Good Company">Good Company</option>
+                                                  <option value="Not a Big Company">Not a Big Company</option>
+                                                  <option value="other">Other</option>
+                                            </select>
+                                               <div id="aboutCompany">
+                                                  <hr><textarea name="company_descri" id="company_descri" class="form-control" placeholder="Write about the company"></textarea><hr>
+                                               </div>
                                             <hr>
                                             <lable id="letmeetingsremarks">
                                               <span class="text-danger">* Please provide details as to why it took you more than 30 minutes.</span>
@@ -835,7 +852,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 <script type="text/javascript">
                                 $(document).ready(function() {
                                 // $('.select2').select2();
-                                $('#aboutCompany').hide();
+                                // $('#aboutCompany').hide();
                                 $('#bcname').select2();
                                 });
                                 document.querySelector('#button').disabled = true;
@@ -1117,7 +1134,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 $("#ifno").hide();
                                 var cstatus = document.getElementById("cstatus").value;
                                 $.ajax({
-                                url:'<?=base_url();?>Menu/getstatusbd',
+                                url:'<?=base_url();?>Menu/getstatusadmin',
                                 type: "POST",
                                 data: {
                                 cstatus: cstatus
@@ -1242,6 +1259,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 data: {tid: tid},
                                 dataType: 'json',
                                 success: function(response){
+               
                                 var len = response.length;
                                 $('#cname,#ctname').text('');
                                 // console.log(response);
@@ -1264,6 +1282,15 @@ date_default_timezone_set("Asia/Kolkata");
                                 var cmpid = response[0].cid_id;
                                 var tidd = response[0].id;
                                 var cmid = response[0].cmid;
+
+                                $.ajax({
+                                    url: '<?=base_url();?>Menu/GetTaskComments',
+                                    type: 'POST',
+                                    data: { taskid: tidd},
+                                    success: function(comments_message) {
+                                        $("#taskcomments").html(comments_message);
+                                    }
+                                });
 
                                 var cpurpose_name = '';
                                 if(cpurpose !==''){
@@ -1358,6 +1385,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 });
                                 $('[id^="closem"]').on('click', function() {
                                 $('#add_closem').modal('show');
+                                
                                 var id = this.value;
                                 document.getElementById("closemid").value=id;
                                 $.ajax({
@@ -1451,11 +1479,11 @@ date_default_timezone_set("Asia/Kolkata");
                                 // Start About Company
                                 $('#company_as').on('change', function b() {
                                   var company_as =this.value;
-                                  if( company_as == 'other'){
-                                    $("#aboutCompany").show();
-                                  }else{
-                                    $("#aboutCompany").hide();
-                                  }
+                                  // if( company_as == 'other'){
+                                  //   $("#aboutCompany").show();
+                                  // }else{
+                                  //   $("#aboutCompany").hide();
+                                  // }
                                 });
                                 // End About Company 
 
@@ -1637,6 +1665,12 @@ date_default_timezone_set("Asia/Kolkata");
             $('#identify_school_select').trigger('change');
             $('#client_int_school_select').trigger('change');
             $('#permission_letter_select').trigger('change');
+
+
+            
+
+
+
         });
     </script>
     <script>

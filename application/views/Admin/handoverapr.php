@@ -89,7 +89,7 @@
                                 <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
-                                              <th>SNo.</th>
+                                              <th>SNo</th>
                                               <th>Client Name</th>
                                               <th>Mediator</th>
                                               <th>No of School</th>
@@ -123,17 +123,19 @@
                                         <?php 
                                         $bds=[];
                                         $j=0;
+                                           $i=1; 
                                         foreach($bdid as $bd){
                                             $bds[$j]=$bd->user_id;
                                         $j++;}
                                         
-                                        $i=1; 
-                                        
+                                      
+                                      
                                         foreach($client as $d){
+                                             
                                           $cid = $d->cid;
                                           if (in_array($d->bd_id, $bds))
                                           {
-                                              
+                                             
                                       ?>
                                       
                                     <tr>
@@ -183,7 +185,7 @@
                                         <th><a href="handEdit/<?=$cid?>"><b>Edit</b></a></th>
                                         <th><a href="handDelete/<?=$cid?>"><b>Reject</b></a></th>
                                     </tr>
-                                    <?php $i++;}} ?>
+                                    <?php $i++; }} ?>
                                   </tbody>
                                 </table>
                             </div>

@@ -154,7 +154,7 @@
                                          <td><?php $st = $dt->status; if($st==0){?>
                                              <button id="add_comment<?=$i?>" value="<?=$tid?>">Comment</button><br><br>
                                              <button id="add_close<?=$i?>" value="<?=$tid?>">Close</button>
-                                             <?php } else{echo 'Request Cloesd';?>
+                                             <?php } else{echo 'Request Closed';?>
                                              <button id="add_open<?=$i?>" value="<?=$tid?>">Re-Open</button>
                                              <?php }?></td>
                                      </tr>

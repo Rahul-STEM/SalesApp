@@ -73,28 +73,27 @@
                                       $i=1;
                                       
 
-                                        $identify_school = $momdata[0]->identify_school;
-                                        
-                                        if($identify_school == 'yes'){
-                                            $state = $momdata[0]->identify_school_state;
-                                            $district = $momdata[0]->identify_school_district;
-                                            $noofschool = $momdata[0]->no_of_school;
+                                      $identify_school = $momdata[0]->identify_school;
+                                      if($identify_school == 'yes'){
+                                        $state = $momdata[0]->identify_school_state;
+                                        $district = $momdata[0]->identify_school_district;
+                                        $noofschool = $momdata[0]->no_of_school;
 
-                                            $states = explode(',', $state);
-                                            $districts = explode(',', $district);
-                                            $schoolCounts = explode(',', $noofschool);
+                                        $states = explode(',', $state);
+                                        $districts = explode(',', $district);
+                                        $schoolCounts = explode(',', $noofschool);
 
-                                            // Combine into a single array
-                                            $combinedArray = [];
+                                        // Combine into a single array
+                                        $combinedArray = [];
 
-                                            for ($i = 0; $i < count($states); $i++) {
-                                                $combinedArray[] = [
-                                                    'identify_school_state' => $states[$i],
-                                                    'identify_school_district' => $districts[$i],
-                                                    'no_of_school' => $schoolCounts[$i]
-                                                ];
-                                            }
+                                        for ($i = 0; $i < count($states); $i++) {
+                                            $combinedArray[] = [
+                                                'identify_school_state' => $states[$i],
+                                                'identify_school_district' => $districts[$i],
+                                                'no_of_school' => $schoolCounts[$i]
+                                            ];
                                         }
+                                      }
                                    
                                      $combinedArraycnt = sizeof($combinedArray);
                                       // echo "<pre>";

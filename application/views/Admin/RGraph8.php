@@ -80,7 +80,7 @@
 
       <?php $st = $this->Menu_model->get_ridfhndone($uid);?>
       
-      data.addRow(['Half Done',<?=$st[0]->both_open_and_close?>, '', '<?=$uid?>']);
+      data.addRow(['Helf Done',<?=$st[0]->both_open_and_close?>, '', '<?=$uid?>']);
       data.addRow(['No single Model', <?=$st[0]->open_count_not_closed?>, '', '<?=$uid?>']);
       data.addRow(['Full Done', <?=$st[0]->open_count_zero?>, '', '<?=$uid?>']);
 

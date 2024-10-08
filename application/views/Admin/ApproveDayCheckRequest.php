@@ -24,15 +24,6 @@
 <link rel="stylesheet" href="<?=base_url();?>assets/css/daterangepicker.css">
 <!-- summernote -->
 <link rel="stylesheet" href="<?=base_url();?>assets/css/summernote-bs4.min.css">
-
-<style>
-    .highlight {
-    background-color: green; /* Highlight color */
-    font-weight: bold; /* Optional styling */
-    color:black;
-}
-</style>
-
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -60,7 +51,6 @@
 </div>
 <!-- /.content-header -->
 <section class="content request_section">
-    <div class="content-header"><center><h2>Approve Day Check Request</h2></center></div>
     <div class="container-fluid">
         <div class="row p-3">
             <div class="col-sm col-md-12 col-lg-12 m-auto">
@@ -85,7 +75,7 @@
                             <td><?=$data->request_by?></td>
                             <td><?=$data->REASON?></td>
                             <td><?=$data->CREATED_AT?></td>
-                            <td class="<?= $data->STATUS == 'Approved' ? 'highlight' : '' ?>"><?=$data->STATUS?></td>
+                            <td><?=$data->STATUS?></td>
                             <td><?=$data->approved_by?></td>
                             <td><?=$data->APPROVED_AT?></td>
                             <td>

@@ -82,13 +82,15 @@ overflow-x: auto;
                               <tr>
                                 <th>S.No.</th>
                                 <th>BD Name</th>
+                                <th>CIN</th>
                                 <th>Company Name</th>
                                 <th>Photo</th>
-                                <th>Started @</th>
-                                <th>Close @</th>
+                                <th>Started At</th>
+                                <th>Close AT</th>
                                 <th>Start Location</th>
                                 <th>Close Location</th>
                                 <th>RP Yes/No</th>
+                                <th>Potential Yes/No</th>
                                 <th>Priority Yes/No</th>
                                 <th>MOM Yes/No</th>
                                 <th>Thanks Mail Yes/No</th>
@@ -106,14 +108,16 @@ overflow-x: auto;
                               if($momc){$momc='yes';}else{$momc='no';}
                               $emailc = $this->Menu_model->get_temailyn($cid,$tid);
                               if($emailc){$emailc='yes';}else{$emailc='no';}
-                              $psta = $this->Menu_model->get_psta($cid);
+                             // $psta = $this->Menu_model->get_psta($cid);
+                             $psta = $dt->apst;
                               if($psta){$psta='yes';}else{$psta='no';}
-                              
+                              if($momc !='no'){
                               ?>
                               
                               <tr>
                                 <td><?=$i?></td>
                                 <td><?=$dt->name?></td>
+                                <td><?=$dt->cmpid;?></td>
                                 <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$cmpid?>"><?=$dt->company_name?></a></td>
                                 <td>
                                     <img src="<?=base_url();?><?=$dt->cphoto?>" alt="image not found" width="200">
@@ -130,12 +134,13 @@ overflow-x: auto;
                                 <td><a href="https://www.google.com/maps?q=<?=$dt->slatitude?>,<?=$dt->slongitude?>"><i class="fas fa-map-marker-alt" style="font-size:36px" aria-hidden="true"></i></a></td>
                                 <td><a href="https://www.google.com/maps?q=<?=$dt->clatitude?>,<?=$dt->clongitude?>"><i class="fas fa-map-marker-alt" style="font-size:36px" aria-hidden="true"></i></a></td>
                                 <td><?=$dt->mtype?></td>
+                                <td><?=$dt->potential?></td>
                                 <td><?=$dt->priority?></td>
                                 <td><?=$momc?></td>
                                 <td><?=$emailc?></td>
                                 <td><?=$psta?></td>
                                 <td><?=$dt->queans?><hr><?=$dt->mcomment?></td>
-                                <?php $i++;} ?>
+                                <?php $i++;} }?>
                               </tbody>
                             </table>
                           </div>

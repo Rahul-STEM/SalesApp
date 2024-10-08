@@ -74,7 +74,7 @@
                     </h3>
                     <div class="card-body FilterSection">
                             <form method="POST"
-                                action="<?= base_url(); ?>Menu/TaskCheck_NewReport/<?php ?>">
+                                action="<?= base_url(); ?>Menu/TaskCheck_NewReport">
                                 <div class="row">
                                     <div class="col-lg-3 col-sm-6">
                                         <label for="startDate">Start Date</label>
@@ -120,19 +120,18 @@
                           <div class="table-responsive">
                             <div class="table-responsive">
                               <div class="pdf-viwer">
-                                <table id="example1" class="table table-striped" cellspacing="0" width="100%">
+                                <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
                                             <th>S.No.</th>
-                                            <!-- <th >Name</th> -->
+                                            <th>Name</th>
                                             <th>Date</th>
                                             <!-- <th>Period</th> -->
                                             <th>Question</th>
                                             <th>Rating</th>
                                             <th>Remark</th>
                                             <th>Feedback By</th>
-                                            <th>Comments</th>
-                                            <!-- <th>Feedback By</th>       -->
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -141,10 +140,8 @@
                                         foreach($getReportbyUser as $singleReport){ ?>
                                         <tr>
                                             <td><?=$i?></td>
-                                            <!-- <td class="userName"><?=$singleReport->userName?></td> -->
-                                            <td class="date"><?=$singleReport->date?></td>
-                                            <!-- <td><?=$singleReport->periods?></td> -->
-
+                                            <td><?=$singleReport->userName?></td>
+                                            <td><?=$singleReport->date?></td>
                                             <td><?=$singleReport->question?></td>
                                             <td>
                                             <?=$singleReport->star?>
@@ -162,11 +159,6 @@
                                             <td><?=$singleReport->remarks?></td>
 
                                             <td><?=$singleReport->feedbackBy?></td>
-                                            <td>
-                                                <b>Comment : </b><?=$singleReport->comments?> <br>
-                                                <b>Comment By: </b><?=$singleReport->commentBy?> <br>
-                                                <b>Thanks Comments : </b><?=$singleReport->thnkscomments?>
-                                            </td>
                                         </tr>
                                         <?php $i++;} ?>
                                     </tbody>
@@ -252,70 +244,14 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="<?=base_url();?>assets/js/dashboard.js"></script>
     <script>
-        $(document).ready(function() {
-
-            const userName = "<?php echo htmlspecialchars($getReportbyUser[0]->userName); ?>";
-
-            $('#example1').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    {
-                        extend: 'excelHtml5',
-                        text: 'Export Excel',
-                        filename: function() {
-                            return userName + '_TaskCheckReport';
-                            // return userName + '_TaskCheckReport_' + new Date().toISOString().slice(0,10);
-                        }
-                    },
-                    {
-                        extend: 'csvHtml5',
-                        text: 'Export CSV',
-                        filename: function() {
-                            return userName + '_TaskCheckReport';
-                            // return userName + '_TaskCheckReport_' + new Date().toISOString().slice(0,10);
-                        }
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        text: 'Export PDF',
-                        filename: function() {
-                            return userName + '_TaskCheckReport';
-                            // return userName + '_TaskCheckReport_' + new Date().toISOString().slice(0,10);
-                        }
-                    }
-                ]
-            });
-        });
+      $("#example1").DataTable({
+      
+        "responsive": false, "lengthChange": false, "autoWidth": false,
+      
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+      
     </script>
-     <!-- <script>
-        $(document).ready(function() {
-            // var table = $('#example1').DataTable();
-            
-            // function setRowspan(columnClass) {
-            //     let rowspan = 1;
-            //     $(columnClass).each(function(index) {
-            //         if (index > 0 && $(this).text() === $(columnClass).eq(index - 1).text()) {
-            //             rowspan++;
-            //             $(this).hide(); // Hide the current cell
-            //             $(columnClass).eq(index - rowspan + 1).attr('rowspan', rowspan);
-            //         } else {
-            //             rowspan = 1;
-            //         }
-            //     });
-            // }
-
-            // Initial setting of rowspans
-            // setRowspan('.userName');
-            // setRowspan('.date');
-            // // setRowspan('.period');
-
-            // // Redraw event to reapply rowspans
-            // table.on('draw', function() {
-            //     setRowspan('.userName');
-            //     setRowspan('.date');
-            //     // setRowspan('.period');
-            // });
-        });
-    </script> -->
   </body>
 </html>

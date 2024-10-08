@@ -71,60 +71,12 @@
                                   <tbody>
                                     <?php 
                                       $i=1;
-                                      
-
-                                      $identify_school = $momdata[0]->identify_school;
-                                      if($identify_school == 'yes'){
-                                        $state = $momdata[0]->identify_school_state;
-                                        $district = $momdata[0]->identify_school_district;
-                                        $noofschool = $momdata[0]->no_of_school;
-
-                                        $states = explode(',', $state);
-                                        $districts = explode(',', $district);
-                                        $schoolCounts = explode(',', $noofschool);
-
-                                        // Combine into a single array
-                                        $combinedArray = [];
-
-                                        for ($i = 0; $i < count($states); $i++) {
-                                            $combinedArray[] = [
-                                                'identify_school_state' => $states[$i],
-                                                'identify_school_district' => $districts[$i],
-                                                'no_of_school' => $schoolCounts[$i]
-                                            ];
-                                        }
-                                      }
-                                   
-                                     $combinedArraycnt = sizeof($combinedArray);
-                                      // echo "<pre>";
-                                      // print_r($combinedArray);
-                                     
-                                      if($key == 'identify_school_state'){
-                                        $array = explode(',', $value);
-                                        $k=1; foreach($array as $arr){ echo "<span>".$k .' - '.$arr."</span> <hr>"; $k++;}
-                                      }
-                                      if($key == 'identify_school_district'){
-                                        $array = explode(',', $value);
-                                        $k=1; foreach($array as $arr){ echo "<span>".$k .' - '.$arr."</span> <hr>"; $k++;}
-                                      }
-                                      if($key == 'no_of_school'){
-                                        $array = explode(',', $value);
-                                        $k=1; foreach($array as $arr){ echo "<span>".$arr."</span> <hr>"; $k++;}
-                                      }
-
-
-
                                      foreach ($momdata as $values):
-
                                         unset($values->id);
                                         unset($values->reject_remarks);
                                         unset($values->cm_call_task);
                                         unset($values->bd_request_task);
                                         unset($values->school_visit_task);
-                                        unset($values->pst_call_task);
-                                        unset($values->pst_assign);
-                                        unset($values->edit_cnt);
-
                                         $getTblCallData = $this->Management_model->get_BDMoM_TBL_Call_Data($values->tid);
                                      
                                         $fwd_date = $getTblCallData[0]->fwd_date;
@@ -143,54 +95,6 @@
                                         $action_name = $action_name[0]->name;
 
                                         foreach ($values as $key => $value):
-                                          if( $key == 'tid'){
-                                            continue;
-                                          }
-
-                                          if($key == 'project_intervention_select'){if($value !== 'Others'){
-                                              unset($values->project_intervention);
-                                          }}
-                                          
-                                          if($key == 'client_has_adopted_select'){if($value == 'no'){
-                                              unset($values->client_has_adopted);
-                                          }
-                                        }
-                                          if($key == 'submit_proposal'){if($value == 'no'){
-                                              unset($values->proposal_no_of_school);
-                                              unset($values->proposal_of_budget);
-                                              unset($values->proposal_of_location);
-                                          }
-                                        }
-                                     
-                                          if($key == 'identify_school')if($value == 'yes'){{
-                                            unset($values->identify_school_district);
-                                            unset($values->no_of_school);
-                                          }}
-                                          if($key == 'identify_school')if($value == 'no'){{
-                                            unset($values->identify_school_state);
-                                            unset($values->identify_school_district);
-                                            unset($values->no_of_school);
-                                          }}
-                                        
-                                          if($key == 'permission_letter'){
-                                            if($value == 'no'){
-                                              unset($values->permission_letter_rech);
-                                              unset($values->Letter_organization_name);
-                                              unset($values->Letter_organization_designation);
-                                              unset($values->Letter_organization_location);
-                                            }
-                                          }
-                                          if($key == 'client_int_school_visit'){
-                                            if($value == 'no'){
-                                              unset($values->client_int_type_project);
-                                              unset($values->client_int_school_date);
-                                              unset($values->client_int_school_state);
-                                              unset($values->client_int_school_district);
-                                              unset($values->client_int_no_of_school);
-                                            }
-                                          }
-
-                                       
                                      ?>
                                         <tr>
                                             <td><?= $i; ?></td>
@@ -201,33 +105,30 @@
                                             if($key == 'user_id'){echo "BD Name";}
                                             if($key == 'init_cmpid'){echo "Comapny Name";}
                                             if($key == 'actontaken'){echo "Action Taken";}
-                                            if($key == 'meetingdonewinitiator'){echo "Meeting done with Initiator or influencer and decision maker of the company";}
+                                            if($key == 'meetingdonewinitiator'){echo "Meeting done with Initiator or infulencer or discision maker of the company";}
                                             if($key == 'presentation'){echo "Presentation and pitching is done for which offering :";}
                                             if($key == 'project_intervention_select'){echo "What is the client's thematic Area for Project Intervention in the current financial Year";}
-                                         
                                             if($key == 'project_intervention'){echo "What is the client's Other thematic Area for Project Intervention in the current financial Year";}
-                                            
+
                                             if($key == 'client_has_adopted_select'){echo "Does the client has adopted any schools ?";}
                                             if($key == 'client_has_adopted'){echo "Specify details of client has adopted any schools";}
                                             if($key == 'approving_autorities'){echo "Who are the approving autorities of the proposal ?";}
                                             if($key == 'budget_for_cfyear'){echo "What is the left over budget for the current financial year ?";}
-                                            if($key == 'fund_sanstion_limit'){echo "what is the fund sanction limit at their level ?";}
+                                            if($key == 'fund_sanstion_limit'){echo "what is the fund sanstion limit at their level ?";}
                                             if($key == 'other_specific_remarks'){echo "Any other specific remarks regards to the meeting ?";}
                                             if($key == 'submit_proposal'){echo "Do we need to submit the proposal ?";}
-                                            if($key == 'proposal_no_of_school'){echo "Proposed number of schools";}
-                                            if($key == 'proposal_of_budget'){echo "Proposed budget";}
-                                            if($key == 'proposal_of_location'){echo "Proposed location";}
+                                            if($key == 'proposal_no_of_school'){echo "Number of school for Proposal";}
+                                            if($key == 'proposal_of_budget'){echo "Budget of Proposal";}
                                             if($key == 'identify_school'){echo "Do we need to identify school ?";}
-                                            if($key == 'identify_school_state'){
-                                              echo "Name of identify school";
-                                            }
+                                            if($key == 'identify_school_state'){echo "Name of State to identify school";}
+                                            if($key == 'identify_school_district'){echo "Name of District to identify school";}
+                                            if($key == 'no_of_school'){echo "Number of identify school";}
                                             if($key == 'permission_letter'){echo "School permission letter required ?";}
                                             if($key == 'permission_letter_rech'){echo "Letter should be address to whom in the organization, along with Name and designation and Location";}
                                             if($key == 'Letter_organization_name'){echo "Letter Organization Name";}
                                             if($key == 'Letter_organization_designation'){echo "Organization Designation Name";}
                                             if($key == 'Letter_organization_location'){echo "Organization Location Name";}
                                             if($key == 'client_int_school_visit'){echo "Client is interested for School Visit ?";}
-                                            if($key == 'client_int_type_project'){echo "Type of project ?";}
                                             if($key == 'client_int_school_date'){echo "Date for Client is interested for School Visit ?";}
                                             if($key == 'client_int_school_state'){echo "State for Client is interested for School Visit ?";}
                                             if($key == 'client_int_school_district'){echo "District for Client is interested for School Visit ?";}
@@ -238,8 +139,7 @@
                                             if($key == 'cdate'){echo "Submit Date";}
                                             if($key == 'approved_status'){echo "Approved Status";}
                                             if($key == 'approved_by'){echo "Approved By";}
-                                            if($key == 'approved_date'){echo "Approved Date";}
-                                           
+
 
                                              ?></td>
                                             <td><?php 
@@ -251,11 +151,8 @@
                                             if($key == 'actontaken'){echo $value;}
                                             if($key == 'meetingdonewinitiator'){echo $value;}
                                             if($key == 'presentation'){echo $value;}
-                                            
                                             if($key == 'project_intervention_select'){echo $value;}
                                             if($key == 'project_intervention'){echo $value;}
-
-
                                             if($key == 'client_has_adopted_select'){echo $value;}
                                             if($key == 'client_has_adopted'){echo $value;}
                                             if($key == 'approving_autorities'){echo $value;}
@@ -265,24 +162,16 @@
                                             if($key == 'submit_proposal'){echo $value;}
                                             if($key == 'proposal_no_of_school'){echo $value;}
                                             if($key == 'proposal_of_budget'){echo $value;}
-                                            if($key == 'proposal_of_location'){echo $value;}
                                             if($key == 'identify_school'){echo $value;}
-
-                                            if($key == 'identify_school_state'){
-                                              foreach($combinedArray as $arrays){
-                                                echo "Name of State - " . $arrays['identify_school_state'] . "<br>";
-                                                echo "Name of District - " . $arrays['identify_school_district'] . "<br>";
-                                                echo "No of School - " . $arrays['no_of_school'] . "<br><br>";
-                                              }
-                                            }
-                                            
+                                            if($key == 'identify_school_state'){echo $value;}
+                                            if($key == 'identify_school_district'){echo $value;}
+                                            if($key == 'no_of_school'){echo $value;}
                                             if($key == 'permission_letter'){echo $value;}
                                             if($key == 'permission_letter_rech'){echo $value;}
                                             if($key == 'Letter_organization_name'){echo $value;}
                                             if($key == 'Letter_organization_designation'){echo $value;}
                                             if($key == 'Letter_organization_location'){echo $value;}
                                             if($key == 'client_int_school_visit'){echo $value;}
-                                            if($key == 'client_int_type_project'){echo $value;}
                                             if($key == 'client_int_school_date'){echo $value;}
                                             if($key == 'client_int_school_state'){echo $value;}
                                             if($key == 'client_int_school_district'){echo $value;}
@@ -291,24 +180,8 @@
                                             if($key == 'rpmmom'){echo $value;}
                                             if($key == 'partner'){echo $value;}
                                             if($key == 'cdate'){echo $value;}
-                                            if($key == 'approved_status'){
-                                              if($value == ''){
-                                                echo "<span class='bg-warning p-2'>Pending</span>";
-                                            }else if($value == 'Approved'){
-                                              echo "<span class='bg-success p-2'>".$value."</span>"; 
-                                            }else if($value == 'Reject'){
-                                              echo "<span class='bg-danger p-2'>".$value."</span>";
-                                            }else if($value == 'NO RP'){
-                                              echo "<span class='bg-danger p-2'>".$value."</span>";
-                                            }
-                                          }
-                                            if($key == 'approved_by'){
-                                              if($value !=''){
-                                                echo $this->Menu_model->get_userbyid($value)[0]->name;
-                                              }
-                                            }
-                                              if($key == 'approved_date'){echo $value;}
-                                           
+                                            if($key == 'approved_status'){echo $value;}
+                                            if($key == 'approved_by'){echo $value;}
                                             
                                             ?></td>
                                         </tr>

@@ -20,13 +20,8 @@
 
 
 
+<!-- Bootstrap 4 -->
 
-
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<!-- <script src="<?=base_url();?>assets/js/dashboard.js"></script> -->
-
-<!-- Google Charts -->
-<script src="https://www.gstatic.com/charts/loader.js"></script>
 
   <style>
       .scrollme {

@@ -690,13 +690,13 @@
                                                         </td>
                                                         <td data-question="Was day ended on good time" data-userid="<?= $data->user_id; ?>" data-period="Yesterday Evening" data-cdate="<?= $cdate; ?>">
                                                             <?php if (isset($data->close_day_request_Remark)) { ?>
-                                                                <?= $data->close_day_request_Remark ?>
+                                                                <b> Day Close Request Reason : </b><?= $data->close_day_request_Remark ?>
                                                                 <br>
-                                                                <?= $data->close_day_req_remarks ?>
+                                                                <b> Day Close Request Remark : </b><?= $data->close_day_req_remarks ?>
                                                                 <br>
-                                                                <?= $data->close_day_approved_status ?>
+                                                                <b> Day Close Request Status : </b><?= $data->close_day_approved_status ?>
                                                                 <br>
-                                                                <?= $data->close_day_approved_remarks ?>
+                                                                <b> Day Close Request Approve Remarks : </b><?= $data->close_day_approved_remarks ?>
                                                                 <hr>
                                                             <?php } else { ?>
                                                                 <span class="text-danger p-1 font-weight-bold"> Not closed yet..!!</span>
@@ -1275,7 +1275,8 @@
                             <!-- Button trigger modal -->
                             
                             <!-- Modal -->
-                            <div class="modal fade" id="ReviewModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                             
+                            <div class="modal fade" id="ReviewModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-body">

@@ -163,7 +163,7 @@ class Management extends Menu {
 
         if(!empty($this->user)){
 
-            if($currentHour >= 11 && $typeID != 2) {
+            if($currentHour >= 11 && $typeID != 2 && $typeID != 13) {
 
                 if (sizeof($ApprovedRequests) > 0) {
                     

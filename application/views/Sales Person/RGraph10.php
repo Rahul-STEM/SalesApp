@@ -89,7 +89,10 @@
                         <?php 
                         
                         $ta = sizeof($task); for($i=0;$i<$ta;$i++){
-                            $stv = $this->Menu_model->get_spdtargetvex($i);?>
+                            $stv = $this->Menu_model->get_spdtargetvex($i);
+                            // var_dump($stv);die;
+                            echo $db3->last_query();
+                            ?>
                         <?=$stv[0]->traget?>,
                         <?php } ?>
                         ],

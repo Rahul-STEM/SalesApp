@@ -1266,9 +1266,12 @@ class Graph_Model extends CI_Model
             $select = " COUNT(CASE WHEN topspender != 'yes' AND focus_funnel != 'yes' AND upsell_client != 'yes' AND keycompany != 'yes' AND pkclient != 'yes' AND priorityc != 'yes' THEN 1 END) AS nocat ";
 
             // Add dynamic conditions based on the categories array
-            foreach ($category as $Singlecategory) {
-            $select .= ", COUNT(CASE WHEN $Singlecategory = 'yes' THEN 1 END) AS $Singlecategory";
+            if(!empty($category)){
+                foreach ($category as $Singlecategory) {
+                    $select .= ", COUNT(CASE WHEN $Singlecategory = 'yes' THEN 1 END) AS $Singlecategory";
+                    }
             }
+            
 
             // Set the select part of the query
             $this->db->select($select);
@@ -4227,7 +4230,13 @@ class Graph_Model extends CI_Model
             $db3->join('spd', 'spd.id = replacereq.sid', 'left');
             $db3->join('client_handover', 'client_handover.projectcode = spd.project_code', 'left');
 
-            $db3->where_in('client_handover.bd_id', $selected_user);
+            if (!empty($selected_users)) {
+
+                // $db3->where_in('bd_id', $selected_users);
+                $db3->where_in('client_handover.bd_id', $selected_user);
+            }
+
+            
 
             if(!empty($selected_status)){
 
@@ -4244,6 +4253,48 @@ class Graph_Model extends CI_Model
 
             // echo $db3->last_query();die;
             return $query->result();
+    }
+
+    public function get_RIDDayWiseTableData($selected_user,$sdate,$edate,$selected_status){
+
+        $db3 = $this->load->database('db3', TRUE);
+
+
+        $db3->select("CAST(replacereq.sdatet AS DATE) AS rdate, spd.project_code, client_handover.project_year, client_handover.id AS chid, spd.id AS sid, spd.sname, COUNT(*) AS noofmodel, status.name AS stname, replacereq.tid, SUM(CASE WHEN replacereq.type='replace' THEN 1 ELSE 0 END) AS `replace`, SUM(CASE WHEN replacereq.type='Repair' THEN 1 ELSE 0 END) AS `Repair`");
+        $db3->from('replacereq');
+        $db3->join('spd', 'spd.id = replacereq.sid');
+        $db3->join('status', 'status.id = spd.status', 'left');
+        $db3->join('client_handover', 'client_handover.projectcode = spd.project_code');
+
+        if (!empty($selected_users)) {
+
+            $db3->where_in('client_handover.bd_id', $selected_user);
+        }
+
+        if(!empty($selected_status)){
+
+            $db3->where('replacereq.status', $selected_status);
+        }
+
+        $db3->where('CAST(replacereq.sdatet AS DATE) >=', $sdate);
+        $db3->where('CAST(replacereq.sdatet AS DATE) <=', $edate);
+
+        $db3->group_by([
+            "CAST(replacereq.sdatet AS DATE)",
+            "spd.project_code",
+            "client_handover.project_year",
+            "client_handover.id",
+            "spd.id",
+            "spd.sname",
+            "status.name",
+            "replacereq.tid"
+        ]);
+        $db3->order_by('rdate', 'DESC');
+
+        $query = $db3->get();
+
+        // echo $db3->last_query();die;
+        return $query->result();
     }
 
 

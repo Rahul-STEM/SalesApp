@@ -351,7 +351,7 @@
                         ?>
                         <?=$ts->count?>,
                         <?php }} ?>],
-                        stack: 'Stack 0'
+                    stack: 'Stack 0'
                         
                 },
 
@@ -367,7 +367,7 @@
                             foreach($task2 as $ts2){ ?>
                             <?=$ts2->count?>,
                             <?php }} ?>],
-                            stack: 'Stack 1'
+                    stack: 'Stack 1'
                             
                         <?php $i++; ?>
                 },
@@ -494,7 +494,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             $.ajax({
-                url: '<?= base_url(); ?>Dashboard/getRoleUser_New',
+                url: '<?= base_url(); ?>GraphNew/getRoleUser_New',
                 type: 'POST',
                 data: {
                     RoleId: selectedUserType

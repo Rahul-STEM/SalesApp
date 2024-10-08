@@ -1565,10 +1565,10 @@ WHERE cid = '$cid'");
         return $query->result();
      }
 
-     public function get_utypebyUserID($uid){
+    public function get_utypebyUserID($uid){
         $query=$this->db->query("SELECT type_id FROM user_details WHERE user_id='$uid'");
         return $query->result();
-     }
+    }
 
 
      public function get_client(){
@@ -2575,7 +2575,7 @@ WHERE cid = '$cid'");
     }
 
     public function get_cctd($tid){
-        $query=$this->db->query("SELECT *,company_contact_master.emailid emailid,company_contact_master.phoneno phoneno,company_contact_master.designation designation,user_details.name bdname,company_master.id comid,company_master.id cmid,tblcallevents.id id,action.name ctname,status.name clsname,company_master.compname cname,company_contact_master.contactperson cp,ud1.name assignedBy,ud2.name assignedTo from tblcallevents LEFT JOIN init_call ON init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id LEFT JOIN company_contact_master on company_contact_master.company_id=company_master.id LEFT JOIN action on action.id=tblcallevents.actiontype_id LEFT JOIN status ON status.id=init_call.cstatus LEFT JOIN user_details ON user_details.user_id=init_call.mainbd LEFT JOIN user_details ud1 ON ud1.user_id=tblcallevents.user_id  LEFT JOIN user_details ud2 ON ud2.user_id=init_call.assignedto_id  WHERE tblcallevents.id='$tid' and company_contact_master.type='primary'");
+        $query=$this->db->query("SELECT *,company_contact_master.emailid emailid,company_contact_master.phoneno phoneno,company_contact_master.designation designation,user_details.name bdname,company_master.id comid,company_master.id cmid,tblcallevents.id id,action.name ctname,status.name clsname,company_master.compname cname,company_contact_master.contactperson cp,ud1.name assignedBy,ud2.name assignedTo from tblcallevents LEFT JOIN init_call ON init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id LEFT JOIN company_contact_master on company_contact_master.company_id=company_master.id LEFT JOIN action on action.id=tblcallevents.actiontype_id LEFT JOIN status ON status.id=init_call.cstatus LEFT JOIN user_details ON user_details.user_id=init_call.mainbd LEFT JOIN user_details ud1 ON ud1.user_id=tblcallevents.user_id  LEFT JOIN user_details ud2 ON ud2.user_id=tblcallevents.assignedto_id  WHERE tblcallevents.id='$tid' and company_contact_master.type='primary'");
         return $query->result();
     }
 
@@ -2725,6 +2725,39 @@ WHERE cid = '$cid'");
             $query=$this->db->query("SELECT *,init_call.id inid FROM init_call left JOIN company_master on company_master.id=init_call.cmpid_id WHERE mainbd='$uid'");
         }
         // echo $this->db->last_query(); exit;
+        return $query->result();
+    }
+
+    public function get_fannalNew($users){
+        // var_dump($users);die;
+        // $utype = $this->Menu_model->get_userbyid($uid);
+        // $utype = $utype[0]->type_id;
+        // if($utype==2){
+
+        //     $query=$this->db->query("SELECT *,init_call.id inid FROM init_call LEFT JOIN user_details ON user_details.user_id=init_call.mainbd left JOIN company_master on company_master.id=init_call.cmpid_id WHERE user_details.admin_id='$uid' and user_details.type_id='3' and user_details.status='active'");
+
+        // }else if($utype==4){
+
+        //     $query=$this->db->query("SELECT *,init_call.id inid FROM init_call left JOIN company_master on company_master.id=init_call.cmpid_id WHERE apst='$uid'");
+        // }else{
+
+        //     $query=$this->db->query("SELECT *,init_call.id inid FROM init_call left JOIN company_master on company_master.id=init_call.cmpid_id WHERE mainbd='$uid'");
+        // }
+
+        
+        $this->db->select('*');
+        $this->db->select('init_call.id inid');
+        $this->db->from('init_call');
+        $this->db->join('company_master', 'company_master.id = init_call.cmpid_id', 'left'); // Left join to get user details
+        if(!empty($users)){
+
+            $this->db->where_in('mainbd',$users);
+        }
+
+        // $query=$this->db->query("SELECT *,init_call.id inid FROM init_call left JOIN company_master on company_master.id=init_call.cmpid_id WHERE mainbd IN($users)");
+
+        $query = $this->db->get();
+        echo $this->db->last_query(); exit;
         return $query->result();
     }
 
@@ -6657,6 +6690,8 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
 
     public function submit_task($tid,$uid,$cmpid,$actontaken,$action_id,$status,$remark,$rpmmom,$purpose,$flink,$flink1,$flink2,$partner,$noofsc,$pbudgetme,$LinkedIn,$Facebook,$YouTube,$Instagram,$OtherSocial,$nadate){
 
+        // $title = $this->db->escape_str($this->input->post('title'));
+        
         date_default_timezone_set("Asia/Kolkata");
         $date = date('Y-m-d H:i:s');
         $query=$this->db->query("SELECT cstatus,init_call.id inid FROM tblcallevents left join init_call on init_call.id=tblcallevents.cid_id WHERE tblcallevents.id='$tid'");
@@ -6682,7 +6717,19 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                }
                else{
 
-                   if($action_id=='6'){$this->db->query("UPDATE tblcallevents SET mom='$rpmmom' WHERE id='$tid'");if($cs=='2'){$status='3';}}
+                   if($action_id=='6'){
+                    // $this->db->query("UPDATE tblcallevents SET mom='$rpmmom' WHERE id='$tid'");
+                    $data = array(
+                        'mom' => $rpmmom
+                    );
+                    
+                    $this->db->where('id', $tid);
+                    $this->db->update('tblcallevents', $data);
+                    
+                    if($cs=='2'){
+                        $status='3';
+                    }
+                }
                    if($action_id=='2'){$remark='eMail Sent Successfully';$status=$cs;}
                    if($action_id=='5'){$status=$cs;}
                    if($action_id=='7'){
@@ -6975,7 +7022,17 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                    else{    
                   
                        if($action_id=='6'){
-                        $this->db->query("UPDATE tblcallevents SET mom='$rpmmom' WHERE id='$tid'");if($cs=='2'){$status='3';}
+                        // $this->db->query("UPDATE tblcallevents SET mom='$rpmmom' WHERE id='$tid'");
+                        $data = array(
+                            'mom' => $rpmmom
+                        );
+                        
+                        $this->db->where('id', $tid);
+                        $this->db->update('tblcallevents', $data);
+
+                        if($cs=='2'){
+                            $status='3';
+                        }
                         $remark = $rpmmom;
                     }
                        
@@ -8507,6 +8564,7 @@ return "Days: $days, Hours: $hours, Minutes: $minutes, Seconds: $seconds";
     public function get_riddaywise($uid){
         $db3 = $this->load->database('db3', TRUE);
         $query=$db3->query("SELECT CASE WHEN DATEDIFF(CURDATE(), replacereq.sdatet) < 5 THEN 'Less than 5 days' WHEN DATEDIFF(CURDATE(), replacereq.sdatet) = 5 THEN '5 days' WHEN DATEDIFF(CURDATE(), replacereq.sdatet) <= 10 THEN '10 days' WHEN DATEDIFF(CURDATE(), replacereq.sdatet) <= 20 THEN '20 days' WHEN DATEDIFF(CURDATE(), replacereq.sdatet) <= 30 THEN '30 days' WHEN DATEDIFF(CURDATE(), replacereq.sdatet) <= 60 THEN '60 days' WHEN DATEDIFF(CURDATE(), replacereq.sdatet) <= 120 THEN '120 days' WHEN DATEDIFF(CURDATE(), replacereq.sdatet) <= 180 THEN '180 days' ELSE 'More than 180 days' END AS day_category, COUNT(*) AS cont FROM replacereq LEFT JOIN spd ON spd.id = replacereq.sid LEFT JOIN client_handover ON client_handover.projectcode = spd.project_code WHERE client_handover.bd_id = '$uid' AND replacereq.status = 'Open' GROUP BY day_category");
+        // echo $db3->last_query();die;
         return $query->result();
     }
 
@@ -8521,6 +8579,7 @@ return "Days: $days, Hours: $hours, Minutes: $minutes, Seconds: $seconds";
     public function get_ridfhndone($uid){
         $db3 = $this->load->database('db3', TRUE);
         $query=$db3->query("SELECT COUNT(*) as total_entries, SUM(CASE WHEN subquery.open_count > 0 AND subquery.close_count > 0 THEN 1 ELSE 0 END) as both_open_and_close, SUM(CASE WHEN subquery.open_count > 0 AND subquery.close_count = 0 THEN 1 ELSE 0 END) as open_count_not_closed, SUM(CASE WHEN subquery.open_count = 0 THEN 1 ELSE 0 END) as open_count_zero FROM ( SELECT COUNT(*) as total, COUNT(CASE WHEN replacereq.status='Open' THEN 1 END) as open_count, COUNT(CASE WHEN replacereq.status='Close' THEN 1 END) as close_count FROM replacereq LEFT join spd ON spd.id=replacereq.sid LEFT join client_handover ON client_handover.projectcode=spd.project_code WHERE type!='Repaired' and client_handover.bd_id='100087' GROUP BY tid ) as subquery");
+        // echo $db3->last_query();die;
         return $query->result();
     }
 
@@ -11511,16 +11570,9 @@ public function updateClusterIdByinitID($uid,$tid,$select_cluster){
 
 public function get_userForTask($uid,$uyid){
 
-    // $this->db->select('user_id');
-    // $this->db->from('taskcheck_star_rating');
-    // $this->db->where('created_at','active');
-
-
-
     $this->db->select('user_id');
     $this->db->select('name');
     $this->db->from('user_details');
-    // $this->db->join('taskcheck_star_rating','taskcheck_star_rating.user_id=user_details.user_id');
 
     if($uyid == 2){
 
@@ -11531,24 +11583,20 @@ public function get_userForTask($uid,$uyid){
         $this->db->where('sales_co',$uid);
 
     }elseif ($uyid == 4) {
-        
+
         $this->db->where('pst_co',$uid);
 
     }elseif ($uyid == 9) {
-        
         $this->db->where('aadmin',$uid);
     }
 
     $this->db->where('status','active');
-
-    // $this->db->where('taskcheck_star_rating.user_id NOT IN');
 
     $this->db->order_by('name','ASC');
     $query = $this->db->get();
     // echo  $this->db->last_query(); die;
 
     return $query->result();
-
 }
 
 public function getTasks($id,$date){

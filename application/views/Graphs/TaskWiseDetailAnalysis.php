@@ -597,7 +597,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             $.ajax({
-                url: '<?= base_url(); ?>Dashboard/getRoleUser_New',
+                url: '<?= base_url(); ?>GraphNew/getRoleUser_New',
                 type: 'POST',
                 data: {
                     RoleId: selectedUserType

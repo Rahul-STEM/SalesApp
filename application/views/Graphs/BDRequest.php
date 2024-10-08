@@ -394,35 +394,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     
 
-<!-- <script>
-    // Function to handle radio button change
-    function handleRadioChange() {
-        const selectedRadio = document.querySelector('input[name="radioFilter"]:checked');
 
-        if (selectedRadio) {
-            const selectedOption = selectedRadio.id;
-
-            const filterByClusterID = document.getElementById('cluster');
-            const filterByRoleID = document.getElementById('userType');
-
-            if (selectedOption === 'filterByCluster') {
-
-                filterByClusterID.disabled = false;
-                filterByRoleID.disabled = true;
-
-            } else if (selectedOption === 'filterByRole') {
-
-                filterByClusterID.disabled = true;
-                filterByRoleID.disabled = false;
-            }
-        }
-    }
-
-    // Attach change event listener to all radio buttons
-    document.querySelectorAll('input[name="option"]').forEach(radio => {
-        radio.addEventListener('change', handleRadioChange);
-    });
-</script> -->
 
 <script>
     $(document).ready(function() {
@@ -444,7 +416,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             $.ajax({
-                url: '<?= base_url(); ?>Dashboard/getRoleUser_New',
+                url: '<?= base_url(); ?>GraphNew/getRoleUser_New',
                 type: 'POST',
                 data: {
                     RoleId: selectedUserType
@@ -513,42 +485,42 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // });
 
-        $("#category").change(function() {
+        // $("#category").change(function() {
 
-            var selectedCategory = $(this).val();
+        //     var selectedCategory = $(this).val();
 
-            if (selectedCategory.includes('select_all')) {
-                // Select all options
-                $('#category option').prop('selected', true);
-                // Remove 'select_all' from the selected values
-                selectedCategory = $('#category option').map(function() {
-                    return this.value !== 'select_all' ? this.value : null;
-                }).get();
+        //     if (selectedCategory.includes('select_all')) {
+        //         // Select all options
+        //         $('#category option').prop('selected', true);
+        //         // Remove 'select_all' from the selected values
+        //         selectedCategory = $('#category option').map(function() {
+        //             return this.value !== 'select_all' ? this.value : null;
+        //         }).get();
 
-                selectedCategory = selectedCategory.filter(function(value) {
-                    return value !== null;
-                });
-            }
+        //         selectedCategory = selectedCategory.filter(function(value) {
+        //             return value !== null;
+        //         });
+        //     }
 
-        });
+        // });
 
-        $("#partnerType").change(function() {
+        // $("#partnerType").change(function() {
 
-            var selectedPartnerType = $(this).val();
+        //     var selectedPartnerType = $(this).val();
 
-            if (selectedPartnerType.includes('select_all')) {
-                // Select all options
-                $('#partnerType option').prop('selected', true);
-                // Remove 'select_all' from the selected values
-                selectedPartnerType = $('#partnerType option').map(function() {
-                    return this.value !== 'select_all' ? this.value : null;
-                }).get();
+        //     if (selectedPartnerType.includes('select_all')) {
+        //         // Select all options
+        //         $('#partnerType option').prop('selected', true);
+        //         // Remove 'select_all' from the selected values
+        //         selectedPartnerType = $('#partnerType option').map(function() {
+        //             return this.value !== 'select_all' ? this.value : null;
+        //         }).get();
 
-                selectedPartnerType = selectedPartnerType.filter(function(value) {
-                    return value !== null;
-                });
-            }
-        });
+        //         selectedPartnerType = selectedPartnerType.filter(function(value) {
+        //             return value !== null;
+        //         });
+        //     }
+        // });
 
     });
 </script>

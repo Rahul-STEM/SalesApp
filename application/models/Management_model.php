@@ -47,7 +47,7 @@ class Management_model  extends Menu_model {
         $date = new DateTime();
         $date->modify('-1 day');
         $pdate =  $date->format('Y-m-d');
-        $pdate = '2024-07-19';
+        // $pdate = '2024-07-19';
 
         $uyid =  $uid;
         $this->load->model('Menu_model');
@@ -224,7 +224,7 @@ class Management_model  extends Menu_model {
                 cydr.approved_status AS close_day_approved_status,
                 cydr.approved_remarks AS close_day_approved_remarks,
                 tce.appointmentdatetime AS task_start_time,
-                SUM(spt.totaltime) AS total_timeTakeFor_planner,
+                SEC_TO_TIME(SUM(TIME_TO_SEC(spt.totaltime))) AS total_timeTakeFor_planner,
                 uwf.TYPE AS userWorkFrom,
                 srfl.prupose AS reasonFor_Request,
                 srfl.stime AS leave_StartTime,

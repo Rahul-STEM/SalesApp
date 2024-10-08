@@ -632,7 +632,7 @@
     </section>
 
 
-        <div class="modal fade bd-example-modal-lg" id="ReviewModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal fade bd-example-modal-lg" id="ReviewModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-primary">
@@ -1020,6 +1020,7 @@
                                         <input type="radio" name="momrat2_10" value="3" id="48_rating_10"><label for="48_rating_10">☆</label>
                                         <input type="radio" name="momrat2_10" value="2" id="47_rating_10"><label for="47_rating_10">☆</label>
                                         <input type="radio" name="momrat2_10" value="1" id="46_rating_10"><label for="46_rating_10">☆</label>
+                                        <br>
                                         <div class="remark-box">
                                             <label for="remark_10">Please provide additional remarks:</label>
                                             <textarea id="remark_10" rows="4" cols="50"></textarea>
@@ -1278,7 +1279,7 @@
         var userId = $rating.closest('.rating').data('userid');
         var question = $rating.closest('.rating').data('question');
         var ratingValue = $rating.val();
-        alert(ratingValue);
+        // alert(ratingValue);
         // console.log("Extracted ID: " + extractedId);
         // alert("Task ID: " + taskId + "\nUser ID: " + userId + "\nExtracted ID: " + extractedId + "\nRating Value: " + ratingValue);
         

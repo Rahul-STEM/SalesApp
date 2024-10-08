@@ -865,7 +865,7 @@ google.charts.setOnLoadCallback(drawChart);
             }
 
             $.ajax({
-                url: '<?=base_url();?>Dashboard/getRoleUser_New',
+                url: '<?=base_url();?>GraphNew/getRoleUser_New',
                 type: 'POST', 
                 data: {RoleId: selectedUserType},
                 success: function(response) {

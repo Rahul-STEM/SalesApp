@@ -33,7 +33,7 @@
                     <div class="card">
                         <div class="card-header">
                             <center>
-                                <h5>Pending RID Day Wise</h5>
+                                <h5>RID Day Wise</h5>
                             </center>
                         </div>
                         <div class="card-body FilterSection">
@@ -52,10 +52,10 @@
                                         <div class="form-group">
                                             <label>Select Status</label>
                                             <select class="custom-select rounded-0" name="status" id="status" required>
-                                                <option value="Open">Open</option>
-                                                <option value="Close">Close</option>
-                                                <!-- <option value="select_all">Select All</option> -->
-                                                
+                                                <!-- <option value="Open">Open</option>
+                                                <option value="Close">Close</option>    -->
+                                                <option value="Open" <?php echo set_select('status', 'Open', ($status == 'Open')); ?>>Open</option>
+                                                <option value="Close" <?php echo set_select('status', 'Close', ($status == 'Close')); ?>>Close</option>   
                                             </select>
                                         </div>
                                     </div>
@@ -110,35 +110,44 @@
                                         </div>
                                     </nav>
                                     <div class="tab-content">
+                                        <br>
                                         <div class="tab-pane fade show active" id="GridView" role="tabpanel" aria-labelledby="nav_GridView">
-                                            <br>
                                             <div class="row text-center" id="grid-view">
-                    
-                   
-                                                <?php
-                                                
-                                                    foreach($TableData as $dt){
-                                                        if($dt->status=='1'){$color = "bg-success";}else{$color = "bg-danger";}
-                                                        $cdate=date('Y-m-d H:i:s');$bdrid=$dt->id;?>
-                                                    
-                                                                
-                                                    <div class="col-sm-12 col-md-4 col-lg-4 mb-4 filter-item">
-                                                    <div class="card p-3 border rounded border-success hover-div d-flex flex-column align-items-stretch h-100 text-dark">
-                                                            Request Type<br><b><?=$dt->request_type?></b><hr>
-                                                            Request Date<br><b><?=$dt->sdatet?></b><hr>
-                                                            BD Name<br><b><?=$dt->bd_name?></b><hr>
-                                                            PIA Name<br><b><?=$dt->pia?></b><hr>
-                                                            Company Name<br><b><?=$dt->cname?> <?=$dt->cpname?></b><hr>
-                                                            Target Date<br><b><?=$tdt=$dt->targetd?></b><hr></a>
-                                                            <b><?=$this->Menu_model->timediff($tdt,$cdate)?></b><hr>
-                                                            <div class="rounded-circle bg-danger" style="position: absolute;bottom: -10px; left: 40%; transform: translateX(-50%); width: 20px; height: 20px;"></div>
-                                                            <div class="rounded-circle bg-danger" style="position: absolute;bottom: -10px; left: 60%; transform: translateX(-50%); width: 20px; height: 20px;"></div>
-                                                    </div>
-                                                    </div>
-                                                <?php } ?>
-                    
-                    
                         
+                    
+                                            <?php
+                                                foreach ($TableData as $ri) {
+                                                    $rdate = $ri->rdate;
+                                                    $tid = $ri->tid;
+                                                    $tidrid = $this->Menu_model->get_tidrid($tid);
+                                                    $sid = $ri->sid;
+                                                    $chid = $ri->chid;
+                                                    $sname = $ri->sname;
+                                                    $noofmodel = $ri->noofmodel;
+                                                    $pyear = $ri->project_year;
+                                                    $pcode = $ri->project_code;
+                                                    $code = "$chid-$sid-$tid";?>
+                            
+                                        
+                                                <div class="col-sm-12 col-md-4 col-lg-4 mb-4 filter-item">
+                                                    <div class="card p-3 border rounded border-success hover-div d-flex flex-column align-items-stretch h-100 text-dark">
+                                                        Request ID<br><b><?= $code ?></b><hr>
+                                                        Project Code<br><b><?= $pcode ?></b><hr>
+                                                        Project Year<br><b><?= $pyear ?></b><hr>
+                                                        Task Date<br><b><?= $ri->rdate ?></b><hr>
+                                                        <?php if($tidrid){?>
+                                                        Task Type<br><b><?= $tidrid[0]->taskname ?></b><hr>
+                                                        Task By<br><b><?= $tidrid[0]->fullname ?></b><hr>
+                                                        <?php } ?>
+                                                        School Name<br><b><?= $sname ?></b><hr>
+                                                        No of Model<br><b><?= $noofmodel ?></b><hr>
+                                                        No of Replacement Model<br><b><?= $ri->replace ?></b><hr>
+                                                        No of Repair Model<br><b><?= $ri->Repair ?></b><hr>
+                                                        <div class="rounded-circle bg-danger" style="position: absolute;bottom: -10px; left: 40%; transform: translateX(-50%); width: 20px; height: 20px;"></div>
+                                                        <div class="rounded-circle bg-danger" style="position: absolute;bottom: -10px; left: 60%; transform: translateX(-50%); width: 20px; height: 20px;"></div>
+                                                    </div>
+                                                </div>
+                                            <?php } ?>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="TableView" role="tabpanel" aria-labelledby="nav_TableView">
@@ -164,27 +173,27 @@
                                                         <tbody>
                                                             
                                                             <?php 
-                                                                $i=1;
-                                                                $mdata = $this->Menu_model->get_fannal($uid);
-                                                                foreach($mdata as $dt){
-                                                                $cid = $dt->cmpid_id;
-                                                                $init=$this->Menu_model->get_initcallbyid($cid);
-                                                                $ciid = $init[0]->id;
-                                                                $ldscd=$this->Menu_model->get_laststatuschangedate($ciid);
-                                                                $updatedt = $ldscd[0]->updatedt;
-                                                                $stlogs = $ldscd[0]->cont;
-                                                                $cdate=date('Y-m-d H:i:s');
-                                                                $timediff = $this->Menu_model->timediff($updatedt,$cdate);
-                                                                $pid = $init[0]->apst;  
-                                                                $patid = $dt->partnerType_id;
-                                                                if($patid){$patrid = $this->Menu_model->get_partnerbyid($patid);$patid = $patrid[0]->name;$pclr=$patrid[0]->clr;} else{$patid='';$pclr='';}
-                                                                if($patid){$sid = $dt->cstatus;$stid=$this->Menu_model->get_statusbyid($sid);$sid=$stid[0]->name;$sclr=$stid[0]->clr;}
-                                                                else{$sid='';$sclr='';}
-                                                                $tblc=$this->Menu_model->get_tblbyidwithremark($ciid);
-                                                                $logs = sizeof($tblc);
-                                                                if($logs>0){$appoint = $tblc[0]->appointmentdatetime;
-                                                                $nextaction = $tblc[0]->nextaction;
-                                                                $remarks = $tblc[0]->remarks;}else{$appoint='';$nextaction='';$remarks='';} 
+                                                            $i=1;
+                                                            $mdata = $this->Menu_model->get_fannalNew($selected_users);
+                                                            foreach($mdata as $dt){
+                                                            $cid = $dt->cmpid_id;
+                                                            $init=$this->Menu_model->get_initcallbyid($cid);
+                                                            $ciid = $init[0]->id;
+                                                            $ldscd=$this->Menu_model->get_laststatuschangedate($ciid);
+                                                            $updatedt = $ldscd[0]->updatedt;
+                                                            $stlogs = $ldscd[0]->cont;
+                                                            $cdate=date('Y-m-d H:i:s');
+                                                            $timediff = $this->Menu_model->timediff($updatedt,$cdate);
+                                                            $pid = $init[0]->apst;  
+                                                            $patid = $dt->partnerType_id;
+                                                            if($patid){$patrid = $this->Menu_model->get_partnerbyid($patid);$patid = $patrid[0]->name;$pclr=$patrid[0]->clr;} else{$patid='';$pclr='';}
+                                                            if($patid){$sid = $dt->cstatus;$stid=$this->Menu_model->get_statusbyid($sid);$sid=$stid[0]->name;$sclr=$stid[0]->clr;}
+                                                            else{$sid='';$sclr='';}
+                                                            $tblc=$this->Menu_model->get_tblbyidwithremark($ciid);
+                                                            $logs = sizeof($tblc);
+                                                            if($logs>0){$appoint = $tblc[0]->appointmentdatetime;
+                                                            $nextaction = $tblc[0]->nextaction;
+                                                            $remarks = $tblc[0]->remarks;}else{$appoint='';$nextaction='';$remarks='';} 
                                                             ?>
                                                             
                                                             <tr>
@@ -272,8 +281,6 @@
     </div>
 
 <?php $colors = array('red','blue','green','yellow','purple','orange','pink','brown','cyan','magenta','teal','lime','violet','indigo','gray');?>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.0.1/dist/chart.umd.min.js"></script>
 
 <script>
     $("#example1").DataTable({
@@ -373,7 +380,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             $.ajax({
-                url: '<?= base_url(); ?>Dashboard/getRoleUser_New',
+                url: '<?= base_url(); ?>GraphNew/getRoleUser_New',
                 type: 'POST',
                 data: {
                     RoleId: selectedUserType
@@ -408,4 +415,3 @@ document.addEventListener('DOMContentLoaded', function() {
 
     });
 </script>
-    <!--  -->

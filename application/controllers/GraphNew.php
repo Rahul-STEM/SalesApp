@@ -76,6 +76,33 @@ class GraphNew extends CI_Controller
         }
     }
 
+    public function getRoleUser_New(){
+
+        $RoleId= $this->input->post('RoleId');
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+
+        $this->db->select('*');
+        $this->db->from('user_details');
+        $this->db->where('status', 'active');
+        $this->db->where_in('type_id', $RoleId);
+        $this->db->order_by('name','ASC');
+
+        $query = $this->db->get(); 
+        // echo $this->db->last_query();die;
+        $user_new =  $query->result();
+        // $user_new =   $this->db->result();
+        // var_dump($user_new);die;
+
+        echo $data = '<option value="select_all">Select All</option>';
+
+        foreach($user_new as $d){
+            
+            echo  $data = '<option value='.$d->user_id.'>'.$d->name.'</option>';
+        }
+    }
+
     public function FunnelAnalysis()
     {
 
@@ -1048,6 +1075,7 @@ class GraphNew extends CI_Controller
     //     }
     // }
 
+
     public function ActionWiseFunnelAnalysis()
     {
 
@@ -1875,10 +1903,10 @@ class GraphNew extends CI_Controller
 
         $roles = $this->Graph_Model->getRoles($dt[0]->id);
 
-        // $TableData =  $this->Graph_Model->get_bdRequestTableData($users,$sdate,$edate);
-        // var_dump($selectedAction);die;
-        $TableData = [];
-        // $get
+        $TableData =  $this->Graph_Model->get_RIDDayWiseTableData($users,$sdate,$edate,$status);
+        // var_dump($TableData);die;
+        // $TableData = [];
+
         if (!empty($user)) {
 
             $this->load->view('include/header');

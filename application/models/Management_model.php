@@ -236,8 +236,8 @@ class Management_model  extends Menu_model {
             $this->db->from('user_day');
             $this->db->join('user_details', 'user_details.user_id = user_day.user_id', 'left');
             $this->db->join('session_plan_time spt', 'spt.user_id = user_day.user_id', 'left');
-            $this->db->join('autotask_time at', 'at.user_id = user_day.user_id', 'left');
-            $this->db->join('userworkfrom uwf', 'uwf.ID = at.user_id', 'left');
+            $this->db->join('autotask_time at1', 'at1.user_id = user_day.user_id AND DATE(at1.date) = "'.$cdate.'"', 'left');
+            $this->db->join('userworkfrom uwf', 'uwf.ID = at1.userworkfrom', 'left');
             $this->db->join('tblcallevents tce', 'tce.user_id = user_day.user_id AND DATE(tce.appointmentdatetime) = "'.$cdate.'"', 'left');
             $this->db->join('close_your_day_request cydr', 'user_details.user_id = cydr.user_id', 'left');
             $this->db->join('special_request_for_leave srfl', 'user_details.user_id = srfl.user_id', 'left');
@@ -261,7 +261,6 @@ class Management_model  extends Menu_model {
             return $query->result();
        
     }
-
 
     public function AddStarRatingNew($data){
 

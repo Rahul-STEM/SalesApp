@@ -11,6 +11,7 @@ class Menu extends CI_Controller {
          $this->load->helper('common_helper');
 
           $this->load->helper('samestatustilldate_helper');
+          $this->load->helper('taskPlanner_helper');
     }
     public function main(){
         $msg = '';
@@ -3539,6 +3540,7 @@ class Menu extends CI_Controller {
         redirect('Menu/Dashboard');
     }
     public function submittask1(){
+        // var_dump($_FILES);die;
         $this->load->library('session');
         $status=1;$filname="";$tid="";$uid="";$action_id="";$ystatus="";$remark="";$remark_msg="";$noremark="";$purpose="";$nremark_msg="";$rpmmom='null';$mom='null';$flink='null';$flink1='null';$flink2='null';
         $tid = $_POST['tid'];
@@ -3574,21 +3576,31 @@ class Menu extends CI_Controller {
         if(isset($_POST['nremark_msg'])){$nremark = $_POST['nremark_msg'];}
         if(isset($_POST['rpmmom'])){$rpmmom = $_POST['rpmmom'];}
         // if(isset($_POST['nadate'])){$nadate = $_POST['nadate'];}else{$nadate='0';}
-        if(isset($_FILES['filname']['name'])){$filname = $_FILES['filname']['name'];
+        if(isset($_FILES['filname']['name']) && !empty($_FILES['filname']['name'])){$filname = $_FILES['filname']['name'];
+            // echo "filename";die;
             $uploadPath = 'uploads/proposal/';
             $this->load->model('Menu_model');
             $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
         }else{$this->load->model('Menu_model');$flink=0;}
-        if(isset($_FILES['filname2']['name'])){$filname2 = $_FILES['filname2']['name'];
+        if(isset($_FILES['filname2']['name']) && !empty($_FILES['filname2']['name'])){$filname2 = $_FILES['filname2']['name'];
+            // echo "filname2";die;
             $uploadPath = 'uploads/proposal/';
             $this->load->model('Menu_model');
             $flink2 = $this->Menu_model->uploadfile($filname2, $uploadPath);
         }else{$this->load->model('Menu_model');$flink2=0;}
-        if(isset($_FILES['filname1']['name'])){$filname1 = $_FILES['filname1']['name'];
+        if(isset($_FILES['filname1']['name']) && !empty($_FILES['filname1']['name'])){$filname1 = $_FILES['filname1']['name'];
+            echo "filname1";die;
+
             $uploadPath = 'uploads/proposal/';
             $this->load->model('Menu_model');
             $flink1 = $this->Menu_model->uploadfile($filname1, $uploadPath);
         }else{$this->load->model('Menu_model');$flink1=0;}
+        if(isset($_FILES['filename10']['name']) && !empty($_FILES['filname10']['name'])){$filename10 = $_FILES['filename10']['name'];
+            $uploadPath = 'uploads/meetings/';
+            echo $uploadPath;die;
+            $this->load->model('Menu_model');
+            $flink10 = $this->Menu_model->uploadfile($filename10, $uploadPath);
+        }else{$this->load->model('Menu_model');$flink10=0;}
         if($noremark!=''){$remark=$noremark;}
         if($yremark!=''){$remark=$yremark;}
         if($nremark!=''){$remark=$nremark;}
@@ -3723,7 +3735,8 @@ class Menu extends CI_Controller {
         redirect('Menu/RPPriority');
     }
     public function daysc(){
-      
+        
+        // echo "hii";die;
         $wffo=0;
         $do = $_POST['do'];
         if(isset($_POST['wffo'])){$wffo = $_POST['wffo'];}
@@ -4421,6 +4434,29 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
+
+
+    public function LateDayStartapprove($id,$type){
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        if($type == 1){
+            $status     = 1;
+            $approved_by    = $uid;
+            $apr_time   = date("Y-m-d H:i:s");
+            $query =  $this->db->query("UPDATE `daystartrequest` SET `status`='$status',`approved_at`='$apr_time',`approval_by`='$approved_by' WHERE id = $id");
+            // echo $this->db->last_query();die;
+            redirect("Menu/dayShiftStartReq");
+        }
+        // elseif (condition) {
+        //     # code...
+        // }
+        else{
+            redirect('Menu/main');
+        }  
+    }
+
+
     public function TodaysPendingTaskapprove($id,$type){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -4445,6 +4481,18 @@ class Menu extends CI_Controller {
         $query =  $this->db->query("UPDATE `task_plan_for_today` SET `approvel_status`='$status',`remarks`='$rejectreamrk' WHERE id = $rejectid");
         redirect("Menu/TodaysTaskApprovelRequest");
     }
+
+    public function dayshiftReject(){
+        $rejectid = $_POST['reject'];
+        $rejectreamrk = $_POST['rejectreamrk'];
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $status = 2;
+        $query =  $this->db->query("UPDATE `daystartrequest` SET `approvel_status`='$status',`remarks`='$rejectreamrk' WHERE id = $rejectid");
+        redirect("Menu/dayShiftStartReq");
+    }
+
     public function TodaysPendingsTaskRequestReject(){
         $rejectid = $_POST['reject'];
         $rejectreamrk = $_POST['rejectreamrk'];
@@ -8005,7 +8053,7 @@ public function Dashboard(){
         $gettoAutoTaskTime = $query->result();
         $query1  =  $this->db->query("SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$currentDate'");
         $gecurAutoTaskTime = $query1->result();
-           
+        $getShiftStartData = $this->Menu_model->getShiftStartData($uid,$tdate);
         if(!empty($user)){
             // $pendingtaskcmp = $this->Menu_model->get_PendingTaskForToday($uid);
             
@@ -8015,7 +8063,7 @@ public function Dashboard(){
             //         $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask Before Going Task Planner Page');
             //         redirect('Menu/Dashboard');
             //     } 
-            $this->load->view($dep_name.'/DayManagement',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'tdate'=>$tdate,'uid'=>$uid,'do'=>$do,'yestdata'=>$yestdata,'gettoAutoTaskTime'=>$gettoAutoTaskTime,'uyid'=>$uyid,'gecurAutoTaskTime'=>$gecurAutoTaskTime,'daycheck'=>'start']);
+            $this->load->view($dep_name.'/DayManagement',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'tdate'=>$tdate,'uid'=>$uid,'do'=>$do,'yestdata'=>$yestdata,'gettoAutoTaskTime'=>$gettoAutoTaskTime,'uyid'=>$uyid,'gecurAutoTaskTime'=>$gecurAutoTaskTime,'getShiftStartData'=>$getShiftStartData,'daycheck'=>'start']);
         }else{
             redirect('Menu/main');
         }
@@ -8043,6 +8091,25 @@ public function Dashboard(){
         }else{
             redirect('Menu/main');
         }
+    }
+
+    public function dayShiftStartReq(){
+        // echo 'hii';die;
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        $mdata = $this->Menu_model->getShiftStartRequest($uid,$uyid);
+        // var_dump($mdata);die;
+        if(!empty($user)){
+            $this->load->view($dep_name.'/dayShiftStartReqApproval',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata]);
+        }else{
+            redirect('Menu/main');
+        }
+
     }
     public function MeetingCheck(){
         date_default_timezone_set("Asia/Calcutta");
@@ -16113,6 +16180,8 @@ public function addplantask11(){
     redirect('Menu/TaskPlanner2/'.$pdate);
 }
 public function addplantask12(){
+
+    // var_dump($_POST);die;
     $this->load->model('Menu_model');
     $this->load->model('Management_model');
     $this->load->library('session');
@@ -16135,7 +16204,7 @@ public function addplantask12(){
      $pdate = $this->input->post('pdate');
      $select_cluster = $this->input->post('select_cluster');
      $selectcompanybyuser = $this->input->post('selectcompanybyuser');
-    
+    // dd($selectby);exit;
      if(!isset($_POST['selectcompanybyuser']) && $ntaction == 4){
         
         $bmdate = $pdate.' '.$ptime.':00';
@@ -16381,17 +16450,21 @@ public function addplantask12(){
             $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime',`plan_change`='0', `selectby`='$selectby' WHERE  id = $tid");
             $query =  $this->db->query("UPDATE `main_review` SET `taskplan`='1' WHERE `ntid` = '$tid'");
         }else{
+         
     if(date("Y-m-d") !== $pdate){     
+       
         if($pendingTodaysTaskcnt > 0){
             $this->session->set_flashdata('success_message',' First Plan Your Yesterday Pending Task.');
             redirect('Menu/TaskPlanner2/'.$pdate);
         }
     }elseif(date("Y-m-d") == $pdate){
+       
         if($pendingOldTaskcnt > 0){
             $this->session->set_flashdata('success_message_plan',' First Plan Your Todays Pending Task]');
             redirect('Menu/TaskPlanner2/'.$pdate);
         }
     }
+
             $ttype = $ntaction;
             if($select_cluster !== ''){
                 $this->Menu_model->updateClusterIdByinitID($uid,$tid,$select_cluster);
@@ -17104,6 +17177,8 @@ public function get_JoinMeetingsCompany(){
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
+        // $tdate='2024-07-18';
+
         $userList = $this->Menu_model->get_userForTask($uid,$uyid);
         $dep_name = $dt[0]->name;
      
@@ -17115,38 +17190,44 @@ public function get_JoinMeetingsCompany(){
         if(isset($_POST['userId'])){
             $userId = $_POST['userId'];
             $taskList = $this->Menu_model->getTasks($userId,$tdate);
+
+            $sizeOfTask =sizeof($taskList);
+            // echo $sizeOfTask;die;
            // echo $this->db->last_query();exit;
         }
         else{
             $userId = '';
+            $sizeOfTask = '';
+
         }
         // echo "<pre>";print_r($taskList);exit;
         // var_dump($taskList);die;
         if(!empty($user)){
-            $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId]);
+            $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId,'sizeOfTask'=>$sizeOfTask]);
         }else{
             redirect('Menu/main');
         }
     }
-    public function getTaskByUser(){
-        $user = $this->session->userdata('user');
-        $data['user'] = $user;
-        $uid = $user['user_id'];
-        $uyid =  $user['type_id'];
-        $this->load->model('Menu_model');
-        $dt=$this->Menu_model->get_utype($uyid);
-        $dep_name = $dt[0]->name;
-        $userId = '100192';
-        $tdate = '2024-07-20';
-        // var_dump($_POST);die;
-        $getTasks = $this->Menu_model->getTasks($userId,$tdate);
-        print_r($getTasks);die;
-        if(!empty($user)){
-            $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'tasks'=>$getTasks]);
-        }else{
-            redirect('Menu/main');
-        }
-    }
+
+    // public function getTaskByUser(){
+    //     $user = $this->session->userdata('user');
+    //     $data['user'] = $user;
+    //     $uid = $user['user_id'];
+    //     $uyid =  $user['type_id'];
+    //     $this->load->model('Menu_model');
+    //     $dt=$this->Menu_model->get_utype($uyid);
+    //     $dep_name = $dt[0]->name;
+    //     $userId = '100192';
+    //     $tdate = '2024-07-20';
+    //     // var_dump($_POST);die;
+    //     $getTasks = $this->Menu_model->getTasks($userId,$tdate);
+    //     // print_r($getTasks);die;
+    //     if(!empty($user)){
+    //         $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'tasks'=>$getTasks]);
+    //     }else{
+    //         redirect('Menu/main');
+    //     }
+    // }
     public function RateTask(){
         $rat = $_POST['rat'];
         $rremark = $_POST['rremark'];
@@ -17906,13 +17987,18 @@ public function TaskCheck_NewReport()
         $jsonData = file_get_contents('php://input');
         // Decode the JSON data
         $data = json_decode($jsonData, true);
+        // print_r($data);
         $this->load->model('Menu_model');
-        // var_dump($data);die;
         foreach ($data as $review) {
             // var_dump($review);die;
             $review['date'] = date('Y-m-d');
             $review['feedback_by'] = $uid;
-            $this->Menu_model->InsertMoMTaskRating($review);
+            $result = $this->Menu_model->InsertMoMTaskRating($review);
+            $result1 = json_encode('success');
+            // echo $result1;die;
+            echo json_encode($result1);
+            // echo jsin_"success..!!";
+            // echo $this->db->last_query();die;
         }
     }
 /*******task Planner***Deepak***6_09_2024******/
@@ -18298,7 +18384,7 @@ public function nostatuschange_indate(){
     }else{
         $days = 8;
     }
-    $cmps = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$days,$sid);
+    $cmps = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$days,$sid,$date=null);
     $cdate = date("Y-m-d");
     echo '<option value="">Select Company</option>';
     foreach($cmps as $cmp){ ?>
@@ -18324,6 +18410,22 @@ public function PlanningForReview(){
     $this->session->set_flashdata('success_message', 'Review Plan Created Successfully !');
     redirect('Menu/TaskPlanner2/'.$pdate);
 }
+
+
+public function dayshiftstart(){
+    $shiftReqdd            = $_POST['shiftReqdd'];
+    $requestRemarkForstartDay    = $_POST['requestForstartDay'];
+    $uid                   = $_POST['uid'];
+
+    $this->load->library('session');
+    $this->load->model('Menu_model');
+    // $plandate = $pdate.' '.$review_plantime;
+    $this->Menu_model->InsertdayshiftstartReq($uid,$shiftReqdd,$requestRemarkForstartDay);
+    $this->session->set_flashdata('success_message', 'Request Sent..!!');
+    redirect('Menu/DayManagement/');
+}
+
+
 public function CheckFirstTimeReviewInYear(){
     $user   = $this->session->userdata('user');
     $uid    = $user['user_id'];

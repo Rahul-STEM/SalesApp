@@ -576,6 +576,7 @@ $dataPoints2 = array(
             <div class="card card-primary card-outline card-outline-tabs">
                 <h4 class="p-3">Today's Task Calendar </h4>
               <div class="card-header p-0 border-bottom-0">
+
                 <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                   <li class="nav-item">
                       <?php $ttbyd = $this->Menu_model->get_ttbydtest($uid,$tdate);
@@ -975,34 +976,7 @@ $dataPoints2 = array(
                                 </div>
                               </div>
 
-                            <?php 
-                              $user_day_planner  = $this->Menu_model->get_daystarted($uid,date("Y-m-d"));
-                              $pinitiate_time = $user_day_planner[0]->planner_initiate_time;
-                              $textmessage = $pinitiate_time == '' ? "Start" : "Resume";
-                              ?>
-                            <div class="card">
-                                <div class="card-header bg-primary" id="start_planning1" data-toggle="collapse" data-target="#start_planning2" aria-expanded="false" aria-controls="collapse9121">
-                                <b><?= $textmessage; ?> Planning </b>   
-                                </div>
-                                <div id="start_planning2" class="collapse" aria-labelledby="start_planning1" data-parent="#accordion">
-                                  <div class="card-body">
-                                    <div class="list-group-item list-group-item-action ">
-                                    <center>
-                                    <button type="button" class="btn btn-success font-weight-bold" style="padding:6px 70px;" onclick="handleReminderCreation()">
-                                    <?= $textmessage; ?> &nbsp;<i class="fa-solid fa-forward"></i>
-                                    </button>
-                                    </center>
-                                    <!-- <br> -->
-                                    <!-- <hr> -->
-                                    <!-- <button id="add_act6734763254" value="" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
-                                       <span class="mr-3 align-items-center">
-                                         sdsadsagd
-                                       </span>
-                                    </button> -->
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
+                            
 
                             </div>
                   </div>
@@ -1313,7 +1287,9 @@ $dataPoints2 = array(
             <div class="col-lg-12 col-sm">
             <div class="card card-primary card-outline card-outline-tabs">
                 <h4 class="p-3">Today's Task Completed</h4>
+                
               <div class="card-header p-0 border-bottom-0">
+
                 <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                   <li class="nav-item">
                       <?php $ttbydc = $this->Menu_model->get_ttbydc($uid,$tdate);
@@ -1888,6 +1864,18 @@ $dataPoints2 = array(
                     <span> <b>Todays Planner Time : <?=$start_tttpft;?> to <?=$end_tttpft;?></b> </span>
                   </div>
                 <?php  } ?> 
+                <div class="card p-3">
+                    <?php 
+                        $user_day_planner  = $this->Menu_model->get_daystarted($uid,date("Y-m-d"));
+                        $pinitiate_time = $user_day_planner[0]->planner_initiate_time;
+                        $textmessage = $pinitiate_time == '' ? "Start" : "Resume";
+                    ?>
+                  <button type="button" class="btn btn-primary" onclick="handleReminderCreation()">
+                      <!-- <b>Start Planning </b> -->
+                      <b><?= $textmessage; ?> Planning </b>   &nbsp;<i class="fa-solid fa-forward"></i>
+                  </button>
+                </div>
+
                 <div class="card p-3">
                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenterspclchngreq">
                       <b>Create a Special Request For Plan Change </b>

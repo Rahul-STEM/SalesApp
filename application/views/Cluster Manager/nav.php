@@ -166,32 +166,74 @@
                     </a>
                 </li>
                 
-            
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-circle"></i>
+                    <p>
+                        Requests
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                            <i class="far fa-dot-circle nav-icon"></i>
+                            <p>
+                                Task Planner Requests
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="<?=base_url();?>Menu/TodaysTaskApprovelRequest" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Task Planner Start Request</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?=base_url();?>Menu/PlannerTaskApprovelPage" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Planner Task Approval</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>
+                                    Day Requests
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="<?=base_url();?>Menu/YesterDayDaysCloseRequest" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Day Close Request</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?=base_url();?>Menu/dayShiftStartReq" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Late Shift Start Request</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?=base_url();?>Menu/GetTodaysTeamDayChnageRequestData" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Day Change Request</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
                 
-                <li class="nav-item">
-                    <a href="<?=base_url();?>Menu/TodaysTaskApprovelRequest" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Task Planner Approval Request</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?=base_url();?>Menu/YesterDayDaysCloseRequest" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Day Close Request</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?=base_url();?>Menu/GetTodaysTeamDayChnageRequestData" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Day Change Request</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?=base_url();?>Menu/PlannerTaskApprovelPage" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Planner Task Approval</p>
-                    </a>
-                </li>
+                
+                
+                
+                
                 <!-- <li class="nav-item">
                     <a href="<?=base_url();?>Menu/AddSpecialCommentOnTask" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>

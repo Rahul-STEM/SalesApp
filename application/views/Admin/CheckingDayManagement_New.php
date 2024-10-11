@@ -519,6 +519,7 @@
                                                 <?php
                                                 $i = 1;
                                                 foreach ($dayData as $data):
+                                                    // var_dump()
                                                     $teamuid = $data->user_id;
                                                 ?>
                                                     <tr>
@@ -644,13 +645,19 @@
                                                         <!--  --> 
                                                         <td data-question="Day End Image is Good" data-userid="<?= $data->user_id; ?>" data-period="Yesterday Evening" data-cdate="<?= $cdate; ?>">
                                                             <?php
-                                                            if (isset($checkcloseday[0]->ucimg)) { ?>
-                                                                <a href="<?= base_url() . '/' . $checkcloseday[0]->ucimg; ?>">
-                                                                    <img class="uimage" height="100px" alt="image not found" src="<?= base_url() . '/' . $checkcloseday[0]->ucimg; ?>">
-                                                                </a>
-                                                            <?php } else { ?>
-                                                                <span class="text-danger p-1 font-weight-bold"> Not closed yet..!!</span>
-                                                            <?php } ?>
+                                                            // echo $this->db->last_query();
+                                                            // var_dump($checkcloseday);
+                                                            // if (isset($checkcloseday[0]->ucimg)) { ?>
+                                                                 <!-- <a href="<?= base_url() . '/' . $checkcloseday[0]->ucimg; ?>">
+                                                                     <img class="uimage" height="100px" alt="image not found" src="<?= base_url() . '/' . $checkcloseday[0]->ucimg; ?>">
+                                                                 </a> -->
+                                                             <?php //} else { ?>
+                                                            <!-- //     <span class="text-danger p-1 font-weight-bold"> Not closed yet..!!</span> -->
+                                                             <?php // } ?>
+                                                            
+                                                            <a href="<?= base_url() . '/' . $data->user_close_image; ?>">
+                                                                <img class="uimage" height="100px" alt="image not found" src="<?= base_url() . '/' . $data->user_close_image; ?>">
+                                                            </a>
                                                             <br><br>
                                                             <hr>
                                                             <p class="question">Day End Image is Good?</p>
@@ -760,7 +767,7 @@
                                                             $sdate->modify('-1 day');
                                                             $previousDate = $sdate->format('Y-m-d');
 
-                                                            $chkStarRating = $this->Management_model->CheckStarRatingsExistorNot_New($teamuid, $previousDate, 'Day End Image is Good', 'Yesterday Evening');
+                                                            $chkStarRating = $this->Management_model->CheckStarRatingsExistorNot_New($teamuid, $previousDate, 'Day End Location as per Plan', 'Yesterday Evening');
 
                                                             if (sizeof($chkStarRating) == 0) { ?>
                                                                 <div class="rating">
@@ -793,13 +800,13 @@
                                                             
                                                             <?= $data->total_timeTakeFor_planner ?>
                                                             <hr>
-                                                            <p class="question">Time take to plan the planner.??</p>
+                                                            <p class="question">Time taken to plan the planner.??</p>
                                                             <?php
                                                             $sdate = new DateTime($cdate);
                                                             $sdate->modify('-1 day');
                                                             $previousDate = $sdate->format('Y-m-d');
 
-                                                            $chkStarRating = $this->Management_model->CheckStarRatingsExistorNot_New($teamuid, $previousDate, 'Was day ended on good time', 'Yesterday Evening');
+                                                            $chkStarRating = $this->Management_model->CheckStarRatingsExistorNot_New($teamuid, $previousDate, 'total time taken to plan planner', 'Yesterday Evening');
 
                                                             if (sizeof($chkStarRating) == 0) { ?>
                                                                 <div class="rating">
@@ -1182,6 +1189,7 @@
                                                                 echo "<br/> <hr/>";
                                                                 $start = new DateTime($ustart);
                                                                 $end = new DateTime($uclose);
+                                                                echo $end;
                                                                 $interval = $start->diff($end);
                                                                 $minutesd = ($interval->h * 60) + $interval->i;
                                                                 $hours = floor($minutesd / 60);

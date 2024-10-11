@@ -392,7 +392,7 @@
                     <p>You Are Starting Day at <b><?=date('H:i:s');?></b><br><br>
                     <div class="mb-4">
                       <select class="form-control" name="wffo" id="wffo" style="width:400px">
-                      <option value="">Start Your Days</option>
+                      <!-- <option value="">Start Your Days</option> -->
                         <?php $userdfrom = $this->Menu_model->userworkfrom() ?>
                             <?php foreach($userdfrom as $udfrom){ ?>
                             <option value="<?= $udfrom->ID; ?>"><?= $udfrom->TYPE; ?></option>

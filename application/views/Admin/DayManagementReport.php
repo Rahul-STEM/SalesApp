@@ -324,13 +324,18 @@ $(document).ready(function() {
             $('.data-table').each(function() {
                 const table = $(this).DataTable();
                 let tableData = [];
-                
+                console.log(table);
+                // return false;
                 if (table) {
                     let headers = table.columns().header().toArray().map(header => $(header).text());
                     tableData.push(headers);
+                    alert(headers);
+                    // return false;
 
                     table.rows({ search: 'applied' }).every(function() {
-                        tableData.push(this.data().toArray());
+                        // tableData.push(this.data().toArray());
+                        tableData.push(this.data());
+
                     });
                 }
                 allData = allData.concat(tableData);
@@ -382,7 +387,7 @@ $(document).ready(function() {
       "buttons": ["excel", "pdf"]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     </script> -->
-    <!-- <script>
+<!-- <script>
         $(document).ready(function() {
 
             const userName = "<?php echo htmlspecialchars($getReportbyUser[0]->userName); ?>";
@@ -507,7 +512,7 @@ $(document).ready(function() {
         });
 
     </script> -->
-    <!-- <script>
+<!-- <script>
         function ExportExcel(userID,startDate,endDate){
             
             $.ajax({

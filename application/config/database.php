@@ -75,9 +75,13 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => '216.10.249.56',
-	'username' => 'staging',
-	'password' => 'InDia@2024&',
+	// 'hostname' => '216.10.249.56',
+	// 'username' => 'staging',
+	// 'password' => 'InDia@2024&',
+	// 'database' => 'staging_stemapp_stemapp',
+	'hostname' => 'localhost',
+	'username' => 'root',
+	'password' => '',
 	'database' => 'staging_stemapp_stemapp',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

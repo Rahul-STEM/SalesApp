@@ -701,6 +701,25 @@ if($type_id == 3){
                         <h5>Task Planner</h5>
                       </div>
                       <div class="card-body">
+                        <div class="form-check" id="note">
+                            <?php 
+
+                                $dayStartFrom = getUserDayStartStatus($uid);
+                                // var_dump($dayStartFrom[0]->wffo);
+                                $wffo = $dayStartFrom[0]->wffo;
+
+                                if($wffo == 1){
+                                    $daystartedFrom = 'Office';
+                                }elseif ($wffo == 1) {
+                                    $daystartedFrom = 'Field';
+                                }else{
+                                    $daystartedFrom = 'Field + Office';
+                                }
+                            
+                            ?>
+                            <span><strong>** (You started you day from <span style="color:blue;"><?=$daystartedFrom?></span>. Filters will be available accordingly..!!)</strong></span>
+                        </div>
+                        <!-- <br> -->
                         <?php  
                         $current_date = date("Y-m-d");
                         $tomorrow_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
@@ -780,9 +799,9 @@ if($type_id == 3){
                         $dyslimit = 30;
                        }
                        $cmpstatss = '4,5'; // Status with - WDL AND NI
-                        $statusnochangecmp = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$days,$cmpstatus);
+                        $statusnochangecmp = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$days,$cmpstatus,$adate);
                         $statusnochangecmpcnt = sizeof($statusnochangecmp);
-                        $statusnochangecmp_wdl_nl = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$dyslimit,$cmpstatss);
+                        $statusnochangecmp_wdl_nl = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$dyslimit,$cmpstatss,$adate);
                         $statusnochangecmp_wdl_nl_cnt = sizeof($statusnochangecmp_wdl_nl);
                         $status_nochangecnt = $statusnochangecmpcnt + $statusnochangecmp_wdl_nl_cnt;
                         if($status_nochangecnt > 0){$cssct = 'text-danger';}else{$cssct = '';}
@@ -870,9 +889,9 @@ if($type_id == 3){
                          <?php } } ?> 
                          <?php 
                          
-                         $impcomp ['Compulsive Task']= 0;
-                         $impcomp ['No Work Days']= 0;
-                         $impcomp ['Need Your Attention']= 0;
+                        //  $impcomp ['Compulsive Task']= 0;
+                        //  $impcomp ['No Work Days']= 0;
+                        //  $impcomp ['Need Your Attention']= 0;
                             $elementsGreaterThanOne = [];
                             foreach ($impcomp as $key => $value) {
                                 if ($value > 1) {

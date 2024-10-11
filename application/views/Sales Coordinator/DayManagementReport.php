@@ -331,7 +331,8 @@ $(document).ready(function() {
                     tableData.push(headers);
 
                     table.rows({ search: 'applied' }).every(function() {
-                        tableData.push(this.data().toArray());
+                        // tableData.push(this.data().toArray());
+                        tableData.push(this.data());
                     });
                 }
                 allData = allData.concat(tableData);

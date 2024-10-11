@@ -4847,6 +4847,37 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         $query=$this->db->query("SELECT (select name FROM user_details where user_id=assignedto_id) as name,(select id FROM init_call where cmpid_id=cid_id) as inid,(select compname FROM company_master where id=inid) as compname, tblcallevents.* FROM tblcallevents WHERE user_id='$uid' and mtype='RP'");
         return $query->result();
     }
+
+    public function getShiftStartRequest($uid,$uyid){
+        $date = date('Y-m-d');
+        $this->db->select('daystartrequest.*');
+        $this->db->select('user_details.name');
+        $this->db->from('daystartrequest');
+        $this->db->join('user_details', 'daystartrequest.user_id = user_details.user_id', 'left'); // Adjust the join condition
+
+        $this->db->where('CAST(created_at AS DATE) =', $date);
+        // $this->db->where('daystartrequest.status', 0);
+
+
+        if($uyid == 2){
+
+            $this->db->where_in('user_details.admin_id', $uid);
+
+        }elseif ($uyid == 13) {
+            $this->db->where_in('user_details.admin_id', $uid);
+
+        }elseif ($uyid == 15) {
+            $this->db->where_in('user_details.admin_id', $uid);
+
+        }
+
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+        // $query=$this->db->query("SELECT * from daystartrequest where cast(created_at AS DATE)='$date'");
+        return $query->result();
+    }
+
+
     public function get_tbldata($id){
         $query=$this->db->query("SELECT * FROM tblcallevents WHERE id='$id'");
         return $query->result();
@@ -4879,6 +4910,12 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         $query=$this->db->query("SELECT cast(ustart as TIME) as ustart,cast(uclose as TIME) as uclose FROM user_day WHERE user_id='$uid' and cast(sdatet as DATE)='$tdate'");
         return $query->result();
     }
+
+    public function getShiftStartData($uid,$tdate){
+        $query=$this->db->query("SELECT * FROM daystartrequest WHERE user_id='$uid' and cast(created_at as DATE)='$tdate'");
+        return $query->result();
+    }
+
      public function get_Yestdaydetail($uid,$tdate){
         $query=$this->db->query("SELECT id,ustart,uclose FROM user_day WHERE user_id='$uid' and cast(sdatet as DATE)='$tdate' and uclose is null");
         return $query->result();
@@ -5441,7 +5478,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
     }
     public function add_plan2($pdate,$uid,$ptime,$inid,$ntaction,$ntstatus,$ntppose,$ttype,$tptime,$new_datetime,$selectby,$jsonData){
         $date = $new_datetime;
- 
+
         if($ntaction==3 || $ntaction==4){
  
              $data = $this->Menu_model->get_initbyid($inid);
@@ -5477,14 +5514,15 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
              }
              $this->db->query("INSERT INTO notify(uid,type,sms) VALUES ('$uid','1','$meetname Created form Funnel')");
          }else{
-           
+         
             if($jsonData == '[]'){
                 $jsonData = '{"Filter_By":"'.$selectby.'"}';
             }
-    
+           
+
             $this->db->query("INSERT INTO tblcallevents(lastCFID, nextCFID, draft, event, fwd_date, actontaken, nextaction, meeting_type, live_loaction, mom_received, appointmentdatetime, actiontype_id, assignedto_id, cid_id, purpose_id, remarks, status_id, user_id, date, updateddate, updation_data_type,plan,tptype,tptime,selectby,filter_by)
             VALUES ('0', '0', '', '', '$date', 'no', '$ntaction', 'NA','NA','no','$date','$ntaction','$uid','$inid','$ntppose','','$ntstatus','$uid','$date','$date','updated','1','$ttype','$tptime','$selectby','$jsonData')");
-           
+        //    echo  $this->db->last_query();exit;
             $tblid = $this->db->insert_id();
           
          //    if($cs!='1' and $ntaction=='1'){ $this->db->query("INSERT INTO tblcallevents (fwd_date,appointmentdatetime,actiontype_id,assignedto_id,cid_id,purpose_id,status_id,user_id,plan,lastCFID,nextCFID) value('$date','$date',2,'$uid',$inid,22,$ntstatus,'$uid','1','0','0')");}
@@ -6056,6 +6094,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         $this->load->library('upload', $config);
         $this->upload->do_upload('file');
         $uploadData = $this->upload->data();
+        // var_dump($uploadData);die;
         $filename = $uploadData['file_name'];
         return $fpn = $uploadPath.$filename;
     }
@@ -6802,6 +6841,11 @@ return "Days: $days, Hours: $hours, Minutes: $minutes, Seconds: $seconds";
     public function plan_review($plandate,$uid,$bdid,$reviewtype,$meetlink,$fixdate){
         $query=$this->db->query("INSERT INTO allreview(plant, uid, bdid, meetid, reviewtype, fixdate)
                                     VALUES ('$plandate','$uid','$bdid','$meetlink','$reviewtype','$fixdate')");
+    }
+
+    public function InsertdayshiftstartReq($uid,$shiftReqdd,$requestForstartDay){
+        $query=$this->db->query("INSERT INTO `daystartrequest`(`user_id`, `reason`, `remark`) VALUES ('$uid','$shiftReqdd','$requestForstartDay')");
+        // echo $this->db->last_query();die;
     }
     
     public function all_bdrremark($deletef,$patnertype,$topspender,$keyclient,$pkeyclient,$priorityclient,$upsellclient,$focusyclient,$rid,$inid,$bdid,$remark,$ntdate,$ntaction,$pstuid,$exsid,$exdate,$rtype,$taskupdate,$potential,$ans1,$ans2,$ans3,$ans4,$requeststatus,$csrbudget,$bdscholl,$travelcluster,$cluster_id){
@@ -10313,6 +10357,7 @@ public function get_tentative_comp($uid){
     
 // New TaskCheck function <======================== START ==============================>
 public function get_userForTask($uid,$uyid){
+    
     $this->db->select('user_id');
     $this->db->select('name');
     $this->db->from('user_details');
@@ -10332,6 +10377,7 @@ public function get_userForTask($uid,$uyid){
     $this->db->order_by('name','ASC');
 
     $query = $this->db->get();
+
         //  echo  $this->db->last_query(); die;
     return $query->result();
 }
@@ -12228,7 +12274,14 @@ public function getRequestMOMBYID($id){
     return $query->result();
 }
 // 10-08-2024
-public function getCompanyWhichNoStatusChange($uid,$days,$status){
+public function getCompanyWhichNoStatusChange($uid,$days,$status,$adate){
+
+    if ( $adate  != date('Y-m-d')) {
+        
+        $date = $adate;
+    }else{
+        $date = date('Y-m-d');
+    }
     $user_data  = $this->session->userdata('user');
     $user_id    = $user_data['user_id'];
     $uyid       =  $user_data['type_id'];
@@ -12243,8 +12296,15 @@ public function getCompanyWhichNoStatusChange($uid,$days,$status){
     }
     // $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE $text AND init_call.cstatus IN ($status) AND (tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE()) AND ((SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id) >= 8) AND NOT EXISTS (SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND tce.user_id = '$uid' AND DATE(tce.appointmentdatetime) = CURDATE())");
     // $query=$this->db->query("SELECT DISTINCT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus, DATEDIFF(CURDATE(), tblcallevents.appointmentdatetime) AS days FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE $text AND init_call.cstatus IN ($status) AND tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE() AND (SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id) >= 3 AND NOT EXISTS (SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND tce.user_id = '$uid' AND DATE(tce.appointmentdatetime) = CURDATE()) HAVING days > $days");
-    $query=$this->db->query("SELECT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus, MAX(DATEDIFF(CURDATE(), tblcallevents.appointmentdatetime)) AS days FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE $text AND init_call.cstatus IN ($status) AND tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE() AND (SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id) >= 3 AND NOT EXISTS (SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND tce.user_id = '$uid' AND DATE(tce.appointmentdatetime) = CURDATE()) GROUP BY init_call.id, company_master.compname, partner_master.name, init_call.cstatus HAVING days > $days");
-    // echo $this->db->last_query();
+
+    
+    // $query=$this->db->query("SELECT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus, MAX(DATEDIFF(CURDATE(), tblcallevents.appointmentdatetime)) AS days FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE $text AND init_call.cstatus IN ($status) AND tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < CURDATE() AND (SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < CURDATE() AND tblcallevents.cid_id = init_call.id) >= 3 AND NOT EXISTS (SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND tce.user_id = '$uid' AND DATE(tce.appointmentdatetime) = CURDATE()) GROUP BY init_call.id, company_master.compname, partner_master.name, init_call.cstatus HAVING days > $days");
+
+
+    $query=$this->db->query("SELECT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus, MAX(DATEDIFF('$date', tblcallevents.appointmentdatetime)) AS days FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE $text AND init_call.cstatus IN ($status) AND tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < '$date' AND (SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < '$date' AND tblcallevents.cid_id = init_call.id) >= 3 AND NOT EXISTS (SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND tce.user_id = '$uid' AND DATE(tce.appointmentdatetime) = '$date') GROUP BY init_call.id, company_master.compname, partner_master.name, init_call.cstatus HAVING days > $days");
+
+
+    //  echo $this->db->last_query();exit;
     return $query->result();
 }
 public function CompanyThatBDHasNoWorkedInDays($uid,$days,$status){
@@ -12311,8 +12371,23 @@ public function GetDayCloseRequestData($uid,$adate,$uyid){
 }
 public function getUserDayStartDetails($uid,$tdate){
     $query=$this->db->query("SELECT * FROM user_day WHERE user_id='$uid' and cast(sdatet as DATE)='$tdate'");
+    // echo $this->db->last_query();die;
     return $query->result();
 }
+
+public function getDaystartRequestCount($uid,$tdate){
+    $query=$this->db->query("SELECT * FROM daystartrequest WHERE user_id='$uid' and cast(created_at as DATE)='$tdate'");
+    // echo $this->db->last_query();die;
+    return $query->result();
+}
+
+public function getDaystartRequestApprovedCount($uid,$tdate){
+    $query=$this->db->query("SELECT COUNT(id) as count FROM daystartrequest WHERE user_id='$uid' and cast(created_at as DATE)='$tdate'");
+    // echo $this->db->last_query();die;
+    return $query->result();
+}
+
+
 public function GetTodaysAutoTaskANDPlanningTime($uid,$tdate){
     $curdate = date("Y-m-d");
     $query  =  $this->db->query("SELECT * FROM `autotask_time` where user_id='$uid' AND date ='$curdate'");

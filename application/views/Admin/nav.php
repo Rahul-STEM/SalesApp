@@ -422,6 +422,70 @@
 
           </li>
 
+          <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-circle"></i>
+                    <p>
+                        Requests
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                            <i class="far fa-dot-circle nav-icon"></i>
+                            <p>
+                                Task Planner Requests
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="<?=base_url();?>Menu/TodaysTaskApprovelRequest" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Task Planner Start Request</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?=base_url();?>Menu/PlannerTaskApprovelPage" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Planner Task Approval</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>
+                                    Day Requests
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="<?=base_url();?>Menu/YesterDayDaysCloseRequest" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Day Close Request</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?=base_url();?>Menu/dayShiftStartReq" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Late Shift Start Request</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?=base_url();?>Menu/GetTodaysTeamDayChnageRequestData" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Day Change Request</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                
            <li class="nav-item">
 
             <a href="<?=base_url();?>Menu/TodaysTaskApprovelRequest" class="nav-link">
@@ -609,38 +673,6 @@
 
           </li>
 
-          
-
-          <!--<li class="nav-item">
-
-            <a class="nav-link" href="<?=base_url();?>Menu/CONVERSIONBWDATE" >
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Conversion B/W Date</p>
-
-            </a>
-
-          </li>
-
-          
-
-          <li class="nav-item">
-
-            <a class="nav-link" href="<?=base_url();?>Menu/ExpectedSchool" >
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Expected School</p>
-
-            </a>
-
-          </li>-->
-
-          
-
-          
-
           <li class="nav-item">
 
             <a class="nav-link" href="<?=base_url();?>Menu/AllUtilisation" >
@@ -799,42 +831,6 @@
             </ul>
             </li>
 
-          <!-- <li class="nav-item dropdown">
-
-            <a href="" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-            <i class="far fa-circle nav-icon"></i>
-
-            <p>Analysis</p>
-
-            </a>
-
-            <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
-             <a class="dropdown-item" href="<?= base_url(); ?>Graphs/Fgraphs">FGraph</a>
-             
-              <a class="dropdown-item" href="<?= base_url(); ?>Menu/day">DGraph</a>
-
-              <a class="dropdown-item" href="<?= base_url(); ?>Menu/request">RGraph</a>
-
-              <a class="dropdown-item" href="<?= base_url(); ?>Menu/region">ROGraph</a>
-
-              <a class="dropdown-item" href="<?= base_url(); ?>Menu/task">TGraph</a>
-
-            </div>
-
-          </li> -->
-      
-          <!--<li class="nav-item">-->
-
-          <!--  <a class="nav-link" href="<?=base_url();?>Menu/AnnualReviewReport" >-->
-
-          <!--    <i class="far fa-circle nav-icon"></i>-->
-
-          <!--    <p>Annual Review Report</p>-->
-
-          <!--  </a>-->
-
-          <!--</li>-->
 
           <li class="nav-item">
 
@@ -847,21 +843,6 @@
             </a>
 
           </li>
-
-          <!--<li class="nav-item">-->
-
-          <!--  <a class="nav-link" href="<?=base_url();?>Menu/AnnualReviewReportDataInAdmin" >-->
-
-          <!--    <i class="far fa-circle nav-icon"></i>-->
-
-          <!--    <p>Annual Review Report</p>-->
-
-          <!--  </a>-->
-
-          <!--</li>-->
-
-          
-
           <li class="nav-item">
 
             <a class="nav-link" href="<?=base_url();?>Menu/HumHongeTaiyarReportAdmin" >
@@ -1238,17 +1219,17 @@ function goForward() { window.history.forward(); }
 
 <script>
   //alert("Fuck");
-  $(document).ready(function() {  
-    //alert("inside");
-    var admin_id = <?=$uid?>;
-    console.log("Admin ID:", admin_id);
+// $(document).ready(function() {  
+//   //alert("inside");
+//     var admin_id = <?=$uid?>;
+//     console.log("Admin ID:", admin_id);
     
-    checkNotifications(admin_id);
+//     checkNotifications(admin_id);
     
-    setInterval(function() {
-        checkNotifications(admin_id); 
-    }, 10000); 
-  });
+//     setInterval(function() {
+//         checkNotifications(admin_id); 
+//     }, 10000); 
+// });
 
   function checkNotifications(admin_id) {
     console.log("Checking notifications for admin_id: " + admin_id);

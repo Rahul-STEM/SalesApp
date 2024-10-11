@@ -544,8 +544,9 @@ public function getAllActiveUserInDepartment(){
         $sdate = new DateTime($cdate);
         $sdate->modify('-1 day');
         $previousDate = $sdate->format('Y-m-d');
-        // $cdate = '2024-07-20';
+        $cdate = '2024-10-08';
         $dayData = $this->Management_model->CheckingDayManage_New($this->uid,$cdate);
+        // echo $this->db->last_query();die;
         // var_dump($dayData);die;
         $RequestApprovals = $this->Management_model->RequestApprovals($this->uid,$cdate);
         $ApprovedRequests = $this->Management_model->ApprovedRequests($this->uid,$cdate);

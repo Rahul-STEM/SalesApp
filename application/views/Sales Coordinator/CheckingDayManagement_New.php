@@ -644,13 +644,16 @@
                                                         <!--  --> 
                                                         <td data-question="Day End Image is Good" data-userid="<?= $data->user_id; ?>" data-period="Yesterday Evening" data-cdate="<?= $cdate; ?>">
                                                             <?php
-                                                            if (isset($checkcloseday[0]->ucimg)) { ?>
-                                                                <a href="<?= base_url() . '/' . $checkcloseday[0]->ucimg; ?>">
+                                                            // if (isset($checkcloseday[0]->ucimg)) { ?>
+                                                                <!-- <a href="<?= base_url() . '/' . $checkcloseday[0]->ucimg; ?>">
                                                                     <img class="uimage" height="100px" alt="image not found" src="<?= base_url() . '/' . $checkcloseday[0]->ucimg; ?>">
-                                                                </a>
-                                                            <?php } else { ?>
-                                                                <span class="text-danger p-1 font-weight-bold"> Not closed yet..!!</span>
-                                                            <?php } ?>
+                                                                </a> -->
+                                                            <?php // } else { ?>
+                                                                <!-- <span class="text-danger p-1 font-weight-bold"> Not closed yet..!!</span> -->
+                                                            <?php // } ?>
+                                                            <a href="<?= base_url() . '/' . $data->user_close_image; ?>">
+                                                                <img class="uimage" height="100px" alt="image not found" src="<?= base_url() . '/' . $data->user_close_image; ?>">
+                                                            </a>
                                                             <br><br>
                                                             <hr>
                                                             <p class="question">Day End Image is Good?</p>

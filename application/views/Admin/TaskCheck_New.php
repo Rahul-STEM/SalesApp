@@ -1,3 +1,7 @@
+<?php
+
+// echo $sizeOfTask;die;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -180,8 +184,10 @@
                         <form action="<?=base_url();?>Menu/TaskCheck_New" method="post" id="taskForm">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <select class="form-control" name="userId" <?php if (!empty($selectedUser)) echo 'disabled'; ?>>
-                                        <option selected disabled>--Select--</option>
+                                    <!-- <select class="form-control" name="userId" id="userSelect" <?php if (!empty($selectedUser && $sizeOfTask > 0)) echo 'disabled'; ?> onchange="myFunction()"> -->
+                                    <select class="form-control" name="userId" id="userSelect" <?php if (!empty($selectedUser && $sizeOfTask > 0)) echo 'disabled'; ?> onchange="checkTaskSize()">
+
+                                        <option value="">--Select--</option>
                                     <?php 
                                     foreach($userList as $user){?>
 
@@ -1267,6 +1273,20 @@
     });
 
 </script>
+
+<script>
+
+$(document).ready(function() {
+
+    var sizeOfTask = <?php echo $sizeOfTask; ?>; // Use PHP to get the value of sizeOfTask
+    // alert(sizeOfTask);
+    if (sizeOfTask == 0) {
+        alert('No task present for selected user..!!');
+    } 
+});
+
+</script>
+
 
 <script>
     $(".rating input").on("click", function() {

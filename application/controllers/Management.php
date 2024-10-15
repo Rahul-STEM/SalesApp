@@ -698,7 +698,7 @@ public function DayManagementReport()
             // Append the record to the appropriate period under the correct date
             $groupedByDate[$date][$period][] = $record;
         }
-        
+        var_dump($groupedByDate);die;
         if (!empty($user)) {
             // $this->load->view('include/header');
             // $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);

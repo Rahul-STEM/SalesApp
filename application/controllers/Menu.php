@@ -4437,10 +4437,11 @@ class Menu extends CI_Controller {
 
 
     public function LateDayStartapprove($id,$type){
+        // echo $type;die;
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
-        if($type == 1){
+        if($type == 'Approve'){
             $status     = 1;
             $approved_by    = $uid;
             $apr_time   = date("Y-m-d H:i:s");
@@ -8111,6 +8112,7 @@ public function Dashboard(){
         }
 
     }
+
     public function MeetingCheck(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d',strtotime("-1 days"));
@@ -17988,18 +17990,23 @@ public function TaskCheck_NewReport()
         // Decode the JSON data
         $data = json_decode($jsonData, true);
         // print_r($data);
+        $successCount = 0;
         $this->load->model('Menu_model');
         foreach ($data as $review) {
             // var_dump($review);die;
             $review['date'] = date('Y-m-d');
             $review['feedback_by'] = $uid;
             $result = $this->Menu_model->InsertMoMTaskRating($review);
-            $result1 = json_encode('success');
+            $successCount++;
+            // $result1 = json_encode('success');
             // echo $result1;die;
-            echo json_encode($result1);
+            // echo json_encode($result1);
             // echo jsin_"success..!!";
             // echo $this->db->last_query();die;
         }
+
+        echo json_encode(['status' => 'success', 'inserted' => $successCount]);
+        exit;
     }
 /*******task Planner***Deepak***6_09_2024******/
 // Start Day Close Request

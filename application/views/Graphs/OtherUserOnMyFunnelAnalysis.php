@@ -555,9 +555,10 @@ document.getElementById('status').addEventListener('change', function() {
 
 
     } else {
+
         actionDropdown.value = "no"; // Reset to default if not completed
         purposeDropdown.value = "no";
-        // actionDropdown.disabled = false;
+        actionDropdown.disabled = false;
         purposeDropdown.disabled = false;
     }
 });

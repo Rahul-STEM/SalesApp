@@ -1125,7 +1125,7 @@
                                     <p> <strong>Photo:</strong> <img id="modalPhoto" src="" alt="Photo" class="img-fluid"> </p>
 
                                     <p><b>Was company photo is right..??</b> </p>
-                                    <fieldset class="MoMrating" data-question="Was company photo is right" data-userid="" data-taskid="">
+                                    <fieldset class="MoMrating" data-question="Was company photo right" data-userid="" data-taskid="">
                                         <input type="radio" name="momrat2_5" value="5" id="25_rating_2"><label for="25_rating_2">☆</label>
                                         <input type="radio" name="momrat2_5" value="4" id="24_rating_2"><label for="24_rating_2">☆</label>
                                         <input type="radio" name="momrat2_5" value="3" id="23_rating_2"><label for="23_rating_2">☆</label>
@@ -1571,10 +1571,10 @@ $(document).ready(function() {
                             // remarkBox.classList.remove('visible');
                         }
 
-                        const radios = fieldset.querySelectorAll('input[type="radio"]');
-                        radios.forEach(radio => {
-                            radio.disabled = true;
-                        });
+                        // const radios = fieldset.querySelectorAll('input[type="radio"]');
+                        // radios.forEach(radio => {
+                        //     radio.disabled = true;
+                        // });
                     }
                 });
             });
@@ -1594,6 +1594,7 @@ $(document).ready(function() {
 
             // Collect ratings and associated questions
             document.querySelectorAll('.MoMrating').forEach(fieldset => {
+
                 const question = fieldset.getAttribute('data-question');
                 const selectedRating = fieldset.querySelector('input[type="radio"]:checked');
                 const ratingValue = selectedRating ? selectedRating.value : null;

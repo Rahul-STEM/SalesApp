@@ -2701,6 +2701,10 @@ class Graph_Model extends CI_Model
 
     public function get_OtherUserOnMyFunnelGraph($uid,$month,$financialYear,$sdate,$edate,$selected_category,$selected_partnerType,$Selected_userType,$selected_cluster,$selected_users,$userTypeid,$Selected_action,$Selected_purpose){
 
+        // echo "action:" .$Selected_action;
+        // echo "<br>";
+        // echo "purpose:" .$Selected_purpose;die;
+
         $this->db->select('init_call.id');
         $this->db->from('init_call');
         $this->db->join('company_master', 'company_master.id = init_call.cmpid_id', 'left');
@@ -2714,7 +2718,7 @@ class Graph_Model extends CI_Model
 
                 if ($singleCategory == 'topspender') {
 
-                    $this->db->or_where('focus_funnel', 'yes');
+                    $this->db->or_where('topspender', 'yes');
                 }
                 if ($singleCategory == 'focus_funnel') {
 
@@ -2766,19 +2770,19 @@ class Graph_Model extends CI_Model
             }
         }
 
-        if ($userTypeid == 2) {
+        // if ($userTypeid == 2) {
 
-            $this->db->where('user_details.admin_id', $uid);
+        //     $this->db->where('user_details.admin_id', $uid);
             
-        } elseif ($userTypeid == 4) {
+        // } elseif ($userTypeid == 4) {
 
-            $this->db->where_in('pst_co', $uid);
-        } elseif ($userTypeid == 9 || $userTypeid == 13) {
+        //     $this->db->where_in('pst_co', $uid);
+        // } elseif ($userTypeid == 9 || $userTypeid == 13) {
 
-            $this->db->where_in('aadmin', $uid);
-        } else {
-            $this->db->where('user_id', $uid);
-        }
+        //     $this->db->where_in('aadmin', $uid);
+        // } else {
+        //     $this->db->where('user_id', $uid);
+        // }
 
         // $this->db->where('user_details admin_id', $uid);
         $this->db->join('user_details', 'user_details.user_id = init_call.mainbd', 'left');
@@ -2794,10 +2798,11 @@ class Graph_Model extends CI_Model
         $subquery2 = $this->db->get_compiled_select();
         // SELECT id FROM init_call WHERE mainbd IN('.$selected_users.'))'
         // echo $subquery;die;
-        if ($Selected_action == null) {
-            $Selected_action = 'Yes';
-        }
-        $this->db->select('COUNT(*) as cont');
+        // if ($Selected_action == null) {
+        //     $Selected_action = 'Yes';
+        // }
+
+            $this->db->select('COUNT(*) as cont');
             $this->db->select('COUNT(case when actiontype_id = 1 then 1 end) as a');
             $this->db->select('COUNT(case when actiontype_id = 2 then 1 end) as b');
             $this->db->select('COUNT(case when actiontype_id = 3 then 1 end) as c');
@@ -2811,6 +2816,7 @@ class Graph_Model extends CI_Model
             $this->db->select('COUNT(case when actiontype_id = 11 then 1 end) as k');
             $this->db->from('tblcallevents');
             // ->where_in('cid_id', $subquery, FALSE)
+
             if (!empty($selected_users)) {
                 # code...
                 $this->db->where_in('tblcallevents.user_id', $selected_users);
@@ -2818,7 +2824,7 @@ class Graph_Model extends CI_Model
             }
             $this->db->where('actontaken', $Selected_action);
             $this->db->where('purpose_achieved', $Selected_purpose);
-            $this->db->where('nextCFID !=', '0');
+            // $this->db->where('nextCFID !=', '0');
             // ->where('CAST(updateddate AS DATE) >=', $sdate)
             // ->where('CAST(updateddate AS DATE) <=', $edate)
             $this->db->where('MONTH(updateddate) >=', $month);
@@ -2827,7 +2833,7 @@ class Graph_Model extends CI_Model
 
         $query = $this->db->get();
 
-        // echo $this->db->last_query();die;
+        // echo $this->db->last_query();
         return $query->result();
     }
 
@@ -2888,10 +2894,10 @@ class Graph_Model extends CI_Model
         }
 
 
-        if (!empty($selected_usersType)) {
+        if (!empty($selected_userType)) {
             $this->db->group_start();
 
-            foreach ($selected_usersType as $singleuserType) {
+            foreach ($selected_userType as $singleuserType) {
                 
                 if ($singleuserType == 2) {
 
@@ -2927,15 +2933,15 @@ class Graph_Model extends CI_Model
         $this->db->where('actontaken', $actionType);
         $this->db->where('purpose_achieved', $purposeType);
 
-        if ($status == 1) {
+        // if ($status == 1) {
 
-            $this->db->where('tblcallevents.nextCFID !=', '0');
-            $this->db->where('tblcallevents.initiateddt != ', NULL);
+        //     $this->db->where('tblcallevents.nextCFID !=', '0');
+        //     $this->db->where('tblcallevents.initiateddt != ', NULL);
 
-        }elseif ($status == 0) {
+        // }elseif ($status == 0) {
             
-            $this->db->where('tblcallevents.nextCFID ', '0');
-        }
+        //     $this->db->where('tblcallevents.nextCFID ', '0');
+        // }
 
         $this->db->where('CAST(updateddate AS DATE) >=', $sdate);
         $this->db->where('CAST(updateddate AS DATE) <=', $edate);
@@ -3347,7 +3353,7 @@ class Graph_Model extends CI_Model
 
         $this->db->where('CAST(updateddate AS DATE) >=', $sdate);
         $this->db->where('CAST(updateddate AS DATE) <=', $edate);
-        $this->db->where('tblcallevents.initiateddt != ', NULL);
+        // $this->db->where('tblcallevents.initiateddt != ', NULL);
         $this->db->order_by('user_details.name', 'ASC');
         $this->db->order_by('tblcallevents.cid_id', 'DESC');
         $this->db->order_by('tblcallevents.updateddate', 'ASC');
@@ -3528,7 +3534,7 @@ class Graph_Model extends CI_Model
 
         $this->db->where('CAST(updateddate AS DATE) >=', $sdate);
         $this->db->where('CAST(updateddate AS DATE) <=', $edate);
-        $this->db->where('tblcallevents.initiateddt != ', NULL);
+        // $this->db->where('tblcallevents.initiateddt != ', NULL);
         $this->db->order_by('user_details.name', 'ASC');
         $this->db->order_by('tblcallevents.cid_id', 'DESC');
         $this->db->order_by('tblcallevents.updateddate', 'ASC');

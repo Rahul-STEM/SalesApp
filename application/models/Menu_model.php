@@ -4864,10 +4864,10 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
             $this->db->where_in('user_details.admin_id', $uid);
 
         }elseif ($uyid == 13) {
-            $this->db->where_in('user_details.admin_id', $uid);
+            $this->db->where_in('user_details.aadmin', $uid);
 
         }elseif ($uyid == 15) {
-            $this->db->where_in('user_details.admin_id', $uid);
+            $this->db->where_in('user_details.sales_co', $uid);
 
         }
 
@@ -10361,18 +10361,19 @@ public function get_userForTask($uid,$uyid){
     $this->db->select('user_id');
     $this->db->select('name');
     $this->db->from('user_details');
-    if($uyid == 2){
-        $this->db->where('admin_id',$uid);
-    }elseif ($uyid == 15 ) {
+
+    // if($uyid == 2){
+    //     $this->db->where('admin_id',$uid);
+    // }elseif ($uyid == 15 ) {
         
-        $this->db->where('sales_co',$uid);
-    }elseif ($uyid == 4) {
+    //     $this->db->where('sales_co',$uid);
+    // }elseif ($uyid == 4) {
         
-        $this->db->where('pst_co',$uid);
-    }elseif ($uyid == 9) {
+    //     $this->db->where('pst_co',$uid);
+    // }elseif ($uyid == 9) {
         
-        $this->db->where('aadmin',$uid);
-    }
+    //     $this->db->where('aadmin',$uid);
+    // }
     $this->db->where('status','active');
     $this->db->order_by('name','ASC');
 

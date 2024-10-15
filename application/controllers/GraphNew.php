@@ -960,8 +960,8 @@ public function getRoleUser_New(){
     public function StatusWiseTaskFunnelGraphData()
     {
 
-        var_dump($_POST);
-        die;
+        // var_dump($_POST);
+        // die;
     }
 
     // public function MonthWiseFunnelAnalysis(){
@@ -1321,7 +1321,7 @@ public function getRoleUser_New(){
         $financialYear = ($currentDate->format('m') >= 4) ? $currentDate->format('Y') : ($currentDate->format('Y') - 1);
 
         $TableData = $this->Graph_Model->APTableDetails($uid,$sdate,$edate,$category,$partnerType,$userType,$users,$userTypeid,$actionType,$purposeType,$status);
-
+        // var_dump($TableData);die;
         $FunnelData = '';
 
         if (!empty($user)) {

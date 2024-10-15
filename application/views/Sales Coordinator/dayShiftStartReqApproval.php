@@ -140,34 +140,37 @@
                               <tbody>
                                 <?php
                                 $j =1;
-                                foreach($getreqData as $data){ ?>
+                                foreach($mdata as $data){ 
+                                  // var_dump($mdata);die;
+                                  
+                                  ?>
                                 <tr>
                                   <th><?= $j ?></th>
                                   <td><?= $this->Menu_model->get_userbyid($data->user_id)[0]->name ?></td>
                                   <td><?= $data->date ?></td>
-                                  <td><?= $data->request_remarks ?></td>
+                                  <td><?= $data->reason ?></td>
                                   <td>
                                     <?php
-                                    if($data->approvel_status == ''){ ?>
+                                    if($data->status == '0'){ ?>
                                     <span class="p-1 bg-warning mr-2">Pending</span>
-                                    <?php }else if($data->approvel_status == 'Approved'){ ?>
+                                    <?php }else if($data->status == '1'){ ?>
                                     <span class="p-1 bg-success mr-2">Approved</span>
                                     <?php }else{ ?>
                                     <span class="p-1 bg-danger mr-2">Reject</span>
                                     <?php }?>
                                   </td>
-                                  <td><?=$data->remarks ?></td>
+                                  <td><?=$data->remark ?></td>
                                   <td>
                                     
                                     <?php
-                                    if($data->approvel_status == ''){ ?>
+                                    if($data->status == ''){ ?>
                                     
                                     <div>
-                                      <p><a href="<?=base_url();?>Menu/TodaysTaskapprove/<?= $data->id?>/Approve" class="btn btn-success mr-2" onclick="return confirm('Are you sure you want to Approved id?');" >Approve</a></p>
+                                      <p><a href="<?=base_url();?>Menu/LateDayStartapprove/<?= $data->id?>/Approve" class="btn btn-success mr-2" onclick="return confirm('Are you sure you want to Approved id?');" >Approve</a></p>
                                       <p><button type="button" class="btn btn-primary"  onclick="Reject(<?= $j ?>,<?= $data->id?>,'Reject')">Reject</button></p>
                                     </div>
                                     
-                                    <?php }else if($data->approvel_status == 'Approved'){ ?>
+                                    <?php }else if($data->status == 1){ ?>
                                     <span class="p-1 bg-success mr-2">Approved</span>
                                     <?php }else{ ?>
                                     <span class="p-1 bg-danger mr-2">Reject</span>

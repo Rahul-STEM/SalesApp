@@ -1830,6 +1830,7 @@ if($type_id == 3){
                           <input type="time" id="meeting-time" name="ptime" min="10:00" max="19:00" class="form-control" required=""> 
                           <hr>
                           <div class="form-group" id="selectcompany">
+                          <small>* You can only 3 company plans at a time</small>
                             <lable><span class="alertmessagecmp"><small>* You can only 3 company plans at a time</small></span></lable>
                             <select class="form-control" required="" multiple placeholder="Choose Company" data-allow-clear="1" name="selectcompanybyuser[]" id="selectcompanybyuser">
                               <option selected disabled>Select Company</option>

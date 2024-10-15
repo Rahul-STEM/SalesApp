@@ -383,11 +383,12 @@
 
                     $currentHour = (int) (new DateTime())->format('H:mm');
                     $daystartCount = getDaystartRequestCount($uid);
-                    // var_dump($daystartCount);die;
-                    if ($currentHour > 11) {
-
-                            $daystartApprovedCount = getDaystartRequestApprovedCount($uid);
+                    // var_dump($currentHour);die;
+                    if ($currentHour >= 11) {
+                        // echo 'hii';die;
+                        $daystartApprovedCount = getDaystartRequestApprovedCount($uid);
                         // var_dump($daystartApprovedCount[0]->count);die;
+
                         if ($daystartCount[0]->status == 0) { ?>
 
                             <form action="<?=base_url();?>Menu/dayshiftstart" method="post" enctype="multipart/form-data">

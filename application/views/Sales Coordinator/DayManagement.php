@@ -161,6 +161,9 @@
                         * Why did you not close your day yesterday?
                         </label>
                         <input type="hidden" value="<?= $uystart_id ?>" name="req_id">
+                        <div id="validationServer04Feedback" class="invalid-feedback">
+                          * Please select a valid reason.
+                        </div>
                         <select class="form-control is-invalid" id="validationServer04" aria-describedby="validationServer04Feedback" name="would_you_want" required style="width:500px;" >
                           <option selected disabled value="">Choose...</option>
                           <option value="I was caught up with an urgent task and lost track of time.">I was caught up with an urgent task and lost track of time.</option>
@@ -171,10 +174,13 @@
                           <option value="I had a backlog of work and wasn't able to finish everything on time.">I had a backlog of work and wasn't able to finish everything on time.</option>
                           <option value="I was working late on a high-priority project and didn't get a chance to update the records.">I was working late on a high-priority project and didn't get a chance to update the records.</option>
                           <option value="I was out of the office and unable to complete the update remotely.">I was out of the office and unable to complete the update remotely.</option>
+                          <option value="other">Other (please specify)</option>
+
                         </select>
-                        <div id="validationServer04Feedback" class="invalid-feedback">
+
+                        <!-- <div id="validationServer04Feedback" class="invalid-feedback">
                           * Please select a valid state.
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                     <hr class="hrclass" style="width: 600px;"/>
@@ -448,6 +454,20 @@
               }
           });
       });
+    </script>
+    <script>
+        $('#validationServer04').on('change', function() {
+            var dayCloseDD = $('#validationServer04').val();
+
+            if (dayCloseDD == 'other') {
+                
+                $('#requestForTodaysTaskPlan').prop('required', true);
+
+            } else {
+                
+                $('#requestForTodaysTaskPlan').prop('required', false);
+            }
+        });
     </script>
     <!-- /.row (main row) -->
     </div><!-- /.container-fluid -->

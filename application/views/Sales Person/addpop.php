@@ -1040,8 +1040,9 @@ date_default_timezone_set("Asia/Kolkata");
                                 case 'pending':
                                 
                                 var ab = document.getElementById("action_id").value;
-                                console.log(ab);
+                                // alert(ab);
                                 if(ab=="1"){
+                                    document.querySelector('#button').disabled = false;
                                 $("#purpose").show();
                                 $("#test2").hide();
                                 $("#test3").hide();
@@ -1052,6 +1053,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 $("#test9").hide();
                                 }
                                 if(ab=="10"){
+                                    document.querySelector('#button').disabled = false;
                                 $("#purpose").show();
                                 $("#test2").hide();
                                 $("#test3").hide();

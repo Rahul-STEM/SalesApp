@@ -12276,13 +12276,15 @@ public function getRequestMOMBYID($id){
 }
 // 10-08-2024
 public function getCompanyWhichNoStatusChange($uid,$days,$status,$adate){
-
+    // echo $adate;die;
     if ( $adate  != date('Y-m-d')) {
         
         $date = $adate;
     }else{
         $date = date('Y-m-d');
     }
+
+    // echo $date;
     $user_data  = $this->session->userdata('user');
     $user_id    = $user_data['user_id'];
     $uyid       =  $user_data['type_id'];
@@ -12304,8 +12306,7 @@ public function getCompanyWhichNoStatusChange($uid,$days,$status,$adate){
 
     $query=$this->db->query("SELECT init_call.id AS inid, company_master.compname AS compname, partner_master.name AS pname, init_call.cstatus, MAX(DATEDIFF('$date', tblcallevents.appointmentdatetime)) AS days FROM init_call LEFT JOIN company_master ON company_master.id = init_call.cmpid_id LEFT JOIN partner_master ON partner_master.id = company_master.partnerType_id LEFT JOIN tblcallevents ON tblcallevents.cid_id = init_call.id WHERE $text AND init_call.cstatus IN ($status) AND tblcallevents.id IS NOT NULL AND DATE(tblcallevents.appointmentdatetime) < '$date' AND (SELECT COUNT(*) FROM tblcallevents WHERE DATE(tblcallevents.appointmentdatetime) < '$date' AND tblcallevents.cid_id = init_call.id) >= 3 AND NOT EXISTS (SELECT 1 FROM tblcallevents tce WHERE tce.cid_id = init_call.id AND tce.user_id = '$uid' AND DATE(tce.appointmentdatetime) = '$date') GROUP BY init_call.id, company_master.compname, partner_master.name, init_call.cstatus HAVING days > $days");
 
-
-    //  echo $this->db->last_query();exit;
+    //  echo $this->db->last_query();
     return $query->result();
 }
 public function CompanyThatBDHasNoWorkedInDays($uid,$days,$status){

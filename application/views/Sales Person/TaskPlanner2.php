@@ -136,7 +136,7 @@
                 cache: false,
                 success: function a(result){
                   if(result > 0){
-                    alert("You have allready plan task for this time, please enter another time");
+                    alert("You have already plan task for this time, please enter another time");
                     input.value = "";
                     
                   }
@@ -1830,8 +1830,8 @@ if($type_id == 3){
                           <input type="time" id="meeting-time" name="ptime" min="10:00" max="19:00" class="form-control" required=""> 
                           <hr>
                           <div class="form-group" id="selectcompany">
-                          <small>* You can only 3 company plans at a time</small>
-                            <lable><span class="alertmessagecmp"><small>* You can only 3 company plans at a time</small></span></lable>
+                          <small>** You can select multiple companies by pressing Ctrl button. **</small>
+                            <lable><span class="alertmessagecmp"><b><small>** You can only 3 company plans at a time **</small></b></span></lable>
                             <select class="form-control" required="" multiple placeholder="Choose Company" data-allow-clear="1" name="selectcompanybyuser[]" id="selectcompanybyuser">
                               <option selected disabled>Select Company</option>
                               <option value="all">All</option>
@@ -1839,12 +1839,12 @@ if($type_id == 3){
                             <p id="totalcompany"></p>
                           </div>
                           <div class="form-group">
-                          <select id="ntactionnew" name="ntaction" class="form-control" required="">
-                              <option value="">Select Action</option>
-                              <?php  foreach($action as $a){if($a->id!=3 && $a->id!=4 && $a->id!=6 && $a->id!=8 && $a->id!=9 && $a->id!=11 && $a->id!=17 && $a->id!=15 && $a->id!=18){ ?>
-                              <option value="<?=$a->id;?>"><?=$a->name;?></option>
-                              <?php }} ?>
-                            </select>
+                            <select id="ntactionnew" name="ntaction" class="form-control" required="">
+                                <option value="">Select Action</option>
+                                <?php  foreach($action as $a){if($a->id!=3 && $a->id!=4 && $a->id!=6 && $a->id!=8 && $a->id!=9 && $a->id!=11 && $a->id!=17 && $a->id!=15 && $a->id!=18){ ?>
+                                <option value="<?=$a->id;?>"><?=$a->name;?></option>
+                                <?php }} ?>
+                                </select>
                           </div>
                           <div class="form-group">
                           <?php $clusters = $this->Menu_model->getClusterByUserId($uid); ?>

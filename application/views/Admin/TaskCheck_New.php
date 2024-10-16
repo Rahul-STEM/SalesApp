@@ -231,6 +231,7 @@
                                 <?php 
                                     $i=1; 
                                     foreach($taskList as $task){
+                                        // var_dump($task);die;
 
                                         $getLastActionDetails = getLastActionDetails($task->tid,$task->user_id,$cdate);
 
@@ -267,13 +268,16 @@
                                         }else{
                                             $OGTaskType = ''; 
                                         }
-                                        $filterUsed = ($task->filter_by);
+                                        $filterUsed = ($task->filter_used);
                                         $filterUsed = json_decode($filterUsed, true);
-                                        // var_dump($filterUsed);die;
                                         $SinglefilterUsedFinal = '';
                                         if (is_array($filterUsed)) {
-
+                                            
                                             foreach ($filterUsed as $key => $SinglefilterUsed) {
+                                                // var_dump($SinglefilterUsed);die;
+
+                                                // echo $SinglefilterUsed;
+                                                // echo "<br>";
 
                                                 if ($key === 'Plan_BY') {
 
@@ -284,9 +288,11 @@
                                                     $SinglefilterUsedFinal = get_CompanyStatus($task->company_id,$SinglefilterUsed);
 
                                                     $SinglefilterUsedFinal = 'Company Status - '.$SinglefilterUsedFinal->name;
+                                                }else{
+                                                    
+                                                    $SinglefilterUsedFinal = $SinglefilterUsed;
                                                 }
                                                 // if 
-    
                                             }
                                         }                                        
                                 ?>
@@ -1374,9 +1380,9 @@ $(document).ready(function() {
                     // console.log('Response:', JSON.parse(response)); 
                     var data = JSON.parse(response);
                     // alert(response)
-        // Update modal content
-                    
-        // Calculate the difference in milliseconds
+                // Update modal content
+                            
+                // Calculate the difference in milliseconds
                     const startTime = parseDate(data.start_time);
                     const endTime = parseDate(data.end_time);
 

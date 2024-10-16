@@ -213,6 +213,7 @@
                           <option value="I was working late on a high-priority project and didn't get a chance to update the records.">I was working late on a high-priority project and didn't get a chance to update the records.</option>
                           <option value="I was out of the office and unable to complete the update remotely.">I was out of the office and unable to complete the update remotely.</option>
                           <option value="We forgot to set our next day planner.">We forgot to set our next day planner</option>
+                          <option value="other">Other (please specify)</option>
                         </select>
                         <div id="validationServer04Feedback" class="invalid-feedback">
                           * Please select a valid state.
@@ -265,13 +266,10 @@
               </div>
             </div>
     <?php } ?>
-
-
-
                     <hr class="hrclass" style="width: 600px;"/>
                     <div class="mb-3">
                       <label for="requestForTodaysTaskPlan" class="form-label">* Please specify the reason : </label>
-                      <textarea class="form-control textarea_message" name="requestForTodaysTaskPlan" id="requestForTodaysTaskPlan" placeholde="* Please specify the reason." required rows="3"></textarea>
+                      <textarea class="form-control textarea_message" name="requestForTodaysTaskPlan" id="requestForTodaysTaskPlan" placeholde="* Please specify the reason." rows="3"></textarea>
                       <div class="invalid-feedback">* Invalid Message</div>
                     </div>
                   </center>
@@ -376,130 +374,244 @@
         </div>
         <?php }else{ ?>
         <?php if($do==0){?>
-        <div class="row p-3">
-          <div class="col-sm col-md-12 col-lg-12 m-auto">
-            <div class="card card-primary card-outline">
-              <div class="card-body box-profile">
-                <h3 class="text-center">Start Your Day</h3>
-                <hr>
-                <form action="<?=base_url();?>Menu/daysc" method="post" enctype="multipart/form-data">
-                  <div class="form-group">
-                    <input type="hidden" name="user_id" value="<?=$uid?>">
-                    <center>
-                    <b class="text-info">Today's Date : <?=date('d-m-Y');?> </b>
-                    <?php date_default_timezone_set("Asia/Kolkata"); ?>
-                    <input type="hidden" name="ustart" value="<?=date('Y-d-m H:i:s')?>">
-                    <p>You Are Starting Day at <b><?=date('H:i:s');?></b><br><br>
-                    <div class="mb-4">
-                      <select class="form-control" name="wffo" id="wffo" style="width:400px">
-                      <!-- <option value="">Start Your Days</option> -->
-                        <?php $userdfrom = $this->Menu_model->userworkfrom() ?>
-                            <?php foreach($userdfrom as $udfrom){ ?>
-                            <option value="<?= $udfrom->ID; ?>"><?= $udfrom->TYPE; ?></option>
-                            <?php } ?>
-                      </select>
+            
+            <?php
+
+$currentHour = (int) (new DateTime())->format('H:mm');
+$daystartCount = getDaystartRequestCount($uid);
+// var_dump($currentHour);die;
+if ($currentHour >= 11) {
+    // echo 'hii';die;
+    $daystartApprovedCount = getDaystartRequestApprovedCount($uid);
+    // var_dump($daystartApprovedCount[0]->count);die;
+
+    if ($daystartCount[0]->status == 0) { ?>
+
+        <form action="<?=base_url();?>Menu/dayshiftstart" method="post" enctype="multipart/form-data">
+            <center>
+                <div class="row">
+                    <div class="col">
+
+                    <?php    
+                    $gecurAutoTaskTime = sizeof($gecurAutoTaskTime);
+                    $message = ($gecurAutoTaskTime) ? "selected" : "disabled";
+                    ?>
+
+                        <label for="validationServer04" class="form-label">
+                        * Why did you are starting your shift late?
+                        </label>
+                        <input type="hidden" value="<?= $uystart_id ?>" name="req_id">
+                        <input type="hidden" value="<?= $uid ?>" name="uid">
+
+                        <select class="form-control is-invalid" id="" aria-describedby="validationServer04Feedback" name="shiftReqdd" required style="width:500px;" >
+                        <option selected disabled value="">Choose...</option>
+                        <option <?=$message?> value="I was caught up with an urgent task and lost track of time.">I was caught up with an urgent task and lost track of time.</option>
+                        <option value="I encountered unexpected issues that took longer to resolve than planned.">I encountered unexpected issues that took longer to resolve than planned.</option>
+                        <option value="I had a personal emergency that required my immediate attention.">I had a personal emergency that required my immediate attention.</option>
+                        <option value="I forgot to update the system at the end of the day.">I forgot to update the system at the end of the day.</option>
+                        <option value="I had difficulty accessing the system due to technical issues.">I had difficulty accessing the system due to technical issues.</option>
+                        <option value="I had a backlog of work and wasn't able to finish everything on time.">I had a backlog of work and wasn't able to finish everything on time.</option>
+                        <option value="I was working late on a high-priority project and didn't get a chance to update the records.">I was working late on a high-priority project and didn't get a chance to update the records.</option>
+                        <option value="I was out of the office and unable to complete the update remotely.">I was out of the office and unable to complete the update remotely.</option>
+                        <option value="We forgot to set our next day planner.">We forgot to set our next day planner</option>
+                        </select>
+                        <!-- <div id="validationServer04Feedback" class="invalid-feedback">
+                        * Please select a valid state.
+                        </div> -->
+
                     </div>
-                    <div class="mb-4 d-flex justify-content-center">
-                      <img class="border profileimgae" id="blah" src="https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/user-profile-icon.png" alt="your image" style="width:250px;height:250px"/>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                      <div class="btn btn-info btn-rounded">
-                        <label class="form-label text-white m-1" for="imgInp">Take Selfie</label>
-                        <input type="file" class="form-control d-none" id="imgInp" name="filname" accept="image/*" capture required/>
-                      </div>
-                    </div>
-                    <input type="hidden" id="lat" name="lat">
-                    <input type="hidden" id="lng" name="lng">
-                    <input type="hidden" name="do" value="<?=$do?>">
-                  </div>
-                  <div id="location">
-                    <div id="map-container-google-3" class="z-depth-1-half map-container-3 p-3 m-3 border">
-                      <iframe style="width:100%;height:200px;" id="mylocation" src="" frameborder="0" style="border:0" allowfullscreen></iframe>
-                    </div>
-                  </div>
-                  <p class="form-group text-center">
-                    <button type="submit" class="btn btn-success" id="submitButton" >Start Your Day</button>
-                   <center>
-                   <p id="goodmessage"></p>
-                   </center>
-                  </div>
-                </form>
+                </div>
+
+            
+                <!-- <input type="hidden" name="autotasktimeisset" value="<?=$gecurAutoTaskTime?>"> -->
+                <hr class="hrclass" style="width: 600px;"/>
+                <div class="mb-3">
+                    <label for="requestForTodaysTaskPlan" class="form-label">* Please specify the reason : </label>
+                    <textarea class="form-control textarea_message" name="requestForstartDay" id="requestForstartDay" placeholde="* Please specify the reason." required rows="3"></textarea>
+                    <div class="invalid-feedback">* Invalid Message</div>
+                </div>
+            </center>
+        <br>
+        <div class="col1 text-center">
+            <button type="submit" class="btn btn-danger">Create Request</button>
+        </div>
+        </form>
+        <br>
+        <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <!-- <th>Name</th> -->
+                <th>Date</th>
+                <th>Request</th>
+                <th>Remark</th>
+                <!-- <th>Approved By</th> -->
+                <th>Approval Status</th>
+                <!-- <th>Admin Message</th>   -->
+            </tr>
+        </thead>
+        <tbody>
+        <?php 
+            $i=1;
+            foreach ($getShiftStartData as $row): 
+            // var_dump($row->reason);
+            if($row->status == 1){
+                $status = 'Approved';
+            }else{
+                $status = 'Pending';
+            }
+            ?>
+            <tr>
+                <td><?php echo $i; ?></td>
+                <td><?php echo $row->created_at; ?></td>
+                <td><?php echo $row->reason; ?></td>
+                <td><?php echo $row->remark; ?></td>
+                <td><?php echo $status;  ?></td>
+
+            </tr>
+        </tbody>
+        <?php $i++; endforeach; ?>
+        </table>
+
+<?php } else{ ?>
+
+    <div class="row p-3">
+        <div class="col-sm col-md-12 col-lg-12 m-auto">
+        <div class="card card-primary card-outline">
+        <div class="card-body box-profile">
+            <h3 class="text-center">Start Your Day</h3>
+            <hr>
+            <form action="<?=base_url();?>Menu/daysc" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <input type="hidden" name="user_id" value="<?=$uid?>">
+                <center>
+                <b class="text-info">Today's Date : <?=date('d-m-Y');?> </b>
+                <?php date_default_timezone_set("Asia/Kolkata"); ?>
+                <input type="hidden" name="ustart" value="<?=date('Y-d-m H:i:s')?>">
+                <p>You Are Starting Day at <b><?=date('H:i:s');?></b><br><br>
+                <div class="mb-4">
+                <select class="form-control" name="wffo" id="wffo" style="width:400px">
+                <!-- <option value="">Start Your Days</option> -->
+                    <?php $userdfrom = $this->Menu_model->userworkfrom() ?>
+                        <?php foreach($userdfrom as $udfrom){ ?>
+                        <option value="<?= $udfrom->ID; ?>"><?= $udfrom->TYPE; ?></option>
+                        <?php } ?>
+                </select>
+                </div>
+                <div class="mb-4 d-flex justify-content-center">
+                <img class="border profileimgae" id="blah" src="https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/user-profile-icon.png" alt="your image" style="width:250px;height:250px"/>
+                </div>
+                <div class="d-flex justify-content-center">
+                <div class="btn btn-info btn-rounded">
+                    <label class="form-label text-white m-1" for="imgInp">Take Selfie</label>
+                    <input type="file" class="form-control d-none" id="imgInp" name="filname" accept="image/*" capture required/>
+                </div>
+                </div>
+                <input type="hidden" id="lat" name="lat">
+                <input type="hidden" id="lng" name="lng">
+                <input type="hidden" name="do" value="<?=$do?>">
+            </div>
+            <div id="location">
+                <div id="map-container-google-3" class="z-depth-1-half map-container-3 p-3 m-3 border">
+                <iframe style="width:100%;height:200px;" id="mylocation" src="" frameborder="0" style="border:0" allowfullscreen></iframe>
+                </div>
+            </div>
+            <p class="form-group text-center">
+                <button type="submit" class="btn btn-success" id="submitButton" >Start Your Day</button>
+            <center>
+            <p id="goodmessage"></p>
+            </center>
+            </div>
+            </form>
 
 
-                <?php 
-                $geturdata = $this->Menu_model->change_user_day_request($uid);
-                $geturdatacnt = sizeof($geturdata);
-                if($geturdatacnt > 0){ ?>
+            <?php 
+            $geturdata = $this->Menu_model->change_user_day_request($uid);
+            $geturdatacnt = sizeof($geturdata);
+            if($geturdatacnt > 0){ ?>
 <hr>
 <div class="card p-5">
 <h5 class="bg-info p-2 text-center">Your Request to change the start your Days</h5>
 
 <table class="table table-striped">
-    <thead class="thead-dark">
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Want To Start</th>
-            <th>Message</th>
-            <th>Approved By</th>
-            <th>Approval Status</th>
-            <th>Admin Message</th>  
-        </tr>
-    </thead>
-    <tbody>
-        <?php 
-        $i=1;
-        foreach ($geturdata as $row): ?>
-        <tr>
-            <td><?php echo $i; ?></td>
-            <td><?php 
-             $udetail = $this->Menu_model->get_userbyid($row->user_id);
-             $username = $udetail[0]->name;
-             echo $username;
-            ?></td>
-            <td><?php echo $row->date; ?></td>
-            <td><?php 
-            echo $this->Menu_model->userworkfrombyid($row->user_want_start)[0]->TYPE;
-           ?></td>
-            <td><?php echo $row->message; ?></td>
-            <td><?php 
-            if($row->apr_by == 0){
-              echo "<span class='p-1 bg-warning'>Pending</span>";
-            }else{
-              $udetail = $this->Menu_model->get_userbyid($row->apr_by);
-              $admidname = $udetail[0]->name;
-              echo $admidname;
-            }
-            ?></td>
-            <td><?php 
-             if($row->apr_status == 0){
-              echo "<span class='p-1 bg-warning'>Pending</span>";
-            }elseif($row->apr_status == 1){
-              echo "<span class='p-1 bg-success'>Approved</span>";
-            }elseif($row->apr_status == 2){
-              echo "<span class='p-1 bg-danger'>Reject</span>";
-            }
-            ?></td>
-            <td><?php 
-            if($row->amessage == ''){
-              echo "<span class='p-1 bg-warning'>Pending</span>";
-            }else{
-              echo $row->amessage; 
-            }
-            ?></td>
-        </tr>
-        <?php $i++; endforeach; ?>
-    </tbody>
+<thead class="thead-dark">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Date</th>
+        <th>Want To Start</th>
+        <th>Message</th>
+        <th>Approved By</th>
+        <th>Approval Status</th>
+        <th>Admin Message</th>  
+    </tr>
+</thead>
+<tbody>
+    <?php 
+    $i=1;
+    foreach ($geturdata as $row): ?>
+    <tr>
+        <td><?php echo $i; ?></td>
+        <td><?php 
+        $udetail = $this->Menu_model->get_userbyid($row->user_id);
+        $username = $udetail[0]->name;
+        echo $username;
+        ?></td>
+        <td><?php echo $row->date; ?></td>
+        <td><?php 
+        echo $this->Menu_model->userworkfrombyid($row->user_want_start)[0]->TYPE;
+    ?></td>
+        <td><?php echo $row->message; ?></td>
+        <td><?php 
+        if($row->apr_by == 0){
+        echo "<span class='p-1 bg-warning'>Pending</span>";
+        }else{
+        $udetail = $this->Menu_model->get_userbyid($row->apr_by);
+        $admidname = $udetail[0]->name;
+        echo $admidname;
+        }
+        ?></td>
+        <td><?php 
+        if($row->apr_status == 0){
+        echo "<span class='p-1 bg-warning'>Pending</span>";
+        }elseif($row->apr_status == 1){
+        echo "<span class='p-1 bg-success'>Approved</span>";
+        }elseif($row->apr_status == 2){
+        echo "<span class='p-1 bg-danger'>Reject</span>";
+        }
+        ?></td>
+        <td><?php 
+        if($row->amessage == ''){
+        echo "<span class='p-1 bg-warning'>Pending</span>";
+        }else{
+        echo $row->amessage; 
+        }
+        ?></td>
+    </tr>
+    <?php $i++; endforeach; ?>
+</tbody>
 </table>
 </div>
-               <?php } ?>
+        <?php } ?>
 
 
-              </div>
-            </div>
-          </div>
         </div>
+</div>
+</div>
+        
+        
+<?php    }
+    // }
+    
+}else{ ?>
+
+    
+
+<?php    }
+
+?>
+
+</div>
 
 
         <div class="modal fade" id="exampleModalReminder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -749,6 +861,7 @@
           });
       });
     </script>
+    
     <!-- /.row (main row) -->
     </div><!-- /.container-fluid -->
     </section>

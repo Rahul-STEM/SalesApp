@@ -155,7 +155,11 @@
 
                                                     <td><?= $data->name; ?></td>
                                                     <td data-question="Did he started his day as planned" data-userid="<?= $data->user_id; ?>" data-period="Mornings" data-cdate="<?= $cdate; ?>">
-                                                        <?= $data->userWorkFrom; ?>
+                                                        <!-- <?= $data->userWorkFrom; ?> -->
+                                                        Planned Day Start : <b><?= $data->userWorkFrom; ?></b>
+                                                        <br>
+                                                        <br>
+                                                        Actual Day Start : <b><?= $data->userWorkFromActual; ?></b>
                                                         <br><br><hr>
                                                         <p class="question">Did he started his day as planned..??</p>
 
@@ -1215,7 +1219,7 @@
                             <!-- Button trigger modal -->
                             
                             <!-- Modal -->
-                            <div class="modal fade" id="ReviewModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                            <div class="modal fade" id="ReviewModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" data-backdrop="static" aria-hidden="true" data-keyboard="false">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-body">

@@ -202,21 +202,25 @@
                         * Why did you not close your day yesterday?
                         </label>
                         <input type="hidden" value="<?= $uystart_id ?>" name="req_id">
-                        <select class="form-control is-invalid" id="validationServer04" aria-describedby="validationServer04Feedback" name="would_you_want" required style="width:500px;" >
-                          <option selected disabled value="">Choose...</option>
-                          <option <?=$message?> value="I was caught up with an urgent task and lost track of time.">I was caught up with an urgent task and lost track of time.</option>
-                          <option value="I encountered unexpected issues that took longer to resolve than planned.">I encountered unexpected issues that took longer to resolve than planned.</option>
-                          <option value="I had a personal emergency that required my immediate attention.">I had a personal emergency that required my immediate attention.</option>
-                          <option value="I forgot to update the system at the end of the day.">I forgot to update the system at the end of the day.</option>
-                          <option value="I had difficulty accessing the system due to technical issues.">I had difficulty accessing the system due to technical issues.</option>
-                          <option value="I had a backlog of work and wasn't able to finish everything on time.">I had a backlog of work and wasn't able to finish everything on time.</option>
-                          <option value="I was working late on a high-priority project and didn't get a chance to update the records.">I was working late on a high-priority project and didn't get a chance to update the records.</option>
-                          <option value="I was out of the office and unable to complete the update remotely.">I was out of the office and unable to complete the update remotely.</option>
-                          <option value="We forgot to set our next day planner.">We forgot to set our next day planner</option>
-                        </select>
                         <div id="validationServer04Feedback" class="invalid-feedback">
-                          * Please select a valid state.
+                          * Please select a valid reason.
                         </div>
+                        <select class="form-control is-invalid" id="validationServer04" aria-describedby="validationServer04Feedback" name="would_you_want" required style="width:500px;" >
+                            <option selected disabled value="">Choose...</option>
+                            <option <?=$message?> value="I was caught up with an urgent task and lost track of time.">I was caught up with an urgent task and lost track of time.</option>
+                            <option value="I encountered unexpected issues that took longer to resolve than planned.">I encountered unexpected issues that took longer to resolve than planned.</option>
+                            <option value="I had a personal emergency that required my immediate attention.">I had a personal emergency that required my immediate attention.</option>
+                            <option value="I forgot to update the system at the end of the day.">I forgot to update the system at the end of the day.</option>
+                            <option value="I had difficulty accessing the system due to technical issues.">I had difficulty accessing the system due to technical issues.</option>
+                            <option value="I had a backlog of work and wasn't able to finish everything on time.">I had a backlog of work and wasn't able to finish everything on time.</option>
+                            <option value="I was working late on a high-priority project and didn't get a chance to update the records.">I was working late on a high-priority project and didn't get a chance to update the records.</option>
+                            <option value="I was out of the office and unable to complete the update remotely.">I was out of the office and unable to complete the update remotely.</option>
+                            <option value="We forgot to set our next day planner.">We forgot to set our next day planner</option>
+                            <option value="other">Other (please specify)</option>
+                        </select>
+                        <!-- <div id="validationServer04Feedback" class="invalid-feedback">
+                          * Please select a valid state.
+                        </div> -->
                       </div>
                     </div>
 
@@ -270,9 +274,9 @@
 
                     <hr class="hrclass" style="width: 600px;"/>
                     <div class="mb-3">
-                      <label for="requestForTodaysTaskPlan" class="form-label">* Please specify the reason : </label>
-                      <textarea class="form-control textarea_message" name="requestForTodaysTaskPlan" id="requestForTodaysTaskPlan" placeholde="* Please specify the reason." required rows="3"></textarea>
-                      <div class="invalid-feedback">* Invalid Message</div>
+                        <label for="requestForTodaysTaskPlan" class="form-label">* Please specify the reason : </label>
+                        <textarea class="form-control textarea_message" name="requestForTodaysTaskPlan" id="requestForTodaysTaskPlan" placeholde="* Please specify the reason." required rows="3"></textarea>
+                        <div class="invalid-feedback">* Invalid Message</div>
                     </div>
                   </center>
                   <br>
@@ -375,7 +379,7 @@
           </div>
         </div>
         <?php }else{ ?>
-        <?php if($do==0){?>
+        <?php if($do==0){ ?>
             
             
 
@@ -480,7 +484,7 @@
                     <?php } else{ ?>
 
                         <div class="row p-3">
-                <div class="col-sm col-md-12 col-lg-12 m-auto">
+                            <div class="col-sm col-md-12 col-lg-12 m-auto">
                             <div class="card card-primary card-outline">
                             <div class="card-body box-profile">
                                 <h3 class="text-center">Start Your Day</h3>
@@ -604,11 +608,7 @@
             </div>
                             
                             
-                    <?php    }?>
-
-                        
-
-                    <?php    
+                    <?php    }
                         // }
                         
                     }else{ ?>
@@ -868,6 +868,20 @@
                 });
           });
       });
+    </script>
+    <script>
+        $('#validationServer04').on('change', function() {
+            var dayCloseDD = $('#validationServer04').val();
+
+            if (dayCloseDD == 'other') {
+                
+                $('#requestForTodaysTaskPlan').prop('required', true);
+
+            } else {
+                
+                $('#requestForTodaysTaskPlan').prop('required', false);
+            }
+        });
     </script>
     <!-- /.row (main row) -->
     </div><!-- /.container-fluid -->

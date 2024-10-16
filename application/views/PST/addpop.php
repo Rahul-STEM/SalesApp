@@ -523,6 +523,7 @@ document.body.addEventListener('change', function (e) {
         case 'pending':
             var ab = document.getElementById("action_id").value;
             if(ab=="1"){
+                document.querySelector('#button').disabled = false;
                 $("#purpose").show();
                 $("#test2").hide();
                 $("#test3").hide();
@@ -531,6 +532,8 @@ document.body.addEventListener('change', function (e) {
                 $("#test7").hide();
                }
                if(ab=="2"){
+                document.querySelector('#button').disabled = false;
+
                 $("#test1").hide();
                 $("#test2").show();
                 $("#test3").hide();
@@ -539,6 +542,8 @@ document.body.addEventListener('change', function (e) {
                 $("#test7").hide();
                }
                if(ab=="3"){
+                document.querySelector('#button').disabled = false;
+
                 $("#test1").hide();
                 $("#test2").hide();
                 $("#test3").show();
@@ -547,6 +552,8 @@ document.body.addEventListener('change', function (e) {
                 $("#test7").hide();
                }
                if(ab=="5"){
+                document.querySelector('#button').disabled = false;
+
                 $("#test1").hide();
                 $("#test2").hide();
                 $("#test3").hide();

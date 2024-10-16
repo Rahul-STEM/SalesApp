@@ -32,7 +32,7 @@ class Management_model  extends Menu_model {
         $date = new DateTime();
         $date->modify('-1 day');
         $pdate =  $date->format('Y-m-d');
-        // $pdate = '2024-07-19';
+        $pdate = '2024-07-19';
 
         $uyid =  $uid;
         $this->load->model('Menu_model');
@@ -53,8 +53,7 @@ class Management_model  extends Menu_model {
                 COUNT(CASE WHEN reassign_type = 2 AND nextCFID != 0 THEN 1 END) AS CompletedassignByOther,
                 SUM(CASE WHEN nextCFID != 0 THEN TIMESTAMPDIFF(MINUTE, initiateddt, updateddate) ELSE 0 END) AS totalMinutesDiff,
                 FLOOR(SUM(CASE WHEN nextCFID != 0 THEN TIMESTAMPDIFF(MINUTE, initiateddt, updateddate) ELSE 0 END) / 60) AS totalHours,
-                MOD(SUM(CASE WHEN nextCFID != 0 THEN TIMESTAMPDIFF(MINUTE, initiateddt, updateddate) ELSE 0 END), 60) AS totalMinutes
-');
+                MOD(SUM(CASE WHEN nextCFID != 0 THEN TIMESTAMPDIFF(MINUTE, initiateddt, updateddate) ELSE 0 END), 60) AS totalMinutes ');
 
         $this->db->from('tblcallevents');
 
@@ -1264,66 +1263,6 @@ public function CheckingDayManage_New($uid,$cdate){
     $utype = $this->Menu_model->get_userbyid($uid);
     $utype = $utype[0]->type_id;
 
-    // $this->db->select('user_details.user_id, 
-    //         user_details.name, 
-    //         user_details.type_id, 
-    //         user_day.ustart AS user_start_time, 
-    //         user_day.usimg AS user_start_image,
-    //         user_day.scomment AS user_start_comment, 
-    //         user_day.slatitude AS user_start_lat, 
-    //         user_day.slongitude AS user_start_long, 
-    //         user_day.uclose AS user_close_time, 
-    //         user_day.ucimg AS user_close_image, 
-    //         user_day.ccomment AS user_end_comment, 
-    //         user_day.clatitude AS user_end_lat, 
-    //         user_day.clongitude AS user_end_long, 
-    //         task_plan_for_today.date, 
-    //         task_plan_for_today.request_remarks AS planner_request_remarks, 
-    //         task_plan_for_today.created_at AS planner_created_at, 
-    //         task_plan_for_today.updated_at AS planner_request_approval_date, 
-    //         task_plan_for_today.approvel_status AS planner_approvel_status,
-    //         task_plan_for_today.updated_at AS planner_approvel_time,
-    //         spt.psdatetime AS user_planner_start_time,
-    //         ud1.name AS approver_Name,
-    //         cydr.why_did_you AS close_day_request_Remark,  
-    //         cydr.req_remarks AS close_day_req_remarks,
-    //         cydr.approved_status AS close_day_approved_status,
-    //         cydr.approved_remarks AS close_day_approved_remarks,
-    //         tce.appointmentdatetime AS task_start_time,
-    //         SUM(spt.totaltime) AS total_timeTakeFor_planner,
-    //         uwf.TYPE AS userWorkFrom,
-    //         srfl.prupose AS reasonFor_Request,
-    //         srfl.stime AS leave_StartTime,
-    //         srfl.etime AS leave_EndTime'
-    //     );
-        
-    //     $this->db->from('user_day');
-    //     $this->db->join('user_details', 'user_details.user_id = user_day.user_id', 'left');
-    //     $this->db->join('session_plan_time spt', 'spt.user_id = user_day.user_id', 'left');
-    //     $this->db->join('autotask_time at', 'at.user_id = user_day.user_id', 'left');
-    //     $this->db->join('userworkfrom uwf', 'uwf.ID = at.user_id', 'left');
-    //     $this->db->join('tblcallevents tce', 'tce.user_id = user_day.user_id AND DATE(tce.appointmentdatetime) = "'.$cdate.'"', 'left');
-    //     $this->db->join('close_your_day_request cydr', 'user_details.user_id = cydr.user_id', 'left');
-    //     $this->db->join('special_request_for_leave srfl', 'user_details.user_id = srfl.user_id', 'left');
-    //     $this->db->join('task_plan_for_today', 'task_plan_for_today.user_id = user_day.user_id AND DATE(task_plan_for_today.date) = DATE(sdatet)', 'left');
-    //     $this->db->join('user_details ud1', 'ud1.user_id = task_plan_for_today.admin_id', 'left');
-
-    //     if ($utype == 15){
-
-    //         $this->db->where('user_details.sales_co', $uid);
-
-    //     }elseif ($utype == 2) {
-            
-    //         $this->db->where('user_details.admin_id', $uid);
-    //     }
-
-    //     $this->db->where('DATE(sdatet)', $cdate);
-    //     $this->db->group_by('user_details.user_id');
-
-    //     $query = $this->db->get();
-    //     // echo $this->db->last_query();die;
-    //     return $query->result();
-
             $this->db->select('user_details.user_id, 
             user_details.name, 
             user_details.type_id, 
@@ -1352,18 +1291,17 @@ public function CheckingDayManage_New($uid,$cdate){
             tce.appointmentdatetime AS task_start_time,
             SEC_TO_TIME(SUM(TIME_TO_SEC(spt.totaltime))) AS total_timeTakeFor_planner,
             uwf.TYPE AS userWorkFrom,
+            uwf1.TYPE AS userWorkFromActual,
             srfl.prupose AS reasonFor_Request,
             srfl.stime AS leave_StartTime,
-            srfl.etime AS leave_EndTime
-
-        '
-        );
+            srfl.etime AS leave_EndTime ');
 
         $this->db->from('user_day');
         $this->db->join('user_details', 'user_details.user_id = user_day.user_id', 'left');
         $this->db->join('session_plan_time spt', 'spt.user_id = user_day.user_id', 'left');
         $this->db->join('autotask_time at1', 'at1.user_id = user_day.user_id AND DATE(at1.date) = "'.$cdate.'"', 'left');
         $this->db->join('userworkfrom uwf', 'uwf.ID = at1.userworkfrom', 'left');
+        $this->db->join('userworkfrom uwf1', 'uwf1.ID = user_day.wffo', 'left');
         $this->db->join('tblcallevents tce', 'tce.user_id = user_day.user_id AND DATE(tce.appointmentdatetime) = "'.$cdate.'"', 'left');
         $this->db->join('close_your_day_request cydr', 'user_details.user_id = cydr.user_id', 'left');
         $this->db->join('special_request_for_leave srfl', 'user_details.user_id = srfl.user_id', 'left');

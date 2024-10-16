@@ -3589,7 +3589,7 @@ class Menu extends CI_Controller {
             $flink2 = $this->Menu_model->uploadfile($filname2, $uploadPath);
         }else{$this->load->model('Menu_model');$flink2=0;}
         if(isset($_FILES['filname1']['name']) && !empty($_FILES['filname1']['name'])){$filname1 = $_FILES['filname1']['name'];
-            echo "filname1";die;
+            // echo "filname1";die;
 
             $uploadPath = 'uploads/proposal/';
             $this->load->model('Menu_model');
@@ -3597,7 +3597,7 @@ class Menu extends CI_Controller {
         }else{$this->load->model('Menu_model');$flink1=0;}
         if(isset($_FILES['filename10']['name']) && !empty($_FILES['filname10']['name'])){$filename10 = $_FILES['filename10']['name'];
             $uploadPath = 'uploads/meetings/';
-            echo $uploadPath;die;
+            // echo $uploadPath;die;
             $this->load->model('Menu_model');
             $flink10 = $this->Menu_model->uploadfile($filename10, $uploadPath);
         }else{$this->load->model('Menu_model');$flink10=0;}
@@ -4441,7 +4441,7 @@ class Menu extends CI_Controller {
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
-        if($type == 'Approve'){
+        if($type == 1){
             $status     = 1;
             $approved_by    = $uid;
             $apr_time   = date("Y-m-d H:i:s");
@@ -16197,23 +16197,25 @@ public function addplantask12(){
     $pendingTodaysTaskcnt = sizeof($todayspendingTask);
     $pendingOldTask = sizeof($pendingOldTask);
     
-     $bdid = $this->input->post('bdid');
-     $tptime = $this->input->post('tptime');
-     $ptime = $this->input->post('ptime');
-     $ntaction = $this->input->post('ntaction');
-     $ntppose = $this->input->post('ntppose');
-     $selectby = $this->input->post('selectby');
-     $pdate = $this->input->post('pdate');
-     $select_cluster = $this->input->post('select_cluster');
-     $selectcompanybyuser = $this->input->post('selectcompanybyuser');
-    // dd($selectby);exit;
+    $bdid = $this->input->post('bdid');
+    $tptime = $this->input->post('tptime');
+    $ptime = $this->input->post('ptime');
+    $ntaction = $this->input->post('ntaction');
+    $ntppose = $this->input->post('ntppose');
+    $selectby = $this->input->post('selectby');
+    $pdate = $this->input->post('pdate');
+    $select_cluster = $this->input->post('select_cluster');
+    $selectcompanybyuser = $this->input->post('selectcompanybyuser');
+    // dd($ntaction);exit;
      if(!isset($_POST['selectcompanybyuser']) && $ntaction == 4){
-        
+        // echo "hii";die;
         $bmdate = $pdate.' '.$ptime.':00';
         $partner = $this->Menu_model->createBargMeetingWithClusterId($bdid,$bmdate,$select_cluster);
         $this->session->set_flashdata('success_message',' Task Planned Successfully !!');
         redirect('Menu/TaskPlanner2/'.$pdate);
      } if(isset($_POST['selectcompanybyuser']) && $ntaction == 4){
+        // echo "bye";die;
+
         $ntaction = 4;
      }
      
@@ -16405,7 +16407,7 @@ public function addplantask12(){
                 $taskplanmincount = $taskplanmincount+10;
                 $modifystr = "+$taskplanmincount minutes";
             }else if($actiontype_id ==3 || $actiontype_id ==4 || $actiontype_id ==12){
-                $taskplanmincount = $taskplanmincount+30;
+                $taskplanmincount = $taskplanmincount+60;
                 $modifystr = "+$taskplanmincount minutes";
             }else if($actiontype_id ==7){
                 $taskplanmincount = $taskplanmincount+15;
@@ -16425,7 +16427,7 @@ public function addplantask12(){
            $sact_type = $this->Menu_model->SelectTaskBYTid($tid);
            
            if($sact_type ==4 || $sact_type == 17 || $sact_type == 3){ 
-            $this->Menu_model->updateBarginmeeting($tid,$new_datetime);
+                $this->Menu_model->updateBarginmeeting($tid,$new_datetime);
            }
      
             $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `plan_change`='0', `selectby`='$selectby'  WHERE  id = $tid");
@@ -18391,8 +18393,9 @@ public function nostatuschange_indate(){
     }else{
         $days = 8;
     }
-    $cmps = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$days,$sid,$date=null);
     $cdate = date("Y-m-d");
+    $cmps = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$days,$sid,$cdate);
+    // $cdate = date("Y-m-d");
     echo '<option value="">Select Company</option>';
     foreach($cmps as $cmp){ ?>
     <option style="color: #d90d2b;" title="<?=$cmp->days?> Days - <?=$cmp->compname?> (<?=$cmp->pname?>)" value="<?=$cmp->inid?>">

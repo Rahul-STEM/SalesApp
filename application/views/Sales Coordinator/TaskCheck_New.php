@@ -278,9 +278,11 @@
                                                     $SinglefilterUsedFinal = get_CompanyStatus($task->company_id,$SinglefilterUsed);
 
                                                     $SinglefilterUsedFinal = 'Company Status - '.$SinglefilterUsedFinal->name;
+                                                }else{
+                                                    
+                                                    $SinglefilterUsedFinal = $SinglefilterUsed;
                                                 }
                                                 // if 
-    
                                             }
                                         }                                        
                                 ?>

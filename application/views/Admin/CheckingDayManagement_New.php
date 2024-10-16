@@ -155,7 +155,11 @@
 
                                                     <td><?= $data->name; ?></td>
                                                     <td data-question="Did he started his day as planned" data-userid="<?= $data->user_id; ?>" data-period="Mornings" data-cdate="<?= $cdate; ?>">
-                                                        <?= $data->userWorkFrom; ?>
+                                                        Planned Day Start : <b><?= $data->userWorkFrom; ?></b>
+                                                        <br>
+                                                        <br>
+                                                        Actual Day Start : <b><?= $data->userWorkFromActual; ?></b>
+
                                                         <br><br><hr>
                                                         <p class="question">Did he started his day as planned..??</p>
 
@@ -414,10 +418,10 @@
                                                         }
                                                         ?>
                                                         <hr>
-                                                            <p class="question">Planner requested correctly?</p>
-                                                            <?php 
+                                                        <p class="question">Planner requested correctly?</p>
+                                                        <?php 
 
-                                                                $chkStarRating = $this->Management_model->CheckStarRatingsExistorNot_New($teamuid,$cdate,'Planner requested correctly','Mornings');
+                                                            $chkStarRating = $this->Management_model->CheckStarRatingsExistorNot_New($teamuid,$cdate,'Planner requested correctly','Mornings');
 
                                                             if(sizeof($chkStarRating) == 0){ ?> 
                                                             <div class="rating">
@@ -427,69 +431,25 @@
                                                                 <input type="radio" name="rat14_<?= $data->user_id; ?>" value="2" id="67_<?= $data->user_id; ?>"><label for="67_<?= $data->user_id; ?>">☆</label>
                                                                 <input type="radio" name="rat14_<?= $data->user_id; ?>" value="1" id="66_<?= $data->user_id; ?>"><label for="66_<?= $data->user_id; ?>">☆</label>
                                                             </div>
-                                                            <?php }else{
-                                                                    foreach($chkStarRating as $star){
-                                                                        // var_dump($chkStarRating);die;
-                                                                        $starRating = $star->star;
-                                                                        $starRemark = $star->remarks;
-                                                                        
-                                                                    }
-                                                                    echo "<hr>";
-                                                                    echo "<span class='text-dark font-weight-normal'><b>Total Star Given</b> :</span>";
-                                                                    echo "<div class='star-rating'>";
-                                                                    $totalStars = 5;
-                                                                    for ($i = 0; $i < $starRating; $i++) {
-                                                                        echo "<i class='fas fa-star'></i>"; // filled star
-                                                                    }
-                                                                    for ($i = $starRating; $i < $totalStars; $i++) {
-                                                                        echo "<i class='far fa-star'></i>"; // empty star
-                                                                    }
-                                                                    echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
-                                                                }  ?>
-                                                        <?php
-
-                                                        if ($data->type_id == 4 || $data->type_id == 9 || $data->type_id == 13) { ?>
-                                                                
-                                                            <hr>
-                                                            <p class="question">Planner approved correctly?</p>
-                                                            <?php 
-
-                                                                $chkStarRating = $this->Management_model->CheckStarRatingsExistorNot_New($teamuid,$cdate,'Planner approved correctly','Mornings');
-
-                                                            if(sizeof($chkStarRating) == 0){ ?> 
-                                                            <div class="rating">
-                                                                <input type="radio" name="rat6_<?= $data->user_id; ?>" value="5" id="30_<?= $data->user_id; ?>"><label for="30_<?= $data->user_id; ?>">☆</label>
-                                                                <input type="radio" name="rat6_<?= $data->user_id; ?>" value="4" id="29_<?= $data->user_id; ?>"><label for="29_<?= $data->user_id; ?>">☆</label>
-                                                                <input type="radio" name="rat6_<?= $data->user_id; ?>" value="3" id="28_<?= $data->user_id; ?>"><label for="28_<?= $data->user_id; ?>">☆</label>
-                                                                <input type="radio" name="rat6_<?= $data->user_id; ?>" value="2" id="27_<?= $data->user_id; ?>"><label for="27_<?= $data->user_id; ?>">☆</label>
-                                                                <input type="radio" name="rat6_<?= $data->user_id; ?>" value="1" id="26_<?= $data->user_id; ?>"><label for="26_<?= $data->user_id; ?>">☆</label>
-                                                            </div>
-                                                            <?php }else{
-                                                                    foreach($chkStarRating as $star){
-                                                                        // var_dump($chkStarRating);die;
-                                                                        $starRating = $star->star;
-                                                                        $starRemark = $star->remarks;
-                                                                        
-                                                                    }
-                                                                    echo "<hr>";
-                                                                    echo "<span class='text-dark font-weight-normal'><b>Total Star Given</b> :</span>";
-                                                                    echo "<div class='star-rating'>";
-                                                                    $totalStars = 5;
-                                                                    for ($i = 0; $i < $starRating; $i++) {
-                                                                        echo "<i class='fas fa-star'></i>"; // filled star
-                                                                    }
-                                                                    for ($i = $starRating; $i < $totalStars; $i++) {
-                                                                        echo "<i class='far fa-star'></i>"; // empty star
-                                                                    }
-                                                                    echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
-                                                                }  ?>
-                                                        <?php   
-                                                        
-                                                        }
-                                                        
-                                                        
-                                                        ?>
-                                                        
+                                                        <?php }else{
+                                                                foreach($chkStarRating as $star){
+                                                                    // var_dump($chkStarRating);die;
+                                                                    $starRating = $star->star;
+                                                                    $starRemark = $star->remarks;
+                                                                    
+                                                                }
+                                                                echo "<hr>";
+                                                                echo "<span class='text-dark font-weight-normal'><b>Total Star Given</b> :</span>";
+                                                                echo "<div class='star-rating'>";
+                                                                $totalStars = 5;
+                                                                for ($i = 0; $i < $starRating; $i++) {
+                                                                    echo "<i class='fas fa-star'></i>"; // filled star
+                                                                }
+                                                                for ($i = $starRating; $i < $totalStars; $i++) {
+                                                                    echo "<i class='far fa-star'></i>"; // empty star
+                                                                }
+                                                                echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
+                                                            }  ?>
                                                     </td>
                                                     <!-- <td></td> -->
                                                 </tr>
@@ -1220,8 +1180,8 @@
                             <!-- Button trigger modal -->
                             
                             <!-- Modal -->
-                            <div class="modal fade" id="ReviewModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
+                            <div class="modal fade" id="ReviewModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                                <div class="modal-dialog" role="document" >
                                     <div class="modal-content">
                                         <div class="modal-body">
                                         <form >
@@ -1416,9 +1376,9 @@
 
                             $('#success-message').show();
         
-                            $('html, body').animate({
-                                scrollTop: $('#success-message').offset().top
-                            }, 1000);
+                            // $('html, body').animate({
+                            //     scrollTop: $('#success-message').offset().top
+                            // }, 1000);
         
                             setTimeout(function() {
                                 $('#success-message').fadeOut('slow', function() {
@@ -1440,6 +1400,11 @@
             var remark = document.getElementById("remark").value;
             var starID = document.getElementById("starID").value;
 
+            if (remark.trim() === "") {
+                alert("Please provide a remark.");
+                return; // Prevent form submission
+            }
+
             $.ajax({
                 url: '<?=base_url();?>Management/updateStarRemark',
                 type: 'POST',
@@ -1454,9 +1419,9 @@
 
                         $('#success-message').show();
         
-                        $('html, body').animate({
-                            scrollTop: $('#success-message').offset().top
-                        }, 1000);
+                        // $('html, body').animate({
+                        //     scrollTop: $('#success-message').offset().top
+                        // }, 1000);
     
                         setTimeout(function() {
                             $('#success-message').fadeOut('slow', function() {

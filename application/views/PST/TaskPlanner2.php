@@ -885,7 +885,7 @@ if($type_id == 3){
                                 <div class="card bg-danger p-2 boxshadownew text-center">
                                   
                                   <lable>
-                                  First Plan Their <?= implode(", ", $elementsGreaterThanOne) ?>
+                                  First Plan Your <?= implode(", ", $elementsGreaterThanOne) ?>
                                   </lable>
                                 </div>
                            <?php } else { ?>

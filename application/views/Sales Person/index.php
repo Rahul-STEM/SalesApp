@@ -597,19 +597,19 @@ $dataPoints2 = array(
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-research-tab" data-toggle="pill" href="#custom-tabs-four-research" role="tab" aria-controls="custom-tabs-four-research" aria-selected="false">
-                        <b> Research (<?=$ttbyd[0]->h?>)</b>
+                        <b> Research (<?=$ttbyd[0]->j?>)</b>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-socialn-tab" data-toggle="pill" href="#custom-tabs-four-socialn" role="tab" aria-controls="custom-tabs-four-socialn" aria-selected="false">
-                        <b> Social Networking (<?=$ttbyd[0]->i?>)</b>
+                        <b> Social Networking (<?=$ttbyd[0]->m?>)</b>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <!-- <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-sociala-tab" data-toggle="pill" href="#custom-tabs-four-sociala" role="tab" aria-controls="custom-tabs-four-sociala" aria-selected="false">
                         <b> Social Activity (<?=$ttbyd[0]->j?>)</b>
                     </a>
-                  </li>
+                  </li> -->
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-email-tab" data-toggle="pill" href="#custom-tabs-four-email" role="tab" aria-controls="custom-tabs-four-email" aria-selected="false">
                         Email <span class="badge badge-success"><?=$ttbyd[0]->b?></span>
@@ -1780,7 +1780,7 @@ $dataPoints2 = array(
                            <span class="mr-3 align-items-center">
                               <i class="fa-solid fa-circle"></i>
                            </span>
-                           <span class="flex"><?=$taid[0]->name?> |
+                            <span class="flex"><?=$taid[0]->name?> |
                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                <small class="text-muted">Task Time:- <?=$time?></small>
                             </span>

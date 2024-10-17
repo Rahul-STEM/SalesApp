@@ -478,8 +478,8 @@
                                             <tbody>
                                                 <?php
                                                 $i = 1;
-                                                foreach ($dayData as $data):
-                                                    // var_dump()
+                                                foreach ($yesterdayData as $data):
+                                                    // var_dump($dayData);
                                                     $teamuid = $data->user_id;
                                                 ?>
                                                     <tr>
@@ -1190,7 +1190,7 @@
                                         </form>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
                                             <button type="button" class="btn btn-primary" onclick="submitReview()">Submit</button>
                                         </div>
                                     </div>

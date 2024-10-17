@@ -1175,7 +1175,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="RatingReviewModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal fade" id="RatingReviewModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1188,7 +1188,7 @@
                     </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
                         <button type="button" class="btn btn-primary" onclick="submitReview()">Submit</button>
                     </div>
                 </div>
@@ -1304,7 +1304,7 @@ $(document).ready(function() {
         var userId = $rating.closest('.rating').data('userid');
         var question = $rating.closest('.rating').data('question');
         var ratingValue = $rating.val();
-        alert(ratingValue);
+        // alert(ratingValue);
         // console.log("Extracted ID: " + extractedId);
         // alert("Task ID: " + taskId + "\nUser ID: " + userId + "\nExtracted ID: " + extractedId + "\nRating Value: " + ratingValue);
         
@@ -1519,6 +1519,11 @@ $(document).ready(function() {
         var remark = document.getElementById("remark").value;
         var starID = document.getElementById("starID").value;
 
+        if (remark.trim() === "") {
+            alert("Please provide a remark.");
+            return; // Prevent form submission
+        }
+
         $.ajax({
             url: '<?=base_url();?>Menu/updateTaskCheckRemark',
             type: 'POST',
@@ -1627,7 +1632,7 @@ $(document).ready(function() {
             // Convert data to JSON (or another format if needed)
             const jsonData = JSON.stringify(data);
 
-            alert(jsonData);
+            // alert(jsonData);
             // Log data for debugging
             console.log('Submitted Data:', data);
 
@@ -1722,6 +1727,7 @@ $(document).ready(function() {
             var taskID = document.getElementById('taskID').value.trim();
             var userID = document.getElementById('userID').value.trim();
 
+            
             // alert(taskID);
 
             // Collect ratings and associated questions

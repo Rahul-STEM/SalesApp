@@ -612,7 +612,129 @@
                         // }
                         
                     }else{ ?>
-
+                        <div class="row p-3">
+                            <div class="col-sm col-md-12 col-lg-12 m-auto">
+                            <div class="card card-primary card-outline">
+                            <div class="card-body box-profile">
+                                <h3 class="text-center">Start Your Day</h3>
+                                <hr>
+                                <form action="<?=base_url();?>Menu/daysc" method="post" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <input type="hidden" name="user_id" value="<?=$uid?>">
+                                    <center>
+                                    <b class="text-info">Today's Date : <?=date('d-m-Y');?> </b>
+                                    <?php date_default_timezone_set("Asia/Kolkata"); ?>
+                                    <input type="hidden" name="ustart" value="<?=date('Y-d-m H:i:s')?>">
+                                    <p>You Are Starting Day at <b><?=date('H:i:s');?></b><br><br>
+                                    <div class="mb-4">
+                                    <select class="form-control" name="wffo" id="wffo" style="width:400px">
+                                    <!-- <option value="">Start Your Days</option> -->
+                                        <?php $userdfrom = $this->Menu_model->userworkfrom() ?>
+                                            <?php foreach($userdfrom as $udfrom){ ?>
+                                            <option value="<?= $udfrom->ID; ?>"><?= $udfrom->TYPE; ?></option>
+                                            <?php } ?>
+                                    </select>
+                                    </div>
+                                    <div class="mb-4 d-flex justify-content-center">
+                                    <img class="border profileimgae" id="blah" src="https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/user-profile-icon.png" alt="your image" style="width:250px;height:250px"/>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                    <div class="btn btn-info btn-rounded">
+                                        <label class="form-label text-white m-1" for="imgInp">Take Selfie</label>
+                                        <input type="file" class="form-control d-none" id="imgInp" name="filname" accept="image/*" capture required/>
+                                    </div>
+                                    </div>
+                                    <input type="hidden" id="lat" name="lat">
+                                    <input type="hidden" id="lng" name="lng">
+                                    <input type="hidden" name="do" value="<?=$do?>">
+                                </div>
+                                <div id="location">
+                                    <div id="map-container-google-3" class="z-depth-1-half map-container-3 p-3 m-3 border">
+                                    <iframe style="width:100%;height:200px;" id="mylocation" src="" frameborder="0" style="border:0" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+                                <p class="form-group text-center">
+                                    <button type="submit" class="btn btn-success" id="submitButton" >Start Your Day</button>
+                                <center>
+                                <p id="goodmessage"></p>
+                                </center>
+                                </div>
+                                </form>
+            
+            
+                                <?php 
+                                $geturdata = $this->Menu_model->change_user_day_request($uid);
+                                $geturdatacnt = sizeof($geturdata);
+                                if($geturdatacnt > 0){ ?>
+                <hr>
+                <div class="card p-5">
+                <h5 class="bg-info p-2 text-center">Your Request to change the start your Days</h5>
+            
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Want To Start</th>
+                            <th>Message</th>
+                            <th>Approved By</th>
+                            <th>Approval Status</th>
+                            <th>Admin Message</th>  
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        $i=1;
+                        foreach ($geturdata as $row): ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>
+                            <td><?php 
+                            $udetail = $this->Menu_model->get_userbyid($row->user_id);
+                            $username = $udetail[0]->name;
+                            echo $username;
+                            ?></td>
+                            <td><?php echo $row->date; ?></td>
+                            <td><?php 
+                            echo $this->Menu_model->userworkfrombyid($row->user_want_start)[0]->TYPE;
+                        ?></td>
+                            <td><?php echo $row->message; ?></td>
+                            <td><?php 
+                            if($row->apr_by == 0){
+                            echo "<span class='p-1 bg-warning'>Pending</span>";
+                            }else{
+                            $udetail = $this->Menu_model->get_userbyid($row->apr_by);
+                            $admidname = $udetail[0]->name;
+                            echo $admidname;
+                            }
+                            ?></td>
+                            <td><?php 
+                            if($row->apr_status == 0){
+                            echo "<span class='p-1 bg-warning'>Pending</span>";
+                            }elseif($row->apr_status == 1){
+                            echo "<span class='p-1 bg-success'>Approved</span>";
+                            }elseif($row->apr_status == 2){
+                            echo "<span class='p-1 bg-danger'>Reject</span>";
+                            }
+                            ?></td>
+                            <td><?php 
+                            if($row->amessage == ''){
+                            echo "<span class='p-1 bg-warning'>Pending</span>";
+                            }else{
+                            echo $row->amessage; 
+                            }
+                            ?></td>
+                        </tr>
+                        <?php $i++; endforeach; ?>
+                    </tbody>
+                </table>
+                </div>
+                            <?php } ?>
+            
+            
+                            </div>
+                </div>
+                        </div>
                         
 
                 <?php    }

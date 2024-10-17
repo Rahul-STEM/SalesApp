@@ -902,9 +902,9 @@ if($type_id == 3){
                               <hr>
                                 <div class="card bg-danger p-2 boxshadownew text-center">
                                   
-                                  <lable>
-                                  First Plan Their <?= implode(", ", $elementsGreaterThanOne) ?>
-                                  </lable>
+                                    <lable>
+                                    First Plan Your <?= implode(", ", $elementsGreaterThanOne) ?>
+                                    </lable>
                                 </div>
                            <?php } else { ?>
                          <?php if($type_id ==13 || $type_id ==4){ 
@@ -933,16 +933,16 @@ if($type_id == 3){
                           <input type="radio" class="form-check-input" name="optradio" value="Status" >Status
                           </label>
                         </div>
-                          <?php
-                              $tooltipstaskact = "This feature allows users to filter and plan tasks related to meetings and research within the company.\n";  
-                              $tooltipstaskact .= "Plan Scheduled Meeting Task: Users can plan and schedule specific meeting tasks.\n";  
-                              $tooltipstaskact .= "Plan Barg-in Meeting Task: Users can plan Barg meeting tasks, choosing from:\n";  
-                              $tooltipstaskact .= "Barg-in Meeting From Funnel: When selecting tasks from the funnel.\n";  
-                              $tooltipstaskact .= "Barg-in Meeting Other : When selecting tasks from other sources.\n";  
-                              $tooltipstaskact .= "Plan Research Task: Users can plan research tasks, choosing from:\n";  
-                              $tooltipstaskact .= "Research  From Funnel: When selecting tasks from the funnel.\n";  
-                              $tooltipstaskact .= "Research  Other : When selecting tasks from other sources.\n";  
-                              $tooltipstaskact .= "Add New Lead: Automatically creates a task to add a new lead.\n";  
+                            <?php
+                                $tooltipstaskact = "This feature allows users to filter and plan tasks related to meetings and research within the company.\n";  
+                                $tooltipstaskact .= "Plan Scheduled Meeting Task: Users can plan and schedule specific meeting tasks.\n";  
+                                $tooltipstaskact .= "Plan Barg-in Meeting Task: Users can plan Barg meeting tasks, choosing from:\n";  
+                                $tooltipstaskact .= "Barg-in Meeting From Funnel: When selecting tasks from the funnel.\n";  
+                                $tooltipstaskact .= "Barg-in Meeting Other : When selecting tasks from other sources.\n";  
+                                $tooltipstaskact .= "Plan Research Task: Users can plan research tasks, choosing from:\n";  
+                                $tooltipstaskact .= "Research  From Funnel: When selecting tasks from the funnel.\n";  
+                                $tooltipstaskact .= "Research  Other : When selecting tasks from other sources.\n";  
+                                $tooltipstaskact .= "Add New Lead: Automatically creates a task to add a new lead.\n";  
                             ?>
                         <div class="form-check">
                           <label class="form-check-label custom-radio-label">

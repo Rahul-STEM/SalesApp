@@ -538,18 +538,22 @@ public function getAllActiveUserInDepartment(){
             }
              echo $data;
  }
+ 
     // New Daymanagement changes <======== START =======>
     public function CheckingDayManagement_New(){
         $cdate = date("Y-m-d");
         $sdate = new DateTime($cdate);
         $sdate->modify('-1 day');
         $previousDate = $sdate->format('Y-m-d');
-        $cdate = '2024-10-08';
+        // $cdate = '2024-10-08';
         $dayData = $this->Management_model->CheckingDayManage_New($this->uid,$cdate);
         // echo $this->db->last_query();die;
-        // var_dump($dayData);die;
+        $yesterdayData = $this->Management_model->CheckingYesterdyDayManage_New($this->uid,$previousDate);
+        
+        // var_dump($yesterdayData);die;
         $RequestApprovals = $this->Management_model->RequestApprovals($this->uid,$cdate);
         $ApprovedRequests = $this->Management_model->ApprovedRequests($this->uid,$cdate);
+
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -565,7 +569,7 @@ public function getAllActiveUserInDepartment(){
                     $this->load->view($this->dep_name.'/RequestForDayCheckApproval',['uid'=>$this->uid,'user'=>$this->user,'cdate'=>$cdate,'RequestApprovals'=>$RequestApprovals]);
                 }
             }else{
-                $this->load->view($this->dep_name.'/CheckingDayManagement_New',['uid'=>$this->uid,'user'=>$this->user,'dayData'=>$dayData,'cdate'=>$cdate,'previousDate'=>$previousDate]);
+                $this->load->view($this->dep_name.'/CheckingDayManagement_New',['uid'=>$this->uid,'user'=>$this->user,'dayData'=>$dayData,'yesterdayData'=>$yesterdayData,'cdate'=>$cdate,'previousDate'=>$previousDate]);
             }
         }else{
             redirect('Menu/main');

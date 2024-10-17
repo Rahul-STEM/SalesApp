@@ -17190,7 +17190,7 @@ public function get_JoinMeetingsCompany(){
         $date->modify('-1 day');
         $tdate =  $date->format('Y-m-d');
         $taskList = array();
-            $tdate='2024-07-18';
+            // $tdate='2024-07-18';
         if(isset($_POST['userId'])){
             $userId = $_POST['userId'];
             $taskList = $this->Menu_model->getTasks($userId,$tdate);

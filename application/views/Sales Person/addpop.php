@@ -1099,6 +1099,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 $("#test9").hide();
                                 }
                                 if(ab=="6"){
+                                  document.querySelector('#button').disabled = false;
                                 $("#test1").hide();
                                 $("#test2").hide();
                                 $("#test3").hide();
@@ -1663,10 +1664,10 @@ date_default_timezone_set("Asia/Kolkata");
                                 
                                 $('#clink').click(function(){
                                   var isMobile = window.orientation > -1;
-                                  if (isMobile != 'Mobile') {
-                                      alert('You need to complete and update this task from mobile..!!');
-                                      return false;
-                                  }
+                                    if (isMobile != 'Mobile') {
+                                        alert('You need to complete and update this task from mobile..!!');
+                                        return false;
+                                    }
                                 var tid = document.getElementById("tidd").value;
                                 $.ajax({
                                 url:'<?=base_url();?>Menu/indtime',

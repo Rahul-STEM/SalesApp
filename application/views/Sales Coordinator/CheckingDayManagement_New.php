@@ -842,6 +842,8 @@
                                                                 <b> Reason For Request : </b> <?= $data->reasonFor_Request; ?>
                                                                 <b> Leave Start time : </b> <?= $data->leave_StartTime; ?>
                                                                 <b> Leave End Time : </b> <?= $data->leave_EndTime; ?>
+                                                                <b> No of Tasks in the leave time : </b>
+
                                                             <?php    
                                                             
                                                             }else{

@@ -3203,7 +3203,7 @@ class Menu extends CI_Controller {
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
         if($cstatus==6){
-        foreach($result as $d){if($d->id==12){
+        foreach($result as $d){if($d->id==12 || $d->id==13 || $d->id==9){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
         if($cstatus==7){
@@ -17190,6 +17190,10 @@ public function get_JoinMeetingsCompany(){
         $date->modify('-1 day');
         $tdate =  $date->format('Y-m-d');
         $taskList = array();
+        $cdate = date("Y-m-d");
+        // $RequestApprovals = '';
+        $RequestApprovals = $this->Menu_model->RequestApprovals($uid);
+        $ApprovedRequests = $this->Menu_model->ApprovedRequests($uid);
             // $tdate='2024-07-18';
         if(isset($_POST['userId'])){
             $userId = $_POST['userId'];
@@ -17204,34 +17208,78 @@ public function get_JoinMeetingsCompany(){
             $sizeOfTask = '';
 
         }
-        // echo "<pre>";print_r($taskList);exit;
-        // var_dump($taskList);die;
+        $currentHour = (int) (new DateTime())->format('H:mm');
+        // echo $currentHour;die;
         if(!empty($user)){
-            $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId,'sizeOfTask'=>$sizeOfTask]);
+
+            if($currentHour >= 11 && $uyid != 2) {
+
+                if (sizeof($ApprovedRequests) > 0) {
+                    
+                    $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId,'sizeOfTask'=>$sizeOfTask]);
+
+                }else{
+                    // echo $dep_name;die;
+                    // redirect('Menu/RequestForTaskCheckApproval');
+                    $this->load->view($dep_name.'/RequestForTaskCheckApproval',['uid'=>$this->uid,'user'=>$this->user,'cdate'=>$cdate,'RequestApprovals'=>$RequestApprovals]);
+                }
+            }else{
+                $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId,'sizeOfTask'=>$sizeOfTask]);
+            }
+
+            // $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId,'sizeOfTask'=>$sizeOfTask]);
         }else{
             redirect('Menu/main');
         }
     }
 
-    // public function getTaskByUser(){
-    //     $user = $this->session->userdata('user');
-    //     $data['user'] = $user;
-    //     $uid = $user['user_id'];
-    //     $uyid =  $user['type_id'];
-    //     $this->load->model('Menu_model');
-    //     $dt=$this->Menu_model->get_utype($uyid);
-    //     $dep_name = $dt[0]->name;
-    //     $userId = '100192';
-    //     $tdate = '2024-07-20';
-    //     // var_dump($_POST);die;
-    //     $getTasks = $this->Menu_model->getTasks($userId,$tdate);
-    //     // print_r($getTasks);die;
-    //     if(!empty($user)){
-    //         $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'tasks'=>$getTasks]);
-    //     }else{
-    //         redirect('Menu/main');
-    //     }
-    // }
+    public function ApproveTaskCheckRequest(){
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        // $typeID =  $user['type_id'];
+        $uyid =  $user['type_id'];
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        
+        $getRequests = $this->Menu_model->getRequests($uid);
+        // var_dump($user);die;
+        if(!empty($user)){
+            $this->load->view($dep_name.'/ApproveTaskCheckRequest',['uid'=>$this->uid,'user'=>$this->user,'getRequests'=>$getRequests]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+
+    public function RequestForTaskCheckApproval(){
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+
+        $request = $this->input->post('remark');
+        $dayData = $this->Menu_model->RequestForTaskCheckApproval($uid,$request);
+        
+    }
+
+    public function ApproveRequest() {
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+
+        // var_dump($_POST);die;
+        $id = $_POST['id'];
+        $action = $_POST['action'];
+        if ($action == 'approve') {
+            $action = 'Approved';
+        }
+        if ($action == 'reject') {
+            $action = 'Rejected';
+        }
+        $result = $this->Menu_model->ApproveRequest($id,$action,$uid);
+    }
+
     public function RateTask(){
         $rat = $_POST['rat'];
         $rremark = $_POST['rremark'];
@@ -20135,4 +20183,9 @@ public function getLeaveDetail(){
     echo $dt[0]->leave_balance;
 }
 // ---------------------profile page End----------------------
+
+
+
+
+
 }

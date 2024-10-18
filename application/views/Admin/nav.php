@@ -311,7 +311,14 @@
     </a>
 
 </li>
+<li class="nav-item">
 
+    <a class="nav-link" href="<?= base_url(); ?>Menu/ApproveTaskCheckRequest">
+        <i class="fas fa-chart-line nav-icon"></i>
+        Approve Task Check Request
+    </a>
+
+</li>
 <li class="nav-item">
 
     <a class="nav-link" href="<?= base_url(); ?>Menu/TaskCheck_NewReport">
@@ -322,7 +329,8 @@
 
     </a>
 
-</li> <li class="nav-item">
+</li> 
+    <li class="nav-item">
 
             <a class="nav-link" href="<?=base_url();?>Menu/NewFunnel" >
 
@@ -358,27 +366,6 @@
             </ul>
           </li>
 
-          
-
-          <!--<li class="nav-item">
-
-            <a href="<?=base_url();?>Menu/LiveTaskTracking" class="nav-link">
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Live Task Tracking</p>
-
-            </a>
-
-          </li>-->
-
-          
-
-          
-
-          
-
-          
 
           <li class="nav-item">
 
@@ -392,12 +379,7 @@
 
           </li>
 
-          
-
-          
-
-          
-
+        
           <li class="nav-item">
 
             <a class="nav-link" href="<?=base_url();?>Menu/CategoryStatusPage" >
@@ -484,7 +466,7 @@
                             </ul>
                         </li>
                     </ul>
-                </li>
+          </li>
                 
            <li class="nav-item">
 
@@ -878,17 +860,6 @@
                         <p>Need Your Attentions </p>
                     </a>
                 </li>
-          <!--<li class="nav-item">-->
-
-          <!--  <a class="nav-link" href="<?=base_url();?>Menu/FAQReport" >-->
-
-          <!--    <i class="far fa-circle nav-icon"></i>-->
-
-          <!--    <p>FAQ Report</p>-->
-
-          <!--  </a>-->
-
-          <!--</li>-->
 
           <li class="nav-item">
 
@@ -901,51 +872,6 @@
             </a>
 
           </li>
-<!-- 
-          <li class="nav-item">
-
-<a href="<?=base_url();?>Menu/DayManagement" class="nav-link">
-
-  <i class="far fa-circle nav-icon"></i>
-
-  <p>Day Management</p>
-
-</a>
-
-</li> -->
-
-          
-
-          
-
-          <!--
-
-          <li class="nav-item">
-
-            <a href="<?=base_url();?>Menu/AnnualReviewDetail" class="nav-link">
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Annual Review</p>
-
-            </a>
-
-          </li>
-
-          <li class="nav-item">
-
-            <a href="<?=base_url();?>Menu/DayManagement" class="nav-link">
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Day Management</p>
-
-            </a>
-
-          </li>
-
-          -->
-
           <li class="nav-item">
 
             <a href="<?=base_url();?>Menu/logout" class="nav-link">

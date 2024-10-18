@@ -546,7 +546,7 @@
 
                                                         if ($getProposalData->pro_apr == 1) { ?>
                                                             
-                                                            <a href="<?= base_url() . $getProposalData->pro_attachment . '/'?>" class="btn btn-primary" target="_blank">View Document</a>
+                                                            <a href="<?= base_url() . $getProposalData->pro_attachment ?>" class="btn btn-primary" target="_blank">View Document</a>
 
                                             <?php       }
  
@@ -1383,13 +1383,36 @@ $(document).ready(function() {
                 // Update modal content
                             
                 // Calculate the difference in milliseconds
-                    const startTime = parseDate(data.start_time);
-                    const endTime = parseDate(data.end_time);
+                // if (data.start_time != ) {
+                    
+                // }
+                    // const startTime = parseDate(data.start_time);
+                    // const endTime = parseDate(data.end_time);
 
-                    // Calculate the difference in milliseconds
+                    if (data.start_time) { // This checks for '', null, or undefined
+                        const startTime = parseDate(data.start_time);
+                    
+                    }else{
+                        const startTime = '';
+                    }
+
+                    if (data.end_time) { // This checks for '', null, or undefined
+                        const endTime = parseDate(data.end_time);
+                  
+                    }else{
+                        const endTime = '';
+                    }
+
                     const timeDifference = endTime - startTime;
-                    // Convert the difference to minutes (or any other unit you prefer)
                     const differenceInMinutes = Math.floor(timeDifference / (1000 * 60)) + ' mins';
+
+                    // if (startTime && endTime) {
+                        
+                    // }else{
+                    //     const differenceInMinutes = '';
+                    // }
+                    // Calculate the difference in milliseconds
+                    // Convert the difference to minutes (or any other unit you prefer)
                     // const differenceInSeconds = Math.floor(timeDifference / 1000);
                     // alert(differenceInMinutes);
 

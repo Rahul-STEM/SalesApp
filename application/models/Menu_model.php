@@ -4908,6 +4908,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
     }
     public function get_daydetail($uid,$tdate){
         $query=$this->db->query("SELECT cast(ustart as TIME) as ustart,cast(uclose as TIME) as uclose FROM user_day WHERE user_id='$uid' and cast(sdatet as DATE)='$tdate'");
+        // echo $this->db->last_query();die;
         return $query->result();
     }
 
@@ -10004,7 +10005,7 @@ public function getSpecialRequestForLeaveData($uid,$uyid){
     }else if($uyid ==15){
         $text = "user.sales_co = '$uid'";
     }else{
-        $text = "user_details.aadmin = '$uid'";
+        $text = "user.admin_id = '$uid'";
     }
     $query = $this->db->query("SELECT srl.*,user.name FROM `special_request_for_leave` as srl LEFT JOIN user_details as user on srl.user_id = user.user_id WHERE $text and date = CURDATE() order by id DESC");
     return $query->result();
@@ -10421,6 +10422,90 @@ public function getTasks($id,$date){
         // echo  $this->db->last_query(); die;
     return $query->result();
 }
+
+public function ApprovedRequests($uid) {
+    $cdate = date('Y-m-d');
+    $this->db->select('reason, created_at,approved_at');
+    $this->db->select('ud1.name AS request_by');
+    $this->db->select('ud2.name AS approved_by');
+    $this->db->from('taskcheckapprovalrequest');
+    $this->db->join('user_details ud1', 'ud1.user_id = taskcheckapprovalrequest.user_id', 'left');
+    $this->db->join('user_details ud2', 'ud2.user_id = taskcheckapprovalrequest.approved_by', 'left');
+    $this->db->where('taskcheckapprovalrequest.user_id', $uid);
+    $this->db->where('DATE(taskcheckapprovalrequest.created_at) ', $cdate);
+    $this->db->where('taskcheckapprovalrequest.status ', 'Approved');
+
+// Execute the query
+    $query = $this->db->get();
+    // echo $this->db->last_query();
+    return $query->result();
+}
+
+    public function getRequests($uid) {
+        $this->db->select('reason, created_at,approved_at');
+        $this->db->select('taskcheckapprovalrequest.id,taskcheckapprovalrequest.status');
+        $this->db->select('ud1.name AS request_by');
+        $this->db->select('ud2.name AS approved_by');
+        $this->db->from('taskcheckapprovalrequest');
+        $this->db->join('user_details ud1', 'ud1.user_id = taskcheckapprovalrequest.user_id', 'left');
+        $this->db->join('user_details ud2', 'ud2.user_id = taskcheckapprovalrequest.approved_by', 'left');
+        $this->db->where('ud1.admin_id', $uid);
+// Execute the query
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+        return $query->result();
+    }
+
+
+    public function ApproveRequest($id,$action,$uid) {
+
+        $current_timestamp = date('Y-m-d H:i:s');
+        // echo $current_timestamp;die;
+        // Update the request status
+        $this->db->set('status', $action);
+        $this->db->set('approved_by', $uid);
+        $this->db->set('approved_at', $current_timestamp);
+        $this->db->where('id', $id);
+        $result = $this->db->update('taskcheckapprovalrequest');
+
+        return 'Success..!!';
+    }
+
+    public function RequestForTaskCheckApproval($uid,$request){
+
+        $data = [
+            'user_id' => $uid,
+            'reason' => $request
+            ];
+    
+        if ($this->db->insert('taskcheckapprovalrequest', $data)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function RequestApprovals($uid) {
+
+        $cdate = date('Y-m-d');
+        // echo $cdate;die;
+        $this->db->select('reason, created_at,approved_at');
+        $this->db->select('ud1.name AS request_by');
+        $this->db->select('ud2.name AS approved_by');
+        $this->db->from('taskcheckapprovalrequest');
+        $this->db->join('user_details ud1', 'ud1.user_id = taskcheckapprovalrequest.user_id', 'left');
+        $this->db->join('user_details ud2', 'ud2.user_id = taskcheckapprovalrequest.approved_by', 'left');
+        $this->db->where('taskcheckapprovalrequest.user_id', $uid);
+        
+        $this->db->where('DATE(taskcheckapprovalrequest.created_at) ', $cdate);
+        // $this->db->where('taskcheckapprovalrequest.status) ', '');
+
+    // Execute the query
+        $query = $this->db->get();
+        // echo $this->db->last_query();die;
+        return $query->result();
+    }
+
 public function RateTask($rat,$rremark,$taskid,$uuid){
     
     $date = date('Y-m-d H:i:s');

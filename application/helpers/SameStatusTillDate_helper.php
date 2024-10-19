@@ -90,4 +90,15 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	    }
 	}
 
+	if (!function_exists('noOfTask')) {
+	    function noOfTask($startTime,$endTime,$userId,$date){
+	        $CI =& get_instance();
+	        // Load the model if not already loaded
+	        $CI->load->model('Menu_model');
+	        $DataSet = $CI->Menu_model->noOfTask($startTime,$endTime,$userId,$date);
+            
+	        return $DataSet;
+	    }
+	}
+
 ?>

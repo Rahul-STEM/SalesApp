@@ -545,7 +545,13 @@ public function getAllActiveUserInDepartment(){
         $sdate = new DateTime($cdate);
         $sdate->modify('-1 day');
         $previousDate = $sdate->format('Y-m-d');
-        // $cdate = '2024-10-08';
+
+        $cdate = '2024-10-08';
+        $sdate = new DateTime($cdate);
+        $sdate->modify('-1 day');
+        $previousDate = $sdate->format('Y-m-d');
+
+        
         $dayData = $this->Management_model->CheckingDayManage_New($this->uid,$cdate);
         // echo $this->db->last_query();die;
         $yesterdayData = $this->Management_model->CheckingYesterdyDayManage_New($this->uid,$previousDate);
@@ -564,7 +570,7 @@ public function getAllActiveUserInDepartment(){
             if($currentHour >= 11 && $typeID != 2) {
                 if (sizeof($ApprovedRequests) > 0) {
                     
-                    $this->load->view($this->dep_name.'/CheckingDayManagement_New',['uid'=>$this->uid,'user'=>$this->user,'typeID'=>$typeID,'dayData'=>$dayData,'cdate'=>$cdate,'previousDate'=>$previousDate]);
+                    $this->load->view($this->dep_name.'/CheckingDayManagement_New',['uid'=>$this->uid,'user'=>$this->user,'typeID'=>$typeID,'dayData'=>$dayData,'yesterdayData'=>$yesterdayData,'cdate'=>$cdate,'previousDate'=>$previousDate]);
                 }else{
                     $this->load->view($this->dep_name.'/RequestForDayCheckApproval',['uid'=>$this->uid,'user'=>$this->user,'cdate'=>$cdate,'RequestApprovals'=>$RequestApprovals]);
                 }

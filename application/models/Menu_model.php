@@ -2611,6 +2611,27 @@ WHERE cid = '$cid'");
         // die;
         return $query->row();
     }
+
+    public function noOfTask($startTime,$endTime,$user_id,$date) {
+        
+        // $this->db->select('id');
+        $this->db->select('COUNT(*) AS numrows');
+        $this->db->from('tblcallevents');
+        $this->db->where('user_id', $user_id);
+        // $this->db->where('user_id', $user_id);
+        $this->db->where('CAST(appointmentdatetime AS DATE) =', "'$date'", FALSE);
+        $this->db->where('TIME(appointmentdatetime) >=', $startTime);
+        $this->db->where('TIME(appointmentdatetime) <=', $endTime);
+        // $count = $this->db->count_all_results('tblcallevents');
+    
+        $query = $this->db->get();
+        // echo $this->db->last_query();
+
+        // $result = $query->row(); // Fetch the result
+        // $numrows = $result->numrows;
+        // die;
+        return $query->row();
+    }
     public function getNoOfReview($id){
         $this->db->select('mtr.id');
     

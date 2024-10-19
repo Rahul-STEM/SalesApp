@@ -32,7 +32,7 @@ class Management_model  extends Menu_model {
         $date = new DateTime();
         $date->modify('-1 day');
         $pdate =  $date->format('Y-m-d');
-        // $pdate = '2024-07-19';
+        $pdate = '2024-07-19';
 
         $uyid =  $uid;
         $this->load->model('Menu_model');

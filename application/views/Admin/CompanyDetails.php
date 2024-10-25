@@ -998,7 +998,7 @@ display: block
 
                                         $i = 1;
                                         foreach ($tblc as $tb) {
-                                            if ($tb->nextCFID != '0' && $tb->nstatus_id != '') {
+                                        //     if ($tb->nextCFID != '0' && $tb->nstatus_id != '') {
 
                                                 $tid = $tb->id;
 
@@ -1038,7 +1038,7 @@ display: block
 
                                     <?php $i++;
                                     
-                                        }
+                                        // }
                                     } ?>
 
                                 </tbody>

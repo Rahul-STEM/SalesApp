@@ -90,6 +90,7 @@
                                             <th>Total Task Assign/Planned</th>
                                             <th>Total Task Pending</th>
                                             <th>Total Task Completed</th>
+                                            <th>Total Auto Task</th>
                                             <th>Call Assign/Planned</th>
                                             <th>Call Pending</th>
                                             <th>Call Completed</th>
@@ -133,6 +134,7 @@
                                         <td><a href="<?=base_url();?>/Menu/ATaskDetail/4/<?=$bdid?>/1/<?=$sd?>/<?=$ed?>/1"><?=$ttd->a?></a></td>
                                         <td><a href="<?=base_url();?>/Menu/ATaskDetail/5/<?=$bdid?>/1/<?=$sd?>/<?=$ed?>/1"><?=$ttd->b?></a></td>
                                         <td><a href="<?=base_url();?>/Menu/ATaskDetail/6/<?=$bdid?>/1/<?=$sd?>/<?=$ed?>/1"><?=$ttd->c?></a></td> 
+                                        <td><a href="<?=base_url();?>Menu/ATaskDetail/11/<?=$uid?>/0/<?=$sd?>/<?=$ed?>/0"><?=$ttd->autotask?></a></td>
                                         <td><a href="<?=base_url();?>/Menu/ATaskDetail/1/<?=$bdid?>/1/<?=$sd?>/<?=$ed?>/1"><?=$ttd->d?></a></td>
                                         <td><a href="<?=base_url();?>/Menu/ATaskDetail/2/<?=$bdid?>/1/<?=$sd?>/<?=$ed?>/1"><?=$ttd->e?></a></td>
                                         <td><a href="<?=base_url();?>/Menu/ATaskDetail/3/<?=$bdid?>/1/<?=$sd?>/<?=$ed?>/1"><?=$ttd->d-$ttd->e?></a></td>

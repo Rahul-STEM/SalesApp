@@ -1078,7 +1078,7 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                               $pinitiate_time = $user_day_planner[0]->planner_initiate_time;
                               $textmessage = $pinitiate_time == '' ? "Start" : "Resume";
                               ?>
-                            <div class="card">
+                            <!-- <div class="card">
                                 <div class="card-header bg-primary" id="start_planning1" data-toggle="collapse" data-target="#start_planning2" aria-expanded="false" aria-controls="collapse9121">
                                 <b><?= $textmessage; ?> Planning </b>   
                                 </div>
@@ -1090,17 +1090,17 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                                     <?= $textmessage; ?> &nbsp;<i class="fa-solid fa-forward"></i>
                                     </button>
                                     </center>
-                                    <!-- <br> -->
-                                    <!-- <hr> -->
-                                    <!-- <button id="add_act6734763254" value="" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                                    <br>
+                                    <hr>
+                                    <button id="add_act6734763254" value="" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
                                        <span class="mr-3 align-items-center">
                                          sdsadsagd
                                        </span>
-                                    </button> -->
+                                    </button>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
+                              </div> -->
 
 
                             </div>
@@ -1927,6 +1927,29 @@ $tbmeetd = $this->Menu_model->get_tbmeetdbyaid($uid,$tdate);
                   </div>
                 <?php  } ?> 
                 <div class="card p-3">
+                <div class="card p-3">
+                <?php 
+                              $user_day_planner  = $this->Menu_model->get_daystarted($uid,date("Y-m-d"));
+                              $pinitiate_time = $user_day_planner[0]->planner_initiate_time;
+                              $textmessage = $pinitiate_time == '' ? "Start" : "Resume";
+                              ?>
+                              <div class="card">
+                                <div class="card-header bg-primary" id="start_planning1" data-toggle="collapse" data-target="#start_planning2" aria-expanded="false" aria-controls="collapse9121">
+                                <b><?= $textmessage; ?> Planning </b>   
+                                </div>
+                                <div id="start_planning2" class="collapse" aria-labelledby="start_planning1" data-parent="#accordion">
+                                  <div class="card-body">
+                                    <div class="list-group-item list-group-item-action ">
+                                    <center>
+                                      <button type="button" class="btn btn-success font-weight-bold" style="padding:6px 70px;" onclick="handleReminderCreation()">
+                                      <?= $textmessage; ?> &nbsp;<i class="fa-solid fa-forward"></i>
+                                      </button>
+                                    </center>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                </div>
                 <div class="card p-3">
                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenterspclchngreq">
                       <b>Create a Special Request For Plan Change </b>

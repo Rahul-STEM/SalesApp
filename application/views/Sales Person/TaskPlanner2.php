@@ -710,7 +710,7 @@ if($type_id == 3){
 
                                 if($wffo == 1){
                                     $daystartedFrom = 'Office';
-                                }elseif ($wffo == 1) {
+                                }elseif ($wffo == 2) {
                                     $daystartedFrom = 'Field';
                                 }else{
                                     $daystartedFrom = 'Field + Office';

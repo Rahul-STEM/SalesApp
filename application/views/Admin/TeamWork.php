@@ -100,6 +100,7 @@ $bd = $this->Menu_model->get_userbyaid($uid);
                                             <th>Total Task Assign/Planned</th>
                                             <th>Total Task Pending</th>
                                             <th>Total Task Completed</th>
+                                            <th>Total Auto Task</th>
                                             <th>Call Assign/Planned</th>
                                             <th>Call Pending</th>
                                             <th>Call Completed</th>
@@ -138,6 +139,8 @@ $bd = $this->Menu_model->get_userbyaid($uid);
                                         <td><a href="<?=base_url();?>Menu/ATaskDetail/4/<?=$uid?>/0/<?=$sd?>/<?=$ed?>/0"><?=$ttd->a?></a></td>
                                         <td><a href="<?=base_url();?>Menu/ATaskDetail/5/<?=$uid?>/0/<?=$sd?>/<?=$ed?>/0"><?=$ttd->b?></a></td>
                                         <td><a href="<?=base_url();?>Menu/ATaskDetail/6/<?=$uid?>/0/<?=$sd?>/<?=$ed?>/0"><?=$ttd->c?></a></td>
+                                        <td><a href="<?=base_url();?>Menu/ATaskDetail/11/<?=$uid?>/0/<?=$sd?>/<?=$ed?>/0"><?=$ttd->autotask?></a></td>
+
                                         <td><a href="<?=base_url();?>Menu/ATaskDetail/1/<?=$uid?>/1/<?=$sd?>/<?=$ed?>/0"><?=$ttd->d?></a></td>
                                         <td><a href="<?=base_url();?>Menu/ATaskDetail/2/<?=$uid?>/1/<?=$sd?>/<?=$ed?>/0"><?=$ttd->e?></a></td>
                                         <td><a href="<?=base_url();?>Menu/ATaskDetail/3/<?=$uid?>/1/<?=$sd?>/<?=$ed?>/0"><?=$ttd->d-$ttd->e?></a></td>

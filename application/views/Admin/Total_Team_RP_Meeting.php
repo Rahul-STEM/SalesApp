@@ -99,20 +99,20 @@ overflow-x: auto;
                               </tr>
                             </thead>
                             <tbody>
-                              <?php $i=1;
-                              foreach($mdata as $dt){
-                              $cmpid = $dt->cmpid;
-                              $cid = $dt->cid;
-                              $tid = $dt->tid;
-                              $momc = $this->Menu_model->get_momyn($cid,$tid);
-                              if($momc){$momc='yes';}else{$momc='no';}
-                              $emailc = $this->Menu_model->get_temailyn($cid,$tid);
-                              if($emailc){$emailc='yes';}else{$emailc='no';}
-                             // $psta = $this->Menu_model->get_psta($cid);
-                             $psta = $dt->apst;
-                              if($psta){$psta='yes';}else{$psta='no';}
-                              if($momc !='no'){
-                              ?>
+                                <?php $i=1;
+                                foreach($mdata as $dt){
+                                $cmpid = $dt->cmpid;
+                                $cid = $dt->cid;
+                                $tid = $dt->tid;
+                                $momc = $this->Menu_model->get_momyn($cid,$tid);
+                                if($momc){$momc='yes';}else{$momc='no';}
+                                $emailc = $this->Menu_model->get_temailyn($cid,$tid);
+                                if($emailc){$emailc='yes';}else{$emailc='no';}
+                                // $psta = $this->Menu_model->get_psta($cid);
+                                $psta = $dt->apst;
+                                if($psta){$psta='yes';}else{$psta='no';}
+                                if($momc !='no'){
+                                ?>
                               
                               <tr>
                                 <td><?=$i?></td>

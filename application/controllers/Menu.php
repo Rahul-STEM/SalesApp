@@ -17,6 +17,8 @@ class Menu extends CI_Controller {
         $msg = '';
         $this->load->model('Menu_model');
         $this->load->view('index');
+        // $this->load->view('noAccess');
+
         //  $this->load->helper('SameStatusTillDate_helper');
     }
     public function logout(){
@@ -3605,7 +3607,7 @@ class Menu extends CI_Controller {
         if($yremark!=''){$remark=$yremark;}
         if($nremark!=''){$remark=$nremark;}
         if($ystatus!==''){$status=$ystatus;}else{$status=$cstatus;}
-        if($purpose==''){$purpose='yes';}
+        if($purpose==''){$purpose='no';}
         if($action_id=='7'){
             $partner = $_POST['partner'];
             $noofsc = $_POST['noofsc'];
@@ -6747,6 +6749,28 @@ public function Dashboard(){
             redirect('Menu/main');
         }
     }
+
+
+    public function Meetings($type,$sd,$ed,$bdid){
+        $sdate = $sd;
+        $edate = $ed;
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        $mdata = $this->Menu_model->get_meetingDetails($uid,$sd,$ed,$bdid,$type);
+        // var_dump($mdata);die;
+        // echo $this->db->last_query();die;
+        if(!empty($user)){
+                $this->load->view($dep_name.'/Meetings',['type'=>$type,'uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+
     public function TBMDFRP_PST($code,$sd,$ed,$bdname){
         if(isset($_POST['sdate']) && isset($_POST['edate'])){
             $sdate = $_POST['sdate'];
@@ -17227,7 +17251,6 @@ public function get_JoinMeetingsCompany(){
                 $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId,'sizeOfTask'=>$sizeOfTask]);
             }
 
-            // $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId,'sizeOfTask'=>$sizeOfTask]);
         }else{
             redirect('Menu/main');
         }

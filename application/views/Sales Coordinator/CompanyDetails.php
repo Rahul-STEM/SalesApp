@@ -216,7 +216,7 @@
                                       <?php 
                                  
                                       $i=1; foreach($tblc as $tb){
-                                          if($tb->nextCFID!='0' && $tb->nstatus_id!=''){
+                                        //   if($tb->nextCFID!='0' && $tb->nstatus_id!=''){
                                           $tid = $tb->id;
                                           $uid = $tb->user_id;
                                           $aid = $tb->actiontype_id;
@@ -240,7 +240,9 @@
                                         <td><?=$lsi[0]->name;?></td>
                                         <td><?=$usi[0]->name;?></td>
                                     </tr>
-                                    <?php $i++;}} ?>
+                                    <?php $i++;
+                                // }
+                                } ?>
                                   </tbody>
                                 </table>
                             </div>

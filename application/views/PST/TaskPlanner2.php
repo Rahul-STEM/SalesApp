@@ -701,6 +701,24 @@ if($type_id == 3){
                         <h5>Task Planner</h5>
                       </div>
                       <div class="card-body">
+                      <div class="form-check" id="note">
+                            <?php 
+
+                                $dayStartFrom = getUserDayStartStatus($uid);
+                                // var_dump($dayStartFrom[0]->wffo);
+                                $wffo = $dayStartFrom[0]->wffo;
+
+                                if($wffo == 1){
+                                    $daystartedFrom = 'Office';
+                                }elseif ($wffo == 2) {
+                                    $daystartedFrom = 'Field';
+                                }else{
+                                    $daystartedFrom = 'Field + Office';
+                                }
+                            
+                            ?>
+                            <span><strong>** (You started you day from <span style="color:blue;"><?=$daystartedFrom?></span>. Filters will be available accordingly..!!)</strong></span>
+                        </div>
                         <?php  
                         $current_date = date("Y-m-d");
                         $tomorrow_date = date('Y-m-d', strtotime($current_date . ' +1 day'));

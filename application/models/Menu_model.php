@@ -1614,7 +1614,7 @@ WHERE cid = '$cid'");
         if($utype==15){$text = "user_details.sales_co='$uid' and (user_details.type_id='3' or user_details.type_id='4' or user_details.type_id='13') and user_details.status='active'";}
         if($utype==4){$text = "user_details.status='active' and ((user_details.pst_co='$uid' and user_details.type_id='3') or (user_details.pst_co='$uid' and user_details.type_id='13') or (user_details.user_id='$uid'))";}
         
-        $query=$this->db->query("SELECT Count(DISTINCT tblcallevents.user_id)bdcount,COUNT(*) a,count(CASE WHEN nextCFID=0 THEN nextCFID end) b,count(CASE WHEN nextCFID!=0 THEN nextCFID end) c, count(CASE WHEN actiontype_id=1 THEN actiontype_id end) d,count(CASE WHEN actiontype_id=1 and nextCFID=0 THEN actiontype_id end) e,count(CASE WHEN actiontype_id=2 THEN actiontype_id end) f,count(CASE WHEN actiontype_id=2 and nextCFID=0 THEN actiontype_id end) g,count(CASE WHEN actiontype_id=3 THEN actiontype_id end) h,count(CASE WHEN actiontype_id=3 and nextCFID=0 THEN actiontype_id end) i,count(CASE WHEN actiontype_id=4 THEN actiontype_id end) j,count(CASE WHEN actiontype_id=4 and nextCFID=0 THEN actiontype_id end) k,count(CASE WHEN actiontype_id=5 THEN actiontype_id end) l,count(CASE WHEN actiontype_id=5 and nextCFID=0 THEN actiontype_id end) m,count(CASE WHEN actiontype_id=6 THEN actiontype_id end) n,count(CASE WHEN actiontype_id=6 and nextCFID=0 THEN actiontype_id end) o,count(CASE WHEN actiontype_id=7 THEN actiontype_id end) p,count(CASE WHEN actiontype_id=7 and nextCFID=0 THEN actiontype_id end) q,count(CASE WHEN actontaken='yes' and nextCFID!=0 THEN actiontype_id end) r,count(CASE WHEN actontaken='no' and nextCFID!=0 THEN actiontype_id end) s,count(CASE WHEN purpose_achieved='yes' and nextCFID!=0 THEN actiontype_id end) t,count(CASE WHEN purpose_achieved='no' and nextCFID!=0 THEN actiontype_id end) u FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id WHERE $text and plan=1 and cast(appointmentdatetime as DATE) BETWEEN '$sd' and '$ed'");
+        $query=$this->db->query("SELECT Count(DISTINCT tblcallevents.user_id)bdcount,COUNT(*) a,count(CASE WHEN nextCFID=0 THEN nextCFID end) b,count(CASE WHEN nextCFID!=0 THEN nextCFID end) c, count(CASE WHEN actiontype_id=1 THEN actiontype_id end) d,count(CASE WHEN actiontype_id=1 and nextCFID=0 THEN actiontype_id end) e,count(CASE WHEN actiontype_id=2 THEN actiontype_id end) f,count(CASE WHEN actiontype_id=2 and nextCFID=0 THEN actiontype_id end) g,count(CASE WHEN actiontype_id=3 THEN actiontype_id end) h,count(CASE WHEN actiontype_id=3 and nextCFID=0 THEN actiontype_id end) i,count(CASE WHEN actiontype_id=4 THEN actiontype_id end) j,count(CASE WHEN actiontype_id=4 and nextCFID=0 THEN actiontype_id end) k,count(CASE WHEN actiontype_id=5 THEN actiontype_id end) l,count(CASE WHEN actiontype_id=5 and nextCFID=0 THEN actiontype_id end) m,count(CASE WHEN actiontype_id=6 THEN actiontype_id end) n,count(CASE WHEN actiontype_id=6 and nextCFID=0 THEN actiontype_id end) o,count(CASE WHEN actiontype_id=7 THEN actiontype_id end) p,count(CASE WHEN actiontype_id=7 and nextCFID=0 THEN actiontype_id end) q,count(CASE WHEN actontaken='yes' and nextCFID!=0 THEN actiontype_id end) r,count(CASE WHEN actontaken='no' and nextCFID!=0 THEN actiontype_id end) s,count(CASE WHEN purpose_achieved='yes' and nextCFID!=0 THEN actiontype_id end) t,count(CASE WHEN purpose_achieved='no' and nextCFID!=0 THEN actiontype_id end) u ,count(CASE WHEN autotask=1 THEN autotask end) autotask  FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id WHERE $text and plan=1 and cast(appointmentdatetime as DATE) BETWEEN '$sd' and '$ed'");
         // echo $str = $this->db->last_query();exit;
         return $query->result();
     }
@@ -1628,7 +1628,7 @@ WHERE cid = '$cid'");
         if($utype==9){$text = "user_details.user_id='$uid'";}
         if($utype==13){$text = "user_details.user_id='$uid'";}
       
-        $query=$this->db->query("SELECT Count(DISTINCT tblcallevents.user_id)bdcount,COUNT(*) a,count(CASE WHEN nextCFID=0 THEN nextCFID end) b,count(CASE WHEN nextCFID!=0 THEN nextCFID end) c, count(CASE WHEN actiontype_id=1 THEN actiontype_id end) d,count(CASE WHEN actiontype_id=1 and nextCFID=0 THEN actiontype_id end) e,count(CASE WHEN actiontype_id=2 THEN actiontype_id end) f,count(CASE WHEN actiontype_id=2 and nextCFID=0 THEN actiontype_id end) g,count(CASE WHEN actiontype_id=3 THEN actiontype_id end) h,count(CASE WHEN actiontype_id=3 and nextCFID=0 THEN actiontype_id end) i,count(CASE WHEN actiontype_id=4 THEN actiontype_id end) j,count(CASE WHEN actiontype_id=4 and nextCFID=0 THEN actiontype_id end) k,count(CASE WHEN actiontype_id=5 THEN actiontype_id end) l,count(CASE WHEN actiontype_id=5 and nextCFID=0 THEN actiontype_id end) m,count(CASE WHEN actiontype_id=6 THEN actiontype_id end) n,count(CASE WHEN actiontype_id=6 and nextCFID=0 THEN actiontype_id end) o,count(CASE WHEN actiontype_id=7 THEN actiontype_id end) p,count(CASE WHEN actiontype_id=7 and nextCFID=0 THEN actiontype_id end) q,count(CASE WHEN actontaken='yes' and nextCFID!=0 THEN actiontype_id end) r,count(CASE WHEN actontaken='no' and nextCFID!=0 THEN actiontype_id end) s,count(CASE WHEN purpose_achieved='yes' and nextCFID!=0 THEN actiontype_id end) t,count(CASE WHEN purpose_achieved='no' and nextCFID!=0 THEN actiontype_id end) u FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id WHERE $text and plan=1 and cast(appointmentdatetime as DATE) BETWEEN '$sd' and '$ed'");
+        $query=$this->db->query("SELECT Count(DISTINCT tblcallevents.user_id)bdcount,COUNT(*) a,count(CASE WHEN nextCFID=0 THEN nextCFID end) b,count(CASE WHEN nextCFID!=0 THEN nextCFID end) c, count(CASE WHEN actiontype_id=1 THEN actiontype_id end) d,count(CASE WHEN actiontype_id=1 and nextCFID=0 THEN actiontype_id end) e,count(CASE WHEN actiontype_id=2 THEN actiontype_id end) f,count(CASE WHEN actiontype_id=2 and nextCFID=0 THEN actiontype_id end) g,count(CASE WHEN actiontype_id=3 THEN actiontype_id end) h,count(CASE WHEN actiontype_id=3 and nextCFID=0 THEN actiontype_id end) i,count(CASE WHEN actiontype_id=4 THEN actiontype_id end) j,count(CASE WHEN actiontype_id=4 and nextCFID=0 THEN actiontype_id end) k,count(CASE WHEN actiontype_id=5 THEN actiontype_id end) l,count(CASE WHEN actiontype_id=5 and nextCFID=0 THEN actiontype_id end) m,count(CASE WHEN actiontype_id=6 THEN actiontype_id end) n,count(CASE WHEN actiontype_id=6 and nextCFID=0 THEN actiontype_id end) o,count(CASE WHEN actiontype_id=7 THEN actiontype_id end) p,count(CASE WHEN actiontype_id=7 and nextCFID=0 THEN actiontype_id end) q,count(CASE WHEN actontaken='yes' and nextCFID!=0 THEN actiontype_id end) r,count(CASE WHEN actontaken='no' and nextCFID!=0 THEN actiontype_id end) s,count(CASE WHEN purpose_achieved='yes' and nextCFID!=0 THEN actiontype_id end) t,count(CASE WHEN purpose_achieved='no' and nextCFID!=0 THEN actiontype_id end) u,count(CASE WHEN autotask=1 THEN autotask end) autotask FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id WHERE $text and plan=1 and cast(appointmentdatetime as DATE) BETWEEN '$sd' and '$ed'");
         // echo $str = $this->db->last_query();
         return $query->result();
     }
@@ -1769,7 +1769,9 @@ WHERE cid = '$cid'");
            $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text and cast(appointmentdatetime  as DATE) BETWEEN '$sd' and '$ed' and plan=1 and nextCFID!=0 and purpose_achieved='no'");
         }elseif($code==10){
            $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text and cast(appointmentdatetime  as DATE) BETWEEN '$sd' and '$ed' and plan=1 and nextCFID!=0 and actontaken='yes' and purpose_achieved='yes'");
-        }else{
+        }elseif($code==11){
+            $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text and cast(appointmentdatetime  as DATE) BETWEEN '$sd' and '$ed' and plan=1 and autotask =1 ");
+         }else{
         $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text and cast(appointmentdatetime  as DATE) BETWEEN '$sd' and '$ed' and plan=1 and nextCFID!=0");
       
         }
@@ -2408,6 +2410,7 @@ WHERE cid = '$cid'");
         $this->db->where('CAST(updateddate AS DATE) >', '2023-04-01');
         $this->db->order_by('updateddate', 'DESC');
         $query = $this->db->get();
+        // echo $this->db->last_query();die;
         return $query->result();
     }
     public function replicate_scteam_tasks($uid) {
@@ -4447,7 +4450,8 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         else{
             $query=$this->db->query("SELECT tblcallevents.*,barginmeeting.*,user_details.*, tblcallevents.id tid, tblcallevents.cid_id cid, (SELECT count(id) from tblcallevents WHERE tblcallevents.cid_id=cid and id>tid and mom!='') momc FROM tblcallevents LEFT JOIN barginmeeting on barginmeeting.tid=tblcallevents.id LEFT JOIN user_details on user_details.user_id=tblcallevents.user_id WHERE $text and cast(barginmeeting.startm AS DATE) BETWEEN '$sdate' AND '$edate' and nextCFID!='0'");
         }
-            
+        
+        // echo $this->db->last_query();die;
         return $query->result();
     }
     public function get_tbmdPST($code,$uid,$bdid,$sdate,$edate){
@@ -4504,6 +4508,13 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         $query=$this->db->query("SELECT * FROM tblcallevents WHERE id='$tid' and mtype='NO RP'");
         return $query->result();
     }
+
+
+    public function get_checkbargMeetingbytid($tid){
+        $query=$this->db->query("SELECT * FROM tblcallevents WHERE id='$tid' and actiontype_id = 4");
+        return $query->result();
+    }
+
     public function get_meetfr($tid,$cid){
         $query=$this->db->query("SELECT count(*) cont FROM barginmeeting WHERE inid = '$cid' AND (SELECT MIN(tid) FROM barginmeeting LEFT JOIN tblcallevents ON tblcallevents.id=barginmeeting.tid where tblcallevents.mtype='RP' and cast(tblcallevents.updateddate as DATE)>'2023-03-31' and inid = '$cid')<'$tid'");
         return $query->result();
@@ -5955,7 +5966,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
                             if($getremningtime < 1){
                                 $this->load->library('session');
                                 $this->session->set_flashdata('success_message','Your auto Task time is up');
-                                redirect("Menu/TaskPlanner2".date('Y-m-d'));
+                                redirect("Menu/TaskPlanner2/".date('Y-m-d'));
                             }
                        
                             if($actiontype_id ==1){
@@ -12495,6 +12506,12 @@ public function getDaystartRequestApprovedCount($uid,$tdate){
     return $query->result();
 }
 
+public function getCheckinTime($uid,$tdate){
+    $query=$this->db->query("SELECT ustart FROM user_day WHERE user_id='$uid' and cast(sdatet as DATE)='$tdate'");
+    // echo $this->db->last_query();die;
+    return $query->result();
+}
+
 
 public function GetTodaysAutoTaskANDPlanningTime($uid,$tdate){
     $curdate = date("Y-m-d");
@@ -13687,5 +13704,310 @@ public function getAction(){
 
     return $query->result();
 }
+
+public function get_all_bd_RP_meetings($uid,$sd,$ed){
+    $text = "user_details.admin_id='$uid' and  user_details.status='active'";
+
+    $query=$this->db->query("SELECT tblcallevents.*,barginmeeting.*,user_details.*,barginmeeting.cid cmpid,
+                            tblcallevents.id tid, init_call.apst,init_call.potential,
+                            tblcallevents.cid_id cid, (SELECT count(tblcallevents.id) from tblcallevents 
+                            LEFT JOIN barginmeeting ON barginmeeting.tid = tblcallevents.id
+                            WHERE tblcallevents.cid_id=cid and tblcallevents.id>barginmeeting.tid and mom!='') momc 
+                            FROM tblcallevents 
+                            LEFT JOIN user_details on user_details.user_id=tblcallevents.user_id 
+                            LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id
+                            LEFT JOIN barginmeeting on barginmeeting.tid=tblcallevents.id 
+                            WHERE $text and cast(barginmeeting.startm AS DATE) BETWEEN '$sd' AND '$ed' and nextCFID!='0' and mtype='RP' 
+                            AND init_call.cmpid_id !=0");
+
+    return $query->result();
+
+ }
+ public function get_all_bd_bargemeeting_data($uid,$sd,$ed){
+    $text = "user_details.admin_id='$uid' and  user_details.status='active'";
+    $query=$this->db->query("SELECT tblcallevents.*,barginmeeting.*,user_details.*,barginmeeting.cid cmpid,
+                            tblcallevents.id tid, init_call.apst,init_call.potential,
+                            tblcallevents.cid_id cid, (SELECT count(tblcallevents.id) from tblcallevents 
+                            LEFT JOIN barginmeeting ON barginmeeting.tid = tblcallevents.id
+                            WHERE tblcallevents.cid_id=cid and tblcallevents.id>barginmeeting.tid and mom!='') momc 
+                            FROM tblcallevents 
+                            LEFT JOIN user_details on user_details.user_id=tblcallevents.user_id 
+                            LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id
+                            LEFT JOIN barginmeeting on barginmeeting.tid=tblcallevents.id 
+                            WHERE $text and cast(barginmeeting.startm AS DATE) BETWEEN '$sd' AND '$ed' AND nextCFID!='0' 
+                            AND init_call.cmpid_id !=0 AND tblcallevents.actiontype_id = 4");
+    return $query->result();
+ }
+
+ public function get_all_bd_bargemeeting_data_by_user($uid,$sd,$ed,$userId){
+    $text = "user_details.admin_id='$uid' and  user_details.status='active'";
+    $query=$this->db->query("SELECT tblcallevents.*,barginmeeting.*,user_details.*,barginmeeting.cid cmpid,
+                            tblcallevents.id tid, init_call.apst,init_call.potential,
+                            tblcallevents.cid_id cid, (SELECT count(tblcallevents.id) from tblcallevents 
+                            LEFT JOIN barginmeeting ON barginmeeting.tid = tblcallevents.id
+                            WHERE tblcallevents.cid_id=cid and tblcallevents.id>barginmeeting.tid and mom!='') momc 
+                            FROM tblcallevents 
+                            LEFT JOIN user_details on user_details.user_id=tblcallevents.user_id 
+                            LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id
+                            LEFT JOIN barginmeeting on barginmeeting.tid=tblcallevents.id 
+                            WHERE $text and tblcallevents.user_id = $userId and cast(barginmeeting.startm AS DATE) BETWEEN '$sd' AND '$ed' AND nextCFID!='0' 
+                            AND init_call.cmpid_id !=0 AND tblcallevents.actiontype_id = 4");
+
+                            // echo $this->db->last_query();die;
+    return $query->result();
+ }
+ public function get_all_bd_schedulemeeting_data($uid,$sd,$ed){
+    $text = "user_details.admin_id='$uid' and  user_details.status='active'";
+    $query=$this->db->query("SELECT tblcallevents.*,barginmeeting.*,user_details.*,barginmeeting.cid cmpid,
+                            tblcallevents.id tid, init_call.apst,init_call.potential,
+                            tblcallevents.cid_id cid, (SELECT count(tblcallevents.id) from tblcallevents 
+                            LEFT JOIN barginmeeting ON barginmeeting.tid = tblcallevents.id
+                            WHERE tblcallevents.cid_id=cid and tblcallevents.id>barginmeeting.tid and mom!='') momc 
+                            FROM tblcallevents 
+                            LEFT JOIN user_details on user_details.user_id=tblcallevents.user_id 
+                            LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id
+                            LEFT JOIN barginmeeting on barginmeeting.tid=tblcallevents.id 
+                            WHERE $text and cast(barginmeeting.startm AS DATE) BETWEEN '$sd' AND '$ed' and nextCFID!='0'
+                            AND init_call.cmpid_id !=0 AND actiontype_id = 3");
+    return $query->result();
+ }
+
+ public function get_all_bd_schedulemeeting_data_by_user($uid,$sd,$ed,$userId){
+    $text = "user_details.admin_id='$uid' and  user_details.status='active'";
+    $query=$this->db->query("SELECT tblcallevents.*,barginmeeting.*,user_details.*,barginmeeting.cid cmpid,
+                            tblcallevents.id tid, init_call.apst,init_call.potential,
+                            tblcallevents.cid_id cid, (SELECT count(tblcallevents.id) from tblcallevents 
+                            LEFT JOIN barginmeeting ON barginmeeting.tid = tblcallevents.id
+                            WHERE tblcallevents.cid_id=cid and tblcallevents.id>barginmeeting.tid and mom!='') momc 
+                            FROM tblcallevents 
+                            LEFT JOIN user_details on user_details.user_id=tblcallevents.user_id 
+                            LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id
+                            LEFT JOIN barginmeeting on barginmeeting.tid=tblcallevents.id 
+                            WHERE $text and tblcallevents.user_id = $userId and cast(barginmeeting.startm AS DATE) BETWEEN '$sd' AND '$ed' and nextCFID!='0'
+                            AND init_call.cmpid_id !=0 AND actiontype_id = 3");
+    return $query->result();
+ }
+
+ public function get_all_bd_join_meetings_data($uid,$sd,$ed){
+    $utype    = $_SESSION['user']['type_id'];
+    if($utype == '2'){
+        $text = "user_details.admin_id='$uid' and user_details.status='active'";
+    }
+    // else if($utype == '3'){
+    //     $text = "user_details.admin_id='$uid' and user_details.status='active'";
+    // }
+    // else if($utype == '4'){
+    //     $text = "user_details.admin_id='$uid' and user_details.status='active'";
+    // }
+    // else if($utype == '13'){
+    //     $text = "user_details.admin_id='$uid' and user_details.status='active'";
+    // }
+    // else if($utype == '15'){
+    //     $text = "user_details.sales_co='$uid' AND type_id IN(3,13,15) and user_details.status='active'";
+    // }
+    $query = $this->db->query("SELECT tblcallevents.*,barginmeeting.*,user_details.*,barginmeeting.cid cmpid,
+                            tblcallevents.id tid, init_call.apst,init_call.potential,
+                            tblcallevents.cid_id cid, (SELECT count(tblcallevents.id) from tblcallevents 
+                            LEFT JOIN barginmeeting ON barginmeeting.tid = tblcallevents.id
+                            WHERE tblcallevents.cid_id=cid and tblcallevents.id>barginmeeting.tid and mom!='') momc 
+                            FROM tblcallevents 
+                            LEFT JOIN user_details on user_details.user_id=tblcallevents.user_id 
+                            LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id
+                            LEFT JOIN barginmeeting on barginmeeting.tid=tblcallevents.id 
+                            WHERE $text and cast(barginmeeting.startm AS DATE) BETWEEN '$sd' AND '$ed' AND nextCFID!='0'  
+                            AND init_call.cmpid_id !=0 AND tblcallevents.actiontype_id=17");
+    return $query->result();
+ }
+
+ public function get_all_bd_join_meetings_data_by_user($uid,$sd,$ed,$userId){
+    $utype    = $_SESSION['user']['type_id'];
+    if($utype == '2'){
+        $text = "user_details.admin_id='$uid' and user_details.status='active'";
+    }
+    // else if($utype == '3'){
+    //     $text = "user_details.admin_id='$uid' and user_details.status='active'";
+    // }
+    // else if($utype == '4'){
+    //     $text = "user_details.admin_id='$uid' and user_details.status='active'";
+    // }
+    // else if($utype == '13'){
+    //     $text = "user_details.admin_id='$uid' and user_details.status='active'";
+    // }
+    // else if($utype == '15'){
+    //     $text = "user_details.sales_co='$uid' AND type_id IN(3,13,15) and user_details.status='active'";
+    // }
+    $query = $this->db->query("SELECT tblcallevents.*,barginmeeting.*,user_details.*,barginmeeting.cid cmpid,
+                            tblcallevents.id tid, init_call.apst,init_call.potential,
+                            tblcallevents.cid_id cid, (SELECT count(tblcallevents.id) from tblcallevents 
+                            LEFT JOIN barginmeeting ON barginmeeting.tid = tblcallevents.id
+                            WHERE tblcallevents.cid_id=cid and tblcallevents.id>barginmeeting.tid and mom!='') momc 
+                            FROM tblcallevents 
+                            LEFT JOIN user_details on user_details.user_id=tblcallevents.user_id 
+                            LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id
+                            LEFT JOIN barginmeeting on barginmeeting.tid=tblcallevents.id 
+                            WHERE $text and tblcallevents.user_id = $userId and cast(barginmeeting.startm AS DATE) BETWEEN '$sd' AND '$ed' AND nextCFID!='0'  
+                            AND init_call.cmpid_id !=0 AND tblcallevents.actiontype_id=17");
+    return $query->result();
+ }
+
+public function get_all_bd_Potential_Meeting_data($uid,$sd,$ed){
+    $text = "user_details.admin_id='$uid' and  user_details.status='active'";
+    $query=$this->db->query("SELECT tblcallevents.*,barginmeeting.*,user_details.*,barginmeeting.cid cmpid,
+                            tblcallevents.id tid, init_call.apst,init_call.potential,
+                            tblcallevents.cid_id cid, (SELECT count(tblcallevents.id) from tblcallevents 
+                            LEFT JOIN barginmeeting ON barginmeeting.tid = tblcallevents.id
+                            WHERE tblcallevents.cid_id=cid and tblcallevents.id>barginmeeting.tid and mom!='') momc 
+                            FROM tblcallevents 
+                            LEFT JOIN user_details on user_details.user_id=tblcallevents.user_id 
+                            LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id
+                            LEFT JOIN barginmeeting on barginmeeting.tid=tblcallevents.id 
+                            WHERE $text and cast(barginmeeting.startm AS DATE) BETWEEN '$sd' AND '$ed' and nextCFID!='0' and init_call.potential='yes' 
+                            AND init_call.cmpid_id !=0");
+    return $query->result();
+ }
+
+
+ public function get_all_bd_Potential_Meeting_data_by_user($uid,$sd,$ed,$userId){
+    $text = "user_details.admin_id='$uid' and  user_details.status='active'";
+    $query=$this->db->query("SELECT tblcallevents.*,barginmeeting.*,user_details.*,barginmeeting.cid cmpid,
+                            tblcallevents.id tid, init_call.apst,init_call.potential,
+                            tblcallevents.cid_id cid, (SELECT count(tblcallevents.id) from tblcallevents 
+                            LEFT JOIN barginmeeting ON barginmeeting.tid = tblcallevents.id
+                            WHERE tblcallevents.cid_id=cid and tblcallevents.id>barginmeeting.tid and mom!='') momc 
+                            FROM tblcallevents 
+                            LEFT JOIN user_details on user_details.user_id=tblcallevents.user_id 
+                            LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id
+                            LEFT JOIN barginmeeting on barginmeeting.tid=tblcallevents.id 
+                            WHERE $text  and tblcallevents.user_id = $userId and cast(barginmeeting.startm AS DATE) BETWEEN '$sd' AND '$ed' and nextCFID!='0' and init_call.potential='yes' 
+                            AND init_call.cmpid_id !=0");
+    return $query->result();
+ }
+ public function get_all_bd_TopSpender_meeting_data($uid,$sd,$ed){
+    $text = "user_details.admin_id='$uid' and  user_details.status='active'";
+    $query=$this->db->query("SELECT tblcallevents.*,barginmeeting.*,user_details.*,barginmeeting.cid cmpid,
+                            tblcallevents.id tid, init_call.apst,init_call.potential,
+                            tblcallevents.cid_id cid, (SELECT count(tblcallevents.id) from tblcallevents 
+                            LEFT JOIN barginmeeting ON barginmeeting.tid = tblcallevents.id
+                            WHERE tblcallevents.cid_id=cid and tblcallevents.id>barginmeeting.tid and mom!='') momc 
+                            FROM tblcallevents 
+                            LEFT JOIN user_details on user_details.user_id=tblcallevents.user_id 
+                            LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id
+                            LEFT JOIN barginmeeting on barginmeeting.tid=tblcallevents.id 
+                            WHERE $text and cast(barginmeeting.startm AS DATE) BETWEEN '$sd' AND '$ed' and nextCFID!='0' and init_call.topspender ='yes'
+                            AND init_call.cmpid_id !=0");
+    return $query->result();
+ }
+
+//  and user_id = $userId
+ public function get_all_bd_TopSpender_meeting_data_by_user($uid,$sd,$ed,$userId){
+    $text = "user_details.admin_id='$uid' and  user_details.status='active'";
+    $query=$this->db->query("SELECT tblcallevents.*,barginmeeting.*,user_details.*,barginmeeting.cid cmpid,
+                            tblcallevents.id tid, init_call.apst,init_call.potential,
+                            tblcallevents.cid_id cid, (SELECT count(tblcallevents.id) from tblcallevents 
+                            LEFT JOIN barginmeeting ON barginmeeting.tid = tblcallevents.id
+                            WHERE tblcallevents.cid_id=cid and tblcallevents.id>barginmeeting.tid and mom!='') momc 
+                            FROM tblcallevents 
+                            LEFT JOIN user_details on user_details.user_id=tblcallevents.user_id 
+                            LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id
+                            LEFT JOIN barginmeeting on barginmeeting.tid=tblcallevents.id 
+                            WHERE $text and tblcallevents.user_id = $userId and cast(barginmeeting.startm AS DATE) BETWEEN '$sd' AND '$ed' and nextCFID!='0' and init_call.topspender ='yes'
+                            AND init_call.cmpid_id !=0");
+    return $query->result();
+ }
+
+ public function get_meetingDetails($uid,$sd,$ed,$userId,$type){
+
+
+    $text = "user_details.admin_id='$uid' and  user_details.status='active'";
+
+    if($type == 'bargMeeting'){
+        $query=$this->db->query("SELECT tblcallevents.*,barginmeeting.*,user_details.*,barginmeeting.cid cmpid,
+                            tblcallevents.id tid, init_call.apst,init_call.potential,
+                            tblcallevents.cid_id cid, (SELECT count(tblcallevents.id) from tblcallevents 
+                            LEFT JOIN barginmeeting ON barginmeeting.tid = tblcallevents.id
+                            WHERE tblcallevents.cid_id=cid and tblcallevents.id>barginmeeting.tid and mom!='') momc 
+                            FROM tblcallevents 
+                            LEFT JOIN user_details on user_details.user_id=tblcallevents.user_id 
+                            LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id
+                            LEFT JOIN barginmeeting on barginmeeting.tid=tblcallevents.id 
+                            WHERE $text and tblcallevents.user_id = $userId and cast(barginmeeting.startm AS DATE) BETWEEN '$sd' AND '$ed' AND nextCFID!='0' 
+                            AND init_call.cmpid_id !=0 AND tblcallevents.actiontype_id = 4");
+    }elseif ($type == 'sheduleMeeting') {
+        
+        $query=$this->db->query("SELECT tblcallevents.*,barginmeeting.*,user_details.*,barginmeeting.cid cmpid,
+                            tblcallevents.id tid, init_call.apst,init_call.potential,
+                            tblcallevents.cid_id cid, (SELECT count(tblcallevents.id) from tblcallevents 
+                            LEFT JOIN barginmeeting ON barginmeeting.tid = tblcallevents.id
+                            WHERE tblcallevents.cid_id=cid and tblcallevents.id>barginmeeting.tid and mom!='') momc 
+                            FROM tblcallevents 
+                            LEFT JOIN user_details on user_details.user_id=tblcallevents.user_id 
+                            LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id
+                            LEFT JOIN barginmeeting on barginmeeting.tid=tblcallevents.id 
+                            WHERE $text and tblcallevents.user_id = $userId and cast(barginmeeting.startm AS DATE) BETWEEN '$sd' AND '$ed' and nextCFID!='0'
+                            AND init_call.cmpid_id !=0 AND actiontype_id = 3");
+        
+    }elseif ($type == 'joinMeeting') {
+        $utype    = $_SESSION['user']['type_id'];
+    if($utype == '2'){
+        $text = "user_details.admin_id='$uid' and user_details.status='active'";
+    }
+    // else if($utype == '3'){
+    //     $text = "user_details.admin_id='$uid' and user_details.status='active'";
+    // }
+    // else if($utype == '4'){
+    //     $text = "user_details.admin_id='$uid' and user_details.status='active'";
+    // }
+    // else if($utype == '13'){
+    //     $text = "user_details.admin_id='$uid' and user_details.status='active'";
+    // }
+    // else if($utype == '15'){
+    //     $text = "user_details.sales_co='$uid' AND type_id IN(3,13,15) and user_details.status='active'";
+    // }
+    $query = $this->db->query("SELECT tblcallevents.*,barginmeeting.*,user_details.*,barginmeeting.cid cmpid,
+                            tblcallevents.id tid, init_call.apst,init_call.potential,
+                            tblcallevents.cid_id cid, (SELECT count(tblcallevents.id) from tblcallevents 
+                            LEFT JOIN barginmeeting ON barginmeeting.tid = tblcallevents.id
+                            WHERE tblcallevents.cid_id=cid and tblcallevents.id>barginmeeting.tid and mom!='') momc 
+                            FROM tblcallevents 
+                            LEFT JOIN user_details on user_details.user_id=tblcallevents.user_id 
+                            LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id
+                            LEFT JOIN barginmeeting on barginmeeting.tid=tblcallevents.id 
+                            WHERE $text and tblcallevents.user_id = $userId and cast(barginmeeting.startm AS DATE) BETWEEN '$sd' AND '$ed' AND nextCFID!='0'  
+                            AND init_call.cmpid_id !=0 AND tblcallevents.actiontype_id=17");
+
+    }elseif ($type == 'potentialMeeting') {
+        
+        $query=$this->db->query("SELECT tblcallevents.*,barginmeeting.*,user_details.*,barginmeeting.cid cmpid,
+                            tblcallevents.id tid, init_call.apst,init_call.potential,
+                            tblcallevents.cid_id cid, (SELECT count(tblcallevents.id) from tblcallevents 
+                            LEFT JOIN barginmeeting ON barginmeeting.tid = tblcallevents.id
+                            WHERE tblcallevents.cid_id=cid and tblcallevents.id>barginmeeting.tid and mom!='') momc 
+                            FROM tblcallevents 
+                            LEFT JOIN user_details on user_details.user_id=tblcallevents.user_id 
+                            LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id
+                            LEFT JOIN barginmeeting on barginmeeting.tid=tblcallevents.id 
+                            WHERE $text  and tblcallevents.user_id = $userId and cast(barginmeeting.startm AS DATE) BETWEEN '$sd' AND '$ed' and nextCFID!='0' and init_call.potential='yes' 
+                            AND init_call.cmpid_id !=0");
+        
+    }elseif ($type == 'topSpenderMeeting') {
+
+        $query=$this->db->query("SELECT tblcallevents.*,barginmeeting.*,user_details.*,barginmeeting.cid cmpid,
+                            tblcallevents.id tid, init_call.apst,init_call.potential,
+                            tblcallevents.cid_id cid, (SELECT count(tblcallevents.id) from tblcallevents 
+                            LEFT JOIN barginmeeting ON barginmeeting.tid = tblcallevents.id
+                            WHERE tblcallevents.cid_id=cid and tblcallevents.id>barginmeeting.tid and mom!='') momc 
+                            FROM tblcallevents 
+                            LEFT JOIN user_details on user_details.user_id=tblcallevents.user_id 
+                            LEFT JOIN init_call ON init_call.id = tblcallevents.cid_id
+                            LEFT JOIN barginmeeting on barginmeeting.tid=tblcallevents.id 
+                            WHERE $text and tblcallevents.user_id = $userId and cast(barginmeeting.startm AS DATE) BETWEEN '$sd' AND '$ed' and nextCFID!='0' and init_call.topspender ='yes'
+                            AND init_call.cmpid_id !=0");
+    }
+
+    
+    return $query->result();
+ }
+ 
+
 //---------------------User profile page -------------------
 }

@@ -699,7 +699,7 @@
                         <li class="nav-item">
                             <a href="<?= base_url(); ?>GraphNew/OtherUserOnFunnelAnalysis" class="nav-link">
                             <i class="far fa-dot-circle nav-icon"></i>
-                            <p>Other User On Funnel Analysis</p>
+                            <p>Action & Purpose wise Funnel Analysis</p>
                             </a>
                         </li>
                         <li class="nav-item">

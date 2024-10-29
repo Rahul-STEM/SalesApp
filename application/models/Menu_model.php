@@ -14009,5 +14009,17 @@ public function get_all_bd_Potential_Meeting_data($uid,$sd,$ed){
  }
  
 
+ 
+public function getActionByID($id){
+
+    $this->db->select('*');
+    $this->db->from('action');
+    $this->db->where('id',$id);
+    $query = $this->db->get();
+    // echo $this->db->last_query();die;
+
+    return $query->result();
+}
+
 //---------------------User profile page -------------------
 }

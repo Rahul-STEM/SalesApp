@@ -320,8 +320,22 @@ if($type_id == 3){
         $userplanetime = $userplanetime + $rmautoTasktime;
         endif;
       }
+
        
         if($totalttasktime >= $plannerremTime){
+          $aid=$this->Menu_model->getAdminId($uid);
+          $admin_id=$aid[0]->aadmin;
+          $uDetails=$this->Menu_model->get_userName($uid);
+          $uName=$uDetails[0]->name;
+
+          $type=2;
+          $msg="Task approval request received from $uName";
+
+          $isPresent = $this->Menu_model->findNotification($uid, $type, $adate);
+          //dd($isPresent);
+          if(empty($isPresent)){
+            $this->Menu_model->triggerNotification($uid, $admin_id, $type, $msg, $adate);
+          }
           $hours_tasktime = floor($totalttasktime / 60);
           $remainingMinutes_tasktime = $totalttasktime % 60;
           $timetexts =  "$hours_tasktime hours and $remainingMinutes_tasktime minutes";
@@ -710,7 +724,7 @@ if($type_id == 3){
 
                                 if($wffo == 1){
                                     $daystartedFrom = 'Office';
-                                }elseif ($wffo == 2) {
+                                }elseif ($wffo == 1) {
                                     $daystartedFrom = 'Field';
                                 }else{
                                     $daystartedFrom = 'Field + Office';
@@ -889,9 +903,9 @@ if($type_id == 3){
                          <?php } } ?> 
                          <?php 
                          
-                        //  $impcomp ['Compulsive Task']= 0;
-                        //  $impcomp ['No Work Days']= 0;
-                        //  $impcomp ['Need Your Attention']= 0;
+                         $impcomp ['Compulsive Task']= 0;
+                          $impcomp ['No Work Days']= 0;
+                          $impcomp ['Need Your Attention']= 0;
                             $elementsGreaterThanOne = [];
                             foreach ($impcomp as $key => $value) {
                                 if ($value > 1) {
@@ -3596,6 +3610,27 @@ if($type_id == 3){
                     $('#taskPurposebyuserCard').hide();
                     $('#taskActionbyuserCard').hide();
                     $('#status_taskaction').hide();
+                    $.ajax({
+                      url:'<?=base_url();?>Menu/CheckCashIsAvailable',
+                      type: "POST",
+                      data: {
+                        slctactval:'TaskAction',
+                      },
+                      cache: false,
+                      success: function a(result){
+                        if(result == 0){
+                          $('#task_action_filter option[value="3"]').prop('disabled', true);
+                          $('#task_action_filter option[value="4"]').prop('disabled', true);
+                          $('#task_action_filter option[value="17"]').prop('disabled', true);
+                          $('#meetingrelmsg').text('* Please Purchase cash for create meeting task');
+                        }else{
+                          $('#task_action_filter option[value="3"]').prop('disabled', false);
+                          $('#task_action_filter option[value="4"]').prop('disabled', false);
+                          $('#task_action_filter option[value="17"]').prop('disabled', false);
+                          $('#meetingrelmsg').text('');
+                        }
+                      }
+                    });
                     $('#task_action_filter').on('change', function() {
                         $("#taskplanningimg").hide();
                         $("#selectcompanybyuser").html('');

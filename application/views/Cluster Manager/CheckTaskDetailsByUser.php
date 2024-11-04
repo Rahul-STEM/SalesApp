@@ -149,9 +149,9 @@ span.tsby {
                                             $actiontype_id = $taskdata->actiontype_id;
                                             $status = $taskdata->approved_status;
                                             // if($status !=0){
-                                            if($actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==1 || $actiontype_id ==10 || $actiontype_id ==15){
+                                            if($actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==1 || $actiontype_id ==10 || $actiontype_id ==15 || $actiontype_id ==2){
                                                 $taskplanmincount += 5;
-                                            }else if($actiontype_id ==2 || $actiontype_id ==6){
+                                            }else if($actiontype_id ==6){
                                                 $taskplanmincount += 10;
                                             }else if($actiontype_id ==3 || $actiontype_id ==4 || $actiontype_id ==12 || $actiontype_id ==17){
                                                 $taskplanmincount += 30;
@@ -226,46 +226,47 @@ span.tsby {
                                     $userplanetime = $userplanetime + $rmautoTasktime;
 
                                     endif;
-                                  } 
+                                  }
+                        
+                                  $getUserCheckinTime = getCheckinTime($tuser_uid);
+                                  $userCheckinTime = $getUserCheckinTime[0]->ustart;
+                                  $dateTime = new DateTime($userCheckinTime);
 
-                                    $getUserCheckinTime = getCheckinTime($tuser_uid);
-                                    $userCheckinTime = $getUserCheckinTime[0]->ustart;
-                                    $dateTime = new DateTime($userCheckinTime);
+                                  // Get the time in 'H:i:s' format
+                                  $time = $dateTime->format('H');
 
-                                    // Get the time in 'H:i:s' format
-                                    $time = $dateTime->format('H');
+                                  if($time >= 12){ ?>
 
-                                    if($time >= 12){ ?>
+                                  <div class="taskaprroveform text-right">
+                                    <input type="hidden" name="suser" value="<?=$tuser_uid;?>" >
+                                      <select class="form-control form-select formselect" aria-label="Default select example" name="status" style="width:300px;" >
+                                        <option selected value="" >Select Approve/Reject</option>
+                                        <option value="Approve">Approve</option>
+                                        <option value="Reject">Reject</option>
+                                      </select>
+                                      <button class="btn btn-primary m-2" type="submit" >Submit</button>
+                                  </form>
+                                </div>
+                              <?php }else{
+                                if($taskplanmincount >= $userplanetime){    
+                                  $background = 'bg-success';                           
+                                ?>
+                                
+                               <div class="taskaprroveform text-right">
+                                    <input type="hidden" name="suser" value="<?=$tuser_uid;?>" >
+                                      <select class="form-control form-select formselect" aria-label="Default select example" name="status" style="width:300px;" >
+                                        <option selected value="" >Select Approve/Reject</option>
+                                        <option value="Approve">Approve</option>
+                                        <option value="Reject">Reject</option>
+                                      </select>
+                                      <button class="btn btn-primary m-2" type="submit" >Submit</button>
+                                  </form>
+                                </div>
+                                  <?php }else{
+                                      // echo $tuser_uid;die;
+                                    $background = 'bg-danger';
+                                  } } ?>
 
-                                    <div class="taskaprroveform text-right">
-                                      <input type="hidden" name="suser" value="<?=$tuser_uid;?>" >
-                                        <select class="form-control form-select formselect" aria-label="Default select example" name="status" style="width:300px;" >
-                                          <option selected value="" >Select Approve/Reject</option>
-                                          <option value="Approve">Approve</option>
-                                          <option value="Reject">Reject</option>
-                                        </select>
-                                        <button class="btn btn-primary m-2" type="submit" >Submit</button>
-                                    </form>
-                                  </div>
-                                <?php }else{
-                                  if($taskplanmincount >= $userplanetime){    
-                                    $background = 'bg-success';                           
-                                  ?>
-                                  
-                                 <div class="taskaprroveform text-right">
-                                      <input type="hidden" name="suser" value="<?=$tuser_uid;?>" >
-                                        <select class="form-control form-select formselect" aria-label="Default select example" name="status" style="width:300px;" >
-                                          <option selected value="" >Select Approve/Reject</option>
-                                          <option value="Approve">Approve</option>
-                                          <option value="Reject">Reject</option>
-                                        </select>
-                                        <button class="btn btn-primary m-2" type="submit" >Submit</button>
-                                    </form>
-                                  </div>
-                                    <?php }else{
-                                        // echo $tuser_uid;die;
-                                      $background = 'bg-danger';
-                                    } } ?>
                                   <?php if($taskplanmincount <= $userplanetime){  ?>         
                                   <marquee class="p-2 mt-1 <?=$background?>"  onMouseOver="this.stop()" onMouseOut="this.start()" width="100%" behavior="left" bgcolor="pink">
                                     <h6> 

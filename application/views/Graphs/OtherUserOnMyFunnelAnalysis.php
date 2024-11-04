@@ -185,7 +185,7 @@
                                         <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                                             <a class="nav-item nav-link active" id="nav_GridView" data-toggle="tab" href="#GridView" role="tab" aria-controls="GridView" aria-selected="true">Grid View</a>
                                             <a class="nav-item nav-link" id="nav_TableView" data-toggle="tab" href="#TableView" role="tab" aria-controls="TableView" aria-selected="false">XLS View</a>
-                                            <!-- <a class="nav-item nav-link" id="nav_TabView" data-toggle="tab" href="#TabView" role="tab" aria-controls="TabView" aria-selected="false">Tab View</a> -->
+                                            <a class="nav-item nav-link" id="nav_TabView" data-toggle="tab" href="#TabView" role="tab" aria-controls="TabView" aria-selected="false">Tab View</a>
                                         </div>
                                     </nav>
                                     <div class="tab-content">
@@ -543,24 +543,24 @@
 
 document.getElementById('status').addEventListener('change', function() {
 
-    var actionDropdown = document.getElementById('action');
-    var purposeDropdown = document.getElementById('purpose');
+var actionDropdown = document.getElementById('action');
+var purposeDropdown = document.getElementById('purpose');
 
-    if (this.value === "1") { // Completed
+if (this.value === "1") { // Completed
 
-        actionDropdown.value = "yes";
-        actionDropdown.disabled = true;
-        purposeDropdown.value = "yes";
-        purposeDropdown.disabled = true;
+    actionDropdown.value = "yes";
+    actionDropdown.disabled = true;
+    purposeDropdown.value = "yes";
+    purposeDropdown.disabled = true;
 
 
-    } else {
+} else {
 
-        actionDropdown.value = "no"; // Reset to default if not completed
-        purposeDropdown.value = "no";
-        actionDropdown.disabled = false;
-        purposeDropdown.disabled = false;
-    }
+    actionDropdown.value = "no"; // Reset to default if not completed
+    purposeDropdown.value = "no";
+    actionDropdown.disabled = false;
+    purposeDropdown.disabled = false;
+}
 });
 
 // document.getElementById('action').addEventListener('change', function() {

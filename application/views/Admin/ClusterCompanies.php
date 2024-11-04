@@ -85,7 +85,7 @@ overflow-x: auto;
                                         <tr>
                                             <th>S.No.</th>
                                             <th>BD Name</th>
-                                            <th>Cluster Manager</th>
+                                            <!-- <th>Cluster Manager</th> -->
                                             <th>PST</th>
                                             <th>Company ID</th>
                                             <th>Company Name</th>
@@ -110,7 +110,7 @@ overflow-x: auto;
                                             <th>Next Action Type</th>
                                             <th>Current Status</th>
                                             <th>Current Remark</th>
-                                            <th>Add Self Review Remark</th>
+                                            <!-- <th>Add Self Review Remark</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -161,7 +161,7 @@ overflow-x: auto;
                                         <tr>
                                             <td><?=$i?></td>
                                             <td><?=$bdname?></td>
-                                            <td><?=$clm_name?></td>
+                                            <!-- <td><?=$clm_name?></td> -->
                                             <td><?=$pstname?></td>
                                             <td><?=$cd[0]->id?></td>
                                             <td><a href="<?=base_url();?>Menu/CompanyDetails/<?=$cid?>"><?=$cd[0]->compname?></a></td>
@@ -186,7 +186,7 @@ overflow-x: auto;
                                             <td><?=$nextaction?></td>
                                             <td><?=$sid?></td>
                                             <td><?=$remarks?></td>
-                                            <th><button type="button" id="add_Rremark<?=$i?>" value="<?=$cid?>">Click</button></th>
+                                            <!-- <th><button type="button" id="add_Rremark<?=$i?>" value="<?=$cid?>">Click</button></th> -->
                                         </tr>
                                         <?php $i++;} ?>
                                     </tbody>

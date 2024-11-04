@@ -503,8 +503,11 @@ if($type_id == 3){
               <div class="row">
               <div class="col-md-12">
                   <label for="validationServer04" class="form-label">
-                  Why would you want to set up a todays planner?
+                  Why would you want to set up a todays planner? 
                   </label>
+                  <div id="validationServer04Feedback" class="invalid-feedback">
+                   * Please select a valid reason.
+                  </div>
                   <select class="form-select is-invalid" id="validationServer04" aria-describedby="validationServer04Feedback" name="would_you_want" required>
                     <option selected disabled value="">Choose...</option>
                     <option value="Planning urgent tasks for today">Planning urgent tasks for today</option>
@@ -514,9 +517,7 @@ if($type_id == 3){
                     <option value="Not planned yesterday due to an urgent meeting">Not planned yesterday due to an urgent meeting</option>
                     <option value="Forgot to set up the planner yesterday">Forgot to set up the planner yesterday</option>
                   </select>
-                  <div id="validationServer04Feedback" class="invalid-feedback">
-                   * Please select a valid state.
-                  </div>
+                  
                 </div>
                 
               </div>
@@ -708,17 +709,17 @@ if($type_id == 3){
                                 // var_dump($dayStartFrom[0]->wffo);
                                 $wffo = $dayStartFrom[0]->wffo;
 
-                                if($wffo == 1){
+                             if($wffo == 1){
                                     $daystartedFrom = 'Office';
                                 }elseif ($wffo == 2) {
                                     $daystartedFrom = 'Field';
                                 }else{
                                     $daystartedFrom = 'Field + Office';
-                                }
-                            
+                                }                            
                             ?>
                             <span><strong>** (You started you day from <span style="color:blue;"><?=$daystartedFrom?></span>. Filters will be available accordingly..!!)</strong></span>
                         </div>
+                        <!-- <br> -->
                         <?php  
                         $current_date = date("Y-m-d");
                         $tomorrow_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
@@ -797,10 +798,10 @@ if($type_id == 3){
                         $cmpstatus = '3,6,9,12,13';  // Status with - Tentive, Positive, Very Positive, Positive NAP, Very Positive NAP
                         $dyslimit = 30;
                        }
-                        $cmpstatss = '4,5'; // Status with - WDL AND NI
-                        $statusnochangecmp = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$days,$cmpstatus);
+                       $cmpstatss = '4,5'; // Status with - WDL AND NI
+                        $statusnochangecmp = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$days,$cmpstatus,$adate);
                         $statusnochangecmpcnt = sizeof($statusnochangecmp);
-                        $statusnochangecmp_wdl_nl = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$dyslimit,$cmpstatss);
+                        $statusnochangecmp_wdl_nl = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$dyslimit,$cmpstatss,$adate);
                         $statusnochangecmp_wdl_nl_cnt = sizeof($statusnochangecmp_wdl_nl);
                         $status_nochangecnt = $statusnochangecmpcnt + $statusnochangecmp_wdl_nl_cnt;
                         if($status_nochangecnt > 0){$cssct = 'text-danger';}else{$cssct = '';}
@@ -905,7 +906,7 @@ if($type_id == 3){
                                 <div class="card bg-danger p-2 boxshadownew text-center">
                                   
                                   <lable>
-                                  First Plan Your <?= implode(", ", $elementsGreaterThanOne) ?>
+                                  First Plan Their <?= implode(", ", $elementsGreaterThanOne) ?>
                                   </lable>
                                 </div>
                            <?php } else { ?>
@@ -5354,7 +5355,7 @@ if($type_id == 3){
                   $('#other_assign_filter input[name="optradio"]').prop('disabled', true);
                   $('#self_assign_filter input[name="optradio"]').prop('disabled', true);
                   $('#review_target_date_filter input[name="optradio"]').prop('disabled', true);
-                  $('#review_planning_filter input[name="optradio"]').prop('disabled', true);
+                 // $('#review_planning_filter input[name="optradio"]').prop('disabled', true);
                   $('#need_your_attention_filter input[name="optradio"]').prop('disabled', true);
                   $('#actionNotPlanned_task_filter input[name="optradio"]').prop('disabled', true);
                   $('#task_action_filter option').not('[value="3"], [value="4"]').attr('disabled', true);
@@ -5408,7 +5409,7 @@ if($type_id == 3){
             var meetingTotalMinutes = meetingHours * 60 + meetingMinutes;
    
             if (meetingTotalMinutes < currentTotalMinutes) {
-                alert("The meeting time cannot be in the past.");
+                alert("The meeting time cannot be set for the past time.");return false;
                // $(this).val('');
             }else{
               $.ajax({

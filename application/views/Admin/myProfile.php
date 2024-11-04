@@ -128,6 +128,22 @@ body{
     font-weight: 600;
     color: #0062cc;
 }
+
+.profile-pic-container {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .profile-pic-container img {
+            width: 100%;
+            /* height: 100%; */
+            object-fit: cover;
+        }
+
 </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -136,13 +152,18 @@ body{
 
 <!-- Navbar -->
 <?php require('nav.php');?>
+
 <!-- /.navbar -->
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 <!-- Content Header (Page header) -->
 <div class="content-header">
 <div class="container-fluid">
-<?php $managerName=$this->Menu_model->get_reportingManager($data[0]->aadmin);?>
+<?php 
+// dd($data);
+$managerName=$this->Menu_model->get_reportingManager($data[0]->aadmin);?>
+
+
 <div class="container">
     <?php
         if ($this->session->flashdata('success_message')): ?>
@@ -181,6 +202,16 @@ body{
           <!-- From Date input -->
            <input type="hidden" name="aadmin" id="aadmin" value="<?=$data[0]->aadmin?>">
            <input type="hidden" name="uid" id="uid" value="<?=$uid?>">
+
+           <div class="form-group">
+                <label for="leaveType">Select Leave Type</label><span style="color:red">*</span>
+                <select class="form-control" name="leaveType" id="leaveType" required>
+                    <option value="" disabled selected>Select leave type</option>
+                    <?php foreach($lvTypes as $val){?>
+                        <option value="<?= $val->id ?>" data-balance="<?= $val->balance ?>"><?= $val->leave_type ?></option>
+                        <?php }?>
+                </select>
+            </div>
           <div class="form-group">
             <label for="fromDate">From Date</label><span style="color:red">*</span>
             <input type="date" class="form-control" name="fromDate" id="fromDate" placeholder="Select from date" required>
@@ -198,7 +229,7 @@ body{
             <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Enter the reason for leave" required></textarea>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" id="leavesubmit" class="btn btn-primary">Submit</button>
         </div>
         </form>
       </div>
@@ -207,39 +238,40 @@ body{
   </div>
 </div>
 <section class="content">
+    
 <div class="container emp-profile">
             <form method="post">
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="profile-img">
-                            <div class="file btn btn-lg btn-primary">
-                                Upload Photo
-                                <input type="file" name="file"/>
+                    <div class="profile-img">
+                            <div class="">
+                            <img id="profilePic" src="<?=base_url();?><?=$data[0]->photo?>" alt="Profile Picture">
+                                <!-- <input type="file" name="file"/> -->
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="profile-head">
+                        <div class="profile">
                                     <h5>
                                         <?=$data[0]->name?>
                                     </h5>
                                     <h6>
                                     <?=$dep_name?>
                                     </h6>
-                                    <p class="proile-rating">RANKINGS : <span>8/10</span></p>
+                                    <!-- <p class="proile-rating">RANKINGS : <span>8/10</span></p> -->
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
                                 </li>
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Timeline</a>
-                                </li>
+                                </li> -->
                                 <li class="nav-item">
                                     <a class="nav-link" id="leave-tab" data-toggle="tab" href="#leave" role="tab" aria-controls="leave" aria-selected="false">Leave management</a>
                                 </li>
-                                <!-- <li class="nav-item">
+                                <li class="nav-item">
                                     <a class="nav-link" id="day-tab" data-toggle="tab" href="#day" role="tab" aria-controls="day" aria-selected="false">Day Management</a>
-                                </li> -->
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -250,7 +282,18 @@ body{
                 </div>
                 <div class="row">
                     <div class="col-md-4">
-                        
+                        <div class="profile-work">
+                            <!-- <p>WORK LINK</p>
+                            <a href="">Website Link</a><br/>
+                            <a href="">Bootsnipp Profile</a><br/>
+                            <a href="">Bootply Profile</a>
+                            <p>SKILLS</p>
+                            <a href="">Web Designer</a><br/>
+                            <a href="">Web Developer</a><br/>
+                            <a href="">WordPress</a><br/>
+                            <a href="">WooCommerce</a><br/>
+                            <a href="">PHP, .Net</a><br/> -->
+                        </div>
                     </div>
                     <div class="col-md-8">
                         <div class="tab-content profile-tab" id="myTabContent">
@@ -303,6 +346,22 @@ body{
                                                 <p><?=$managerName[0]->name?></p>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Date Of Joining</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><?=$data[0]->usercreateDate?></p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Zone</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><?=$data[0]->zoneName?></p>
+                                            </div>
+                                        </div>
                             </div>
                             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                         <div class="row">
@@ -310,7 +369,7 @@ body{
                                                 <label>Experience</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <p>Expert</p>
+                                                <p>-</p>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -326,20 +385,10 @@ body{
                                                 <label>Zone</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <p>230</p>
+                                                <p><?=$data[0]->zoneName?></p>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>My teams</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <!-- <?php $count = $this->Menu_model->get_adminTeams($uid); 
-                                                       //echo $count;
-                                                ?> -->
-                                                <p><a href="<?=base_url();?>Menu/teamDetails"><?=$count[0]->teamsCount?></a></p>
-                                            </div>
-                                        </div>
+                                        
                             </div>
                             <div class="tab-pane fade" id="leave" role="tabpanel" aria-labelledby="profile-tab">
                             <?php if($lvTypes){?>
@@ -380,14 +429,15 @@ body{
                                         <?php }else{?>
                                             <h4>No leaves available</h4>
                                             <?php }?>
-                            </div>
+                                        </div>
+                                        
                             <div class="tab-pane fade" id="day" role="tabpanel" aria-labelledby="profile-tab">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label>Day Start</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <p><?=$dayData[0]->ustart?></p>
+                                                <p><?=$dayData[0]->ustart??'Day Yet to Start'?></p>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -395,7 +445,7 @@ body{
                                                 <label>Day End</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <p><?=$dayData[0]->uclose?></p>
+                                                <p><?=$dayData[0]->uclose??"Day yet to end"?></p>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -437,237 +487,6 @@ body{
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-
-<script>
-    $(document).ready(function() {
-        // Event listener for form submission
-        $('#regForm').on('submit', function(event) {
-            var password = $('#password').val();
-            var confirmPassword = $('#confirmPassword').val();
-
-            if (password !== confirmPassword) {
-                // Set the flash data in session using AJAX or display the message directly
-                <?php $this->session->set_flashdata('error_message', 'Password Mismatch !!'); ?>
-
-                // Optionally display the error message directly using jQuery
-                alert('Password Mismatch !!');
-
-                // Prevent the form from submitting
-                event.preventDefault();
-            }
-        });
-    });
-</script>
-
-<script>
-    $(document).ready(function() {
-        $('#zone').change(function() {
-            var zoneId = $(this).val();
-            if (zoneId) {
-                // Fetch Cluster Managers
-                $.ajax({
-                    url: 'fetchClusterManagers',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: { zone_id: zoneId },
-                    success: function(response) {
-                        var clusterSelect = $('#cluster');
-                        
-                        // Clear existing options
-                        clusterSelect.empty();
-
-                        // Check if the response is an array and has data
-                        if (Array.isArray(response) && response.length > 0) {
-                            // Add default option
-                            clusterSelect.append('<option value="" selected>Choose Cluster Manager</option>');
-                            
-                            // Add options from the response
-                            $.each(response, function(index, item) {
-                                clusterSelect.append('<option value="' + item.user_id + '">' + item.name + '</option>');
-                            });
-                        } else {
-                            // Add "No data available" option
-                            clusterSelect.append('<option value="" disabled selected>No data available</option>');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("AJAX error: ", status, error);
-                    }
-                });
-
-                // Fetch Sales Coordinators
-                $.ajax({
-                    url: 'fetchSalesCoordinators', 
-                    type: 'POST',
-                    dataType: 'json',
-                    data: { zone_id: zoneId },
-                    success: function(response) {
-                        var salesSelect = $('#sales');
-                        
-                        // Clear existing options
-                        salesSelect.empty();
-
-                        // Check if the response is an array and has data
-                        if (Array.isArray(response) && response.length > 0) {
-                            // Add default option
-                            salesSelect.append('<option value="" selected>Choose Sales Coordinator</option>');
-                            
-                            // Add options from the response
-                            $.each(response, function(index, item) {
-                                salesSelect.append('<option value="' + item.user_id + '">' + item.name + '</option>');
-                            });
-                        } else {
-                            // Add "No data available" option
-                            salesSelect.append('<option value="" disabled selected>No data available</option>');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("AJAX error: ", status, error);
-                    }
-                });
-
-                // Fetch BDPST
-                $.ajax({
-
-                    url: 'fetchBdpst', // Your URL to fetch BDPST
-                    type: 'POST',
-                    dataType: 'json',
-                    data: { zone_id: zoneId },
-                    success: function(response) {
-                        var bdpstSelect = $('#bdpstF');
-                        
-                        // Clear existing options
-                        bdpstSelect.empty();
-
-                        // Check if the response is an array and has data
-                        if (Array.isArray(response) && response.length > 0) {
-                            // Add default option
-                            bdpstSelect.append('<option value="" selected>Choose BDPST</option>');
-                            
-                            // Add options from the response
-                            $.each(response, function(index, item) {
-                                bdpstSelect.append('<option value="' + item.user_id + '">' + item.name + '</option>');
-                            });
-                        } else {
-                            // Add "No data available" option
-                            bdpstSelect.append('<option value="" disabled selected>No data available</option>');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("AJAX error: ", status, error);
-                    }
-                });
-
-                // Fetch PST
-                $.ajax({
-                    url: 'fetchPst',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: { zone_id: zoneId },
-                    success: function(response) {
-                        var pstSelect = $('#pst');
-                        
-                        // Clear existing options
-                        pstSelect.empty();
-
-                        // Check if the response is an array and has data
-                        if (Array.isArray(response) && response.length > 0) {
-                            // Add default option
-                            pstSelect.append('<option value="" selected>Choose PST</option>');
-                            
-                            // Add options from the response
-                            $.each(response, function(index, item) {
-                                pstSelect.append('<option value="' + item.user_id + '">' + item.name + '</option>');
-                            });
-                        } else {
-                            // Add "No data available" option
-                            pstSelect.append('<option value="" disabled selected>No data available</option>');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("AJAX error: ", status, error);
-                    }
-                });
-            }
-        });
-
-    });
-</script>
-
-<script>
-    $(document).ready(function() {
-        // Call the function when the page is loaded and when the type field is changed
-        $('#type').on('change', function() {
-            toggleFields();
-        });
-
-        function toggleFields() {
-            const userType = parseInt($('#type').val()); // Get the selected value of user type
-            console.log(userType);
-            const salesField = $('#sales');
-            const pstField = $('#pst');
-            const clusterField = $('#cluster');
-            const bdpst = $('#bdpstF');
-
-            // Enable all fields initially
-            salesField.prop('disabled', false);
-            pstField.prop('disabled', false);
-            clusterField.prop('disabled', false);
-            bdpst.prop('disabled', false);
-
-            if ((userType === 2) || (userType === 1)) {
-                salesField.prop('disabled', true);
-                pstField.prop('disabled', true);
-                clusterField.prop('disabled', true);
-                bdpst.prop('disabled', true);
-            } else if (userType === 15) {
-                pstField.prop('disabled', true);
-                clusterField.prop('disabled', true);
-                bdpst.prop('disabled', true);
-                salesField.prop('disabled', true);
-            } else if (userType === 4) {
-                clusterField.prop('disabled', true);
-                bdpst.prop('disabled', true);
-                //salesField.prop('disabled', true);
-                pstField.prop('disabled', true);
-            }else if (userType === 9) {
-                clusterField.prop('disabled', true);
-                bdpst.prop('disabled', true);
-                salesField.prop('disabled', true);
-                pstField.prop('disabled', true);
-            }else if (userType === 13) {
-                clusterField.prop('disabled', true);
-                bdpst.prop('disabled', true);
-                //salesField.prop('disabled', true);
-                //pstField.prop('disabled', true);
-            }else if (userType === 5) {
-                clusterField.prop('disabled', true);
-                //bdpst.prop('disabled', true);
-                salesField.prop('disabled', true);
-                pstField.prop('disabled', true);
-            }
-        }
-
-        // Optionally trigger the function when the page is first loaded in case user type is pre-selected
-        toggleFields();
-    });
-</script>
-<script>
-    function togglePassword(fieldId) {
-        var passwordField = document.getElementById(fieldId);
-        var toggleIcon = passwordField.nextElementSibling.querySelector('i');
-        
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            toggleIcon.classList.remove('fa-eye');
-            toggleIcon.classList.add('fa-eye-slash');
-        } else {
-            passwordField.type = 'password';
-            toggleIcon.classList.remove('fa-eye-slash');
-            toggleIcon.classList.add('fa-eye');
-        }
-    }
-</script>
 
 <footer class="main-footer">
 <strong>Copyright &copy; 2021-2022 <a href="<?=base_url();?>">Stemlearning</a>.</strong>
@@ -724,15 +543,37 @@ $.widget.bridge('uibutton', $.ui.button)
 <script src="<?=base_url();?>assets/js/buttons.html5.min.js"></script>
 <script src="<?=base_url();?>assets/js/buttons.print.min.js"></script>
 <script src="<?=base_url();?>assets/js/buttons.colVis.min.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-beta1/js/bootstrap.min.js"></script> -->
-
-<!-- AdminLTE App -->
 <script src="<?=base_url();?>assets/js/adminlte.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="<?=base_url();?>assets/js/dashboard.js"></script>
-<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script> -->
+<script>
+$(document).ready(function () {
+    $('#leavesubmit').on('click', function () {
+       var fromDate =$('#fromDate').val();
+       var toDate =$('#toDate').val();
+       var leaveType =$('#leaveType').val();
+       var leaveBalance = $('#leaveType').find(':selected').data('balance');
+
+       var startDate = new Date(fromDate);
+        var endDate = new Date(toDate);
+        var timeDifference = endDate - startDate;
+
+        // Convert time difference from milliseconds to days (1 day = 1000 * 60 * 60 * 24 milliseconds)
+        var dateDiff = timeDifference / (1000 * 60 * 60 * 24);
+        var dateDiff = dateDiff + 1;
+        if(fromDate > toDate){
+            alert('Enter a valid date selection')
+            return false;
+        }
+        if(dateDiff > leaveBalance){
+            alert('You dont have enough leave balance for this selection')
+            return false;
+        }
+        
+        //return true;
+    });
+});
+</script>
 
 
 </body>

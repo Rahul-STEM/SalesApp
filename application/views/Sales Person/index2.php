@@ -187,6 +187,7 @@
                             <li class="nav-item">
                               <?php 
                               $ttbyd = $this->Menu_model->get_ttbytimedAutotaskCount($uid);
+                              $ttbyd[0]->c = '1';
                               ?>
                               <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">
                               All <span class="badge badge-success"><?=$ttbyd[0]->ab?></span>
@@ -223,6 +224,11 @@
                               </a>
                             </li>
                             <li class="nav-item">
+                              <a class="nav-link" id="custom-tabs-four-meeting-tab" data-toggle="pill" href="#custom-tabs-four-meeting" role="tab" aria-controls="custom-tabs-four-meeting" aria-selected="false">
+                              Visit Meeting <span class="badge badge-success"><?=$ttbyd[0]->c?></span>
+                              </a>
+                            </li>
+                            <li class="nav-item">
                               <a class="nav-link" id="custom-tabs-four-whatsapp-tab" data-toggle="pill" href="#custom-tabs-four-whatsapp" role="tab" aria-controls="custom-tabs-whatsapp" aria-selected="false">
                               WA<span class="badge badge-success"><?=$ttbyd[0]->e?></span>
                               </a>
@@ -249,12 +255,14 @@
                       <div class="card">
                           <?php 
                           $atai = 1; 
+                          // dd($totalt);exit;
                           foreach($totalt as $tt){
                             $taid = $tt->actiontype_id;
                             $taid=$this->Menu_model->get_actionbyid($taid);
                             $time = $tt->appointmentdatetime;
                             $reminder = $tt->reminder;
                             $time = date('h:i a', strtotime($time));
+
                             ?>
                           <button id="add_act<?=$atai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;width: fit-content; padding: 10px;">
                                   <span class="mr-3 align-items-center">
@@ -289,6 +297,7 @@
                           $rimbyname = $this->Menu_model->get_userbyid($rimby);
 
                           $time = date('h:i a', strtotime($time));
+                          
                       ?>
                         <div class="list-group-item list-group-item-action">
                           <span class="text-danger"><b><?php if($reminder>0){echo 'Reminder for This Task by '.$rimbyname[0]->name." at ".$rimat;}?></b></span><br>

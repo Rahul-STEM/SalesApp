@@ -91,6 +91,7 @@ span.tsby {
                 <!-- /.content-header -->
                 <?php
                 $bd = $this->Menu_model->get_userbyaid($uid);
+//dd($bd);echo "teststst";
                 ?>
                 <!-- Main content -->
                 <section class="content">
@@ -115,10 +116,10 @@ span.tsby {
                         <div class="card-body">
                           <div class="body-content">
                             <div class="page-header">
-                            <?php 
+                            <?php
                       
                                         $totalttaskdata =$this->Menu_model->getTotalUserTaskDetailsOnPlanner($tuser_uid,$taskdate);
-                                        
+                                       // dd($totalttaskdata);
                                         $taskplanmincount = 0;
                                         $new_datetimemin = '';
                                        
@@ -148,9 +149,9 @@ span.tsby {
                                             $actiontype_id = $taskdata->actiontype_id;
                                             $status = $taskdata->approved_status;
                                             // if($status !=0){
-                                            if($actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==1 || $actiontype_id ==10 || $actiontype_id ==15){
+                                            if($actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==1 || $actiontype_id ==10 || $actiontype_id ==15 || $actiontype_id ==2){
                                                 $taskplanmincount += 5;
-                                            }else if($actiontype_id ==2 || $actiontype_id ==6){
+                                            }else if($actiontype_id ==6){
                                                 $taskplanmincount += 10;
                                             }else if($actiontype_id ==3 || $actiontype_id ==4 || $actiontype_id ==12 || $actiontype_id ==17){
                                                 $taskplanmincount += 30;

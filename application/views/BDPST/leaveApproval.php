@@ -89,12 +89,6 @@
             <div class="card p-2 bg-primary">
               <div class="row">
                 <div class="col-md-8"></div>
-                <div class="col-md-4">
-                  <form class="setpaldate" action="<?=base_url();?>Menu/TodaysTaskApprovelRequest" method="post">
-                    <input type="date" class="form-control m-2" name="targetdate" value="<?=$adate?>" required="" id="plandate">
-                    <input type="submit" class="btn btn-warning m-2" value="Set Date">
-                  </form>
-                </div>
               </div>
             </div>
             <div class="row p-3">
@@ -111,16 +105,14 @@
                 <div class="card card-primary card-outline">
                   <div class="card-body box-profile">
                     <div class="bg-warning colapsboxsha text-center mt-2 mb-2">
-                      <h3><i>Todays Task Approvel Request</i></h3>
+                      <h3><i>Leave Approval Requests</i></h3>
                     </div>
-                    <?php
-                    $utype = $this->Menu_model->get_userbyid($userid);
-                    ?>
-                    <div class="btn btn-primary colapsboxsha col-md-12 col-lg-12 mt-2 d-flex justify-content-between align-items-center" data-toggle="collapse" href="#collapseExample<?=$k?>" role="button" aria-expanded="false" aria-controls="collapseExample<?=$k?>">
+                    
+                    <!-- <div class="btn btn-primary colapsboxsha col-md-12 col-lg-12 mt-2 d-flex justify-content-between align-items-center" data-toggle="collapse" href="#collapseExample<?=$k?>" role="button" aria-expanded="false" aria-controls="collapseExample<?=$k?>">
                       Request :
                       
-                    </div>
-                    <div class="collapse show mt-3" id="collapseExample<?=$k?>">
+                    </div> -->
+                    <div class="collapse show mt-3" id="collapseExample">
                       <div class="card card-body" style="background: azure;"  >
                         <div class="ApprovedStatus">
                           <!--<h4 class="ApprovedStatus Pending">Changes For Academic year 2024-24</h4> -->
@@ -129,51 +121,39 @@
                               <thead>
                                 <tr>
                                   <th scope="col">#</th>
-                                  <th scope="col">User Name</th>
-                                  <th scope="col">Date</th>
-                                  <th scope="col">Request Message</th>
-                                  <th scope="col">Approvel Status</th>
-                                  <th scope="col">Remarks</th>
+                                  <th scope="col">Name</th>
+                                  <th scope="col">From Date</th>
+                                  <th scope="col">To Date</th>
+                                  <th scope="col">Reason For Leave Apply</th>
+                                  <th scope="col">Reason for ending the leave</th>
                                   <th scope="col">Action</th>
                                 </tr>
                               </thead>
                               <tbody>
                                 <?php
                                 $j =1;
-                                foreach($mdata as $data){ 
-                                  // var_dump($mdata);die;
-                                  
-                                  ?>
+                                foreach($getreqData as $data){ ?>
                                 <tr>
-                                  <th><?= $j ?></th>
-                                  <td><?= $this->Menu_model->get_userbyid($data->user_id)[0]->name ?></td>
-                                  <td><?= $data->date ?></td>
-                                  <td><?= $data->reason ?></td>
-                                  <td>
-                                    <?php
-                                    if($data->status == '0'){ ?>
-                                    <span class="p-1 bg-warning mr-2">Pending</span>
-                                    <?php }else if($data->status == '1'){ ?>
-                                    <span class="p-1 bg-success mr-2">Approved</span>
-                                    <?php }else{ ?>
-                                    <span class="p-1 bg-danger mr-2">Reject</span>
-                                    <?php }?>
-                                  </td>
-                                  <td><?=$data->remark ?></td>
+                                  <td><?= $j ?></td>
+                                  <td><?= $data->name ?></td>
+                                  <td><?=$data->start_date?></td>
+                                  <td><?=$data->end_date?></td>
+                                  <td><?=$data->reason?></td>
+                                  <td><?=$data->update_reason?></td>
                                   <td>
                                     
                                     <?php
-                                    if($data->status == ''){ ?>
+                                    if($data->status == 'pending' || $data->update_status == 'pending'){ ?>
                                     
                                     <div>
-                                      <p><a href="<?=base_url();?>Menu/LateDayStartapprove/<?= $data->id?>/Approve" class="btn btn-success mr-2" onclick="return confirm('Are you sure you want to Approved id?');" >Approve</a></p>
-                                      <p><button type="button" class="btn btn-primary"  onclick="Reject(<?= $j ?>,<?= $data->id?>,'Reject')">Reject</button></p>
+                                      <p><a href="<?=base_url();?>Menu/leaveAction/approved/<?= $data->id?>/<?=$data->leave_end_request?>" class="btn btn-success mr-2" onclick="return confirm('Are you sure you want to Approved id?');" >Approve</a></p>
+                                      <p><button type="button" class="btn btn-primary" onclick="Reject(<?= $data->id?>,<?=$data->leave_end_request?>)">Reject</button></p>
                                     </div>
                                     
-                                    <?php }else if($data->status == 1){ ?>
+                                    <?php }else if(($data->status == 'approved' && $data->update_status == null) || ($data->update_status == 'approved')){ ?>
                                     <span class="p-1 bg-success mr-2">Approved</span>
                                     <?php }else{ ?>
-                                    <span class="p-1 bg-danger mr-2">Reject</span>
+                                    <span class="p-1 bg-danger mr-2">Rejected</span>
                                     <?php }?>
                                     
                                   </td>
@@ -198,10 +178,9 @@
                             </button>
                           </div>
                           <div class="modal-body">
-                            <form action="<?=base_url();?>Menu/TodaysTaskReject" method="post" >
-                              <input type="hidden" id="rejectid" value="" name="reject">
+                            <form id="leaveRejectform" method="post" >
                               <div class="mb-3 mt-3">
-                                <textarea id="rejectreamrk" name="rejectreamrk" cols="30" placeholder="Add Remark " class="form-control"  rows="4"></textarea>
+                                <textarea id="rejectreamrk" name="rejectreamrk" cols="30" placeholder="Add Remark " class="form-control"  rows="4" required></textarea>
                               </div>
                               <div class="form-group text-center">
                                 <button type="submit" class="btn btn-success mt-2">Submit</button>
@@ -225,11 +204,12 @@
         $('#exampleModalCenter'+mid+' #rejectid').val(id);
         }
         
-        function Reject(mid,id,val){
+        function Reject(id,lvEnd){
         // alert(mid);
         // alert('#exampleModalCenterdata'+mid);
         $('#exampleModalCenterdata').modal('show');
-        $('#rejectid').val(id);
+        //$('#rejectid').val(id);
+        $('#leaveRejectform').attr('action', 'leaveAction/rejected/'+id+'/'+lvEnd);
         // $('#exampleModalCenterdata'+mid).modal('show');
         // $('#exampleModalCenterdata'+mid+' #rejectid').val(id);
         }

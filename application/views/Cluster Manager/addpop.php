@@ -72,7 +72,6 @@ date_default_timezone_set("Asia/Kolkata");
                   </div>
                   <div class="p-3" id="test3" style="display: none;">
                     <label>Attach Meeting Photo</label>
-                    <input type="file" class="form-control-file" name="filename10" required>
                   </div>
                   <div class="p-3" id="test5" style="display: none;">
                     <label>Attach Whatsapp Media</label>
@@ -982,8 +981,6 @@ date_default_timezone_set("Asia/Kolkata");
                                 
                                 var ab = document.getElementById("action_id").value;
                                 if(ab=="1"){
-                                document.querySelector('#button').disabled = false;
-
                                 $("#purpose").show();
                                 $("#test2").hide();
                                 $("#test3").hide();
@@ -994,8 +991,6 @@ date_default_timezone_set("Asia/Kolkata");
                                 $("#test9").hide();
                                 }
                                 if(ab=="10"){
-                                document.querySelector('#button').disabled = false;
-
                                 $("#purpose").show();
                                 $("#test2").hide();
                                 $("#test3").hide();
@@ -1019,8 +1014,6 @@ date_default_timezone_set("Asia/Kolkata");
                                 $("#test9").hide();
                                 }
                                 if(ab=="3"){
-                                document.querySelector('#button').disabled = false;
-
                                 $("#test1").hide();
                                 $("#test2").hide();
                                 $("#test3").show();

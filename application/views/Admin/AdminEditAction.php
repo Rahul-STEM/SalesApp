@@ -115,7 +115,7 @@ overflow-x: auto;
                                     <label class="form-label" for="fname"> First Name</label>
                                     <input type="text" id="fname" name="fname" class="form-control form-control-lg"
                                     value="<?= isset($nameArr) ? $nameArr[0] : '' ?>" />
-                                    <input type="hidden" id="user_id" name="user_id" value="<?= $userId ?>" />
+                                    <input type="hidden" id="user_id" name="user_id" value="<?= $uid ?>" />
                                     
                                 </div>
 
@@ -126,7 +126,7 @@ overflow-x: auto;
                                 <div data-mdb-input-init class="form-outline">
                                     <label class="form-label" for="lname"> Last Name</label>
                                     <input type="text" id="lname" name="lname" class="form-control form-control-lg" value="<?= isset($nameArr) ? $nameArr[1] : '' ?>" />
-                                    <input type="hidden" id="user_id" name="user_id" value="<?= $userId ?>" />
+                                    <input type="hidden" id="user_id" name="user_id" value="<?= $uid ?>" />
                                     
                                 </div>
 
@@ -274,9 +274,10 @@ $(document).ready(function() {
 
             // AJAX call to upload the file
             $.ajax({
-                url: '<?= base_url(); ?>Menu/uploadProfilePic/<?=$userId?>',  // Update with your controller URL
+                url: '<?= base_url(); ?>Menu/uploadProfilePic/<?=$uid?>',  // Update with your controller URL
                 type: 'POST',
                 data: formData,
+                dataType: 'json',
                 contentType: false,
                 processData: false,
                 success: function(response) {

@@ -25,8 +25,8 @@
     <!-- summernote -->
     <link rel="stylesheet" href="<?=base_url();?>assets/css/summernote-bs4.min.css">
     <style>
- .form-group,p.tasklogp{font-weight:700}.create_task_bg,.form-group,p.tasklogp{box-shadow:rgba(9,30,66,.25) 0 1px 1px,rgba(9,30,66,.13) 0 0 1px 1px}div#cmpmanytime{background:#f0f8ff;padding:10px}thead{background:#000;color:#fff}.clrdiff{color:#f5004f}.create_task_bg,.form-group{background:#f0f8ff;padding:15px}.form-control.is-valid,.was-validated .form-control:valid{background:0 0!important;border-radius:5px}span.pccolor{color:#0830b1}#optionCountCompany{font-size:12px}p.tasklogp{align-items:center;justify-content:center;display:flex;padding:4px;margin:0;background:#faebd7;font-family:math}.card.generatetable.p-3 {background: beige;}
-    </style>
+ .form-group,p.tasklogp{font-weight:700}.create_task_bg,.form-group,p.tasklogp{box-shadow:rgba(9,30,66,.25) 0 1px 1px,rgba(9,30,66,.13) 0 0 1px 1px}div#cmpmanytime{background:#f0f8ff;padding:10px}thead{background:#000;color:#fff}.clrdiff{color:#f5004f}.create_task_bg,.form-group{background:#f0f8ff;padding:15px}.form-control.is-valid,.was-validated .form-control:valid{background:0 0!important;border-radius:5px}span.pccolor{color:#0830b1}#optionCountCompany{font-size:12px}p.tasklogp{align-items:center;justify-content:center;display:flex;padding:4px;margin:0;background:#faebd7;font-family:math}.card.generatetable.p-3 {background: beige;} lable{font-weight: 600;}.create_task_bg_target{background: linear-gradient( 135deg, rgba(255, 180, 80, 1) 0%, rgba(255, 140, 150, 1) 30%, rgba(120, 180, 255, 1) 60%, rgba(160, 100, 255, 1) 100% );margin: 20px;}
+   </style>
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -67,6 +67,10 @@
             </button>
           </div>
           <?php endif; ?>
+
+
+        
+
           <?php
             if ($this->session->flashdata('error_message')): ?>
           <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -76,9 +80,18 @@
             </button>
           </div>
           <?php endif; ?>
+
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><span id="totalpendingcmp"></span></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
           <div class="row p-3">
             <?php
               $revst = $this->Menu_model->get_reviewstarted($uid);
+              $typeid = $user['type_id'];
               if($revst){$bdid = $revst[0]->bdid;}else{$bdid=0;}
               
               if($bdid==0){
@@ -146,23 +159,66 @@
                       <div class="invalid-feedback">Please provide Start Date Time.</div>
                       <div class="valid-feedback">Looks good!</div>
                       <?php  if($revst[0]->reviewtype !== 'Roaster'){ ?>
+                        <?php $basereviews = $this->Menu_model->getBaseReview($revst[0]->bdid);
+                        $basereviewscnt = sizeof($basereviews);
+                        //if($basereviewscnt > 0){
+                        ?>
+                        <div class="mt-4">
+                          <lable>Select Base Review :</lable>
+                            <select class="form-control" id="slct_base_review" name="slct_base_review" required="">
+                              <option value="">Select </option>
+                              <?php foreach($basereviews as $basereview){
+                                // $basereviewdate = date("Y-m-d", strtotime($basereview->sdatet));
+                                $basereviewid = $basereview->id;
+                                ?>
+                              <option value="<?= $basereviewid; ?>"><?= $basereview->reviewtype; ?>( <?= $basereview->sdatet; ?> )</option>
+                              <?php } ?>
+                            </select>
+                            <div class="invalid-feedback">Please Select a Base Review First!</div>
+                            <div class="valid-feedback">Looks good!</div>
+                        </div>
+                        <?php //} ?>
+                        <div class="mt-4">
+                        <lable>Select Assign :</lable>
+                            <select class="form-control" id="slct_assign" name="slct_assign" required="">
+                              <option value="">Select</option>
+                              <?php if($typeid == 3){ ?>
+                                <option value="PST">PST Assign</option>
+                                <option value="Cluster">Cluster Assign</option>
+                              <?php } ?>
+                              <?php if($typeid == 13){ ?>
+                                <option value="BD">BD Assign</option>
+                                <option value="Cluster">Cluster Assign</option>
+                                <option value="PST">PST Assign</option>
+                              <?php } ?>
+                              <?php if($typeid == 4){ ?>
+                                <option value="BD">Only BD</option>
+                                <option value="Cluster">Cluster Assign</option>
+                                <option value="PST">PST Assign</option>
+                              <?php } ?>
+                            </select>
+                            <div class="invalid-feedback">Please Select Assign.</div>
+                            <div class="valid-feedback">Looks good!</div>
+                        </div>
                       <div class="mt-4">
+                      <lable>Select Company Status :</lable>
                         <select class="form-control" id="statusid" name="statusid" required="">
                           <option value="">Select Status</option>
                           <?php 
-                            $typeid = $user['type_id'];
+                           
                             if($typeid == 3 || $typeid == 5){
                                 $status_array = [1,4,5,8];
                             }else if($typeid == 13){
                                 if($revst[0]->bdid == $revst[0]->uid){
                                   $status_array = [1,2,3,4,5,8];
                                 }else{
-                                  $status_array = [2,3];
+                                  $status_array = [1,2,3,4,5,8];
+                                  // $status_array = [2,3];
                                 }
                             }else if($typeid == 4){
-                                $status_array = [6,9,12,13];
+                                $status_array = [1,2,3,4,5,8,6,9,12,13];
                             }else if($typeid == 9){
-                                $status_array = [2,3,4,5,6,8,9,12,13];
+                                $status_array = [1,2,3,4,5,8,6,9,12,13];
                             }else{
                                 $status_array = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
                             }
@@ -171,16 +227,17 @@
                           <option value="<?=$st->id?>"><?=$st->name?></option>
                           <?php }} ?>
                         </select>
-                        <div class="invalid-feedback">Please Create Plan First.</div>
+                        <div class="invalid-feedback">Please Select Status First.</div>
                         <div class="valid-feedback">Looks good!</div>
                       </div>
                     
                       <div class="mt-4">
-                        <lable>note: showing only those companies which are not involved PST</lable>
+                        <!-- <lable>note: showing only those companies which are not involved PST</lable> -->
+                        <lable>Select Company</lable>
                         <select class="form-control" name="inid" required="" id="inid">
                         </select>
                         <p id="optionCountCompany"></p>
-                        <div class="invalid-feedback">Please Select Status First.</div>
+                        
                         <div class="valid-feedback">Looks good!</div>
                       </div>
                       <?php }else{ 
@@ -216,7 +273,7 @@
 
                         <?php } ?>
                     </div>
-                    <a href="<?=base_url();?>Menu/AllReviewac"><button type="button" class="btn btn-outline-danger">Go to Action wise Review</button></a><br>
+                    <!-- <a href="<?=base_url();?>Menu/AllReviewac"><button type="button" class="btn btn-outline-danger">Go to Action wise Review</button></a><br> -->
                   </div>
                     </div>
                     
@@ -231,7 +288,7 @@
                           <textarea class="form-control mt-3" name="closeremark" placeholder="Review Close Final Remark..."  required=""></textarea>
                           <input type="datetime-local" name="closetdate" value="<?=date('Y-m-d H:i:s');?>" class="form-control mt-3" required="">
                           <div class="form-group text-center mt-3">
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to close review task ?');">Close Review</button>
+                            <button type="submit" class="btn btn-danger" id="closereviewbtn" onclick="return confirm('Are you sure you want to close review task ?');">Close Review</button>
                           </div>
                         </div>
                       </form>
@@ -881,6 +938,15 @@
                               <textarea class="form-control" name="status_change_by_pst[]" placeholder="Review Remark..."  required=""></textarea>
                           </div>
                         </div>
+
+                        <div class="col-12 col-md-12 mb-12 card p-2">
+                          <label for="validationSample04">Do You Want to Plan Meetings Between 15 Janauary :</label>
+                          <input type="hidden" readonly value="Do You Want to Plan Meetings Between 15 Janauary " class="form-control" name="meetings_between_Janauary[]"> 
+                          <div class="form-group">
+                              <textarea class="form-control" name="meetings_between_Janauary[]" placeholder="Review Remark..."  required=""></textarea>
+                          </div>
+                        </div>
+
                         <div class="col-12 col-md-12 mb-12 card p-5" style="background: cornsilk;">
                           <label for="validationSample04"> Is the frequency of the task right? </label>
                           <input type="hidden" readonly value="Is the frequency of the task right?" class="form-control" name="task_frequency[]"> 
@@ -889,6 +955,9 @@
                             <option value="yes">Yes</option>
                             <option value="no">No</option>
                           </select>
+                          <div class="form-group" id="task_frequency_remarks">
+                              <textarea class="form-control" name="task_frequency[]" placeholder="Remark..."></textarea>
+                          </div>
                           <label for="validationSample02">Do you need any intervention or support from? </label>
                           <input type="hidden" readonly value="Do you need any intervention or support from?" class="form-control" name="intervention_or_suppert[]"> 
                           <select id="intervention_or_suppert" name="intervention_or_suppert[]" class="form-control" required>
@@ -897,17 +966,27 @@
                             <option value="PST">PST </option>
                             <option value="Sales Head">Sales Head</option>
                           </select>
+                          <div class="form-group" id="intervention_or_suppert_remarks">
+                              <textarea class="form-control" name="intervention_or_suppert[]" placeholder="Enter What Type of Support"></textarea>
+                          </div>
                         </div>
                         </div>
                         </div>
                       </div>
+                      <hr>
+                      <div class="card p-2 create_task_bg_target" id="create_task_bg_target">
+                        <div id="basereview_targetdata"></div>   
+                      </div>
                     </div>
                       <hr>
-                      <div class="card p-2 create_task_bg pb-4" id="rosterhide">
+                      
+
+                      <div class="card p-2 create_task_bg pb-4" id="rosterhide" style="margin:20px;">
                         <center>
                           <h5>Create Task</h5>
                         </center>
-                        <input type="datetime-local" id="ntdate" name="ntdate" value="<?=date('Y-m-d H:i:s');?>" class="form-control" required="">
+                        <lable>Select Action Date</lable>
+                        <input type="datetime-local" id="ntdate"  name="ntdate" value="" class="form-control" required="">
                         <lable>Select Action</lable>
                         <select id="ntaction" name="ntaction" class="form-control"  required="">
                           <option value="">Select Action</option>
@@ -978,6 +1057,35 @@
             </div>
             <?php } ?>
       </section>
+
+      <div class="modal fade" id="exampleModalCenterdata" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                           
+                            <center>
+                            <h5 class="modal-title" id="exampleModalLongTitle">Add Meetings Link <span class="text-primary" id="meetingaddperson"></span></h5>
+                            
+                            </center>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <form action="" id="meetingsform" method="post" >
+                              <div class="mb-3 mt-3">
+                                <textarea id="rejectreamrk" name="meetinglink" cols="30" placeholder="Add Meetings Link " class="form-control"  rows="4"></textarea>
+                              </div>
+                              <div class="form-group text-center">
+                                <button type="submit" class="btn btn-success mt-2">Submit</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
       <script type='text/javascript'>
         $( document ).ready(function() {
@@ -1011,12 +1119,67 @@
             $("#slct_cluster_card").hide();
             $("#mainlogtable").hide();
 
+            $("#task_frequency_remarks").hide();
+            $("#intervention_or_suppert_remarks").hide();
+            $("#create_task_bg_target").hide();
+
             var rtypeslct = document.getElementById("rtype").value;
             if(rtypeslct == 'Roaster'){
               $("#common_review_slct").hide();
               $("#cmpdata").hide();
             }
+       
+       
+       
+        var review_id = document.getElementById("slsct_review_id").value;
+        var pstid = document.getElementById("pstid").value;
+        var bdid = document.getElementById("bdid").value;
+        var fdate = document.getElementById("fdate").value;
+        $.ajax({
+        url:'<?=base_url();?>Menu/getcmpdbybd_new',
+        type: "POST",
+        data: {
+        review_id: review_id,
+        pstid: pstid,
+        bdid: bdid,
+        fdate: fdate,
+        },
+        cache: false,
+        success: function a(result){
+        if(result == 0){
+          $('#closereviewbtn').prop('disabled', false);
+          $("#totalpendingcmp").text('* Good JOB! No companies are pending for review. Please close this review.');
+          $("#totalpendingcmp").css('color', 'white');
+        }else{
+          $("#totalpendingcmp").text('* Total ' +result + ' companies are pending for review !');
+          $("#totalpendingcmp").css('color', 'white');
+          $('#closereviewbtn').prop('disabled', true);
+
+              // $('nav > ul> li > a').on('click', function(e) {
+              //       e.preventDefault();
+              //       alert('You must click "Close Review" before moving to another Page.');
+              //   });
+              // window.oncontextmenu = function () {
+              //   return false;
+              //   }
+              //   $(document).keydown(function (event) {
+              //   if (event.keyCode == 123) {
+              //   return false;
+              //   }
+              //   else if (event.ctrlKey && event.shiftKey && event.keyCode == 73) {
+              //   return false;
+              //   }
+              //   else if (event.ctrlKey && event.keyCode == 85) {
+              //   return false;
+              //   }
+              //   })         
+        }
+        }
         });
+     
+       
+       
+          });
         
         
         
@@ -1146,6 +1309,29 @@
               $("#slct_cluster_card").hide();
           }
       });
+
+      $('#frequency_of_the_task').on('change', function() {
+          var val = this.value;
+          if (val == 'no') {
+              $("#task_frequency_remarks").show();
+              $("#task_frequency_remarks textarea").attr('required', true);
+          } else {
+              $("#task_frequency_remarks textarea").removeAttr('required');
+              $("#task_frequency_remarks").hide();
+          }
+      });
+      $('#intervention_or_suppert').on('change', function() {
+          var val = this.value;
+          if (val !== '') {
+              $("#intervention_or_suppert_remarks").show();
+              $("#intervention_or_suppert_remarks textarea").attr('required', true);
+          } else {
+              $("#intervention_or_suppert_remarks textarea").removeAttr('required');
+              $("#intervention_or_suppert_remarks").hide();
+          }
+      });
+
+      
         
         // $('#rp_meeting_done').on('change', function b() {
         //     var val = this.value;
@@ -1212,6 +1398,10 @@
             document.getElementById("ans31").value=val;document.getElementById("ans31").readOnly = true;}
         });
         
+
+
+
+
         
         // $('#csrbudget').on('change', function b() {
         //     var val = this.value;
@@ -1233,6 +1423,10 @@
         //         ''
         //     }
         // });
+
+
+
+
         
         $("#orrr").hide();
         $('#statusid').on('change', function b() {
@@ -1327,13 +1521,17 @@
           }
           
         }
-        
+       
         $('#statusid').on('change', function b() {
+        var slct_assign = '';
         var review_id = document.getElementById("slsct_review_id").value;
         var pstid = document.getElementById("pstid").value;
         var stid = document.getElementById("statusid").value;
         var bdid = document.getElementById("bdid").value;
         var fdate = document.getElementById("fdate").value;
+        var slct_base_review = document.getElementById("slct_base_review").value;
+        var slct_assign = document.getElementById("slct_assign").value;
+
         $.ajax({
         url:'<?=base_url();?>Menu/getcmpdbybd',
         type: "POST",
@@ -1343,6 +1541,8 @@
         stid: stid,
         bdid: bdid,
         fdate: fdate,
+        slct_base_review:slct_base_review,
+        slct_assign:slct_assign
         },
         cache: false,
         success: function a(result){
@@ -1617,6 +1817,7 @@
         $('#inid').on('change', function b() {
         var inid = document.getElementById("inid").value;
         var fdate = document.getElementById("fdate").value;
+        var slct_base_review = document.getElementById("slct_base_review").value;
         $.ajax({
         url:'<?=base_url();?>Menu/getcmpnlog',
         type: "POST",
@@ -1624,7 +1825,8 @@
         inid: inid,
         fdate: fdate,
         rtype: rtype,
-        rtype_id: rtype_id
+        rtype_id: rtype_id,
+        slct_base_review:slct_base_review
         },
         cache: false,
         success: function a(result){
@@ -1655,9 +1857,140 @@
         var fdate = document.getElementById("fdate").value;
         var rtype = document.getElementById("rtype").value;
         var rtype_id = document.getElementById("slsct_review_id").value;
-
+        
+        var slct_base_review = document.getElementById("slct_base_review").value;
+        var slct_assign = document.getElementById("slct_assign").value;
       if(rtype !=='Roaster'){
+      var slct_assign = '';
+      if(rtype !== 'Half Yearly'){
+        if(slct_base_review == ''){
+          alert('Please select base review');
+          $('#inid').val('');
+          $('#common_review_slct').hide('');
+          $("#cmpdata").hide();
+          $("#rosterhide").hide();
+          $("#reviewmainremarks").hide();
+          $("#loadcompinfo").hide();
+          return false;
+        }else{
+        $.ajax({
+        url:'<?=base_url();?>Menu/getCompanyInfo',
+        type: "POST",
+        data: {
+        inid: inid,
+        },
+        cache: false,
+        success: function a(result){
+          var cmpjsonData = JSON.parse(result);
+          var apstValue = cmpjsonData[0].apst
+          var clmValue = cmpjsonData[0].clm_id;
+          if(apstValue !== null || clmValue !== ''){
+            $.ajax({
+              url:'<?=base_url();?>Menu/getCompanyuserInfo',
+              type: "POST",
+              data: {
+                apstValue : apstValue
+              },
+              cache: false,
+              success: function a(result){
+                // if(result !=='' || clmValue !==''){
+                  $('#exampleModalCenterdata').modal('show');
+                  // $('#meetingaddperson').text(result);
+                    $('#meetingsform').submit(function(e) {
+                      e.preventDefault();
+                      $.ajax({
+                        url:'<?=base_url();?>Menu/AddReviewMeetingLink',
+                        type: "POST",
+                        data: $(this).serialize() + '&rtype_id='+rtype_id+ '&inid='+inid, // Serialize the form data
+                          success: function(response) {
+                              console.log("Meeting Link submitted successfully!");
+                              $('#exampleModalCenterdata').modal('hide');
+                          },
+                          error: function() {
+                              console.log("An error occurred while submitting the form.");
+                          }
+                      });
+                  });
+                // }else{
+                //   $('#exampleModalCenterdata').modal('hide');
+                // }
+              }
+              });
+          }
+        }
+        });
+          $('#common_review_slct').show('');
+          $("#cmpdata").show();
+          $("#rosterhide").show();
+          $("#reviewmainremarks").show();
+          $("#loadcompinfo").show();
+          
+          $("#create_task_bg_target").show();
 
+          $.ajax({
+          url:'<?=base_url();?>Menu/getCompanyReviewTargetData',
+          type: "POST",
+          data: {
+          inid: inid,
+          rtype_id: rtype_id,
+          slct_base_review: slct_base_review
+          },
+          cache: false,
+          success: function a(result){
+              $("#basereview_targetdata").html(result);
+          }
+          });
+
+
+
+
+        }
+      }else if(rtype == 'Half Yearly'){
+        $.ajax({
+        url:'<?=base_url();?>Menu/getCompanyInfo',
+        type: "POST",
+        data: {
+        inid: inid,
+        },
+        cache: false,
+        success: function a(result){
+          var cmpjsonData = JSON.parse(result);
+          var apstValue = cmpjsonData[0].apst;
+          var clmValue = cmpjsonData[0].clm_id;
+          if (apstValue !== null || clmValue !== '') {
+            $.ajax({
+              url:'<?=base_url();?>Menu/getCompanyuserInfo',
+              type: "POST",
+              data: {
+                apstValue : apstValue
+              },
+              cache: false,
+              success: function a(result){
+                  $('#exampleModalCenterdata').modal('show');
+                  // $('#meetingaddperson').text(result);
+                    $('#meetingsform').submit(function(e) {
+                      e.preventDefault();
+                      $.ajax({
+                        url:'<?=base_url();?>Menu/AddReviewMeetingLink',
+                        type: "POST",
+                        data: $(this).serialize() + '&rtype_id='+rtype_id+ '&inid='+inid, // Serialize the form data
+                          success: function(response) {
+                              console.log("Meeting Link submitted successfully!");
+                              $('#exampleModalCenterdata').modal('hide');
+                          },
+                          error: function() {
+                              console.log("An error occurred while submitting the form.");
+                          }
+                      });
+                  });
+              }
+              });
+          }
+        }
+        });
+      }
+        
+        var slct_base_review = document.getElementById("slct_base_review").value;
         $.ajax({
         url:'<?=base_url();?>Menu/getcmplogs',
         type: "POST",
@@ -1665,7 +1998,8 @@
         inid: inid,
         fdate: fdate,
         rtype: rtype,
-        rtype_id: rtype_id
+        rtype_id: rtype_id,
+        slct_base_review:slct_base_review
         },
         cache: false,
         success: function a(result){
@@ -1679,7 +2013,8 @@
         inid: inid,
         fdate: fdate,
         rtype: rtype,
-        rtype_id: rtype_id
+        rtype_id: rtype_id,
+        slct_base_review:slct_base_review
         },
         cache: false,
         success: function a(result){

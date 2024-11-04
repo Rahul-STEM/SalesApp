@@ -15,8 +15,6 @@
                                             <th>MainBD</th>
                                             <th>Company ID</th>
                                             <th>Company Name</th>
-                                            <th>Current Status</th>
-                                            <th>Last Status</th>
                                             <th>Conversions</th>
                                             <th>Created Date</th>
                                             <th>Assigned Date</th>
@@ -35,11 +33,11 @@
                                                 <td><?php echo getUserNameById($val->mainbd);?></td>
                                                 <td><?php echo $val->cmpid_id;?></td>
                                                 <td><a target ="_blank" href="<?php echo base_url()?>Menu/CompanyDetails/<?php echo $val->apst; ?>"><?php echo getCompanyNameByCmpid($val->cmpid_id);?></a></td>
-                                                <td><?php echo getCStatusBystatusId($val->cstatus);?></th>
-                                                <td><?php echo getCStatusBystatusId($val->lstatus);?></th>
+                                                <!-- <td><?php // echo getCStatusBystatusId($val->cstatus);?></th>
+                                                <td><?php // echo getCStatusBystatusId($val->lstatus);?></th> -->
                                                 <?php if($totallogs >0){
                                                  ?>
-                                                   <td><a target="_blank" href="<?php echo base_url()?>Menu/PSTConversionsList/<?php echo $apst;?>/<?php echo $val->cmpid_id;?>"> <?php echo $totallogs;;?></a></td>
+                                                   <td><a target="_blank" href="<?php echo base_url()?>Menu/PSTConversionsList/<?php echo $apst;?>/<?php echo $val->cmpid_id;?>/<?php echo $sd;?>/<?php echo $ed;?>"> <?php echo $totallogs;;?></a></td>
                                                  <?php
                                                 }
                                                 else{ ?>

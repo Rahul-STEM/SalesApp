@@ -1,7 +1,23 @@
 <?php include('header.php'); ?>
+<style>
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/image/crm/targetCRM.png');  /* Replace with your image path */
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px);  /* Apply blur effect */
+    z-index: -1; /* Place the background behind content */
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <!-- Main content -->
   <section class="content">
-    <div class="container-fluid">
+    <div class="container-fluid .background-image">
       <div class="row">
         <div class="col-12">
           <div class="card">
@@ -16,77 +32,194 @@
                   // dd($sdate);
                      ?>
                     <div class="table-responsive">
-                      <div class="table-responsive">
-                        <div class="pdf-viwer">
-                        <div class="container">
-                          <form name="targetVsachivementform" method="post" action="targetVsAchievedData">
-                            <div class="row g-2 align-items-center">
-                              <div class="col-sm-3">
-                                <input type="date" class="form-control" name="sdate" value="<?php echo isset($sdate) ? $sdate : ''; ?> " required id="sdate" min="">
-                              </div>
-                              <div class="col-sm-3">
-                                <input type="date" class="form-control" name="edate" value="<?php echo isset($edate) ? $edate : ''; ?>" required id="edate" min="">
-                              </div>
-                              <div class="col-sm-3">
-                                <input type="submit" value="Show Report" class="btn btn-primary w-100">
-                              </div>
-                            </div>
-                          </form>
-                        </div>
-                          <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                              <input type="hidden" name="hidden_mdata" value="<?php print_r($targetVsAchieved);?>"/>
-                            <thead>
-                                <tr>
-                                    <th>BD</th>
-                                    <th colspan=2>Prospecting Schools</th>
-                                    <th colspan=2>Proposal Count</th>
-                                    <th colspan=2>Proposal Revenue</th>
-                                    <th colspan=2>Closure Clients</th>
-                                    <th colspan=2>Closure Schools</th>
-                                    <th colspan=2>Closure Revenue</th>
-                                </tr>
-                              <tr>
-                                <th></th>
-                                <th>Target</th>
-                                <th>Achieved</th>
-                                <th>Target</th>
-                                <th>Achieved</th> 
-                                <th>Target</th>
-                                <th>Achieved</th>
-                                <th>Target</th>
-                                <th>Achieved</th>
-                                 <th>Target</th>
-                                <th>Achieved</th>
-                              </tr>
-                            </thead>
-                                <tbody>
-                                    <?php
-                                    foreach($targetVsAchieved as $key=>$val){
-                                      if($val['target']){
+                        <div class="table-responsive">
+                            <div class="pdf-viwer">
+                                <div class="container">
+                                    <form name="targetVsachivementform" method="post" action="targetVsAchievedData">
+                                        <div class="row g-2 align-items-center">
+                                            <div class="col-sm-4">
+                                                <label for="reviewtype">Select Review Type</label>
+                                                <select name="reviewtype" id="reviewtype" class="custom-select rounded-0" required>
+                                                    <option value="">Select Review Type</option>
+                                                    <?php foreach($allReviewType as $key=>$val){ ?>
+                                                        <option value="<?php echo $val->id; ?>" <?php echo ($val->id == $selectedReviewType) ? 'selected' : ''; ?>><?php echo $val->name; ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label for="partnertype">Select Partner Type</label>
+                                                <select name="partnertype" id="partnertype" class="custom-select rounded-0" required>
+                                                    <option value="">Select Partner Type</option>
+                                                    <?php foreach($partnerType as $key=>$val){ ?>
+                                                        <option value="<?php echo $val->id; ?>" <?php echo ($val->id == $selectedPartnerType) ? 'selected' : ''; ?>><?php echo $val->name; ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label for="partnertype">Select User</label>
+                                                <select name="user" id="user" class="custom-select rounded-0" required>
+                                                    <option value="">Select User</option>
+                                                    <?php foreach($users as $key=>$val){ ?>
+                                                        <option value="<?php echo $val->user_id; ?>" <?php echo ($val->user_id == $selecteduserID) ? 'selected' : ''; ?>><?php echo $val->name; ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
 
-                                      
-                                       ?>
-                                          <tr>
-                                             <!-- <td><?php //echo getUserNameById($key['targetUserId']); ?></td> -->
-                                               <td><?php echo getUserNameById($val['targetUserId']); ?></td>
-                                              <td><?php echo $val['prospecting_target']; ?></td>
-                                              <td><?php echo $val['prospective_achieved']; ?></td>
-                                              <td><?php echo $val['proposal_target']; ?></td>
-                                              <td><?php echo $val['proposal_achieved']; ?></td>
-                                              <td><?php echo $val['proposal_revenue']; ?></td>
-                                              <td><?php echo $val['proposal_revenue_achieved'];?></td>
-                                              <td><?php echo $val['closure_client_target']; ?></td>
-                                              <td><?php echo $val['closure_clients_achieved']; ?></td>
-                                              <td><?php echo $val['closure_revenue_target']; ?></td>
-                                              <td><?php echo $val['closure_schools_achieved']; ?></td>
-                                              <td><?php echo $val['closure_revenue']; ?></td>
-                                              <td><?php echo $val['closure_evenue_achieved']; ?></td>
-                                          </tr>
-                                       <?php }
-                                    }?>
-                                </tbody>
-                            </table>
-                          </div>
+                                        <hr>
+                                        <div class="row g-2 align-items-center">
+                                            <div class="col-sm-2">
+                                                <input type="submit" value="Show Report" class="btn btn-primary w-100">
+                                            </div>           
+                                        </div>
+                                    </form>
+                                    <hr>
+                                </div>
+                                <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                <input type="hidden" name="hidden_mdata" value="<?php print_r($targetVsAchieved);?>"/>
+                                <thead>
+                                    <tr>
+                                        <th>BD</th>
+                                        <th>Target Start Date</th>
+                                        <th>Target End Date</th>
+                                        <th colspan=3>Prospecting Schools</th>
+                                        <th colspan=3>Proposal Count</th>
+                                        <th colspan=3>Proposal Revenue</th>
+                                        <th colspan=3>Closure Clients</th>
+                                        <!-- <th colspan=2>Closure Schools</th> -->
+                                        <th colspan=3>Closure Revenue</th>
+                                    </tr>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Target</th>
+                                    <th>Achieved</th>
+                                    <th></th>
+                                    <th>Target</th>
+                                    <th>Achieved</th> 
+                                    <th></th>
+                                    <th>Target</th>
+                                    <th>Achieved</th>
+                                    <th></th>
+                                    <th>Target</th>
+                                    <th>Achieved</th>
+                                    <th></th>
+                                    <th>Target</th>
+                                    <th>Achieved</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                    <tbody>
+                                        <?php
+                                        foreach($targetVsAchieved as $key=>$val){
+
+                                            // die;
+                                            if(!empty($val['target'])){
+                                            // var_dump($val);
+                                            /***Porspecting */
+                                            if($val['prospecting_target'] > $val['prospective_achieved']){
+                                            $prospimage = '<i class="far fa-grin-beam"></i>'; //Not Good Performance
+                                            }
+                                            else if($val['prospecting_target'] == $val['prospective_achieved']){
+                                            $prospimage = '<i class="far fa-grin"></i>';//Good Performance
+                                            }
+                                            else{
+                                            $prospimage='<i class="far fa-frown"></i>';//Great Performance
+                                            }
+
+                                            /***Proposal Target*/
+                                            if($val['proposal_target'] > $val['proposal_achieved']){
+                                            $propsalimage = '<i class="far fa-grin-beam"></i>'; //Not Good Performance
+                                            }
+                                            else if($val['proposal_target'] == $val['proposal_achieved']){
+                                            $propsalimage = '<i class="far fa-grin"></i>';//Good Performance
+                                            }
+                                            else{
+                                            $propsalimage='<i class="far fa-frown"></i>';//Great Performance
+                                            }
+
+                                            /***Proposal Revenue*/
+                                            if($val['proposal_revenue'] > $val['proposal_revenue_achieved']){
+                                            $prosreveimage = '<i class="far fa-grin-beam"></i>'; //Not Good Performance
+                                            }
+                                            else if($val['proposal_revenue'] == $val['proposal_revenue_achieved']){
+                                            $prosreveimage = '<i class="far fa-grin"></i>';//Good Performance
+                                            }
+                                            else{
+                                            $prosreveimage='<i class="far fa-frown"></i>';//Great Performance
+                                            }
+
+                                            /***Closure target*/
+                                            if($val['closure_client_target'] > $val['closure_clients_achieved']){
+                                            $closureclientreveimage = '<i class="far fa-grin-beam"></i>'; //Not Good Performance
+                                            }
+                                            else if($val['closure_client_target'] == $val['closure_clients_achieved']){
+                                            $closureclientreveimage = '<i class="far fa-grin"></i>';//Good Performance
+                                            }
+                                            else{
+                                            $closureclientreveimage='<i class="far fa-frown"></i>';//Great Performance
+                                            }
+
+                                            /***Closure Revenue*/
+                                            if($val['closure_revenue_target'] > $val['closure_revenue_achieved']){
+                                            $closurerevenueimage = '<i class="far fa-grin-beam"></i>'; //Not Good Performance
+                                            }
+                                            else if($val['closure_revenue_target'] == $val['closure_revenue_achieved']){
+                                            $closurerevenueimage = '<i class="far fa-grin"></i>';//Good Performance
+                                            }
+                                            else{
+                                            $closurerevenueimage='<i class="far fa-frown"></i>';//Great Performance
+                                            }
+                                        ?>
+                                        <tr>
+                                            <?php //var_dump($val);?>
+                                                <!-- <td><?php //echo getUserNameById($key['targetUserId']); ?></td> -->
+                                                <td><?php echo ($val['targetUserId'])? getUserNameById($val['targetUserId']) :"-"; ?></td>
+                                                <td><?php echo ($val['targetStartDate']); ?></td>
+                                                <td><?php echo ($val['targetEndDate']); ?></td>
+
+                                                <td><?php echo ($val['prospecting_target']) ? $val['prospecting_target'] :"-"; ?></td>
+
+                                                <td><a href='<?php echo base_url();?>Menu/getAchievedDataList/<?php echo $val['targetUserId']?>/prospective_achieved/<?php echo $sdate;?>/<?php echo $edate;?>'><?php echo ($val['prospective_achieved'])? $val['prospective_achieved']:"-"; ?></a></td>
+
+                                                <td><?php echo $prospimage;?></td>
+
+                                                <td><?php echo ($val['proposal_target'])? $val['proposal_target']:"-"; ?></td>
+
+                                                <td><a href='<?php echo base_url();?>Menu/getAchievedDataList/<?php echo $val['targetUserId']?>/proposal_achieved/<?php echo $sdate;?>/<?php echo $edate;?>'><?php echo ($val['proposal_achieved'])? $val['proposal_achieved']:"-" ?></a></td>
+
+                                                <td><?php echo $image;?></td>
+
+                                                <td><?php echo ($val['proposal_revenue'])? $val['proposal_revenue']:"-"; ?></td>
+
+                                                <td><a href='<?php echo base_url();?>Menu/getAchievedDataList/<?php echo $val['targetUserId']?>/revenue_achieved/<?php echo $sdate;?>/<?php echo $edate;?>'><?php echo ($val['proposal_revenue_achieved']) ? $val['proposal_revenue_achieved']:"-";?></a></td>
+
+                                                <td><?php echo $prosreveimage;?></td>
+
+                                                <td><?php echo ($val['closure_client_target'])? $val['closure_client_target']:"-"; ?></td>
+                                                
+                                                <td><a href='<?php echo base_url();?>Menu/getAchievedDataList/<?php echo $val['targetUserId']?>/closure_achieved/<?php echo $sdate;?>/<?php echo $edate;?>'><?php echo ($val['closure_clients_achieved'])? $val['closure_clients_achieved']:"-"; ?></a></td>
+
+                                                <!-- <td><?php //echo ($val['closure_school_target'])? $val['closure_school_target']:"-"; ?></td>
+                                                <td><?php //echo ($val['closure_schools_achieved'])? $val['closure_schools_achieved']:"-"; ?></td> -->
+                                                <td><?php echo $closureclientreveimage;?></td>
+
+                                                <td><?php echo ($val['closure_revenue_target'])? $val['closure_revenue_target']:"-"; ?></td>
+
+                                                <td><a href='<?php echo base_url();?>Menu/getAchievedDataList/<?php echo $val['targetUserId']?>/closure_achieved/<?php echo $sdate;?>/<?php echo $edate;?>'><?php echo ($val['closure_revenue_achieved'])? $val['closure_revenue_achieved'] :"-"; ?></a></td>
+
+                                                <td><?php echo $closurerevenueimage;?></td>
+
+                                            </tr>
+                                        <?php }
+                                        }?>
+                                    </tbody>
+                                </table>
+                                <div style="width: 60%; margin: auto;">
+                                    <canvas id="targetAchievedChart"></canvas>
+                                </div>
+                            </div>
                         </div>
                         </form>            <!--END OF FORM ^^-->
                       </fieldset>
@@ -105,3 +238,102 @@
       </section>
       
       <?php include('footer.php') ;?>
+    <script>
+        // Sample data extracted from your array structure
+
+        var data = <?php $data;?>
+        // Extracting data for plotting
+        var labels = ['Prospecting', 'Proposal', 'Closure Clients'];
+        var targetData = [
+            data[100059].prospecting_target, data[100059].proposal_target, data[100059].closure_client_target,
+            data[100062].prospecting_target, data[100062].proposal_target, data[100062].closure_client_target,
+            data[100087].prospecting_target, data[100087].proposal_target, data[100087].closure_client_target,
+            data[100172].prospecting_target, data[100172].proposal_target, data[100172].closure_client_target
+        ];
+
+        var achievedData = [
+            data[100059].prospecting_achieved, data[100059].proposal_achieved, data[100059].closure_clients_achieved,
+            data[100062].prospecting_achieved, data[100062].proposal_achieved, data[100062].closure_clients_achieved,
+            data[100087].prospecting_achieved, data[100087].proposal_achieved, data[100087].closure_clients_achieved,
+            data[100172].prospecting_achieved, data[100172].proposal_achieved, data[100172].closure_clients_achieved
+        ];
+
+        // Configuration for the bar chart
+        var ctx = document.getElementById('targetAchievedChart').getContext('2d');
+        var targetAchievedChart = new Chart(ctx, {
+            type: 'horizontalBar',
+            data: {
+                labels: ['User 100059', 'User 100062', 'User 100087', 'User 100172'],
+                datasets: [
+                    {
+                        label: 'Prospecting Target',
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        data: [
+                            data[100059].prospecting_target, data[100059].proposal_target, data[100059].closure_client_target,
+                            data[100062].prospecting_target, data[100062].proposal_target, data[100062].closure_client_target,
+                            data[100087].prospecting_target, data[100087].proposal_target, data[100087].closure_client_target,
+                            data[100172].prospecting_target, data[100172].proposal_target, data[100172].closure_client_target
+                        ]
+                    },
+                    {
+                        label: 'Prospecting Achieved',
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                        data: [
+                            data[100059].prospecting_achieved, data[100059].proposal_achieved, data[100059].closure_clients_achieved,
+                            data[100062].prospecting_achieved, data[100062].proposal_achieved, data[100062].closure_clients_achieved,
+                            data[100087].prospecting_achieved, data[100087].proposal_achieved, data[100087].closure_clients_achieved,
+                            data[100172].prospecting_achieved, data[100172].proposal_achieved, data[100172].closure_clients_achieved
+                        ]
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Values'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+      <!-- jQuery for Auto-Filling End Date -->
+<script>
+    $(document).ready(function() {
+        $('#sdate, #reviewtype').on('change', function() {
+            var startDate = $('#sdate').val();
+            var reviewType = $('#reviewtype').val();
+            if (startDate && reviewType) {
+                var endDate = new Date(startDate);
+                if (reviewType === "1" ) {
+                    endDate.setDate(endDate.getDate() + 7); // Add 7 days for weekly review
+                } else if (reviewType === "2") {
+                  endDate.setDate(endDate.getDate() + 14);// Add Fortnightly review
+                }
+                else if(reviewType === "3"){
+                  endDate.setMonth(endDate.getMonth() + 1); // Add Monthly month for monthly review
+                }
+                else if(reviewType === "4"){
+                  endDate.setMonth(endDate.getMonth() + 3); 
+                }
+                else if(reviewType === "6"){
+                  endDate.setMonth(endDate.getMonth() + 6); 
+                }
+                // Format the end date to YYYY-MM-DD
+                var year = endDate.getFullYear();
+                var month = (endDate.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-indexed
+                var day = endDate.getDate().toString().padStart(2, '0');
+                console.log(startDate+"=="+day+"-"+month+"-"+year);
+                $('#edate').val(`${year}-${month}-${day}`);
+            }
+        });
+    });
+</script>

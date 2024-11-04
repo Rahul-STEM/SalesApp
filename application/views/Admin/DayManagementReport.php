@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -148,7 +149,9 @@
                                         <div class="table-responsive">
                                             <div class="pdf-viwer">
                                             <?php
-                                                $i = 1;
+                                             
+if (!empty($getReportbyUser) && is_array($getReportbyUser)) {
+    $i = 1;
                                                 foreach ($getReportbyUser as $date => $periods):
                                                 ?>
                                                     <center><h2>Date: <?php echo htmlspecialchars($date); ?></h2></center>
@@ -178,6 +181,7 @@
                                                 <?php
                                                     $i++;
                                                 endforeach;
+}
                                                 ?>
 
                                             </div>
@@ -324,18 +328,13 @@ $(document).ready(function() {
             $('.data-table').each(function() {
                 const table = $(this).DataTable();
                 let tableData = [];
-                console.log(table);
-                // return false;
+                
                 if (table) {
                     let headers = table.columns().header().toArray().map(header => $(header).text());
                     tableData.push(headers);
-                    alert(headers);
-                    // return false;
 
                     table.rows({ search: 'applied' }).every(function() {
-                        // tableData.push(this.data().toArray());
                         tableData.push(this.data());
-
                     });
                 }
                 allData = allData.concat(tableData);
@@ -381,157 +380,5 @@ $(document).ready(function() {
         }
     });
 </script>
-<!-- <script>
-      $("#example1").DataTable({
-      "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 5,
-      "buttons": ["excel", "pdf"]
-      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    </script> -->
-<!-- <script>
-        $(document).ready(function() {
-
-            const userName = "<?php echo htmlspecialchars($getReportbyUser[0]->userName); ?>";
-            // alert(userName);
-            var table1 = $('#example1').DataTable();
-            var table2 = $('#eveningTable').DataTable();
-            var table3 = $('#yesterdayTaskTable').DataTable();
-
-            // Initialize export buttons
-            new $.fn.dataTable.Buttons(table1, {
-                buttons: [
-                    {
-                        extend: 'csvHtml5',
-                        className: 'btn btn-info', 
-                        text: '<i class="fa fa-file-csv"></i> Export All Tables to CSV',
-                        action: function (e, dt, button, config) {
-                            exportAllTables('csv', [
-                                { table: table1, includeHeaders: true },
-                                { table: table2, includeHeaders: false },
-                                { table: table3, includeHeaders: false }]);
-                        }
-                    },
-                    {
-                        extend: 'excelHtml5',
-                        className: 'btn btn-info', 
-                        text: '<i class="fa fa-file-excel"></i> Export All Tables to Excel',
-                        action: function (e, dt, button, config) {
-                            exportAllTables('excel', [
-                                { table: table1, includeHeaders: true },
-                                { table: table2, includeHeaders: false },
-                                { table: table3, includeHeaders: false }]);
-                        }
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        className: 'btn btn-info', 
-                        text: '<i class="fa fa-file-pdf"></i> Export All Tables to PDF',
-                        action: function (e, dt, button, config) {
-                            exportAllTables('pdf', [
-                                { table: table1, includeHeaders: true },
-                                { table: table2, includeHeaders: false },
-                                { table: table3, includeHeaders: false }
-                            ]);
-                        }
-                    }
-                ]
-            });
-
-            // Append the buttons to all the tables
-            table1.buttons(0, null).container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            // table2.buttons(0, null).container().appendTo('#eveningTable_wrapper .col-md-6:eq(0)');
-            // table3.buttons(0, null).container().appendTo('#yesterdayTaskTable_wrapper .col-md-6:eq(0)');
-
-
-
-            function exportAllTables(type, tables) {
-                
-                // alert(userName);
-                let allData = [];
-
-                tables.forEach(function(item) {
-                    // Get all data from the table
-                    var table = item.table;
-                    var includeHeaders = item.includeHeaders;
-                    
-                    // Get all data from the table
-                    var data = table.rows().data().toArray();
-
-                    if (includeHeaders) {
-                // Append table headers
-                        allData.push(table.columns().header().toArray().map(function(header) {
-                            return $(header).text(); // Get header text
-                        }));
-                    }
-                    // Append table data
-                    allData = allData.concat(data);
-                });
-
-                // Convert to CSV/Excel/PDF format and trigger export
-                if (type === 'csv') {
-                    exportToCSV(allData);
-                } else if (type === 'excel') {
-                    exportToExcel(allData);
-                } else if (type === 'pdf') {
-                    exportToPDF(allData,);
-                }
-            }
-
-            function exportToCSV(data) {
-                var csv = data.map(row => row.join(',')).join('\n');
-
-                var csvBlob = new Blob([csv], { type: 'text/csv' });
-                var url = URL.createObjectURL(csvBlob);
-
-                var a = document.createElement('a');
-                a.href = url;
-                a.download = userName+'_.csv';
-                a.click();
-            }
-
-            function exportToExcel(data) {
-            // For Excel export, you can use the SheetJS library (XLSX)
-                var ws = XLSX.utils.aoa_to_sheet(data);
-                var wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "Merged Tables");
-
-                XLSX.writeFile(wb, userName+"_.xlsx");
-            }
-
-            function exportToPDF(data) {
-
-                var doc = new jsPDF();
-                // Format the data for PDF (row by row)
-                var finalY = 10;
-                data.forEach(function(row) {
-                    doc.text(row.join(' '), 10, finalY);
-                    finalY += 10;
-                });
-
-                doc.save(userName + '_.pdf'); 
-            }
-        });
-
-    </script> -->
-<!-- <script>
-        function ExportExcel(userID,startDate,endDate){
-            
-            $.ajax({
-
-                url: '<?=base_url();?>Management/export_to_excel',
-                type: 'POST',
-                data: {
-                    userID: userID,
-                    startDate: startDate,
-                    endDate: endDate
-                },
-                success: function(response) {
-
-                },
-                error: function() {
-                    alert("There was an error submitting the rating.");
-                }
-            });
-        }
-    </script> -->
-</body>
+  </body>
 </html>

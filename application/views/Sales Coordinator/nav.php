@@ -78,10 +78,6 @@
         </div>
       </li>-->
       <!-- Notifications Dropdown Menu -->
-       <?php 
-       $user = $this->session->userdata('user');
-       
-       ?>
       <h4>HI!  <?=$user['name']?></h4>
       <input type="hidden" id="ur_id" value="<?=$uid?>">
       <li class="nav-item">
@@ -114,9 +110,13 @@
         <div class="image">
           <img src="<?=base_url();?>assets/image/user/Team.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
-        <div class="info">
-          <a href="#" class="d-block">User Name</a>
-        </div>
+               <div class="info">
+      <?php $userName=$this->Menu_model->get_userName($uid);?>
+
+        <a href="<?=base_url();?>Menu/myProfile" class="d-block"><?=$userName[0]->name?></a>
+
+      </div>
+
       </div>
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -136,13 +136,6 @@
           Day Check Management
           </a>
           </li>
-          <li class="nav-item">
-                <a class="nav-link" href="<?= base_url(); ?>Management/ApproveDayCheckRequest">
-                    <i class="fas fa-chart-line nav-icon"></i>
-                    <!-- <p>Day Check Report</p> -->
-                    Approve Day Check Request
-                </a>
-            </li>
           <li class="nav-item">
           <a class="nav-link" href="<?= base_url(); ?>Menu/TaskCheck_New">
           <i class="fas fa-chart-bar nav-icon"></i>
@@ -324,10 +317,8 @@
   <?php 
       if(!isset($daycheck)){
         $current_uid    = $user['user_id'];
-        // var_dump($current_uid);die;
       $user_type = $user['type_id'];
       $user_day = $this->Menu_model->get_daydetail($current_uid,date("Y-m-d"));
-      // var_dump($user_day);die;
       if(sizeof($user_day) == 0){
           $this->session->set_flashdata('error_message','* Please start your day first');
           redirect('Menu/DayManagement');

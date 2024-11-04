@@ -78,8 +78,6 @@ date_default_timezone_set("Asia/Kolkata");
                   </div>
                   <div class="p-3" id="test3" style="display: none;">
                     <label>Attach Meeting Photo</label>
-                    <input type="file" class="form-control-file" name="filename10" required>
-
                   </div>
                   <div class="p-3" id="test5" style="display: none;">
                     <label>Attach Whatsapp Media</label>
@@ -802,7 +800,7 @@ date_default_timezone_set("Asia/Kolkata");
                                               
                                             
 
-                                             <div class="form-group p-3">
+                                             <div class="form-group p-3" id="potentional_client_card">
                                               <label>Potentional Client:</label><br>
                                               <input type="radio" id="yes" name="potentional_client" value="yes" required>
                                               <label for="male">YES</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -927,9 +925,8 @@ date_default_timezone_set("Asia/Kolkata");
                                 $('#rpmmom').on('change', function a() {
                                 document.querySelector('#button').disabled = false;
                                 });
-                                function disableOtherRadioButtons(value) {
-                                var radioButtons = document.getElementsByName(value);
-                                console.log(radioButtons);
+                                function disableOtherRadioButtons(name) {
+                                var radioButtons = document.getElementsByName(name);
                                 for (var i = 0; i < radioButtons.length; i++) {
                                 if (radioButtons[i].checked) {
                                 continue;
@@ -1040,9 +1037,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 case 'pending':
                                 
                                 var ab = document.getElementById("action_id").value;
-                                // alert(ab);
                                 if(ab=="1"){
-                                    document.querySelector('#button').disabled = false;
                                 $("#purpose").show();
                                 $("#test2").hide();
                                 $("#test3").hide();
@@ -1053,7 +1048,6 @@ date_default_timezone_set("Asia/Kolkata");
                                 $("#test9").hide();
                                 }
                                 if(ab=="10"){
-                                    document.querySelector('#button').disabled = false;
                                 $("#purpose").show();
                                 $("#test2").hide();
                                 $("#test3").hide();
@@ -1077,7 +1071,6 @@ date_default_timezone_set("Asia/Kolkata");
                                 $("#test9").hide();
                                 }
                                 if(ab=="3"){
-                                document.querySelector('#button').disabled = false;
                                 $("#test1").hide();
                                 $("#test2").hide();
                                 $("#test3").show();
@@ -1099,7 +1092,6 @@ date_default_timezone_set("Asia/Kolkata");
                                 $("#test9").hide();
                                 }
                                 if(ab=="6"){
-                                  document.querySelector('#button').disabled = false;
                                 $("#test1").hide();
                                 $("#test2").hide();
                                 $("#test3").hide();
@@ -1354,7 +1346,6 @@ date_default_timezone_set("Asia/Kolkata");
                                   data: { taskid: tidd},
                                   success: function(comments_message) {
                                       $("#taskcomments").html(comments_message);
-                                      
                                   }
                               });
                                 var cpurpose_name = '';
@@ -1392,7 +1383,7 @@ date_default_timezone_set("Asia/Kolkata");
                                 document.getElementById("glink").href = "mailto:"+emailid;
                                 document.getElementById("cmplink").href = "CompanyDetails/"+cmid;
                                 document.getElementById("assignedBy").innerHTML = assignedBy;
-                                document.getElementById("assignedTo").innerHTML = assignedTo;
+                              //  document.getElementById("assignedTo").innerHTML = assignedTo;
                                 //  alert(ctname);
  								if(ctname=='Research'){
                                   $("#reaserch_message").show();
@@ -1664,10 +1655,10 @@ date_default_timezone_set("Asia/Kolkata");
                                 
                                 $('#clink').click(function(){
                                   var isMobile = window.orientation > -1;
-                                    if (isMobile != 'Mobile') {
-                                        alert('You need to complete and update this task from mobile..!!');
-                                        return false;
-                                    }
+                                  if (isMobile != 'Mobile') {
+                                      alert('You need to complete and update this task from mobile..!!');
+                                      return false;
+                                  }
                                 var tid = document.getElementById("tidd").value;
                                 $.ajax({
                                 url:'<?=base_url();?>Menu/indtime',
@@ -1845,6 +1836,20 @@ $("#rpmsClick").click(function(){
             $('#identify_school_box').on('click', '.remove-field', function() {
                 $(this).parent().remove();
             });
+
+            $("#potentional_client_card").hide();
+            $('#priority').on('change', function f() {
+                    var priority = this.value;
+                    if(priority == 'yes'){
+                      $("#potentional_client_card").show();
+                    }else{
+                      $("#potentional_client_card").hide();
+                    }
+                });
+
+
+
+
             // End Add More School Data When Mom Upload 
     });
 </script>

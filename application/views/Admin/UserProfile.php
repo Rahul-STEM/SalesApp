@@ -265,9 +265,9 @@ $managerName=$this->Menu_model->get_reportingManager($data[0]->aadmin);?>
                             </ul>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                   <div class="col-md-2">
                         <input type="button" class="profile-edit-btn" name="btnAddMore" value="Edit Profile" 
-                            onclick="window.location.href='<?= base_url(); ?>Menu/UserEditAction/<?=$data[0]->user_id?>'"/>
+                            onclick="window.location.href='<?= base_url(); ?>Menu/AdminEditAction/<?=$uid?>'"/>
                     </div>
 
                 </div>

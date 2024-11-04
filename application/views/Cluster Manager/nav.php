@@ -16,81 +16,28 @@
     </ul>
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-        <!-- Navbar Search -->
-        
-        <!-- Messages Dropdown Menu
-        <li class="nav-item dropdown">
-            <a class="nav-link" data-toggle="dropdown" href="#">
-                <i class="far fa-comments"></i>
-                <span class="badge badge-danger navbar-badge">3</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <a href="#" class="dropdown-item">
-                    
-                    <div class="media">
-                        <img src="<?=base_url();?>assets/image/user/Team.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                        <div class="media-body">
-                            <h3 class="dropdown-item-title">
-                            User 1
-                            <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                            </h3>
-                            <p class="text-sm">Call me whenever you can...</p>
-                            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                        </div>
-                    </div>
-                    
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    
-                    <div class="media">
-                        <img src="<?=base_url();?>assets/image/user/Team.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                        <div class="media-body">
-                            <h3 class="dropdown-item-title">
-                            User 2
-                            <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                            </h3>
-                            <p class="text-sm">I got your message bro</p>
-                            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                        </div>
-                    </div>
-                    
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    
-                    <div class="media">
-                        <img src="<?=base_url();?>assets/image/user/Team.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                        <div class="media-body">
-                            <h3 class="dropdown-item-title">
-                            User 3
-                            <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                            </h3>
-                            <p class="text-sm">The subject goes here</p>
-                            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                        </div>
-                    </div>
-                    
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-            </div>
-        </li>-->
-        <!-- Notifications Dropdown Menu -->
-        <h4>HI!  <?=$user['name']?> </h4>
-        <input type="hidden" id="ur_id" value="<?=$uid?>">
-        <li class="nav-item">
-            <a class="nav-link" href="<?=base_url();?>/Menu/Notification">
-                <i class="far fa-bell"></i>
-                <?php $notify=$this->Menu_model->notify($uid);?>
-                <span class="badge badge-warning navbar-badge"><?=sizeof($notify);?></span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                <i class="fas fa-expand-arrows-alt"></i>
-            </a>
-        </li>
+      <!-- Navbar Search -->
+      
+      
+      <!-- Notifications Dropdown Menu -->
+      <h4>HI!  <?=$user['name']?></h4>
+      <input type="hidden" id="ur_id" value="<?=$uid?>">
+      <li class="nav-item">
+      <a class="nav-link" href="<?=base_url();?>/Menu/Notification">
+        <i class="far fa-bell fa-2x" style="color: green;"></i> <!-- Increased the bell icon size with fa-2x -->
+        <?php $notify = $this->Menu_model->notify($uid); ?>
+        <?php if(sizeof($notify)>0){?>
+        <span class="badge badge-danger navbar-badge" id="notification" style="display:block; font-size: 1.2em; padding: 5px 8px;">
+            <?= sizeof($notify); ?>
+        </span>
+        <?php } ?>
+      </a> 
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+          <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+      </li>
     </ul>
 </nav>
 <!-- Main Sidebar Container -->
@@ -106,9 +53,12 @@
             <div class="image">
                 <img src="<?=base_url();?>assets/image/user/Team.jpg" class="img-circle elevation-2" alt="User Image">
             </div>
-            <div class="info">
-                <a href="#" class="d-block">User Name</a>
-            </div>
+             <div class="info">
+      <?php $userName=$this->Menu_model->get_userName($uid);?>
+
+        <a href="<?=base_url();?>Menu/myProfile" class="d-block"><?=$userName[0]->name?></a>
+
+      </div>
         </div>
         
         
@@ -127,8 +77,18 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                
                 <li class="nav-item">
+
+                <a class="nav-link" href="<?= base_url(); ?>Management/CheckingDayManagement_New">
+                    <i class="fas fa-chart-line nav-icon"></i>Day Check Management </a>
+
+			</li>     
+      <li class="nav-item">
+
+    <a class="nav-link" href="<?= base_url(); ?>Menu/TaskCheck_New">
+        <i class="fas fa-chart-bar nav-icon"></i>        <!-- <p>Task Check Management</p> -->
+        Task Check Management    </a>
+</li>                <li class="nav-item">
                     <a href="<?=base_url();?>Menu/HandBIND" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Handover to Installation</p>
@@ -166,74 +126,32 @@
                     </a>
                 </li>
                 
+            
+                
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-circle"></i>
-                    <p>
-                        Requests
-                        <i class="right fas fa-angle-left"></i>
-                    </p>
+                    <a href="<?=base_url();?>Menu/TodaysTaskApprovelRequest" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Task Planner Approval Request</p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                            <i class="far fa-dot-circle nav-icon"></i>
-                            <p>
-                                Task Planner Requests
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="<?=base_url();?>Menu/TodaysTaskApprovelRequest" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Task Planner Start Request</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?=base_url();?>Menu/PlannerTaskApprovelPage" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Planner Task Approval</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-dot-circle nav-icon"></i>
-                                <p>
-                                    Day Requests
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="<?=base_url();?>Menu/YesterDayDaysCloseRequest" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Day Close Request</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?=base_url();?>Menu/dayShiftStartReq" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Late Shift Start Request</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?=base_url();?>Menu/GetTodaysTeamDayChnageRequestData" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Day Change Request</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
                 </li>
-                
-                
-                
-                
-                
+                <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/YesterDayDaysCloseRequest" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Day Close Request</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/GetTodaysTeamDayChnageRequestData" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Day Change Request</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?=base_url();?>Menu/PlannerTaskApprovelPage" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Planner Task Approval</p>
+                    </a>
+                </li>
                 <!-- <li class="nav-item">
                     <a href="<?=base_url();?>Menu/AddSpecialCommentOnTask" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
@@ -400,7 +318,10 @@
       ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
-<script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script> 
 $(document).ready(function() {
 trackLocation();
 });
@@ -459,40 +380,173 @@ else {console.error("Geolocation is not supported by this browser.");}
 }
 function goBack() { window.history.back(); }
 function goForward() { window.history.forward(); }
+  
+    var ur_id = document.getElementById("ur_id").value;
+    $.ajax({
+    url:'<?=base_url();?>Menu/bdpopup',
+     method: 'post',
+     data: {ur_id: ur_id},
+     success: function(result){
+        var res = result;
+        $("#alsmss").html(result);
+    }
+    });
+    
+    
+    $.ajax({
+    url:'<?=base_url();?>Menu/opalsms',
+     method: 'post',
+     data: {ur_id: ur_id},
+     success: function(result){
+        var res = result;
+        $("#opalsms").html(result);
+    }
+    });
+    
+    
+    $.ajax({
+    url:'<?=base_url();?>Menu/nitisms',
+     method: 'post',
+     data: {ur_id: ur_id},
+     success: function(result){
+        var res = result;
+        $("#nitisms").html(result);
+    }
+    });
+    
+    
+    
+</script>  
 
-var ur_id = document.getElementById("ur_id").value;
-$.ajax({
-url:'<?=base_url();?>Menu/bdpopup',
-method: 'post',
-data: {ur_id: ur_id},
-success: function(result){
-var res = result;
-$("#alsmss").html(result);
+<script>
+  $(document).ready(function() {  
+    //alert("inside");
+    var admin_id = <?=$uid?>;
+    console.log("Admin ID:", admin_id);
+    
+    //checkNotifications(admin_id, false);
+    
+    setInterval(function() {
+        checkNotifications(admin_id, true);
+    }, 60000);
+  });
+
+  let shownNotifications = [];
+
+  function checkNotifications(admin_id, flag) {
+    console.log(flag);
+    console.log("Checking notifications for admin_id: " + admin_id);
+    $.ajax({
+        url: '<?=base_url();?>Menu/check_notifications', 
+        method: 'post',
+        dataType: 'json', 
+        data: { admin_id: admin_id },
+        success: function(response) {
+          console.log(response);
+                if (response.length > 0) {
+                    let notificationCount = response.length;
+                    console.log(notificationCount);
+                    response.forEach(function(notification) {
+
+                      if (shownNotifications.includes(notification.type)) 
+                      {
+                          if (flag) {
+                              //freezeScreen();
+                              flag = true;
+                          }
+                      } else {
+                          shownNotifications.push(notification.type);
+                      }
+                        Swal.fire({
+                            title: `${notificationCount} New Notifications`,
+                            text: notification.sms,
+                            icon: 'info',
+                            showCancelButton: true,
+                            confirmButtonText: 'Go to page',
+                            cancelButtonText: 'Cancel'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                markNotificationAsRead(notification.id);
+
+                                var sdatet = new Date(notification.sdatet).toISOString().split('T')[0];
+                                console.log(notification);
+                                console.log(sdatet);
+
+                                // Redirect based on notification type_id
+                                if (notification.type == '1') {
+                                    window.location.href = '<?= base_url("#"); ?>';
+                                } else if (notification.type == '2') {
+                                    let url2 = `<?= base_url("Menu/CheckTaskDetailsByUser/"); ?>${notification.uid}/${sdatet}`;
+                                    console.log('Redirecting to:', url2);  
+                                    window.location.href = url2;
+                                } else if (notification.type == '3') {
+                                    window.location.href = '<?= base_url("#"); ?>';
+                                } else if (notification.type == '4') {
+                                    window.location.href = '<?= base_url("Menu/TodaysTaskApprovelRequest"); ?>';
+                                } else if (notification.type == '5') {
+                                    window.location.href = '<?= base_url("#"); ?>';
+                                } else {
+                                    console.error('Unknown notification type:', notification.type);
+                                }
+
+                                //unfreezeScreen(); // Unfreeze the screen only after processing
+                            }
+                        });
+                    });
+                } else {
+                    console.log('No new notifications.');
+                }
+            },
+            error: function(error) {
+                console.error('Error fetching notifications:', error);
+            }
+        });
+    }
+
+
+  // Function to mark notifications as read
+  function markNotificationAsRead(notificationId) {
+    console.log("Marking notification as read, ID: " + notificationId);
+    $.ajax({
+        url: '<?=base_url();?>Menu/mark_notification_as_read', // Correct endpoint for marking as read
+        method: 'post',
+        data: { id: notificationId },
+        dataType: 'json', // Expecting JSON data
+        success: function() {
+            console.log('Notification marked as read.');
+        },
+        error: function(error) {
+            console.error('Error marking notification as read:', error);
+        }
+    });
+  }
+
+  function freezeScreen() 
+  {
+    var overlay = document.createElement('div');
+    overlay.id = 'screen-overlay';
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    overlay.style.zIndex = '1000';
+    document.body.appendChild(overlay);
+  }
+
+// Remove the freeze screen overlay when needed
+function unfreezeScreen() 
+{
+    var overlay = document.getElementById('screen-overlay');
+    if (overlay) {
+        overlay.remove();
+    }
 }
-});
-
-
-$.ajax({
-url:'<?=base_url();?>Menu/opalsms',
-method: 'post',
-data: {ur_id: ur_id},
-success: function(result){
-var res = result;
-$("#opalsms").html(result);
-}
-});
-
-
-$.ajax({
-url:'<?=base_url();?>Menu/nitisms',
-method: 'post',
-data: {ur_id: ur_id},
-success: function(result){
-var res = result;
-$("#nitisms").html(result);
-}
-});
-
-
-
+</script>
+<script>
+    $('#notification').on('click', function() {
+        // Hide the notification count
+        $('#notification').hide();
+    });
 </script>

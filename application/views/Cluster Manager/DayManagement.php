@@ -388,7 +388,7 @@
                     $currentHour = (int) (new DateTime())->format('H:mm');
                     $daystartCount = getDaystartRequestCount($uid);
                     // var_dump($currentHour);die;
-                    if ($currentHour >= 11) {
+                    if ($currentHour >= 12) {
                         // echo 'hii';die;
                         $daystartApprovedCount = getDaystartRequestApprovedCount($uid);
                         // var_dump($daystartApprovedCount[0]->count);die;

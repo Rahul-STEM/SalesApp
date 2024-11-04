@@ -72,13 +72,30 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
-                 <div class="card p-5">
-                     <?php foreach($mdata as $md){?>
-                     <div class="alert alert-light" role="alert" onclick="read('<?=$md->id?>');" id="<?=$md->id?>">
-                        <b><?=$md->sdatet?></b> : <?=$md->sms?>
-                     </div>
-                     <?php }?>
-                 </div>
+          <div class="card p-5">
+    <?php foreach ($mdata as $md):
+        $type = $md->type;
+        $uid = $md->uid;
+        $sdatet = $md->sdatet;
+    ?>
+        <div class="alert alert-light" role="alert" onclick="read('<?=$md->id?>');" id="<?=$md->id?>">
+            <b><?=$md->sdatet?></b> :
+            <?php if ($type == 2): ?>
+                <a href="<?= base_url("Menu/CheckTaskDetailsByUser/$uid/$sdatet") ?>" style="text-decoration: none; color: blue;">
+                    <?=$md->sms?>
+                </a>
+            <?php elseif ($type == 4): ?>
+                <a href="<?= base_url("Menu/TodaysTaskApprovelRequest") ?>" style="text-decoration: none; color: blue;">
+                    <?=$md->sms?>
+                </a>
+            <?php else: ?>
+                <a href="#" style="text-decoration: none; color: inherit;">
+                    <?=$md->sms?>
+                </a>
+            <?php endif; ?>
+        </div>
+    <?php endforeach; ?>
+</div>
                  </div></div></div>
             <!-- /.card -->
            </div>

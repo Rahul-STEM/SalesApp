@@ -70,6 +70,8 @@ overflow-x: auto;
             <div class="card-body">
               <div class="container-fluid body-content">
                 <div class="page-header">
+                  <h4>Potential Meeting List</h4>
+
                   <fieldset>
                     <?php 
                     // dd($mdata);
@@ -85,12 +87,11 @@ overflow-x: auto;
                                 <th>CIN</th>
                                 <th>Company Name</th>
                                 <th>Photo</th>
-                                <th>Started At</th>
-                                <th>Close AT</th>
+                                <th>Started @</th>
+                                <th>Close @</th>
                                 <th>Start Location</th>
                                 <th>Close Location</th>
                                 <th>RP Yes/No</th>
-                                <th>Potential Yes/No</th>
                                 <th>Priority Yes/No</th>
                                 <th>MOM Yes/No</th>
                                 <th>Thanks Mail Yes/No</th>
@@ -101,6 +102,7 @@ overflow-x: auto;
                             <tbody>
                               <?php $i=1;
                               foreach($mdata as $dt){
+                                  if($dt->cmpid != 0){
                               $cmpid = $dt->cmpid;
                               $cid = $dt->cid;
                               $tid = $dt->tid;
@@ -108,16 +110,16 @@ overflow-x: auto;
                               if($momc){$momc='yes';}else{$momc='no';}
                               $emailc = $this->Menu_model->get_temailyn($cid,$tid);
                               if($emailc){$emailc='yes';}else{$emailc='no';}
-                             // $psta = $this->Menu_model->get_psta($cid);
-                             $psta = $dt->apst;
+                              //$psta = $this->Menu_model->get_psta($cid);
+                              $psta =$dt->apst;
                               if($psta){$psta='yes';}else{$psta='no';}
-                              
+                            
                               ?>
                               
                               <tr>
                                 <td><?=$i?></td>
                                 <td><?=$dt->name?></td>
-                                <td><?=$dt->cmpid;?></td>
+                                <td><?=$cmpid?></td>
                                 <td><a href="<?=base_url();?>/Menu/CompanyDetails/<?=$cmpid?>"><?=$dt->company_name?></a></td>
                                 <td>
                                     <img src="<?=base_url();?><?=$dt->cphoto?>" alt="image not found" width="200">
@@ -134,13 +136,12 @@ overflow-x: auto;
                                 <td><a href="https://www.google.com/maps?q=<?=$dt->slatitude?>,<?=$dt->slongitude?>"><i class="fas fa-map-marker-alt" style="font-size:36px" aria-hidden="true"></i></a></td>
                                 <td><a href="https://www.google.com/maps?q=<?=$dt->clatitude?>,<?=$dt->clongitude?>"><i class="fas fa-map-marker-alt" style="font-size:36px" aria-hidden="true"></i></a></td>
                                 <td><?=$dt->mtype?></td>
-                                <td><?=$dt->potential?></td>
                                 <td><?=$dt->priority?></td>
                                 <td><?=$momc?></td>
                                 <td><?=$emailc?></td>
                                 <td><?=$psta?></td>
                                 <td><?=$dt->queans?><hr><?=$dt->mcomment?></td>
-                                <?php $i++; }?>
+                                <?php $i++; }} ?>
                               </tbody>
                             </table>
                           </div>

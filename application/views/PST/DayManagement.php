@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -387,8 +388,9 @@
 $currentHour = (int) (new DateTime())->format('H:mm');
 $daystartCount = getDaystartRequestCount($uid);
 // var_dump($currentHour);die;
-if ($currentHour >= 11) {
-    // echo 'hii';die;
+
+if ($currentHour >= 12) {
+//  echo 'hii';die;
     $daystartApprovedCount = getDaystartRequestApprovedCount($uid);
     // var_dump($daystartApprovedCount[0]->count);die;
 
@@ -480,7 +482,9 @@ if ($currentHour >= 11) {
         <?php $i++; endforeach; ?>
         </table>
 
-<?php } else{ ?>
+<?php } else{
+ // echo "+++****";exit;
+  ?>
 
     <div class="row p-3">
         <div class="col-sm col-md-12 col-lg-12 m-auto">
@@ -534,6 +538,7 @@ if ($currentHour >= 11) {
 
             <?php 
             $geturdata = $this->Menu_model->change_user_day_request($uid);
+           // dd($geturdata);exit;
             $geturdatacnt = sizeof($geturdata);
             if($geturdatacnt > 0){ ?>
 <hr>

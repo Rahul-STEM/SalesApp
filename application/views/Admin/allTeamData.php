@@ -1,7 +1,7 @@
 <?php include('header.php');?>
-<form class="p-3" method="POST" action="getAllMyTeam/<?php echo $type;?>">
+<form class="p-3" method="POST" action="<?php echo $type;?>">
 <input type="date" name="sdate" class="mr-2" value="<?=$sd?>">
-<input type="date" name="edate" class="mr-2" value="<?=$sd?>">
+<input type="date" name="edate" class="mr-2" value="<?=$ed?>">
 <button type="submit" class="bg-primary text-light">Filter</button>
 </form>
 <!-- Main content -->
@@ -97,7 +97,7 @@ if(isset($totalTeamdata)){
         }
             ?>
       
-        <td><a target="_blank" href='<?php echo $ahreflinkcmp;?>/<?php echo $uid;?>'><?php echo $val['totalcompanies'];?></a></td>
+        <td><a target="_blank" href='<?php echo $ahreflinkcmp;?>/<?php echo $uid;?>/<?php echo $sd;?>/<?php echo $ed;?>'><?php echo $val['totalcompanies'];?></a></td>
         <td></td>
         <!-- <td><a target="_blank" href='<?php //echo $ahreflinktask;?>/<?php //echo $uid;?>'><?php // echo $val['totaltasks'];?></a></td> -->
         <!-- <td><a target="_blank" href='<?php // echo $ahreflinkconversion;?>/<?php // echo $uid;?>'><?php // echo $val['totalconversions'];?></a></td> -->

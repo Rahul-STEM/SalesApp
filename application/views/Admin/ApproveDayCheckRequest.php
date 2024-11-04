@@ -24,6 +24,14 @@
 <link rel="stylesheet" href="<?=base_url();?>assets/css/daterangepicker.css">
 <!-- summernote -->
 <link rel="stylesheet" href="<?=base_url();?>assets/css/summernote-bs4.min.css">
+<style>
+    .highlight {
+    background-color: green; /* Highlight color */
+    font-weight: bold; /* Optional styling */
+    color:black;
+}
+</style>
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -75,7 +83,7 @@
                             <td><?=$data->request_by?></td>
                             <td><?=$data->REASON?></td>
                             <td><?=$data->CREATED_AT?></td>
-                            <td><?=$data->STATUS?></td>
+			    <td class="<?= $data->STATUS == 'Approved' ? 'highlight' : '' ?>"><?=$data->STATUS?></td>
                             <td><?=$data->approved_by?></td>
                             <td><?=$data->APPROVED_AT?></td>
                             <td>

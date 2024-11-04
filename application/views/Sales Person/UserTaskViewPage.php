@@ -118,9 +118,9 @@ span.tsby {
                           $actiontype_id = $taskdata->actiontype_id;
                           $status = $taskdata->approved_status;
                           // if($status !=0){
-                          if($actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==1 || $actiontype_id ==10 || $actiontype_id ==15){
+                          if($actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==1 || $actiontype_id ==10 || $actiontype_id ==15 || $actiontype_id ==2 ){
                               $taskplanmincount += 5;
-                          }else if($actiontype_id ==2 || $actiontype_id ==6){
+                          }else if($actiontype_id ==6){
                               $taskplanmincount += 10;
                           }else if($actiontype_id ==3 || $actiontype_id ==4 || $actiontype_id ==12 || $actiontype_id ==17){
                               $taskplanmincount += 30;

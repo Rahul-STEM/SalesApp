@@ -101,7 +101,7 @@
                                           <h5>Create Task</h5>
                                       </center>
                                       <hr>
-                                      <?= form_open('Menu/addtask') ?>
+                                      <?= form_open('Menu/addtaskNYA') ?>
                                       <input type="hidden" name="ntuid" value="<?= $uid ?>">
                                       <input type="hidden" id='ntinid' name="ntinid">
                                       

@@ -38,7 +38,7 @@
             <h3>Target Questions Form For <?php echo $username;?> - <?php echo $reviewType." Review "; ?></h3>
             <form method="post" name="targetQandA" action="targetQandA">
                 <!-- Prospecting Section -->
-                <h5>Prospecting</h5>
+                <h5>Prospectinggg</h5>
                 <div class="form-group">
                     <label for="prospectingCompanies">How Many No. Of Prospecting Companies?</label>
                     <input type="number" class="form-control" id="prospectingCompanies" name="prospecting_companies" required>
@@ -86,9 +86,7 @@
         </div>
 
         <div class="col-md-6 image-container">
-            <h3>Target Q&A</h3>
-            <img src="<?php echo base_url();?>assets/image/crm/targetCRM.png" alt="Target Q&A" class="img-fluid" />
-        
+            <h3>Target Q&A</h3>        
         </div>
     </div>
     </div>

@@ -73,7 +73,7 @@
 
         <div class="col-md-6 image-container">
             <h3>Target Q&A</h3>
-            <img src="your-image-url-here.jpg" alt="Target Q&A" class="img-fluid" />
+            <!-- <img src="your-image-url-here.jpg" alt="Target Q&A" class="img-fluid" /> -->
         </div>
     </div>
 </div>

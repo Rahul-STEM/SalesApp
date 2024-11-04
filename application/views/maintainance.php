@@ -12,6 +12,7 @@
             justify-content: center;
             height: 100vh;
             background-color: #f8f9fa;
+            /* background-image: url('<?php echo base_url("uploads/istockphoto-1348157796-612x612.jpg"); ?>'); */
             
         }
         .img{

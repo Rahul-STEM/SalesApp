@@ -708,17 +708,17 @@ if($type_id == 3){
                                 // var_dump($dayStartFrom[0]->wffo);
                                 $wffo = $dayStartFrom[0]->wffo;
 
-                                if($wffo == 1){
+                            if($wffo == 1){
                                     $daystartedFrom = 'Office';
                                 }elseif ($wffo == 2) {
                                     $daystartedFrom = 'Field';
                                 }else{
                                     $daystartedFrom = 'Field + Office';
-                                }
-                            
+                                }                            
                             ?>
                             <span><strong>** (You started you day from <span style="color:blue;"><?=$daystartedFrom?></span>. Filters will be available accordingly..!!)</strong></span>
                         </div>
+                        <!-- <br> -->
                         <?php  
                         $current_date = date("Y-m-d");
                         $tomorrow_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
@@ -798,9 +798,9 @@ if($type_id == 3){
                         $dyslimit = 30;
                        }
                        $cmpstatss = '4,5'; // Status with - WDL AND NI
-                        $statusnochangecmp = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$days,$cmpstatus);
+                        $statusnochangecmp = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$days,$cmpstatus,$adate);
                         $statusnochangecmpcnt = sizeof($statusnochangecmp);
-                        $statusnochangecmp_wdl_nl = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$dyslimit,$cmpstatss);
+                        $statusnochangecmp_wdl_nl = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$dyslimit,$cmpstatss,$adate);
                         $statusnochangecmp_wdl_nl_cnt = sizeof($statusnochangecmp_wdl_nl);
                         $status_nochangecnt = $statusnochangecmpcnt + $statusnochangecmp_wdl_nl_cnt;
                         if($status_nochangecnt > 0){$cssct = 'text-danger';}else{$cssct = '';}
@@ -903,7 +903,7 @@ if($type_id == 3){
                                 <div class="card bg-danger p-2 boxshadownew text-center">
                                   
                                   <lable>
-                                  First Plan Your <?= implode(", ", $elementsGreaterThanOne) ?>
+                                  First Plan Their <?= implode(", ", $elementsGreaterThanOne) ?>
                                   </lable>
                                 </div>
                            <?php } else { ?>
@@ -5350,7 +5350,7 @@ if($type_id == 3){
                   $('#other_assign_filter input[name="optradio"]').prop('disabled', true);
                   $('#self_assign_filter input[name="optradio"]').prop('disabled', true);
                   $('#review_target_date_filter input[name="optradio"]').prop('disabled', true);
-                  $('#review_planning_filter input[name="optradio"]').prop('disabled', true);
+                  //$('#review_planning_filter input[name="optradio"]').prop('disabled', true);
                   $('#need_your_attention_filter input[name="optradio"]').prop('disabled', true);
                   $('#actionNotPlanned_task_filter input[name="optradio"]').prop('disabled', true);
                   $('#task_action_filter option').not('[value="3"], [value="4"]').attr('disabled', true);

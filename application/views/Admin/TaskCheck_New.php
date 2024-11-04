@@ -1,7 +1,3 @@
-<?php
-
-// echo $sizeOfTask;die;
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -184,10 +180,8 @@
                         <form action="<?=base_url();?>Menu/TaskCheck_New" method="post" id="taskForm">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <!-- <select class="form-control" name="userId" id="userSelect" <?php if (!empty($selectedUser && $sizeOfTask > 0)) echo 'disabled'; ?> onchange="myFunction()"> -->
-                                    <select class="form-control" name="userId" id="userSelect" <?php if (!empty($selectedUser && $sizeOfTask > 0)) echo 'disabled'; ?> onchange="checkTaskSize()">
-
-                                        <option value="">--Select--</option>
+                                    <select class="form-control" name="userId" <?php if (!empty($selectedUser)) echo 'disabled'; ?>>
+                                        <option selected disabled>--Select--</option>
                                     <?php 
                                     foreach($userList as $user){?>
 
@@ -231,7 +225,6 @@
                                 <?php 
                                     $i=1; 
                                     foreach($taskList as $task){
-                                        // var_dump($task);die;
 
                                         $getLastActionDetails = getLastActionDetails($task->tid,$task->user_id,$cdate);
 
@@ -268,16 +261,13 @@
                                         }else{
                                             $OGTaskType = ''; 
                                         }
-                                        $filterUsed = ($task->filter_used);
+                                        $filterUsed = ($task->filter_by);
                                         $filterUsed = json_decode($filterUsed, true);
+                                        // var_dump($filterUsed);die;
                                         $SinglefilterUsedFinal = '';
                                         if (is_array($filterUsed)) {
-                                            
-                                            foreach ($filterUsed as $key => $SinglefilterUsed) {
-                                                // var_dump($SinglefilterUsed);die;
 
-                                                // echo $SinglefilterUsed;
-                                                // echo "<br>";
+                                            foreach ($filterUsed as $key => $SinglefilterUsed) {
 
                                                 if ($key === 'Plan_BY') {
 
@@ -546,7 +536,7 @@
 
                                                         if ($getProposalData->pro_apr == 1) { ?>
                                                             
-                                                            <a href="<?= base_url() . $getProposalData->pro_attachment ?>" class="btn btn-primary" target="_blank">View Document</a>
+                                                            <a href="<?= base_url() . $getProposalData->pro_attachment . '/'?>" class="btn btn-primary" target="_blank">View Document</a>
 
                                             <?php       }
  
@@ -1131,7 +1121,7 @@
                                     <p> <strong>Photo:</strong> <img id="modalPhoto" src="" alt="Photo" class="img-fluid"> </p>
 
                                     <p><b>Was company photo is right..??</b> </p>
-                                    <fieldset class="MoMrating" data-question="Was company photo right" data-userid="" data-taskid="">
+                                    <fieldset class="MoMrating" data-question="Was company photo is right" data-userid="" data-taskid="">
                                         <input type="radio" name="momrat2_5" value="5" id="25_rating_2"><label for="25_rating_2">☆</label>
                                         <input type="radio" name="momrat2_5" value="4" id="24_rating_2"><label for="24_rating_2">☆</label>
                                         <input type="radio" name="momrat2_5" value="3" id="23_rating_2"><label for="23_rating_2">☆</label>
@@ -1175,7 +1165,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="RatingReviewModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static">
+        <div class="modal fade" id="RatingReviewModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1188,7 +1178,7 @@
                     </form>
                     </div>
                     <div class="modal-footer">
-                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" onclick="submitReview()">Submit</button>
                     </div>
                 </div>
@@ -1281,20 +1271,6 @@
 </script>
 
 <script>
-
-$(document).ready(function() {
-
-    var sizeOfTask = <?php echo $sizeOfTask; ?>; // Use PHP to get the value of sizeOfTask
-    // alert(sizeOfTask);
-    if (sizeOfTask == 0) {
-        alert('No task present for selected user..!!');
-    } 
-});
-
-</script>
-
-
-<script>
     $(".rating input").on("click", function() {
 
         var $rating = $(this);
@@ -1304,7 +1280,7 @@ $(document).ready(function() {
         var userId = $rating.closest('.rating').data('userid');
         var question = $rating.closest('.rating').data('question');
         var ratingValue = $rating.val();
-        // alert(ratingValue);
+        alert(ratingValue);
         // console.log("Extracted ID: " + extractedId);
         // alert("Task ID: " + taskId + "\nUser ID: " + userId + "\nExtracted ID: " + extractedId + "\nRating Value: " + ratingValue);
         
@@ -1380,39 +1356,16 @@ $(document).ready(function() {
                     // console.log('Response:', JSON.parse(response)); 
                     var data = JSON.parse(response);
                     // alert(response)
-                // Update modal content
-                            
-                // Calculate the difference in milliseconds
-                // if (data.start_time != ) {
+        // Update modal content
                     
-                // }
-                    // const startTime = parseDate(data.start_time);
-                    // const endTime = parseDate(data.end_time);
+        // Calculate the difference in milliseconds
+                    const startTime = parseDate(data.start_time);
+                    const endTime = parseDate(data.end_time);
 
-                    if (data.start_time) { // This checks for '', null, or undefined
-                        const startTime = parseDate(data.start_time);
-                    
-                    }else{
-                        const startTime = '';
-                    }
-
-                    if (data.end_time) { // This checks for '', null, or undefined
-                        const endTime = parseDate(data.end_time);
-                  
-                    }else{
-                        const endTime = '';
-                    }
-
-                    const timeDifference = endTime - startTime;
-                    const differenceInMinutes = Math.floor(timeDifference / (1000 * 60)) + ' mins';
-
-                    // if (startTime && endTime) {
-                        
-                    // }else{
-                    //     const differenceInMinutes = '';
-                    // }
                     // Calculate the difference in milliseconds
+                    const timeDifference = endTime - startTime;
                     // Convert the difference to minutes (or any other unit you prefer)
+                    const differenceInMinutes = Math.floor(timeDifference / (1000 * 60)) + ' mins';
                     // const differenceInSeconds = Math.floor(timeDifference / 1000);
                     // alert(differenceInMinutes);
 
@@ -1542,11 +1495,6 @@ $(document).ready(function() {
         var remark = document.getElementById("remark").value;
         var starID = document.getElementById("starID").value;
 
-        if (remark.trim() === "") {
-            alert("Please provide a remark.");
-            return; // Prevent form submission
-        }
-
         $.ajax({
             url: '<?=base_url();?>Menu/updateTaskCheckRemark',
             type: 'POST',
@@ -1605,10 +1553,10 @@ $(document).ready(function() {
                             // remarkBox.classList.remove('visible');
                         }
 
-                        // const radios = fieldset.querySelectorAll('input[type="radio"]');
-                        // radios.forEach(radio => {
-                        //     radio.disabled = true;
-                        // });
+                        const radios = fieldset.querySelectorAll('input[type="radio"]');
+                        radios.forEach(radio => {
+                            radio.disabled = true;
+                        });
                     }
                 });
             });
@@ -1628,7 +1576,6 @@ $(document).ready(function() {
 
             // Collect ratings and associated questions
             document.querySelectorAll('.MoMrating').forEach(fieldset => {
-
                 const question = fieldset.getAttribute('data-question');
                 const selectedRating = fieldset.querySelector('input[type="radio"]:checked');
                 const ratingValue = selectedRating ? selectedRating.value : null;
@@ -1655,7 +1602,7 @@ $(document).ready(function() {
             // Convert data to JSON (or another format if needed)
             const jsonData = JSON.stringify(data);
 
-            // alert(jsonData);
+            alert(jsonData);
             // Log data for debugging
             console.log('Submitted Data:', data);
 
@@ -1750,7 +1697,6 @@ $(document).ready(function() {
             var taskID = document.getElementById('taskID').value.trim();
             var userID = document.getElementById('userID').value.trim();
 
-            
             // alert(taskID);
 
             // Collect ratings and associated questions

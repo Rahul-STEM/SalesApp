@@ -218,7 +218,8 @@
         </div>
 
         <div class="info">
-        <?php $userName=$this->Menu_model->get_userName($uid);?>
+        <?php 
+$userName=$this->Menu_model->get_userName($uid);?>
 
           <a href="<?=base_url();?>Menu/myProfile" class="d-block"><?=$userName[0]->name?></a>
 
@@ -311,14 +312,7 @@
     </a>
 
 </li>
-<li class="nav-item">
 
-    <a class="nav-link" href="<?= base_url(); ?>Menu/ApproveTaskCheckRequest">
-        <i class="fas fa-chart-line nav-icon"></i>
-        Approve Task Check Request
-    </a>
-
-</li>
 <li class="nav-item">
 
     <a class="nav-link" href="<?= base_url(); ?>Menu/TaskCheck_NewReport">
@@ -329,8 +323,7 @@
 
     </a>
 
-</li> 
-    <li class="nav-item">
+</li> <li class="nav-item">
 
             <a class="nav-link" href="<?=base_url();?>Menu/NewFunnel" >
 
@@ -366,44 +359,7 @@
             </ul>
           </li>
 
-
-          <li class="nav-item">
-
-            <a class="nav-link" href="<?=base_url();?>Menu/NotworkCompanyBDPST" >
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Not Work Company by BDPST</p>
-
-            </a>
-
-          </li>
-
-        
-          <li class="nav-item">
-
-            <a class="nav-link" href="<?=base_url();?>Menu/CategoryStatusPage" >
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Category Wise Status</p>
-
-            </a>
-
-          </li>
-
-          <li class="nav-item">
-
-            <a class="nav-link" href="<?=base_url();?>Menu/TeamDailyReport/<?=date('Y-m-d')?>" >
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Team Daily Report</p>
-
-            </a>
-
-          </li>
-
+          
           <li class="nav-item">
                     <a href="#" class="nav-link">
                     <i class="nav-icon fas fa-circle"></i>
@@ -466,8 +422,69 @@
                             </ul>
                         </li>
                     </ul>
+                </li>
+          <!--<li class="nav-item">
+
+            <a href="<?=base_url();?>Menu/LiveTaskTracking" class="nav-link">
+
+              <i class="far fa-circle nav-icon"></i>
+
+              <p>Live Task Tracking</p>
+
+            </a>
+
+          </li>-->
+
+          
+
+          
+
+          
+
+          
+
+          <li class="nav-item">
+
+            <a class="nav-link" href="<?=base_url();?>Menu/NotworkCompanyBDPST" >
+
+              <i class="far fa-circle nav-icon"></i>
+
+              <p>Not Work Company by BDPST</p>
+
+            </a>
+
           </li>
-                
+
+          
+
+          
+
+          
+
+          <li class="nav-item">
+
+            <a class="nav-link" href="<?=base_url();?>Menu/CategoryStatusPage" >
+
+              <i class="far fa-circle nav-icon"></i>
+
+              <p>Category Wise Status</p>
+
+            </a>
+
+          </li>
+
+          <li class="nav-item">
+
+            <a class="nav-link" href="<?=base_url();?>Menu/TeamDailyReport/<?=date('Y-m-d')?>" >
+
+              <i class="far fa-circle nav-icon"></i>
+
+              <p>Team Daily Report</p>
+
+            </a>
+
+          </li>
+
            <li class="nav-item">
 
             <a href="<?=base_url();?>Menu/TodaysTaskApprovelRequest" class="nav-link">
@@ -655,6 +672,38 @@
 
           </li>
 
+          
+
+          <!--<li class="nav-item">
+
+            <a class="nav-link" href="<?=base_url();?>Menu/CONVERSIONBWDATE" >
+
+              <i class="far fa-circle nav-icon"></i>
+
+              <p>Conversion B/W Date</p>
+
+            </a>
+
+          </li>
+
+          
+
+          <li class="nav-item">
+
+            <a class="nav-link" href="<?=base_url();?>Menu/ExpectedSchool" >
+
+              <i class="far fa-circle nav-icon"></i>
+
+              <p>Expected School</p>
+
+            </a>
+
+          </li>-->
+
+          
+
+          
+
           <li class="nav-item">
 
             <a class="nav-link" href="<?=base_url();?>Menu/AllUtilisation" >
@@ -699,7 +748,7 @@
                         <li class="nav-item">
                             <a href="<?= base_url(); ?>GraphNew/OtherUserOnFunnelAnalysis" class="nav-link">
                             <i class="far fa-dot-circle nav-icon"></i>
-                            <p>Action & Purpose wise Funnel Analysis</p>
+                            <p>Other User On Funnel Analysis</p>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -813,6 +862,42 @@
             </ul>
             </li>
 
+          <!-- <li class="nav-item dropdown">
+
+            <a href="" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+            <i class="far fa-circle nav-icon"></i>
+
+            <p>Analysis</p>
+
+            </a>
+
+            <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+             <a class="dropdown-item" href="<?= base_url(); ?>Graphs/Fgraphs">FGraph</a>
+             
+              <a class="dropdown-item" href="<?= base_url(); ?>Menu/day">DGraph</a>
+
+              <a class="dropdown-item" href="<?= base_url(); ?>Menu/request">RGraph</a>
+
+              <a class="dropdown-item" href="<?= base_url(); ?>Menu/region">ROGraph</a>
+
+              <a class="dropdown-item" href="<?= base_url(); ?>Menu/task">TGraph</a>
+
+            </div>
+
+          </li> -->
+      
+          <!--<li class="nav-item">-->
+
+          <!--  <a class="nav-link" href="<?=base_url();?>Menu/AnnualReviewReport" >-->
+
+          <!--    <i class="far fa-circle nav-icon"></i>-->
+
+          <!--    <p>Annual Review Report</p>-->
+
+          <!--  </a>-->
+
+          <!--</li>-->
 
           <li class="nav-item">
 
@@ -825,6 +910,21 @@
             </a>
 
           </li>
+
+          <!--<li class="nav-item">-->
+
+          <!--  <a class="nav-link" href="<?=base_url();?>Menu/AnnualReviewReportDataInAdmin" >-->
+
+          <!--    <i class="far fa-circle nav-icon"></i>-->
+
+          <!--    <p>Annual Review Report</p>-->
+
+          <!--  </a>-->
+
+          <!--</li>-->
+
+          
+
           <li class="nav-item">
 
             <a class="nav-link" href="<?=base_url();?>Menu/HumHongeTaiyarReportAdmin" >
@@ -855,11 +955,22 @@
                     </a>
                 </li>
           <li class="nav-item">
-                    <a href="<?=base_url();?>Menu/NeedYourAttentionsInAdmin" class="nav-link">
+                    <a href="<?=base_url();?>Menu/needyourattention" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Need Your Attentions </p>
                     </a>
                 </li>
+          <!--<li class="nav-item">-->
+
+          <!--  <a class="nav-link" href="<?=base_url();?>Menu/FAQReport" >-->
+
+          <!--    <i class="far fa-circle nav-icon"></i>-->
+
+          <!--    <p>FAQ Report</p>-->
+
+          <!--  </a>-->
+
+          <!--</li>-->
 
           <li class="nav-item">
 
@@ -872,6 +983,51 @@
             </a>
 
           </li>
+<!-- 
+          <li class="nav-item">
+
+<a href="<?=base_url();?>Menu/DayManagement" class="nav-link">
+
+  <i class="far fa-circle nav-icon"></i>
+
+  <p>Day Management</p>
+
+</a>
+
+</li> -->
+
+          
+
+          
+
+          <!--
+
+          <li class="nav-item">
+
+            <a href="<?=base_url();?>Menu/AnnualReviewDetail" class="nav-link">
+
+              <i class="far fa-circle nav-icon"></i>
+
+              <p>Annual Review</p>
+
+            </a>
+
+          </li>
+
+          <li class="nav-item">
+
+            <a href="<?=base_url();?>Menu/DayManagement" class="nav-link">
+
+              <i class="far fa-circle nav-icon"></i>
+
+              <p>Day Management</p>
+
+            </a>
+
+          </li>
+
+          -->
+
           <li class="nav-item">
 
             <a href="<?=base_url();?>Menu/logout" class="nav-link">
@@ -1145,17 +1301,17 @@ function goForward() { window.history.forward(); }
 
 <script>
   //alert("Fuck");
-// $(document).ready(function() {  
-//   //alert("inside");
-//     var admin_id = <?=$uid?>;
-//     console.log("Admin ID:", admin_id);
+  $(document).ready(function() {  
+    //alert("inside");
+    var admin_id = <?=$uid?>;
+    console.log("Admin ID:", admin_id);
     
-//     checkNotifications(admin_id);
+    checkNotifications(admin_id);
     
-//     setInterval(function() {
-//         checkNotifications(admin_id); 
-//     }, 10000); 
-// });
+    setInterval(function() {
+        checkNotifications(admin_id); 
+    }, 10000); 
+  });
 
   function checkNotifications(admin_id) {
     console.log("Checking notifications for admin_id: " + admin_id);

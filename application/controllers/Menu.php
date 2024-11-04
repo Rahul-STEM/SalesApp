@@ -9,16 +9,14 @@ class Menu extends CI_Controller {
         // Load models, libraries, helpers, etc.
         $this->load->model('Menu_model');
          $this->load->helper('common_helper');
-
           $this->load->helper('samestatustilldate_helper');
-          $this->load->helper('taskPlanner_helper');
+$this->load->helper('taskPlanner_helper');
     }
     public function main(){
         $msg = '';
         $this->load->model('Menu_model');
-        $this->load->view('index');
-        // $this->load->view('noAccess');
-
+ 
+       $this->load->view('index');
         //  $this->load->helper('SameStatusTillDate_helper');
     }
     public function logout(){
@@ -3205,7 +3203,7 @@ class Menu extends CI_Controller {
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
         if($cstatus==6){
-        foreach($result as $d){if($d->id==12 || $d->id==13 || $d->id==9){
+        foreach($result as $d){if($d->id==12){
            echo  $data = '<option value='.$d->id.'>'.$d->name.'</option>';
         }}}
         if($cstatus==7){
@@ -3542,8 +3540,9 @@ class Menu extends CI_Controller {
         redirect('Menu/Dashboard');
     }
     public function submittask1(){
-        // var_dump($_FILES);die;
+
         $this->load->library('session');
+
         $status=1;$filname="";$tid="";$uid="";$action_id="";$ystatus="";$remark="";$remark_msg="";$noremark="";$purpose="";$nremark_msg="";$rpmmom='null';$mom='null';$flink='null';$flink1='null';$flink2='null';
         $tid = $_POST['tid'];
         $uid = $_POST['uid'];
@@ -3578,31 +3577,21 @@ class Menu extends CI_Controller {
         if(isset($_POST['nremark_msg'])){$nremark = $_POST['nremark_msg'];}
         if(isset($_POST['rpmmom'])){$rpmmom = $_POST['rpmmom'];}
         // if(isset($_POST['nadate'])){$nadate = $_POST['nadate'];}else{$nadate='0';}
-        if(isset($_FILES['filname']['name']) && !empty($_FILES['filname']['name'])){$filname = $_FILES['filname']['name'];
-            // echo "filename";die;
+        if(isset($_FILES['filname']['name'])){$filname = $_FILES['filname']['name'];
             $uploadPath = 'uploads/proposal/';
             $this->load->model('Menu_model');
             $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
         }else{$this->load->model('Menu_model');$flink=0;}
-        if(isset($_FILES['filname2']['name']) && !empty($_FILES['filname2']['name'])){$filname2 = $_FILES['filname2']['name'];
-            // echo "filname2";die;
+        if(isset($_FILES['filname2']['name'])){$filname2 = $_FILES['filname2']['name'];
             $uploadPath = 'uploads/proposal/';
             $this->load->model('Menu_model');
             $flink2 = $this->Menu_model->uploadfile($filname2, $uploadPath);
         }else{$this->load->model('Menu_model');$flink2=0;}
-        if(isset($_FILES['filname1']['name']) && !empty($_FILES['filname1']['name'])){$filname1 = $_FILES['filname1']['name'];
-            // echo "filname1";die;
-
+        if(isset($_FILES['filname1']['name'])){$filname1 = $_FILES['filname1']['name'];
             $uploadPath = 'uploads/proposal/';
             $this->load->model('Menu_model');
             $flink1 = $this->Menu_model->uploadfile($filname1, $uploadPath);
         }else{$this->load->model('Menu_model');$flink1=0;}
-        if(isset($_FILES['filename10']['name']) && !empty($_FILES['filname10']['name'])){$filename10 = $_FILES['filename10']['name'];
-            $uploadPath = 'uploads/meetings/';
-            // echo $uploadPath;die;
-            $this->load->model('Menu_model');
-            $flink10 = $this->Menu_model->uploadfile($filename10, $uploadPath);
-        }else{$this->load->model('Menu_model');$flink10=0;}
         if($noremark!=''){$remark=$noremark;}
         if($yremark!=''){$remark=$yremark;}
         if($nremark!=''){$remark=$nremark;}
@@ -3715,6 +3704,14 @@ class Menu extends CI_Controller {
                 $status =1;
             }
         }
+        if($action_id == 5){
+            if(!isset($_POST['purpose'])){$purpose = 'yes';}
+            $actontaken = $_POST['actontaken'];
+        
+        if($actontaken == 'no'){
+                $purpose = 'no';
+            }
+        }
         $id = $this->Menu_model->submit_task1($tid,$uid,$cmpid,$actontaken,$action_id,$status,$remark,$rpmmom,$purpose,$flink,$flink1,$flink2,$partner,$noofsc,$pbudgetme,$LinkedIn,$Facebook,$YouTube,$Instagram,$OtherSocial);
       
         
@@ -3727,6 +3724,7 @@ class Menu extends CI_Controller {
                 $this->session->set_flashdata('success_message',' Please Add Your Lead ');
             }
         }
+
         redirect('Menu/Dashboard');
     }
     public function submitRPP(){
@@ -3737,8 +3735,7 @@ class Menu extends CI_Controller {
         redirect('Menu/RPPriority');
     }
     public function daysc(){
-        
-        // echo "hii";die;
+      
         $wffo=0;
         $do = $_POST['do'];
         if(isset($_POST['wffo'])){$wffo = $_POST['wffo'];}
@@ -3773,8 +3770,7 @@ class Menu extends CI_Controller {
         }
       
         if($do == 0){
-          
-            $pendingtaskcmp = $this->Menu_model->get_PendingTaskForToday($user_id);
+           $pendingtaskcmp = $this->Menu_model->get_PendingTaskForToday($user_id);
            $pendingautotaskcmpcnt = sizeof($pendingtaskcmp);  
            if($pendingautotaskcmpcnt > 0){
                 $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
@@ -3902,13 +3898,20 @@ class Menu extends CI_Controller {
         $closeremark     = $_POST['closeremark'];
         $closetdate      = $_POST['closetdate'];
         $rrid            = $_POST['rrid'];
-    
+
         $this->load->model('Menu_model');
         $result                     =  $this->Menu_model->close_review($closetdate,$closeremark,$rrid);
+        // var_dump($result);die;
         $data['uid']                =  $result[0]->uid;
-        $data['reviewType']         =  $result[0]->reviewType;
-        $data['review_user_id']     =  $review_userid   = $this->input->post('bduid');
+        $data['reviewType']   = $reviewType      =  $result[0]->reviewtype;
+        // $data['review_user_id']     =  $review_userid   = $this->input->post('bduid');
+        $data['review_user_id']     = $review_userid   = $result[0]->bdid;
+        // var_dump($data);die;
+        $data['targetVsAchieved']       = $this->Menu_model->getAchievedData($review_userid ,$sdate=null,$edate=null,$partnerType=null,$reviewType);
+        // var_dump($data['targetVsAchieved']     );die;
         $data['partnerType']        = $this->Menu_model->get_partnertype();
+
+
         if($review_userid != $uid){
                 $data['review_user_id']         = $this->input->post('reviewuserid');
                 $data['username']               = getUserNameById($data['review_user_id']);
@@ -3923,6 +3926,16 @@ class Menu extends CI_Controller {
                     $this->load->view('PST/targetForm.php',$data);
                     $this->load->view('footer.php');
                 }
+                else if($type_id =='3'){
+                    $this->load->view('header.php');
+                    $this->load->view('Sales Person/targetForm.php',$data);
+                    $this->load->view('footer.php');
+                }
+                // else if($type_id =='2'){
+                //     $this->load->view('header.php');
+                //     $this->load->view('Sales Person/targetForm.php',$data);
+                //     $this->load->view('footer.php');
+                // }
                 else{
                     redirect('Menu/AllReviewPlaing');
                 }
@@ -4429,37 +4442,14 @@ class Menu extends CI_Controller {
             $status     = "Approved";
             $reamrks    = "Approved By ".$user['name'];
             $apr_time   = date("Y-m-d H:i:s");
+
             $query =  $this->db->query("UPDATE `task_plan_for_today` SET `approvel_status`='$status',`apr_time`='$apr_time',`remarks`='$reamrks' WHERE id = $id");
-       
+    
             redirect("Menu/TodaysTaskApprovelRequest");
         }else{
             redirect('Menu/main');
         }
     }
-
-
-    public function LateDayStartapprove($id,$type){
-        // echo $type;die;
-        $user = $this->session->userdata('user');
-        $data['user'] = $user;
-        $uid = $user['user_id'];
-        if($type == 1){
-            $status     = 1;
-            $approved_by    = $uid;
-            $apr_time   = date("Y-m-d H:i:s");
-            $query =  $this->db->query("UPDATE `daystartrequest` SET `status`='$status',`approved_at`='$apr_time',`approval_by`='$approved_by' WHERE id = $id");
-            // echo $this->db->last_query();die;
-            redirect("Menu/dayShiftStartReq");
-        }
-        // elseif (condition) {
-        //     # code...
-        // }
-        else{
-            redirect('Menu/main');
-        }  
-    }
-
-
     public function TodaysPendingTaskapprove($id,$type){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -4484,18 +4474,6 @@ class Menu extends CI_Controller {
         $query =  $this->db->query("UPDATE `task_plan_for_today` SET `approvel_status`='$status',`remarks`='$rejectreamrk' WHERE id = $rejectid");
         redirect("Menu/TodaysTaskApprovelRequest");
     }
-
-    public function dayshiftReject(){
-        $rejectid = $_POST['reject'];
-        $rejectreamrk = $_POST['rejectreamrk'];
-        $user = $this->session->userdata('user');
-        $data['user'] = $user;
-        $uid = $user['user_id'];
-        $status = 2;
-        $query =  $this->db->query("UPDATE `daystartrequest` SET `approvel_status`='$status',`remarks`='$rejectreamrk' WHERE id = $rejectid");
-        redirect("Menu/dayShiftStartReq");
-    }
-
     public function TodaysPendingsTaskRequestReject(){
         $rejectid = $_POST['reject'];
         $rejectreamrk = $_POST['rejectreamrk'];
@@ -4962,8 +4940,17 @@ public function Dashboard(){
             $revenue +=  (int)$tost[0]->fbudget;
         }
         $pstc=$this->Menu_model->get_pstc($uid);
-        $pendingautotaskcmp = $this->Menu_model->get_totaltPendingAutoTaskdetails($uid);
-        $pendingautotaskcmpcnt = sizeof($pendingautotaskcmp);
+        $pendingautotaskcmp         = $this->Menu_model->get_totaltPendingAutoTaskdetails($uid);
+        $currentdate = date("Y-m-d");
+        $getautotaskquery       =  $this->db->query("SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$currentdate'");
+        $gecurAutoTaskTime      = $getautotaskquery->result();
+        $gecurAutoTaskTimecnt   = sizeof($gecurAutoTaskTime);
+        if($gecurAutoTaskTimecnt == 0){
+            $this->session->set_flashdata('error_message','First Update Your Auto Task Time and Planner Time !');
+            redirect('Menu/UpdateTodaysAutotaskTime');
+        }
+        // dd($pendingautotaskcmp);exit;
+        $pendingautotaskcmpcnt      = sizeof($pendingautotaskcmp);
         if($pendingautotaskcmpcnt > 0){
             $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask');
         }   
@@ -6379,8 +6366,8 @@ public function Dashboard(){
     }
     public function UpsellClient(){
         if(isset($_POST['sdate'])){
-        $sdate = $_POST['sdate'];
-        $edate = $_POST['edate'];
+            $sdate = $_POST['sdate'];
+            $edate = $_POST['edate'];
         }
         else{
             $sdate = date('Y-m-d');
@@ -6392,13 +6379,13 @@ public function Dashboard(){
         $edate = new DateTime($edate);
         $user = $this->session->userdata('user');
         $data['user'] = $user;
-        $uid = $user['user_id'];
-        $uyid =  $user['type_id'];
+        $uid     = $user['user_id'];
+        $uyid    =  $user['type_id'];
         $this->load->model('Menu_model');
-        $dt=$this->Menu_model->get_utype($uyid);
+        $dt       = $this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         if(!empty($user)){
-            $this->load->view($dep_name.'/UpsellClient',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate, 'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
+            $this->load->view($dep_name.'/UpsellClient',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
         }else{
             redirect('Menu/main');
         }
@@ -6749,28 +6736,6 @@ public function Dashboard(){
             redirect('Menu/main');
         }
     }
-
-
-    public function Meetings($type,$sd,$ed,$bdid){
-        $sdate = $sd;
-        $edate = $ed;
-        $user = $this->session->userdata('user');
-        $data['user'] = $user;
-        $uid = $user['user_id'];
-        $uyid =  $user['type_id'];
-        $this->load->model('Menu_model');
-        $dt=$this->Menu_model->get_utype($uyid);
-        $dep_name = $dt[0]->name;
-        $mdata = $this->Menu_model->get_meetingDetails($uid,$sd,$ed,$bdid,$type);
-        // var_dump($mdata);die;
-        // echo $this->db->last_query();die;
-        if(!empty($user)){
-                $this->load->view($dep_name.'/Meetings',['type'=>$type,'uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
-        }else{
-            redirect('Menu/main');
-        }
-    }
-
     public function TBMDFRP_PST($code,$sd,$ed,$bdname){
         if(isset($_POST['sdate']) && isset($_POST['edate'])){
             $sdate = $_POST['sdate'];
@@ -8054,40 +8019,44 @@ public function Dashboard(){
     }
     public function DayManagement(){
         date_default_timezone_set("Asia/Calcutta");
-        $tdate=date('Y-m-d');
-        $user = $this->session->userdata('user');
+        $tdate        = date('Y-m-d');
+        $user         = $this->session->userdata('user');
         $data['user'] = $user;
-        $uid = $user['user_id'];
-        $uyid =  $user['type_id'];
+        $uid          = $user['user_id'];
+        $uyid         =  $user['type_id'];
         $this->load->model('Menu_model');
-        $dt=$this->Menu_model->get_utype($uyid);
-        $dep_name = $dt[0]->name;
-        $mdata = $this->Menu_model->get_daydetail($uid,$tdate);
-        $yesterday = date('Y-m-d', strtotime('-1 day', strtotime($tdate)));
-        $yestdata = $this->Menu_model->get_Yestdaydetail($uid,$yesterday);
+        $dt           = $this->Menu_model->get_utype($uyid);
+        $dep_name     = $dt[0]->name;
+        $mdata        = $this->Menu_model->get_daydetail($uid,$tdate);
+        $yesterday    = date('Y-m-d', strtotime('-1 day', strtotime($tdate)));
+        $yestdata     = $this->Menu_model->get_Yestdaydetail($uid,$yesterday);
+
         if($mdata)
-        {$st = $mdata[0]->ustart;
+        {
+         $st = $mdata[0]->ustart;
          $ct = $mdata[0]->uclose;
             if($st!=''){$do=1;}
             if($ct!=''){$do=2;}
         }else{$do=0;}
-        // $yesterday_date = date("Y-m-d", strtotime("-1 day"));
-        $currentDate = date("Y-m-d");
+
+        $currentDate  = date("Y-m-d");
         $tomorrowDate = date("Y-m-d", strtotime($currentDate . ' +1 day'));
-        $query  =  $this->db->query("SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$tomorrowDate'");
+
+    //    echo "SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$tomorrowDate'";
+    //  echo "<br>";
+    //  echo "SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$currentDate'";
+    //   exit;
+
+
+        $query             =  $this->db->query("SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$tomorrowDate'");
         $gettoAutoTaskTime = $query->result();
-        $query1  =  $this->db->query("SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$currentDate'");
+
+        $query1            =  $this->db->query("SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$currentDate'");
         $gecurAutoTaskTime = $query1->result();
+    //    dd($getAutoTaskTime);
+
         $getShiftStartData = $this->Menu_model->getShiftStartData($uid,$tdate);
         if(!empty($user)){
-            // $pendingtaskcmp = $this->Menu_model->get_PendingTaskForToday($uid);
-            
-            //     //  $pendingautotaskcmpcnt = $pendingtaskcmp[0]->totalrecords;  
-            //  //   echo "12121";exit;
-            //     if($pendingautotaskcmpcnt > 0){
-            //         $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask Before Going Task Planner Page');
-            //         redirect('Menu/Dashboard');
-            //     } 
             $this->load->view($dep_name.'/DayManagement',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'tdate'=>$tdate,'uid'=>$uid,'do'=>$do,'yestdata'=>$yestdata,'gettoAutoTaskTime'=>$gettoAutoTaskTime,'uyid'=>$uyid,'gecurAutoTaskTime'=>$gecurAutoTaskTime,'getShiftStartData'=>$getShiftStartData,'daycheck'=>'start']);
         }else{
             redirect('Menu/main');
@@ -8117,26 +8086,6 @@ public function Dashboard(){
             redirect('Menu/main');
         }
     }
-
-    public function dayShiftStartReq(){
-        // echo 'hii';die;
-        $user = $this->session->userdata('user');
-        $data['user'] = $user;
-        $uid = $user['user_id'];
-        $uyid =  $user['type_id'];
-        $this->load->model('Menu_model');
-        $dt=$this->Menu_model->get_utype($uyid);
-        $dep_name = $dt[0]->name;
-        $mdata = $this->Menu_model->getShiftStartRequest($uid,$uyid);
-        // var_dump($mdata);die;
-        if(!empty($user)){
-            $this->load->view($dep_name.'/dayShiftStartReqApproval',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata]);
-        }else{
-            redirect('Menu/main');
-        }
-
-    }
-
     public function MeetingCheck(){
         date_default_timezone_set("Asia/Calcutta");
         $tdate=date('Y-m-d',strtotime("-1 days"));
@@ -8196,6 +8145,7 @@ public function Dashboard(){
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         $mdata = $this->Menu_model->get_BDdayclose($uid,$tdate);
+
         if(!empty($user)){
             $this->load->view($dep_name.'/DayCloseCheck',['uid'=>$uid,'user'=>$user,'tdate'=>$tdate,'mdata'=>$mdata]);
         }else{
@@ -10300,57 +10250,8 @@ public function Dashboard(){
                     $this->Menu_model->InsertRevviewData($fdata);
                 }
         }
-        // Task Releted log Start 
-        $log_data = [
-            'total_Logs'                 => ensure_five_elements($this->input->post('total_Logs')),
-            'how_many_calls'             => ensure_five_elements($this->input->post('how_many_calls')),
-            'how_many_emails'            => ensure_five_elements($this->input->post('how_many_emails')),
-            'scheduled_meetings'         => ensure_five_elements($this->input->post('scheduled_meetings')),
-            'barg_in_meetings'           => ensure_five_elements($this->input->post('barg_in_meetings')),
-            'whatsapp_activity'          => ensure_five_elements($this->input->post('whatsapp_activity')),
-            'mom_done'                   => ensure_five_elements($this->input->post('mom_done')),
-            'proposal_done'              => ensure_five_elements($this->input->post('proposal_done')),
-            'how_many_research'          => ensure_five_elements($this->input->post('how_many_research')),
-            'status_change_by_cluster'   => ensure_five_elements($this->input->post('task_done_by_cluster')),
-            'status_change_by_cluster'   => ensure_five_elements($this->input->post('status_change_by_cluster')),
-            'task_done_by_pst'           => ensure_five_elements($this->input->post('task_done_by_pst')),
-            'status_change_by_pst'       => ensure_five_elements($this->input->post('status_change_by_pst')),
-            'task_frequency'             => ensure_five_elements($this->input->post('task_frequency')),
-            'intervention_or_suppert'    => ensure_five_elements($this->input->post('intervention_or_suppert'))
-        ];
-        foreach($log_data as $ldata){
-            array_unshift($ldata, $mrid);
-            $this->Menu_model->InsertRevviewData($ldata);
-        }
-        // Task Releted log End
-        $this->session->set_flashdata('success_message','Review Done Successfully !!');
-    }else{
-        $exdate = '';
-        $exsid = '';
-        $csid = '';
-        $ntid = '';
-        $roasterrcnt = $this->input->post('roster_company_cnt');
-        $result = [];
-        foreach ($_POST as $key => $value) {
-            if (strpos($key, 'roster_task_action') === 0 || strpos($key, 'roster_task_status') === 0) {
-                $result[$key] = $value;
-            }
-        }
-        $desired_length = 5;
-        foreach ($result as $key => $value) {
-            $result[$key] = array_slice(array_pad($value, $desired_length, ""), 0, $desired_length);
-        }
-        // Rostar Review Start
-        foreach($result as $rldata){
-            echo $revid  = $rldata[0];
-            $this->Menu_model->UpdateRosterDone($revid);
-            $this->Menu_model->InsertRevviewData($rldata);
-        }
-         // Rostar Review End
-         $this->session->set_flashdata('success_message','Roster Review Successfully Submitted !!');
     }
-    redirect('Menu/AllReviewPlaing/');
-    }
+}
     public function tsetting(){
         $bdid=$_POST['bdid'];
         $inid=$_POST['inid'];
@@ -12144,6 +12045,11 @@ public function Dashboard(){
         $fdate      = $this->input->post('fdate');
         $pstid      = $this->input->post('pstid');
         $review_id  = $this->input->post('review_id');
+        $review_id  = $this->input->post('review_id');
+        
+        $slct_base_review  = $this->input->post('slct_base_review');
+        $slct_assign  = $this->input->post('slct_assign');
+
         $this->load->model('Menu_model');
        
         $revdata    =   $this->Menu_model->getReviewByRID($review_id);
@@ -12151,7 +12057,16 @@ public function Dashboard(){
         $reviewtype =   $revdata[0]->reviewtype;
         $cdatetime  =   date("Y-m-d H:i:s");
         
-        $cmp=$this->Menu_model->get_cmpdbybd($stid,$bdid,$fdate);
+        if($slct_assign == 'PST'){
+            $cmp=$this->Menu_model->get_cmpdby_assign($stid,$bdid,'PST',$pstid);
+        }else if($slct_assign == 'Cluster'){
+            $cmp=$this->Menu_model->get_cmpdby_assign($stid,$bdid,'Cluster',$pstid);
+        }else if($slct_assign == 'BD'){
+            $cmp=$this->Menu_model->get_cmpdbybd($stid,$bdid,$fdate);
+        }else{
+            $cmp=$this->Menu_model->get_cmpdbybd($stid,$bdid,$fdate);
+        }
+
         if($reviewtype =='Self Half Yearly' || $reviewtype =='Half Yearly'){
             $revcmp     =   $this->Menu_model->getReviewedCMPHalfYearly();
            
@@ -12171,7 +12086,8 @@ public function Dashboard(){
                 });
             }
             $result = filterArray3($revcmp, $cmp);
-            if($reviewtype == 'Self Weekly' || $reviewtype == 'Weekly'){
+            $rev_startt = date("Y-m-d H:i:s");
+            if($reviewtype == 'Self Weekly' || $reviewtype == 'Weekly' || $reviewtype =='Self Review'){
                 $cdate = date("Y-m-d", strtotime("-7 days", strtotime($rev_startt)));
             }
             if($reviewtype == 'Self Fortnightly' || $reviewtype == 'Fortnightly'){
@@ -12180,21 +12096,26 @@ public function Dashboard(){
             if($reviewtype == 'Self Monthly' || $reviewtype == 'Monthly'){
                 $cdate = date("Y-m-d", strtotime("-30 days", strtotime($rev_startt)));
             }
-            if($reviewtype == 'Self Quarterly' || $reviewtype == 'Querterly'){
+            if($reviewtype == 'Self Quarterly' || $reviewtype == 'Querterly' || $reviewtype == 'Quarterly'){
                 $cdate = date("Y-m-d", strtotime("-90 days", strtotime($rev_startt)));
             }
             if($reviewtype == 'Roaster'){
                 $cdate = date("Y-m-d", strtotime("-7 days", strtotime($rev_startt)));
             }
-    
+            $resultcnt = sizeof($result);
+
             $init_ids = '';
             foreach($result as $dt){
                 $init_ids .= $dt->inid.',';
            }
            $revinit_ids = rtrim($init_ids, ',');
            $user_id = $uid;
-           $revdcmp  =   $this->Menu_model->CheckReviewDoneorNotByUser($user_id,$cdate,$revinit_ids,$reviewtype);
-      
+           if($resultcnt > 0){
+            $revdcmp  =   $this->Menu_model->CheckReviewDoneorNotByUser($user_id,$cdate,$revinit_ids,$reviewtype);
+           }else{
+            $revdcmpnocmp = 1;
+           }
+          
            function filterArray4($array1, $array2) {
             $inidValues = array_column($array1, 'inid');
             return array_filter($array2, function($item) use ($inidValues) {
@@ -12202,11 +12123,16 @@ public function Dashboard(){
             });
         }
         $result = filterArray4($revdcmp, $result);
+
         }
         
-        echo '<option value="">Select Company</option>';
-        foreach($result as $dt){
-             echo  $data = '<option value='.$dt->inid.'>'.$dt->compname.'</option>';
+        if($revdcmpnocmp == 1){
+            echo '<option value="">No Company Found !</option>';
+        }else{
+            echo '<option value="">Select Company</option>';
+            foreach($result as $dt){
+                 echo  $data = '<option value='.$dt->inid.'>'.$dt->compname.'</option>';
+            }
         }
     }
     public function getbdcmpts(){
@@ -12576,36 +12502,66 @@ public function Dashboard(){
         $fdate = $this->input->post('fdate');
         $rtype = $this->input->post('rtype');
         $rtype_id = $this->input->post('rtype_id');
+        $slct_base_review_id   = $this->input->post('slct_base_review');
         $this->load->model('Menu_model');
+        $revdata    =   $this->Menu_model->getReviewByRID($slct_base_review_id);
+
+        $revdatacnt = sizeof($revdata);
+        if($revdatacnt > 0){
+            $slct_base_review = $revdata[0]->sdatet;
+            $rtype = $revdata[0]->reviewtype;
+            $slct_base_review = date("Y-m-d", strtotime($slct_base_review));
+        }
+      
         if($rtype == 'Self Half Yearly' || $rtype == 'Half Yearly'){
             $currentDate = new DateTime();
             $currentDate->modify('-6 months');
             $fdate = $currentDate->format('Y-m-d');
         }
         if($rtype == 'Self Weekly' || $rtype == 'Weekly'){
-            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
-            $start_date = $rdetails[0]->startt; 
-            $fdate = date("Y-m-d", strtotime("-7 days", strtotime($start_date)));
+            if($slct_base_review !== ''){
+                $start_date = $slct_base_review; 
+            }else{
+                $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+                $start_date = $rdetails[0]->startt;
+            }
+            // $fdate = date("Y-m-d", strtotime("-7 days", strtotime($start_date)));
+            $fdate = date("Y-m-d", strtotime("-0 days", strtotime($start_date)));
         }
         if($rtype == 'Self Fortnightly' || $rtype == 'Fortnightly'){
-            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
-            $start_date = $rdetails[0]->startt; 
-            $fdate = date("Y-m-d", strtotime("-15 days", strtotime($start_date)));
+            if($slct_base_review !==''){
+                $start_date = $slct_base_review; 
+            }else{
+                $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+                $start_date = $rdetails[0]->startt;
+            }
+            // $fdate = date("Y-m-d", strtotime("-15 days", strtotime($start_date)));
+            $fdate = date("Y-m-d", strtotime("-0 days", strtotime($start_date)));
         }
         if($rtype == 'Self Monthly' || $rtype == 'Monthly'){
-            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
-            $start_date = $rdetails[0]->startt; 
-            $fdate = date("Y-m-d", strtotime("-30 days", strtotime($start_date)));
+            if($slct_base_review !==''){
+                $start_date = $slct_base_review; 
+            }else{
+                $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+                $start_date = $rdetails[0]->startt;
+            }
+            // $fdate = date("Y-m-d", strtotime("-30 days", strtotime($start_date)));
+            $fdate = date("Y-m-d", strtotime("-0 days", strtotime($start_date)));
         }
-        if($rtype == 'Self Quarterly' || $rtype == 'Querterly'){
-            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
-            $start_date = $rdetails[0]->startt; 
-            $fdate = date("Y-m-d", strtotime("-90 days", strtotime($start_date)));
+        if($rtype == 'Self Quarterly' || $rtype == 'Querterly' || $reviewtype == 'Quarterly'){
+            if($slct_base_review !==''){
+                $start_date = $slct_base_review; 
+            }else{
+                $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+                $start_date = $rdetails[0]->startt;
+            }
+            // $fdate = date("Y-m-d", strtotime("-90 days", strtotime($start_date)));
+            $fdate = date("Y-m-d", strtotime("-0 days", strtotime($start_date)));
         }
     
         $cmp=$this->Menu_model->get_cmpnlog($inid);
         $cmptd=$this->Menu_model->get_cmptd($inid,$fdate);
-        // echo $this->db->last_query();
+        
         $cmpptd=$this->Menu_model->get_cmpptd($inid);
         echo '<h5><b><a target="_blank" href="'.base_url().'Menu/CompanyDetails/'.$cmp[0]->cid.'">'.$cmp[0]->compname.'</a></b></h5>';
         echo '<lable><b>Current Status: '.$cmp[0]->csstatus.'</b></lable><br>';
@@ -12635,32 +12591,64 @@ public function Dashboard(){
         $rtype      = $this->input->post('rtype');
         $rtype_id   = $this->input->post('rtype_id');
         $this->load->model('Menu_model');
+        $slct_base_review_id   = $this->input->post('slct_base_review');
+        $revdata    =   $this->Menu_model->getReviewByRID($slct_base_review_id);
+
+        $revdatacnt = sizeof($revdata);
+        if($revdatacnt > 0){
+            $slct_base_review = $revdata[0]->sdatet;
+            $rtype = $revdata[0]->reviewtype;
+            $slct_base_review = date("Y-m-d", strtotime($slct_base_review));
+        }
+        
+        
         if($rtype == 'Self Half Yearly' || $rtype == 'Half Yearly'){
             $currentDate = new DateTime();
             $currentDate->modify('-6 months');
             $fdate = $currentDate->format('Y-m-d');
         }
         if($rtype == 'Self Weekly' || $rtype == 'Weekly'){
-            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
-            $start_date = $rdetails[0]->startt; 
-            $fdate = date("Y-m-d", strtotime("-7 days", strtotime($start_date)));
+            if($slct_base_review !==''){
+                $start_date = $slct_base_review; 
+            }else{
+                $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+                $start_date = $rdetails[0]->startt;
+            }
+            // $fdate = date("Y-m-d", strtotime("-7 days", strtotime($start_date)));
+            $fdate = date("Y-m-d", strtotime("-0 days", strtotime($start_date)));
         }
         if($rtype == 'Self Fortnightly' || $rtype == 'Fortnightly'){
-            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
-            $start_date = $rdetails[0]->startt; 
-            $fdate = date("Y-m-d", strtotime("-15 days", strtotime($start_date)));
+            if($slct_base_review !==''){
+                $start_date = $slct_base_review; 
+            }else{
+                $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+                $start_date = $rdetails[0]->startt;
+            }
+            // $fdate = date("Y-m-d", strtotime("-15 days", strtotime($start_date)));
+            $fdate = date("Y-m-d", strtotime("-0 days", strtotime($start_date)));
         }
         if($rtype == 'Self Monthly' || $rtype == 'Monthly'){
-            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
-            $start_date = $rdetails[0]->startt; 
-            $fdate = date("Y-m-d", strtotime("-30 days", strtotime($start_date)));
+            if($slct_base_review !==''){
+                $start_date = $slct_base_review; 
+            }else{
+                $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+                $start_date = $rdetails[0]->startt;
+            }
+            // $fdate = date("Y-m-d", strtotime("-30 days", strtotime($start_date)));
+            $fdate = date("Y-m-d", strtotime("-0 days", strtotime($start_date)));
         }
-        if($rtype == 'Self Quarterly' || $rtype == 'Querterly'){
-            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
-            $start_date = $rdetails[0]->startt; 
-            $fdate = date("Y-m-d", strtotime("-90 days", strtotime($start_date)));
+        if($rtype == 'Self Quarterly' || $rtype == 'Querterly' || $reviewtype == 'Quarterly'){
+            if($slct_base_review !==''){
+                $start_date = $slct_base_review; 
+            }else{
+                $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+                $start_date = $rdetails[0]->startt;
+            }
+            // $fdate = date("Y-m-d", strtotime("-90 days", strtotime($start_date)));
+            $fdate = date("Y-m-d", strtotime("-0 days", strtotime($start_date)));
         }
         $logdetail=$this->Menu_model->get_logdetail($inid,$fdate);
+    
         $i=1;
         foreach($logdetail as $logs){
             $bdid = $logs->user_id;
@@ -12811,18 +12799,31 @@ public function Dashboard(){
         $this->session->set_flashdata('success_message','Task Plan Successfully');
         redirect('Menu/TaskPlanner2/'.$pdate);
     }
-    public function addtask(){
-        $date= $this->input->post('ntdate');
-        $uid= $this->input->post('ntuid');
-        $ntinid= $this->input->post('ntinid');
-        $ntaction= $this->input->post('ntaction');
-        $ntstatus= $this->input->post('ntstatus');
-        $ntppose= $this->input->post('ntppose');
-        $ntnextaction= $this->input->post('ntnextaction');
-        $this->load->model('Menu_model');
-        $id=$this->Menu_model->add_task($uid,$ntinid,$ntaction,$ntstatus,$ntppose,$ntnextaction,$date);
-        redirect('Menu/Dashboard');
-    }
+ public function addtask(){
+
+    $date= $this->input->post('ntdate');
+
+    $uid= $this->input->post('ntuid');
+
+    $ntinid= $this->input->post('ntinid');
+
+    $ntaction= $this->input->post('ntaction');
+
+    $ntstatus= $this->input->post('ntstatus');
+
+    $ntppose= $this->input->post('ntppose');
+
+    $ntnextaction= $this->input->post('ntnextaction');
+
+    $this->load->model('Menu_model');
+
+    $id=$this->Menu_model->add_task($uid,$ntinid,$ntaction,$ntstatus,$ntppose,$ntnextaction,$date);
+
+    redirect('Menu/Dashboard');
+
+}
+
+
     public function addcompany(){
         $uid= $this->input->post('uid');
         $compname= $this->input->post('compname');
@@ -16206,8 +16207,6 @@ public function addplantask11(){
     redirect('Menu/TaskPlanner2/'.$pdate);
 }
 public function addplantask12(){
-
-    // var_dump($_POST);die;
     $this->load->model('Menu_model');
     $this->load->model('Management_model');
     $this->load->library('session');
@@ -16221,25 +16220,23 @@ public function addplantask12(){
     $pendingTodaysTaskcnt = sizeof($todayspendingTask);
     $pendingOldTask = sizeof($pendingOldTask);
     
-    $bdid = $this->input->post('bdid');
-    $tptime = $this->input->post('tptime');
-    $ptime = $this->input->post('ptime');
-    $ntaction = $this->input->post('ntaction');
-    $ntppose = $this->input->post('ntppose');
-    $selectby = $this->input->post('selectby');
-    $pdate = $this->input->post('pdate');
-    $select_cluster = $this->input->post('select_cluster');
-    $selectcompanybyuser = $this->input->post('selectcompanybyuser');
-    // dd($ntaction);exit;
+     $bdid = $this->input->post('bdid');
+     $tptime = $this->input->post('tptime');
+     $ptime = $this->input->post('ptime');
+     $ntaction = $this->input->post('ntaction');
+     $ntppose = $this->input->post('ntppose');
+     $selectby = $this->input->post('selectby');
+     $pdate = $this->input->post('pdate');
+     $select_cluster = $this->input->post('select_cluster');
+     $selectcompanybyuser = $this->input->post('selectcompanybyuser');
+    //dd($_POST);exit;
      if(!isset($_POST['selectcompanybyuser']) && $ntaction == 4){
-        // echo "hii";die;
+        
         $bmdate = $pdate.' '.$ptime.':00';
         $partner = $this->Menu_model->createBargMeetingWithClusterId($bdid,$bmdate,$select_cluster);
         $this->session->set_flashdata('success_message',' Task Planned Successfully !!');
         redirect('Menu/TaskPlanner2/'.$pdate);
      } if(isset($_POST['selectcompanybyuser']) && $ntaction == 4){
-        // echo "bye";die;
-
         $ntaction = 4;
      }
      
@@ -16431,7 +16428,7 @@ public function addplantask12(){
                 $taskplanmincount = $taskplanmincount+10;
                 $modifystr = "+$taskplanmincount minutes";
             }else if($actiontype_id ==3 || $actiontype_id ==4 || $actiontype_id ==12){
-                $taskplanmincount = $taskplanmincount+60;
+                $taskplanmincount = $taskplanmincount+30;
                 $modifystr = "+$taskplanmincount minutes";
             }else if($actiontype_id ==7){
                 $taskplanmincount = $taskplanmincount+15;
@@ -16447,11 +16444,12 @@ public function addplantask12(){
         $modifystr = "+$taskplanmincount minutes";
         $newdate->modify($modifystr);
         $new_datetime = $newdate->format('Y-m-d H:i:s');
+//echo $selectby; exit;
         if($selectby == 'Plan But Not Initiated'){
            $sact_type = $this->Menu_model->SelectTaskBYTid($tid);
            
            if($sact_type ==4 || $sact_type == 17 || $sact_type == 3){ 
-                $this->Menu_model->updateBarginmeeting($tid,$new_datetime);
+            $this->Menu_model->updateBarginmeeting($tid,$new_datetime);
            }
      
             $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime', `plan_change`='0', `selectby`='$selectby'  WHERE  id = $tid");
@@ -16478,21 +16476,17 @@ public function addplantask12(){
             $query =  $this->db->query("UPDATE `tblcallevents` SET `appointmentdatetime`='$new_datetime',`plan_change`='0', `selectby`='$selectby' WHERE  id = $tid");
             $query =  $this->db->query("UPDATE `main_review` SET `taskplan`='1' WHERE `ntid` = '$tid'");
         }else{
-         
     if(date("Y-m-d") !== $pdate){     
-       
         if($pendingTodaysTaskcnt > 0){
             $this->session->set_flashdata('success_message',' First Plan Your Yesterday Pending Task.');
             redirect('Menu/TaskPlanner2/'.$pdate);
         }
     }elseif(date("Y-m-d") == $pdate){
-       
         if($pendingOldTaskcnt > 0){
             $this->session->set_flashdata('success_message_plan',' First Plan Your Todays Pending Task]');
             redirect('Menu/TaskPlanner2/'.$pdate);
         }
     }
-
             $ttype = $ntaction;
             if($select_cluster !== ''){
                 $this->Menu_model->updateClusterIdByinitID($uid,$tid,$select_cluster);
@@ -17083,15 +17077,98 @@ $mdata2 = $this->Menu_model->get_all_bd_Fresh_RP_meetings_New($tids);
         redirect('Menu/main');
     }
 }
+public function Total_Team_Join_Meeting($uid,$sdate,$edate){ 
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $mdata = $this->Menu_model->get_all_bd_join_meeting($uid,$sdate,$edate);
+    if(!empty($user)){
+        $this->load->view($dep_name.'/Total_Team_Join_Meeting',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'mdata'=>$mdata2]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+
+public function Total_Team_Join_Meeting_data($uid,$sdate,$edate){ 
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid          = $user['user_id'];
+    $uyid         =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt           = $this->Menu_model->get_utype($uyid);
+    $dep_name     =  $dt[0]->name;
+    $udetail      = $this->Menu_model->get_userbyid($uid);
+    $mdata        = $this->Menu_model->get_all_bd_join_meetings_data($uid,$sdate,$edate);
+    if(!empty($user)){
+        $this->load->view($dep_name.'/Total_Team_Join_Meeting_data',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'mdata'=>$mdata]);
+    }else{
+        redirect('Menu/main');
+    }
+}
 public function Total_Team_Potential_Meeting($uid,$sdate,$edate){ 
     $user = $this->session->userdata('user');
     $data['user'] = $user;
     $uid = $user['user_id'];
     $uyid =  $user['type_id'];
     $this->load->model('Menu_model');
-    $mdata = $this->Menu_model->get_all_bd_Potential_meetings($uid,$sdate,$edate);
+    $dt           = $this->Menu_model->get_utype($uyid);
+    $dep_name     =  $dt[0]->name;
+    $udetail      = $this->Menu_model->get_userbyid($uid);
+    $mdata = $this->Menu_model->get_all_bd_Potential_meeting_data($uid,$sdate,$edate);
     if(!empty($user)){
-        $this->load->view($dep_name.'/Total_Team_potential_Meeting',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'mdata'=>$mdata2]);
+        $this->load->view($dep_name.'/Total_team_potential_Meeting',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'mdata'=>$mdata]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function Total_Team_TopSpender_Meeting($uid,$sdate,$edate){ 
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt           = $this->Menu_model->get_utype($uyid);
+    $dep_name     =  $dt[0]->name;
+    $udetail      = $this->Menu_model->get_userbyid($uid);
+    $mdata = $this->Menu_model->get_all_bd_TopSpender_meeting_data($uid,$sdate,$edate);
+    //dd($mdata);exit;
+    if(!empty($user)){
+        $this->load->view($dep_name.'/Total_Team_TopSpender_Meeting',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'mdata'=>$mdata]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function Total_Team_BargeMeeting($uid,$sdate,$edate){ 
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt           = $this->Menu_model->get_utype($uyid);
+    $dep_name     =  $dt[0]->name;
+    $udetail      = $this->Menu_model->get_userbyid($uid);
+    $mdata = $this->Menu_model->get_all_bd_bargemeeting_data($uid,$sdate,$edate);
+    if(!empty($user)){
+        $this->load->view($dep_name.'/Total_Team_BargeMeeting',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'mdata'=>$mdata]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function Total_Team_ScheduleMeeting($uid,$sdate,$edate){ 
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt           = $this->Menu_model->get_utype($uyid);
+    $dep_name     =  $dt[0]->name;
+    $udetail      = $this->Menu_model->get_userbyid($uid);
+    $mdata        = $this->Menu_model->get_all_bd_schedulemeeting_data($uid,$sdate,$edate);
+   
+    if(!empty($user)){
+        $this->load->view($dep_name.'/Total_Team_ScheduleMeeting',['uid'=>$uid,'user'=>$user,'sdate'=>$sdate,'edate'=>$edate,'mdata'=>$mdata]);
     }else{
         redirect('Menu/main');
     }
@@ -17198,111 +17275,83 @@ public function get_JoinMeetingsCompany(){
     }
 }
 // New TaskCheck <=========================================== START ==================================>
-    public function TaskCheck_New(){
+public function TaskCheck_New(){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    // $tdate='2024-07-18';
+
+    $userList = $this->Menu_model->get_userForTask($uid,$uyid);
+    $dep_name = $dt[0]->name;
+ 
+    $date = new DateTime();
+    $date->modify('-1 day');
+    $tdate =  $date->format('Y-m-d');
+    $taskList = array();
+    $cdate = date("Y-m-d");
+    // $RequestApprovals = '';
+    $RequestApprovals = $this->Menu_model->RequestApprovals($uid);
+    $ApprovedRequests = $this->Menu_model->ApprovedRequests($uid);
+        // $tdate='2024-07-18';
+    if(isset($_POST['userId'])){
+        $userId = $_POST['userId'];
+        $taskList = $this->Menu_model->getTasks($userId,$tdate);
+
+        $sizeOfTask =sizeof($taskList);
+        // echo $sizeOfTask;die;
+       // echo $this->db->last_query();exit;
+    }
+    else{
+        $userId = '';
+        $sizeOfTask = '';
+
+    }
+    $currentHour = (int) (new DateTime())->format('H:mm');
+    // echo $currentHour;die;
+    if(!empty($user)){
+
+        if($currentHour >= 11 && $uyid != 2) {
+
+            if (sizeof($ApprovedRequests) > 0) {
+                
+                $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId,'sizeOfTask'=>$sizeOfTask]);
+
+            }else{
+                // echo $dep_name;die;
+                // redirect('Menu/RequestForTaskCheckApproval');
+                $this->load->view($dep_name.'/RequestForTaskCheckApproval',['uid'=>$this->uid,'user'=>$this->user,'cdate'=>$cdate,'RequestApprovals'=>$RequestApprovals]);
+            }
+        }else{
+            $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId,'sizeOfTask'=>$sizeOfTask]);
+        }
+
+        // $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId,'sizeOfTask'=>$sizeOfTask]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+    public function getTaskByUser(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
         $this->load->model('Menu_model');
         $dt=$this->Menu_model->get_utype($uyid);
-        // $tdate='2024-07-18';
-
-        $userList = $this->Menu_model->get_userForTask($uid,$uyid);
         $dep_name = $dt[0]->name;
-     
-        $date = new DateTime();
-        $date->modify('-1 day');
-        $tdate =  $date->format('Y-m-d');
-        $taskList = array();
-        $cdate = date("Y-m-d");
-        // $RequestApprovals = '';
-        $RequestApprovals = $this->Menu_model->RequestApprovals($uid);
-        $ApprovedRequests = $this->Menu_model->ApprovedRequests($uid);
-            // $tdate='2024-07-18';
-        if(isset($_POST['userId'])){
-            $userId = $_POST['userId'];
-            $taskList = $this->Menu_model->getTasks($userId,$tdate);
-
-            $sizeOfTask =sizeof($taskList);
-            // echo $sizeOfTask;die;
-           // echo $this->db->last_query();exit;
-        }
-        else{
-            $userId = '';
-            $sizeOfTask = '';
-
-        }
-        $currentHour = (int) (new DateTime())->format('H:mm');
-        // echo $currentHour;die;
-        if(!empty($user)){
-
-            if($currentHour >= 11 && $uyid != 2) {
-
-                if (sizeof($ApprovedRequests) > 0) {
-                    
-                    $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId,'sizeOfTask'=>$sizeOfTask]);
-
-                }else{
-                    // echo $dep_name;die;
-                    // redirect('Menu/RequestForTaskCheckApproval');
-                    $this->load->view($dep_name.'/RequestForTaskCheckApproval',['uid'=>$this->uid,'user'=>$this->user,'cdate'=>$cdate,'RequestApprovals'=>$RequestApprovals]);
-                }
-            }else{
-                $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId,'sizeOfTask'=>$sizeOfTask]);
-            }
-
-        }else{
-            redirect('Menu/main');
-        }
-    }
-
-    public function ApproveTaskCheckRequest(){
-
-        $user = $this->session->userdata('user');
-        $data['user'] = $user;
-        $uid = $user['user_id'];
-        // $typeID =  $user['type_id'];
-        $uyid =  $user['type_id'];
-        $dt=$this->Menu_model->get_utype($uyid);
-        $dep_name = $dt[0]->name;
-        
-        $getRequests = $this->Menu_model->getRequests($uid);
-        // var_dump($user);die;
-        if(!empty($user)){
-            $this->load->view($dep_name.'/ApproveTaskCheckRequest',['uid'=>$this->uid,'user'=>$this->user,'getRequests'=>$getRequests]);
-        }else{
-            redirect('Menu/main');
-        }
-    }
-
-    public function RequestForTaskCheckApproval(){
-        $user = $this->session->userdata('user');
-        $data['user'] = $user;
-        $uid = $user['user_id'];
-
-        $request = $this->input->post('remark');
-        $dayData = $this->Menu_model->RequestForTaskCheckApproval($uid,$request);
-        
-    }
-
-    public function ApproveRequest() {
-
-        $user = $this->session->userdata('user');
-        $data['user'] = $user;
-        $uid = $user['user_id'];
-
+        $userId = '100192';
+        $tdate = '2024-07-20';
         // var_dump($_POST);die;
-        $id = $_POST['id'];
-        $action = $_POST['action'];
-        if ($action == 'approve') {
-            $action = 'Approved';
+        $getTasks = $this->Menu_model->getTasks($userId,$tdate);
+        // print_r($getTasks);die;
+        if(!empty($user)){
+            $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'tasks'=>$getTasks]);
+        }else{
+            redirect('Menu/main');
         }
-        if ($action == 'reject') {
-            $action = 'Rejected';
-        }
-        $result = $this->Menu_model->ApproveRequest($id,$action,$uid);
     }
-
     public function RateTask(){
         $rat = $_POST['rat'];
         $rremark = $_POST['rremark'];
@@ -17376,7 +17425,7 @@ public function get_JoinMeetingsCompany(){
         $utype                  = $_SESSION['user']['type_id'];
         // $bd_user_id          = $reviewId;
         $dt                     = $this->Menu_model->get_utype($utype);
-        $utype                  = $dt[0]->name;
+        // $utype                  = $dt[0]->name;
         $data['reviewType']     = $reviewType;
         $bd_user_details        = $this->Menu_model->get_userbyid($reviewId);
         $data['username']       = $bd_user_details[0]->name;
@@ -17395,7 +17444,7 @@ public function get_JoinMeetingsCompany(){
                $insertdata['closure_school_target']            = $this->input->post('closure_school_target');
                $insertdata['closure_client_target']            = $this->input->post('closure_client_target');
                $insertdata['closure_revenue_target']           = $this->input->post('closure_revenue_target');
-               $insertdata['reviewType']                      = $reviewType;
+               $insertdata['reviewType']                       = $reviewType;
                
             //    if($reviewType ==''){
                 
@@ -17408,49 +17457,72 @@ public function get_JoinMeetingsCompany(){
                $this->Menu_model->insertTargetQandA($insertdata);
                $data['success_message']                         = "Target Data has been set for the user for the Review ".$insertdata['reviewType']." ";
             }
-        $data['utype'] = $utype;
+        // $data['utype'] = $utype;
+        // echo $data['utype'];die;
         $this->load->view('header.php');
             if($utype != '13'){
+                // echo "hii";die;
                 $this->load->view('Cluster Manager/targetForm.php',$data);
             }
             else if($utype != '4'){
+                // echo "bye";die;
+
                 $this->load->view('PST/targetQandA.php',$data);
             }
         $this->load->view('footer.php');
     }
     
     public function targetVsAchievedData(){
-        $uid     = $_SESSION['user']['user_id'];
-        $utypeid = $_SESSION['user']['type_id'];
-       
-        if($_POST){
-            $sdate                  = $this->input->post('sdate');  
-            $edate                  = $this->input->post('edate'); 
-            $partnerType            = $this->input->post('partner_type');
+
+        // var_dump($_POST);die;
+        $uid                = $_SESSION['user']['user_id'];
+        $utypeid            = $_SESSION['user']['type_id'];
+        $user               = $this->session->userdata('user');
+        $data['user']       = $user;
+        $data['uid']        = $uid;
+        $data['utypeid']    = $utypeid;
+
+        if($utypeid == '2'){
+            if($_POST){
+                $sdate                  = $this->input->post('sdate');  
+                $edate                  = $this->input->post('edate'); 
+                $partnerType            = $this->input->post('partnertype');
+                $reviewType            = $this->input->post('reviewtype');
+                $userID                 = $this->input->post('user');
+            }
+            else{
+                $sdate          = date("Y-m-d");
+                $edate          = date("Y-m-d");
+                $partnerType    = "";
+                $reviewType    = "";
+            }
+            // $sdate      = '2024-01-01';
+            // $edate      = '2024-06-06';
+            $dt                             = $this->Menu_model->get_utype($utypeid);
+            $utype                          = $dt[0]->name;
+            $getMyTeamListIds               = $this->Menu_model->getMyTeamList($uid,$utypeid,$column='user_id');
+            $getMyTeamListIds_str           = implode(',',$getMyTeamListIds);
+            $data['partnerType']            = $this->Menu_model->get_partnertype();
+            $data['allReviewType']          = $this->Menu_model->getallreviewtype();
+            $data['users']                  = $this->Menu_model->getUserByType($utypeid,$uid);
+            $data['sdate']                  = $sdate;
+            $data['edate']                  = $edate;
+            $data['targetVsAchieved']       = $this->Menu_model->getAchievedData($userID,$sdate,$edate,$partnerType,$reviewType);
+            // $data['targetVsAchieved']       = $this->Menu_model->getAchievedData($getMyTeamListIds_str,$sdate,$edate,$partnerType='');
+            $data['selectedPartnerType']                 = $partnerType;
+            $data['selectedReviewType']                  = $reviewType;
+            $data['selecteduserID']                      = $userID;
+            // var_dump($data['targetVsAchieved']);die;
+            $data['heading']                = 'Target Vs Achieved';
+            // dd($data);exit;
+            $this->load->view('Admin/TargetVsAchieved',$data);
         }
         else{
-            $sdate          = date("Y-m-d");
-            $edate          = date("Y-m-d");
-            // $sdate          = '2024-02-25';
-            // $edate          = '2024-08-25';
+            // $data['warning_message'] = 'You dont have sufficient rights to view this page';
+            $this->session->set_flashdata('warning', 'You dont have sufficient rights to view this page!');
+
+            $this->load->view("no_page_load",$data);
         }
-      $sdate = '2024-01-01' ;
-      $edate = '2024-01-06';
-        $getMyTeamListIds_str           = $mainbd;
-        $dt                             = $this->Menu_model->get_utype($utypeid);
-        $utype                          = $dt[0]->name;
-        $getMyTeamListIds               = $this->Menu_model->getMyTeamList($uid,$utypeid,$column='user_id');
-        $getMyTeamListIds_str           = implode(',',$getMyTeamListIds);
-        $data['partnerType']            = $this->Menu_model->get_partnertype();
-        $data['allReviewType']          = $this->Menu_model->getallreviewtype();
-        // dd($data);exit;
-       // $partnerType                    = 2;
-        $data['sdate']                  = $sdate;
-        $data['edate']                  = $edate;
-        $data['targetVsAchieved']       = $this->Menu_model->getAchievedData($getMyTeamListIds_str,$sdate,$edate,$partnerType);
-        $data['heading']                = 'Target Vs Achieved';
-        //   dd($data);
-        $this->load->view('Admin/TargetVsAchieved',$data);
     }
    
     public function getAchievedDataList($uid,$category,$sdate,$edate){
@@ -17459,6 +17531,7 @@ public function get_JoinMeetingsCompany(){
         //for proposal          : proposal_achieved_View 
         //for revenue           : revenue_achieved_View 
         //for closure           : closure_achieved_View  
+        // dd($data);exit;
         $data['sdate']          = $sdate;
         $data['edate']          = $edate;
         $data['username']       = $this->Menu_model->getUserNameById($uid);
@@ -17470,122 +17543,128 @@ public function get_JoinMeetingsCompany(){
     /*******User Management** ABHISHEK**/
     public function UserRegistration(){
     
-    $user = $this->session->userdata('user');
-    //print_r($user);
-    $data['user'] = $user;
-    $uid = $user['user_id'];
-    $uyid =  $user['type_id'];
-    $this->load->model('Menu_model');
-    $userArr = array();
-    if ($this->input->post()) {
-        $initUserId=$this->input->post('user_id');
-        $casual=$this->input->post('casual');
-        $sick=$this->input->post('sick');
-        $emergency=$this->input->post('emergency');
-        $unpaid=$this->input->post('unpaid');
-        $comp_off=$this->input->post('comp_off');
+        $user = $this->session->userdata('user');
+        //print_r($user);
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
         
-        $leaveData = [
-            '1' => $casual,
-            '2' => $sick,
-            '10' => $emergency,
-            '8' => $unpaid,
-            '5' => $comp_off
-        ];
-        
-        // Convert the array to JSON format
-        $jsonLeaveData = json_encode($leaveData);
-        //dd($jsonLeaveData);
-        $password=$this->input->post('password');
-        $salt = '$2y$10$' . substr(strtr(base64_encode(random_bytes(16)), '+', '.'), 0, 22);
-        $hashedPassword = crypt($password, $salt);
-        //echo $hashedPassword;
-
-        $userId = $this->Menu_model->generateUserId();
-        //echo"<pre>userId ";print_r($userId[0]->user_id);exit;
-       $maxUserId = (int)($userId[0]->user_id);
-       $finalUserId = $maxUserId + 1;
-
-        $userArr = array(
-            'fname' => $this->input->post('fname'),
-            'lname' => $this->input->post('lname'),
-            'name' =>$this->input->post('fname').' '.$this->input->post('lname'),
-            'email' => $this->input->post('email'),
-            'leave_balance' =>  $jsonLeaveData,
-            'Username' => $this->input->post('Username'),
-            'joiningDate' => date("Y-m-d"),
-            'phone' => $this->input->post('phone'),
-            'zone' => $user['zone_id'] ?? $this->input->post('zone'),
-            'type' => $user['type_id'] ?? $this->input->post('type'),
-            'cluster' => $this->input->post('cluster') ?? 0,
-            'bdpstF' => $this->input->post('bdpstF') ?? 0,
-            'sales' =>$this->input->post('sales') ?? 0,
-            'pst' => $this->input->post('pst') ?? 0,
-            'password' => $this->input->post('password'),
-            'inside' => null,
-            'aadmin' => $this->input->post('admin'),
-            'admin_id' => 45,
-            'status' => 'active',
-            'userId'=>$finalUserId,
-        );
-
-        $authUser = array(
-            'fname' => $this->input->post('fname'),
-            'lname' => $this->input->post('lname'),
-            'email' => $this->input->post('email'),
-            'Username' => $this->input->post('Username'),
-            'joiningDate' => date("Y-m-d H:i:s"),
-            'password' => $hashedPassword,
-            'is_active' => 1,
-        );
-        // echo"<pre>authUser ";print_r($authUser);
-        // echo"<pre>userDetail ";print_r($userDetail);exit;
-        $username = $userArr['Username'];
-        $user = $this->Menu_model->checkUsername($username);
-        $num=count($user);
-        //echo $num;exit;
-        if(!empty($initUserId)){
-            //dd($userArr);
-            $isSucess = $this->Menu_model->editUserData($userArr, $initUserId);
-            if($isSucess && $uyid==2){
-
-            $this->session->set_flashdata('success_message',"User updated successfully !");
-            redirect('Menu/UserRegistration');
-            }else{
-                $this->session->set_flashdata('success_message',"Profile updated successfully !");
-                redirect('Menu/myProfile');
+        //dd($data);
+        $userArr = array();
+        if ($this->input->post()) {
+            $initUserId=$this->input->post('user_id');
+            if($initUserId){
+                $existingUserData = $this->Menu_model->get_userInfo($initUserId);
+                //echo"existingUserData";dd($existingUserData);
             }
-        }elseif($user){
-            //echo"here inside if";exit;
-            $this->session->set_flashdata('error_message',"Username already Exists !");
-            redirect("Menu/userEditAction/$initUserId");
-        }else{
-            //echo"here inside else";
-
-            $isSucess = $this->Menu_model->insertUserData($userArr, $authUser);
-            if($isSucess){
-                //echo"here inside issucess";exit;
-                $this->session->set_flashdata('success_message',"User added successfully with User ID - $finalUserId ");
+            $casual=$this->input->post('casual');
+            $sick=$this->input->post('sick');
+            $emergency=$this->input->post('emergency');
+            $unpaid=$this->input->post('unpaid');
+            $comp_off=$this->input->post('comp_off');
+            
+            $leaveData = [
+                '1' => $casual,
+                '2' => $sick,
+                '10' => $emergency,
+                '8' => $unpaid,
+                '5' => $comp_off
+            ];
+            
+            // Convert the array to JSON format
+            $jsonLeaveData = json_encode($leaveData);
+            //dd($jsonLeaveData);
+            $password=$this->input->post('password');
+            $salt = '$2y$10$' . substr(strtr(base64_encode(random_bytes(16)), '+', '.'), 0, 22);
+            $hashedPassword = crypt($password, $salt);
+            //echo $hashedPassword;
+    
+            $userId = $this->Menu_model->generateUserId();
+            //echo"<pre>userId ";print_r($userId[0]->user_id);exit;
+           $maxUserId = (int)($userId[0]->user_id);
+           $finalUserId = $maxUserId + 1;
+    
+            $userArr = array(
+                'fname' => $this->input->post('fname'),
+                'lname' => $this->input->post('lname'),
+                'name' =>$this->input->post('fname').' '.$this->input->post('lname'),
+                'email' => $this->input->post('email'),
+                'leave_balance' =>  $jsonLeaveData,
+                'Username' => $this->input->post('Username'),
+                'joiningDate' => date("Y-m-d"),
+                'phone' => $this->input->post('phone'),
+                'zone' => $this->input->post('zone') ?? $existingUserData[0]->zone_id,
+                'type' =>  $this->input->post('type') ?? $existingUserData[0]->type_id,
+                'cluster' => $this->input->post('cluster') ?? $existingUserData[0]->aadmin ?? 0,
+                'bdpstF' =>  $this->input->post('bdpstF') ?? $existingUserData[0]->aadmin ?? 0,
+                'sales' => $this->input->post('sales') ?? $existingUserData[0]->sales_co ?? 0,
+                'pst' => $this->input->post('pst') ?? $existingUserData[0]->badmin ?? 0,
+                'password' => $this->input->post('password'),
+                'inside' => null,
+                'aadmin' => $this->input->post('admin') ?? $existingUserData[0]->aadmin,
+                'admin_id' => 45,
+                'status' => 'active',
+                'userId'=>$finalUserId,
+            );
+    
+            $authUser = array(
+                'fname' => $this->input->post('fname'),
+                'lname' => $this->input->post('lname'),
+                'email' => $this->input->post('email'),
+                'Username' => $this->input->post('Username'),
+                'joiningDate' => date("Y-m-d H:i:s"),
+                'password' => $hashedPassword,
+                'is_active' => 1,
+            );
+            // echo"<pre>authUser ";print_r($authUser);
+            // echo"<pre>userDetail ";print_r($userDetail);exit;
+            $username = $userArr['Username'];
+            $user = $this->Menu_model->checkUsername($username);
+            $num=count($user);
+            //echo $num;exit;
+            if(!empty($initUserId)){
+                //dd($userArr);
+                $isSucess = $this->Menu_model->editUserData($userArr, $initUserId);
+                if($isSucess && $uyid==2){
+    
+                $this->session->set_flashdata('success_message',"User updated successfully !");
                 redirect('Menu/UserRegistration');
+                }else{
+                    $this->session->set_flashdata('success_message',"Profile updated successfully !");
+                    redirect('Menu/myProfile');
+                }
+            }elseif($user){
+                //echo"here inside if";exit;
+                $this->session->set_flashdata('error_message',"Username already Exists !");
+                redirect("Menu/userEditAction/$initUserId");
+            }else{
+                //echo"here inside else";
+    
+                $isSucess = $this->Menu_model->insertUserData($userArr, $authUser);
+                if($isSucess){
+                    //echo"here inside issucess";exit;
+                    $this->session->set_flashdata('success_message',"User added successfully with User ID - $finalUserId ");
+                    redirect('Menu/UserRegistration');
+                }
+    
             }
-
+            
         }
-        
+        $dt=$this->Menu_model->get_utype($uyid);
+        //echo"<pre>dt ";print_r($dt);exit;
+        $dep_name = $dt[0]->name;
+        //echo"<pre>";print($_POST['name']);exit;
+        $zone=$this->Menu_model->getZone();
+        $type=$this->Menu_model->get_user_type();
+        $pst=$this->Menu_model->get_pstNames();
+        $salesCoordinator = $this->Menu_model->get_salesCoordinatorNames();
+        $clusterManager = $this->Menu_model->get_clusterManagerNames();
+        $bdpst = $this->Menu_model->get_bdpstNames();
+        $admin = $this->Menu_model->get_adminNames();
+        //echo"<pre>admin ";print_r($admin);exit;
+        $this->load->view($dep_name.'/UserRegistration',['user'=>$user,'zone'=>$zone, "type"=>$type, "pst"=>$pst, "salesCoordinator"=>$salesCoordinator, "clusterManager"=>$clusterManager, "bdpst"=>$bdpst, "admin"=>$admin]);
     }
-    $dt=$this->Menu_model->get_utype($uyid);
-    //echo"<pre>dt ";print_r($dt);exit;
-    $dep_name = $dt[0]->name;
-    //echo"<pre>";print($_POST['name']);exit;
-    $zone=$this->Menu_model->getZone();
-    $type=$this->Menu_model->get_user_type();
-    $pst=$this->Menu_model->get_pstNames();
-    $salesCoordinator = $this->Menu_model->get_salesCoordinatorNames();
-    $clusterManager = $this->Menu_model->get_clusterManagerNames();
-    $bdpst = $this->Menu_model->get_bdpstNames();
-    $admin = $this->Menu_model->get_adminNames();
-    //echo"<pre>admin ";print_r($admin);exit;
-    $this->load->view($dep_name.'/UserRegistration',['user'=>$user,'zone'=>$zone, "type"=>$type, "pst"=>$pst, "salesCoordinator"=>$salesCoordinator, "clusterManager"=>$clusterManager, "bdpst"=>$bdpst, "admin"=>$admin]);
-}
 
      public function UserDisplayPage(){
         $user = $this->session->userdata('user');
@@ -17602,30 +17681,39 @@ public function get_JoinMeetingsCompany(){
             redirect('Menu/main');
         }
     }
-    public function UserEditAction($userId){
-        $user = $this->session->userdata('user');
-        $data['user'] = $user;
-        $uid = $user['user_id'];
-        $uyid =  $user['type_id'];
-        $this->load->model('Menu_model');
-        $dt=$this->Menu_model->get_utype($uyid);
-        $dep_name = $dt[0]->name;
-        $userDetails = $this->Menu_model->get_userbyid($userId);
-        $fullname=$userDetails[0]->name;
-        $nameArr = explode(' ',$fullname);
-        $zone=$this->Menu_model->getZone();
-        $type=$this->Menu_model->get_user_type();
-        $pst=$this->Menu_model->get_pstNames();
-        $salesCoordinator = $this->Menu_model->get_salesCoordinatorNames();
-        $clusterManager = $this->Menu_model->get_clusterManagerNames();
-        $bdpst = $this->Menu_model->get_bdpstNames();
-        $admin = $this->Menu_model->get_adminNames();
-        if(!empty($user)){
-            $this->load->view($dep_name."/UserEditPage",['user'=>$user,'uid'=>$uid, 'userDetails'=>$userDetails,'zone'=>$zone, 'type'=>$type, 'pst'=>$pst, 'salesCoordinator'=>$salesCoordinator, 'clusterManager'=>$clusterManager, 'bdpst'=>$bdpst, 'admin'=>$admin, 'userId'=>$userId,'nameArr'=>$nameArr]);
-        }else{
-            redirect('Menu/main');
-        }
+   
+public function UserEditAction($userId){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $userDetails = $this->Menu_model->get_userbyid($userId);
+    //dd($userDetails);
+    $lvBalance = $userDetails[0]->leave_balance;
+    $lvArr=json_decode($lvBalance,true);
+    //dd($lvArr);
+    $photo = $userDetails[0]->photo ? base_url($userDetails[0]->photo) : base_url('uploads/profile_pics/default.png');
+    //dd($photo);
+
+    $fullname=$userDetails[0]->name;
+    $nameArr = explode(' ',$fullname);
+    $zone=$this->Menu_model->getZone();
+    $type=$this->Menu_model->get_user_type();
+    $pst=$this->Menu_model->get_pstNames();
+    $salesCoordinator = $this->Menu_model->get_salesCoordinatorNames();
+    $clusterManager = $this->Menu_model->get_clusterManagerNames();
+    $bdpst = $this->Menu_model->get_bdpstNames();
+    $admin = $this->Menu_model->get_adminNames();
+    //echo"<pre>userDetails ";print_r($nameArr);exit;
+    if(!empty($user)){
+        $this->load->view($dep_name."/UserEditPage",['user'=>$user,'uid'=>$uid, 'userDetails'=>$userDetails,'zone'=>$zone, 'type'=>$type, 'pst'=>$pst, 'salesCoordinator'=>$salesCoordinator, 'clusterManager'=>$clusterManager, 'bdpst'=>$bdpst, 'admin'=>$admin, 'userId'=>$userId,'nameArr'=>$nameArr, 'photo'=>$photo,'lvArr'=>$lvArr]);
+    }else{
+        redirect('Menu/main');
     }
+}
 public function UserDeleteAction($userId){
     $this->load->model('Menu_model');
     $removed = $this->Menu_model->changeActiveStatus($userId);
@@ -18097,10 +18185,12 @@ public function dayscRequest(){
     $endautotasktime    = $_POST['endautotasktime'];
     $start_tttpft       = $_POST['start_tttpft'];
     $end_tttpft         = $_POST['end_tttpft'];
-    $autotasktimeisset  = $_POST['autotasktimeisset'];
+    $autotasktimeisset  = (isset($_POST['autotasktimeisset']))?($_POST['autotasktimeisset']):'0';
+   
     if($uyid ==15){
         $autotasktimeisset = 1;
     }
+  
     if($autotasktimeisset != 0){
         $planbutnotinited = $this->Menu_model->CreateCloseDayRequest($uid,$req_id,$req_answer,$message,$autotasktimeisset);
     }else{
@@ -18109,7 +18199,6 @@ public function dayscRequest(){
    
     $this->session->set_flashdata('success_message','* Day Close Request Sent SuccessFully !');
     redirect('Menu/DayManagement');
-    
 }
 public function YesterdayDayClose(){
     $user_id    = $_POST['user_id'];
@@ -18123,7 +18212,7 @@ public function YesterdayDayClose(){
     $this->load->model('Menu_model');
     $flink      = $this->Menu_model->uploadfile($filname, $uploadPath);
     $this->Menu_model->UpdateCloseYesterDay($flink,$user_id,$lat,$lng,$req_id);
-    $this->session->set_flashdata('success_message','*You have closed the perevious day successfully, Start You Day Now.');
+    $this->session->set_flashdata('success_message','*You have closed the previous day successfully, Start You Day Now.');
     redirect('Menu/DayManagement');
 }
 public function YesterDayDaysCloseRequest(){
@@ -18142,6 +18231,7 @@ public function YesterDayDaysCloseRequest(){
     }else{
         $adate = date("Y-m-d");
     }
+    
     $getreqData  =   $this->Menu_model->GetDayCloseRequestData($uid,$adate,$uyid);
      if(!empty($user)){
         $this->load->view($dep_name.'/YesterDayDaysCloseRequest',['uid'=>$uid,'user'=>$user,'adate'=>$adate,'getreqData'=>$getreqData]);
@@ -18466,7 +18556,7 @@ public function nostatuschange_indate(){
     }
     $cdate = date("Y-m-d");
     $cmps = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$days,$sid,$cdate);
-    // $cdate = date("Y-m-d");
+    
     echo '<option value="">Select Company</option>';
     foreach($cmps as $cmp){ ?>
     <option style="color: #d90d2b;" title="<?=$cmp->days?> Days - <?=$cmp->compname?> (<?=$cmp->pname?>)" value="<?=$cmp->inid?>">
@@ -18491,22 +18581,6 @@ public function PlanningForReview(){
     $this->session->set_flashdata('success_message', 'Review Plan Created Successfully !');
     redirect('Menu/TaskPlanner2/'.$pdate);
 }
-
-
-public function dayshiftstart(){
-    $shiftReqdd            = $_POST['shiftReqdd'];
-    $requestRemarkForstartDay    = $_POST['requestForstartDay'];
-    $uid                   = $_POST['uid'];
-
-    $this->load->library('session');
-    $this->load->model('Menu_model');
-    // $plandate = $pdate.' '.$review_plantime;
-    $this->Menu_model->InsertdayshiftstartReq($uid,$shiftReqdd,$requestRemarkForstartDay);
-    $this->session->set_flashdata('success_message', 'Request Sent..!!');
-    redirect('Menu/DayManagement/');
-}
-
-
 public function CheckFirstTimeReviewInYear(){
     $user   = $this->session->userdata('user');
     $uid    = $user['user_id'];
@@ -18921,7 +18995,7 @@ public function SendRequestForDayStartChnage(){
     
     $this->db->insert('change_user_day_request', $data);
     $this->load->library('session');
-    $this->session->set_flashdata('success_message','Request to change the start your Days Sended Successfully !');
+    $this->session->set_flashdata('success_message','Request to change the start your Days Sent Successfully !');
     redirect('Menu/DayManagement');
 }
 public function GetTodaysTeamDayChnageRequestData(){
@@ -19162,7 +19236,6 @@ public function UserVisitPage(){
     }   
 }
 public function CheckTaskPlanningTime(){
-    
     date_default_timezone_set("Asia/Calcutta");
     $user           = $this->session->userdata('user');
     $uid            = $user['user_id'];
@@ -19171,6 +19244,7 @@ public function CheckTaskPlanningTime(){
     $initedtime     = date("Y-m-d H:i:s");
     $tdate          = date("Y-m-d");
     $user_day       = $this->Menu_model->get_daystarted($uid,date("Y-m-d"));
+   // dd($user_day);exit;
       if(sizeof($user_day) > 0){
         $pinitiate_time = $user_day[0]->planner_initiate_time;
         if($pinitiate_time == ''){
@@ -19261,7 +19335,7 @@ public function GetCompanyPrimaryContact(){
 //         redirect('Menu/main');
 //     }
 // }
-public function CMAssignedCmpList($clmid){
+public function CMAssignedCmpList($clmid,$sd,$ed){
     $user                = $this->session->userdata('user');
     // $data['CMWork']   = $this->Menu_model->getCMAssignedWork();
     $data['user']        = $user;
@@ -19270,15 +19344,14 @@ public function CMAssignedCmpList($clmid){
     $dt                  = $this->Menu_model->get_utype($uyid);
     $dep_name            = $dt[0]->name;
     $data['clmid']       = $clmid;
-    $data['sd']          =  $sd = '2024-06-20';
-    $data['ed']          =  $ed = '2024-07-28';
-    // dd($data);exit;
-    $totalArr = array();
-    $CMWorkcompanies           = $this->Menu_model->getCMAssignedCompanies($clmid,$sd,$ed);
+    $data['sd']          =  $sd;
+    $data['ed']          =  $ed;
+    $totalArr            = array();
+    $CMWorkcompanies     = $this->Menu_model->getCMAssignedCompanies($clmid,$sd,$ed);
      $data['CMWorkcompanies']  = $CMWorkcompanies;
     $this->load->view('Admin/CMAssignedCompanies.php',$data);
 }
-public function PSTAssignedCmpList($apst){
+public function PSTAssignedCmpList($apst,$sd,$ed){
     $user                = $this->session->userdata('user');
     // $data['CMWork']   = $this->Menu_model->getCMAssignedWork();
     $data['user']        = $user;
@@ -19287,8 +19360,8 @@ public function PSTAssignedCmpList($apst){
     $dt                  = $this->Menu_model->get_utype($uyid);
     $dep_name            = $dt[0]->name;
     $data['apst'] =$apst;
-    $data['sd']          =  $sd = '2024-06-20';
-    $data['ed']          =  $ed = '2024-07-28';
+    $data['sd']          =  $sd;
+    $data['ed']          =  $ed ;
     $data['PSTWorkcompanies']  = $this->Menu_model->getPSTAssignedCompanies($apst,$sd,$ed);
     //  dd($data);exit;
     $this->load->view('Admin/PSTAssignedCompanies.php',$data);
@@ -19302,8 +19375,8 @@ public function BDAssignedCmpList($bd){
     $dt                  = $this->Menu_model->get_utype($uyid);
     $dep_name            = $dt[0]->name;
     $data['apst']        = $bd;
-    $data['sd']          = $sd = '2024-06-20';
-    $data['ed']          = $ed = '2024-07-28';
+    $data['sd']          =  $sd;
+    $data['ed']          =  $ed;
     $data['BDWorkcompanies']  = $this->Menu_model->getBDAssignedCompanies($bd,$sd,$ed);
     //  dd($data);exit;
   
@@ -19370,7 +19443,6 @@ public function CreateTaskForTaskCheck() {
     }
 }
     public function getAllMyTeam($type){
-        // echo $type;exit;
         $uid                   = $_SESSION['user']['user_id'];
         $utype                 = $_SESSION['user']['type_id'];
         if($type =='all'){
@@ -19380,17 +19452,13 @@ public function CreateTaskForTaskCheck() {
             $typeids = $type;
         }
         $user = $this->session->userdata('user');
-         $sd = $this->input->post('startdate');
-         $ed = $this->input->post('enddate');
+         $sd = $this->input->post('sdate');
+         $ed = $this->input->post('edate');
         if(empty($sd) && empty($ed)){
            $sd = date('Y-m-d'); 
            $ed = date('Y-m-d');
         }
-       
-        $sd = '2024-06-20'; 
-        $ed = '2024-07-28';
         $totalTeamData         = $this->Menu_model->getTotalUserByTypeId($uid,$typeids,$total='data',$sd,$ed);
-        //  dd($totalTeamData);exit;
         $data['totalTeamdata'] = $totalTeamData ; 
         $data['uid']           = $uid;
         $data['utype']         = $utype;
@@ -19398,25 +19466,23 @@ public function CreateTaskForTaskCheck() {
         $data['sd']            = $sd;
         $data['ed']            = $ed;
         $data['type'] = $type;
-         $this->load->view('Admin/allTeamData',$data);
+        $this->load->view('Admin/allTeamData',$data);
     }
-    public function CMConversionsList($clmid,$cmpid){
+    public function CMConversionsList($clmid,$cmpid,$sd,$ed){
         $uid                   = $_SESSION['user']['user_id'];
         $utype                 = $_SESSION['user']['type_id'];
         if(empty($type)){
              $type               = '3,4,5,9,13,15';
         }
         $user = $this->session->userdata('user');
-         $sd = $this->input->post('startdate');
-         $ed = $this->input->post('enddate');
+        //  $sd = $this->input->post('sdate');
+        //  $ed = $this->input->post('enddate');
         if(empty($sd) && empty($ed)){
            $sd = date('Y-m-d'); 
            $ed = date('Y-m-d');
         }
-        $sd = '2024-06-20'; 
-        $ed = '2024-07-28';
-        // echo $cmpid;
-        $conversionList                 = $this->Menu_model->getTotalCMConversionList($clmid,$sd,$ed,$cmpid);
+       
+        $conversionList        = $this->Menu_model->getTotalCMConversionList($clmid,$sd,$ed,$cmpid);
         $data['uid']           = $uid;
         $data['utype']         = $utype;
         $data['user']          = $user;
@@ -19426,43 +19492,63 @@ public function CreateTaskForTaskCheck() {
         $data['ed']            =  $ed;
          $this->load->view('Admin/CMConversionList',$data);
     }
-    public function PSTConversionsList($pstid,$cmpid){
+    public function CMTasksList($clmid,$cmpid,$sd,$ed){
         $uid                   = $_SESSION['user']['user_id'];
         $utype                 = $_SESSION['user']['type_id'];
         if(empty($type)){
              $type               = '3,4,5,9,13,15';
         }
         $user = $this->session->userdata('user');
-         $sd = $this->input->post('startdate');
-         $ed = $this->input->post('enddate');
         if(empty($sd) && empty($ed)){
            $sd = date('Y-m-d'); 
            $ed = date('Y-m-d');
         }
-        $data['sd'] = $sd = '2024-06-20'; 
-        $data['ed'] = $ed = '2024-07-28';
-        // dd("xcd");exit;
+       
+        $tasksList             = $this->Menu_model->getTotalCMTaskList($clmid,$sd,$ed,$cmpid);
+        $data['uid']           = $uid;
+        $data['utype']         = $utype;
+        $data['user']          = $user;
+        $data['taskList']      = $tasksList;
+     
+        $data['sd']            =  $sd;
+        $data['ed']            =  $ed;
+         $this->load->view('Admin/CMTaskList',$data);
+    }
+
+    public function PSTConversionsList($pstid,$cmpid,$sd,$ed){
+        $uid                   = $_SESSION['user']['user_id'];
+        $utype                 = $_SESSION['user']['type_id'];
+        if(empty($type)){
+             $type               = '3,4,5,9,13,15';
+        }
+        $user = $this->session->userdata('user');
+        //  $sd = $this->input->post('sdate');
+        //  $ed = $this->input->post('edate');
+        if(empty($sd) && empty($ed)){
+           $sd = date('Y-m-d'); 
+           $ed = date('Y-m-d');
+        }
+        $data['sd'] = $sd; 
+        $data['ed'] = $ed;
         $data['PSTconversionList']        = $this->Menu_model->getTotalPSTConversionList($pstid,$sd,$ed,$cmpid);
         $data['uid']           = $uid;
         $data['utype']         = $utype;
         $data['user']          = $user;
         $data['sd']            =  $sd;
         $data['ed']            =  $ed;
-        // dd($data);exit;
          $this->load->view('Admin/PSTConversionList',$data);
     }
     public function BDConversionsList($bdid,$cmpid){
         $uid                   = $_SESSION['user']['user_id'];
         $utype                 = $_SESSION['user']['type_id'];
         $user = $this->session->userdata('user');
-         $sd = $this->input->post('startdate');
-         $ed = $this->input->post('enddate');
+         $sd = $this->input->post('sdate');
+         $ed = $this->input->post('edate');
         if(empty($sd) && empty($ed)){
            $sd = date('Y-m-d'); 
            $ed = date('Y-m-d');
         }
-        $sd = '2024-06-20'; 
-        $ed = '2024-07-28';
+      
         $conversionList         = $this->Menu_model->getTotalBDConversionList($bdid,$sd,$ed,$cmpid);
         $data['conversionList'] = $conversionList ; 
         // dd($data);exit;
@@ -19473,21 +19559,19 @@ public function CreateTaskForTaskCheck() {
         $data['ed']            = $ed;
         $this->load->view('Admin/BDConversionList',$data);
     }
-    public function BDPSTConversionsList($bdid,$cmpid){
+    public function BDPSTConversionsList($bdid,$cmpid,$sd,$ed){
         $uid                   = $_SESSION['user']['user_id'];
         $utype                 = $_SESSION['user']['type_id'];
         $user = $this->session->userdata('user');
-         $sd = $this->input->post('startdate');
-         $ed = $this->input->post('enddate');
+        
         if(empty($sd) && empty($ed)){
            $sd = date('Y-m-d'); 
            $ed = date('Y-m-d');
         }
-        $sd = '2024-06-20'; 
-        $ed = '2024-07-28';
+       
         $conversionList         = $this->Menu_model->getTotalBDPSTConversionList($bdid,$sd,$ed,$cmpid);
         $data['conversionList'] = $conversionList ; 
-        // dd($data);exit;
+       
         $data['uid']           = $uid;
         $data['utype']         = $utype;
         $data['user']          = $user;
@@ -19586,35 +19670,66 @@ public function getcmpnlogAgainstReviewTask(){
     $rtype = $this->input->post('rtype');
     $rtype_id = $this->input->post('rtype_id');
     $this->load->model('Menu_model');
+    $slct_base_review_id   = $this->input->post('slct_base_review');
+    $base_revdata    =   $this->Menu_model->getReviewByRID($slct_base_review_id);
+    $revdatacnt = sizeof($base_revdata);
+    if($revdatacnt > 0){
+        $slct_base_review = $base_revdata[0]->sdatet;
+        $rtype = $base_revdata[0]->reviewtype;
+        $slct_base_review = date("Y-m-d", strtotime($slct_base_review));
+    }
+
     if($rtype == 'Self Half Yearly' || $rtype == 'Half Yearly'){
         $currentDate = new DateTime();
         $currentDate->modify('-6 months');
         $fdate = $currentDate->format('Y-m-d');
     }
     if($rtype == 'Self Weekly' || $rtype == 'Weekly'){
-        $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
-        $start_date = $rdetails[0]->startt; 
-        $fdate = date("Y-m-d", strtotime("-7 days", strtotime($start_date)));
+        
+        if($slct_base_review !==''){
+            $start_date = $slct_base_review; 
+        }else{
+            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+            $start_date = $rdetails[0]->startt;
+        }
+        // $fdate = date("Y-m-d", strtotime("-7 days", strtotime($start_date)));
+        $fdate = date("Y-m-d", strtotime("-0 days", strtotime($start_date)));
     }
     if($rtype == 'Self Fortnightly' || $rtype == 'Fortnightly'){
-        $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
-        $start_date = $rdetails[0]->startt; 
-        $fdate = date("Y-m-d", strtotime("-15 days", strtotime($start_date)));
+        if($slct_base_review !==''){
+            $start_date = $slct_base_review; 
+        }else{
+            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+            $start_date = $rdetails[0]->startt;
+        }
+        // $fdate = date("Y-m-d", strtotime("-15 days", strtotime($start_date)));
+        $fdate = date("Y-m-d", strtotime("-0 days", strtotime($start_date)));
     }
     if($rtype == 'Self Monthly' || $rtype == 'Monthly'){
-        $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
-        $start_date = $rdetails[0]->startt; 
-        $fdate = date("Y-m-d", strtotime("-30 days", strtotime($start_date)));
+        if($slct_base_review !==''){
+            $start_date = $slct_base_review; 
+        }else{
+            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+            $start_date = $rdetails[0]->startt;
+        }
+        // $fdate = date("Y-m-d", strtotime("-30 days", strtotime($start_date)));
+        $fdate = date("Y-m-d", strtotime("-0 days", strtotime($start_date)));
     }
-    if($rtype == 'Self Quarterly' || $rtype == 'Querterly'){
-        $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
-        $start_date = $rdetails[0]->startt; 
-        $fdate = date("Y-m-d", strtotime("-90 days", strtotime($start_date)));
+    if($rtype == 'Self Quarterly' || $rtype == 'Querterly' || $reviewtype == 'Quarterly'){
+        if($slct_base_review !==''){
+            $start_date = $slct_base_review; 
+        }else{
+            $rdetails   = $this->Menu_model->getReviewByRID($rtype_id); 
+            $start_date = $rdetails[0]->startt;
+        }
+        // $fdate = date("Y-m-d", strtotime("-90 days", strtotime($start_date)));
+        $fdate = date("Y-m-d", strtotime("-0 days", strtotime($start_date)));
     }
     $complog = [];
+
     $cmptd  =   $this->Menu_model->get_cmptd_new($inid,$fdate);
-    // echo $this->db->last_query();
     $complog['totaltask'] = $cmptd;
+    // dd($complog);
     $data = json_encode($complog);
     echo $data;
 }
@@ -20012,30 +20127,31 @@ public function getCMandPST() {
 }
 
 public function leaveApply(){
-    $uid= $this->input->post('uid');
-    $leaveType= $this->input->post('leaveType');
-    $aadmin= $this->input->post('aadmin');
-    $fromDate= $this->input->post('fromDate');
-    $toDate= $this->input->post('toDate');
-    $reason= $this->input->post('reason');
-    $leaveData = array(
-        'user_id' => $uid,       // User ID
-        'leave_type' => $leaveType,       // User ID
-        'admin_id' => $aadmin, // Admin or approving person ID
-        'start_date' => $fromDate, // Start date of the leave
-        'end_date' => $toDate,    // End date of the leave
-        'reason' => $reason,           // Default status set to pending
-    );
-    //dd($leaveData);
-    $isSent= $this->db->insert('leave_requests', $leaveData);
-    if($isSent){
-        $this->session->set_flashdata('success_message','Leave successfully sent for approval');
+        $uid= $this->input->post('uid');
+        $leaveType= $this->input->post('leaveType');
+        $aadmin= $this->input->post('aadmin');
+        $fromDate= $this->input->post('fromDate');
+        $toDate= $this->input->post('toDate');
+        $reason= $this->input->post('reason');
+        $leaveData = array(
+            'user_id' => $uid,       // User ID
+            'leave_type' => $leaveType,       // User ID
+            'admin_id' => $aadmin, // Admin or approving person ID
+            'start_date' => $fromDate, // Start date of the leave
+            'end_date' => $toDate,    // End date of the leave
+            'reason' => $reason,           // Default status set to pending
+        );
+        //dd($leaveData);
+        $isSent= $this->db->insert('leave_requests', $leaveData);
+        if($isSent){
+            $this->session->set_flashdata('success_message','Leave successfully sent for approval');
 
-    }else{
-        $this->session->set_flashdata('error_message', 'Failed to send leave request. Please try again.');
+        }else{
+            $this->session->set_flashdata('error_message', 'Failed to send leave request. Please try again.');
+        }
+        redirect('Menu/myProfile');
     }
-    redirect('Menu/myProfile');
-}
+
 
 public function leaveApproval(){
     $user = $this->session->userdata('user');
@@ -20110,16 +20226,19 @@ public function leaveAction($status,$id,$lvEnd){
     redirect('Menu/leaveApproval');
 }
 
+
 public function uploadProfilePic($userId) {
-    if (isset($_FILES['file']) && !empty($_FILES['file']['name'])) {
+    //echo 'here';exit;
+    if (isset($_FILES['file'])) {
         $config['upload_path'] = './uploads/profile_pics/';
-        $config['allowed_types'] = 'jpg|jpeg|png|gif';
-        $config['max_size'] = 2048; // 2MB limit
-
+        $config['allowed_types'] = '*';
+        $config['max_size'] = 4096;
+        
         $this->load->library('upload', $config);
-
+        
         if ($this->upload->do_upload('file')) {
             $fileData = $this->upload->data();
+            //dd($fileData);
             $filePath = 'uploads/profile_pics/' . $fileData['file_name'];
 
             $data = ['photo' => $filePath];
@@ -20135,6 +20254,7 @@ public function uploadProfilePic($userId) {
         echo json_encode(['status' => 'error', 'message' => 'No file selected']);
     }
 }
+
 
 public function UserProfile($UserId){
 
@@ -20205,10 +20325,511 @@ public function getLeaveDetail(){
     dd($dt);
     echo $dt[0]->leave_balance;
 }
+
+/***Day start late request***Rahul */
+public function dayShiftStartReq(){
+    // echo 'hii';die;
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $mdata = $this->Menu_model->getShiftStartRequest($uid,$uyid);
+    // var_dump($mdata);die;
+    if(!empty($user)){
+        $this->load->view($dep_name.'/dayShiftStartReqApproval',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata]);
+    }else{
+        redirect('Menu/main');
+    }
+
+}
+
+public function dayshiftstart(){
+$shiftReqdd            = $_POST['shiftReqdd'];
+$requestRemarkForstartDay    = $_POST['requestForstartDay'];
+$uid                   = $_POST['uid'];
+
+$this->load->library('session');
+$this->load->model('Menu_model');
+// $plandate = $pdate.' '.$review_plantime;
+$this->Menu_model->InsertdayshiftstartReq($uid,$shiftReqdd,$requestRemarkForstartDay);
+$this->session->set_flashdata('success_message', 'Request Sent..!!');
+redirect('Menu/DayManagement/');
+}
+
+
+public function LateDayStartapprove($id,$type){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    if($type == 1){
+        $status     = 1;
+        $approved_by    = $uid;
+        $apr_time   = date("Y-m-d H:i:s");
+        $query =  $this->db->query("UPDATE daystartrequest SET status='$status',approved_at='$apr_time',approval_by='$approved_by' WHERE id = $id");
+        // echo $this->db->last_query();die;
+        redirect("Menu/dayShiftStartReq");
+    }
+    // elseif (condition) {
+    //     # code...
+    // }
+    else{
+        redirect('Menu/main');
+    }  
+}
+public function fetchCompanyDetails() {
+    $this->load->model('Menu_model');
+    $cmp_id = $this->input->post('id'); // Get the id from the AJAX request
+    $cd = $this->Menu_model->get_cdbyid($cmp_id);
+    $ccd = $this->Menu_model->get_ccdbyid($cmp_id);
+    $init=$this->Menu_model->get_initcallbyid($cmp_id);
+    $ciid = $init[0]->id;
+    $sid = $init[0]->cstatus;
+    $mainbd = $init[0]->mainbd;
+    $apst = $init[0]->apst;
+    $tblc = $this->Menu_model->get_tblcalleventsbyid($ciid);
+
+    $tbllast=$this->Menu_model->get_tblcalleventsbyid($ciid);
+    $aid = $tbllast[0]->actiontype_id;
+    $cstatus=$this->Menu_model->get_statusbyid($sid);
+    $action=$this->Menu_model->get_actionbyid($aid);
+
+    // Prepare data to send back as a JSON response
+    $data = array(
+        'compname' => $cd[0]->compname,
+        'current_status' => $cstatus[0]->name, // Example, adjust according to your actual data
+        'current_status_id' => $cstatus[0]->id, // Example, adjust according to your actual data
+        // 'last_task' => $ccd[0]->last_task,
+        // 'last_task_remark' => $ccd[0]->last_remark,
+        'init_id' => $init[0]->id,
+    );
+
+    //echo"<pre>data ";print_r($data);exit;
+
+    echo json_encode($data); // Return the data as JSON
+}
+
+public function addtaskNYA(){
+    $user = $this->session->userdata('user');
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+
+    $date= $this->input->post('ntdate');
+    $uid= $this->input->post('ntuid');
+    $ntinid= $this->input->post('ntinid');
+    $ntaction= $this->input->post('ntaction');
+    $ntstatus= $this->input->post('ntstatus');
+    $ntppose= $this->input->post('ntppose');
+    $ntnextaction= $this->input->post('ntnextaction');
+    $user= $this->input->post('user');
+    $action= $this->input->post('action');
+   
+    $this->load->model('Menu_model');
+    if(isset($user) && !empty($user)){
+        //echo"here";exit;
+        $id=$this->Menu_model->add_task($user,$ntinid,$action,$ntstatus,$ntppose,$ntnextaction,$date);
+    }else{
+        $id=$this->Menu_model->add_task($uid,$ntinid,$ntaction,$ntstatus,$ntppose,$ntnextaction,$date);
+    }
+
+    if($uyid==2){
+        redirect('Menu/needYourAttention');
+    }else{
+        redirect('Menu/Dashboard');
+    }
+    
+}
+
+public function ApproveTaskCheckRequest(){
+
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    // $typeID =  $user['type_id'];
+    $uyid =  $user['type_id'];
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    
+    $getRequests = $this->Menu_model->getRequests($uid);
+    // var_dump($user);die;
+    if(!empty($user)){
+        $this->load->view($dep_name.'/ApproveTaskCheckRequest',['uid'=>$this->uid,'user'=>$this->user,'getRequests'=>$getRequests]);
+    }else{
+        redirect('Menu/main');
+    }
+}
+public function RequestForTaskCheckApproval(){
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+
+    $request = $this->input->post('remark');
+    $dayData = $this->Menu_model->RequestForTaskCheckApproval($uid,$request);
+    
+}
+
+public function ApproveRequest() {
+
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+
+    // var_dump($_POST);die;
+    $id = $_POST['id'];
+    $action = $_POST['action'];
+    if ($action == 'approve') {
+        $action = 'Approved';
+    }
+    if ($action == 'reject') {
+        $action = 'Rejected';
+    }
+    $result = $this->Menu_model->ApproveRequest($id,$action,$uid);
+}
 // ---------------------profile page End----------------------
 
+/**REVIEW FUNCTIONS - DEEPAK*/
+public function getcmpdbybd_new(){
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+    $uyid           =  $user['type_id'];
+    $bdid       = $this->input->post('bdid');
+    $fdate      = $this->input->post('fdate');
+    $pstid      = $this->input->post('pstid');
+    $review_id  = $this->input->post('review_id');
+    $this->load->model('Menu_model');
+   
+    $revdata    =   $this->Menu_model->getReviewByRID($review_id);
+    $rev_startt =   $revdata[0]->startt;
+    $reviewtype =   $revdata[0]->reviewtype;
+    $cdatetime  =   date("Y-m-d H:i:s");
+  
+    if($uyid == 3){
+        $statusid = '1,4,5,8';
+    }elseif($uyid == 13){
+        $statusid = '1,2,3,4,5,8';
+    }elseif($uyid == 4){
+        $statusid = '1,2,3,4,5,8,6,9,12,13';
+    }
+    
 
+    $cmp=$this->Menu_model->get_cmpdbybd_newforrev($statusid,$bdid,$fdate);
+    if($reviewtype =='Self Half Yearly' || $reviewtype =='Half Yearly'){
+        $revcmp     =   $this->Menu_model->getReviewedCMPHalfYearly();
+       
+        function filterArray($array1, $array2) {
+            $inidValues = array_column($array1, 'inid');
+            return array_filter($array2, function($item) use ($inidValues) {
+                return !in_array($item->inid, $inidValues);
+            });
+        }
+        $result = filterArray($revcmp, $cmp);
+    }else{
+        $revcmp     =   $this->Menu_model->getReviewedCMPHalfYearly();
+        function filterArray3($array1, $array2) {
+            $inidValues = array_column($array1, 'inid');
+            return array_filter($array2, function($item) use ($inidValues) {
+                return in_array($item->inid, $inidValues);
+            });
+        }
+        $result = filterArray3($revcmp, $cmp);
+        if($reviewtype == 'Self Weekly' || $reviewtype == 'Weekly' || $reviewtype =='Self Review'){
+            $cdate = date("Y-m-d", strtotime("-7 days", strtotime($rev_startt)));
+        }
+        if($reviewtype == 'Self Fortnightly' || $reviewtype == 'Fortnightly'){
+            $cdate = date("Y-m-d", strtotime("-15 days", strtotime($rev_startt)));
+        }
+        if($reviewtype == 'Self Monthly' || $reviewtype == 'Monthly'){
+            $cdate = date("Y-m-d", strtotime("-30 days", strtotime($rev_startt)));
+        }
+        if($reviewtype == 'Self Quarterly' || $reviewtype == 'Querterly' || $reviewtype == 'Quarterly'){
+            $cdate = date("Y-m-d", strtotime("-90 days", strtotime($rev_startt)));
+        }
+        if($reviewtype == 'Roaster'){
+            $cdate = date("Y-m-d", strtotime("-7 days", strtotime($rev_startt)));
+        }
 
+        $init_ids = '';
+        foreach($result as $dt){
+            $init_ids .= $dt->inid.',';
+       }
+       $revinit_ids = rtrim($init_ids, ',');
+       $user_id = $uid;
+       $revdcmp  =   $this->Menu_model->CheckReviewDoneorNotByUser($user_id,$cdate,$revinit_ids,$reviewtype);
+  
+       function filterArray4($array1, $array2) {
+        $inidValues = array_column($array1, 'inid');
+        return array_filter($array2, function($item) use ($inidValues) {
+            return !in_array($item->inid, $inidValues);
+        });
+    }
+    $result = filterArray4($revdcmp, $result);
+    }
+    
+    $resultcnt = sizeof($result);
+    echo $resultcnt;
+    
+}
+public function AddReviewMeetingLink(){
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+    $uyid           =  $user['type_id'];
+    $this->load->model('Menu_model');
+    
+    $meetinglink      = $this->input->post('meetinglink');
+    $rtype_id      = $this->input->post('rtype_id');
+    $inid      = $this->input->post('inid');
+    $data = array(
+        'user_by'    => $uid,
+        'meeting'    => $meetinglink,
+        'rid'        => $rtype_id,
+        'inid'       => $inid,
+    );
+    $this->db->insert('review_meeting_link', $data);
+    
+}
+public function getCompanyuserInfo(){
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+    $uyid           =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $apstValue      = $this->input->post('apstValue');
+    $utype = $this->Menu_model->get_userbyid($apstValue);
+    $utypecnt = sizeof($utype);
+    if($utypecnt > 0){
+        $uname = $utype[0]->name;
+        echo $uname;
+    }
+}
+public function getCompanyInfo(){
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+    $uyid           =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $inid      = $this->input->post('inid');
+    $initdata = $this->Menu_model->get_cmpbyinid($inid);
+   
+    $initdata = json_encode($initdata);
+    echo $initdata;
 
+}
+public function getCompanyReviewTargetData(){
+    
+    $user           = $this->session->userdata('user');
+    $data['user']   = $user;
+    $uid            = $user['user_id'];
+    $uyid           =  $user['type_id'];
+
+    $this->load->model('Menu_model');
+    
+    $inid               = $this->input->post('inid');
+    $rtype_id           = $this->input->post('rtype_id');
+    $slct_base_review   = $this->input->post('slct_base_review');
+
+    $baseData           = $this->Menu_model->getBaseReviewTargetData($inid,$slct_base_review);
+    $baseDatacnt        = sizeof($baseData);
+    if($baseDatacnt > 0){ 
+    $ntid               = $baseData[0]->ntid;
+    $sdate              = $baseData[0]->sdate;
+    $by_uid             = $baseData[0]->by_uid;
+    $for_uid            = $baseData[0]->for_uid;
+    $csid               = $baseData[0]->csid;
+    $exsid              = $baseData[0]->exsid;
+    $exdate             = $baseData[0]->exdate;
+    $cdate              = $baseData[0]->cdate;
+    $remarks            = $baseData[0]->remarks;
+    $rtype              = $baseData[0]->rtype;
+
+    $revCmpStatus       = $this->Menu_model->get_statusbyid($csid);
+    $revCmpStatusName   = $revCmpStatus[0]->name; 
+
+    $revExpCmpStatus       = $this->Menu_model->get_statusbyid($exsid);
+    $revExpCmpStatusName   = $revExpCmpStatus[0]->name; 
+
+    $by_uidData       = $this->Menu_model->get_userbyid($by_uid);
+    $for_uidData      = $this->Menu_model->get_userbyid($for_uid);
+    
+    if($by_uid == $for_uid){
+        $by_uidDataName  = $by_uidData[0]->name;
+        $for_uidDataName = '';
+    }else{
+        $by_uidDataName  = $by_uidData[0]->name;
+        $for_uidDataName = $for_uidData[0]->name;
+    }
+
+    $initdata   = $this->Menu_model->get_cmpbyinid($inid);
+    $compname   = $initdata[0]->compname;
+    $cstatus    = $initdata[0]->cstatus;
+    $lstatus    = $initdata[0]->lstatus;
+    $clm_id     = $initdata[0]->clm_id;
+    $apst       = $initdata[0]->apst;
+
+    $getCurCmpStatus      = $this->Menu_model->get_statusbyid($cstatus);
+    $getCurCmpStatusName  = $getCurCmpStatus[0]->name; 
+    $getLastCmpStatus     = $this->Menu_model->get_statusbyid($lstatus);
+    $geLastCmpStatusName  = $getLastCmpStatus[0]->name; 
+
+    $ntData              = $this->Menu_model->getTBLTaskByID($ntid);
+    $actontaken          = $ntData[0]->actontaken;
+    $purpose_achieved    = $ntData[0]->purpose_achieved;
+    $appointmentdatetime = $ntData[0]->appointmentdatetime;
+    $actiontype_id       = $ntData[0]->actiontype_id;
+    $purpose_id          = $ntData[0]->purpose_id;
+    $updateddate         = $ntData[0]->updateddate;
+    $status_id           = $ntData[0]->status_id;
+
+    $getCmpTaskStatus    = $this->Menu_model->get_statusbyid($status_id);
+    $getCTStatusname     = $getCmpTaskStatus[0]->name; 
+
+    $getCmpTaskAction    = $this->Menu_model->get_actionbyid($actiontype_id);
+    $getCTActionName     = $getCmpTaskAction[0]->name;
+    $getCmpTaskPurpose   = $this->Menu_model->get_purposeNameById($purpose_id);
+ 
+    $html = "";
+    
+    $html .= "<div class='card p-2'> 
+            <table class='table table-bordered'>
+                <tbody>
+                    <tr class='table-success'>
+                        <td>Base Review</td>
+                        <td>$rtype</td>
+                    </tr>
+                    <tr class='table-primary'>
+                        <td>Company Name</td>
+                        <td>$compname</td>
+                    </tr>
+                    <tr class='table-secondary'>
+                        <td>Company Current Status</td>
+                        <td>$getCurCmpStatusName</td>
+                    </tr>
+                    <tr class='table-success'>
+                        <td>Company Last Status</td>
+                        <td>$geLastCmpStatusName</td>
+                    </tr>
+                    <tr class='table-danger'>
+                        <td>Task Name</td>
+                        <td>$getCTActionName</td>
+                    </tr>
+                    <tr class='table-warning'>
+                        <td>Task Date</td>
+                        <td>$appointmentdatetime</td>
+                    </tr>
+                    <tr class='table-info'>
+                        <td>Action</td>
+                        <td>$actontaken</td>
+                    </tr>
+                    <tr class='table-primary'>
+                        <td>Purpose</td>
+                        <td>$purpose_achieved</td>
+                    </tr>
+                    <tr class='table-secondary'>
+                        <td>Review Time Company Status</td>
+                        <td>$revCmpStatusName</td>
+                    </tr>
+                    <tr class='table-info'>
+                        <td>Review Time Expected Status</td>
+                        <td>$revExpCmpStatusName</td>
+                    </tr>
+                    <tr class='table-danger'>
+                        <td>Review Time Expected Date</td>
+                        <td>$exdate</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>";
+    echo $html;
+    }else{
+        echo "<p class='font-weight-bold text-center'>* There is no review of this company in this base review.</p>";
+    }
+   
+    
+}
+
+/** END REVIEW FUNCTIONS */
+
+/** To add autotask time for today */
+public function UpdateTodaysAutotaskTime(){
+    $this->load->model('Menu_model');
+    $this->load->library('session');
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $date =  date('Y-m-d');
+    
+    $query1            =  $this->db->query("SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$date'");
+    $gecurAutoTaskTime = $query1->result();
+    $gecurAutoTaskTimecnt = sizeof($gecurAutoTaskTime);
+
+    if($gecurAutoTaskTimecnt == 0){
+        if(!empty($user)){
+            $this->load->view($dep_name.'/UpdateTodaysAutotaskTime',['uid'=>$uid,'user'=>$user,'date'=>$date]);
+        }else{
+            redirect('Menu/main');
+        }
+    }else{
+        $this->session->set_flashdata('success_message','Auto Task Time and Planner Time Allready Updated !');
+        redirect('Menu/Dashboard');
+    }
+}
+
+public function AddAutoTaskTime(){
+    $this->load->model('Menu_model');
+    $this->load->library('session');
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $dt=$this->Menu_model->get_utype($uyid);
+
+    $startautotasktime               = $this->input->post('startautotasktime').':00';
+    $endautotasktime           = $this->input->post('endautotasktime').':00';
+    $start_tttpft   = $this->input->post('start_tttpft');
+    $end_tttpft   = $this->input->post('end_tttpft');
+    $date =  date('Y-m-d');
+
+    $data = array(
+        'user_id'       => $uid,
+        'date'          => $date,
+        'stime'         => $startautotasktime,
+        'etime'         => $endautotasktime,
+        'start_tttpft'  => $start_tttpft,
+        'end_tttpft'    => $end_tttpft,
+        'userworkfrom'  => 0,
+    );
+    
+    $this->db->insert('autotask_time', $data);
+    $this->session->set_flashdata('success_message','Auto Task Time and Planner Time Add Successfullly!');
+    redirect('Menu/Dashboard');
+}
+public function Meetings($type,$sd,$ed,$bdid){
+    $sdate = $sd;
+    $edate = $ed;
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $uyid =  $user['type_id'];
+    $this->load->model('Menu_model');
+    $dt=$this->Menu_model->get_utype($uyid);
+    $dep_name = $dt[0]->name;
+    $mdata = $this->Menu_model->get_meetingDetails($uid,$sd,$ed,$bdid,$type);
+    // var_dump($mdata);die;
+    // echo $this->db->last_query();die;
+    if(!empty($user)){
+            $this->load->view($dep_name.'/Meetings',['type'=>$type,'uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'sdate'=>$sdate,'edate'=>$edate,'sd'=>$sd,'ed'=>$ed]);
+    }else{
+        redirect('Menu/main');
+    }
+}
 
 }

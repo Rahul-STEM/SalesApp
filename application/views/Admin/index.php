@@ -232,26 +232,30 @@ $closure        = count($this->Menu_model->getBdWiseCompList($uid,'7'));
 $type               =   '3,4,5,9,13,15';
 $sd = date('Y-m-d'); 
 $ed = date('Y-m-d');
+//$sd = '2024-07-01'; $ed ='2024-07-31';
 $totalTeam          =   $this->Menu_model->getTotalUserByTypeId($uid,$type,'count',$sd,$ed);
+
 $totalBD            =   $this->Menu_model->getTotalUserByTypeId($uid,'3','count',$sd,$ed);
-$totalPST           =   $this->Menu_model->getTotalUserByTypeId($uid,'4','count',$sd,$ed);
+$psttype = '4';
+$totalPST           =   $this->Menu_model->getTotalUserByTypeId($uid,$psttype,'count',$sd,$ed);
 $totalInsideSales   =   $this->Menu_model->getTotalUserByTypeId($uid,'5','count',$sd,$ed);
 $totalBDPST         =   $this->Menu_model->getTotalUserByTypeId($uid,'9','count',$sd,$ed);
-$totalCM            =   $this->Menu_model->getTotalUserByTypeId($uid,'13','count',$sd,$ed);
+$cmtype = '13';
+$totalCM            =   $this->Menu_model->getTotalUserByTypeId($uid,$cmtype,'count',$sd,$ed);
 $totalSC            =   $this->Menu_model->getTotalUserByTypeId($uid,'15','count',$sd,$ed);
 
 // $PSTAssigned    = $this->Menu_model->final_scon1($uid,$tdate,$tdate,0);
 ?>
 
 <div class="inner">
-    <center><h5>Total Team  Data</h5></center><hr>
-   <p><a target="_blank" href="getAllMyTeam/all ">Total Team - <b><?php  echo $totalTeam;?></b></p></a><hr>
-    <p><a target="_blank" href="getAllMyTeam/3">Total BD - <b><?php echo $totalBD;?></b></a></p><hr>
+    <center><h5>Total Team Data</h5></center><hr>
+   <!-- <p><a target="_blank" href="getAllMyTeam/all ">Total Team - <b><?php  echo $totalTeam;?></b></p></a><hr>
+    <p><a target="_blank" href="getAllMyTeam/3">Total BD - <b><?php echo $totalBD;?></b></a></p><hr> -->
     <p><a target="_blank" href="getAllMyTeam/13">Total CM - <b><?php echo $totalCM;?></b></a></p><hr>
-    <p><a target="_blank" href="getAllMyTeam/5">Total Inside Sales - <b><?php echo $totalInsideSales;?></b></a></p><hr>
-    <p><a target="_blank" href="getAllMyTeam/9">Total BDPST - <b><?php echo $totalBDPST;?></b></a></p><hr>
+    <!-- <p><a target="_blank" href="getAllMyTeam/5">Total Inside Sales - <b><?php echo $totalInsideSales;?></b></a></p><hr>
+    <p><a target="_blank" href="getAllMyTeam/9">Total BDPST - <b><?php echo $totalBDPST;?></b></a></p><hr> -->
     <p><a target="_blank" href="getAllMyTeam/4">Total PST - <b><?php echo $totalPST;?></b></a></p><hr>
-    <p><a target="_blank" href="getAllMyTeam/15">Total SC - <b><?php echo $totalSC;?></b></a></p><hr>
+    <!-- <p><a target="_blank" href="getAllMyTeam/15">Total SC - <b><?php echo $totalSC;?></b></a></p><hr> -->
 
 </div>
 <div class="icon">

@@ -46,7 +46,7 @@
 
             <form method="post" name="targetQandA" action="targetQandA">
                 <!-- Prospecting Section -->
-                <h5>Prospecting</h5>
+                <h5>Prospectingg</h5>
                 <div class="form-group">
                     <label for="prospectingCompanies">How Many No. Of Prospecting Companies?</label>
                     <input type="number" class="form-control" id="prospectingCompanies" name="prospecting_companies" required>
@@ -91,9 +91,11 @@
         </div>
 
         <div class="col-md-6 image-container">
-            <h3>Target Q&A</h3>
-            <img src="<?php echo base_url();?>assets/image/crm/targetCRM.png" alt="Target Q&A" class="img-fluid" />
-            <canvas id="targetChart" class="mt-4"></canvas>
+            <!-- <h3>Target Q&A</h3> -->
+            <h3>Previous Target vs Achievement Data</h3>
+            <!-- <canvas id="targetChart" class="mt-4"></canvas> -->
+            <canvas id="myChart" width="400" height="200"></canvas>
+
         </div>
     </div>
     </div>
@@ -102,16 +104,90 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+
+<?php 
+
+// $data = [
+//     'prospecting_target' => '10',
+//     'prospecting_achieved' => '302',
+//     'proposal_target' => '20',
+//     'proposal_achieved' => '43',
+//     'proposal_revenue' => '1023',
+//     'proposal_revenue_achieved' => '1182',
+//     'closure_client_target' => '12',
+//     'closure_clients_achieved' => '1',
+// ];
+
+$data = $targetVsAchieved;
+
+// var_dump($data);die;
+$chartData = [
+    'labels' => ['Prospecting', 'Proposal', 'Revenue', 'Closure Clients'],
+    'targets' => [
+        (int)$data['prospecting_target'],
+        (int)$data['proposal_target'],
+        (int)$data['proposal_revenue'],
+        (int)$data['closure_client_target'],
+    ],
+    'achieved' => [
+        (int)$data['prospecting_achieved'],
+        (int)$data['proposal_achieved'],
+        (int)$data['proposal_revenue_achieved'],
+        (int)$data['closure_clients_achieved'],
+    ],
+];
+
+?>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var chartData = <?php echo json_encode($chartData); ?>;
+
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: chartData.labels,
+            datasets: [
+                {
+                    label: 'Targets',
+                    data: chartData.targets,
+                    backgroundColor: 'rgba(222, 16, 16)',
+                    // borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Achieved',
+                    data: chartData.achieved,
+                    backgroundColor: 'rgba(23, 227, 18)',
+                    // borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+
+<!-- <script>
     const ctx = document.getElementById('targetChart').getContext('2d');
     let targetChart;
 
     function updateChart() {
+
         const schools = document.getElementById('schools').value || 0;
         const clients = document.getElementById('clients').value || 0;
         const proposals = document.getElementById('newProposals').value || 0;
 
         const data = {
+
             labels: ['Schools', 'Clients', 'Proposals'],
             datasets: [{
                 label: 'Target Data',
@@ -147,7 +223,8 @@
                         }
                     }
                 }
-            });
+            }
+        });
     }
 
     // Add event listeners to input fields
@@ -157,5 +234,5 @@
 
     // Initialize chart with default values
     updateChart();
-</script>
+</script> -->
 <?php include_once('footer.php');?>

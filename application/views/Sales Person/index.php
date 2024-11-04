@@ -576,7 +576,6 @@ $dataPoints2 = array(
             <div class="card card-primary card-outline card-outline-tabs">
                 <h4 class="p-3">Today's Task Calendar </h4>
               <div class="card-header p-0 border-bottom-0">
-
                 <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                   <li class="nav-item">
                       <?php $ttbyd = $this->Menu_model->get_ttbydtest($uid,$tdate);
@@ -597,19 +596,19 @@ $dataPoints2 = array(
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-research-tab" data-toggle="pill" href="#custom-tabs-four-research" role="tab" aria-controls="custom-tabs-four-research" aria-selected="false">
-                        <b> Research (<?=$ttbyd[0]->j?>)</b>
+                        <b> Research (<?=$ttbyd[0]->h?>)</b>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-socialn-tab" data-toggle="pill" href="#custom-tabs-four-socialn" role="tab" aria-controls="custom-tabs-four-socialn" aria-selected="false">
-                        <b> Social Networking (<?=$ttbyd[0]->m?>)</b>
+                        <b> Social Networking (<?=$ttbyd[0]->i?>)</b>
                     </a>
                   </li>
-                  <!-- <li class="nav-item">
+                  <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-sociala-tab" data-toggle="pill" href="#custom-tabs-four-sociala" role="tab" aria-controls="custom-tabs-four-sociala" aria-selected="false">
                         <b> Social Activity (<?=$ttbyd[0]->j?>)</b>
                     </a>
-                  </li> -->
+                  </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-email-tab" data-toggle="pill" href="#custom-tabs-four-email" role="tab" aria-controls="custom-tabs-four-email" aria-selected="false">
                         Email <span class="badge badge-success"><?=$ttbyd[0]->b?></span>
@@ -976,7 +975,34 @@ $dataPoints2 = array(
                                 </div>
                               </div>
 
-                            
+                            <?php 
+                              $user_day_planner  = $this->Menu_model->get_daystarted($uid,date("Y-m-d"));
+                              $pinitiate_time = $user_day_planner[0]->planner_initiate_time;
+                              $textmessage = $pinitiate_time == '' ? "Start" : "Resume";
+                              ?>
+                            <div class="card">
+                                <div class="card-header bg-primary" id="start_planning1" data-toggle="collapse" data-target="#start_planning2" aria-expanded="false" aria-controls="collapse9121">
+                                <b><?= $textmessage; ?> Planning </b>   
+                                </div>
+                                <div id="start_planning2" class="collapse" aria-labelledby="start_planning1" data-parent="#accordion">
+                                  <div class="card-body">
+                                    <div class="list-group-item list-group-item-action ">
+                                    <center>
+                                    <button type="button" class="btn btn-success font-weight-bold" style="padding:6px 70px;" onclick="handleReminderCreation()">
+                                    <?= $textmessage; ?> &nbsp;<i class="fa-solid fa-forward"></i>
+                                    </button>
+                                    </center>
+                                    <!-- <br> -->
+                                    <!-- <hr> -->
+                                    <!-- <button id="add_act6734763254" value="" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                                       <span class="mr-3 align-items-center">
+                                         sdsadsagd
+                                       </span>
+                                    </button> -->
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
 
                             </div>
                   </div>
@@ -1287,9 +1313,7 @@ $dataPoints2 = array(
             <div class="col-lg-12 col-sm">
             <div class="card card-primary card-outline card-outline-tabs">
                 <h4 class="p-3">Today's Task Completed</h4>
-                
               <div class="card-header p-0 border-bottom-0">
-
                 <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                   <li class="nav-item">
                       <?php $ttbydc = $this->Menu_model->get_ttbydc($uid,$tdate);
@@ -1780,7 +1804,7 @@ $dataPoints2 = array(
                            <span class="mr-3 align-items-center">
                               <i class="fa-solid fa-circle"></i>
                            </span>
-                            <span class="flex"><?=$taid[0]->name?> |
+                           <span class="flex"><?=$taid[0]->name?> |
                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
                                <small class="text-muted">Task Time:- <?=$time?></small>
                             </span>
@@ -1864,7 +1888,7 @@ $dataPoints2 = array(
                     <span> <b>Todays Planner Time : <?=$start_tttpft;?> to <?=$end_tttpft;?></b> </span>
                   </div>
                 <?php  } ?> 
-                <div class="card p-3">
+			<div class="card p-3">
                     <?php 
                         $user_day_planner  = $this->Menu_model->get_daystarted($uid,date("Y-m-d"));
                         $pinitiate_time = $user_day_planner[0]->planner_initiate_time;
@@ -1872,10 +1896,9 @@ $dataPoints2 = array(
                     ?>
                   <button type="button" class="btn btn-primary" onclick="handleReminderCreation()">
                       <!-- <b>Start Planning </b> -->
-                      <b><?= $textmessage; ?> Planning </b>   &nbsp;<i class="fa-solid fa-forward"></i>
+                      <b><?= $textmessage; ?> Planning </b>    <i class="fa-solid fa-forward"></i>
                   </button>
                 </div>
-
                 <div class="card p-3">
                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenterspclchngreq">
                       <b>Create a Special Request For Plan Change </b>

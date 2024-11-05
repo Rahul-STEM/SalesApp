@@ -457,6 +457,7 @@ $sca = $this->Menu_model->final_scon1($uid,$tdate,$tdate,0);
     ?>
     <center><h5>Total Funnel </h5></center><hr>
     <p><a href="BDTOBDCTF"><b>Company TF BD to Other BD</b></a></p><hr>
+    <p><a href="FunnelTransferToBD"><b>Company TF BD to Other BD</b></a></p><hr>
     <p><a href="BDFunnal/<?=$uid?>">All BD Funnel</p></a>
     <p><a href="ProposalApr"><b>Proposal Approval</b></p></a><hr>
     <p><a href="AllProposalDetail"><b>Proposal Detail</b></p></a><hr>

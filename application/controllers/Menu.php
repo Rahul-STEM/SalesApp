@@ -8610,6 +8610,25 @@ public function Dashboard(){
             redirect('Menu/main');
         }
     }
+
+
+    public function FunnelTransferToBD(){
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+        $dep_name = $dt[0]->name;
+        $mdata=$this->Menu_model->get_userbyaid($uid);
+        if(!empty($user)){
+            $this->load->view($dep_name.'/FunnelTransferToBD',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata]);
+        }else{
+            redirect('Menu/main');
+        }
+    }
+
+
     public function spddetail($cid){
         $user = $this->session->userdata('user');
         $data['user'] = $user;

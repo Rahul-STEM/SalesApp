@@ -151,6 +151,7 @@
                                                 <?php 
                                                     $i=1; foreach($dayData as $data):
                                                     $teamuid = $data->user_id;
+                                                    // var_dump($data);die;
                                                 ?>
                                                 <tr>
 

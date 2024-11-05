@@ -1182,7 +1182,6 @@ public function RequestForDayManagementApproval_Model($uid,$request){
         }else {
             
             $this->db->where("user_id",$id);
-
         }
 
         $this->db->where("status",'active');
@@ -1321,6 +1320,7 @@ public function StoreReminder($rtype,$rmessage,$user_id){
     ];
     $this->db->insert('reminder', $data);
 }
+
 public function CheckingDayManage_New($uid,$cdate){
     // $cdate = '2024-07-01';
     $utype = $this->Menu_model->get_userbyid($uid);
@@ -1357,7 +1357,11 @@ public function CheckingDayManage_New($uid,$cdate){
             uwf1.TYPE AS userWorkFromActual,
             srfl.prupose AS reasonFor_Request,
             srfl.stime AS leave_StartTime,
-            srfl.etime AS leave_EndTime ');
+            srfl.etime AS leave_EndTime,
+            at1.stime AS autoTask_startTime,
+            at1.etime AS autoTask_endTime,
+            
+            ');
 
         $this->db->from('user_day');
         $this->db->join('user_details', 'user_details.user_id = user_day.user_id', 'left');

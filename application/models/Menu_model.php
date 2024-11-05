@@ -2046,6 +2046,7 @@ WHERE cid = '$cid'");
     }
     public function get_cdbyBD($pst){
         $query=$this->db->query("SELECT company_master.*,init_call.cstatus,init_call.mainbd FROM init_call LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE init_call.mainbd='$pst'");
+        // echo $this->db->last_query();
         return $query->result();
     }
     public function get_cpst($fopst,$topst,$cid){

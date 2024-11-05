@@ -654,7 +654,7 @@ public function getAllActiveUserInDepartment(){
         $sdate = new DateTime($cdate);
         $sdate->modify('-1 day');
         $previousDate = $sdate->format('Y-m-d');
-        // $cdate = '2024-10-08';
+        $cdate = '2024-10-08';
         $dayData = $this->Management_model->CheckingDayManage_New($this->uid,$cdate);
         // echo $this->db->last_query();die;
         $yesterdayData = $this->Management_model->CheckingYesterdyDayManage_New($this->uid,$previousDate);

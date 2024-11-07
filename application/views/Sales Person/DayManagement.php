@@ -131,10 +131,29 @@
         </div>
         <?php endif; ?>
         <?php  
-          $yestdatacnt = sizeof($yestdata);
-          $uystart_id = $yestdata[0]->id;
-          $uystart = $yestdata[0]->ustart;
-          $uyclose = $yestdata[0]->uclose;
+
+            $checklastLoginDay = getlastloginData($uid);
+            // echo $this->db->last_query();die;
+            // echo $checklastLoginDay;die;
+            // var_dump($checklastLoginDay[0]->sdatet_cast);die;
+
+            $start_date = new DateTime($checklastLoginDay[0]->sdatet_cast);  // Convert start date to DateTime object
+            $end_date = new DateTime();  // Current date
+            $interval = new DateInterval('P1D');  // 1 day interval
+            $daterange = new DatePeriod($start_date, $interval, $end_date);
+
+            $dates = [];
+            foreach ($daterange as $date) {
+                $dates[] = $date->format('Y-m-d');  // Add each date in 'Y-m-d' format
+                $day_of_week = date('l', strtotime($dates));
+            }
+
+            // var_dump($dates);die;
+
+            $yestdatacnt = sizeof($yestdata);
+            $uystart_id = $yestdata[0]->id;
+            $uystart = $yestdata[0]->ustart;
+            $uyclose = $yestdata[0]->uclose;
 
           // Check Yesterday Day Close or Not
           if ($yestdatacnt == 1) {?>
@@ -143,77 +162,83 @@
             <div class="card card-primary card-outline">
               <div class="card-body box-profile">
                 <div class="blink">
-                  <h3 class="text-center">You forgot to close your day yesterday</h3>
+                    <h3 class="text-center">You forgot to close your day yesterday</h3>
                 </div>
                 <marquee class="p-2 mt-1" width="100%" behavior="alternate" bgcolor="pink">
-                  <h6> * Please submit a request to close yesterday's day and begin today's</h6>
+                    <h6> * Please submit a request to close yesterday's day and begin today's</h6>
                 </marquee>
                 <hr>
                 <div class="row">
-                  <div class="col-md-3 text-center">
-                    <div class="card bg-success p-2">
-                      <p>You have Started your Day at </p>
-                      <hr>
-                      <b><?=$uystart ?></b>
+                    <div class="col-md-3 text-center">
+                        <div class="card bg-success p-2">
+                            <p>You have Started your Day at </p>
+                            <hr>
+                            <b><?=$uystart ?></b>
+                        </div>
                     </div>
-                  </div>
-                  <div class="col-md-3 text-center">
-                    <div class="card bg-danger p-2">
-                      <p>But you have not closed your day yet.</p>
-                      <hr>
-                      <b>0000-00-00 00:00:00</b>
+                    <div class="col-md-3 text-center">
+                        <div class="card bg-danger p-2">
+                            <p>But you have not closed your day yet.</p>
+                            <hr>
+                            <b>0000-00-00 00:00:00</b>
+                        </div>
                     </div>
-                  </div>
-                  <div class="col-md-3 text-center">
-                    <div class="card bg-warning p-2">
-                      <p>Time diffrence is </p>
-                      <hr>
-                      <b><?=$this->Menu_model->timediff($uystart,$ctdate);?></b>
+                    <div class="col-md-3 text-center">
+                        <div class="card bg-warning p-2">
+                            <p>Time diffrence is </p>
+                            <hr>
+                            <b><?=$this->Menu_model->timediff($uystart,$ctdate);?></b>
+                        </div>
                     </div>
-                  </div>
-                  <div class="col-md-3 text-center">
-                    <div class="card bg-warning p-2">
-                      <p>Yesterday Pending Task </p>
-                      <hr>
-                      <b><?php 
-                          $getoldPendingTask = $this->Menu_model->get_OLDPendingTask($uid);
-                          echo $getoldPendingTaskcnt = sizeof($getoldPendingTask);
-                      ?></b>
+                    <div class="col-md-3 text-center">
+                        <div class="card bg-warning p-2">
+                            <p>Yesterday Pending Task </p>
+                            <hr>
+                            <b><?php 
+                                $getoldPendingTask = $this->Menu_model->get_OLDPendingTask($uid);
+                                echo $getoldPendingTaskcnt = sizeof($getoldPendingTask);
+                            ?></b>
+                        </div>
                     </div>
-                  </div>
                 </div>
                 <hr class="hrclass" style="width: 500px;"/>
                 <?php          
                   $getDayCloseRequest = $this->Menu_model->GetDayCloseRequest($uid,$tdate);
                   $getDayCloseRequescnt = sizeof($getDayCloseRequest);
 
-                  if($getDayCloseRequescnt  == 0){ ?>
+                if($getDayCloseRequescnt  == 0){ ?>
+
+                    <?php
+
+                        // $check
+
+                    ?>
                 <form action="<?=base_url();?>Menu/dayscRequest" method="post" enctype="multipart/form-data">
                   <center>
                     <div class="row">
                       <div class="col">
 
-                      <?php    
-                    $gecurAutoTaskTime = sizeof($gecurAutoTaskTime);
-                    $message = ($gecurAutoTaskTime) ? "selected" : "disabled";
-                    ?>
+                        <?php    
+                            $gecurAutoTaskTime = sizeof($gecurAutoTaskTime);
+                            $message = ($gecurAutoTaskTime) ? "selected" : "disabled";
+                        ?>
 
                         <label for="validationServer04" class="form-label">
                         * Why did you not close your day yesterday?
                         </label>
                         <input type="hidden" value="<?= $uystart_id ?>" name="req_id">
                         <select class="form-control is-invalid" id="validationServer04" aria-describedby="validationServer04Feedback" name="would_you_want" required style="width:500px;" >
-                          <option selected disabled value="">Choose...</option>
-                          <option <?=$message?> value="I was caught up with an urgent task and lost track of time.">I was caught up with an urgent task and lost track of time.</option>
-                          <option value="I encountered unexpected issues that took longer to resolve than planned.">I encountered unexpected issues that took longer to resolve than planned.</option>
-                          <option value="I had a personal emergency that required my immediate attention.">I had a personal emergency that required my immediate attention.</option>
-                          <option value="I forgot to update the system at the end of the day.">I forgot to update the system at the end of the day.</option>
-                          <option value="I had difficulty accessing the system due to technical issues.">I had difficulty accessing the system due to technical issues.</option>
-                          <option value="I had a backlog of work and wasn't able to finish everything on time.">I had a backlog of work and wasn't able to finish everything on time.</option>
-                          <option value="I was working late on a high-priority project and didn't get a chance to update the records.">I was working late on a high-priority project and didn't get a chance to update the records.</option>
-                          <option value="I was out of the office and unable to complete the update remotely.">I was out of the office and unable to complete the update remotely.</option>
-                          <option value="We forgot to set our next day planner.">We forgot to set our next day planner</option>
-                          <option value="other">Other (please specify)</option>
+                            <option selected disabled value="">Choose...</option>
+                            <option <?=$message?> value="I was caught up with an urgent task and lost track of time.">I was caught up with an urgent task and lost track of time.</option>
+                            <option value="I encountered unexpected issues that took longer to resolve than planned.">I encountered unexpected issues that took longer to resolve than planned.</option>
+                            <option value="I had a personal emergency that required my immediate attention.">I had a personal emergency that required my immediate attention.</option>
+                            <option value="I forgot to update the system at the end of the day.">I forgot to update the system at the end of the day.</option>
+                            <option value="I had difficulty accessing the system due to technical issues.">I had difficulty accessing the system due to technical issues.</option>
+                            <option value="I had a backlog of work and wasn't able to finish everything on time.">I had a backlog of work and wasn't able to finish everything on time.</option>
+                            <option value="I was working late on a high-priority project and didn't get a chance to update the records.">I was working late on a high-priority project and didn't get a chance to update the records.</option>
+                            <option value="I was out of the office and unable to complete the update remotely.">I was out of the office and unable to complete the update remotely.</option>
+                            <option value="We forgot to set our next day planner.">We forgot to set our next day planner</option>
+                            <option value="other">Other (please specify)</option>
                         </select>
                         <div id="validationServer04Feedback" class="invalid-feedback">
                             * Please select a valid reason.

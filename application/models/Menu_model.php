@@ -799,11 +799,11 @@ WHERE cid = '$cid'");
         if($da1[0]->b > 0){
         $data = $data."<a href='".base_url()."/Menu/BDAlertDetail/3'><div class='rounded border border-white text-center p-1 m-1 bg-danger text-white'><b>Total ".$da1[0]->b." Company Not Taken any Review by PST</b></div><a/>";}
         date_default_timezone_set("Asia/Kolkata");
-        $nextdate = date('Y-m-d', strtotime('+1 day'));
-        $nxtdtask=$this->Menu_model->get_nxtdtask($ur_id,$nextdate);
-        $nxtdplan = $this->Menu_model->get_nxtdplan($ur_id,$nextdate);
-        if($nxtdplan[0]->cont > 0){
-        $data = $data."<a href='#'><div class='rounded border border-white text-center p-1 m-1 bg-danger text-white'><b>You Are Not Plan for Next Day Task</b></div><a/>";}
+        // $nextdate = date('Y-m-d', strtotime('+1 day'));
+        // $nxtdtask=$this->Menu_model->get_nxtdtask($ur_id,$nextdate);
+        // $nxtdplan = $this->Menu_model->get_nxtdplan($ur_id,$nextdate);
+        // if($nxtdplan[0]->cont > 0){
+        // $data = $data."<a href='#'><div class='rounded border border-white text-center p-1 m-1 bg-danger text-white'><b>You Are Not Plan for Next Day Task</b></div><a/>";}
         $query=$this->db->query("SELECT COUNT(CASE WHEN init_call.cstatus='6' THEN init_call.cstatus END) + COUNT(CASE WHEN init_call.cstatus='7' THEN init_call.cstatus END) + COUNT(CASE WHEN init_call.cstatus='9' THEN init_call.cstatus END) + COUNT(CASE WHEN init_call.cstatus='12' THEN init_call.cstatus END) + COUNT(CASE WHEN init_call.cstatus='13' THEN init_call.cstatus END) b FROM init_call LEFT JOIN allreviewdata ON allreviewdata.inid=init_call.id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE init_call.mainbd='$ur_id' and apst is not null and allreviewdata.inid is null ORDER BY `init_call`.`cstatus` ASC");
         $da1 = $query->result();
         if($da1[0]->b > 0){
@@ -4885,6 +4885,12 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         $query=$this->db->query("SELECT id,ustart,uclose FROM user_day WHERE user_id='$uid' and cast(ustart as DATE)='$tdate' and uclose is null");
         return $query->result();
     }
+
+    // public function get_Yestdaydetail($uid,$tdate){
+    //     $query=$this->db->query("SELECT id,ustart,uclose FROM user_day WHERE user_id='$uid' and uclose is null ORDER BY  id DESC LIMIT 1");
+
+    //     return $query->result();
+    // }
     public function get_daystarted($uid,$tdate){
         if($tdate ==''){
             $tdate = date("Y-m-d");
@@ -6909,18 +6915,18 @@ return "Days: $days, Hours: $hours, Minutes: $minutes, Seconds: $seconds";
         $query     =  $this->db->query("UPDATE allreview set closet='$closetdate',cremark='$closeremark' WHERE id='$rrid'");
         // $sel_query =  $this->db->query("SELECT uid,reviewtype FROM allreview WHERE id ='$rrid'");
         $sel_query = $this->db->query("
-    SELECT 
-        ar.uid, 
-        ar.bdid, 
-        ar.reviewtype, 
-        rt.id as reviewtype
-    FROM 
-        allreview ar 
-    JOIN 
-        review_type rt ON ar.reviewtype = rt.name 
-    WHERE 
-        ar.id = '$rrid'
-");
+                        SELECT 
+                            ar.uid, 
+                            ar.bdid, 
+                            ar.reviewtype, 
+                            rt.id as reviewtype
+                        FROM 
+                            allreview ar 
+                        JOIN 
+                            review_type rt ON ar.reviewtype = rt.name 
+                        WHERE 
+                            ar.id = '$rrid'
+                    ");
 
 // echo "
 //     SELECT 
@@ -12363,6 +12369,8 @@ public function getTargetVsAchieved($utype){
 }
     public function insertTargetQandA($targetQandAdata){
         $this->db->insert('targetqanda', $targetQandAdata);
+
+        // echo $this->db->last_query();die;
     }
     
     public function getAchievedData($bdlist,$sdate,$edate,$partnertype,$reviewType){
@@ -13100,6 +13108,7 @@ public function UpdateCloseYesterDay($flink,$user_id,$lat,$lng,$req_id){
     $tdate=date('Y-m-d H:i:s');
     $this->db->query("Update user_day set uclose='$tdate',ucimg='$flink',clatitude='$lat',clongitude='$lng' where id='$req_id'");
     $this->db->query("INSERT INTO notify(uid,type,sms) VALUES ('$user_id','1','You Are Closed Your Yesterday Day at $tdate')");
+    // echo $this->db->last_query();die;
 }
 public function get_tblDataByUserId($userId, $date){
     $query = $this->db->query("SELECT * FROM `tblcallevents` WHERE user_id = ? AND appointmentdatetime LIKE ?", array($userId, '%' . $date . '%'));
@@ -14616,5 +14625,23 @@ public function getUserByType($utype,$uid){
     return $query->result();
 
 }
+
+    public function getlastloginData($uid){
+
+        $date = date('Y-m-d');
+        // $query=$this->db->query("SELECT ustart FROM user_day WHERE user_id='$uid' and sdatet != '$date ' ORDER BY  id DESC LIMIT 1");
+
+        $this->db->select('CAST(sdatet AS DATE) as sdatet_cast')
+                ->from('user_day')
+                ->where('CAST(sdatet AS DATE) !=', $date, false)
+                ->order_by('id', 'DESC')
+                ->limit(1);
+
+        $query = $this->db->get();
+
+        // echo $this->db->last_query();die;
+        return $query->result();
+
+    } 
  
 }

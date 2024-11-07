@@ -110,19 +110,19 @@
                         <div class="invalid-feedback">Please provide Start Date Time.</div>
                         <div class="valid-feedback">Looks good!</div>
                         <div class="mt-4">
-                          <select class="form-control" name="reviewid" required="">
-                            <?php $reviewid = $this->Menu_model->get_reviewid($uid);
-                              foreach($reviewid as $rev){
-                              ?>
-                            <option value="<?=$rev->rid?>"><?=$rev->name?> (<?=$rev->reviewtype?>) (<?=$rev->plant?>)</option>
-                            <?php } ?>
-                          </select>
+                            <select class="form-control" name="reviewid" required="">
+                                <?php $reviewid = $this->Menu_model->get_reviewid($uid);
+                                foreach($reviewid as $rev){
+                                ?>
+                                <option value="<?=$rev->rid?>"><?=$rev->name?> (<?=$rev->reviewtype?>) (<?=$rev->plant?>)</option>
+                                <?php } ?>
+                            </select>
                           <div class="invalid-feedback">Please Create Plan First.</div>
                           <div class="valid-feedback">Looks good!</div>
                         </div>
                       </div>
                       <div class="form-group text-center">
-                        <button type="submit" class="btn btn-success" onclick="this.form.submit(); this.disabled = true;">Srart Review</button>
+                        <button type="submit" class="btn btn-success" onclick="this.form.submit(); this.disabled = true;">Start Review</button>
                       </div>
                   </form>
                   </div>

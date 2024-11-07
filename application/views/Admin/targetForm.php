@@ -72,8 +72,11 @@
         </div>
 
         <div class="col-md-6 image-container">
-            <h3>Target Q&A</h3>
-            <!-- <img src="your-image-url-here.jpg" alt="Target Q&A" class="img-fluid" /> -->
+            <!-- <h3>Target Q&A</h3> -->
+            <h3>Previous Target vs Achievement Data</h3>
+            <!-- <canvas id="targetChart" class="mt-4"></canvas> -->
+            <canvas id="myChart" width="400" height="200"></canvas>
+
         </div>
     </div>
 </div>
@@ -81,4 +84,75 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+<?php 
+    $userData = reset($targetVsAchieved);
+
+    $data = [
+        'prospecting_target' => $userData['prospecting_target'],
+        'prospecting_achieved' => $userData['prospective_achieved'],
+        'proposal_target' => $userData['proposal_target'],
+        'proposal_achieved' => $userData['proposal_achieved'],
+        'proposal_revenue' => $userData['proposal_revenue'],
+        'proposal_revenue_achieved' => $userData['proposal_revenue_achieved'],
+        'closure_client_target' => $userData['closure_client_target'],
+        'closure_clients_achieved' => $userData['closure_clients_achieved'],
+    ];
+
+    // print_r($targetVsAchieved['prospecting_target']);die;
+    $chartData = [
+        'labels' => ['Prospecting', 'Proposal', 'Revenue', 'Closure Clients'],
+        'targets' => [
+            (int)$data['prospecting_target'],
+            (int)$data['proposal_target'],
+            (int)$data['proposal_revenue'],
+            (int)$data['closure_client_target'],
+        ],
+        'achieved' => [
+            (int)$data['prospecting_achieved'],
+            (int)$data['proposal_achieved'],
+            (int)$data['proposal_revenue_achieved'],
+            (int)$data['closure_clients_achieved'],
+        ],
+    ];
+
+    ?>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chartData = <?php echo json_encode($chartData); ?>;
+
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: chartData.labels,
+                datasets: [
+                    {
+                        label: 'Targets',
+                        data: chartData.targets,
+                        backgroundColor: 'rgba(222, 16, 16)',
+                        // borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Achieved',
+                        data: chartData.achieved,
+                        backgroundColor: 'rgba(23, 227, 18)',
+                        // borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+</script>
+
+
 <?php include_once('footer.php');?>

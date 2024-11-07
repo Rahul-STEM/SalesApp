@@ -58,7 +58,7 @@
 
   <!-- Navbar -->
   <?php require('nav.php');?>
-  <?php // include 'addlog.php';?>
+  <?php  include 'addlog.php';?>
   <!-- /.navbar -->
 
   <!-- Content Wrapper. Contains page content -->

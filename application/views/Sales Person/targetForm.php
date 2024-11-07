@@ -1,4 +1,9 @@
 <?php include_once('header.php');?>
+<?php 
+
+// var_dump($data);die;
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,21 +18,23 @@
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
+        
         .image-container {
             text-align: center;
         }
-        .tagline-list {
-    background-color: #e9f5ff; /* Light blue background */
-    padding: 15px; /* Padding around the list */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-}
 
-.tagline-list li {
-    margin-bottom: 10px; /* Space between list items */
-    font-weight: 500; /* Slightly bolder font */
-    color: #333; /* Darker text color */
-}
+        .tagline-list {
+            background-color: #e9f5ff; /* Light blue background */
+            padding: 15px; /* Padding around the list */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        .tagline-list li {
+            margin-bottom: 10px; /* Space between list items */
+            font-weight: 500; /* Slightly bolder font */
+            color: #333; /* Darker text color */
+        }
     </style>
 </head>
 <body>
@@ -41,27 +48,43 @@
     <div class="row">
 
         <div class="col-md-6 form-container">
-            <input type="hidden" name="review_user_id" value="<?php echo $review_user_id;?>">
-            <input type="hidden" name="reviewType" value="<?php echo $reviewType;?>">
-
+            
             <form method="post" name="targetQandA" action="targetQandA">
+                <input type="hidden" name="review_user_id" value="<?php echo $review_user_id;?>">
+                <input type="hidden" name="reviewType" value="<?php echo $reviewType;?>">
+                <div class="parnerType-section">
+                    <div class="form-group">
+                        <label for="partnerType">Select Partner Type</label>
+                        <select class="form-control" id="partnerType" name="partner_type[]"  required>
+                            <option value="" disabled selected>Select Partner Type</option>
+                            <?php foreach($partnerType as $partnerValue){ ?>
+                                    <option value="<?php echo $partnerValue->id; ?>">
+                                        <?php echo $partnerValue->name; ?>
+                                    </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                
                 <!-- Prospecting Section -->
-                <h5>Prospectingg</h5>
-                <div class="form-group">
+                <h5>Prospecting</h5>
+                <!-- <div class="form-group">
                     <label for="prospectingCompanies">How Many No. Of Prospecting Companies?</label>
                     <input type="number" class="form-control" id="prospectingCompanies" name="prospecting_companies" required>
+                </div> -->
+                
+                <div id="prospecting-container">
+                    <div class="prospecting-section">
+                        <div class="form-group">
+                            <label for="prospectingCompanies">How Many No. Of Prospecting Companies?</label>
+                            <input type="number" class="form-control" id="prospectingCompanies" name="prospecting_companies[]" required>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="partnerType">Select Partner Type</label>
-                    <select class="form-control" id="partnerType" name="partner_type"  required>
-                        <option value="" disabled selected>Select Partner Type</option>
-                        <?php foreach($partnerType as $partnerValue){ ?>
-                                <option value="<?php echo $partnerValue->id; ?>">
-                                    <?php echo $partnerValue->name; ?>
-                                </option>
-                        <?php } ?>
-                    </select>
-                </div>
+
+                <button type="button" id="addProspecting" class="btn btn-primary">Add Another Prospecting Section</button>
+
+
                 <!-- Proposals Section -->
                 <h5>Proposals</h5>
                 <div class="form-group">
@@ -106,6 +129,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
 
 <?php 
@@ -174,6 +198,42 @@
         });
 </script>
 
+<script>
+    // Wait for the DOM to be fully loaded before running the script
+    document.addEventListener('DOMContentLoaded', function() {
+        // JavaScript to handle the cloning of the prospecting section
+        document.getElementById('addProspecting').addEventListener('click', function() {
+            // Get the prospecting container and the section to clone
+            var container = document.getElementById('prospecting-container');
+            var sectionToClone = document.querySelector('.prospecting-section');
+            var parnerTypeToClone = document.querySelector('.parnerType-section');
+            
+            if (sectionToClone) { // Ensure the section exists before cloning
+                // Clone the section and append it to the container
+                var clonedSection = sectionToClone.cloneNode(true);
+
+                var clonedpartnerType = parnerTypeToClone.cloneNode(true);
+                // Optionally, you can clear the inputs inside the cloned section if you don't want the same values copied over
+                var inputs = clonedSection.querySelectorAll('input');
+                inputs.forEach(function(input) {
+                    input.value = ''; // Reset the input value
+                });
+
+                var inputs = clonedpartnerType.querySelectorAll('input');
+                inputs.forEach(function(input) {
+                    input.value = ''; // Reset the input value
+                });
+
+                // Append the cloned section to the container
+                container.appendChild(clonedpartnerType);
+                container.appendChild(clonedSection);
+
+            } else {
+                console.error('Section to clone not found!');
+            }
+        });
+    });
+</script>
 
 <!-- <script>
     const ctx = document.getElementById('targetChart').getContext('2d');

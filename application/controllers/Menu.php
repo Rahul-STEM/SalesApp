@@ -8,9 +8,10 @@ class Menu extends CI_Controller {
        
         // Load models, libraries, helpers, etc.
         $this->load->model('Menu_model');
-         $this->load->helper('common_helper');
-          $this->load->helper('samestatustilldate_helper');
-$this->load->helper('taskPlanner_helper');
+        $this->load->helper('common_helper');
+        $this->load->helper('samestatustilldate_helper');
+        $this->load->helper('taskPlanner_helper');
+        $this->load->helper('dayCheck_helper');
     }
     public function main(){
         $msg = '';
@@ -3911,11 +3912,11 @@ $this->load->helper('taskPlanner_helper');
         // var_dump($data['targetVsAchieved']     );die;
         $data['partnerType']        = $this->Menu_model->get_partnertype();
 
-
+        // var_dump($data);die;
         if($review_userid != $uid){
-                $data['review_user_id']         = $this->input->post('reviewuserid');
+                // $data['review_user_id']         = $this->input->post('reviewuserid');
                 $data['username']               = getUserNameById($data['review_user_id']);
-                $data['reviewType']             = $this->input->post('reviewType');
+                // $data['reviewType']             = $this->input->post('reviewType');
                 if($type_id == '13'){
                     $this->load->view('header.php');
                     $this->load->view('Cluster Manager/targetForm.php',$data);
@@ -8030,11 +8031,11 @@ public function Dashboard(){
         $mdata        = $this->Menu_model->get_daydetail($uid,$tdate);
         $yesterday    = date('Y-m-d', strtotime('-1 day', strtotime($tdate)));
         $yestdata     = $this->Menu_model->get_Yestdaydetail($uid,$yesterday);
-
+        // var_dump($yestdata);die;
         if($mdata)
         {
-         $st = $mdata[0]->ustart;
-         $ct = $mdata[0]->uclose;
+            $st = $mdata[0]->ustart;
+            $ct = $mdata[0]->uclose;
             if($st!=''){$do=1;}
             if($ct!=''){$do=2;}
         }else{$do=0;}
@@ -8042,10 +8043,10 @@ public function Dashboard(){
         $currentDate  = date("Y-m-d");
         $tomorrowDate = date("Y-m-d", strtotime($currentDate . ' +1 day'));
 
-    //    echo "SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$tomorrowDate'";
+    //  echo "SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$tomorrowDate'";
     //  echo "<br>";
     //  echo "SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$currentDate'";
-    //   exit;
+    //  exit;
 
 
         $query             =  $this->db->query("SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$tomorrowDate'");
@@ -17439,43 +17440,95 @@ public function TaskCheck_New(){
     
     /******* To Create Target Vs Achievement Report Function - Manasvi 31-09-2024*******/
     
-     public function targetQandA(){
+    public function targetQandA(){
         $uid                    = $_SESSION['user']['user_id'];
         $utype                  = $_SESSION['user']['type_id'];
         // $bd_user_id          = $reviewId;
         $dt                     = $this->Menu_model->get_utype($utype);
         // $utype                  = $dt[0]->name;
-        $data['reviewType']     = $reviewType;
-        $bd_user_details        = $this->Menu_model->get_userbyid($reviewId);
-        $data['username']       = $bd_user_details[0]->name;
+        // $data['reviewType']     = $reviewType;
+        // $bd_user_details        = $this->Menu_model->get_userbyid($reviewId);
+        // $data['username']       = $bd_user_details[0]->name;
         $data['partnerType']    = $this->Menu_model->get_partnertype();
         $dt                     = $this->Menu_model->get_utype($utype);
         $dep_name               = $dt[0]->name;
         
-            if($_POST){
-               $reviewId                                       = $this->input->post('review_user_id');
-               $insertdata['targetUserId']                     = $reviewId;
-               $reviewType                                     = $this->input->post('reviewType');
-               $insertdata['prospecting_companies']            = $this->input->post('prospecting_companies');
-               $insertdata['prospecting_school_target']        = $this->input->post('prospecting_school_target');
-               $insertdata['proposal_target']                  = $this->input->post('proposal_target');
-               $insertdata['proposal_revenue']                 = $this->input->post('proposal_revenue');
-               $insertdata['closure_school_target']            = $this->input->post('closure_school_target');
-               $insertdata['closure_client_target']            = $this->input->post('closure_client_target');
-               $insertdata['closure_revenue_target']           = $this->input->post('closure_revenue_target');
-               $insertdata['reviewType']                       = $reviewType;
-               
-            //    if($reviewType ==''){
+        if ($_POST) {
+
+            // var_dump($_POST);die;
+            $reviewId = $this->input->post('review_user_id');
+            $reviewType = $this->input->post('reviewType');
+    
+            // Collect the dynamic arrays
+            $partnerTypes = $this->input->post('partner_type'); // Array of selected partner types
+            $prospectingCompanies = $this->input->post('prospecting_companies'); // Array of prospecting companies
+            
+            // Ensure the arrays are the same length
+            $numFields = count($partnerTypes);
+            // if ($numFields != count($prospectingCompanies)) {
+            //     $data['error_message'] = "Mismatched number of partner types and prospecting companies!";
+            //     $this->load->view('your_view_file', $data);
+            //     return;
+            // }
+    
+            // Loop through the arrays and insert each record
+            for ($i = 0; $i < $numFields; $i++) {
+                $insertdata = [
+                    'targetUserId' => $uid ,
+                    'reviewType' => $reviewType,
+                    'partnerType' => $partnerTypes[$i], // Current partner type
+                    'prospecting_target' => $prospectingCompanies[$i], // Current prospecting company count
+                    // 'prospecting_school_target' => $this->input->post('prospecting_school_target'),
+                    // 'proposal_target' => $this->input->post('proposal_target'),
+                    'proposal_revenue' => $this->input->post('proposal_revenue'),
+                    'closure_school_target' => $this->input->post('closure_no_of_Schools'),
+                    'closure_client_target' => $this->input->post('closure_no_of_clients'),
+                    'closure_revenue_target' => $this->input->post('closure_revenue'),
+                    // 'targetStartDate' => $this->input->post('targetStartDate'),
+                    // 'targetEndDate' => $this->input->post('targetEndDate'),
+                    'updatedBy' => $uid,
+                    'updatedAt' => date("Y-m-d h:i:s")
+                ];
                 
-            //    }
-               $insertdata['targetStartDate']                  = $this->input->post('targetStartDate');
-               $insertdata['targetEndDate']                    = $this->input->post('targetEndDate');
-               $insertdata['partnerType']                      = $this->input->post('partner_type');
-               $insertdata['updatedBy']                        = $uid;
-               $insertdata['updatedAt']                        = date("Y-m-d h:i:s");
-               $this->Menu_model->insertTargetQandA($insertdata);
-               $data['success_message']                         = "Target Data has been set for the user for the Review ".$insertdata['reviewType']." ";
+                // var_dump($insertdata);die;
+                // Insert data into the database
+                $this->Menu_model->insertTargetQandA($insertdata);
             }
+    
+            // Success message
+            $data['success_message'] = "Target Data has been set for the user for the Review " . $reviewType;
+    
+            // Optionally, redirect or load a success view
+        }
+
+            // if($_POST){
+
+            //     // $numFields = count($this->input->post('partner_type'));
+
+
+            //    $reviewId                                       = $this->input->post('review_user_id');
+            //    $insertdata['targetUserId']                     = $reviewId;
+            //    $reviewType                                     = $this->input->post('reviewType');
+            //    $insertdata['prospecting_companies']            = $this->input->post('prospecting_companies');
+            //    $insertdata['prospecting_school_target']        = $this->input->post('prospecting_school_target');
+            //    $insertdata['proposal_target']                  = $this->input->post('proposal_target');
+            //    $insertdata['proposal_revenue']                 = $this->input->post('proposal_revenue');
+            //    $insertdata['closure_school_target']            = $this->input->post('closure_school_target');
+            //    $insertdata['closure_client_target']            = $this->input->post('closure_client_target');
+            //    $insertdata['closure_revenue_target']           = $this->input->post('closure_revenue_target');
+            //    $insertdata['reviewType']                       = $reviewType;
+               
+            // //    if($reviewType ==''){
+                
+            // //    }
+            //    $insertdata['targetStartDate']                  = $this->input->post('targetStartDate');
+            //    $insertdata['targetEndDate']                    = $this->input->post('targetEndDate');
+            //    $insertdata['partnerType']                      = $this->input->post('partner_type');
+            //    $insertdata['updatedBy']                        = $uid;
+            //    $insertdata['updatedAt']                        = date("Y-m-d h:i:s");
+            //    $this->Menu_model->insertTargetQandA($insertdata);
+            //    $data['success_message']                         = "Target Data has been set for the user for the Review ".$insertdata['reviewType']." ";
+            // }
         // $data['utype'] = $utype;
         // echo $data['utype'];die;
         $this->load->view('header.php');
@@ -17485,8 +17538,11 @@ public function TaskCheck_New(){
             }
             else if($utype != '4'){
                 // echo "bye";die;
-
                 $this->load->view('PST/targetQandA.php',$data);
+            }
+            else if($utype != '3'){
+                // echo "bye";die;
+                $this->load->view('Sales Person/targetQandA.php',$data);
             }
         $this->load->view('footer.php');
     }

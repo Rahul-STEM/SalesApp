@@ -95,7 +95,7 @@
                                         </div>
                                     </div>
                                     <!-- Cluster -->
-                                    <div class="col-md-3">
+                                    <!-- <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Select Cluster</label>
                                             <select class="custom-select rounded-0" name="cluster[]" id="cluster"
@@ -108,7 +108,21 @@
                                                 <?php } ?>
                                             </select>
                                         </div>
+                                    </div> -->
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Select Role</label>
+                                            <select class="custom-select rounded-0" name="userType[]" id="userType" multiple>
+                                                <option value="select_all">Select All</option>
+                                                <?php foreach($roles as $r) {
+                                                ?>
+                                                <option value="<?= $r->id ?>" <?= in_array($r->id, $userType) ? 'selected' : '' ?>><?= $r->name ?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
                                     </div>
+
                                     <!--Cluster Users -->
                                     <div class="col-md-3">
                                         <div class="form-group">
@@ -1006,6 +1020,37 @@
                     }
                 });
 
+            });
+
+            $("#userType").change(function(){
+
+                var selectedUserType = $(this).val(); 
+                if (selectedUserType.includes('select_all')) {
+                // Select all options
+                    $('#userType option').prop('selected', true);
+                    // Remove 'select_all' from the selected values
+                    selectedUserType = $('#userType option').map(function() {
+                        return this.value !== 'select_all' ? this.value : null;
+                    }).get();
+
+                    selectedUserType = selectedUserType.filter(function(value) {
+                        return value !== null;
+                    });
+                }
+
+                $.ajax({
+                    url: '<?=base_url();?>GraphNew/getRoleUser_New',
+                    type: 'POST', 
+                    data: {RoleId: selectedUserType},
+                    success: function(response) {
+                        // alert(response);
+                        $("#user").html(response);
+                        $('#user').prop('required',true);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
             });
 
             $("#user").change(function () {

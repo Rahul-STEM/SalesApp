@@ -224,26 +224,153 @@
                     <i class="far fa-circle nav-icon"></i>
                     <p>Our Special Request For Leave Some Time </p>
                     </a>
-                </li>
-        
-          
-          
-          
-          
-          
-          
-          <!--<li class="nav-item">
-            <a href="<?=base_url();?>Menu/Mytarget" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>My Target</p>
+          </li>
+            <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-circle"></i>
+              <p>
+                Analysis
+                <i class="right fas fa-angle-left"></i>
+              </p>
             </a>
-          </li>-->
-          <!--<li class="nav-item">-->
-          <!--  <a href="<?=base_url();?>Menu/AddFAQ" class="nav-link">-->
-          <!--    <i class="far fa-circle nav-icon"></i>-->
-          <!--    <p>Add FAQ</p>-->
-          <!--  </a>-->
-          <!--</li>-->
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>
+                        Task Graph
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="<?= base_url(); ?>GraphNew/StatusWiseTaskAnalysis" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>Status Wise Task Analysis</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url(); ?>GraphNew/ActionWiseFunnelAnalysis" class="nav-link">
+                            <i class="far fa-dot-circle nav-icon"></i>
+                            <p>Action Wise Funnel Analysis</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url(); ?>GraphNew/OtherUserOnFunnelAnalysis" class="nav-link">
+                            <i class="far fa-dot-circle nav-icon"></i>
+                            <p>Other User On Funnel Analysis</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url(); ?>GraphNew/TimeSlotWiseTaskAnalysis" class="nav-link">
+                            <i class="far fa-dot-circle nav-icon"></i>
+                            <p>Time Slot Wise Task Analysis</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url(); ?>GraphNew/ActionWiseTaskConversion" class="nav-link">
+                            <i class="far fa-dot-circle nav-icon"></i>
+                            <p>Action Wise Task Conversion</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url(); ?>GraphNew/StatusWiseTaskConversion" class="nav-link">
+                            <i class="far fa-dot-circle nav-icon"></i>
+                            <p>Status Wise Task Conversion</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url(); ?>GraphNew/TaskWiseDetailAnalysis" class="nav-link">
+                            <i class="far fa-dot-circle nav-icon"></i>
+                            <p>Task Wise Detail Analysis</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url(); ?>GraphNew/StatusWiseTaskConversion" class="nav-link">
+                            <i class="far fa-dot-circle nav-icon"></i>
+                            <p>Status Wise Task Conversion</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>
+                            Funnel Graph
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="<?= base_url(); ?>GraphNew/FunnelAnalysis" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>Funnel Analysis</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url(); ?>GraphNew/CityWiseFunnelAnalysis" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>City Wise Funnel Analysis</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url(); ?>GraphNew/PartnerWiseFunnelAnalysis" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>Partner Wise Funnel Analysis</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url(); ?>GraphNew/CategoryWiseFunnelAnalysis" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>Category Wise Funnel Analysis</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url(); ?>GraphNew/CompanyWithSameStatusSinceFunnleAnalysis" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>Company With Same Status Analysis</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url(); ?>GraphNew/StageWiseFunnleAnalysis" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>Stage Wise Funnle Analysis</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>
+                        R Graph
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="<?= base_url(); ?>GraphNew/BDRequest" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>BD Request</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url(); ?>GraphNew/PendingRIDDayWise" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>RID Day Wise</p>
+                            </a>
+                        </li>
+                        <!-- <li class="nav-item">
+                            <a href="#" class="nav-link">
+                            <i class="far fa-dot-circle nav-icon"></i>
+                            <p>Level 3</p>
+                            </a>
+                        </li> -->
+                    </ul>
+                </li>
+            </ul>
+            </li>
           
           <li class="nav-item">
             <a href="<?=base_url();?>Menu/AllReviewPlaing" class="nav-link">

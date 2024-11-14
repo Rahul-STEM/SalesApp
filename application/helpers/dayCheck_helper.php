@@ -10,6 +10,15 @@ if (!function_exists('getlastloginData')) {
         
         return $DataSet;
     }
+
+    function checkLeaveForDay($uid,$date){
+        $CI =& get_instance();
+        // Load the model if not already loaded
+        $CI->load->model('Menu_model');
+        $DataSet = $CI->Menu_model->checkLeaveForDay($uid,$date);
+        
+        return $DataSet;
+    }
 }
 
 

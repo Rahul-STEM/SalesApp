@@ -166,14 +166,14 @@
         </div>
         <?php endif; ?>
           <section class="content">
-              <?php $totalt = $this->Menu_model->get_ttbytimeAutotaskData($uid); ?>
-                  <?php
-                      $pentask = sizeof($autotasktimenew);
-                      if($pentask > 0){
-                        $ast1=$autotasktimenew[0]->stime;
-                        $aet2=$autotasktimenew[0]->etime;
-                      }
-              ?>
+                <?php $totalt = $this->Menu_model->get_ttbytimeAutotaskData($uid); ?>
+                    <?php
+                        $pentask = sizeof($autotasktimenew);
+                        if($pentask > 0){
+                            $ast1=$autotasktimenew[0]->stime;
+                            $aet2=$autotasktimenew[0]->etime;
+                        }
+                    ?>
               <div class="row p-3">
                 <div class="col-lg-12 col-sm">
                   <div class="row">
@@ -318,9 +318,6 @@
                         </button></div>
                       <?php $aai++;}}} ?>
                   </div></button>
-
-
-
                   <div class="tab-pane fade" id="custom-tabs-four-research" role="tabpanel" aria-labelledby="custom-tabs-four-research-tab">
                       <?php $aai=0;foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='10'){
                           $taid = $tt->actiontype_id;

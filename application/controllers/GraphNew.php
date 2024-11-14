@@ -93,11 +93,9 @@ class GraphNew extends CI_Controller
             $userType = array_filter($_POST['userType'], function ($value) {
                 return $value !== 'select_all';
             });
-
             // $userType = implode(',', ($userType));
 
         } else {
-
             $userType = [];
         }
 
@@ -106,10 +104,8 @@ class GraphNew extends CI_Controller
             $cluster = array_filter($_POST['cluster'], function ($value) {
                 return $value !== 'select_all';
             });
-
-            $cluster = implode(',', ($cluster));
+            // $cluster = implode(',', ($cluster));
         } else {
-
             $cluster = [];
         }
 
@@ -118,13 +114,11 @@ class GraphNew extends CI_Controller
             $users = array_filter($_POST['user'], function ($value) {
                 return $value !== 'select_all';
             });
-
             // $users = implode(',', ($users));
         } else {
 
             $users = [];
         }
-
 
         if (isset($_POST['partnerType'])) {
 
@@ -194,10 +188,6 @@ class GraphNew extends CI_Controller
             $sankeyGraphData = [];
         }
 
-        // $jsonSankeyData = json_encode($sankeyGraphData);
-
-        // var_dump($sankeyGraphData);die;
-
         if (!empty($user)) {
             $this->load->view('include/header');
             $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);
@@ -227,7 +217,7 @@ class GraphNew extends CI_Controller
         $selected_users = (array) json_decode($selected_users);
         $selected_category = (array) json_decode($selected_category);
         
-        var_dump(($selected_users));die;
+        //var_dump(($selected_users));die;
 
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -440,29 +430,49 @@ class GraphNew extends CI_Controller
         }
     }
 
-public function getRoleUser_New(){
+    public function getRoleUser_New(){
 
         $RoleId= $this->input->post('RoleId');
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
+        $userTypeid = $user['type_id'];
+        // var_dump($user);die;
 
         $this->db->select('*');
         $this->db->from('user_details');
         $this->db->where('status', 'active');
+
+        if ($userTypeid == 2) {
+
+            $this->db->where('user_details.admin_id', $uid);
+
+        } elseif ($userTypeid == 4) {
+
+            $this->db->where_in('pst_co', $uid);
+        } elseif ($userTypeid == 9 || $userTypeid == 13) {
+
+            $this->db->where_in('aadmin', $uid);
+        }elseif ($userTypeid == 15 ) {
+
+            $this->db->where_in('sales_co', $uid);
+        } else {
+            $this->db->where('user_details.user_id', $uid);
+        }
+
+        // $this->db->where('sales_co', $uid );
+
         $this->db->where_in('type_id', $RoleId);
         $this->db->order_by('name','ASC');
 
         $query = $this->db->get(); 
         // echo $this->db->last_query();die;
+        
         $user_new =  $query->result();
-        // $user_new =   $this->db->result();
-        // var_dump($user_new);die;
 
         echo $data = '<option value="select_all">Select All</option>';
 
         foreach($user_new as $d){
-            
             echo  $data = '<option value='.$d->user_id.'>'.$d->name.'</option>';
         }
     }
@@ -719,8 +729,20 @@ public function getRoleUser_New(){
 
     public function StageWiseFunnleAnalysis()
     {
-
+        
         // var_dump($_POST);die;
+
+        if (isset($_POST['userType'])) {
+
+            $userType = array_filter($_POST['userType'], function ($value) {
+                return $value !== 'select_all';
+            });
+            // $userType = implode(',', ($userType));
+
+        } else {
+            $userType = [];
+        }
+
         if (isset($_POST['startDate']) && isset($_POST['endDate'])) {
 
             $sdate = $_POST['startDate'];
@@ -790,12 +812,14 @@ public function getRoleUser_New(){
         $dt = $this->Graph_Model->get_utype($userTypeid);
         $dep_name = $dt[0]->name;
 
+        $roles = $this->Graph_Model->getRoles($dt[0]->id);
+        
         $get_cluster = $this->Graph_Model->get_clusters();
         $status = $this->Graph_Model->getStatus();
 
 
-        $FunnelData = $this->Graph_Model->getStageWiseFunnelGraphDetails($uid, $userTypeid, $sdate, $edate, $SelectedStatus, $SelectedCluster, $SelectedCategory, $SelectedUsers, $SelectedpartnerType);
-        $TableData = $this->Graph_Model->getStageWiseFunnelTableDetails($uid, $userTypeid, $sdate, $edate, $SelectedStatus, $SelectedCluster, $SelectedCategory, $SelectedUsers, $SelectedpartnerType);
+        $FunnelData = $this->Graph_Model->getStageWiseFunnelGraphDetails($uid, $userTypeid, $sdate, $edate, $SelectedStatus, $SelectedCluster, $SelectedCategory, $SelectedUsers, $SelectedpartnerType,$userType);
+        $TableData = $this->Graph_Model->getStageWiseFunnelTableDetails($uid, $userTypeid, $sdate, $edate, $SelectedStatus, $SelectedCluster, $SelectedCategory, $SelectedUsers, $SelectedpartnerType,$userType);
 
         // $GraphData = '';
         // $TableData = '';
@@ -804,7 +828,7 @@ public function getRoleUser_New(){
         if (!empty($user)) {
             $this->load->view('include/header');
             $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);
-            $this->load->view('Graphs/StageWiseFunnelAnalysis', ['uid' => $uid, 'user' => $user, 'sdate' => $sdate, 'edate' => $edate, 'SelectedStatus' => $SelectedStatus, 'status' => $status, 'SelectedpartnerType' => $SelectedpartnerType, 'partner_type' => $partner_type, 'SelectedCluster' => $SelectedCluster, 'clusters' => $get_cluster, 'SelectedCategory' => $SelectedCategory, 'SelectedUsers' => $SelectedUsers, 'TableData' => $TableData, 'userTypeid' => $userTypeid, 'FunnelData' => $FunnelData]);
+            $this->load->view('Graphs/StageWiseFunnelAnalysis', ['uid' => $uid, 'user' => $user, 'sdate' => $sdate, 'edate' => $edate, 'SelectedStatus' => $SelectedStatus, 'status' => $status, 'SelectedpartnerType' => $SelectedpartnerType, 'partner_type' => $partner_type, 'SelectedCluster' => $SelectedCluster, 'clusters' => $get_cluster, 'SelectedCategory' => $SelectedCategory, 'SelectedUsers' => $SelectedUsers, 'TableData' => $TableData, 'userTypeid' => $userTypeid, 'FunnelData' => $FunnelData,'roles' => $roles,'userType'=>$userType]);
             $this->load->view('include/footer');
         } else {
             redirect('Menu/main');
@@ -854,7 +878,6 @@ public function getRoleUser_New(){
 
     public function StatusWiseTaskAnalysis()
     {
-
 // echo "test";exit;
         if (isset($_POST['startDate']) && isset($_POST['endDate'])) {
 
@@ -940,10 +963,9 @@ public function getRoleUser_New(){
 
         $TableData = $this->Graph_Model->StatusWiseTaskTableDetails($uid, $userTypeid, $sdate, $edate, $userType, $cluster, $partnerType, $category, $users);
 
-        // $FunnelData = $this->Graph_Model->getGraphDetails($uid, $userTypeid, $sdate, $edate, $userType, $cluster, $partnerType, $category, $users);
         // var_dump($TableData);die;
 
-        $FunnelData = '';
+        $FunnelData = [];
         // $TableData = '';
         if (!empty($user)) {
 

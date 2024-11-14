@@ -80,7 +80,7 @@
                   <div class="form-group">
                     <label for="task_type">Request Type</label>
                     <select class="custom-select rounded-0" name="request_type" id="task_type">
-                  </select>
+                    </select>
                   </div>
                   <div class="form-group">
                     <label for="cname">Client</label>

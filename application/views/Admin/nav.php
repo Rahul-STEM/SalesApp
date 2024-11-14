@@ -715,7 +715,7 @@ $userName=$this->Menu_model->get_userName($uid);?>
             </a>
 
           </li>
-          <li class="nav-item">
+            <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-circle"></i>
               <p>

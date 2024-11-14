@@ -4176,6 +4176,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         return $query->result();
     }
      public function get_ttbytimeAutotaskData($uid){
+        
         $query=$this->db->query("SELECT tblcallevents.*,status.name,status.color,(select init_call.cmpid_id from init_call WHERE id=tblcallevents.cid_id) as cmpid_id,(select company_master.compname from company_master WHERE id=cmpid_id) as compname, (select company_master.id from company_master WHERE id=cmpid_id) as cid FROM tblcallevents JOIN status ON status.id=tblcallevents.status_id WHERE assignedto_id='$uid' and autotask=1 and nextCFID=0 and plan=1 and DATE(appointmentdatetime) < CURDATE() AND appointmentdatetime != '0000-00-00 00:00:00'");
         
         return $query->result();
@@ -4878,11 +4879,16 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
     }
     public function get_daydetail($uid,$tdate){
        // echo "SELECT cast(ustart as TIME) as ustart,cast(uclose as TIME) as uclose FROM user_day WHERE user_id='$uid' and cast(sdatet as DATE)='$tdate'";exit;
+
         $query=$this->db->query("SELECT cast(ustart as TIME) as ustart,cast(uclose as TIME) as uclose FROM user_day WHERE user_id='$uid' and cast(sdatet as DATE)='$tdate'");
+
+        // $query=$this->db->query("SELECT cast(ustart as TIME) as ustart FROM user_day WHERE user_id='$uid' and cast(sdatet as DATE)='$tdate'");
+    //    echo $this->db->last_query();die;
         return $query->result();
     }
      public function get_Yestdaydetail($uid,$tdate){
         $query=$this->db->query("SELECT id,ustart,uclose FROM user_day WHERE user_id='$uid' and cast(ustart as DATE)='$tdate' and uclose is null");
+        // echo $this->db->last_query();die;
         return $query->result();
     }
 
@@ -10580,18 +10586,18 @@ public function get_userForTask($uid,$uyid){
     $this->db->select('user_id');
     $this->db->select('name');
     $this->db->from('user_details');
-    // if($uyid == 2){
-    //     $this->db->where('admin_id',$uid);
-    // }elseif ($uyid == 15 ) {
+    if($uyid == 2){
+        $this->db->where('admin_id',$uid);
+    }elseif ($uyid == 15 ) {
         
-    //     $this->db->where('sales_co',$uid);
-    // }elseif ($uyid == 4) {
+        $this->db->where('sales_co',$uid);
+    }elseif ($uyid == 4) {
         
-    //     $this->db->where('pst_co',$uid);
-    // }elseif ($uyid == 9) {
+        $this->db->where('pst_co',$uid);
+    }elseif ($uyid == 9) {
         
-    //     $this->db->where('aadmin',$uid);
-    // }
+        $this->db->where('aadmin',$uid);
+    }
     $this->db->where('status','active');
     $this->db->order_by('name','ASC');
     $query = $this->db->get();
@@ -14629,10 +14635,10 @@ public function getUserByType($utype,$uid){
     public function getlastloginData($uid){
 
         $date = date('Y-m-d');
-        // $query=$this->db->query("SELECT ustart FROM user_day WHERE user_id='$uid' and sdatet != '$date ' ORDER BY  id DESC LIMIT 1");
 
         $this->db->select('CAST(sdatet AS DATE) as sdatet_cast')
                 ->from('user_day')
+                ->where('user_id', $uid)
                 ->where('CAST(sdatet AS DATE) !=', $date, false)
                 ->order_by('id', 'DESC')
                 ->limit(1);
@@ -14641,7 +14647,23 @@ public function getUserByType($utype,$uid){
 
         // echo $this->db->last_query();die;
         return $query->result();
-
     } 
- 
+
+
+    public function checkLeaveForDay($uid,$date){
+
+        $this->db->select('id')
+                ->from('leave_requests')
+                ->where('user_id', $uid)
+                ->where('status', 'approved')
+                ->where('CAST(start_date AS DATE) >=', $date)
+                ->where('CAST(end_date AS DATE) <=', $date);
+
+        $query = $this->db->get();
+
+        // echo $this->db->last_query();die;
+        return $query->result();
+    } 
+
+    
 }

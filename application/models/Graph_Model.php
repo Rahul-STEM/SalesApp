@@ -160,7 +160,20 @@ class Graph_Model extends CI_Model
         $this->db->select('*');
         $this->db->from('user_type');
         // $this->db->where('Active_Flag', 0);
-        if ($type_id != 2) {
+        if ($type_id == '15') {
+            # code...
+            $this->db->where_in('id', [3,4,13]);
+        }
+        else if($type_id == 2) {
+            $this->db->where_in('id', [3,4,13,15]);
+        }
+        else if($type_id == 13) {
+            $this->db->where_in('id', [3]);
+        }
+        else if($type_id == 4) {
+            $this->db->where_in('id', [3,13]);
+        }
+        else{
             $this->db->where('id', $type_id);
         }
         $query = $this->db->get();
@@ -349,7 +362,11 @@ class Graph_Model extends CI_Model
         } elseif ($userTypeid == 13) {
             //if CLM is loggedin
             $this->db->where('admin_id', $uid);
-        } else {
+        }elseif ($userTypeid == 15) {
+            //if CLM is loggedin
+            $this->db->where('sales_co', $uid);
+        }  
+        else {
             //if BD is loggedin
             $this->db->where('mainbd', $uid);
         }
@@ -392,39 +409,39 @@ class Graph_Model extends CI_Model
             $this->db->where_in('company_master.partnerType_id', $partnerType);
         }
 
-        // if (!empty($category)) {
-        //     $this->db->group_start();
+        if (!empty($category)) {
+            $this->db->group_start();
 
-        //     foreach ($category as $singleCategory) {
+            foreach ($category as $singleCategory) {
 
-        //         if ($singleCategory == 'topspender') {
+                if ($singleCategory == 'topspender') {
 
-        //             $this->db->or_where('topspender', 'yes');
-        //         }
-        //         if ($singleCategory == 'focus_funnel') {
+                    $this->db->or_where('topspender', 'yes');
+                }
+                if ($singleCategory == 'focus_funnel') {
 
-        //             $this->db->or_where('focus_funnel', 'yes');
-        //         }
-        //         if ($singleCategory == 'upsell_client') {
+                    $this->db->or_where('focus_funnel', 'yes');
+                }
+                if ($singleCategory == 'upsell_client') {
 
-        //             $this->db->or_where('upsell_client', 'yes');
-        //         }
-        //         if ($singleCategory == 'keycompany') {
+                    $this->db->or_where('upsell_client', 'yes');
+                }
+                if ($singleCategory == 'keycompany') {
 
-        //             $this->db->or_where('keycompany', 'yes');
-        //         }
-        //         if ($singleCategory == 'pkclient ') {
+                    $this->db->or_where('keycompany', 'yes');
+                }
+                if ($singleCategory == 'pkclient ') {
 
-        //             $this->db->or_where('pkclient', 'yes');
-        //         }
-        //         if ($singleCategory == 'priorityc ') {
+                    $this->db->or_where('pkclient', 'yes');
+                }
+                if ($singleCategory == 'priorityc ') {
 
-        //             $this->db->or_where('priorityc', 'yes');
-        //         }
-        //     }
+                    $this->db->or_where('priorityc', 'yes');
+                }
+            }
 
-        //     $this->db->group_end();
-        // }
+            $this->db->group_end();
+        }
 
         //if user type is selected
         if (!empty($userType)) {
@@ -465,10 +482,14 @@ class Graph_Model extends CI_Model
         } elseif ($userTypeid == 13) {
             //if CLM is loggedin
             $this->db->where('admin_id', $uid);
-        } else {
-            //if BD is loggedin
-            $this->db->where('mainbd', $uid);
-        }
+        } elseif ($userTypeid == 15) {
+            //if CLM is loggedin
+            $this->db->where('sales_co', $uid);
+        } 
+        // else {
+        //     //if BD is loggedin
+        //     $this->db->where('mainbd', $uid);
+        // }
 
         $this->db->where('user_details.status', 'active');
 
@@ -479,8 +500,8 @@ class Graph_Model extends CI_Model
         // $this->db->group_by('stname');
         $query = $this->db->get();
 
-        //    echo $this->db->last_query();
-        // die;
+        // echo $this->db->last_query();die;
+        
         return $query->result();
     }
 
@@ -715,13 +736,6 @@ class Graph_Model extends CI_Model
     public function getSankeyGraphData($uid, $userTypeid, $sdate, $edate, $userType = null, $cluster = null, $partnerType = null, $category = null, $users = null)
     {
 
-        // var_dump($sdate);die;
-        // $this->db->select('status.clr stclr');
-        // $this->db->select('status.id stid');
-        // $this->db->select('status.name stname');
-        // $this->db->select('COUNT(*) cont');
-
-        
         $this->db->select('ic.id id');
         $this->db->from('init_call ic');
         $this->db->join('status', 'status.id = ic.cstatus', 'left');
@@ -768,13 +782,11 @@ class Graph_Model extends CI_Model
             $this->db->group_end();
         }
 
-        // var_dump($cluster);die;
         // if cluster is selected
         if (!empty($cluster)) {
             // echo 'hii';die;
             $this->db->where_in('aadmin', $users);
         }
-
 
         // if userType is selected
         if (!empty($userType)) {
@@ -795,23 +807,26 @@ class Graph_Model extends CI_Model
         }
 
         // echo $userTypeid;die;
-        // if ($userTypeid == 2) {
-        //     //if admin is loggedin
-        //     $this->db->where('admin_id', $uid);
-        // } elseif ($userTypeid == 4) {
-        //     //if PST is loggedin
-        //     $this->db->where('pst_co', $uid);
-        // } elseif ($userTypeid == 9) {
-        //     //if BDPST is loggedin
-        //     $this->db->where('aadmin', $uid);
-        // } elseif ($userTypeid == 13) {
-        //     //if CLM is loggedin
-        //     $this->db->where('admin_id', $uid);
-        // } else {
+        if ($userTypeid == 2) {
+            //if admin is loggedin
+            $this->db->where('admin_id', $uid);
+        } elseif ($userTypeid == 4) {
+            //if PST is loggedin
+            $this->db->where('pst_co', $uid);
+        } elseif ($userTypeid == 9) {
+            //if BDPST is loggedin
+            $this->db->where('aadmin', $uid);
+        } elseif ($userTypeid == 13) {
+            //if CLM is loggedin
+            $this->db->where('aadmin', $uid);
+        } elseif ($userTypeid == 15) {
+            //if CLM is loggedin
+            $this->db->where('sales_co', $uid);
+        } 
+        // else {
         //     //if BD is loggedin
         //     $this->db->where('mainbd', $uid);
         // }
-
         
         $this->db->where('user_details.status', 'active');
 
@@ -907,6 +922,9 @@ class Graph_Model extends CI_Model
         } elseif ($userTypeid == 4) {
 
             $this->db->where_in('pst_co', $uid);
+        }elseif ($userTypeid == 15) {
+
+            $this->db->where_in('sales_co', $uid);
         } elseif ($userTypeid == 9 || $userTypeid == 13) {
 
             $this->db->where_in('aadmin', $uid);
@@ -1012,6 +1030,7 @@ class Graph_Model extends CI_Model
         // }
 
         // if cluster is selected
+
 
 
         if ($userTypeid == 2) {
@@ -1520,6 +1539,7 @@ class Graph_Model extends CI_Model
 
         // if cluster is selected
 
+        
         if ($Category == 'focus_funnel') {
 
             $this->db->where('ic.focus_funnel', 'yes');
@@ -1586,6 +1606,9 @@ class Graph_Model extends CI_Model
         } elseif ($userTypeid == 4) {
 
             $this->db->where_in('pst_co', $uid);
+        }elseif ($userTypeid == 15) {
+
+            $this->db->where_in('sales_co', $uid);
         } elseif ($userTypeid == 9 || $userTypeid == 13) {
 
             $this->db->where_in('aadmin', $uid);
@@ -1699,6 +1722,9 @@ class Graph_Model extends CI_Model
         } elseif ($userTypeid == 4) {
 
             $this->db->where_in('pst_co', $uid);
+        } elseif ($userTypeid == 15) {
+
+            $this->db->where_in('sales_co', $uid);
         } elseif ($userTypeid == 9 || $userTypeid == 13) {
 
             $this->db->where_in('aadmin', $uid);
@@ -1888,7 +1914,7 @@ class Graph_Model extends CI_Model
         return $query->result();
     }
 
-    public function getStageWiseFunnelGraphDetails($uid, $userTypeid, $sdate, $edate, $status, $SelectedCluster, $SelectedCategory, $SelectedUsers, $SelectedpartnerType)
+    public function getStageWiseFunnelGraphDetails($uid, $userTypeid, $sdate, $edate, $status, $SelectedCluster, $SelectedCategory, $SelectedUsers, $SelectedpartnerType,$userType)
     {
 
         $this->db->select("
@@ -1955,20 +1981,47 @@ class Graph_Model extends CI_Model
             $this->db->where_in('company_master.partnerType_id', $SelectedpartnerType);
         }
 
-        if ($userTypeid == 2) {
+        if (!empty($userType)) {
+            $this->db->group_start();
+            foreach ($userType as $singleuserType) {
 
-            $this->db->where('user_details.admin_id', $uid);
-        } elseif ($userTypeid == 4) {
+                if ($singleuserType == 4) {
 
-            $this->db->where_in('pst_co', $uid);
-        } elseif ($userTypeid == 9 || $userTypeid == 13) {
+                    $this->db->or_where_in('pst_co', $SelectedUsers);
+                }
+                if ($singleuserType == 9 || $singleuserType == 13) {
 
-            $this->db->where_in('aadmin', $uid);
-        } else {
+                    $this->db->or_where_in('aadmin', $SelectedUsers);
+                }
+                else{
 
-            $this->db->where('user_id', $uid);
+                    $this->db->where_in('user_id', $SelectedUsers);
+                }
+            }
+            $this->db->group_end();
         }
 
+        if ($userTypeid == 2) {
+            //if admin is loggedin
+            $this->db->where('admin_id', $uid);
+        } elseif ($userTypeid == 4) {
+            //if PST is loggedin
+            $this->db->where('pst_co', $uid);
+        } elseif ($userTypeid == 9) {
+            //if BDPST is loggedin
+            $this->db->where('aadmin', $uid);
+        } elseif ($userTypeid == 13) {
+            //if CLM is loggedin
+            $this->db->where('aadmin', $uid);
+        } elseif ($userTypeid == 15) {
+            //if CLM is loggedin
+            $this->db->where('sales_co', $uid);
+        } 
+        else {
+            //if BD is loggedin
+            $this->db->where('mainbd', $uid);
+        }
+        
         if (!empty($SelectedUsers)) {
 
             $this->db->where_in('user_details.aadmin', $SelectedUsers);
@@ -2064,7 +2117,7 @@ class Graph_Model extends CI_Model
         return $query->result();
     }
 
-    public function getStageWiseFunnelTableDetails($uid, $userTypeid, $sdate, $edate, $SelectedStatus, $SelectedCluster, $SelectedCategory, $SelectedUsers, $SelectedpartnerType)
+    public function getStageWiseFunnelTableDetails($uid, $userTypeid, $sdate, $edate, $SelectedStatus, $SelectedCluster, $SelectedCategory, $SelectedUsers, $SelectedpartnerType,$userType)
     {
 
         $this->db->select('ic.id ic_id');
@@ -2145,6 +2198,25 @@ class Graph_Model extends CI_Model
         } else {
             $this->db->where('user_id', $uid);
         }
+
+
+        if (!empty($userType)) {
+            $this->db->group_start();
+            foreach ($userType as $singleuserType) {
+                if ($singleuserType == 4) {
+                    $this->db->or_where_in('pst_co', $SelectedUsers);
+                }
+                if ($singleuserType == 9 || $singleuserType == 13) {
+                    $this->db->or_where_in('aadmin', $SelectedUsers);
+                }
+                else{
+
+                    $this->db->where_in('user_id', $SelectedUsers);
+                }
+            }
+            $this->db->group_end();
+        }
+
 
         if (!empty($SelectedUsers)) {
 
@@ -2348,8 +2420,11 @@ class Graph_Model extends CI_Model
         } elseif ($userTypeid == 9 || $userTypeid == 13) {
 
             $this->db->where_in('aadmin', $uid);
+        }elseif ($userTypeid == 15 ) {
+
+            $this->db->where_in('sales_co', $uid);
         } else {
-            $this->db->where('user_id', $uid);
+            $this->db->where('user_details.user_id', $uid);
         }
         $this->db->where('CAST(updateddate AS DATE) >=', $sdate);
         $this->db->where('CAST(updateddate AS DATE) <=', $edate);
@@ -2563,6 +2638,9 @@ class Graph_Model extends CI_Model
         } elseif ($userTypeid == 9 || $userTypeid == 13) {
 
             $this->db->where_in('aadmin', $uid);
+        } elseif ($userTypeid == 15) {
+
+            $this->db->where_in('sales_co', $uid);
         } else {
             $this->db->where('user_id', $uid);
         }
@@ -2680,12 +2758,15 @@ class Graph_Model extends CI_Model
         } elseif ($userTypeid == 9 || $userTypeid == 13) {
 
             $this->db->where_in('aadmin', $uid);
+        } elseif ($userTypeid == 15) {
+
+            $this->db->where_in('sales_co', $uid);
         } else {
-            $this->db->where('user_id', $uid);
+            $this->db->where('user_details.user_id', $uid);
         }
 
         if (!empty($action)) {
-            # code...
+
             $this->db->where_in('actiontype_id', $action);
         }
         $this->db->where('tblcallevents.nextCFID !=', '0');
@@ -2770,19 +2851,22 @@ class Graph_Model extends CI_Model
             }
         }
 
-        // if ($userTypeid == 2) {
+        if ($userTypeid == 2) {
 
-        //     $this->db->where('user_details.admin_id', $uid);
+            $this->db->where('user_details.admin_id', $uid);
             
-        // } elseif ($userTypeid == 4) {
+        } elseif ($userTypeid == 4) {
 
-        //     $this->db->where_in('pst_co', $uid);
-        // } elseif ($userTypeid == 9 || $userTypeid == 13) {
+            $this->db->where_in('pst_co', $uid);
+        } elseif ($userTypeid == 9 || $userTypeid == 13) {
 
-        //     $this->db->where_in('aadmin', $uid);
-        // } else {
-        //     $this->db->where('user_id', $uid);
-        // }
+            $this->db->where_in('aadmin', $uid);
+        } elseif ($userTypeid == 15) {
+
+            $this->db->where_in('sales_co', $uid);
+        } else {
+            $this->db->where('user_id', $uid);
+        }
 
         // $this->db->where('user_details admin_id', $uid);
         $this->db->join('user_details', 'user_details.user_id = init_call.mainbd', 'left');
@@ -2909,6 +2993,9 @@ class Graph_Model extends CI_Model
                 else if ($singleuserType == 9 || $singleuserType == 13) {
                     $this->db->or_where_in('user_details.aadmin', $selected_users);
                 }
+                else if ($singleuserType == 15) {
+                    $this->db->or_where_in('user_details.sales_co', $selected_users);
+                }
                 else{
 
                     $this->db->where_in('user_details.user_id', $selected_users);
@@ -2917,18 +3004,21 @@ class Graph_Model extends CI_Model
             $this->db->group_end();
         }
 
-        // if ($userTypeid == 2) {
+        if ($userTypeid == 2) {
 
-        //     $this->db->where('user_details.admin_id', $uid);
-        // } elseif ($userTypeid == 4) {
+            $this->db->where('user_details.admin_id', $uid);
+        } elseif ($userTypeid == 4) {
 
-        //     $this->db->where_in('pst_co', $uid);
-        // } elseif ($userTypeid == 9 || $userTypeid == 13) {
+            $this->db->where_in('pst_co', $uid);
+        } elseif ($userTypeid == 9 || $userTypeid == 13) {
 
-        //     $this->db->where_in('user_details.aadmin', $uid);
-        // } else {
-        //     $this->db->where('user_details.user_id', $uid);
-        // }
+            $this->db->where_in('user_details.aadmin', $uid);
+        } elseif ($userTypeid == 15) {
+
+            $this->db->where_in('user_details.sales_co', $uid);
+        }else {
+            $this->db->where('user_details.user_id', $uid);
+        }
 
         $this->db->where('actontaken', $actionType);
         $this->db->where('purpose_achieved', $purposeType);

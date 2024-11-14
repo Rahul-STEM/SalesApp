@@ -37,7 +37,7 @@
                             <img src="https://stemlearning.in/opp/assets/image/icon/whatsapp.png" style="height:30px;"></a>
                         </span>
                     </div>
-                    <? }?>
+                    <?php }?>
                                 </div>
                                 <input type="hidden" name="action_id" id="action_id" value="<?=$ttbl[0]->actiontype_id?>">
                                 <div class="col-lg-12 card-form__body card-body">
@@ -223,6 +223,11 @@
    <input type="text" name="designation" class="form-control  p-3  mt-2" placeholder="Designation">
    <input type="number" name="phoneno" class="form-control  p-3  mt-2" placeholder="Contact No">
    <input type="email" name="emailid" class="form-control  p-3  mt-2" placeholder="Email">
+   <span><b>Set Contact Type?</b></span><br>
+    <input type="radio" name="primary" Value="primary" checked> 
+    <label>Primary</label>
+    <input type="radio" name="primary" Value="alternate"> 
+    <label>Alternate</label><br>
    <button type="submit" class="btn btn-primary mt-3" onclick="this.form.submit(); this.disabled = true;">Submit</button>
    </form>
   </div>

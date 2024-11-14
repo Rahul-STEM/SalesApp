@@ -137,19 +137,71 @@
             // echo $checklastLoginDay;die;
             // var_dump($checklastLoginDay[0]->sdatet_cast);die;
 
-            $start_date = new DateTime($checklastLoginDay[0]->sdatet_cast);  // Convert start date to DateTime object
+            $start_date = new DateTime($checklastLoginDay[0]->sdatet_cast);  
             $end_date = new DateTime();  // Current date
             $interval = new DateInterval('P1D');  // 1 day interval
             $daterange = new DatePeriod($start_date, $interval, $end_date);
 
             $dates = [];
+            $day_of_week = []; // Initialize the array to store the day names
+
             foreach ($daterange as $date) {
-                $dates[] = $date->format('Y-m-d');  // Add each date in 'Y-m-d' format
-                $day_of_week = date('l', strtotime($dates));
+
+                $formatted_date = $date->format('Y-m-d');
+                $checkLeaveForDay = checkLeaveForDay($uid,$formatted_date);
+
+                // var_dump(sizeof($checkLeaveForDay));die;
+
+                // if (sizeof($checkLeaveForDay) > 0) {
+                    
+                // } else {
+                    
+                    
+                // }
+                
+                // Format the date as 'Y-m-d'
+                $dates[] = $formatted_date;  // Add formatted date to array
+                $day_of_week[] = $date->format('l');  // Get the day of the week
+            
+                // Check if it's a Saturday
+                // if ($date->format('l') === 'Saturday') {
+                //     $week_occurances[] = getNthSaturday($date);
+                // }
+
             }
 
-            // var_dump($dates);die;
+            // Function to determine the nth Saturday of the month
+            // function getNthSaturday($date) {
+            //     // Get the first day of the month
+            //     $first_day_of_month = new DateTime($date->format('Y-m-01'));
+                
+            //     // Find the first Saturday of the month
+            //     $first_saturday = clone $first_day_of_month;
+            //     $first_saturday->modify('first saturday of this month');
+                
+            //     // Calculate the week number of the current Saturday
+            //     $diff = $date->diff($first_saturday);
+            //     $week_number = floor($diff->days / 7) + 1;
 
+            //     // Check if it's the 2nd or 4th Saturday
+            //     if ($week_number == 2) {
+            //         return '2nd Saturday';
+            //     } elseif ($week_number == 4) {
+            //         return '4th Saturday';
+            //     } else {
+            //         return 'Not 2nd or 4th Saturday';
+            //     }
+            // }
+
+            // // Output the results
+            // foreach ($week_occurances as $result) {
+            //     echo $result . "\n";
+            // }
+            
+            
+            // var_dump($dates);
+            // var_dump($day_of_week);die;
+            
             $yestdatacnt = sizeof($yestdata);
             $uystart_id = $yestdata[0]->id;
             $uystart = $yestdata[0]->ustart;

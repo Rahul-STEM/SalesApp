@@ -17296,17 +17296,19 @@ public function get_JoinMeetingsCompany(){
 }
 // New TaskCheck <=========================================== START ==================================>
 public function TaskCheck_New(){
+    // echo "hii2";
     $user = $this->session->userdata('user');
     $data['user'] = $user;
     $uid = $user['user_id'];
     $uyid =  $user['type_id'];
     $this->load->model('Menu_model');
     $dt=$this->Menu_model->get_utype($uyid);
+    // echo "hii2";die;
     // $tdate='2024-07-18';
 
     $userList = $this->Menu_model->get_userForTask($uid,$uyid);
     $dep_name = $dt[0]->name;
- 
+    // echo "hii3";die;
     $date = new DateTime();
     $date->modify('-1 day');
     $tdate =  $date->format('Y-m-d');
@@ -17314,17 +17316,21 @@ public function TaskCheck_New(){
     $cdate = date("Y-m-d");
     // $RequestApprovals = '';
     $RequestApprovals = $this->Menu_model->RequestApprovals($uid);
+    // var_dump($RequestApprovals);die;
     $ApprovedRequests = $this->Menu_model->ApprovedRequests($uid);
-        // $tdate='2024-07-18';
+    // var_dump($ApprovedRequests);die;
+    // echo "hii5";die;
+        $tdate='2024-06-05';
     if(isset($_POST['userId'])){
         $userId = $_POST['userId'];
+        // echo $userId;die;
         $taskList = $this->Menu_model->getTasks($userId,$tdate);
-
+        
         $sizeOfTask =sizeof($taskList);
-        // echo $sizeOfTask;die;
        // echo $this->db->last_query();exit;
     }
     else{
+        // echo "hii";die;
         $userId = '';
         $sizeOfTask = '';
 
@@ -17332,17 +17338,17 @@ public function TaskCheck_New(){
     $currentHour = (int) (new DateTime())->format('H:mm');
     // echo $currentHour;die;
     if(!empty($user)){
-
         if($currentHour >= 11 && $uyid != 2) {
-
+            
             if (sizeof($ApprovedRequests) > 0) {
                 
                 $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId,'sizeOfTask'=>$sizeOfTask]);
-
+                
             }else{
                 // echo $dep_name;die;
                 // redirect('Menu/RequestForTaskCheckApproval');
-                $this->load->view($dep_name.'/RequestForTaskCheckApproval',['uid'=>$this->uid,'user'=>$this->user,'cdate'=>$cdate,'RequestApprovals'=>$RequestApprovals]);
+                // var_dump($dep_name);die;
+                $this->load->view($dep_name.'/RequestForTaskCheckApproval',['uid'=>$this->uid,'user'=>$user,'cdate'=>$cdate,'RequestApprovals'=>$RequestApprovals]);
             }
         }else{
             $this->load->view($dep_name.'/TaskCheck_New',['uid'=>$uid,'user'=>$user,'userList'=>$userList,'taskList'=>$taskList,'cdate'=>$tdate,'selectedUser'=>$userId,'sizeOfTask'=>$sizeOfTask]);

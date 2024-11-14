@@ -171,17 +171,17 @@
                     </a>
          </li>
           <?php $tdate = date('Y-m-d');
-         $current_date = date('Y-m-d');
-          $days = $this->Menu_model->get_daystarted($uid,$tdate); 
+            $current_date = date('Y-m-d');
+            $days = $this->Menu_model->get_daystarted($uid,$tdate); 
           // if($days){
             ?>
-          <!-- <li class="nav-item">
-          <a href="<?=base_url();?>Menu/TaskPlanner2/<?=$current_date?>" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Task Planner</p>
-            </a>
-          </li> -->
-          <?php //} ?>
+            <!-- <li class="nav-item">
+            <a href="<?=base_url();?>Menu/TaskPlanner2/<?=$current_date?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Task Planner</p>
+                </a>
+            </li> -->
+            <?php //} ?>
           
            <li class="nav-item">
             <a href="<?=base_url();?>Menu/TodaysTaskApprovelRequest" class="nav-link">
@@ -213,42 +213,170 @@
               <p>Our Special Request For Leave Some Time </p>
               </a>
           </li>
-          <li class="nav-item">
-                    <a href="<?=base_url();?>Menu/UserTaskViewPage" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Our Todays Task Status</p>
-                    </a>
-                </li>
-          <!-- <li class="nav-item">-->
-          <!--  <a class="nav-link" href="<?=base_url();?>Menu/cluster" >-->
-          <!--    <i class="far fa-circle nav-icon"></i>-->
-          <!--    <p>Add travel Cluster</p>-->
-          <!--  </a>-->
-          <!--</li>-->
-          <!--<li class="nav-item">-->
-          <!--  <a href="<?=base_url();?>Menu/AddFAQ" class="nav-link">-->
-          <!--    <i class="far fa-circle nav-icon"></i>-->
-          <!--    <p>Add FAQ</p>-->
-          <!--  </a>-->
-          <!--</li>-->
-          <!--<li class="nav-item">-->
-          <!--  <a href="<?=base_url();?>Menu/FAQReport" class="nav-link">-->
-          <!--    <i class="far fa-circle nav-icon"></i>-->
-          <!--    <p>FAQ Report</p>-->
-          <!--  </a>-->
-          <!--</li>-->
-          <li class="nav-item">
-            <a href="<?=base_url();?>Menu/HumHongeTaiyar" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Hum Honge Taiyar</p>
-            </a>
-           </li>
-           <li class="nav-item">
-            <a href="<?=base_url();?>Menu/HumHongeTaiyarReport" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Hum Honge Taiyar Report</p>
-            </a>
-           </li>
+            <li class="nav-item">
+                <a href="<?=base_url();?>Menu/UserTaskViewPage" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Our Todays Task Status</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-circle"></i>
+                <p>
+                    Analysis
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>
+                            Task Graph
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="<?= base_url(); ?>GraphNew/StatusWiseTaskAnalysis" class="nav-link">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Status Wise Task Analysis</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= base_url(); ?>GraphNew/ActionWiseFunnelAnalysis" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>Action Wise Funnel Analysis</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= base_url(); ?>GraphNew/OtherUserOnFunnelAnalysis" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>Other User On Funnel Analysis</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= base_url(); ?>GraphNew/TimeSlotWiseTaskAnalysis" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>Time Slot Wise Task Analysis</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= base_url(); ?>GraphNew/ActionWiseTaskConversion" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>Action Wise Task Conversion</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= base_url(); ?>GraphNew/StatusWiseTaskConversion" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>Status Wise Task Conversion</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= base_url(); ?>GraphNew/TaskWiseDetailAnalysis" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>Task Wise Detail Analysis</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= base_url(); ?>GraphNew/StatusWiseTaskConversion" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>Status Wise Task Conversion</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>
+                                Funnel Graph
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="<?= base_url(); ?>GraphNew/FunnelAnalysis" class="nav-link">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Funnel Analysis</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= base_url(); ?>GraphNew/CityWiseFunnelAnalysis" class="nav-link">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>City Wise Funnel Analysis</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= base_url(); ?>GraphNew/PartnerWiseFunnelAnalysis" class="nav-link">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Partner Wise Funnel Analysis</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= base_url(); ?>GraphNew/CategoryWiseFunnelAnalysis" class="nav-link">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Category Wise Funnel Analysis</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= base_url(); ?>GraphNew/CompanyWithSameStatusSinceFunnleAnalysis" class="nav-link">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Company With Same Status Analysis</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= base_url(); ?>GraphNew/StageWiseFunnleAnalysis" class="nav-link">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Stage Wise Funnle Analysis</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>
+                            R Graph
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="<?= base_url(); ?>GraphNew/BDRequest" class="nav-link">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>BD Request</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= base_url(); ?>GraphNew/PendingRIDDayWise" class="nav-link">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>RID Day Wise</p>
+                                </a>
+                            </li>
+                            <!-- <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>Level 3</p>
+                                </a>
+                            </li> -->
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a href="<?=base_url();?>Menu/HumHongeTaiyar" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Hum Honge Taiyar</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="<?=base_url();?>Menu/HumHongeTaiyarReport" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Hum Honge Taiyar Report</p>
+                </a>
+            </li>
           <li class="nav-item">
             <a class="nav-link" href="<?=base_url();?>Menu/AnnualReviewDet" >
               <i class="far fa-circle nav-icon"></i>
@@ -281,20 +409,77 @@
     </div>
     <!-- /.sidebar -->
   </aside>
-  <?php 
-      if(!isset($daycheck)){
-        $current_uid    = $user['user_id'];
-      $user_type = $user['type_id'];
-      $user_day = $this->Menu_model->get_daydetail($current_uid,date("Y-m-d"));
-      if(sizeof($user_day) == 0){
-          $this->session->set_flashdata('error_message','* Please start your day first');
-          redirect('Menu/DayManagement');
-      }  
-      }    
-      ?>
+    <?php 
+        if(!isset($daycheck)){
+            $current_uid    = $user['user_id'];
+            $user_type = $user['type_id'];
+            $user_day = $this->Menu_model->get_daydetail($current_uid,date("Y-m-d"));
+            if(sizeof($user_day) == 0){
+                $this->session->set_flashdata('error_message','* Please start your day first');
+                redirect('Menu/DayManagement');
+            }  
+        }    
+    ?>
   
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script> 
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>  -->
+
+<script src="<?=base_url();?>assets/js/jquery.min.js"></script>
+
+<!-- Bootstrap Bundle (includes Popper) -->
+<script src="<?=base_url();?>assets/js/bootstrap.bundle.min.js"></script>
+
+<!-- ChartJS -->
+<script src="<?=base_url();?>assets/js/Chart.min.js"></script>
+
+<!-- Sparkline -->
+<script src="<?=base_url();?>assets/js/sparkline.js"></script>
+
+<!-- JQVMap -->
+<script src="<?=base_url();?>assets/js/jquery.vmap.min.js"></script>
+<script src="<?=base_url();?>assets/js/jquery.vmap.usa.js"></script>
+
+<!-- jQuery Knob Chart -->
+<!-- <script src="plugins/jquery-knob/jquery.knob.min.js"></script> -->
+
+<!-- daterangepicker -->
+<script src="<?=base_url();?>assets/js/moment.min.js"></script>
+<script src="<?=base_url();?>assets/js/daterangepicker.js"></script>
+
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="<?=base_url();?>assets/js/tempusdominus-bootstrap-4.min.js"></script>
+
+<!-- Summernote -->
+<script src="<?=base_url();?>assets/js/summernote-bs4.min.js"></script>
+
+<!-- overlayScrollbars -->
+<script src="<?=base_url();?>assets/js/jquery.overlayScrollbars.min.js"></script>
+
+<!-- DataTables & Plugins -->
+<script src="<?=base_url();?>assets/js/jquery.dataTables.min.js"></script>
+<script src="<?=base_url();?>assets/js/dataTables.bootstrap4.min.js"></script>
+<script src="<?=base_url();?>assets/js/dataTables.responsive.min.js"></script>
+<script src="<?=base_url();?>assets/js/responsive.bootstrap4.min.js"></script>
+<script src="<?=base_url();?>assets/js/dataTables.buttons.min.js"></script>
+<script src="<?=base_url();?>assets/js/buttons.bootstrap4.min.js"></script>
+<script src="<?=base_url();?>assets/js/jszip.min.js"></script>
+<script src="<?=base_url();?>assets/js/pdfmake.min.js"></script>
+<script src="<?=base_url();?>assets/js/vfs_fonts.js"></script>
+<script src="<?=base_url();?>assets/js/buttons.html5.min.js"></script>
+<script src="<?=base_url();?>assets/js/buttons.print.min.js"></script>
+<script src="<?=base_url();?>assets/js/buttons.colVis.min.js"></script>
+
+<!-- AdminLTE App -->
+<script src="<?=base_url();?>assets/js/adminlte.js"></script>
+
+<!-- Daterangepicker CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+
+<!-- Daterangepicker JS -->
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+
 <script> 
 $(document).ready(function() {
     trackLocation();

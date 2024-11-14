@@ -226,6 +226,8 @@
                                     $i=1; 
                                     foreach($taskList as $task){
 
+                                        // var_dump($task);die;
+
                                         $getLastActionDetails = getLastActionDetails($task->tid,$task->user_id,$cdate);
 
                                         $getSameStatusSince = getSameStatusSince($task->tid,$cdate);
@@ -298,6 +300,47 @@
                                                 if ($task->actiontype_id == 8 ) { ?>
                                                     <button type="button" class="btn btn-primary" onclick="OpenReviewModal(<?=$task->tid?>,<?=$task->user_id?>)">View Review Details</button>
                                             <?php   }  ?>
+                                            <?php 
+
+                                                if ($task->actiontype_id == 2 && $task->autotask == 1) { ?>
+                                                   
+                                                    <p class="question">Was email sent..??</p>
+                                                <?php    $chkStarRating = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($task->user_id,'was email sent',$task->tid);
+                                                // var_dump($chkStarRating);die;
+                                                if(sizeof($chkStarRating) == 0){ ?>
+
+                                                    <div class="rating" data-question="was email sent" data-userid="<?= $task->user_id; ?>" data-taskid="<?= $task->tid; ?>" >
+                                                        <input type="radio" name="rat20_<?= $task->user_id; ?>" value="5" id="90_<?= $task->tid; ?>"><label for="90_<?= $task->tid; ?>">☆</label>
+                                                        <input type="radio" name="rat20_<?= $task->user_id; ?>" value="4" id="91_<?= $task->tid; ?>"><label for="91_<?= $task->tid; ?>">☆</label>
+                                                        <input type="radio" name="rat20_<?= $task->user_id; ?>" value="3" id="92_<?= $task->tid; ?>"><label for="92_<?= $task->tid; ?>">☆</label>
+                                                        <input type="radio" name="rat20_<?= $task->user_id; ?>" value="2" id="93_<?= $task->tid; ?>"><label for="93_<?= $task->tid; ?>">☆</label>
+                                                        <input type="radio" name="rat20_<?= $task->user_id; ?>" value="1" id="94_<?= $task->tid; ?>"><label for="94_<?= $task->tid; ?>">☆</label>
+                                                    </div>
+
+                                            <?php }else{
+                                                foreach($chkStarRating as $star){
+                                                    // var_dump($chkStarRating);die;
+                                                    $starRating = $star->star;
+                                                    $starRemark = $star->remarks;
+                                                    
+                                                }
+                                                echo "<hr>";
+                                                echo "<span class='text-dark font-weight-normal'><b>Total Star Given</b> :</span>";
+                                                echo "<div class='star-rating'>";
+                                                $totalStars = 5;
+                                                for ($i = 0; $i < $starRating; $i++) {
+                                                    echo "<i class='fas fa-star'></i>"; // filled star
+                                                }
+                                                for ($i = $starRating; $i < $totalStars; $i++) {
+                                                    echo "<i class='far fa-star'></i>"; // empty star
+                                                }
+                                                echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
+                                            }  
+
+                                                }
+                                                
+                                            
+                                            ?>
                                         </td> 
                                         <td><?= $task->compname; ?></td>
                                         <td><?= $SinglefilterUsedFinal; ?>

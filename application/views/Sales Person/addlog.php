@@ -221,7 +221,7 @@
    <input type="text" name="designation" class="form-control  p-3  mt-2" placeholder="Designation">
    <input type="number" name="phoneno" class="form-control  p-3  mt-2" placeholder="Contact No">
    <input type="email" name="emailid" class="form-control  p-3  mt-2" placeholder="Email"><br>
-   <span><b>Set Contact Type?</b></span><br>
+    <span><b>Set Contact Type?</b></span><br>
     <input type="radio" name="primary" Value="primary" checked> 
     <label>Primary</label>
     <input type="radio" name="primary" Value="alternate"> 

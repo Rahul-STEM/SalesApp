@@ -74,7 +74,7 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
-	'dsn'	=> '',
+	'dsn'	   => '',
 	// 'hostname' => '216.10.249.56',
 	// 'username' => 'staging',
 	// 'password' => 'InDia@2024&',
@@ -100,7 +100,7 @@ $db['default'] = array(
 );
 
 $db['db2'] = array(
-	'dsn'	=> '',
+	'dsn'	   => '',
 	'hostname' => 'stemlearning.in',
 	'username' => 'steml1og_stemfun',
 	'password' => 's0RkDLtTvN0t',

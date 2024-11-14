@@ -290,11 +290,31 @@
     </div>
 
 <script src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+
+<!-- Optional: For button functionality like Excel, CSV, PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vfs-fonts/2.0.1/vfs_fonts.js"></script>
+
 <script>
-    $("#example1").DataTable({
-      "responsive": false, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    // $("#example1").DataTable({
+    //   "responsive": false, "lengthChange": false, "autoWidth": false,
+    //   "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    // }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+
+    $(document).ready(function() {
+        // $('#example1').DataTable();
+
+        $("#example1").DataTable({
+            "responsive": false, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+    });
 </script>
 
 <!-- <script>

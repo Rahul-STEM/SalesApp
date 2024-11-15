@@ -245,132 +245,101 @@ $userName=$this->Menu_model->get_userName($uid);?>
 
                with font-awesome or any other icon font library -->
 
-          <li class="nav-item">
-
-            <a href="<?=base_url();?>Menu/Dashboard" class="nav-link">
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Dashboard</p>
-
-            </a>
-
-          </li>
+            <li class="nav-item">
+                <a href="<?=base_url();?>Menu/Dashboard" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Dashboard</p>
+                </a>
+            </li>
           
-          <li class="nav-item">
+            <li class="nav-item">
+                <a href="<?=base_url();?>Menu/DayManagement" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Day Management</p>
+                </a>
+            </li>
 
-<a href="<?=base_url();?>Menu/DayManagement" class="nav-link">
-
-  <i class="far fa-circle nav-icon"></i>
-
-  <p>Day Management</p>
-
-</a>
-
-</li>
-
-          <li class="nav-item">
-
+            <li class="nav-item">
                 <a class="nav-link" href="<?= base_url(); ?>Management/CheckingDayManagement_New">
                     <i class="fas fa-chart-line nav-icon"></i>
-
                     <!-- <p>Day Check Management</p> -->
                     Day Check Management
-
                 </a>
+            </li>
 
-</li>
-<li class="nav-item">
-
+            <li class="nav-item">
                 <a class="nav-link" href="<?= base_url(); ?>Management/ApproveDayCheckRequest">
                     <i class="fas fa-chart-line nav-icon"></i>
-
                     <!-- <p>Day Check Report</p> -->
                     Approve Day Check Request
                 </a>
-
             </li>
-            <li class="nav-item">
 
+            <li class="nav-item">
                 <a class="nav-link" href="<?= base_url(); ?>Menu/ApproveTaskCheckRequest">
                     <i class="fas fa-chart-line nav-icon"></i>
-
                     <!-- <p>Day Check Report</p> -->
                     Approve Task Check Request
                 </a>
-
             </li>
-<li class="nav-item">
 
-    <a class="nav-link" href="<?= base_url(); ?>Management/DayManagementReport">
-        <i class="fas fa-chart-line nav-icon"></i>
-
-        <!-- <p>Day Check Report</p> -->
-        Day Check Report
-    </a>
-
-</li>
-
-<li class="nav-item">
-
-    <a class="nav-link" href="<?= base_url(); ?>Menu/TaskCheck_New">
-        <i class="fas fa-chart-bar nav-icon"></i>
-
-        <!-- <p>Task Check Management</p> -->
-        Task Check Management
-
-    </a>
-
-</li>
-
-<li class="nav-item">
-
-    <a class="nav-link" href="<?= base_url(); ?>Menu/TaskCheck_NewReport">
-        <i class="fas fa-chart-bar nav-icon"></i>
-
-        <!-- <p>Task Check Report</p> -->
-        Task Check Report
-
-    </a>
-
-</li> <li class="nav-item">
-
-            <a class="nav-link" href="<?=base_url();?>Menu/NewFunnel" >
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>New Funnel Added</p>
-
-            </a>
-
-          </li>
-
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                User Management
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a class="nav-link" href="<?= base_url(); ?>Menu/UserRegistration">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>User Entry Form</p>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url(); ?>Management/DayManagementReport">
+                    <i class="fas fa-chart-line nav-icon"></i>
+                    <!-- <p>Day Check Report</p> -->
+                    Day Check Report
                 </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="<?= base_url(); ?>Menu/UserDisplayPage">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>User Details</p>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url(); ?>Menu/TaskCheck_New">
+                    <i class="fas fa-chart-bar nav-icon"></i>
+                    <!-- <p>Task Check Management</p> -->
+                    Task Check Management
                 </a>
-              </li>
-            </ul>
-          </li>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url(); ?>Menu/TaskCheck_NewReport">
+                    <i class="fas fa-chart-bar nav-icon"></i>
+                    <!-- <p>Task Check Report</p> -->
+                    Task Check Report
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?=base_url();?>Menu/NewFunnel" >
+                <i class="far fa-circle nav-icon"></i>
+                    <p>New Funnel Added</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-users"></i>
+                    <p>
+                        User Management
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url(); ?>Menu/UserRegistration">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>User Entry Form</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url(); ?>Menu/UserDisplayPage">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>User Details</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
 
           
-          <li class="nav-item">
+            <li class="nav-item">
                     <a href="#" class="nav-link">
                     <i class="nav-icon fas fa-circle"></i>
                     <p>
@@ -429,128 +398,74 @@ $userName=$this->Menu_model->get_userName($uid);?>
                                         <p>Day Change Request</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="<?=base_url();?>Menu/leaveApproval" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Leave Requests</p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     </ul>
-                </li>
-          <!--<li class="nav-item">
-
-            <a href="<?=base_url();?>Menu/LiveTaskTracking" class="nav-link">
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Live Task Tracking</p>
-
-            </a>
-
-          </li>-->
-
-          
-
-          
-
-          
-
-          
-
-          <li class="nav-item">
-
-            <a class="nav-link" href="<?=base_url();?>Menu/NotworkCompanyBDPST" >
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Not Work Company by BDPST</p>
-
-            </a>
-
-          </li>
+            </li>
 
             <li class="nav-item">
-
-                <a class="nav-link" href="<?=base_url();?>Management/HolidayList" >
-
+                <a class="nav-link" href="<?=base_url();?>Menu/NotworkCompanyBDPST" >
                 <i class="far fa-circle nav-icon"></i>
-
-                <p>Manage Holiday List</p>
-
+                <p>Not Work Company by BDPST</p>
                 </a>
+            </li>
 
+            <li class="nav-item">
+                <a class="nav-link" href="<?=base_url();?>Management/HolidayList" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Manage Holiday List</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?=base_url();?>Menu/CategoryStatusPage" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Category Wise Status</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?=base_url();?>Menu/TeamDailyReport/<?=date('Y-m-d')?>" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Team Daily Report</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="<?=base_url();?>Menu/TodaysTaskApprovelRequest" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Task Approval Request</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?=base_url();?>Menu/AllReviewPlaing" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Plan BD Review</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?=base_url();?>Menu/targetVsAchievedData" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Target vs Achived Data Report</p>
+                </a>
             </li>
 
           
 
-          
-
-          <li class="nav-item">
-
-            <a class="nav-link" href="<?=base_url();?>Menu/CategoryStatusPage" >
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Category Wise Status</p>
-
-            </a>
-
-          </li>
-
-          <li class="nav-item">
-
-            <a class="nav-link" href="<?=base_url();?>Menu/TeamDailyReport/<?=date('Y-m-d')?>" >
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Team Daily Report</p>
-
-            </a>
-
-          </li>
-
-           <li class="nav-item">
-
-            <a href="<?=base_url();?>Menu/TodaysTaskApprovelRequest" class="nav-link">
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Task Approval Request</p>
-
-            </a>
-
-          </li>
-
-          <li class="nav-item">
-
-            <a class="nav-link" href="<?=base_url();?>Menu/AllReviewPlaing" >
-
-              <i class="far fa-circle nav-icon"></i>
-              <p>Plan BD Review</p>
-            </a>
-          </li>
-
-           <li class="nav-item">
-
-            <a class="nav-link" href="<?=base_url();?>Menu/targetVsAchievedData" >
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Target vs Achived Data Report</p>
-
-            </a>
-
-          </li>
-
-          
-
-          <li class="nav-item">
-
-            <a class="nav-link" href="<?=base_url();?>Menu/AllPSTReviewPlaing" >
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Plan PST Review</p>
-
-            </a>
-
-          </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?=base_url();?>Menu/AllPSTReviewPlaing" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Plan PST Review</p>
+                </a>
+            </l>
 
           <li class="nav-item">
 

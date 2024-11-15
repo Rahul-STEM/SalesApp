@@ -4206,6 +4206,7 @@ class Menu extends CI_Controller {
     }
     public function TaskPlanner2($adate){
         
+        // echo $adate;die;
         date_default_timezone_set("Asia/Calcutta");
         
         if(isset($_POST['adate'])){
@@ -4219,7 +4220,13 @@ class Menu extends CI_Controller {
         $datetime2      = new DateTime($adate);
         if ($datetime1 < $datetime2) {
             $this->session->set_flashdata('error_message','* You Can Not Planned Task For This Date : '.$adate);
+            $user = $this->session->userdata('user');
+            $data['user'] = $user;
+            $uid = $user['user_id'];
+
             $adate = $tommrowdate;
+            $this->checkPlannerDate($adate);
+            // if()
             redirect("Menu/TaskPlanner2/".$adate); 
         }elseif ($datetime1_cur > $datetime2) {
             $this->session->set_flashdata('error_message','* You Can Not Planned Task For This Date : '.$adate);
@@ -4303,6 +4310,35 @@ class Menu extends CI_Controller {
         }else{
             redirect('Menu/main');
         }
+    }
+
+
+
+    private function checkPlannerDate($date){
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+
+        $checkLeaveForDay = checkLeaveForDay($uid,$date);
+
+        if ($checkLeaveForDay[0]->status == 'approved') {
+
+            $adate = getNextDate($date);// Format it as YYYY-MM-DD
+
+        }else{
+            
+            $checkforHoliday = checkforHoliday($date);
+    
+            if(sizeof($checkforHoliday) > 0){
+
+                $adate = getNextDate($date);
+
+            }
+        }
+    
     }
     public function CheckPlannerTimeisReadyorNot($uid,$adate){
         
@@ -8042,12 +8078,6 @@ public function Dashboard(){
 
         $currentDate  = date("Y-m-d");
         $tomorrowDate = date("Y-m-d", strtotime($currentDate . ' +1 day'));
-
-    //  echo "SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$tomorrowDate'";
-    //  echo "<br>";
-    //  echo "SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$currentDate'";
-    //  exit;
-
 
         $query             =  $this->db->query("SELECT * FROM `autotask_time` WHERE user_id =$uid and date='$tomorrowDate'");
         $gettoAutoTaskTime = $query->result();
@@ -20214,15 +20244,20 @@ public function leaveApply(){
         $fromDate= $this->input->post('fromDate');
         $toDate= $this->input->post('toDate');
         $reason= $this->input->post('reason');
+        $halfdayleave= $this->input->post('halfdayleave');
+        $halfdayleaveType= $this->input->post('halfdayleaveType');
+
         $leaveData = array(
             'user_id' => $uid,       // User ID
             'leave_type' => $leaveType,       // User ID
             'admin_id' => $aadmin, // Admin or approving person ID
             'start_date' => $fromDate, // Start date of the leave
             'end_date' => $toDate,    // End date of the leave
-            'reason' => $reason,           // Default status set to pending
+            'reason' => $reason,
+            'is_halfday_leave' => $halfdayleave,
+            'halfday_leaveType' => $halfdayleaveType          // Default status set to pending
         );
-        //dd($leaveData);
+        // dd($leaveData);
         $isSent= $this->db->insert('leave_requests', $leaveData);
         if($isSent){
             $this->session->set_flashdata('success_message','Leave successfully sent for approval');
@@ -20244,7 +20279,7 @@ public function leaveApproval(){
     $dep_name = $dt[0]->name;
     //echo $dep_name;exit;
     $getreqData = $this->Menu_model->get_leaveInfo($uid);
-    //dd($getreqData);
+    // dd($getreqData);
     if(!empty($user)){
         $this->load->view($dep_name.'/leaveApproval',['uid'=>$uid,'user'=>$user,'getreqData'=>$getreqData,'dep_name'=>$dep_name]);
     }else{

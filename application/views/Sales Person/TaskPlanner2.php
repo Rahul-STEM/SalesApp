@@ -5661,7 +5661,7 @@ $(document).ready(function(){
             if (time > limitTime) {
                 event.preventDefault();
                 // Show an alert
-                alert('The time cannot be later than 7 PM.');
+                // alert('The time cannot be later than 7 PM.');
                 $('#end_tttpft').css('border', '2px solid red');
                 // $('#end-time').val('');
             }else{

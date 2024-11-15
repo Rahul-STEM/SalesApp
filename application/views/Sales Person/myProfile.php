@@ -224,14 +224,14 @@ $managerName=$this->Menu_model->get_reportingManager($data[0]->aadmin);?>
             </div>
 
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="leaveType" id="flexRadioDefault2" checked>
+                <input class="form-check-input" type="radio" name="halfdayleave" id="flexRadioDefault2" checked>
                 <label class="form-check-label" for="flexRadioDefault2">
                     Full Day
                 </label>
             </div>      
             
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="leaveType" id="flexRadioDefault1">
+                <input class="form-check-input" type="radio" name="halfdayleave" id="flexRadioDefault1" value="1">
                 <label class="form-check-label" for="flexRadioDefault1">
                     Half Day
                 </label>
@@ -239,7 +239,7 @@ $managerName=$this->Menu_model->get_reportingManager($data[0]->aadmin);?>
 
             <div class="form-group" id="halfDayLeaveType" >
                 <label for="leaveType">Select Leave Type</label><span style="color:red">*</span>
-                <select class="form-control" name="leaveType" id="leaveType" required>
+                <select class="form-control" name="halfdayleaveType" id="" required>
                     <option value="" disabled selected>Select leave type</option>
                     <option value="1">First Half Leave (10 AM - 2:30 PM)</option>
                     <option value="2">Second Half Leave (2:30 PM - 7 PM)</option>
@@ -539,8 +539,6 @@ All rights reserved.
 <!-- JQVMap -->
 <script src="<?=base_url();?>assets/js/jquery.vmap.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery.vmap.usa.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
 <!-- daterangepicker -->
 <script src="<?=base_url();?>assets/js/moment.min.js"></script>
 <script src="<?=base_url();?>assets/js/daterangepicker.js"></script>

@@ -13883,8 +13883,10 @@ public function get_leaveInfo($uid){
         "SELECT ud.name,lr.*
         FROM leave_requests as lr
         join user_details as ud on lr.user_id=ud.user_id
-        WHERE lr.admin_id = $uid and (lr.status='pending' or lr.update_status='pending')
+        WHERE lr.admin_id = $uid 
         ");
+        // and (lr.status='pending' or lr.update_status='pending')
+    // echo $this->db->last_query();die;
     return $query->result();
 }
 
@@ -14652,13 +14654,26 @@ public function getUserByType($utype,$uid){
 
     public function checkLeaveForDay($uid,$date){
 
-        $this->db->select('id')
+        $this->db->select('user_id,start_date,end_date,reason,status,is_halfday_leave,halfday_leaveType')
                 ->from('leave_requests')
                 ->where('user_id', $uid)
                 ->where('status', 'approved')
                 ->where('CAST(start_date AS DATE) >=', $date)
                 ->where('CAST(end_date AS DATE) <=', $date);
 
+        $query = $this->db->get();
+
+        // echo $this->db->last_query();die;
+        return $query->result();
+    } 
+
+
+    public function checkforHoliday($date){
+
+        $this->db->select('holiday_date,holiday_name')
+                ->from('holidaylist')
+                ->where('CAST(holiday_date AS DATE) >=', $date);
+                
         $query = $this->db->get();
 
         // echo $this->db->last_query();die;

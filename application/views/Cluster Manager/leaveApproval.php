@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Annual Comany Report | STEM APP| WebAPP</title>
+    <title>Leave Requests | STEM APP| WebAPP</title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
     <!-- Font Awesome -->
@@ -86,11 +86,11 @@
         <section class="content">
           <div class="container-fluid">
             
-            <div class="card p-2 bg-primary">
+            <!-- <div class="card p-2 bg-primary">
               <div class="row">
                 <div class="col-md-8"></div>
               </div>
-            </div>
+            </div> -->
             <div class="row p-3">
               <div class="col-sm col-md-12 col-lg-12 m-auto">
                 <?php if ($this->session->flashdata('action_message')): ?>
@@ -120,34 +120,61 @@
                             <table id="exampledata" class="table table-striped table-bordered" cellspacing="0" width="100%">
                               <thead>
                                 <tr>
-                                  <th scope="col">#</th>
-                                  <th scope="col">Name</th>
-                                  <th scope="col">From Date</th>
-                                  <th scope="col">To Date</th>
-                                  <th scope="col">Reason For Leave Apply</th>
-                                  <th scope="col">Reason for ending the leave</th>
-                                  <th scope="col">Action</th>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">From Date</th>
+                                    <th scope="col">To Date</th>
+                                    <th scope="col">Is Half Day Leave</th>
+                                    <th scope="col">Half Day Time</th>
+                                    <th scope="col">Reason For Leave Apply</th>
+                                    <th scope="col">Reason for ending the leave</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                               </thead>
                               <tbody>
                                 <?php
                                 $j =1;
-                                foreach($getreqData as $data){ ?>
+                                foreach($getreqData as $data){ 
+                                    
+                                    if ($data->is_halfday_leave == 1) {
+                                       $isHalfDayLeave = 'Half Day Leave';
+
+                                       if ($data->halfday_leaveType == 1) {
+
+                                            $isHalfDayLeaveTime = '1st Half of the Day Leave';
+                                        }else {
+
+                                            $isHalfDayLeaveTime = '2nd Half of the Day Leave';
+                                        }
+
+                                    }else {
+                                        $isHalfDayLeave = 'Full Day Leave';
+                                        $isHalfDayLeaveTime = 'NA';
+                                    }
+
+                                    
+
+                                    // $data->end_date 
+                                    
+                                ?>
                                 <tr>
-                                  <td><?= $j ?></td>
-                                  <td><?= $data->name ?></td>
-                                  <td><?=$data->start_date?></td>
-                                  <td><?=$data->end_date?></td>
-                                  <td><?=$data->reason?></td>
-                                  <td><?=$data->update_reason?></td>
-                                  <td>
+                                    <td><?= $j ?></td>
+                                    <td><?= $data->name ?></td>
+                                    <td><?=$data->start_date?></td>
+                                    <td><?=$data->end_date?></td>
+                                    <!-- <td><?=$data->end_date?></td> -->
+                                    <td><?=$isHalfDayLeave?></td>
+                                    <td><?=$isHalfDayLeaveTime?></td>
+                                    <td><?=$data->reason?></td>
+                                    <td><?=$data->update_reason?></td>
+                                    <td>
                                     
                                     <?php
                                     if($data->status == 'pending' || $data->update_status == 'pending'){ ?>
                                     
                                     <div>
-                                      <p><a href="<?=base_url();?>Menu/leaveAction/approved/<?= $data->id?>/<?=$data->leave_end_request?>" class="btn btn-success mr-2" onclick="return confirm('Are you sure you want to Approved id?');" >Approve</a></p>
-                                      <p><button type="button" class="btn btn-primary" onclick="Reject(<?= $data->id?>,<?=$data->leave_end_request?>)">Reject</button></p>
+                                        <p><a href="<?=base_url();?>Menu/leaveAction/approved/<?= $data->id?>/<?=$data->leave_end_request?>" class="btn btn-success mr-2" onclick="return confirm('Are you sure you want to Approved id?');" >Approve</a></p>
+                                        <p><button type="button" class="btn btn-primary" onclick="Reject(<?= $data->id?>,<?=$data->leave_end_request?>)">Reject</button></p>
                                     </div>
                                     
                                     <?php }else if(($data->status == 'approved' && $data->update_status == null) || ($data->update_status == 'approved')){ ?>

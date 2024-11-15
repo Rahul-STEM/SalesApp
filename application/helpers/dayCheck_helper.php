@@ -19,6 +19,29 @@ if (!function_exists('getlastloginData')) {
         
         return $DataSet;
     }
+
+
+    function checkforHoliday($date){
+        $CI =& get_instance();
+        // Load the model if not already loaded
+        $CI->load->model('Menu_model');
+        $DataSet = $CI->Menu_model->checkforHoliday($date);
+        
+        return $DataSet;
+    }
+
+    function getNextDate($date){
+
+        $CI =& get_instance();
+
+        $dateObj = new DateTime($date);
+
+        $dateObj->modify('+1 day');
+
+        $adate = $dateObj->format('Y-m-d');
+        return $adate;
+    }
+
 }
 
 

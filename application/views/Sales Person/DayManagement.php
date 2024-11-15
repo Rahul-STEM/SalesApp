@@ -111,65 +111,83 @@
    
     ?>
     <section class="content">
-      <div class="container-fluid">
+        <div class="container-fluid">
         <?php
           if ($this->session->flashdata('error_message')): ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <strong> <?php echo $this->session->flashdata('error_message'); ?></strong>
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong> <?php echo $this->session->flashdata('error_message'); ?></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
         <?php endif; ?>
         <?php
-          if ($this->session->flashdata('success_message')): ?>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-          <strong> <?php echo $this->session->flashdata('success_message'); ?></strong>
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+            if ($this->session->flashdata('success_message')): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong> <?php echo $this->session->flashdata('success_message'); ?></strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
         <?php endif; ?>
-        <?php  
 
-            $checklastLoginDay = getlastloginData($uid);
+        <?php  
+            $date = date('Y-m-d');
+            $checkLeaveForDay = checkLeaveForDay($uid,$date);
+            
+            // var_dump(($checkLeaveForDay[0]->status));die;
+            if ($checkLeaveForDay[0]->status == 'approved') {
+
+                $msg = "You have applied for the leave today..!!";
+
+            } 
+            // else {
+
+            //     $msg = '';
+
+            // }
+            
+
+            // $checklastLoginDay = getlastloginData($uid);
+
             // echo $this->db->last_query();die;
             // echo $checklastLoginDay;die;
             // var_dump($checklastLoginDay[0]->sdatet_cast);die;
 
-            $start_date = new DateTime($checklastLoginDay[0]->sdatet_cast);  
-            $end_date = new DateTime();  // Current date
-            $interval = new DateInterval('P1D');  // 1 day interval
-            $daterange = new DatePeriod($start_date, $interval, $end_date);
+            // $start_date = new DateTime($checklastLoginDay[0]->sdatet_cast);  
+            // $end_date = new DateTime();  // Current date
+            // $interval = new DateInterval('P1D');  // 1 day interval
+            // $daterange = new DatePeriod($start_date, $interval, $end_date);
+            
 
             // var_dump($daterange);die;
-            $dates = [];
-            $day_of_week = []; // Initialize the array to store the day names
+            // $dates = [];
+            // $day_of_week = []; // Initialize the array to store the day names
 
-            foreach ($daterange as $date) {
+            // foreach ($daterange as $date) {
 
-                $formatted_date = $date->format('Y-m-d');
-                $checkLeaveForDay = checkLeaveForDay($uid,$formatted_date);
+            //     $formatted_date = $date->format('Y-m-d');
+            //     $checkLeaveForDay = checkLeaveForDay($uid,$formatted_date);
 
-                // var_dump(sizeof($checkLeaveForDay));die;
+            //     var_dump(($checkLeaveForDay));die;
 
-                if (sizeof($checkLeaveForDay) > 0) {
+            //     if (sizeof($checkLeaveForDay) > 0) {
                     
-                } else {
+            //     } else {
                     
                     
-                }
+            //     }
                 
-                // Format the date as 'Y-m-d'
-                // $dates[] = $formatted_date;  // Add formatted date to array
-                // $day_of_week[] = $date->format('l');  // Get the day of the week
+            //     // Format the date as 'Y-m-d'
+            //     // $dates[] = $formatted_date;  // Add formatted date to array
+            //     // $day_of_week[] = $date->format('l');  // Get the day of the week
             
-                // Check if it's a Saturday
-                // if ($date->format('l') === 'Saturday') {
-                //     $week_occurances[] = getNthSaturday($date);
-                // }
+            //     // Check if it's a Saturday
+            //     // if ($date->format('l') === 'Saturday') {
+            //     //     $week_occurances[] = getNthSaturday($date);
+            //     // }
 
-            }
+            // }
 
             // var_dump($dates);die;
             // Function to determine the nth Saturday of the month

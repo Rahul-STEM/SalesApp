@@ -207,12 +207,18 @@
               <p>Team Special Request For Leave Some Time </p>
               </a>
           </li>
-          <li class="nav-item">
-              <a href="<?=base_url();?>Menu/SpecialRequestForLeaveSomeTime" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Our Special Request For Leave Some Time </p>
-              </a>
-          </li>
+            <li class="nav-item">
+                <a href="<?=base_url();?>Menu/SpecialRequestForLeaveSomeTime" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Our Special Request For Leave Some Time </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="<?=base_url();?>Menu/leaveApproval" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Leave Request </p>
+                </a>
+            </li>
             <li class="nav-item">
                 <a href="<?=base_url();?>Menu/UserTaskViewPage" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>

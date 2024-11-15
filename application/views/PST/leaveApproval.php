@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Annual Comany Report | STEM APP| WebAPP</title>
+    <title>Leave Requests | STEM APP| WebAPP</title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
     <!-- Font Awesome -->
@@ -86,11 +86,11 @@
         <section class="content">
           <div class="container-fluid">
             
-            <div class="card p-2 bg-primary">
+            <!-- <div class="card p-2 bg-primary">
               <div class="row">
                 <div class="col-md-8"></div>
               </div>
-            </div>
+            </div> -->
             <div class="row p-3">
               <div class="col-sm col-md-12 col-lg-12 m-auto">
                 <?php if ($this->session->flashdata('action_message')): ?>

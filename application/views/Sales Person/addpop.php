@@ -341,10 +341,10 @@ date_default_timezone_set("Asia/Kolkata");
                       </select>
                     </div>
                     <div class="col-12 col-md-12 mb-12">
-                      <label for="remark_msg">Remarks</label>
-                      <textarea type="text" class="form-control" id="re_mark" name="nremark_msg" readonly></textarea>
-                      <div class="invalid-feedback">.</div>
-                      <div class="valid-feedback">Looks good!</div>
+                        <label for="remark_msg">Remarks</label>
+                        <textarea type="text" class="form-control" id="re_mark" name="nremark_msg" readonly required></textarea>
+                        <div class="invalid-feedback">.</div>
+                        <div class="valid-feedback">Looks good!</div>
                     </div>
                     <!-- <div class="col-12 col-md-12 mb-12">
                       <label>Next Action Date</label>
@@ -664,32 +664,32 @@ date_default_timezone_set("Asia/Kolkata");
                 </div></div></div>
                 <!-- User details -->
                 <div id="doaction" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-standard-title" aria-hidden="true">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="modal-standard-title1"></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div> <!-- // END .modal-header -->
-                        <div class="modal-body">
-                          <div class="card card-form col-md-12">
-                            <div class="card-header bg-info">Create Plan</div>
-                            <h6 class="text-center mt-1" id="cmpname"></h6>
-                            <div class="col-lg-12 card-body">
-                              <?php $today = date('Y-m-d H:i:s'); ?>
-                              <?=form_open('Menu/dateplan')?>
-                              <input type="hidden" name="uid"  id="uid" value="<?=$uid?>">
-                              <input type="hidden" id="taskid" name="taskid">
-                              <lable>Select Date Time</lable>
-                              <input type="datetime-local" name="date" id="date" class="form-control p-3 mt-2 mb-2" placeholder="Date" min="<?=$today?>" value="<?=$today?>">
-                              <div id="dateremaek"></div>
-                              <button type="submit" id="planbtn" class="btn btn-primary mt-3" onclick="this.form.submit(); this.disabled = true;">Submit</button>
-                            </form>
-                          </div>
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal-standard-title1"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div> <!-- // END .modal-header -->
+                            <div class="modal-body">
+                                <div class="card card-form col-md-12">
+                                <div class="card-header bg-info">Create Plan</div>
+                                <h6 class="text-center mt-1" id="cmpname"></h6>
+                                <div class="col-lg-12 card-body">
+                                <?php $today = date('Y-m-d H:i:s'); ?>
+                                <?=form_open('Menu/dateplan')?>
+                                <input type="hidden" name="uid"  id="uid" value="<?=$uid?>">
+                                <input type="hidden" id="taskid" name="taskid">
+                                <lable>Select Date Time</lable>
+                                <input type="datetime-local" name="date" id="date" class="form-control p-3 mt-2 mb-2" placeholder="Date" min="<?=$today?>" value="<?=$today?>">
+                                <div id="dateremaek"></div>
+                                <button type="submit" id="planbtn" class="btn btn-primary mt-3" onclick="this.form.submit(); this.disabled = true;">Submit</button>
+                                </form>
+                            </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
                     </div> <!-- // END .modal-body -->
                     
                   </div></div></div>

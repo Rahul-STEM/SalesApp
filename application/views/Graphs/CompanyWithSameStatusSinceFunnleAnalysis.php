@@ -115,7 +115,7 @@
                                         <div class="form-group">
                                             <label>Select User</label>
                                             <select id="user" class="custom-select rounded-0" name="user[]"
-                                                data-live-search="true" multiple>
+                                                data-live-search="true" multiple required>
 
                                             </select>
                                         </div>

@@ -1445,5 +1445,40 @@ public function RequestApprovals($uid,$cdate) {
     return $query->result();
 }
 
+public function getHolidayList() {     
 
+    $cdate = date('Y-m-d');
+    // echo $cdate;die;
+    $this->db->select('holiday_name, holiday_date,created_at');
+    $this->db->select('ud1.name AS request_by');
+    $this->db->from('holidaylist');
+    $this->db->join('user_details ud1', 'ud1.user_id = holidaylist.created_by', 'left');
+    // $this->db->where('daymanagementapprovalrequest.USER_ID', $uid);
+    
+    // $this->db->where('DATE(daymanagementapprovalrequest.CREATED_AT) ', $cdate);
+
+    $this->db->order_by('holiday_date',ASC);
+// Execute the query
+    $query = $this->db->get();
+    // echo $this->db->last_query();
+    return $query->result();
+}
+
+public function addHoliday($holiday_name,$holiday_date,$uid){
+
+    $data = [
+        'holiday_name' => $holiday_name,
+        'holiday_date' => $holiday_date,
+        'created_by'   => $uid
+    ];
+
+    if ($this->db->insert('holidaylist', $data)) {
+        return true;
+    } else {
+        return false;
+    }
+
+}
+
+// $this->db->insert('daymanagementapprovalrequest', $data)
 }

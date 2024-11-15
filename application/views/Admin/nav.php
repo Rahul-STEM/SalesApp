@@ -290,6 +290,16 @@ $userName=$this->Menu_model->get_userName($uid);?>
                 </a>
 
             </li>
+            <li class="nav-item">
+
+                <a class="nav-link" href="<?= base_url(); ?>Menu/ApproveTaskCheckRequest">
+                    <i class="fas fa-chart-line nav-icon"></i>
+
+                    <!-- <p>Day Check Report</p> -->
+                    Approve Task Check Request
+                </a>
+
+            </li>
 <li class="nav-item">
 
     <a class="nav-link" href="<?= base_url(); ?>Management/DayManagementReport">
@@ -455,7 +465,17 @@ $userName=$this->Menu_model->get_userName($uid);?>
 
           </li>
 
-          
+            <li class="nav-item">
+
+                <a class="nav-link" href="<?=base_url();?>Management/HolidayList" >
+
+                <i class="far fa-circle nav-icon"></i>
+
+                <p>Manage Holiday List</p>
+
+                </a>
+
+            </li>
 
           
 
@@ -582,7 +602,7 @@ $userName=$this->Menu_model->get_userName($uid);?>
 
           </li>
 
-          <li class="nav-item">
+          <!-- <li class="nav-item">
 
             <a href="<?=base_url();?>Menu/TaskCheck" class="nav-link">
 
@@ -592,7 +612,7 @@ $userName=$this->Menu_model->get_userName($uid);?>
 
             </a>
 
-          </li>
+          </li> -->
 
           <li class="nav-item">
 
@@ -671,38 +691,6 @@ $userName=$this->Menu_model->get_userName($uid);?>
             </a>
 
           </li>
-
-          
-
-          <!--<li class="nav-item">
-
-            <a class="nav-link" href="<?=base_url();?>Menu/CONVERSIONBWDATE" >
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Conversion B/W Date</p>
-
-            </a>
-
-          </li>
-
-          
-
-          <li class="nav-item">
-
-            <a class="nav-link" href="<?=base_url();?>Menu/ExpectedSchool" >
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Expected School</p>
-
-            </a>
-
-          </li>-->
-
-          
-
-          
 
           <li class="nav-item">
 
@@ -862,43 +850,6 @@ $userName=$this->Menu_model->get_userName($uid);?>
             </ul>
             </li>
 
-          <!-- <li class="nav-item dropdown">
-
-            <a href="" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-            <i class="far fa-circle nav-icon"></i>
-
-            <p>Analysis</p>
-
-            </a>
-
-            <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
-             <a class="dropdown-item" href="<?= base_url(); ?>Graphs/Fgraphs">FGraph</a>
-             
-              <a class="dropdown-item" href="<?= base_url(); ?>Menu/day">DGraph</a>
-
-              <a class="dropdown-item" href="<?= base_url(); ?>Menu/request">RGraph</a>
-
-              <a class="dropdown-item" href="<?= base_url(); ?>Menu/region">ROGraph</a>
-
-              <a class="dropdown-item" href="<?= base_url(); ?>Menu/task">TGraph</a>
-
-            </div>
-
-          </li> -->
-      
-          <!--<li class="nav-item">-->
-
-          <!--  <a class="nav-link" href="<?=base_url();?>Menu/AnnualReviewReport" >-->
-
-          <!--    <i class="far fa-circle nav-icon"></i>-->
-
-          <!--    <p>Annual Review Report</p>-->
-
-          <!--  </a>-->
-
-          <!--</li>-->
-
           <li class="nav-item">
 
             <a class="nav-link" href="<?=base_url();?>Menu/ReviewPage" >
@@ -910,18 +861,6 @@ $userName=$this->Menu_model->get_userName($uid);?>
             </a>
 
           </li>
-
-          <!--<li class="nav-item">-->
-
-          <!--  <a class="nav-link" href="<?=base_url();?>Menu/AnnualReviewReportDataInAdmin" >-->
-
-          <!--    <i class="far fa-circle nav-icon"></i>-->
-
-          <!--    <p>Annual Review Report</p>-->
-
-          <!--  </a>-->
-
-          <!--</li>-->
 
           
 
@@ -960,17 +899,7 @@ $userName=$this->Menu_model->get_userName($uid);?>
                         <p>Need Your Attentions </p>
                     </a>
                 </li>
-          <!--<li class="nav-item">-->
 
-          <!--  <a class="nav-link" href="<?=base_url();?>Menu/FAQReport" >-->
-
-          <!--    <i class="far fa-circle nav-icon"></i>-->
-
-          <!--    <p>FAQ Report</p>-->
-
-          <!--  </a>-->
-
-          <!--</li>-->
 
           <li class="nav-item">
 
@@ -983,50 +912,7 @@ $userName=$this->Menu_model->get_userName($uid);?>
             </a>
 
           </li>
-<!-- 
-          <li class="nav-item">
 
-<a href="<?=base_url();?>Menu/DayManagement" class="nav-link">
-
-  <i class="far fa-circle nav-icon"></i>
-
-  <p>Day Management</p>
-
-</a>
-
-</li> -->
-
-          
-
-          
-
-          <!--
-
-          <li class="nav-item">
-
-            <a href="<?=base_url();?>Menu/AnnualReviewDetail" class="nav-link">
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Annual Review</p>
-
-            </a>
-
-          </li>
-
-          <li class="nav-item">
-
-            <a href="<?=base_url();?>Menu/DayManagement" class="nav-link">
-
-              <i class="far fa-circle nav-icon"></i>
-
-              <p>Day Management</p>
-
-            </a>
-
-          </li>
-
-          -->
 
           <li class="nav-item">
 

@@ -848,12 +848,6 @@ public function getAllActiveUserInDepartment(){
 
     // MOM Start Here
 
-
-
-
-
-
-
 public function Change_RP_To_No_RP(){
 
     $mom_id= $this->input->post('mom_id');
@@ -1022,6 +1016,36 @@ public function SendReminder(){
 
     $this->session->set_flashdata('success_message', 'Reminder Send Successfully !');
     redirect('Menu/Dashboard');
+}
+
+
+public function HolidayList(){
+
+    // echo "hii";die;
+    $user = $this->session->userdata('user');
+    $data['user'] = $user;
+    $uid = $user['user_id'];
+    $typeID =  (int) $user['type_id'];
+
+    if (isset($_POST['holiday_name'])) {
+        
+        $holiday_name = $this->input->post('holiday_name');
+        $holiday_date = $this->input->post('holiday_date');
+        $data['uid'] = $uid;
+
+        $addHoliday = $this->Management_model->addHoliday($holiday_name,$holiday_date,$uid);
+
+        if($addHoliday){
+            $this->session->set_flashdata('success', 'Holiday added successfully.');
+            redirect('management/HolidayList');
+        }
+    }
+
+
+    $getHolidayList =  $this->Management_model->getHolidayList();
+
+    $this->load->view($this->dep_name.'/HolidayList',['uid'=>$this->uid,'user'=>$this->user,'getHolidayList'=>$getHolidayList]);
+
 }
 
 }

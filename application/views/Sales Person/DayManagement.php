@@ -142,6 +142,7 @@
             $interval = new DateInterval('P1D');  // 1 day interval
             $daterange = new DatePeriod($start_date, $interval, $end_date);
 
+            // var_dump($daterange);die;
             $dates = [];
             $day_of_week = []; // Initialize the array to store the day names
 
@@ -152,16 +153,16 @@
 
                 // var_dump(sizeof($checkLeaveForDay));die;
 
-                // if (sizeof($checkLeaveForDay) > 0) {
+                if (sizeof($checkLeaveForDay) > 0) {
                     
-                // } else {
+                } else {
                     
                     
-                // }
+                }
                 
                 // Format the date as 'Y-m-d'
-                $dates[] = $formatted_date;  // Add formatted date to array
-                $day_of_week[] = $date->format('l');  // Get the day of the week
+                // $dates[] = $formatted_date;  // Add formatted date to array
+                // $day_of_week[] = $date->format('l');  // Get the day of the week
             
                 // Check if it's a Saturday
                 // if ($date->format('l') === 'Saturday') {
@@ -170,6 +171,7 @@
 
             }
 
+            // var_dump($dates);die;
             // Function to determine the nth Saturday of the month
             // function getNthSaturday($date) {
             //     // Get the first day of the month

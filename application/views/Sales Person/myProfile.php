@@ -212,17 +212,41 @@ $managerName=$this->Menu_model->get_reportingManager($data[0]->aadmin);?>
                         <?php }?>
                 </select>
             </div>
-          <div class="form-group">
-            <label for="fromDate">From Date</label><span style="color:red">*</span>
-            <input type="date" class="form-control" name="fromDate" id="fromDate" placeholder="Select from date" required>
-          </div>
+            <div class="form-group">
+                <label for="fromDate">From Date</label><span style="color:red">*</span>
+                <input type="date" class="form-control" name="fromDate" id="fromDate" placeholder="Select from date" required>
+            </div>
 
           <!-- To Date input -->
-          <div class="form-group">
-            <label for="toDate">To Date</label><span style="color:red">*</span>
-            <input type="date" class="form-control" name="toDate" id="toDate" placeholder="Select to date" required>
-          </div>
+            <div class="form-group">
+                <label for="toDate">To Date</label><span style="color:red">*</span>
+                <input type="date" class="form-control" name="toDate" id="toDate" placeholder="Select to date" required>
+            </div>
 
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="leaveType" id="flexRadioDefault2" checked>
+                <label class="form-check-label" for="flexRadioDefault2">
+                    Full Day
+                </label>
+            </div>      
+            
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="leaveType" id="flexRadioDefault1">
+                <label class="form-check-label" for="flexRadioDefault1">
+                    Half Day
+                </label>
+            </div>
+
+            <div class="form-group" id="halfDayLeaveType" >
+                <label for="leaveType">Select Leave Type</label><span style="color:red">*</span>
+                <select class="form-control" name="leaveType" id="leaveType" required>
+                    <option value="" disabled selected>Select leave type</option>
+                    <option value="1">First Half Leave (10 AM - 2:30 PM)</option>
+                    <option value="2">Second Half Leave (2:30 PM - 7 PM)</option>
+                </select>
+            </div>
+
+            <br>
           <!-- Reason textarea input -->
           <div class="form-group">
             <label for="reason">Reason</label><span style="color:red">*</span>
@@ -237,253 +261,250 @@ $managerName=$this->Menu_model->get_reportingManager($data[0]->aadmin);?>
     </div>
   </div>
 </div>
-<section class="content">
-    
-<div class="container emp-profile">
-            <form method="post">
-                <div class="row">
-                    <div class="col-md-4">
-                    <div class="profile-img">
-                            <div class="">
-                            <img id="profilePic" src="<?=base_url();?><?=$data[0]->photo?>" alt="Profile Picture">
-                                <!-- <input type="file" name="file"/> -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="profile">
-                                    <h5>
-                                        <?=$data[0]->name?>
-                                    </h5>
-                                    <h6>
-                                    <?=$dep_name?>
-                                    </h6>
-                                    <!-- <p class="proile-rating">RANKINGS : <span>8/10</span></p> -->
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
-                                </li>
-                                <!-- <li class="nav-item">
-                                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Timeline</a>
-                                </li> -->
-                                <li class="nav-item">
-                                    <a class="nav-link" id="leave-tab" data-toggle="tab" href="#leave" role="tab" aria-controls="leave" aria-selected="false">Leave management</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="day-tab" data-toggle="tab" href="#day" role="tab" aria-controls="day" aria-selected="false">Day Management</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="button" class="profile-edit-btn" name="btnAddMore" value="Edit Profile" 
-                            onclick="window.location.href='<?= base_url(); ?>Menu/UserEditAction/<?=$uid?>'"/>
-                    </div>
 
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="profile-work">
-                            <!-- <p>WORK LINK</p>
-                            <a href="">Website Link</a><br/>
-                            <a href="">Bootsnipp Profile</a><br/>
-                            <a href="">Bootply Profile</a>
-                            <p>SKILLS</p>
-                            <a href="">Web Designer</a><br/>
-                            <a href="">Web Developer</a><br/>
-                            <a href="">WordPress</a><br/>
-                            <a href="">WooCommerce</a><br/>
-                            <a href="">PHP, .Net</a><br/> -->
+<section class="content">
+    <div class="container emp-profile">
+        <form method="post">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="profile-img">
+                        <div class="">
+                        <img id="profilePic" src="<?=base_url();?><?=$data[0]->photo?>" alt="Profile Picture">
+                            <!-- <input type="file" name="file"/> -->
                         </div>
                     </div>
-                    <div class="col-md-8">
-                        <div class="tab-content profile-tab" id="myTabContent">
-                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>User Name</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?=$data[0]->username?></p>
-                                            </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="profile">
+                        <h5>
+                            <?=$data[0]->name?>
+                        </h5>
+                        <h6>
+                        <?=$dep_name?>
+                        </h6>
+                                <!-- <p class="proile-rating">RANKINGS : <span>8/10</span></p> -->
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+                            </li>
+                            <!-- <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Timeline</a>
+                            </li> -->
+                            <li class="nav-item">
+                                <a class="nav-link" id="leave-tab" data-toggle="tab" href="#leave" role="tab" aria-controls="leave" aria-selected="false">Leave management</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="day-tab" data-toggle="tab" href="#day" role="tab" aria-controls="day" aria-selected="false">Day Management</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <input type="button" class="profile-edit-btn" name="btnAddMore" value="Edit Profile" 
+                        onclick="window.location.href='<?= base_url(); ?>Menu/UserEditAction/<?=$uid?>'"/>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="profile-work">
+                        <!-- <p>WORK LINK</p>
+                        <a href="">Website Link</a><br/>
+                        <a href="">Bootsnipp Profile</a><br/>
+                        <a href="">Bootply Profile</a>
+                        <p>SKILLS</p>
+                        <a href="">Web Designer</a><br/>
+                        <a href="">Web Developer</a><br/>
+                        <a href="">WordPress</a><br/>
+                        <a href="">WooCommerce</a><br/>
+                        <a href="">PHP, .Net</a><br/> -->
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="tab-content profile-tab" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>User Name</label>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>User Id</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?=$data[0]->user_id?></p>
-                                            </div>
+                                        <div class="col-md-6">
+                                            <p><?=$data[0]->username?></p>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Name</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?=$data[0]->name?></p>
-                                            </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>User Id</label>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Email</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?=$data[0]->email?></p>
-                                            </div>
+                                        <div class="col-md-6">
+                                            <p><?=$data[0]->user_id?></p>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Phone</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?=$data[0]->phoneno?></p>
-                                            </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Name</label>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Reporting Manager</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?=$managerName[0]->name?></p>
-                                            </div>
+                                        <div class="col-md-6">
+                                            <p><?=$data[0]->name?></p>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Date Of Joining</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?=$data[0]->usercreateDate?></p>
-                                            </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Email</label>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Zone</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?=$data[0]->zoneName?></p>
-                                            </div>
+                                        <div class="col-md-6">
+                                            <p><?=$data[0]->email?></p>
                                         </div>
-                            </div>
-                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Experience</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>-</p>
-                                            </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Phone</label>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Date Of Joining</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?=$data[0]->usercreateDate?></p>
-                                            </div>
+                                        <div class="col-md-6">
+                                            <p><?=$data[0]->phoneno?></p>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Zone</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?=$data[0]->zoneName?></p>
-                                            </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Reporting Manager</label>
                                         </div>
-                                        
-                            </div>
-                            <div class="tab-pane fade" id="leave" role="tabpanel" aria-labelledby="profile-tab">
-                            <?php if($lvTypes){?>
-                                <?php foreach($lvTypes as $val){?>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label><?=$val->leave_type?></label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?=$val->balance?></p>
-                                            </div>
+                                        <div class="col-md-6">
+                                            <p><?=$managerName[0]->name?></p>
                                         </div>
-                                        <?php }?>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Apply for leave</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><button id="applyButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                                                Apply
-                                                </button></p>
-                                            </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Date Of Joining</label>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Leave Status</label>
-                                            </div>
-                                            <?php if($lvData){?>
-                                            <div class="col-md-6">
-                                                <p>Leave form <?=$lvData[0]->start_date?> to <?=$lvData[0]->end_date?> is <?=$lvData[0]->status?>.</p>     
-                                            </div>
-                                            <?php }else{?>
-                                                <div class="col-md-6">
-                                                <p>No leaves planned</p>     
-                                            </div>
-                                                <?php }?>
+                                        <div class="col-md-6">
+                                            <p><?=$data[0]->usercreateDate?></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Zone</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><?=$data[0]->zoneName?></p>
+                                        </div>
+                                    </div>
+                        </div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Experience</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>-</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Date Of Joining</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><?=$data[0]->usercreateDate?></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Zone</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><?=$data[0]->zoneName?></p>
+                                        </div>
+                                    </div>
+                                    
+                        </div>
+                        <div class="tab-pane fade" id="leave" role="tabpanel" aria-labelledby="profile-tab">
+                        <?php if($lvTypes){?>
+                            <?php foreach($lvTypes as $val){?>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label><?=$val->leave_type?></label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><?=$val->balance?></p>
+                                        </div>
+                                    </div>
+                                    <?php }?>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Apply for leave</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><button id="applyButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                                            Apply
+                                            </button></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Leave Status</label>
+                                        </div>
+                                        <?php if($lvData){?>
+                                        <div class="col-md-6">
+                                            <p>Leave form <?=$lvData[0]->start_date?> to <?=$lvData[0]->end_date?> is <?=$lvData[0]->status?>.</p>     
                                         </div>
                                         <?php }else{?>
-                                            <h4>No leaves available</h4>
+                                            <div class="col-md-6">
+                                            <p>No leaves planned</p>     
+                                        </div>
                                             <?php }?>
+                                    </div>
+                                    <?php }else{?>
+                                        <h4>No leaves available</h4>
+                                        <?php }?>
+                                    </div>
+                                    
+                        <div class="tab-pane fade" id="day" role="tabpanel" aria-labelledby="profile-tab">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Day Start</label>
                                         </div>
-                                        
-                            <div class="tab-pane fade" id="day" role="tabpanel" aria-labelledby="profile-tab">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Day Start</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?=$dayData[0]->ustart??'Day Yet to Start'?></p>
-                                            </div>
+                                        <div class="col-md-6">
+                                            <p><?=$dayData[0]->ustart??'Day Yet to Start'?></p>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Day End</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?=$dayData[0]->uclose??"Day yet to end"?></p>
-                                            </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Day End</label>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Tasks Planned</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?=$taskData[0]->allTasks?></p>
-                                            </div>
+                                        <div class="col-md-6">
+                                            <p><?=$dayData[0]->uclose??"Day yet to end"?></p>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Tasks Completed</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?=$taskData[0]->completed?></p>
-                                            </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Tasks Planned</label>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Tasks Pending</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?=$taskData[0]->pending?></p>
-                                            </div>
+                                        <div class="col-md-6">
+                                            <p><?=$taskData[0]->allTasks?></p>
                                         </div>
-                            </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Tasks Completed</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><?=$taskData[0]->completed?></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Tasks Pending</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><?=$taskData[0]->pending?></p>
+                                        </div>
+                                    </div>
                         </div>
                     </div>
                 </div>
-            </form>           
-        </div>
+            </div>
+        </form>           
+    </div>
 </section>
 </div></div>
-
-
-
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -508,9 +529,7 @@ All rights reserved.
 <!-- jQuery UI 1.11.4 -->
 <script src="<?=base_url();?>assets/js/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-$.widget.bridge('uibutton', $.ui.button)
-</script>
+
 <!-- Bootstrap 4 -->
 <script src="<?=base_url();?>assets/js/bootstrap.bundle.min.js"></script>
 <!-- ChartJS -->
@@ -576,6 +595,28 @@ $(document).ready(function () {
 });
 </script>
 
+<script>
+    // Get references to the radio buttons and the select dropdown
+    const fullDayRadio = document.getElementById('flexRadioDefault2');
+    const halfDayRadio = document.getElementById('flexRadioDefault1');
+    const leaveTypeDropdown = document.getElementById('halfDayLeaveType');
+
+    // Function to toggle the visibility of the leave type dropdown based on selected radio button
+    function toggleLeaveTypeDropdown() {
+        if (halfDayRadio.checked) {
+            leaveTypeDropdown.style.display = 'block'; // Show dropdown
+        } else {
+            leaveTypeDropdown.style.display = 'none'; // Hide dropdown
+        }
+    }
+
+    // Initially call the function to set the correct visibility based on the default selection
+    toggleLeaveTypeDropdown();
+
+    // Add event listeners to radio buttons to call the function on change
+    fullDayRadio.addEventListener('change', toggleLeaveTypeDropdown);
+    halfDayRadio.addEventListener('change', toggleLeaveTypeDropdown);
+</script>
 
 </body>
 </html>

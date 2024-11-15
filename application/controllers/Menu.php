@@ -20570,6 +20570,8 @@ public function ApproveRequest() {
         $action = 'Rejected';
     }
     $result = $this->Menu_model->ApproveRequest($id,$action,$uid);
+
+    redirect('Menu/ApproveTaskCheckRequest');
 }
 // ---------------------profile page End----------------------
 

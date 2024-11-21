@@ -70,100 +70,108 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
-    <div class="card">
+        <div class="card">
               <div class="card-header">
                 <h3 class="text-center m-3 text-secondary">Funnel Transfer Inside BD to Main BD
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                   <div class="container body-content">
-        <div class="page-header">
-            <div class="form-group">
-                <form action="" method="POST">
-                    <lable>BD</lable>
-                    <Select name="fpst">
-                        <option>BD</option>
-                        <?php foreach($mdata as $md){?>
-                        <option value="<?=$md->user_id?>"><?=$md->name?></option>
-                        <?php }?>
-                    </Select>
-                    <lable>BD</lable>
-                    <Select name="tpst">
-                        <option>BD</option>
-                        <?php foreach($mdata as $md){?>
-                        <option value="<?=$md->user_id?>"><?=$md->name?></option>
-                        <?php }?>
-                    </Select>
-                    <input type="submit">
-                </form>
-                
-                
-                <fieldset>
-                        <div class="table-responsive">
-                            <div class="table-responsive"> 
-                            <form action="<?=base_url();?>/Menu/cbdtf" method="POST">
-                                <?php if(isset($_POST['tpst'])){$tpst = $_POST['tpst'];?>
-                                <input type="hidden" name="topst" value="<?=$tpst?>">
-                                <?php } 
-                                
-                                if(isset($_POST['fpst'])){$fpst = $_POST['fpst'];
-                                      $cdata=$this->Menu_model->get_cdbyBD($fpst);?>
-                                      
-                                      <input type="hidden" name="fopst" value="<?=$fpst?>">
-                                      
-                                      
-                                <table id="" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Check for Change PST</th>
-                                            <th>Company Name</th>
-                                            <th>Patner Type</th>
-                                            <th>BD Name</th>
-                                            <th>Status</th>
-                                            <th>Address</th>
-                                            <th>City</th>
-                                            <th>State</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                      <?php 
-                                      $i=1;
-                                        foreach($cdata as $ct){
-                                            
-                                           $pid=$ct->partnerType_id;
-                                           $pid = $this->Menu_model->get_partnerbyid($pid);
-                                           
-                                           $bdid=$ct->mainbd;
-                                           $bdid = $this->Menu_model->get_userbyid($bdid);
-                                           
-                                           if(isset($ct->cstatus)){$sid=$ct->cstatus;
-                                           $sid = $this->Menu_model->get_statusbyid($sid); $sname=$sid[0]->name;}else{$sname="";}
-                                        ?>
-                                        
-                                    <tr>
-                                         <td><input type="checkbox" name="cid[]" value="<?=$ct->id?>"></td>
-                                         <td><a target="_blank" href="<?=base_url();?>/menu/CompanyDetails/<?=$ct->id?>"><?=$ct->compname?></a></td>
-                                         <td><?=$pid[0]->name?></td>
-                                         <td><?=$bdid[0]->name?></td>
-                                         <td><?=$sname?></td>
-                                         <td><?=$ct->address?></td>
-                                         <td><?=$ct->city?></td>
-                                         <td><?=$ct->state?></td>
-                                     </tr>
-                                     
-                                     <?php $i++;}}?>
-                                     
-                                  </tbody>
-                                </table>
-                                <input type="submit">
-                                
+                    <div class="page-header">
+                        <div class="form-group">
+                            <form action="" method="POST">
+                            <div class="row">
+                            <div class="col-md-4">
+                                <lable>From BD</lable>
+                                <Select name="fpst" class="form-control">
+                                    <option selected disabled>BD</option>
+                                    <?php foreach($mdata as $md){?>
+                                        <option value="<?=$md->user_id?>"><?=$md->name?></option>
+                                    <?php }?>
+                                </Select>
+                            </div>
+                            <div class="col-md-4">
+                                <lable>To BD</lable>
+                                <Select name="tpst" class="form-control">
+                                    <option selected disabled>BD</option>
+                                    <?php foreach($mdata as $md){?>
+                                        <option value="<?=$md->user_id?>"><?=$md->name?></option>
+                                    <?php }?>
+                                </Select>
+                            </div>
+                            <div class="col-md-4">
+                                <lable>&nbsp</lable>
+                                <input type="submit" class="btn btn-primary">
+
                             </div>
                         </div>
-                    </form>            <!--END OF FORM ^^-->
-                </fieldset>
-            </div>
-            <hr />
-        </div>
+                            </form>
+                            <br>
+                            
+                            <fieldset>
+                                <div class="table-responsive">
+                                    <div class="table-responsive"> 
+                                    <form action="<?=base_url();?>/Menu/cbdtf" method="POST">
+                                        <?php if(isset($_POST['tpst'])){$tpst = $_POST['tpst'];?>
+                                        <input type="hidden" name="topst" value="<?=$tpst?>">
+                                        <?php } 
+                                        
+                                        if(isset($_POST['fpst'])){$fpst = $_POST['fpst'];
+                                            $cdata=$this->Menu_model->get_cdbyBD($fpst);?>
+                                                
+                                            <input type="hidden" name="fopst" value="<?=$fpst?>">     
+                                            <table id="" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Check for Change PST</th>
+                                                        <th>Company Name</th>
+                                                        <th>Patner Type</th>
+                                                        <th>BD Name</th>
+                                                        <th>Status</th>
+                                                        <th>Address</th>
+                                                        <th>City</th>
+                                                        <th>State</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php 
+                                                    $i=1;
+                                                    foreach($cdata as $ct){
+                                                        
+                                                        $pid=$ct->partnerType_id;
+                                                        $pid = $this->Menu_model->get_partnerbyid($pid);
+                                                        
+                                                        $bdid=$ct->mainbd;
+                                                        $bdid = $this->Menu_model->get_userbyid($bdid);
+                                                        
+                                                        if(isset($ct->cstatus)){$sid=$ct->cstatus;
+                                                        $sid = $this->Menu_model->get_statusbyid($sid); $sname=$sid[0]->name;}else{$sname="";}
+                                                    ?>
+                                                    
+                                                <tr>
+                                                        <td><input type="checkbox" name="cid[]" value="<?=$ct->id?>"></td>
+                                                        <td><a target="_blank" href="<?=base_url();?>/menu/CompanyDetails/<?=$ct->id?>"><?=$ct->compname?></a></td>
+                                                        <td><?=$pid[0]->name?></td>
+                                                        <td><?=$bdid[0]->name?></td>
+                                                        <td><?=$sname?></td>
+                                                        <td><?=$ct->address?></td>
+                                                        <td><?=$ct->city?></td>
+                                                        <td><?=$ct->state?></td>
+                                                    </tr>
+                                                    
+                                                    <?php $i++;}}?>
+                                                    
+                                                </tbody>
+                                            </table>
+                                            <input type="submit" class="btn btn-danger">
+                                        
+                                    </div>
+                                </div>
+                                </form>            <!--END OF FORM ^^-->
+                            </fieldset>
+                        </div>
+                        <hr />
+                    </div>
     </div></div></div></div>
               </div>
               <!-- /.card-body -->

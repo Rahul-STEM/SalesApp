@@ -31,15 +31,6 @@
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
     <script>
-        <?php  $checkHalfDayLeave = checkHalfDayLeave($uid,$adate);
-        
-                $partOfleave = $checkHalfDayLeave[0]->halfday_leaveType;
-
-                echo "var partOfleave = '" . addslashes($partOfleave) . "';";
-        ?>
-
-        // alert(partOfleave);
-        // var partOfleave =  
       function validateTimeInput(event) {
           const input = event.target;
           const timeValue = input.value;
@@ -51,66 +42,66 @@
               input.value = "";
           }
       }
-        function validateTimeInputAuto(event) {
-            const input = event.target;
-            const timeValue = input.value;
-            const minTime = "16:00";
-            const maxTime = "19:00";
-        
-            if (timeValue < minTime || timeValue > maxTime) {
-                alert("Please enter a time between 04:00 PM and 7:00 PM.");
-                input.value = "";
-            }
-        }
+      function validateTimeInputAuto(event) {
+          const input = event.target;
+          const timeValue = input.value;
+          const minTime = "16:00";
+          const maxTime = "19:00";
       
-        document.addEventListener('DOMContentLoaded', function() {
-            const timeInput = document.getElementById('start-time1');
-            timeInput.setAttribute('min', '10:00');
-            timeInput.setAttribute('max', '19:00');
-            timeInput.addEventListener('change', validateTimeInput);
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            const timeInput = document.getElementById('end-time1');
-            timeInput.setAttribute('min', '10:00');
-            timeInput.setAttribute('max', '19:00');
-            timeInput.addEventListener('change', validateTimeInput);
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            const timeInput = document.getElementById('start-time');
-            timeInput.setAttribute('min', '16:00');
-            timeInput.setAttribute('max', '19:00');
-            timeInput.addEventListener('change', validateTimeInputAuto);
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            const timeInput = document.getElementById('end-time');
-            timeInput.setAttribute('min', '16:00');
-            timeInput.setAttribute('max', '19:00');
-            timeInput.addEventListener('change', validateTimeInputAuto);
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            const timeInput = document.getElementById('meetingtimerequest1');
-            timeInput.setAttribute('min', '10:00');
-            timeInput.setAttribute('max', '19:00');
-            timeInput.addEventListener('change', validateTimeInput);
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            const timeInput = document.getElementById('meetingtimerequest2');
-            timeInput.setAttribute('min', '10:00');
-            timeInput.setAttribute('max', '19:00');
-            timeInput.addEventListener('change', validateTimeInput);
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            const timeInput = document.getElementById('meetingtimerequest3');
-            timeInput.setAttribute('min', '10:00');
-            timeInput.setAttribute('max', '19:00');
-            timeInput.addEventListener('change', validateTimeInput);
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            const timeInput = document.getElementById('review_plantime');
-            timeInput.setAttribute('min', '10:00');
-            timeInput.setAttribute('max', '19:00');
-            timeInput.addEventListener('change', validateTimeInput);
-        });
+          if (timeValue < minTime || timeValue > maxTime) {
+              alert("Please enter a time between 04:00 PM and 7:00 PM.");
+              input.value = "";
+          }
+      }
+      
+      document.addEventListener('DOMContentLoaded', function() {
+          const timeInput = document.getElementById('start-time1');
+          timeInput.setAttribute('min', '10:00');
+          timeInput.setAttribute('max', '19:00');
+          timeInput.addEventListener('change', validateTimeInput);
+      });
+      document.addEventListener('DOMContentLoaded', function() {
+          const timeInput = document.getElementById('end-time1');
+          timeInput.setAttribute('min', '10:00');
+          timeInput.setAttribute('max', '19:00');
+          timeInput.addEventListener('change', validateTimeInput);
+      });
+      document.addEventListener('DOMContentLoaded', function() {
+          const timeInput = document.getElementById('start-time');
+          timeInput.setAttribute('min', '16:00');
+          timeInput.setAttribute('max', '19:00');
+          timeInput.addEventListener('change', validateTimeInputAuto);
+      });
+      document.addEventListener('DOMContentLoaded', function() {
+          const timeInput = document.getElementById('end-time');
+          timeInput.setAttribute('min', '16:00');
+          timeInput.setAttribute('max', '19:00');
+          timeInput.addEventListener('change', validateTimeInputAuto);
+      });
+      document.addEventListener('DOMContentLoaded', function() {
+          const timeInput = document.getElementById('meetingtimerequest1');
+          timeInput.setAttribute('min', '10:00');
+          timeInput.setAttribute('max', '19:00');
+          timeInput.addEventListener('change', validateTimeInput);
+      });
+      document.addEventListener('DOMContentLoaded', function() {
+          const timeInput = document.getElementById('meetingtimerequest2');
+          timeInput.setAttribute('min', '10:00');
+          timeInput.setAttribute('max', '19:00');
+          timeInput.addEventListener('change', validateTimeInput);
+      });
+      document.addEventListener('DOMContentLoaded', function() {
+          const timeInput = document.getElementById('meetingtimerequest3');
+          timeInput.setAttribute('min', '10:00');
+          timeInput.setAttribute('max', '19:00');
+          timeInput.addEventListener('change', validateTimeInput);
+      });
+      document.addEventListener('DOMContentLoaded', function() {
+          const timeInput = document.getElementById('review_plantime');
+          timeInput.setAttribute('min', '10:00');
+          timeInput.setAttribute('max', '19:00');
+          timeInput.addEventListener('change', validateTimeInput);
+      });
       
     </script>
     <?php
@@ -280,9 +271,6 @@ if($type_id == 3){
         <div class="container-fluid">
         <?php
         $totalttaskdata = $this->Menu_model->getUserTotalTaskTimeForTodays($uid,$adate);
-        // if($uid  == 100059){
-        //   echo $this->db->last_query();
-        // }
         $totalttasktime = $totalttaskdata[0]->ttime;
         $taskplanmincount =0;
         $lunchtime      = 30;      // Lunch Time 45 Miniute
@@ -327,23 +315,13 @@ if($type_id == 3){
         $rmautoTasktime = 30;
    
         $plannerremTime = $plannerremTime - $diffInMinutes;
-        //$plannerremTime = $plannerremTime + $rmautoTasktime;
-        $userplaetime = $userplanetime - $diffInMinutes;
-       // $userplanetime = $userplanetime + $rmautoTasktime;
+        $plannerremTime = $plannerremTime + $rmautoTasktime;
+        $userplanetime = $userplanetime - $diffInMinutes;
+        $userplanetime = $userplanetime + $rmautoTasktime;
         endif;
       }
 
-    //   echo $userplaetime;die;
-        // $checkHalfDayLeave = checkHalfDayLeave($uid,$adate);
-        // echo sizeof($checkHalfDayLeave);die;
-        if(sizeof($checkHalfDayLeave) == 1){
-
-            $userplaetime = $userplaetime/2;
-            $plannerremTime = $plannerremTime/2;
-
-        }
-    //   echo $userplaetime;die;
-      
+       
         if($totalttasktime >= $plannerremTime){
           $aid=$this->Menu_model->getAdminId($uid);
           $admin_id=$aid[0]->aadmin;
@@ -379,7 +357,7 @@ if($type_id == 3){
             <div class="text-effect1 mb-1 mt-1">
               <span class="text-capitalize font-weight-bold">
                 <?php 
-               $hours_tasktime = floor($remaintaktimeis / 60);;
+               $hours_tasktime = floor($remaintaktimeis / 60);
                $remainingMinutes_tasktime = $remaintaktimeis % 60;
                $remaintaktime_is = "$hours_tasktime hours and $remainingMinutes_tasktime minutes";
                 echo "<mark> Remaining Time to Enable Task Approval Feature :<span class='remening_time_cnt'> ".$remaintaktime_is."<span></mark>";
@@ -463,8 +441,6 @@ if($type_id == 3){
                 //   print_r($reqCount);
                 //   die; 
             // $approvel_status = 'Approved';
-
-  
             if($adate == date("Y-m-d") && $getAutoTaskTime == 0 || $adate !== date("Y-m-d")){ 
                 if($getAutoTaskTime !==1){
                 ?>
@@ -480,19 +456,19 @@ if($type_id == 3){
                   <div class="was-validated">
                     <input type="hidden" id="userid" value="<?=$uid?>" name="bdid" required="">
                     <div class="col-md-12 col-sm mt-3">
-                        <input type="hidden" class="form-control" id="ttype" name="ttype" Value="Auto Task" required="">
-                        <input type="hidden" class="form-control" name="pdate" value="<?=$adate?>" required="">
-                        <input type="hidden" name="ntuid" value="<?=$uid?>" required="">
- 
-                        <div class="form-group">
-                            <label for="start-time">Enter Start Time</label>
-                            <input type="time" id="start-time" name="startautotasktime" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="end-time">Enter End Time</label>
-                            <input type="time" id="end-time" name="endautotasktime" class="form-control" required>
-                        </div>
-                        <hr>
+                      <input type="hidden" class="form-control" id="ttype" name="ttype" Value="Auto Task" required="">
+                      <input type="hidden" class="form-control" name="pdate" value="<?=$adate?>" required="">
+                      <input type="hidden" name="ntuid" value="<?=$uid?>" required="">
+                     
+                      <div class="form-group">
+                        <label for="start-time">Enter Start Time</label>
+                        <input type="time" id="start-time" name="startautotasktime" class="form-control" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="end-time">Enter End Time</label>
+                        <input type="time" id="end-time" name="endautotasktime" class="form-control" required>
+                      </div>
+                      <hr>
                       <?php 
                       if($adate !== date("Y-m-d")){ 
                        $userdfrom = $this->Menu_model->userworkfrom() ?>
@@ -530,7 +506,7 @@ if($type_id == 3){
                 $getPendingTaskreqcnt = sizeof($getPendingTaskreq);
                 if($getPendingTaskreqcnt > 0){
                     $getPendingTaskreqappr = $getPendingTaskreq[0]->approvel_status;
-                }
+                  }
                   ?>
             <div class="card p-2 bg-dark text-center">
               <h5><i>If you want to plan task for today, you need to take approval first.</i></h5>
@@ -748,7 +724,7 @@ if($type_id == 3){
 
                                 if($wffo == 1){
                                     $daystartedFrom = 'Office';
-                                }elseif ($wffo == 2) {
+                                }elseif ($wffo == 1) {
                                     $daystartedFrom = 'Field';
                                 }else{
                                     $daystartedFrom = 'Field + Office';
@@ -796,20 +772,7 @@ if($type_id == 3){
                       // $planbutnotinitedcnt = 0;
                       // $reviewtaskcnt = 0;
                       // $reviewCount = 0;
-
-   
-                      $emergencytask = $this->Menu_model->GetEmergencyTask($uid,$adate);
-                    $emergencytaskcnt = sizeof($emergencytask);
-                        
-                      if($emergencytaskcnt < 2){ ?>
-                        <div class="form-check">
-                          <label class="form-check-label custom-radio-label">
-                            <input type="radio" class="form-check-input" name="optradio" value="Create Emergency Meetings Task" >
-                            <span style="color:green;" data-toggle="tooltip" data-placement="left" title="">Create Meetings Task ( <?= $emergencytaskcnt; ?> )</span>
-                         </label>
-                        </div>
-                        <?php } ?>
-                      
+                      ?>
                     <?php if($planbutnotinitedcnt > 0 && $adate !== date("Y-m-d")){ ?>
                       <div class="form-check">
                           <label class="form-check-label custom-radio-label">
@@ -850,9 +813,9 @@ if($type_id == 3){
                         $dyslimit = 30;
                        }
                        $cmpstatss = '4,5'; // Status with - WDL AND NI
-                        $statusnochangecmp = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$days,$cmpstatus,$adate); //date passed as oer planner date -Rahul
+                        $statusnochangecmp = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$days,$cmpstatus,$adate);
                         $statusnochangecmpcnt = sizeof($statusnochangecmp);
-                        $statusnochangecmp_wdl_nl = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$dyslimit,$cmpstatss,$adate);//date passed as oer planner date -Rahul
+                        $statusnochangecmp_wdl_nl = $this->Menu_model->getCompanyWhichNoStatusChange($uid,$dyslimit,$cmpstatss,$adate);
                         $statusnochangecmp_wdl_nl_cnt = sizeof($statusnochangecmp_wdl_nl);
                         $status_nochangecnt = $statusnochangecmpcnt + $statusnochangecmp_wdl_nl_cnt;
                         if($status_nochangecnt > 0){$cssct = 'text-danger';}else{$cssct = '';}
@@ -940,9 +903,9 @@ if($type_id == 3){
                          <?php } } ?> 
                          <?php 
                          
-                       // $impcomp ['Compulsive Task']= 0;
-                        // $impcomp ['No Work Days']= 0;
-                        // $impcomp ['Need Your Attention']= 0;
+                         $impcomp ['Compulsive Task']= 0;
+                          $impcomp ['No Work Days']= 0;
+                          $impcomp ['Need Your Attention']= 0;
                             $elementsGreaterThanOne = [];
                             foreach ($impcomp as $key => $value) {
                                 if ($value > 1) {
@@ -984,16 +947,16 @@ if($type_id == 3){
                           <input type="radio" class="form-check-input" name="optradio" value="Status" >Status
                           </label>
                         </div>
-                          <?php
-                              $tooltipstaskact = "This feature allows users to filter and plan tasks related to meetings and research within the company.\n";  
-                              $tooltipstaskact .= "Plan Scheduled Meeting Task: Users can plan and schedule specific meeting tasks.\n";  
-                              $tooltipstaskact .= "Plan Barg-in Meeting Task: Users can plan Barg meeting tasks, choosing from:\n";  
-                              $tooltipstaskact .= "Barg-in Meeting From Funnel: When selecting tasks from the funnel.\n";  
-                              $tooltipstaskact .= "Barg-in Meeting Other : When selecting tasks from other sources.\n";  
-                              $tooltipstaskact .= "Plan Research Task: Users can plan research tasks, choosing from:\n";  
-                              $tooltipstaskact .= "Research  From Funnel: When selecting tasks from the funnel.\n";  
-                              $tooltipstaskact .= "Research  Other : When selecting tasks from other sources.\n";  
-                              $tooltipstaskact .= "Add New Lead: Automatically creates a task to add a new lead.\n";  
+                            <?php
+                                $tooltipstaskact = "This feature allows users to filter and plan tasks related to meetings and research within the company.\n";  
+                                $tooltipstaskact .= "Plan Scheduled Meeting Task: Users can plan and schedule specific meeting tasks.\n";  
+                                $tooltipstaskact .= "Plan Barg-in Meeting Task: Users can plan Barg meeting tasks, choosing from:\n";  
+                                $tooltipstaskact .= "Barg-in Meeting From Funnel: When selecting tasks from the funnel.\n";  
+                                $tooltipstaskact .= "Barg-in Meeting Other : When selecting tasks from other sources.\n";  
+                                $tooltipstaskact .= "Plan Research Task: Users can plan research tasks, choosing from:\n";  
+                                $tooltipstaskact .= "Research  From Funnel: When selecting tasks from the funnel.\n";  
+                                $tooltipstaskact .= "Research  Other : When selecting tasks from other sources.\n";  
+                                $tooltipstaskact .= "Add New Lead: Automatically creates a task to add a new lead.\n";  
                             ?>
                         <div class="form-check">
                           <label class="form-check-label custom-radio-label">
@@ -1112,7 +1075,7 @@ if($type_id == 3){
                   </div>
                   <div class="col-lg-4 col-sm-4" id="planningStart2" >
                     <div class="card p-4 taskselectionarea">
-                      <!-- <div class="row">
+                      <div class="row">
                         <div class="col-6">
                         </div>
                         <div class="col-6">
@@ -1121,7 +1084,7 @@ if($type_id == 3){
                             <label>Action Not Planned </label>                          
                           </div>
                         </div>
-                      </div> -->
+                      </div>
                       <div id="actionPlanned" class ="card p-2">
                       <div id="becauseof_topsender_pst_meet" class="p-2">
                       <div class="form-group">
@@ -1198,13 +1161,6 @@ if($type_id == 3){
                           <option selected disabled>Purpose</option>
                           <option value="yes">Yes</option>
                           <option value="no">No</option>
-                        </select>
-                        <hr>
-                        <select class="form-control" id="slct_days_status">
-                          <option selected disabled>Select Days</option>
-                          <option value="1-3">1-3 Days</option>
-                          <option value="3-5">3-5 Days</option>
-                          <option value="5-7">5-7 Days</option>
                         </select>
                       </div>
                     </div>
@@ -1348,15 +1304,6 @@ if($type_id == 3){
                           <option value="no">No</option>
                         </select>
                       </div>
-                      <div class="form-group" id="taskPurposebyusercatcard_days">
-                      <label>Select Days</label>
-                        <select class="form-control" id="taskPurposebyusercatdata_days">
-                              <option selected disabled>Select Days</option>
-                              <option value="1-3">1-3 Days</option>
-                              <option value="3-5">3-5 Days</option>
-                              <option value="5-7">5-7 Days</option>
-                        </select>
-                      </div>
                     </div>
                     <div id="clusterLocactionFiltercard" class="card p-4" >
                       <input type="hidden" name="selectbyuser" id="selectbyuser" value=""> 
@@ -1395,17 +1342,6 @@ if($type_id == 3){
                           <option value="no">No</option>
                         </select>
                       </div>
-
-                      <div class="form-group" id="taskPurposebyuserCluster_days">
-                      <label>Select Days</label>
-                        <select class="form-control" id="taskPurposebyCluster_days">
-                              <option selected disabled>Select Days</option>
-                              <option value="1-3">1-3 Days</option>
-                              <option value="3-5">3-5 Days</option>
-                              <option value="5-7">5-7 Days</option>
-                        </select>
-                      </div>
-
                     </div>
                     <div id="companyLocationdatacard" class="card p-4" >
                       <input type="hidden" name="selectbyuser" id="selectbyuser" value=""> 
@@ -1498,15 +1434,6 @@ if($type_id == 3){
                           <option value="no">No</option>
                         </select>
                       </div>
-                      <div class="form-group" id="taskPurposebyuserCard_days">
-                        <label>Select Days</label>
-                        <select class="form-control" id="taskPurposebyuserCardData_days">
-                              <option selected disabled>Select Days</option>
-                              <option value="1-3">1-3 Days</option>
-                              <option value="3-5">3-5 Days</option>
-                              <option value="5-7">5-7 Days</option>
-                        </select>
-                      </div>
                       <div id="partnertype" class="card p-4">
                         <div class="form-group">
                           <label>Partner Type</label>
@@ -1555,15 +1482,6 @@ if($type_id == 3){
                             <option selected disabled>Purpose</option>
                             <option value="yes">Yes</option>
                             <option value="no">No</option>
-                          </select>
-                        </div>
-                        <div class="form-group" id="partnertype_taskPurpose_days">
-                          <label>Select Days</label>
-                          <select class="form-control" id="partnertype_taskPurposeData_days">
-                                <option selected disabled>Select Days</option>
-                                <option value="1-3">1-3 Days</option>
-                                <option value="3-5">3-5 Days</option>
-                                <option value="5-7">5-7 Days</option>
                           </select>
                         </div>
                       </div>
@@ -2459,11 +2377,6 @@ if($type_id == 3){
       <input type="hidden" value="<?=$phours?>" id = "phours">
       <input type="hidden" value="<?=$pminutes?>" id = "pminutes">
       <input type="hidden" value="<?=$pseconds?>" id = "pseconds">
-
-  <input type="hidden" value="<?=$totalttasktime?>" id = "totalttasktime">
-  <input type="hidden" value="<?=$plannerremTime?>" id = "plannerremTime">
-
-
       <script type='text/javascript'>
      
         var currentTime = new Date();
@@ -2501,22 +2414,22 @@ if($type_id == 3){
         var enteredMs = convertToMilliseconds(enteredTime);
         // Check if entered time is between start and end time frames
         if(plandate == formattedDate){
-        if (enteredMs >= startMs && enteredMs <= endMs) {
-        alert("You already have plan for this time slot");
-        $('#planbtn1').css('display', 'none');
-        } else {
-        $('#planbtn1').css('display', '');
-        }
+            if (enteredMs >= startMs && enteredMs <= endMs) {
+                alert("You already have plan for this time slot");
+                $('#planbtn1').css('display', 'none');
+            } else {
+                $('#planbtn1').css('display', '');
+            }
         }
         });
         
-        function convertToMilliseconds(timeStr) {
-        var parts = timeStr.split(':');
-        var hours = parseInt(parts[0], 10);
-        var minutes = parseInt(parts[1], 10);
-        var seconds = parseInt(parts[2], 10) || 0; // Default to 0 seconds if not provided
-        return hours * 3600000 + minutes * 60000 + seconds * 1000;
-        }
+            function convertToMilliseconds(timeStr) {
+                var parts = timeStr.split(':');
+                var hours = parseInt(parts[0], 10);
+                var minutes = parseInt(parts[1], 10);
+                var seconds = parseInt(parts[2], 10) || 0; // Default to 0 seconds if not provided
+                return hours * 3600000 + minutes * 60000 + seconds * 1000;
+            }
         });
         
         $("#cmpdetail,#statusmdetail,#locationdetail,#categorydetail,#notask15ddetail,#tobescheduled,#samesfld,#preplanned,#reviewtarget").hide();
@@ -2527,87 +2440,81 @@ if($type_id == 3){
       <script type='text/javascript'>
    
                 $(document).ready(function() {
-                 $('#selectcompanyname').hide();
-                 $("#selectstatus").hide();
-                 $("#daysByTask").hide();
-                 $("#selectcompanybyuser").hide();
-                 $("#tasktaction").hide();
-                 $('#taskActionbyuser').hide();
-                 $('#taskPurposebyuser').hide();
-                 $("#actionnotplaned").hide();
-                 $("#tptime").hide();
-                 $('#ntactionnew').hide();
-                 $('#ntppose').hide();
-                 $('#meeting-time').hide();
-                 $('#planbtn1').hide();
-                 $('#companyLocation').hide();
-                 $('#companyLocationdata').hide();
-                 $('#companyLocation').hide();
-                 $('#selectCategory').hide();
-                 $("#maintaskcard").hide();
-                 $("#selectactionplanecard").hide();
-                 $("#daysfiltercard").hide();
-                 $("#companyLocationdatacard").hide();
-                 $("#daysfiltercard_anp").hide();
-                 $("#taskActionbyusercatcatcard").hide();
-                 $("#taskPurposebyusercatcard").hide();
-                 $("#clusterLocactionFiltercard").hide();
-                 $("#statusfiltercardCluster").hide();
-                 $("#taskActionbyuserCluster").hide();
-                 $("#taskPurposebyuserCluster").hide();
-                 $("#task_actionCard").hide();
-                 $("#pstAssignCard").hide();
-                 $('#taskActionCard').hide();
-                 $('#status_taskaction_card').hide();
-                 $('#taskaction_card_area').hide();
-                 $('#taskActionbyuserCard').hide();
-                 $('#taskPurposebyuserCard').hide();
-                 $('#partnertype').hide();
-                 $('#partnertype_cstatus').hide();
-                 $('#partnertype_task').hide();
-                 $('#partnertype_taskAction').hide();
-                 $('#partnertype_taskPurpose').hide();
-                 $('#sameStatusLastLimitDays').hide();
-                 $('#partnertype_planbut').hide();
-                 $('#daysfiltercard_planbut').hide();
-                 $('#planbut_taskActioncard').hide();
-                 $('#planbut_taskPurposecard').hide();
-                 $('#planbutnotinitiatedcard').hide();
-                 $('#planbutnotinitiatedcardold').hide();
-                 $('#create_barg_in_meeting').hide();
-                 $('#firstQuarter1').hide();
-                 $('#firstQuarter1cstatys').hide();
-                 $('#firstQuarter1cstatysDataTask').hide();
-                 $('#firstQuarter1taskActionbyuser').hide();
-                 $('#firstQuarter1taskPurposebyuser').hide();
-                 $('#reviewTargetDate').hide();
-                 $('#reviewTargetDate_typeoftaskCard').hide();
-                 $('#reviewTargetDate_Action').hide();
-                 $('#reviewTargetDate_Purpose').hide();
-                 $('#reviewTargetReviewSelf').hide();
-                 $('#reviewTargetReviewSelf').hide();
-                 $('#select_cluster').hide();
-                 $('#selectcompanyname_barg').hide();
-                 $('#status_taskaction_card').hide();
-                 $('#auto_assign').hide();
-                 $('#selectbarginCompanyType').hide();
-                 $('#selectReseachCompanyType').hide();
-                 $('#slct_auto_assign_task_type').hide();
-                 $('#pendingdata_message').hide();
-                 $('#compulsive_task_card').hide();
-                 $('#actionnotplaned_NeedYour').hide();
-                 $("#review_planning_card").hide();
-                 $("#need_your_attention").hide();
-                 $("#becauseofplanchange").hide();
-                 $("#becauseof_topsender_pst_meet").hide();
-                 $("#becauseofTPM_TaskDatacard").hide();
-                 $("#becauseofTPM_TaskDatacard_new").hide();
-                //  New Changes By Deepak 
-                $('#slct_days_status').hide();
-                $('#taskPurposebyuserCard_days').hide();
-                $('#taskPurposebyuserCluster_days').hide();
-                $('#taskPurposebyusercatcard_days').hide();
-                $('#partnertype_taskPurpose_days').hide();
+                    $('#selectcompanyname').hide();
+                    $("#selectstatus").hide();
+                    $("#daysByTask").hide();
+                    $("#selectcompanybyuser").hide();
+                    $("#tasktaction").hide();
+                    $('#taskActionbyuser').hide();
+                    $('#taskPurposebyuser').hide();
+                    $("#actionnotplaned").hide();
+                    $("#tptime").hide();
+                    $('#ntactionnew').hide();
+                    $('#ntppose').hide();
+                    $('#meeting-time').hide();
+                    $('#planbtn1').hide();
+                    $('#companyLocation').hide();
+                    $('#companyLocationdata').hide();
+                    $('#companyLocation').hide();
+                    $('#selectCategory').hide();
+                    $("#maintaskcard").hide();
+                    $("#selectactionplanecard").hide();
+                    $("#daysfiltercard").hide();
+                    $("#companyLocationdatacard").hide();
+                    $("#daysfiltercard_anp").hide();
+                    $("#taskActionbyusercatcatcard").hide();
+                    $("#taskPurposebyusercatcard").hide();
+                    $("#clusterLocactionFiltercard").hide();
+                    $("#statusfiltercardCluster").hide();
+                    $("#taskActionbyuserCluster").hide();
+                    $("#taskPurposebyuserCluster").hide();
+                    $("#task_actionCard").hide();
+                    $("#pstAssignCard").hide();
+                    $('#taskActionCard').hide();
+                    $('#status_taskaction_card').hide();
+                    $('#taskaction_card_area').hide();
+                    $('#taskActionbyuserCard').hide();
+                    $('#taskPurposebyuserCard').hide();
+                    $('#partnertype').hide();
+                    $('#partnertype_cstatus').hide();
+                    $('#partnertype_task').hide();
+                    $('#partnertype_taskAction').hide();
+                    $('#partnertype_taskPurpose').hide();
+                    $('#sameStatusLastLimitDays').hide();
+                    $('#partnertype_planbut').hide();
+                    $('#daysfiltercard_planbut').hide();
+                    $('#planbut_taskActioncard').hide();
+                    $('#planbut_taskPurposecard').hide();
+                    $('#planbutnotinitiatedcard').hide();
+                    $('#planbutnotinitiatedcardold').hide();
+                    $('#create_barg_in_meeting').hide();
+                    $('#firstQuarter1').hide();
+                    $('#firstQuarter1cstatys').hide();
+                    $('#firstQuarter1cstatysDataTask').hide();
+                    $('#firstQuarter1taskActionbyuser').hide();
+                    $('#firstQuarter1taskPurposebyuser').hide();
+                    $('#reviewTargetDate').hide();
+                    $('#reviewTargetDate_typeoftaskCard').hide();
+                    $('#reviewTargetDate_Action').hide();
+                    $('#reviewTargetDate_Purpose').hide();
+                    $('#reviewTargetReviewSelf').hide();
+                    $('#reviewTargetReviewSelf').hide();
+                    $('#select_cluster').hide();
+                    $('#selectcompanyname_barg').hide();
+                    $('#status_taskaction_card').hide();
+                    $('#auto_assign').hide();
+                    $('#selectbarginCompanyType').hide();
+                    $('#selectReseachCompanyType').hide();
+                    $('#slct_auto_assign_task_type').hide();
+                    $('#pendingdata_message').hide();
+                    $('#compulsive_task_card').hide();
+                    $('#actionnotplaned_NeedYour').hide();
+                    $("#review_planning_card").hide();
+                    $("#need_your_attention").hide();
+                    $("#becauseofplanchange").hide();
+                    $("#becauseof_topsender_pst_meet").hide();
+                    $("#becauseofTPM_TaskDatacard").hide();
+                    $("#becauseofTPM_TaskDatacard_new").hide();
                 });
         
                 $("#mainbox").hide();$("#ScheduledBox").hide();
@@ -3177,48 +3084,12 @@ if($type_id == 3){
                         success: function a(result){
                             $("#selectcompanybyuser").html(result);
                             $("#selectcompanybyuser").show();
-                            $('#slct_days_status').show();
                             var optionCount = $('#selectcompanybyuser').find('option').length;
                         optionCount = optionCount-1;
                         $("#totalcompany").text('Total Company :'+ optionCount);
                             }
                         });
                         });
-
-
-                        $('#slct_days_status').on('change', function() {
-                        var slct_days_status = $(this).val();
-                        var uid = $("#curuserid").val();
-                        var tasktaction = $('#tasktaction').val();
-                        var selectedValue = $('#selectstatusbyuser').val();
-                        var taskActionbyuser = $('#taskActionbyuser').val();
-                        var taskPurposebyuser = $('#taskPurposebyuser').val();
-                        $.ajax({
-                        url:'<?=base_url();?>Menu/getTaskPurposeYesorNobyuser_status',
-                        type: "POST",
-                        data: {
-                        sid: selectedValue,
-                        tasktaction: tasktaction,
-                        taskActionbyuser: taskActionbyuser,
-                        taskPurposebyuser: taskPurposebyuser,
-                        slct_days_status: slct_days_status,
-                        uid: uid
-                        },
-                        cache: false,
-                        success: function a(result){
-                            $("#selectcompanybyuser").html(result);
-                            $("#selectcompanybyuser").show();
-                            var optionCount = $('#selectcompanybyuser').find('option').length;
-                            optionCount = optionCount-1;
-                            $("#totalcompany").text('Total Company :'+ optionCount);
-                            }
-                        });
-                        });
-
-
-
-                }else{
-                  $('#slct_days_status').hide();
                 }
                 
                 if(val=='Location'){
@@ -3464,7 +3335,6 @@ if($type_id == 3){
                         $("#maintaskcard").show();
                         $("#selectcompanybyuser").html(result);
                         $("#selectcompanybyuser").show();
-                        $("#taskPurposebyusercatcard_days").show();
                         var optionCount = $('#selectcompanybyuser').find('option').length;
                         // optionCount = optionCount-1;
                         $("#totalcompany").text('Total Company :'+ optionCount);
@@ -3478,44 +3348,8 @@ if($type_id == 3){
                         }
                         });
                     });
-
-
-                    $('#taskPurposebyusercatdata_days').on('change', function() {
-                        var slct_days_status = $(this).val();
-                        var uid = $("#curuserid").val();
-
-                        var selectedValue = $('#statusfiltercardCat').val();
-                        var taskActionbyuser = $('#taskActionbyusercat').val();
-                        var taskPurposebyuser = $('#taskPurposebyusercatdata').val();
-                        var selectdcategory = $('#selectdcategory').val();
-                        $.ajax({
-                        url:'<?=base_url();?>Menu/getTaskPurposeYesorNobyuser_status',
-                        type: "POST",
-                        data: {
-                        sid: selectedValue,
-                        selectdcategory: selectdcategory,
-                        taskActionbyuser: taskActionbyuser,
-                        taskPurposebyuser: taskPurposebyuser,
-                        slct_days_status: slct_days_status,
-                        uid: uid
-                        },
-                        cache: false,
-                        success: function a(result){
-                            $("#selectcompanybyuser").html(result);
-                            $("#selectcompanybyuser").show();
-                            var optionCount = $('#selectcompanybyuser').find('option').length;
-                            optionCount = optionCount-1;
-                            $("#totalcompany").text('Total Company :'+ optionCount);
-                            }
-                        });
-                        });
-
-
-
-
                 }else{
                     $('#selectCategory').hide();
-                    $("#taskPurposebyusercatcard_days").hide();
                 }
         
                 if(val == 'Cluster Location'){
@@ -3708,46 +3542,11 @@ if($type_id == 3){
                     $('#ntppose').show();
                     $('#meeting-time').show();
                     $('#planbtn1').show();
-                    $('#taskPurposebyuserCluster_days').show();
                     }
                     });
                     });
-
-
-                    $('#taskPurposebyCluster_days').on('change', function() {
-                        var slct_days_status = $(this).val();
-                        var uid = $("#curuserid").val();
-                        var selectedValue = $('#statusfilterCluster').val();
-                        var clusterid = $('#clusterNameLocaction').val();
-                        var taskActionbyuser = $('#taskActionbyCluster').val();
-                        var taskPurposebyuser = $('#taskPurposebyCluster').val();
-                        $.ajax({
-                        url:'<?=base_url();?>Menu/getTaskPurposeYesorNobyuser_status',
-                        type: "POST",
-                        data: {
-                        sid: selectedValue,
-                        clusterid: clusterid,
-                        taskActionbyuser: taskActionbyuser,
-                        taskPurposebyuser: taskPurposebyuser,
-                        slct_days_status: slct_days_status,
-                        uid: uid
-                        },
-                        cache: false,
-                        success: function a(result){
-                            $("#selectcompanybyuser").html(result);
-                            $("#selectcompanybyuser").show();
-                            var optionCount = $('#selectcompanybyuser').find('option').length;
-                            optionCount = optionCount-1;
-                            $("#totalcompany").text('Total Company :'+ optionCount);
-                            }
-                        });
-                        });
-
-
-
                 }else{
                     $('#clusterLocactionFiltercard').hide();
-                    $('#taskPurposebyuserCluster_days').hide();
                 }
         
                 if(val == 'PST Assign'){
@@ -4208,49 +4007,12 @@ if($type_id == 3){
                         optionCount = optionCount-1;
                         $("#totalcompany").text('Total Company :'+ optionCount);
                         $('#taskPurposebyuserCard').show();
-                        $('#taskPurposebyuserCard_days').show();
-                            }
-                        });
-        
-                        });
-
-                    $('#taskPurposebyuserCardData_days').on('change', function() {
-                        var slct_days_status = $(this).val();
-                        var taskPurposebyuserCardData = $("#taskPurposebyuserCardData").val();
-                        var taskActionbyuserCardData =  $('#taskActionbyuserCardData').val();
-                        var selectedValue1 = $('#status_taskaction').val();
-                        var tasktaction =  $('#task_action_filter').val();
-                        $.ajax({
-                        url:'<?=base_url();?>Menu/getTaskPurposeYesorNobyuser_status',
-                        type: "POST",
-                        data: {
-                        sid: selectedValue1,
-                        tasktaction: tasktaction,
-                        taskActionbyuser: taskActionbyuserCardData,
-                        taskPurposebyuser: taskPurposebyuserCardData,
-                        slct_days_status: slct_days_status,
-                        uid: uid
-                        },
-                        cache: false,
-                        success: function a(result){
-                            $("#selectcompanybyuser").html(result);
-                            $("#selectcompanybyuser").show();
-                            var optionCount = $('#selectcompanybyuser').find('option').length;
-                            if(optionCount !== 0){
-                              optionCount = optionCount-1;
-                            }else{
-                              optionCount = 0;
-                            }
-                        
-                        $("#totalcompany").text('Total Company :'+ optionCount);
-                        $('#taskPurposebyuserCard').show();
                             }
                         });
         
                         });
                 }else{
                     $('#taskActionCard').hide();
-                    $('#taskPurposebyuserCard_days').hide();
                 }
         
                 if(val =='Partner Type'){
@@ -4426,7 +4188,6 @@ if($type_id == 3){
                         $("#maintaskcard").show();
                         $("#selectcompanybyuser").html(result);
                         $("#selectcompanybyuser").show();
-                        $("#partnertype_taskPurpose_days").show();
                         var optionCount = $('#selectcompanybyuser').find('option').length;
                         optionCount = optionCount-1;
                         $("#totalcompany").text('Total Company :'+ optionCount);
@@ -4440,45 +4201,8 @@ if($type_id == 3){
                         }
                         });
                     });
-
-                    $('#partnertype_taskPurposeData_days').on('change', function() {
-                        var slct_days_status = $(this).val();
-                        var uid = $("#curuserid").val();
-
-                        var slctprtnrtype = $('#partnertype_select').val();
-                        var selectedValue = $('#partnertype_cstatusData').val();
-                        var taskdata = $('#partnertype_taskData').val();
-                        var taskActionbyuser = $('#partnertype_taskActionData').val();
-                        var taskPurposebyuser = $('#partnertype_taskPurposeData').val();
-                        $.ajax({
-                        url:'<?=base_url();?>Menu/getTaskPurposeYesorNobyuser_status',
-                        type: "POST",
-                        data: {
-                        sid: selectedValue,
-                        slctprtnrtype: slctprtnrtype,
-                        taskActionbyuser: taskActionbyuser,
-                        taskPurposebyuser: taskPurposebyuser,
-                        slct_days_status: slct_days_status,
-                        slctprtnrtype_taskdata: taskdata,
-                        uid: uid
-                        },
-                        cache: false,
-                        success: function a(result){
-                            $("#selectcompanybyuser").html(result);
-                            $("#selectcompanybyuser").show();
-                            var optionCount = $('#selectcompanybyuser').find('option').length;
-                            optionCount = optionCount-1;
-                            $("#totalcompany").text('Total Company :'+ optionCount);
-                            }
-                        });
-                        });
-
-
-
-
                     }else{
                         $('#partnertype').hide();
-                        $("#partnertype_taskPurpose_days").hide();
                     }
         
                     if(val == 'Plan But Not Initiated'){
@@ -5238,7 +4962,6 @@ if($type_id == 3){
                     
                     $('#statusnochanhecomp_status').on('change', function() {
                     var selectstatusbyusernotplaned = $(this).val();
-                    var adate = "<?php echo $adate;?>";
                     $("#selectcompanybyuser").html('');
                     $("#totalcompany").text('');
                     var uid = $("#curuserid").val();
@@ -5248,8 +4971,7 @@ if($type_id == 3){
                         type: "POST",
                         data: {
                         sid: selectstatusbyusernotplaned,
-                        uid: uid,
- 			adate:adate
+                        uid: uid
                         },
                         cache: false,
                         success: function a(result){
@@ -5429,326 +5151,6 @@ if($type_id == 3){
                     }else{
                       $('#becauseofplanchange').hide();
                     }
- 
-                    if(val =='Create Emergency Meetings Task'){
-                      $('#task_action_filter option').each(function() {
-                          if ($(this).val() !== '3' && $(this).val() !== '4' && $(this).val() !== '') {
-                              $(this).prop('disabled', true);
-                          }
-                      });
-                   
-                      $("#selectby").val(val);
-                    var uid = $("#curuserid").val();
-                    $(".taskselectionarea").hide();
-                    $('#taskActionCard').show();
-                    $('#maintaskcard').hide();
-                    $('#taskaction_card_area').show();
-                    $('#task_action_filter').show();
-                    // $('#taskaction_card_area').hide();
-                    $('#taskPurposebyuserCard').hide();
-                    $('#taskActionbyuserCard').hide();
-                    $('#status_taskaction').hide();
-                    $.ajax({
-                      url:'<?=base_url();?>Menu/CheckCashIsAvailable',
-                      type: "POST",
-                      data: {
-                        slctactval:'TaskAction',
-                      },
-                      cache: false,
-                      success: function a(result){
-                        if(result == 0){
-                          $('#task_action_filter option[value="3"]').prop('disabled', true);
-                          $('#task_action_filter option[value="4"]').prop('disabled', true);
-                          $('#task_action_filter option[value="17"]').prop('disabled', true);
-                          $('#meetingrelmsg').text('* Please Purchase cash for create meeting task');
-                        }else{
-                          $('#task_action_filter option[value="3"]').prop('disabled', false);
-                          $('#task_action_filter option[value="4"]').prop('disabled', false);
-                          $('#task_action_filter option[value="17"]').prop('disabled', false);
-                          $('#meetingrelmsg').text('');
-                        }
-                      }
-                    });
-                    $('#task_action_filter').on('change', function() {
-                        $("#taskplanningimg").hide();
-                        $("#selectcompanybyuser").html('');
-                        $("#totalcompany").text('');
-                        var uid = $("#curuserid").val();
-                        var tasktaction = $(this).val();
-                        if(tasktaction ==3){
-                          $("#ntppose").html("<option value=''>Select Purpose</option>");
-                          $('#status_taskaction_card').hide();
-                          $('#status_taskaction').hide();
-                          $('#taskActionbyuserCard').hide();
-                          $('#taskPurposebyuserCard').hide();
-                          $("#selectcompany").show();
-                          $("#bcytpe").hide();
-                          $('#selectReseachCompanyType').hide();
-                          $.ajax({
-                          url:'<?=base_url();?>Menu/get_SheduledMeetCompany',
-                          type: "POST",
-                          data: {
-                          uid: uid
-                          },
-                          cache: false,
-                          success: function a(result){
-                            $("#maintaskcard").show();
-                            $("#selectcompanybyuser").html(result);
-                            $("#selectcompanybyuser").show();
-                            $("#select_cluster").show();
-                            var optionCount = $('#selectcompanybyuser').find('option').length;
-                            optionCount = optionCount-1;
-                            $("#totalcompany").text('Total Company :'+ optionCount);
-                            $("#tasktaction").show();
-                            $("#tptime").val('');
-                            $("#tptime").show();
-                            $('#ntactionnew').show();
-                            $('#ntppose').show();
-                            $('#meeting-time').show();
-                            $('#planbtn1').show();
-                            $("#taskplanningimg").hide();
-                          var newOption = $('<option>', {
-                              value: '3',
-                              text: 'Scheduled Meeting',
-                              selected: true,
-                          });
-                          $('#ntactionnew').append(newOption);
-                          $('#ntactionnew option').prop('disabled', true);
-                          $('#ntactionnew option[value="3"]').prop('disabled', false);
-                          var inidids = '';
-                            $('#selectcompanybyuser').change(function() {
-                            var inidids = '';
-                            $('#selectcompanybyuser :selected').each(function(i, sel){
-                                inidids += $(sel).val() + ',';
-                            });
-                            inidids = inidids.slice(0, -1);
-                            $.ajax({
-                              url:'<?=base_url();?>Menu/getpurposebyinidnew',
-                              type: "POST",
-                              data: {
-                              inid: inidids,
-                              aid: 3
-                              },
-                              cache: false,
-                              success: function a(result){
-                                $("#ntppose").html(result);
-                              }
-                              });
-                        });
-                          }
-                          });
-                        }else if(tasktaction ==4){
-                          $("#ntppose").html("<option value='34'>Fresh Meeting</option>");
-                          $('#status_taskaction_card').hide();
-                          $('#status_taskaction').hide();
-                          $('#taskActionbyuserCard').hide();
-                          $('#taskPurposebyuserCard').hide();
-                          $('#maintaskcard').hide();
-                          $("#bcytpe").show();
-                          $('#selectbarginCompanyType').show();
-                          $('#selectReseachCompanyType').hide();
-                          $("#taskplanningimg").show();
-                          $('#bcytpe').on('change', function() {
-                            var bcytpe = $(this).val();
-                          if(bcytpe == 'From Funnel'){
-                            $("#taskplanningimg").hide();
-                            $('#maintaskcard').show();
-                            $("#selectcompany").show();
-                          $.ajax({
-                          url:'<?=base_url();?>Menu/get_BargeMeetCompany',
-                          type: "POST",
-                          data: {
-                          uid: uid
-                          },
-                          cache: false,
-                          success: function a(result){
-                            $("#maintaskcard").show();
-                            $("#selectcompanybyuser").html(result);
-                            $("#selectcompanybyuser").show();
-                            $("#select_cluster").show();
-                            var optionCount = $('#selectcompanybyuser').find('option').length;
-                            optionCount = optionCount-1;
-                            $("#totalcompany").text('Total Company :'+ optionCount);
-                            $("#tasktaction").show();
-                            $("#tptime").val('');
-                            $("#tptime").show();
-                            $('#ntactionnew').show();
-                            $('#ntppose').show();
-                            $('#meeting-time').show();
-                            $('#planbtn1').show();
-                            $('#ntactionnew option[value="4"]').first().remove();
-                          var newOption = $('<option>', {
-                              value: '4',
-                              text: 'Barg in Meeting',
-                              selected: true,
-                          });
-                          $('#ntactionnew').append(newOption);
-                          $("#ntppose").html("<option value='135'>Remeeting</option>");
-                          $('#ntactionnew option').prop('disabled', true);
-                          $('#ntactionnew option[value="4"]').prop('disabled', false);
-                          }
-                          });
-                            }else if(bcytpe == 'Other'){
-                             
-                              $("#taskplanningimg").hide();
-                              $("#maintaskcard").show();
-                              $("#selectcompany").hide();
-                              $("#select_cluster").show();
-                              $("#tasktaction").show();
-                              $("#tptime").val('');
-                              $("#tptime").show();
-                              $('#ntactionnew').show();
-                              $('#ntppose').show();
-                              $('#meeting-time').show();
-                              $('#planbtn1').show();
-                              $('#ntactionnew option[value="4"]').first().remove();
-                              var newOption = $('<option>', {
-                              value: '4',
-                              text: 'Barg in Meeting',
-                              selected: true,
-                          });
-                          $('#ntactionnew option').prop('disabled', true);
-                          $('#ntactionnew option[value="4"]').prop('disabled', false);
-                          $('#ntactionnew').append(newOption);
-                              $("#ntppose").html("<option value='34'>Fresh Meeting</option>");
-                              $('#selectcompanybyuser').removeAttr('required');
-                            }
-                          });
-                        }else if(tasktaction ==17){
-                          $("#ntppose").html("<option value=''>Select Purpose</option>");
-                          $('#status_taskaction_card').hide();
-                          $('#status_taskaction').hide();
-                          $('#taskActionbyuserCard').hide();
-                          $('#taskPurposebyuserCard').hide();
-                          $("#selectcompany").show();
-                          $("#bcytpe").hide();
-                          $('#selectReseachCompanyType').hide();
-                          $('#ntactionnew option').prop('disabled', true);
-                          $('#ntactionnew option[value="17"]').prop('disabled', false);
-                          
-                          $.ajax({
-                          url:'<?=base_url();?>Menu/get_JoinMeetingsCompany',
-                          type: "POST",
-                          data: {
-                          uid: uid
-                          },
-                          cache: false,
-                          success: function a(result){
-                            $("#maintaskcard").show();
-                            $("#selectcompanybyuser").html(result);
-                            $("#selectcompanybyuser").show();
-                            $("#select_cluster").show();
-                            var optionCount = $('#selectcompanybyuser').find('option').length;
-                            optionCount = optionCount-1;
-                            $("#totalcompany").text('Total Company :'+ optionCount);
-                            $("#tasktaction").show();
-                            $("#tptime").val('');
-                            $("#tptime").show();
-                            $('#ntactionnew').show();
-                            $('#ntppose').show();
-                            $('#meeting-time').show();
-                            $('#planbtn1').show();
-                            $('#select_with_bd_pst').show();
-                          var newOption = $('<option>', {
-                              value: '17',
-                              text: 'Join Meeting',
-                              selected: true,
-                          });
-                          $('#ntactionnew option').prop('disabled', true);
-                          $('#ntactionnew option[value="17"]').prop('disabled', false);
-                          $('#ntactionnew').append(newOption);
-                            var inidids = '';
-                            $('#selectcompanybyuser').change(function() {
-                            var inidids = '';
-                            $('#selectcompanybyuser :selected').each(function(i, sel){
-                                inidids += $(sel).val() + ',';
-                            });
-                            inidids = inidids.slice(0, -1);
-                            $.ajax({
-                              url:'<?=base_url();?>Menu/getpurposebyinidnew',
-                              type: "POST",
-                              data: {
-                              inid: inidids,
-                              aid: 3
-                              },
-                              cache: false,
-                              success: function a(result){
-                                $("#ntppose").html(result);
-                              }
-                              });
-                             });
-                          }
-                          });
-                        }else{
-                          $('#ntactionnew option[value="3"]').remove();
-                          $('#ntactionnew option[value="4"]').remove();
-                          $('#ntactionnew option[value="17"]').remove();
-                          $('#selectbarginCompanyType').hide();
-                          $("#select_cluster").hide();
-                          $('#selectReseachCompanyType').hide();
-                          $('#ntactionnew option').prop('disabled', false);
-                          $("#ntppose").html("<option value=''>Select Purpose</option>");
-                            $.ajax({
-                            url:'<?=base_url();?>Menu/taskactionnotplan_filter',
-                            type: "POST",
-                            data: {
-                            tasktaction: tasktaction,
-                            uid: uid
-                            },
-                            cache: false,
-                            success: function a(result){
-                            $("#maintaskcard").show();
-                            $("#selectcompanybyuser").html(result);
-                            $("#selectcompanybyuser").show();
-                            var optionCount = $('#selectcompanybyuser').find('option').length;
-                            optionCount = optionCount-1;
-                            $("#totalcompany").text('Total Company :'+ optionCount);
-                            $("#tptime").show();
-                            $('#ntactionnew').show();
-                            $('#ntppose').show();
-                            $('#meeting-time').show();
-                            $('#planbtn1').show();
-                            // $('#daysfiltercard_anp').show();
-                            $('#status_taskaction_card').show();
-                            $('#status_taskaction').show();
-                                }
-                            });
-                        }
-                        });
-                    $('#status_taskaction').on('change', function() {
-                    var selectstatusbyusernotplaned = $(this).val();
-                    $("#selectcompanybyuser").html('');
-                    $("#totalcompany").text('');
-                    var uid = $("#curuserid").val();
-                    var tasktaction =  $('#task_action_filter').val();
-                        $.ajax({
-                        url:'<?=base_url();?>Menu/getstatuscmpnotplaned',
-                        type: "POST",
-                        data: {
-                        sid: selectstatusbyusernotplaned,
-                        tasktaction: tasktaction,
-                        uid: uid
-                        },
-                        cache: false,
-                        success: function a(result){
-                            $("#selectcompanybyuser").html(result);
-                              $("#selectcompanybyuser").show();
-                              var optionCount = $('#selectcompanybyuser').find('option').length;
-                          optionCount = optionCount-1;
-                          $("#totalcompany").text('Total Company :'+ optionCount);
-                          $('#taskActionbyuserCard').show();
-                        }
-                        });
-                    });
-              
-                }else{
-  		if(val == 'Task Action'){
-                      $('#taskaction_card_area').show();
-                  }else{
-                    $('#taskaction_card_area').hide();
-                  }
-                    
-                }
                 });
                 });
                
@@ -5895,11 +5297,8 @@ if($type_id == 3){
             // Stop button click event
             $('#stop').click(function() {
                 if (startTime) {
-
-		var totalttasktime = parseInt($("#totalttasktime").val());
- 		var plannerremTime = parseInt($("#plannerremTime").val());
- 		if(totalttasktime >= plannerremTime){
                   var timerval = $("#timer").text();
+                  
                     resetTimer();
                     alert("Planner Timer stopped and reset!");
                     $.ajax({
@@ -5915,19 +5314,6 @@ if($type_id == 3){
                         });
                         clearInterval(x);
                         document.getElementById("demo").innerHTML = "Time Spent in Task Planning: " + "00:00:00";
-
-			}else{
-		var avremtime = plannerremTime - totalttasktime;
-		if (avremtime < 60) {
-        		alert("You need to plan "+avremtime +" minutes task to stop the session");
-    		} else {
-        		var avre_hours = Math.floor(avremtime / 60);
-        		var avre_minutes = avremtime % 60;
-        		alert("You need to plan hours " + avre_hours + " and " + avre_minutes + " minutes task to stop the session");
-    			}
-
-		}
-
                 }
             });
           
@@ -5961,62 +5347,55 @@ if($type_id == 3){
               }
           });
           $('#end-time').on('change', function() {
-                var startTime = $('#start-time').val();
-                if (startTime === '') {
-                    alert("Please Enter Start Time");
-                    $('#end-time').val('');
-                } else {
-                    var endTime = $(this).val();
-                    var startTimeMinutes = convertTimeToMinutes(startTime);
-                    var endTimeMinutes = convertTimeToMinutes(endTime);
-                    // Check if the difference is more than 90 minutes
-                    if ((endTimeMinutes - startTimeMinutes) > 90 || (endTimeMinutes - startTimeMinutes) < 90) {
-                        alert('Auto Task Max Time is Only 90 Minutes');
-                        $('#end-time').val('');
-                    }
-                }
+              var startTime = $('#start-time').val();
+              if (startTime === '') {
+                  alert("Please Enter Start Time");
+                  $('#end-time').val('');
+              } else {
+                  var endTime = $(this).val();
+                  var startTimeMinutes = convertTimeToMinutes(startTime);
+                  var endTimeMinutes = convertTimeToMinutes(endTime);
+                  // Check if the difference is more than 90 minutes
+                  if ((endTimeMinutes - startTimeMinutes) > 90) {
+                      alert('Auto Task Max Time is Only 90 Minutes');
+                      $('#end-time').val('');
+                  }
+              }
           });
-            function convertTimeToMinutes(time) {
-                var timeParts = time.split(':');
-                var hours = parseInt(timeParts[0], 10);
-                var minutes = parseInt(timeParts[1], 10);
-                return (hours * 60) + minutes;
-            }
-            var uid = $("#curuserid").val();
-            $.ajax({
-                url:'<?=base_url();?>Menu/getUserDayStartStatus',
-                type: "POST",
-                data: {
-                uid: uid,
-                },
-                cache: false,
-                success: function a(result){
-                    if(result ==2){
-                        $('#compulsive_task_filter input[name="optradio"]').prop('disabled', true);
-                        // $('#compulsive_task_filter label').css('text-decoration', 'line-through');
-                        $('#actionNotPlannedNeed_filter input[name="optradio"]').prop('disabled', true);
-                        $('#company_name_filter input[name="optradio"]').prop('disabled', true);
-                        $('#company_status_filter input[name="optradio"]').prop('disabled', true);
-                        $('#cluster_location_fiilter input[name="optradio"]').prop('disabled', true);
-                        $('#company_category_filter input[name="optradio"]').prop('disabled', true);
-                        $('#partner_type_filter input[name="optradio"]').prop('disabled', true);
-                        $('#ssllimit_days_filter input[name="optradio"]').prop('disabled', true);
-                        $('#other_assign_filter input[name="optradio"]').prop('disabled', true);
-                        $('#self_assign_filter input[name="optradio"]').prop('disabled', true);
-                        $('#review_target_date_filter input[name="optradio"]').prop('disabled', true);
-
-                        $('#review_target_date_filter input[name="optradio"]').prop('disabled', false);
-                        $('#review_planning_filter input[name="optradio"]').prop('disabled', false);
-
-                        $('#need_your_attention_filter input[name="optradio"]').prop('disabled', true);
-                        $('#actionNotPlanned_task_filter input[name="optradio"]').prop('disabled', true);
-                        $('#task_action_filter option').not('[value="3"], [value="4"]').attr('disabled', true);
-                    }
-                    if(result ==3){
-                        $('#review_target_date_filter input[name="optradio"]').prop('disabled', false);
-                        $('#review_planning_filter input[name="optradio"]').prop('disabled', false);
-                    }
+          function convertTimeToMinutes(time) {
+                          var timeParts = time.split(':');
+                          var hours = parseInt(timeParts[0], 10);
+                          var minutes = parseInt(timeParts[1], 10);
+                          return (hours * 60) + minutes;
+                      }
+         var uid = $("#curuserid").val();
+          $.ajax({
+            url:'<?=base_url();?>Menu/getUserDayStartStatus',
+            type: "POST",
+            data: {
+              uid: uid,
+            },
+            cache: false,
+            success: function a(result){
+                if(result ==2){
+                  $('#compulsive_task_filter input[name="optradio"]').prop('disabled', true);
+                  // $('#compulsive_task_filter label').css('text-decoration', 'line-through');
+                  $('#actionNotPlannedNeed_filter input[name="optradio"]').prop('disabled', true);
+                  $('#company_name_filter input[name="optradio"]').prop('disabled', true);
+                  $('#company_status_filter input[name="optradio"]').prop('disabled', true);
+                  $('#cluster_location_fiilter input[name="optradio"]').prop('disabled', true);
+                  $('#company_category_filter input[name="optradio"]').prop('disabled', true);
+                  $('#partner_type_filter input[name="optradio"]').prop('disabled', true);
+                  $('#ssllimit_days_filter input[name="optradio"]').prop('disabled', true);
+                  $('#other_assign_filter input[name="optradio"]').prop('disabled', true);
+                  $('#self_assign_filter input[name="optradio"]').prop('disabled', true);
+                  $('#review_target_date_filter input[name="optradio"]').prop('disabled', true);
+                  $('#review_planning_filter input[name="optradio"]').prop('disabled', true);
+                  $('#need_your_attention_filter input[name="optradio"]').prop('disabled', true);
+                  $('#actionNotPlanned_task_filter input[name="optradio"]').prop('disabled', true);
+                  $('#task_action_filter option').not('[value="3"], [value="4"]').attr('disabled', true);
                 }
+            }
             });
             $('#getAvailableTime').on('change', function() {
               $('#freeaslotDisplay').html('').slideUp("fast");
@@ -6065,9 +5444,8 @@ if($type_id == 3){
             var meetingTotalMinutes = meetingHours * 60 + meetingMinutes;
    
             if (meetingTotalMinutes < currentTotalMinutes) {
-              alert("The meeting time cannot be set for the past time.");
-	      return false;
-              //$(this).val('');
+                alert("The meeting time cannot be in the past.");
+                 //$(this).val('');
             }else{
               $.ajax({
                   url:'<?=base_url();?>Menu/TodaysPlannerRequest',
@@ -6125,25 +5503,25 @@ if($type_id == 3){
         background-color: #eee;
         }
       </style>
-      <script>
+    <script>
         function myFunction() {
-        var input, filter, ul, li, a, i, txtValue;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        ul = document.getElementById("myUL");
-        li = ul.getElementsByTagName("li");
-        for (i = 0; i < li.length; i++) {
-        a = li[i].getElementsByTagName("a")[0];
-        txtValue = a.textContent || a.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        li[i].style.display = "";
-        } else {
-        li[i].style.display = "none";
+            var input, filter, ul, li, a, i, txtValue;
+                input = document.getElementById("myInput");
+                filter = input.value.toUpperCase();
+                ul = document.getElementById("myUL");
+                li = ul.getElementsByTagName("li");
+            for (i = 0; i < li.length; i++) {
+                a = li[i].getElementsByTagName("a")[0];
+                txtValue = a.textContent || a.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
         }
-        }
-        }
-      </script>
-<script>
+    </script>
+    <script>
         $(document).ready(function () {
           $('#myForm').on('submit', function () {
               // Populate hidden fields with form input values
@@ -6283,7 +5661,7 @@ $(document).ready(function(){
             if (time > limitTime) {
                 event.preventDefault();
                 // Show an alert
-                alert('The time cannot be later than 7 PM.');
+                // alert('The time cannot be later than 7 PM.');
                 $('#end_tttpft').css('border', '2px solid red');
                 // $('#end-time').val('');
             }else{
@@ -6367,27 +5745,6 @@ $(document).ready(function(){
         var randomClass = classes[Math.floor(Math.random() * classes.length)];
         $('#backgroundchange').addClass(randomClass);
 
-       var userid = "<?php echo $uid; ?>";
-        var adate = "<?php echo $adate;?>";
-        // alert(userid+"=="+date);return false;
-
-    // Your AJAX call
-    $.ajax({
-        url: '<?=base_url();?>Menu/checkUsersTasksForTheDay', // The URL to send the request to
-        type: 'POST', // The HTTP method (GET, POST, etc.)
-        data: {
-                userid: userid,
-                adate:adate
-                },
-        success: function(response) {
-         // alert(response);return false;
-            // Handle the response here
-            console.log("Email send to your reporting manager");
-            // Perform further actions based on the response
-        },
-    });
-
-
 
 });
 </script>
@@ -6456,29 +5813,6 @@ $(document).ready(function(){
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="<?=base_url();?>assets/js/dashboard.js"></script>
     <script>
-
- $(document).ready(function() {
-        var userid = "<?php echo $uid; ?>";
-        var adate = "<?php echo $adate;?>";
-        // alert(userid+"=="+date);return false;
-console.log(userid+"=="+date);return false;
-    // Your AJAX call
-    $.ajax({
-        url: '<?=base_url();?>Menu/checkUsersTasksForTheDay', // The URL to send the request to
-        type: 'POST', // The HTTP method (GET, POST, etc.)
-        data: {
-                userid: userid,
-                adate:adate
-                },
-        success: function(response) {
-         console.log(response);
-            // Handle the response here
-            console.log("Email send to your reporting manager");
-            // Perform further actions based on the response
-        },
-    });
-});
-
 $("#example1").DataTable({
 "responsive": false, "lengthChange": false, "autoWidth": false,'pageLength' : 3,
 "buttons": ["excel", "pdf"]

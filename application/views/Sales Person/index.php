@@ -634,6 +634,11 @@ $dataPoints2 = array(
                         Proposal<span class="badge badge-success"><?=$ttbyd[0]->g?></span>
                     </a>
                   </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-four-reviews-tab" data-toggle="pill" href="#custom-tabs-four-reviews" role="tab" aria-controls="custom-tabs-proposal" aria-selected="false">
+                            Reviews<span class="badge badge-success"><?=$ttbyd[0]->g?></span>
+                        </a>
+                    </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-barg-tab" data-toggle="pill" href="#custom-tabs-four-barg" role="tab" aria-controls="custom-tabs-four-barg" aria-selected="false">
                         Visit Meeting <span class="badge badge-success">
@@ -1002,7 +1007,7 @@ $dataPoints2 = array(
                                     </div>
                                   </div>
                                 </div>
-                              </div>
+                            </div>
 
                             </div>
                   </div>
@@ -1077,8 +1082,6 @@ $dataPoints2 = array(
                       <?php $aai++;}}} ?>
                   </div>
 
-
-
                   <div class="tab-pane fade" id="custom-tabs-four-socialn" role="tabpanel" aria-labelledby="custom-tabs-four-socialn-tab">
                       <?php $aai=0;foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='13'){
                           $taid = $tt->actiontype_id;
@@ -1106,148 +1109,171 @@ $dataPoints2 = array(
                       <?php $aai++;}}} ?>
                   </div></button>
 
+                    <div class="tab-pane fade" id="custom-tabs-four-sociala" role="tabpanel" aria-labelledby="custom-tabs-four-sociala-tab">
+                        <?php $aai=0;foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='14'){
+                            $taid = $tt->actiontype_id;
+                            $taid=$this->Menu_model->get_action($taid);
+                            $time = $tt->appointmentdatetime;
+                            $time = date('h:i a', strtotime($time));
+                        ?>
 
-                  <div class="tab-pane fade" id="custom-tabs-four-sociala" role="tabpanel" aria-labelledby="custom-tabs-four-sociala-tab">
-                      <?php $aai=0;foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='14'){
-                          $taid = $tt->actiontype_id;
-                          $taid=$this->Menu_model->get_action($taid);
-                          $time = $tt->appointmentdatetime;
-                          $time = date('h:i a', strtotime($time));
-                      ?>
+                            <div class="list-group-item list-group-item-action">
+                                <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                            <input type="hidden" value="<?=$tt->id?>" id="tid">
+                            <span class="mr-3 align-items-center">
+                                <i class="fa-solid fa-circle"></i>
+                            </span>
+                            <span class="flex"><?=$taid[0]->name?> |
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <small class="text-muted">Task Time:- <?=$time?></small>
+                                </span>
+                                <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                </span>
+                                <span class="text-right">
+                                    <i class="fa-solid fa-forward"></i>
+                                </span>
+                            </button></div>
+                        <?php $aai++;}}} ?>
+                    </div></button>
 
-                        <div class="list-group-item list-group-item-action">
+                    <div class="tab-pane fade" id="custom-tabs-four-email" role="tabpanel" aria-labelledby="custom-tabs-four-email-tab">
+                        <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='2'){
+                            if($tt->autotask == 1){$style = 'background: antiquewhite;'; $titletask = 'Auto Task';}else{$style =''; $titletask='';}
+                        ?>
+                            <div class="list-group-item list-group-item-action" title="<?=$titletask ?>" style="<?= $style ?>" >
                             <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
-                          <input type="hidden" value="<?=$tt->id?>" id="tid">
-                           <span class="mr-3 align-items-center">
-                              <i class="fa-solid fa-circle"></i>
-                           </span>
-                           <span class="flex"><?=$taid[0]->name?> |
-                               <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                               <small class="text-muted">Task Time:- <?=$time?></small>
-                            </span>
-                            <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                            </span>
-                            <span class="text-right">
-                                <i class="fa-solid fa-forward"></i>
-                            </span>
-                        </button></div>
-                      <?php $aai++;}}} ?>
-                  </div></button>
 
-
-
-                  <div class="tab-pane fade" id="custom-tabs-four-email" role="tabpanel" aria-labelledby="custom-tabs-four-email-tab">
-                      <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='2'){
-                        if($tt->autotask == 1){$style = 'background: antiquewhite;'; $titletask = 'Auto Task';}else{$style =''; $titletask='';}
-                      ?>
-                        <div class="list-group-item list-group-item-action" title="<?=$titletask ?>" style="<?= $style ?>" >
-                        <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
-
-                           <span class="mr-3 align-items-center">
-                              <i class="fa-solid fa-circle"></i>
-                           </span>
-                           <span class="flex">
-                               <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                               <small class="text-muted">Next Task:- </small>
+                            <span class="mr-3 align-items-center">
+                                <i class="fa-solid fa-circle"></i>
                             </span>
-                            <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                            </span>
-                            <span class="text-right">
-                                <i class="fa-solid fa-forward"></i>
-                            </span>
-                        </button>
-                      </div>
-                      <?php $aai++;}}} ?>
-                  </div>
-                  <div class="tab-pane fade" id="custom-tabs-four-meeting" role="tabpanel" aria-labelledby="custom-tabs-four-meeting-tab">
-                      <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='3'){
-                      ?>
-                        <div class="list-group-item list-group-item-action">
-                        <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
-
-                           <span class="mr-3 align-items-center">
-                              <i class="fa-solid fa-circle"></i>
-                           </span>
-                           <span class="flex">
-                               <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                               <small class="text-muted">Next Task:- </small>
-                            </span>
-                            <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                            </span>
-                            <span class="text-right">
-                                <i class="fa-solid fa-forward"></i>
-                            </span>
-                        </button></div>
-                      <?php $aai++;}}} ?>
-                  </div>
-                  <div class="tab-pane fade" id="custom-tabs-four-whatsapp" role="tabpanel" aria-labelledby="custom-tabs-four-whatsapp-tab">
-                      <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='5'){
-                      ?>
-                        <div class="list-group-item list-group-item-action">
-                        <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
-                           <span class="mr-3 align-items-center">
-                              <i class="fa-solid fa-circle"></i>
-                           </span>
-                           <span class="flex">
-                               <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                               <small class="text-muted">Next Task:- </small>
-                            </span>
-                            <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                            </span>
-                            <span class="text-right">
-                                <i class="fa-solid fa-forward"></i>
-                            </button></span>
+                            <span class="flex">
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <small class="text-muted">Next Task:- </small>
+                                </span>
+                                <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                </span>
+                                <span class="text-right">
+                                    <i class="fa-solid fa-forward"></i>
+                                </span>
+                            </button>
                         </div>
-                      <?php $aai++;}}} ?>
-                  </div>
+                        <?php $aai++;}}} ?>
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-four-meeting" role="tabpanel" aria-labelledby="custom-tabs-four-meeting-tab">
+                        <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='3'){
+                        ?>
+                            <div class="list-group-item list-group-item-action">
+                            <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
 
-                  <div class="tab-pane fade" id="custom-tabs-four-mom" role="tabpanel" aria-labelledby="custom-tabs-four-mom-tab">
-                      <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='6'){
-                      ?>
-                        <div class="list-group-item list-group-item-action">
-                        <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
-                           <span class="mr-3 align-items-center">
-                              <i class="fa-solid fa-circle"></i>
-                           </span>
-                           <span class="flex">
-                               <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                               <small class="text-muted">Next Task:- </small>
+                            <span class="mr-3 align-items-center">
+                                <i class="fa-solid fa-circle"></i>
                             </span>
-                            <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                            <span class="flex">
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <small class="text-muted">Next Task:- </small>
+                                </span>
+                                <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                </span>
+                                <span class="text-right">
+                                    <i class="fa-solid fa-forward"></i>
+                                </span>
+                            </button></div>
+                        <?php $aai++;}}} ?>
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-four-whatsapp" role="tabpanel" aria-labelledby="custom-tabs-four-whatsapp-tab">
+                        <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='5'){
+                        ?>
+                            <div class="list-group-item list-group-item-action">
+                            <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                            <span class="mr-3 align-items-center">
+                                <i class="fa-solid fa-circle"></i>
                             </span>
-                            <span class="text-right">
-                                <i class="fa-solid fa-forward"></i>
-                            </button></span>
-                        </div>
-                      <?php $aai++;}}} ?>
-                  </div>
+                            <span class="flex">
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <small class="text-muted">Next Task:- </small>
+                                </span>
+                                <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                </span>
+                                <span class="text-right">
+                                    <i class="fa-solid fa-forward"></i>
+                                </button></span>
+                            </div>
+                        <?php $aai++;}}} ?>
+                    </div>
 
-                  <div class="tab-pane fade" id="custom-tabs-four-proposal" role="tabpanel" aria-labelledby="custom-tabs-four-proposal-tab">
-                      <?php foreach($totalt as $tt){
-                      
+                    <div class="tab-pane fade" id="custom-tabs-four-mom" role="tabpanel" aria-labelledby="custom-tabs-four-mom-tab">
+                        <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='6'){
+                        ?>
+                            <div class="list-group-item list-group-item-action">
+                            <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                            <span class="mr-3 align-items-center">
+                                <i class="fa-solid fa-circle"></i>
+                            </span>
+                            <span class="flex">
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <small class="text-muted">Next Task:- </small>
+                                </span>
+                                <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                </span>
+                                <span class="text-right">
+                                    <i class="fa-solid fa-forward"></i>
+                                </button></span>
+                            </div>
+                        <?php $aai++;}}} ?>
+                    </div>
+
+                    <div class="tab-pane fade" id="custom-tabs-four-proposal" role="tabpanel" aria-labelledby="custom-tabs-four-proposal-tab">
+                        <?php foreach($totalt as $tt){
                         
-                        if($tt->plan==1){if($tt->actiontype_id=='7'){
-                       
-                      ?>
-                        <div class="list-group-item list-group-item-action">
-                        <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
-                           <span class="mr-3 align-items-center">
-                              <i class="fa-solid fa-circle"></i>
-                           </span>
-                           <span class="flex">
-                               <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                               <small class="text-muted">Next Task:- </small>
+                            
+                            if($tt->plan==1){if($tt->actiontype_id=='7'){
+                        
+                        ?>
+                            <div class="list-group-item list-group-item-action">
+                            <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                            <span class="mr-3 align-items-center">
+                                <i class="fa-solid fa-circle"></i>
                             </span>
-                            <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                            <span class="flex">
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <small class="text-muted">Next Task:- </small>
+                                </span>
+                                <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                </span>
+                                <span class="text-right">
+                                    <i class="fa-solid fa-forward"></i>
+                                </button></span>
+                            </div>
+                        <?php $aai++;}}} ?>
+                    </div>
+                    
+                    <div class="tab-pane fade" id="custom-tabs-four-reviews" role="tabpanel" aria-labelledby="custom-tabs-four-reviews-tab">
+                        <?php foreach($totalt as $tt){
+                        
+                            
+                            if($tt->plan==1){if($tt->actiontype_id=='8'){
+                        
+                        ?>
+                            <div class="list-group-item list-group-item-action">
+                            <a class="btn" id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                            <span class="mr-3 align-items-center">
+                                <i class="fa-solid fa-circle"></i>
                             </span>
-                            <span class="text-right">
-                                <i class="fa-solid fa-forward"></i>
-                            </button></span>
-                        </div>
-                      <?php $aai++;}}} ?>
-                  </div>
+                            <span class="flex">
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <small class="text-muted">Next Task:- </small>
+                            </span>
+                                <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
+                                </span>
+                                <span class="text-right">
+                                    <i class="fa-solid fa-forward"></i>
+                                </a></span>
+                            </div>
+                        <?php $aai++;}}} ?>
+                        kjhvawodhvlauydvouydlub;u;i
+                    </div>
 
-                  <div class="tab-pane fade" id="custom-tabs-four-barg" role="tabpanel" aria-labelledby="custom-tabs-four-barg-tab">
+                    <div class="tab-pane fade" id="custom-tabs-four-barg" role="tabpanel" aria-labelledby="custom-tabs-four-barg-tab">
 
                              <?php
                             $bl=0;
@@ -1289,7 +1315,7 @@ $dataPoints2 = array(
                                         <b class="text-danger">Close Meeting (<?=$meet_name; ?>)</b>
                                     </div>
                             <?php $bl++;}} ?>
-                        </div>
+                    </div>
                             <?php foreach($barg as $br){if($br->status=='RPClose'){
                               
                                 // echo "<pre>";

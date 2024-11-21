@@ -96,16 +96,16 @@ span.tsby {
                 <!-- Main content -->
                 <section class="content">
                   <div class="container-fluid">
-                  <div class="row">
-                             <div class="col-md-4"> 
-                                    <div class="dateform text-left">
-                                    <form method="post" action="<?=base_url();?>Menu/CheckTaskDetailsByUser/<?=$tuser_uid?>/<?=$taskdate?>">
-                                        <input type="date" class="" name="adate" value="<?=$taskdate?>"  id="plandate"  max="<?= date('Y-m-d') ?>">
-                                        <input type="submit" class="" value="Set Date">
-                                    </form>
-                                    </div>
-                                  </div>
-                             </div>
+                    <div class="row">
+                        <div class="col-md-4"> 
+                            <div class="dateform text-left">
+                                <form method="post" action="<?=base_url();?>Menu/CheckTaskDetailsByUser/<?=$tuser_uid?>/<?=$taskdate?>">
+                                    <input type="date" class="" name="adate" value="<?=$taskdate?>"  id="plandate"  max="<?= date('Y-m-d') ?>">
+                                    <input type="submit" class="" value="Set Date">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                       <div class="col-12">
                       <div class="card">
@@ -118,63 +118,72 @@ span.tsby {
                             <div class="page-header">
                             <?php
                       
-                                        $totalttaskdata =$this->Menu_model->getTotalUserTaskDetailsOnPlanner($tuser_uid,$taskdate);
-                                       // dd($totalttaskdata);
-                                        $taskplanmincount = 0;
-                                        $new_datetimemin = '';
-                                       
-                                        $apprvtask = '';
-                                        $rejecttask ='';
-                                        $rejetbutnta ='';
-                                        $rejetbutnau ='';
-                                        $rejetbutnasd ='';
-                                        foreach($totalttaskdata as $taskdata){ 
-                                        if($taskdata->approved_status == 1 ) {
-                                          $apprvtask +=1;
-                                        }
-                                        if($taskdata->approved_status == 0 && $taskdata->self_assign == '') {
-                                          $rejecttask +=1;
-                                        }
-                                        if($taskdata->approved_status == 0 && $taskdata->self_assign == 1) {
-                                          $rejetbutnau +=1;
-                                      }
-                                        if($taskdata->approved_status == 0 && $taskdata->self_assign == 2) {
-                                          $rejetbutnta +=1;
-                                      }
-                                        if($taskdata->approved_status == 0 && $taskdata->self_assign == 3) {
-                                          $rejetbutnasd +=1;
-                                      }
-                                        
-                                    
-                                            $actiontype_id = $taskdata->actiontype_id;
-                                            $status = $taskdata->approved_status;
-                                            // if($status !=0){
-                                            if($actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==1 || $actiontype_id ==10 || $actiontype_id ==15 || $actiontype_id ==2){
-                                                $taskplanmincount += 5;
-                                            }else if($actiontype_id ==6){
-                                                $taskplanmincount += 10;
-                                            }else if($actiontype_id ==3 || $actiontype_id ==4 || $actiontype_id ==12 || $actiontype_id ==17){
-                                                $taskplanmincount += 30;
-                                            }else if($actiontype_id ==7){
-                                                $taskplanmincount += 15;
-                                            }else if($actiontype_id ==11 || $actiontype_id ==13 || $actiontype_id ==14){
-                                                $taskplanmincount += 2;
-                                            }
-                                          // }
-                                        }
-                                        
-                                        $exactplanedtime = $taskplanmincount;
-                                    
-                                        $lunchtime      = 30;      // Lunch Time 45 Miniute
-                                        $autoTasktime   = 90;  // 90 Minutes For Auto Task
-                                        $topp           = 60; // 60 Minutes For Tommorow Planner Planning
-                                        $texpense_time  = $lunchtime + $autoTasktime + $topp; // totol expense time
-                                        $nine_hours_planning =540; // 9 hours Planning = 9* 60 = 540 Minutes 
-                                        $userplanetime = $nine_hours_planning - $texpense_time; // total plan time  - 345 minutes
-                                        $plannerremTime = $userplanetime - $taskplanmincount;
-                                        $srlData = $this->Menu_model->GetTodaysApprovedSpecialRequestforLeave($tuser_uid,$taskdate);
-                                       
-                                       ?>
+                                $totalttaskdata =$this->Menu_model->getTotalUserTaskDetailsOnPlanner($tuser_uid,$taskdate);
+                                // dd($totalttaskdata);
+                                $taskplanmincount = 0;
+                                $new_datetimemin = '';
+                                
+                                $apprvtask = '';
+                                $rejecttask ='';
+                                $rejetbutnta ='';
+                                $rejetbutnau ='';
+                                $rejetbutnasd ='';
+                                foreach($totalttaskdata as $taskdata){ 
+                                if($taskdata->approved_status == 1 ) {
+                                    $apprvtask +=1;
+                                }
+                                if($taskdata->approved_status == 0 && $taskdata->self_assign == '') {
+                                    $rejecttask +=1;
+                                }
+                                if($taskdata->approved_status == 0 && $taskdata->self_assign == 1) {
+                                    $rejetbutnau +=1;
+                                }
+                                if($taskdata->approved_status == 0 && $taskdata->self_assign == 2) {
+                                    $rejetbutnta +=1;
+                                }
+                                if($taskdata->approved_status == 0 && $taskdata->self_assign == 3) {
+                                    $rejetbutnasd +=1;
+                                }
+                                
+                            
+                                    $actiontype_id = $taskdata->actiontype_id;
+                                    $status = $taskdata->approved_status;
+                                    // if($status !=0){
+                                    if($actiontype_id ==5 || $actiontype_id ==8 || $actiontype_id ==9 || $actiontype_id ==1 || $actiontype_id ==10 || $actiontype_id ==15 || $actiontype_id ==2){
+                                        $taskplanmincount += 5;
+                                    }else if($actiontype_id ==6){
+                                        $taskplanmincount += 10;
+                                    }else if($actiontype_id ==3 || $actiontype_id ==4 || $actiontype_id ==12 || $actiontype_id ==17){
+                                        $taskplanmincount += 30;
+                                    }else if($actiontype_id ==7){
+                                        $taskplanmincount += 15;
+                                    }else if($actiontype_id ==11 || $actiontype_id ==13 || $actiontype_id ==14){
+                                        $taskplanmincount += 2;
+                                    }
+                                    // }
+                                }
+                                
+                                $exactplanedtime = $taskplanmincount;
+                            
+                                $lunchtime      = 30;      // Lunch Time 45 Miniute
+                                $autoTasktime   = 90;  // 90 Minutes For Auto Task
+                                $topp           = 60; // 60 Minutes For Tommorow Planner Planning
+                                $texpense_time  = $lunchtime + $autoTasktime + $topp; // totol expense time
+                                $nine_hours_planning =540; // 9 hours Planning = 9* 60 = 540 Minutes 
+                                $userplanetime = $nine_hours_planning - $texpense_time; // total plan time  - 345 minutes
+                                $plannerremTime = $userplanetime - $taskplanmincount;
+                                $srlData = $this->Menu_model->GetTodaysApprovedSpecialRequestforLeave($tuser_uid,$taskdate);
+
+                                $checkHalfDayLeave = checkHalfDayLeave($uid,$adate);
+                                // echo sizeof($checkHalfDayLeave);die;
+                                if(sizeof($checkHalfDayLeave) == 1){
+
+                                    $userplanetime = $userplanetime/2;
+                                    $plannerremTime = $plannerremTime/2;
+
+                                }
+                                
+                            ?>
                              
                               <form method="post" action="<?=base_url();?>Menu/approveDailyTask">
                               <fieldset>

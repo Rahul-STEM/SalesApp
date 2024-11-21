@@ -2060,6 +2060,7 @@ WHERE cid = '$cid'");
             $query=$this->db->query("update init_call set apst='$topst' WHERE cmpid_id='$cmpid'");
         }
     }
+
     public function get_cbdtf($fopst,$topst,$cid){
         $l = sizeof($cid);
         for($i=0;$i<$l;$i++){
@@ -2069,9 +2070,10 @@ WHERE cid = '$cid'");
             $inid = $data[0]->id;
             $query=$this->db->query("update tblcallevents set assignedto_id='$topst',user_id='$topst' WHERE cid_id='$inid' and assignedto_id='$fopst' and nextCFID='0'");
             $query=$this->db->query("update init_call set mainbd='$topst',insidebd='$fopst' WHERE cmpid_id='$cmpid'");
-            $query=$this->db->query("update barginmeeting set user_id='$topst' WHERE inid='$inid'");
+            $query=$this->db->query("update barginmeeting set user_id='$topst' WHERE inid='$inid' AND status = 'Pending'");
         }
     }
+    
     public function get_cdbyidwin($cid){
         $query=$this->db->query("SELECT * FROM company_master LEFT JOIN init_call ON init_call.cmpid_id=company_master.id LEFT JOIN company_contact_master ON company_contact_master.company_id=company_master.id WHERE company_master.id='$cid' and company_contact_master.type='primary'");
         return $query->result();
@@ -10616,6 +10618,7 @@ public function getTasks($id,$date){
     $this->db->select('tce.selectby selectby');
     $this->db->select('tce.filter_by filter_by');
     $this->db->select('tce.purpose_achieved purpose_achieved');
+    $this->db->select('tce.late_remarks_message late_remarks_message');
     $this->db->select('s1.name old_status');
     $this->db->select('s2.name new_status');
     $this->db->select('company_master.id cmpid');
@@ -12375,7 +12378,6 @@ public function getTargetVsAchieved($utype){
 }
     public function insertTargetQandA($targetQandAdata){
         $this->db->insert('targetqanda', $targetQandAdata);
-
         // echo $this->db->last_query();die;
     }
     
@@ -12427,12 +12429,6 @@ public function getTargetVsAchieved($utype){
 
 
         foreach($targetData as $targetDataSingle){
-        
-            // foreach($bdlistArray as $bdid){
-            // $prospecting    = " SELECT count(*) as prospectingCount FROM `init_call` 
-            //                         LEFT JOIN company_master ON init_call.cmpid_id = company_master.id 
-            //                         WHERE mainbd = '".$bdid."' AND createDate 
-            //                         BETWEEN '".$sdate."' AND '".$edate."' ";
 
             $prospecting    = " SELECT count(*) as prospectingCount FROM `init_call` 
                                     LEFT JOIN company_master ON init_call.cmpid_id = company_master.id 
@@ -12443,13 +12439,6 @@ public function getTargetVsAchieved($utype){
             }
 
             $prosp_query    =  $this->db->query($prospecting);
-            // $proposals      = "SELECT count('p.*') as proposalCount
-            //                     FROM `proposal` p 
-            //                     LEFT JOIN `tblcallevents` tbe ON tbe.id = p.tid 
-            //                     LEFT JOIN `init_call` ini ON ini.id = tbe.cid_id
-            //                     WHERE p.apr ='1' AND p.user_id= '".$bdid."' 
-            //                     AND p.sdatet BETWEEN '".$sdate."' 
-            //                     AND '".$edate."' GROUP BY p.user_id ";
 
             $proposals      = "SELECT count('p.*') as proposalCount
                                 FROM `proposal` p 
@@ -12460,14 +12449,6 @@ public function getTargetVsAchieved($utype){
 
             $proposal_query  = $this->db->query($proposals);
 
-            //proposalrevenue
-            // $proposal_revenue    = "SELECT SUM(exrevenue) as totalproposalrevenue 
-            //                         FROM `init_call` ini 
-            //                         LEFT JOIN `tblcallevents` tbe ON tbe.cid_id = ini.id 
-            //                         LEFT JOIN `proposal` p ON tbe.id = p.tid
-            //                         WHERE mainbd = '".$bdid."' 
-            //                         AND `exrevenue` != '' AND exrevenue !='NA' AND exrevenue !='0' 
-            //                         AND createDate BETWEEN '".$sdate."' AND '".$edate."' ";
 
             $proposal_revenue    = "SELECT SUM(exrevenue) as totalproposalrevenue 
                                     FROM `init_call` ini 
@@ -12477,14 +12458,7 @@ public function getTargetVsAchieved($utype){
                                     AND `exrevenue` != '' AND exrevenue !='NA' AND exrevenue !='0' ";
 
             $proposal_revenue_query   = $this->db->query($proposal_revenue);
-            
-            //closure count
-            // $closure_count    = "SELECT count(DISTINCT(ini.id)) as closureCount  
-            //                         FROM `init_call` ini
-            //                         LEFT JOIN tblcallevents tbe ON tbe.cid_id = ini.id
-            //                         WHERE mainbd = '".$bdid."' AND cstatus ='7' 
-            //                         AND tbe.updateddate BETWEEN '".$sdate."' AND '".$edate."' 
-            //                         GROUP BY ini.cmpid_id "; 
+
 
             $closure_count    = "SELECT count(DISTINCT(ini.id)) as closureCount  
                                     FROM `init_call` ini
@@ -12492,15 +12466,6 @@ public function getTargetVsAchieved($utype){
                                     WHERE mainbd = '".$bdid."' AND cstatus ='7' GROUP BY ini.cmpid_id "; 
 
             $closure_count_query =  $this->db->query($closure_count);
-
-        //closure revenue
-            // $closure_revenue =     "SELECT SUM(exrevenue) as closureRevenue  
-            //                         FROM `init_call` ini
-            //                         LEFT JOIN tblcallevents tbe ON tbe.cid_id = ini.id
-            //                         WHERE mainbd = '".$bdid."' AND cstatus ='7' 
-            //                         AND `exrevenue` != '' AND exrevenue !='NA' AND exrevenue !='0' 
-            //                         AND ini.updated_at BETWEEN '".$sdate."' AND '".$edate."' 
-            //                         GROUP BY ini.cmpid_id "; 
 
             $closure_revenue =     "SELECT SUM(exrevenue) as closureRevenue  
                                     FROM `init_call` ini
@@ -12523,11 +12488,7 @@ public function getTargetVsAchieved($utype){
             $targetDataArr[$bdid]['closure_clients_achieved']        = (isset($closureCount->closureCount))?$closureCount->closureCount:"0";
             $targetDataArr[$bdid]['closure_revenue_achieved']         = (isset($closureRevenue->closureRevenue))? $closureRevenue->closureRevenue:"0";
         }
-        // dd($targetDataArr);exit;
-
-        // var_dump($targetDataArr);die;
-
-
+        
         return $targetDataArr;
     }
 
@@ -14652,33 +14613,39 @@ public function getUserByType($utype,$uid){
     } 
 
 
-    public function checkLeaveForDay($uid,$date){
-
-        $this->db->select('user_id,start_date,end_date,reason,status,is_halfday_leave,halfday_leaveType')
-                ->from('leave_requests')
-                ->where('user_id', $uid)
-                ->where('status', 'approved')
-                ->where('CAST(start_date AS DATE) >=', $date)
-                ->where('CAST(end_date AS DATE) <=', $date);
-
+    public function checkLeaveForDay($uid, $date){
+        $this->db->select('user_id, start_date, end_date, reason, status, is_halfday_leave, halfday_leaveType')
+                 ->from('leave_requests')
+                 ->where('user_id', $uid)
+                 ->where('is_halfday_leave', 0)
+                 ->where('status', 'approved')
+                 ->where('CAST(start_date AS DATE) <=', $date)  // Leave starts before or on the date
+                 ->where('CAST(end_date AS DATE) >=', $date);  // Leave ends after or on the date
         $query = $this->db->get();
-
         // echo $this->db->last_query();die;
         return $query->result();
-    } 
+    }
 
 
     public function checkforHoliday($date){
-
-        $this->db->select('holiday_date,holiday_name')
-                ->from('holidaylist')
-                ->where('CAST(holiday_date AS DATE) >=', $date);
-                
+        $this->db->select('holiday_date, holiday_name')
+                 ->from('holidaylist')
+                 ->where('CAST(holiday_date AS DATE) =', $date); // Check for exact match with the date
         $query = $this->db->get();
+        return $query->result();
+    }
+    
 
+    public function checkHalfDayLeave($uid, $date){
+        $this->db->select('user_id, start_date, end_date, reason, status, is_halfday_leave, halfday_leaveType')
+                 ->from('leave_requests')
+                 ->where('user_id', $uid)
+                 ->where('is_halfday_leave', 1)
+                 ->where('status', 'approved')
+                 ->where('CAST(start_date AS DATE) <=', $date)  // Leave starts before or on the date
+                 ->where('CAST(end_date AS DATE) >=', $date);  // Leave ends after or on the date
+        $query = $this->db->get();
         // echo $this->db->last_query();die;
         return $query->result();
-    } 
-
-    
+    }
 }

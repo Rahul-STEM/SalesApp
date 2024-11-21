@@ -30,6 +30,17 @@ if (!function_exists('getlastloginData')) {
         return $DataSet;
     }
 
+
+    function checkHalfDayLeave($uid,$date){
+        $CI =& get_instance();
+        // Load the model if not already loaded
+        $CI->load->model('Menu_model');
+        $DataSet = $CI->Menu_model->checkHalfDayLeave($uid,$date);
+        
+        return $DataSet;
+    }
+
+
     function getNextDate($date){
 
         $CI =& get_instance();

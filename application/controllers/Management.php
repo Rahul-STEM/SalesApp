@@ -1036,7 +1036,13 @@ public function HolidayList(){
         $addHoliday = $this->Management_model->addHoliday($holiday_name,$holiday_date,$uid);
 
         if($addHoliday){
-            $this->session->set_flashdata('success', 'Holiday added successfully.');
+            
+            $this->session->set_flashdata('success_msg', 'Holiday added successfully..!!');
+            redirect('management/HolidayList');
+
+        }else{
+
+            $this->session->set_flashdata('error_msg', 'Unable to add Holiday..!!');
             redirect('management/HolidayList');
         }
     }

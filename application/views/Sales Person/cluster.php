@@ -74,13 +74,22 @@
                         <form action="<?=base_url();?>Menu/AddNewCluster" method="post" enctype="multipart/form-data">
                             <div class="was-validated">
                                 <input type="hidden" name="uid" value="<?=$uid?>">
+
+                                <div class="form-group">
+                                    <label for="task_type">Type of Travel</label><br>
+                                    <!-- <input type="text" placeholder='Enter Cluster Name' class="form-control" name="typeofTravel" id="typeofTravel" required> -->
+                                    <select class="form-control" name="typeofTravel" id="typeofTravel" required>
+                                        <option value="" Selected disabled>Select Location</option>
+                                        <option value="base">Base Location</option>
+                                        <option value="outStation">Out Station</option>
+                                    </select>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="task_type">Travel Cluster Name</label><br>
                                     <input type="text" placeholder='Enter Cluster Name' class="form-control" name="cluster" id="cluster" required>
                                 </div>
-                                
-                                
-                                
+                                 
                                 <div class="form-group">
                                     <label for="task_type">Select Cluster State</label><br>
                                     <select  name="clusterState" id="clusterState" class="form-control" required>

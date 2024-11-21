@@ -226,6 +226,8 @@
                                     $i=1; 
                                     foreach($taskList as $task){
 
+                                        // var_dump($task);die;
+
                                         $getLastActionDetails = getLastActionDetails($task->tid,$task->user_id,$cdate);
 
                                         $getSameStatusSince = getSameStatusSince($task->tid,$cdate);
@@ -379,9 +381,15 @@
                                             <?php ?>
                                         </td>
                                         <td ><?= $task->start_time; ?>
-                                            <br><br>
+                                        <br><br>
                                             Time taken from planning to initiate : <b> <?= $task->time_diff_updateVsInitiat; ?></b>
                                         <br><br><hr>
+                                        <?php
+
+                                            if (!empty($task->late_remarks_message)) { ?>
+                                                Why Task Started Late : <b> <?= $task->late_remarks_message; ?></b>
+                                            <br><br><hr>
+                                        <?php  } ?>
                                             <p class="question">Was Task Initiated on time..??</p>
                                         <?php 
                                             $chkStarRating = $this->Menu_model->CheckTaskStarRatingsExistorNot_New($task->user_id,'Was Task Initiated on time',$task->tid);

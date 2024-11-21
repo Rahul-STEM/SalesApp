@@ -83,6 +83,18 @@
                             <form action="<?=base_url();?>Menu/AddNewCluster" method="post" enctype="multipart/form-data">
                                 <div class="was-validated">
                                     <input type="hidden" name="uid" value="<?=$uid?>">
+
+                                    <div class="form-group">
+                                        <label for="task_type">Type of Travel</label><br>
+                                        <!-- <input type="text" placeholder='Enter Cluster Name' class="form-control" name="typeofTravel" id="typeofTravel" required> -->
+                                        <select class="form-control" name="typeofTravel" id="typeofTravel" required>
+                                            <option value="" Selected disabled>Select Location</option>
+                                            <option value="base">Base Location</option>
+                                            <option value="outStation">Out Station</option>
+                                        </select>
+                                    </div>
+
+
                                     <div class="form-group">
                                         <label for="task_type">Travel Cluster Name</label><br>
                                         <input type="text" placeholder='Enter Cluster Name' class="form-control" name="cluster" id="cluster" required>
@@ -90,26 +102,26 @@
                                 
                          
                                 
-                                     <div class="form-group">
-                                          <label for="task_type">Select Cluster State</label><br>
-                                          <select  name="clusterState" id="clusterState" class="form-control" required>
+                                    <div class="form-group">
+                                        <label for="task_type">Select Cluster State</label><br>
+                                        <select  name="clusterState" id="clusterState" class="form-control" required>
                                           <!--<option disabled selected>Select Cluster State</option>-->
                                         <?php foreach($state as $stat){?>
                                             <option value='<?=$stat->state_id ?>'><?=$stat->state_title ?></option>
                                         <?php }?>
-                                    </select>
-                                  </div>
+                                        </select>
+                                    </div>
                               
                                    <div class="form-group">
-                                       <label for="task_type">Select Cluster District</label><br>
-                                          <select  name="clusterDistrict[]" id="clusterDistrict" multiple class="form-control" required>
+                                        <label for="task_type">Select Cluster District</label><br>
+                                            <select  name="clusterDistrict[]" id="clusterDistrict" multiple class="form-control" required>
                                           <!--<option disabled selected>Select Cluster District</option>-->
                                     </select>
                                   </div>
                               
                                    <div class="form-group">
-                                         <label for="task_type">Select Cluster City</label><br>
-                                          <select  name="clusterCity[]" multiple id="clusterCity" class="form-control" required>
+                                        <label for="task_type">Select Cluster City</label><br>
+                                            <select  name="clusterCity[]" multiple id="clusterCity" class="form-control" required>
                                           <!--<option disabled selected>Select Cluster City</option>-->
                                     </select>
                                   </div>

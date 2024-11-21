@@ -1993,6 +1993,10 @@ class Graph_Model extends CI_Model
 
                     $this->db->or_where_in('aadmin', $SelectedUsers);
                 }
+                if ($singleuserType == 15) {
+
+                    $this->db->or_where_in('sales_co', $SelectedUsers);
+                }
                 else{
 
                     $this->db->where_in('user_id', $SelectedUsers);
@@ -2022,10 +2026,10 @@ class Graph_Model extends CI_Model
             $this->db->where('mainbd', $uid);
         }
         
-        if (!empty($SelectedUsers)) {
+        // if (!empty($SelectedUsers)) {
 
-            $this->db->where_in('user_details.aadmin', $SelectedUsers);
-        }
+        //     $this->db->where_in('user_details.aadmin', $SelectedUsers);
+        // }
 
         $this->db->where('CAST(init_call.createDate AS DATE) >=', "'$sdate'", FALSE);
         $this->db->where('CAST(init_call.createDate AS DATE) <=', "'$edate'", FALSE);
@@ -2097,15 +2101,18 @@ class Graph_Model extends CI_Model
         } elseif ($userTypeid == 9 || $userTypeid == 13) {
 
             $this->db->where_in('aadmin', $uid);
+        }elseif ($userTypeid == 15) {
+
+            $this->db->or_where_in('sales_co', $SelectedUsers);
         } else {
 
             $this->db->where('user_id', $uid);
         }
 
-        if (!empty($SelectedUsers)) {
+        // if (!empty($SelectedUsers)) {
 
-            $this->db->where_in('user_details.aadmin', $SelectedUsers);
-        }
+        //     $this->db->where_in('user_details.aadmin', $SelectedUsers);
+        // }
 
 
         $this->db->where_in('init_call.cstatus', $statusArray);
@@ -2195,6 +2202,9 @@ class Graph_Model extends CI_Model
         } elseif ($userTypeid == 9 || $userTypeid == 13) {
 
             $this->db->where_in('aadmin', $uid);
+        }elseif ($userTypeid == 15) {
+
+            $this->db->or_where_in('sales_co', $SelectedUsers);
         } else {
             $this->db->where('user_id', $uid);
         }
@@ -2218,10 +2228,10 @@ class Graph_Model extends CI_Model
         }
 
 
-        if (!empty($SelectedUsers)) {
+        // if (!empty($SelectedUsers)) {
 
-            $this->db->where_in('user_details.aadmin', $SelectedUsers);
-        }
+        //     $this->db->where_in('user_details.aadmin', $SelectedUsers);
+        // }
 
 
         $this->db->where('CAST(ic.createDate AS DATE) >=', "'$sdate'", FALSE);
@@ -2311,6 +2321,9 @@ class Graph_Model extends CI_Model
         } elseif ($userTypeid == 9 || $userTypeid == 13) {
 
             $this->db->where_in('aadmin', $uid);
+        }elseif ($userTypeid == 15) {
+
+            $this->db->where_in('sales_co', $uid);
         } else {
             $this->db->where('user_id', $uid);
         }

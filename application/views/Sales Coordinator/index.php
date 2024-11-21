@@ -31,34 +31,34 @@
   <link rel="stylesheet" href="<?=base_url();?>assets/css/buttons.bootstrap4.min.css">
   <style>
     .scrollme {
-overflow-x: auto;
-}
-.content-wrapper>.content {
-    background: azure;
-}
-.inner h5{
-    background: blanchedalmond;
-    line-height: 35px;
-    font-size: 17px;
-    border-radius: 26px;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
-    font-weight: 700;
-}
-.bg-light, .bg-light>a {
-    color: #1f2d3d !important;
-    background: #ebf5cb !important;
-    border-radius: 40px;
-    position: relative;
-    overflow: hidden;
-    /* box-shadow: rgba(0, 0, 0, .1) 0 1px 2px 0; */
-    /* cursor: pointer; */
-    font-size: 19px;
-    text-align: left;
-}
-.small-box>.small-box-footer {
-    background: #c5eb4d !important;
-    font-weight: 500;
-}
+        overflow-x: auto;
+    }
+    .content-wrapper>.content {
+        background: azure;
+    }
+    .inner h5{
+        background: blanchedalmond;
+        line-height: 35px;
+        font-size: 17px;
+        border-radius: 26px;
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+        font-weight: 700;
+    }
+    .bg-light, .bg-light>a {
+        color: #1f2d3d !important;
+        background: #ebf5cb !important;
+        border-radius: 40px;
+        position: relative;
+        overflow: hidden;
+        /* box-shadow: rgba(0, 0, 0, .1) 0 1px 2px 0; */
+        /* cursor: pointer; */
+        font-size: 19px;
+        text-align: left;
+    }
+    .small-box>.small-box-footer {
+        background: #c5eb4d !important;
+        font-weight: 500;
+    }
   </style>
   
 </head>

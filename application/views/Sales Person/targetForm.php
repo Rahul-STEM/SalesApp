@@ -87,14 +87,36 @@
 
                 <!-- Proposals Section -->
                 <h5>Proposals</h5>
-                <div class="form-group">
-                    <label for="newProposals">New Proposals To Be Handed Over?</label>
-                    <input type="number" class="form-control" id="proposal_no_of_schools" name="proposal_no_of_schools"  required>
-                </div>
-                <div class="form-group">
+                    <div class="form-group">
+                        <label for="newProposals">New Proposals To Be Handed Over?</label>
+                        <input type="number" class="form-control" id="proposal_no_of_schools" name="proposal_no_of_schools"  required>
+                    </div>
+                    <div class="form-group">
+                        <label for="proposalRevenue">Proposal Revenue</label>
+                        <input type="number" class="form-control" id="proposal_revenue" name="proposal_revenue" required>
+                    </div>
+
+                <!-- Outstation Meeting Section -->
+                <h5>Outstation Meeting Target</h5>
+                    <div class="form-group">
+                        <label for="outstation_meeting_target">Outstation Meeting Target?</label>
+                        <input type="number" class="form-control" id="outstation_meeting_target" name="outstation_meeting_target"  required>
+                    </div>
+                <!-- <div class="form-group">
                     <label for="proposalRevenue">Proposal Revenue</label>
                     <input type="number" class="form-control" id="proposal_revenue" name="proposal_revenue" required>
-                </div>
+                </div> -->
+
+                <h5>Bargin Meeting Target</h5>
+                    <div class="form-group">
+                        <label for="bargin_meeting_target">Bargin Meeting Target?</label>
+                        <input type="number" class="form-control" id="bargin_meeting_target" name="bargin_meeting_target"  required>
+                    </div>
+                <!-- <div class="form-group">
+                    <label for="proposalRevenue">Proposal Revenue</label>
+                    <input type="number" class="form-control" id="proposal_revenue" name="proposal_revenue" required>
+                </div> -->
+
                 <!-- Closure Section -->
                 <h5>Closure</h5>
                 <div class="form-group">

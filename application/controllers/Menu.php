@@ -3909,37 +3909,37 @@ class Menu extends CI_Controller {
         $data['review_user_id']     = $review_userid   = $result[0]->bdid;
         // var_dump($data);die;
         $data['targetVsAchieved']       = $this->Menu_model->getAchievedData($review_userid ,$sdate=null,$edate=null,$partnerType=null,$reviewType);
-        // var_dump($data['targetVsAchieved']     );die;
+        // var_dump($data['targetVsAchieved']);die;
         $data['partnerType']        = $this->Menu_model->get_partnertype();
 
         // var_dump($data);die;
         if($review_userid != $uid){
                 // $data['review_user_id']         = $this->input->post('reviewuserid');
-                $data['username']               = getUserNameById($data['review_user_id']);
-                // $data['reviewType']             = $this->input->post('reviewType');
-                if($type_id == '13'){
-                    $this->load->view('header.php');
-                    $this->load->view('Cluster Manager/targetForm.php',$data);
-                    $this->load->view('footer.php');
-                }
-                else if($type_id =='4'){
-                    $this->load->view('header.php');
-                    $this->load->view('PST/targetForm.php',$data);
-                    $this->load->view('footer.php');
-                }
-                else if($type_id =='3'){
-                    $this->load->view('header.php');
-                    $this->load->view('Sales Person/targetForm.php',$data);
-                    $this->load->view('footer.php');
-                }
-                // else if($type_id =='2'){
-                //     $this->load->view('header.php');
-                //     $this->load->view('Sales Person/targetForm.php',$data);
-                //     $this->load->view('footer.php');
-                // }
-                else{
-                    redirect('Menu/AllReviewPlaing');
-                }
+            $data['username']               = getUserNameById($data['review_user_id']);
+            // $data['reviewType']             = $this->input->post('reviewType');
+            if($type_id == '13'){
+                $this->load->view('header.php');
+                $this->load->view('Cluster Manager/targetForm.php',$data);
+                $this->load->view('footer.php');
+            }
+            else if($type_id =='4'){
+                $this->load->view('header.php');
+                $this->load->view('PST/targetForm.php',$data);
+                $this->load->view('footer.php');
+            }
+            else if($type_id =='3'){
+                $this->load->view('header.php');
+                $this->load->view('Sales Person/targetForm.php',$data);
+                $this->load->view('footer.php');
+            }
+            // else if($type_id =='2'){
+            //     $this->load->view('header.php');
+            //     $this->load->view('Sales Person/targetForm.php',$data);
+            //     $this->load->view('footer.php');
+            // }
+            else{
+                redirect('Menu/AllReviewPlaing');
+            }
         }
         else{
             redirect('Menu/AllReviewPlaing');
@@ -4204,6 +4204,7 @@ class Menu extends CI_Controller {
             redirect('Menu/main');
         }
     }
+
     public function TaskPlanner2($adate){
         
         // echo $adate;die;
@@ -4214,10 +4215,15 @@ class Menu extends CI_Controller {
         }else{
             $adate = $adate;
         }
+
+        //$adate = $this->checkPlannerDate($adate);
+
+        
         $tommrowdate =  date('Y-m-d', strtotime('tomorrow'));
         $datetime1      = new DateTime($tommrowdate);
         $datetime1_cur  = new DateTime(date("Y-m-d"));
         $datetime2      = new DateTime($adate);
+        
         if ($datetime1 < $datetime2) {
             $this->session->set_flashdata('error_message','* You Can Not Planned Task For This Date : '.$adate);
             $user = $this->session->userdata('user');
@@ -4225,7 +4231,7 @@ class Menu extends CI_Controller {
             $uid = $user['user_id'];
 
             $adate = $tommrowdate;
-            $this->checkPlannerDate($adate);
+           // $this->checkPlannerDate($adate);
             // if()
             redirect("Menu/TaskPlanner2/".$adate); 
         }elseif ($datetime1_cur > $datetime2) {
@@ -4233,6 +4239,9 @@ class Menu extends CI_Controller {
             $adate = date("Y-m-d");
             redirect("Menu/TaskPlanner2/".$adate);
         }
+
+
+
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
@@ -4291,55 +4300,92 @@ class Menu extends CI_Controller {
         $getPendingAutoTask  =  $this->db->query("SELECT * FROM `tblcallevents` WHERE user_id = $uid AND nextCFID = 0 AND autotask = 1 AND auto_plan = 1 AND cast(appointmentdatetime AS DATE) != '$curdate'");
         $getPendingTask =  $getPendingAutoTask->result();
         $pcount = sizeof($getPendingTask);
-    $getPendingTimeTask  =  $this->db->query("SELECT * FROM `tblcallevents` WHERE user_id = $uid  AND (nextCFID = 0 AND lastCFID = 0 AND plan = 1 AND autotask = 1 AND auto_plan = 0)");
-    $getPendingTimeTask =  $getPendingTimeTask->result();
-    $timecount = 0;
-    foreach ($getPendingTimeTask as $taskmin){
-        $taskactiontime = $this->Menu_model->getTaskAction($taskmin->actiontype_id);
-        $timecount += $taskactiontime[0]->yest;
-    }
+        $getPendingTimeTask  =  $this->db->query("SELECT * FROM `tblcallevents` WHERE user_id = $uid  AND (nextCFID = 0 AND lastCFID = 0 AND plan = 1 AND autotask = 1 AND auto_plan = 0)");
+        $getPendingTimeTask =  $getPendingTimeTask->result();
+        $timecount = 0;
+        foreach ($getPendingTimeTask as $taskmin){
+            $taskactiontime = $this->Menu_model->getTaskAction($taskmin->actiontype_id);
+            $timecount += $taskactiontime[0]->yest;
+        }
         $hours = floor($timecount / 60);
         $minutes = $timecount % 60;
         $mesaage = $hours ." Hours ".$minutes." Minutes Pending For Task Work";
+
    
-   
-    $getplandateindata  =  $this->db->query("SELECT * FROM `autotask_time` where user_id='$uid' AND date ='$adate'");
-    $getplandateindata =  $getplandateindata->result();
-        if(!empty($user)){
-            $this->load->view($dep_name.'/TaskPlanner2',['uid'=>$uid,'user'=>$user,'planbutnotinitedcnt'=>$planbutnotinitedcnt,'getplandt'=>$getplandateindata,'pendingtask'=>$pcount, 'mesaage'=>$mesaage,'adate'=>$adate,'tptime'=>$tptime,'getAutoTaskTime'=>$getAutoTaskTime,'getreqData'=>$getreqData,'oldPendTask'=>$oldplanbutnotinited,'type_id'=>$uyid]);
-        }else{
-            redirect('Menu/main');
-        }
-    }
-
-
-
-    private function checkPlannerDate($date){
-
-        $user = $this->session->userdata('user');
-        $data['user'] = $user;
-        $uid = $user['user_id'];
-        $uyid =  $user['type_id'];
-        $this->load->model('Menu_model');
-
-        $checkLeaveForDay = checkLeaveForDay($uid,$date);
-
-        if ($checkLeaveForDay[0]->status == 'approved') {
-
-            $adate = getNextDate($date);// Format it as YYYY-MM-DD
-
-        }else{
-            
-            $checkforHoliday = checkforHoliday($date);
-    
-            if(sizeof($checkforHoliday) > 0){
-
-                $adate = getNextDate($date);
-
+        $getplandateindata  =  $this->db->query("SELECT * FROM `autotask_time` where user_id='$uid' AND date ='$adate'");
+        $getplandateindata =  $getplandateindata->result();
+            if(!empty($user)){
+                $this->load->view($dep_name.'/TaskPlanner2',['uid'=>$uid,'user'=>$user,'planbutnotinitedcnt'=>$planbutnotinitedcnt,'getplandt'=>$getplandateindata,'pendingtask'=>$pcount, 'mesaage'=>$mesaage,'adate'=>$adate,'tptime'=>$tptime,'getAutoTaskTime'=>$getAutoTaskTime,'getreqData'=>$getreqData,'oldPendTask'=>$oldplanbutnotinited,'type_id'=>$uyid]);
+            }else{
+                redirect('Menu/main');
             }
-        }
-    
     }
+
+    private function isHolidayOrLeave($uid, $date) {
+        // Check if the date is a holiday
+        $checkforHoliday = checkforHoliday($date);
+        
+        // Check if the date has leave approved
+        $checkLeaveForDay = checkLeaveForDay($uid, $date);
+        
+        // Log the results of the checks for debugging
+        log_message('debug', "Checking date: $date, Holiday check: " . sizeof($checkforHoliday) . ", Leave check: " . (sizeof($checkLeaveForDay) > 0 ? 'Yes' : 'No'));
+        
+        // Return true if either is a holiday or the user has leave
+        return (sizeof($checkforHoliday) > 0 || sizeof($checkLeaveForDay) > 0);
+    }
+
+    private function checkPlannerDate($date) {
+    // Get the user session details
+        $user = $this->session->userdata('user');
+        $uid = $user['user_id'];
+    
+    // Debug log to see the passed date and if it's valid or not
+        log_message('debug', "Initial date passed: $date, Is holiday or leave: " . ($this->isHolidayOrLeave($uid, $date) ? 'Yes' : 'No'));
+        
+        // First, check if the given date is a Sunday and adjust to Monday if it is
+        if (date('l', strtotime($date)) == 'Sunday') {
+            log_message('debug', "Initial date is Sunday, adjusting to Monday: $date");
+            $date = date('Y-m-d', strtotime($date . ' +1 day')); // Set to Monday
+        }
+
+        // If the given date is valid (not holiday or leave), return it as is
+        if (!$this->isHolidayOrLeave($uid, $date)) {
+            // Debug log to confirm the given date is valid
+            log_message('debug', "Returning the original date: $date");
+            return $date;
+        }
+
+    // Start by calculating the next date
+        $adate = getNextDate($date);
+
+        // Check if the next date is Sunday, and adjust it to Monday if so
+        if (date('l', strtotime($adate)) == 'Sunday') {
+            log_message('debug', "Next date is Sunday, adjusting to Monday: $adate");
+            $adate = date('Y-m-d', strtotime($adate . ' +1 day')); // Set to Monday
+        }
+
+    // Keep checking the next days until we find a valid date (not a holiday or leave)
+        while ($this->isHolidayOrLeave($uid, $adate)) {
+            // If the next date is a holiday or leave, get the next date
+            $adate = getNextDate($adate);
+
+            // If the next date is Sunday, skip to Monday
+            if (date('l', strtotime($adate)) == 'Sunday') {
+                log_message('debug', "Next date is Sunday, adjusting to Monday: $adate");
+                $adate = date('Y-m-d', strtotime($adate . ' +1 day')); // Set to Monday
+            }
+
+            // Debug log for each iteration
+            log_message('debug', "Checking date: $adate, Is holiday or leave: " . ($this->isHolidayOrLeave($uid, $adate) ? 'Yes' : 'No'));
+        }
+
+        // Debug log to confirm the final date returned
+        log_message('debug', "Returning adjusted date: $adate");
+        // Return the final valid date
+        return $adate;
+    }
+
     public function CheckPlannerTimeisReadyorNot($uid,$adate){
         
         $this->load->model('Menu_model');
@@ -4365,6 +4411,7 @@ class Menu extends CI_Controller {
             }
         }
     }
+    
     public function RequestForTodaysTaskPlan(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -14801,24 +14848,47 @@ public function Dashboard(){
                             ->where('state_id',$clusterStateid)->get()->result();
             // echo $this->db->last_query(); exit;
             $data = '';
+            $data .= '<option disabled >Select City </option>';
              foreach($district as $dt){
+               
                     $data .= '<option value='.$dt->districtid.'>'.$dt->district_title.'</option>';
                 }
                 echo $data;
     }
     public function getAllclusterDistrictCity(){
-       $clusterDistrict = $_POST['clusterDistrict'];
+        $clusterDistrict = $_POST['clusterDistrict'];
         $this->load->model('Menu_model');
         $cityids = implode(", ", $clusterDistrict);
+        var_dump($cityids);die;
         $query = $this->db->query("SELECT * FROM in_city WHERE districtid IN ($cityids)");
+        echo $this->db->last_query(); exit;
         $districtcity = $query->result();
             $data = '';
-            $data .= '<option disabled >Select User </option>';
+            $data .= '<option disabled >Select City </option>';
             foreach($districtcity as $dtc){
                 $data .= '<option value='.$dtc->id.'>'.$dtc->name.'</option>';
             }
         echo $data;
     }
+
+
+    public function getCitybyDistrict(){
+        $clusterDistrict = $_POST['clusterDistrict'];
+        $this->load->model('Menu_model');
+        // $cityids = implode(", ", $clusterDistrict);
+        // var_dump($clusterDistrict);die;
+        $query = $this->db->query("SELECT * FROM in_city WHERE districtid IN ($clusterDistrict)");
+        // echo $this->db->last_query(); exit;
+        $districtcity = $query->result();
+            $data = '';
+            $data .= '<option disabled >Select City </option>';
+            foreach($districtcity as $dtc){
+                $data .= '<option value='.$dtc->id.'>'.$dtc->name.'</option>';
+            }
+        echo $data;
+    }
+
+
     public function AddNewCluster(){
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -14831,10 +14901,11 @@ public function Dashboard(){
         $cluster = $_POST['cluster'];
         $clusterState = $_POST['clusterState'];
         $clusterDistrict = $_POST['clusterDistrict'];
+        $typeofTravel = $_POST['typeofTravel'];
         $clusterDistrict = implode(",", $clusterDistrict);
         $clusterCity = $_POST['clusterCity'];
         $clusterCity = implode(",", $clusterCity);
-        $this->db->query("INSERT INTO `cluster`(`clustername`,`user_id`,`in_state`, `in_district`, `in_city`) VALUES ('$cluster','$uid','$clusterState','$clusterDistrict','$clusterCity')");
+        $this->db->query("INSERT INTO `cluster`(`clustername`,`user_id`,`in_state`, `in_district`, `in_city`,`travelType`) VALUES ('$cluster','$uid','$clusterState','$clusterDistrict','$clusterCity','$typeofTravel')");
         $this->load->library('session');
         $this->session->set_flashdata('success_message', 'Cluster Add successfully');
      redirect('Menu/cluster');
@@ -17494,7 +17565,10 @@ public function TaskCheck_New(){
             // var_dump($_POST);die;
             $reviewId = $this->input->post('review_user_id');
             $reviewType = $this->input->post('reviewType');
-    
+            
+            $bargin_meeting_target = $this->input->post('bargin_meeting_target');
+            $outstation_meeting_target = $this->input->post('outstation_meeting_target');
+
             // Collect the dynamic arrays
             $partnerTypes = $this->input->post('partner_type'); // Array of selected partner types
             $prospectingCompanies = $this->input->post('prospecting_companies'); // Array of prospecting companies
@@ -17512,6 +17586,8 @@ public function TaskCheck_New(){
                 $insertdata = [
                     'targetUserId' => $uid ,
                     'reviewType' => $reviewType,
+                    'bargin_meeting_target' => $bargin_meeting_target,
+                    'outstation_meeting_target' => $outstation_meeting_target,
                     'partnerType' => $partnerTypes[$i], // Current partner type
                     'prospecting_target' => $prospectingCompanies[$i], // Current prospecting company count
                     // 'prospecting_school_target' => $this->input->post('prospecting_school_target'),
@@ -17773,8 +17849,11 @@ public function TaskCheck_New(){
         $clusterManager = $this->Menu_model->get_clusterManagerNames();
         $bdpst = $this->Menu_model->get_bdpstNames();
         $admin = $this->Menu_model->get_adminNames();
+        $states=$this->Menu_model->GetState();
+        // $cities=$this->Menu_model->getZone();
+        // $zone=$this->Menu_model->getZone();
         //echo"<pre>admin ";print_r($admin);exit;
-        $this->load->view($dep_name.'/UserRegistration',['user'=>$user,'zone'=>$zone, "type"=>$type, "pst"=>$pst, "salesCoordinator"=>$salesCoordinator, "clusterManager"=>$clusterManager, "bdpst"=>$bdpst, "admin"=>$admin]);
+        $this->load->view($dep_name.'/UserRegistration',['user'=>$user,'zone'=>$zone, "type"=>$type, "pst"=>$pst, "states"=>$states, "salesCoordinator"=>$salesCoordinator, "clusterManager"=>$clusterManager, "bdpst"=>$bdpst, "admin"=>$admin]);
     }
 
      public function UserDisplayPage(){

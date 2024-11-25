@@ -100,14 +100,14 @@ span.tsby {
                 <!-- Main content -->
                 <section class="content">
                   <div class="container-fluid">
-                    <!-- <div class="row">
+                    <div class="row">
                     <div class="col-md-4">
                     <form class="setpaldate" action="<?=base_url();?>Menu/UserTaskViewPage" method="post">
-                      <input type="date" class=" m-2" name="adate" value="<?=$date?>" required="" id="plandate"  max="<?= date('Y-m-d') ?>">
+                      <input type="date" class="form-control m-2" name="adate" value="<?=$date?>" required="" id="plandate"  max="<?= date('Y-m-d') ?>">
                       <input type="submit" class="btn-warning m-2" value="Set Date">
                     </form>
                     </div>
-                    </div>  -->
+                    </div> 
                     
                     <?php 
                    

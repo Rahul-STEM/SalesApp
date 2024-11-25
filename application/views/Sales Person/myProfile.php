@@ -224,7 +224,7 @@ $managerName=$this->Menu_model->get_reportingManager($data[0]->aadmin);?>
             </div>
 
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="halfdayleave" id="flexRadioDefault2" checked>
+                <input class="form-check-input" type="radio" name="halfdayleave" id="flexRadioDefault2" value="0" checked>
                 <label class="form-check-label" for="flexRadioDefault2">
                     Full Day
                 </label>
@@ -239,7 +239,7 @@ $managerName=$this->Menu_model->get_reportingManager($data[0]->aadmin);?>
 
             <div class="form-group" id="halfDayLeaveType" >
                 <label for="leaveType">Select Leave Type</label><span style="color:red">*</span>
-                <select class="form-control" name="halfdayleaveType" id="" required>
+                <select class="form-control" name="halfdayleaveType" id="">
                     <option value="" disabled selected>Select leave type</option>
                     <option value="1">First Half Leave (10 AM - 2:30 PM)</option>
                     <option value="2">Second Half Leave (2:30 PM - 7 PM)</option>
@@ -256,6 +256,62 @@ $managerName=$this->Menu_model->get_reportingManager($data[0]->aadmin);?>
             <button type="submit" id="leavesubmit" class="btn btn-primary">Submit</button>
         </div>
         </form>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="viewApprovedLeaves" tabindex="-1" role="dialog" aria-labelledby="viewApprovedLeavesTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Approved Leaves</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <!-- <form method="post" action="cancelLeaves"> -->
+          <!-- From Date input -->
+            <input type="hidden" name="aadmin" id="aadmin" value="<?=$data[0]->aadmin?>">
+            <input type="hidden" name="uid" id="uid" value="<?=$uid?>">
+            
+            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Leave Type</th>
+                        <th>From Date</th>
+                        <th>To Date</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>                   
+                </thead>
+                <tbody>
+                <?php 
+                    foreach($lvData as $tda){ 
+                        // var_dump($tda->leave_type);
+                        $leaveType = $this->Menu_model->getLeaveTypebyId($tda->leave_type);
+                        ?>
+                    <tr>
+                        <td><?= $leaveType[0]->leave_type?></td>
+                        <td><?= $tda->start_date?></td>
+                        <td><?= $tda->end_date?></td>
+                        <td><?= $tda->reason?></td>
+                        <td><?= $tda->status?></td>
+                        <td>
+                            <?php
+                                if ($tda->status == 'approved') { ?>
+                                    <button class="btn btn-danger" onclick="cancelLeave(<?= $tda->id ?>)">Cancel Leave</button>
+                        <?php    }?>
+                        
+                        </td>
+                    </tr>
+                <?php } ?>
+                </tbody>
+            </table>
+        <!-- </form> -->
       </div>
       
     </div>
@@ -443,7 +499,8 @@ $managerName=$this->Menu_model->get_reportingManager($data[0]->aadmin);?>
                                         </div>
                                         <?php if($lvData){?>
                                         <div class="col-md-6">
-                                            <p>Leave form <?=$lvData[0]->start_date?> to <?=$lvData[0]->end_date?> is <?=$lvData[0]->status?>.</p>     
+                                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#viewApprovedLeaves">View Leaves</button>
+                                            <!-- <p>Leave form <?=$lvData[0]->start_date?> to <?=$lvData[0]->end_date?> is <?=$lvData[0]->status?>.</p>      -->
                                         </div>
                                         <?php }else{?>
                                             <div class="col-md-6">
@@ -602,8 +659,10 @@ $(document).ready(function () {
     // Function to toggle the visibility of the leave type dropdown based on selected radio button
     function toggleLeaveTypeDropdown() {
         if (halfDayRadio.checked) {
+            leaveTypeDropdown.setAttribute('required', 'true');
             leaveTypeDropdown.style.display = 'block'; // Show dropdown
         } else {
+            leaveTypeDropdown.style.display = 'none';
             leaveTypeDropdown.style.display = 'none'; // Hide dropdown
         }
     }
@@ -614,6 +673,35 @@ $(document).ready(function () {
     // Add event listeners to radio buttons to call the function on change
     fullDayRadio.addEventListener('change', toggleLeaveTypeDropdown);
     halfDayRadio.addEventListener('change', toggleLeaveTypeDropdown);
+
+
+    function cancelLeave(leaveId) {
+
+        if (confirm("Are you sure you want to cancel this leave?")) {
+            // Use AJAX to send the leave ID to the server
+            $.ajax({
+                url: 'cancelLeave', // URL to your cancelLeave function
+                method: 'POST',
+                data: { id: leaveId },
+                success: function(response) {
+                    var result = JSON.parse(response); // Parse the JSON response
+                    if (result.status == 'success') {
+                        alert(result.message);
+                        location.reload(); // Optionally reload the page to see changes
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: function() {
+                    alert("An error occurred while canceling the leave.");
+                    location.reload();
+                }
+            });
+        }
+    }
+
+
+
 </script>
 
 </body>

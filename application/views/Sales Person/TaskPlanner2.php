@@ -31,12 +31,7 @@
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
     <script>
-        <?php  $checkHalfDayLeave = checkHalfDayLeave($uid,$adate);
-        
-                $partOfleave = $checkHalfDayLeave[0]->halfday_leaveType;
-
-                echo "var partOfleave = '" . addslashes($partOfleave) . "';";
-        ?>
+       
 
         // alert(partOfleave);
         // var partOfleave =  
@@ -334,7 +329,7 @@ if($type_id == 3){
       }
 
     //   echo $userplaetime;die;
-        // $checkHalfDayLeave = checkHalfDayLeave($uid,$adate);
+        $checkHalfDayLeave = checkHalfDayLeave($uid,$adate);
         // echo sizeof($checkHalfDayLeave);die;
         if(sizeof($checkHalfDayLeave) == 1){
 
@@ -5961,6 +5956,19 @@ if($type_id == 3){
               }
           });
           $('#end-time').on('change', function() {
+            <?php  $checkHalfDayLeave = checkHalfDayLeave($uid,$adate);
+        
+                    $partOfleave = $checkHalfDayLeave[0]->halfday_leaveType;
+
+                    echo "var partOfleave = '" . addslashes($partOfleave) . "';";
+            ?>
+                var autotaskTime = 90;
+
+                if (partOfleave == 1 || partOfleave == 2 ) {
+                    
+                    autotaskTime = 45;
+                }
+
                 var startTime = $('#start-time').val();
                 if (startTime === '') {
                     alert("Please Enter Start Time");
@@ -5970,7 +5978,7 @@ if($type_id == 3){
                     var startTimeMinutes = convertTimeToMinutes(startTime);
                     var endTimeMinutes = convertTimeToMinutes(endTime);
                     // Check if the difference is more than 90 minutes
-                    if ((endTimeMinutes - startTimeMinutes) > 90 || (endTimeMinutes - startTimeMinutes) < 90) {
+                    if ((endTimeMinutes - startTimeMinutes) > autotaskTime || (endTimeMinutes - startTimeMinutes) < autotaskTime) {
                         alert('Auto Task Max Time is Only 90 Minutes');
                         $('#end-time').val('');
                     }
@@ -6461,7 +6469,7 @@ $(document).ready(function(){
         var userid = "<?php echo $uid; ?>";
         var adate = "<?php echo $adate;?>";
         // alert(userid+"=="+date);return false;
-console.log(userid+"=="+date);return false;
+// console.log(userid+"=="+adate);return false;
     // Your AJAX call
     $.ajax({
         url: '<?=base_url();?>Menu/checkUsersTasksForTheDay', // The URL to send the request to

@@ -3713,8 +3713,9 @@ class Menu extends CI_Controller {
                 $purpose = 'no';
             }
         }
+        
         $id = $this->Menu_model->submit_task1($tid,$uid,$cmpid,$actontaken,$action_id,$status,$remark,$rpmmom,$purpose,$flink,$flink1,$flink2,$partner,$noofsc,$pbudgetme,$LinkedIn,$Facebook,$YouTube,$Instagram,$OtherSocial);
-      
+        
         
         if($action_id == 10){
             $getcmpinfo1 =  $this->Menu_model->get_cmpbyinid($init_id);
@@ -3880,6 +3881,7 @@ class Menu extends CI_Controller {
         redirect('Menu/AllPSTReviewPlaing');
     }
     public function startreview(){
+        // var_dump($_POST);die;
         $startt = $_POST['startt'];
         $reviewid = $_POST['reviewid'];
         $this->load->model('Menu_model');
@@ -20297,7 +20299,7 @@ public function myProfile(){
         // dd($dayData);
         $taskData = $this->Menu_model->taskStatus($uid,$tdate);
         $lvData = $this->Menu_model->get_leave_detail_by_uid($uid);
-        //dd($lvData);
+        // dd($lvData);
         if(!empty($user)){
             $this->load->view($dep_name.'/myProfile',['uid'=>$uid,'user'=>$user,'data'=>$data,'dep_name'=>$dep_name,'dayData'=>$dayData, 'taskData'=>$taskData, 'lvData'=>$lvData, 'lvTypes'=>$lvTypes,'lvTypes'=>$lvTypes]);
         }else{
@@ -20325,6 +20327,13 @@ public function leaveApply(){
         $reason= $this->input->post('reason');
         $halfdayleave= $this->input->post('halfdayleave');
         $halfdayleaveType= $this->input->post('halfdayleaveType');
+        // var_dump($halfdayleave);die;
+
+        if($halfdayleave == 1 && empty($halfdayleaveType)){
+
+            $halfdayleaveType = null;
+        }
+
 
         $leaveData = array(
             'user_id' => $uid,       // User ID
@@ -20338,6 +20347,7 @@ public function leaveApply(){
         );
         // dd($leaveData);
         $isSent= $this->db->insert('leave_requests', $leaveData);
+        // echo $this->db->last_query();die;
         if($isSent){
             $this->session->set_flashdata('success_message','Leave successfully sent for approval');
 
@@ -21028,5 +21038,199 @@ public function Meetings($type,$sd,$ed,$bdid){
         redirect('Menu/main');
     }
 }
+
+
+function array_to_csv($array, $filename, $delimiter = ',') {
+    $f = fopen('php://memory', 'w'); 
+    
+    // Flatten the array and determine the header
+    $flat_array = [];
+    $headers = [];
+    
+    foreach ($array as $row) {
+        $flat_row = $this->flatten_array($row);
+        $flat_array[] = $flat_row;
+        $headers = array_merge($headers, array_keys($flat_row));
+    }
+    
+
+      // Remove duplicate headers
+        $headers = array_unique($headers);
+
+        // Write headers to CSV
+        fputcsv($f, $headers, $delimiter);
+
+        // Write rows to CSV
+        foreach ($flat_array as $flat_row) {
+            // Ensure all keys are aligned with headers
+            $row_data = [];
+            foreach ($headers as $header) {
+                $row_data[] = $flat_row[$header] ?? ''; // Default to empty string if key is missing
+            }
+    fputcsv($f, $row_data, $delimiter);
+}
+
+    // Rewind the buffer and save it to a string
+    rewind($f);
+    $csv_data = stream_get_contents($f);
+    fclose($f);
+
+$file_path = sys_get_temp_dir() . '/'.$filename;
+
+$file = fopen($file_path, 'w');
+if ($file === false) {
+    die("Failed to create file in temporary directory.");
+}
+
+$bytes_written = fwrite($file, $csv_data);
+
+return $file_path;
+}
+
+
+// Helper function to flatten a multidimensional array
+function flatten_array($array, $prefix = '') {
+$result = [];
+foreach ($array as $key => $value) {
+    $new_key = $prefix ? $prefix . '.' . $key : $key; // Use dot notation for nested keys
+    if (is_array($value)) {
+        $result = array_merge($result, flatten_array($value, $new_key));
+    } else {
+        $result[$new_key] = $value;
+    }
+}
+return $result;
+}
+/** To send email to respective users */
+public function checkUsersTasksForTheDay(){
+    $uid               = $_POST['userid'];
+    $adate             = $_POST['adate'];
+
+    $totaltime         = $this->Menu_model->getUserTotalTaskTimeForTodays($uid,$adate);
+    $report_content    = $this->Menu_model->getTotalUserTaskDetailsOnPlanner($uid,$adate); // Replace with actual content
+ 
+    $totalttasktime    = $totaltime[0]->ttime;
+    $udetail           = $this->Menu_model->get_userbyid($uid);
+    $adminid           = $udetail[0]->admin_id;
+    $aadminid          = $udetail[0]->aadmin;
+    $username          = $udetail[0]->username;
+    $name               =$udetail[0]->name;
+
+    $admindetails      = $this->Menu_model->get_userbyid($adminid);
+    $adminusername     = $admindetails[0]->username;
+    $adminemail        = $admindetails[0]->email;
+
+    $aadmindetails     = $this->Menu_model->get_userbyid($aadminid);
+    $aadminusername    = $aadmindetails[0]->username;
+    $aadminemail       = $aadmindetails[0]->email;
+    $file_name         = $username."_".date('Y-m-d').".csv"; // Example file name
+
+    $csv_path = $this->array_to_csv($report_content,$file_name);
+ 
+    // $fordate = strtotime(date('Y-m-d'),$adate);
+  $data['name']             = $name;
+  $data['uid']              = $uid;
+  $data['adminid']          = $adminid;
+  $data['aadminid']         = $aadminid;
+  $data['username']         = $username;
+  $data['adminusername']    = $adminusername;
+  $data['adminemail']       = $adminemail ;
+  $data['aadminusername']   = $aadminusername;
+  $data['aadminemail']      = $aadminemail ;
+  $data['adate']            = $adate;
+  $type                     ='6 Hours Planning';
+  $flag                     ='6 Hours tasks planning is been completed';
+  $data['subject']          = $flag." For the date ".$adate." For User ".$name." ";
+  $data['message']          = '<a href="https://stemapp.in/Menu/CheckTaskDetailsByUser/'.$uid.'/'.$adate.'" >Please check your team member - [<b>'.$name.'</b>] report on this link for the 6 hours Tasks planned for the day.</a>';
+  $data['csv_path']         = $csv_path;
+  $data['type']             = $type;
+    if($totalttasktime >= '360'){
+        //check whether email is already sent fro the day
+       $emailsend =  $this->Menu_model->checkFOrUsersEmailSent($uid,$adate,$type);
+
+     //  echo $emailsend;exit;
+        if($emailsend == 0)
+        {
+                $this->send_email($data);
+        }
+       else{
+        //email is been already sent
+       }
+    }
+    else{
+        //
+    }
+}
+
+public function send_email($data){
+// dd($data);exit;
+    $this->email->initialize();
+    // Sender's email
+    $this->email->from('crm.help@stemapp.in', 'CRM Help');
+    
+    // Recipient's email
+    // $this->email->to($data['aadminemail'],$data['aadminusername']);
+    // $this->email->cc($data['adminemail'],$data['adminusername']);
+//     $toemail = $data['to'];
+// if(isset($data['to']) && !empty($data['to'])){
+//     foreach ($to as $email => $name) {
+//         $this->email->to($email, $name);
+//     }
+// }
+    $this->email->bcc("manasviyogesh.mahadik@stemlearning.in","Manasvi");
+    
+
+    // Email subject
+    $this->email->subject($data['subject']);
+
+    // Email message
+    $this->email->message($data['message']);
+
+        if (file_exists($data['csv_path'])) {
+            $this->email->attach($data['csv_path']);
+        } else {
+            die("Temporary file does not exist.");
+        }
+
+  //  $this->email->attach($data['csv_path']);
+
+    // Send the emai    l
+    if ($this->email->send()) {
+        echo 'Email sent successfully!';
+      // to add logs in mail send table :- totalemaillogs
+      $this->Menu_model->insertIntoEmail($data);
+        echo $this->db->last_query();
+    } else {
+        // Show error message
+        echo $this->email->print_debugger(['headers', 'subject']);
+    }
+    unlink($data['csv_path']);
+}
+
+    public function cancelLeave() {
+        // Step 1: Get the leave ID from the request (assuming it's passed via POST)
+        $leaveId = $this->input->post('id');
+        
+        if (!$leaveId) {
+            // If the ID is not provided, return an error
+            echo json_encode(['status' => 'error', 'message' => 'Leave ID is missing.']);
+            return;
+        }
+
+        // Step 2: Update the status of the leave request to 'cancelled'
+        $this->db->where('id', $leaveId); // Select the row with the given ID
+        $updateData = array('status' => 'cancelled'); // Set the status to 'cancelled'
+        
+        $this->db->update('leave_requests', $updateData); // Update the database
+        // echo $this->db->last_query();die;
+        if ($this->db->affected_rows() > 0) {
+            // If the status was updated successfully
+            echo json_encode(['status' => 'success', 'message' => 'Leave successfully cancelled.']);
+        } else {
+            // If no rows were affected (i.e., no leave request was found with that ID)
+            echo json_encode(['status' => 'error', 'message' => 'Failed to cancel leave. Please try again.']);
+        }
+    }
+
 
 }

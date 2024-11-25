@@ -114,6 +114,9 @@ overflow-x: hidden;
 
 <?php
 
+// $getReviewCou
+$reviewid = $this->Menu_model->get_Allreviewid($uid);
+
 $dataPoints1 = array(
 	array("label"=> "2010", "y"=> 36.12),
 	array("label"=> "2011", "y"=> 34.87),
@@ -586,7 +589,7 @@ $dataPoints2 = array(
 
                       ?>
                     <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">
-                        All <span class="badge badge-success"><?=$ttbyd[0]->ab?></span>
+                        All <span class="badge badge-success"><?=$ttbyd[0]->ab + sizeof($reviewid)?></span>
                     </a>
                   </li>
                   <li class="nav-item">
@@ -636,7 +639,7 @@ $dataPoints2 = array(
                   </li>
                     <li class="nav-item">
                         <a class="nav-link" id="custom-tabs-four-reviews-tab" data-toggle="pill" href="#custom-tabs-four-reviews" role="tab" aria-controls="custom-tabs-proposal" aria-selected="false">
-                            Reviews<span class="badge badge-success"><?=$ttbyd[0]->g?></span>
+                            Reviews<span class="badge badge-success"><?=sizeof($reviewid)?></span>
                         </a>
                     </li>
                   <li class="nav-item">
@@ -1248,29 +1251,34 @@ $dataPoints2 = array(
                     </div>
                     
                     <div class="tab-pane fade" id="custom-tabs-four-reviews" role="tabpanel" aria-labelledby="custom-tabs-four-reviews-tab">
-                        <?php foreach($totalt as $tt){
+                        <?php 
                         
-                            
-                            if($tt->plan==1){if($tt->actiontype_id=='8'){
                         
+                        // var_dump($reviewid);
+                        foreach($reviewid as $tt){
+
                         ?>
                             <div class="list-group-item list-group-item-action">
-                            <a class="btn" id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
+                            <a href="javascript:void(0);" onclick="submitStartReview(<?= $tt->rid ?>)" class="btn reviewbtn" value="<?=$tt->rid?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
                             <span class="mr-3 align-items-center">
                                 <i class="fa-solid fa-circle"></i>
                             </span>
                             <span class="flex">
-                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
-                                <small class="text-muted">Next Task:- </small>
+                                <strong class="text-secondary mr-1"><?=$tt->reviewtype?> Review (<?=$tt->plant?>)</strong><br>
+                                <!-- <small class="text-muted">Next Task:- </small> -->
                             </span>
-                                <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
-                                </span>
-                                <span class="text-right">
-                                    <i class="fa-solid fa-forward"></i>
-                                </a></span>
+                                <?php
+                                    if (!empty($tt->startt) && $tt->closet == null ) { ?>
+                                        <i class="fa-solid fa-forward"> </i> <span class="badge badge-danger">Ongoing Review </span>
+                                    <?php }else{ ?>
+                                        <span class="text-right">
+                                        <i class="fa-solid fa-forward"> </i> <span class="badge badge-success">Start Review </span>
+                                    <?php } ?>
+                                
+                                </a>
+                            </span>
                             </div>
-                        <?php $aai++;}}} ?>
-                        kjhvawodhvlauydvouydlub;u;i
+                        <?php } ?>
                     </div>
 
                     <div class="tab-pane fade" id="custom-tabs-four-barg" role="tabpanel" aria-labelledby="custom-tabs-four-barg-tab">
@@ -1380,7 +1388,7 @@ $dataPoints2 = array(
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" id="custom-tabs-four-barg-tab" data-toggle="pill" href="#custom-tabs-four-barg" role="tab" aria-controls="custom-tabs-four-barg" aria-selected="false">
+                    <a class="nav-link" id="custom-tabs-four-barg_completed" data-toggle="pill" href="#custom-tabs-four-barg" role="tab" aria-controls="custom-tabs-four-barg" aria-selected="false">
                         Visit Meeting <span class="badge badge-success"><?=$ttbydc[0]->d?></span>
                     </a>
                   </li>
@@ -2311,6 +2319,68 @@ function myFunction() {
 }
 
 
+</script>
+
+<!-- <script>
+    $(document).ready(function() {
+        function submitStartReview(reviewId) {
+            var startt = '<?= date('Y-m-d H:i:s') ?>';  // Correct date format
+            alert(startt); // Check if the date is printed correctly
+            $.ajax({
+                url: '<?= base_url('Menu/startreview') ?>',
+                method: 'POST',
+                data: {
+                    startt: startt,  // Send the start time
+                    reviewid: reviewId  // Send the review ID
+                },
+                success: function(response) {
+                    window.location.href = '<?= base_url('Menu/AllReviewPlaing') ?>';
+                },
+                error: function(xhr, status, error) {
+                    alert('Error: ' + error);
+                }
+            });
+        }
+
+        // Ensure the onclick works after the DOM is ready
+        $("a.btn").click(function() {
+            var reviewId = $(this).attr("value");
+            submitStartReview(reviewId);
+        });
+    });
+</script> -->
+
+<script>
+$(document).ready(function() {
+    // Bind the click event to the reviewbtn class
+    $('.reviewbtn').click(function() {
+        // Get the review ID from the element's 'value' attribute
+        var reviewId = $(this).attr('value');
+        
+        // Set the current date and time as the start time (use PHP to output the current time)
+        var startt = '<?= date('Y-m-d H:i:s') ?>';  // Corrected date output in JavaScript format
+        
+        // alert(startt); // Test to see if the date is properly passed (optional)
+        
+        // Send the data via AJAX
+        $.ajax({
+            url: '<?= base_url('Menu/startreview') ?>',
+            method: 'POST',
+            data: {
+                startt: startt,  // Send the start time
+                reviewid: reviewId  // Send the review ID
+            },
+            success: function(response) {
+                // Redirect to the AllReviewPlaing page after successful review update
+                window.location.href = '<?= base_url('Menu/AllReviewPlaing') ?>';
+            },
+            error: function(xhr, status, error) {
+                // Handle any errors that occur during the AJAX request
+                alert('Error: ' + error);
+            }
+        });
+    });
+});
 </script>
 </body>
 </html>

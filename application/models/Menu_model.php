@@ -4261,7 +4261,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         return $query->result();
     }
     public function get_ttbydc($uid,$tdate){
-        $query=$this->db->query("SELECT count(*) ab,COUNT(CASE WHEN actiontype_id=1 THEN actiontype_id END) a,COUNT(CASE WHEN actiontype_id=2 THEN actiontype_id END) b,COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) c,COUNT(CASE WHEN actiontype_id=4 THEN actiontype_id END) d,COUNT(CASE WHEN actiontype_id=5 THEN actiontype_id END) e,COUNT(CASE WHEN actiontype_id=6 THEN actiontype_id END) f,COUNT(CASE WHEN actiontype_id=7 THEN actiontype_id END) g,COUNT(CASE WHEN actiontype_id=8 THEN actiontype_id END) h,COUNT(CASE WHEN actiontype_id=9 THEN actiontype_id END) i,COUNT(CASE WHEN actiontype_id=10 THEN actiontype_id END) j,COUNT(CASE WHEN actiontype_id=11 THEN actiontype_id END) k,COUNT(CASE WHEN actiontype_id=12 THEN actiontype_id END) l,COUNT(CASE WHEN actiontype_id=13 THEN actiontype_id END) m from tblcallevents WHERE assignedto_id='$uid' and cast(updateddate AS DATE)='$tdate' and nextCFID!=0");
+        $query=$this->db->query("SELECT count(*) ab,COUNT(CASE WHEN actiontype_id=1 THEN actiontype_id END) a,COUNT(CASE WHEN actiontype_id=2 THEN actiontype_id END) b,COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) c,COUNT(CASE WHEN actiontype_id=4 THEN actiontype_id END) d,COUNT(CASE WHEN actiontype_id=5 THEN actiontype_id END) e,COUNT(CASE WHEN actiontype_id=6 THEN actiontype_id END) f,COUNT(CASE WHEN actiontype_id=7 THEN actiontype_id END) g,COUNT(CASE WHEN actiontype_id=8 THEN actiontype_id END) h,COUNT(CASE WHEN actiontype_id=9 THEN actiontype_id END) i,COUNT(CASE WHEN actiontype_id=10 THEN actiontype_id END) j,COUNT(CASE WHEN actiontype_id=11 THEN actiontype_id END) k,COUNT(CASE WHEN actiontype_id=12 THEN actiontype_id END) l,COUNT(CASE WHEN actiontype_id=13 THEN actiontype_id END) m from tblcallevents WHERE assignedto_id='$uid' and cast(updateddate AS DATE)='$tdate' and nextCFID=0");
         return $query->result();
     }
     public function get_totaltd($uid,$tdate){
@@ -5221,7 +5221,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         $utype = $this->Menu_model->get_userbyid($uid);
         $utype = $utype[0]->type_id;
         if($utype ==3){
-            $apr_status = "and approved_status = 1";
+            $apr_status = "AND approved_status = 1";
         }elseif($utype ==13 || $utype == 4){
             $apr_status = "AND approved_status = 1";
         }else{
@@ -14646,6 +14646,25 @@ public function getUserByType($utype,$uid){
                  ->where('CAST(end_date AS DATE) >=', $date);  // Leave ends after or on the date
         $query = $this->db->get();
         // echo $this->db->last_query();die;
+        return $query->result();
+    }
+
+    public function GetEmergencyTask($uid,$adate){
+        $query=$this->db->query("SELECT *  FROM `tblcallevents` WHERE (`actiontype_id` = 4 || `actiontype_id` = 3) AND `assignedto_id` = $uid and emergency = 1 and cast(appointmentdatetime as date) = '$adate'");
+         return $query->result();
+    }
+
+
+    public function get_Allreviewid($uid){
+        $query=$this->db->query("SELECT allreview.id rid,user_details.name name,allreview.* FROM allreview LEFT JOIN user_details ON user_details.user_id=allreview.bdid WHERE closet is null and uid='$uid'");
+        return $query->result();
+    }
+
+
+    public function getLeaveTypebyId($id){
+
+        $query=$this->db->query("SELECT * FROM leave_master  WHERE status = 'active' and id='$id'");
+        // echo $this->db->last_query();
         return $query->result();
     }
 }

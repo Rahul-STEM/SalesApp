@@ -55,6 +55,17 @@ if (!function_exists('getlastloginData')) {
 
 }
 
+if (!function_exists('checkInitiatedMeeting')) {
+    function checkInitiatedMeeting($id){
+        $CI =& get_instance();
+        // Load the model if not already loaded
+        $CI->load->model('Menu_model');
+        $DataSet = $CI->Menu_model->checkInitiatedMeeting($id);
+        
+        // return $DataSet;
+    }
+}
+
 
 
 ?>

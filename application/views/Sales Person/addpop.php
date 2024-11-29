@@ -694,7 +694,54 @@ date_default_timezone_set("Asia/Kolkata");
                     
                   </div></div></div>
                   
-                  
+
+                  <!-- Initiate Meeting....!!!!!!!  -->
+
+                  <div id="initiate_Meeting" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-standard-title" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="modal-standard-title1"></h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                          </button>
+                          </div> <!-- // END .modal-header -->
+                          <div class="modal-body">
+                            <div class="card card-form col-md-12">
+                              <div class="row no-gutters">
+                                <div class="col-lg-12 card-form__body card-body">
+                                  
+                                  <div>
+                                    <center><h5>Initiate Meeting</h5></center><hr>
+                                    <?php date_default_timezone_set("Asia/Kolkata");?>
+                                    <form action="<?=base_url();?>Menu/rpminitiate" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" name="uid" value="<?=$uid?>">
+                                        <input type="hidden" name="smid" value="" id="initmid">
+                                        <input type="hidden" name="bscid" value="">
+                                        <input type="hidden" name="lat">
+                                        <input type="hidden" name="lng">
+                                        <input type="hidden" name="startm" value="<?=date('Y-m-d H:i:s')?>">
+                                        <center>Meeting Initiated at <?=date('H:i:s')?></center>
+                                        <input type="text" name="company_name" class="form-control p-3 mt-2" id="bmcname">
+                                      <!-- <input type="file" name="cphoto" accept="image/*" required class="form-control p-3 mt-2" capture="camera"> -->
+                                      
+                                        <div id="location">
+                                            <div id="map-container-google-3" class="z-depth-1-half map-container-3 p-3 m-3 border">
+                                                <iframe style="width:100%;height:200px;" id="mylocationinitiate" src="" frameborder="0" style="border:0" allowfullscreen></iframe>
+                                            </div>
+                                        </div>
+
+                                      <button type="submit" id="rpmsClick1" class="btn btn-primary mt-3">Submit</button>
+                                   
+                                    </form>
+                                  </div>
+                                  
+                                </div>
+                              </div>
+                            </div>
+                            </div> <!-- // END .modal-body -->
+                            
+                          </div></div></div>                  
                   
                   
                   <div id="add_startm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-standard-title" aria-hidden="true">
@@ -1444,6 +1491,35 @@ date_default_timezone_set("Asia/Kolkata");
                                 }
                                 });
                                 });
+                                // initiate meeting
+                                $('[id^="initm"]').on('click', function() {
+                                $('#initiate_Meeting').modal('show');
+                                var id = this.value;
+                                document.getElementById("initmid").value=id;
+                                $.ajax({
+                                url:'<?=base_url();?>Menu/bmtd',
+                                method: 'post',
+                                data: {id: id},
+                                dataType: 'json',
+                                success: function(response){
+                                var len = response.length;
+                                $('#compname,#cid').text('');
+                                if(len > 0){
+                                var compname = response[0].compname;
+                                var cid = response[0].cid;
+
+                                // localStorage.setItem('startMeetformSubmitted', 'true');
+                                let myObjectData = { compname: compname, cid: cid,bmid: id };
+                                localStorage.setItem("myObjectKey", JSON.stringify(myObjectData));
+
+                                document.getElementById("bmcname").value = compname;
+                                document.getElementById("bscid").value = cid;
+                                }
+                                }
+                                });
+                                });
+
+
                                 $('[id^="startm"]').on('click', function() {
                                 $('#add_startm').modal('show');
                                 var id = this.value;

@@ -2703,11 +2703,28 @@ WHERE cid = '$cid'");
         $query=$this->db->query("SELECT * FROM user_details WHERE admin_id='$uid' and (type_id=4 ) AND lower(status) = 'active' ");
         return $query->result();
     }
+    // public function get_userbyaaid($uid){
+    //     $utype = $this->Menu_model->get_userbyid($uid);
+    //     $utype = $utype[0]->type_id;
+    //     if($utype ==4){
+    //         $query=$this->db->query("SELECT * FROM user_details where (pst_co='$uid')  and status='active' and (type_id=3 or type_id=13)");
+    //     }else{
+    //         $query=$this->db->query("SELECT * FROM user_details where (aadmin='$uid' or badmin='$uid')  and status='active' and (type_id=3 or type_id=9)");
+    //     }
+        
+    //     return $query->result();
+    // }
+
+
     public function get_userbyaaid($uid){
         $utype = $this->Menu_model->get_userbyid($uid);
         $utype = $utype[0]->type_id;
         if($utype ==4){
             $query=$this->db->query("SELECT * FROM user_details where (pst_co='$uid')  and status='active' and (type_id=3 or type_id=13)");
+        }if($utype ==13){
+            $query=$this->db->query("SELECT * FROM user_details where (aadmin='$uid')  and status='active' and (type_id=3 )");
+        }if($utype ==15){
+            $query=$this->db->query("SELECT * FROM user_details where (sales_co='$uid')  and status='active' and (type_id=3)");
         }else{
             $query=$this->db->query("SELECT * FROM user_details where (aadmin='$uid' or badmin='$uid')  and status='active' and (type_id=3 or type_id=9)");
         }
@@ -5331,6 +5348,15 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         $this->db->query("INSERT INTO notify(uid,type,sms) VALUES ('$uid','1','Bargin Meeting Started $company_name')");
         return  $smid;
     }
+
+    public function initiate_rpm($uid,$startm,$company_name,$lat,$lng,$smid,$bscid){
+        $query=$this->db->query("update barginmeeting set company_name='$company_name',initiateTime='$startm',initiateLat='$lat',initiateLongi='$lng',status='Initiated' WHERE id='$smid'");
+        // echo $this->db->last_query();die;
+        $query=$this->db->query("update company_master set compname='$company_name' WHERE id='$bscid'");
+        $this->db->query("INSERT INTO notify(uid,type,sms) VALUES ('$uid','1','Bargin Meeting Initiated $company_name')");
+        return  $smid;
+    }
+
     public function close_rpm($uid,$closem,$caddress,$cpname,$cpdes,$cpno,$cpemail,$lat,$lng,$type,$priority,$cmid,$bmcid,$bmccid,$bminid,$bmtid,$letmeetingsremarks,$updateStatus,$company_as,$company_descri,$potentional_client){
        
             if($bmtid == ''){
@@ -14665,6 +14691,13 @@ public function getUserByType($utype,$uid){
 
         $query=$this->db->query("SELECT * FROM leave_master  WHERE status = 'active' and id='$id'");
         // echo $this->db->last_query();
+        return $query->result();
+    }
+
+    public function checkInitiatedMeeting($id){
+
+        $query=$this->db->query("SELECT * FROM barginmeeting  WHERE initiateTime = null and `status`='Pending' and id='$id'");
+        echo $this->db->last_query();
         return $query->result();
     }
 }

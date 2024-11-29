@@ -106,8 +106,8 @@
                                         $bd = $this->Menu_model->get_userbyaSCid($uid);
                                   
                                         foreach ($bd as $b){
-                                          $bdid = $b->user_id;
-                                        $mdata=$this->Menu_model->get_bdrequest($bdid,$code);
+                                            $bdid = $b->user_id;
+                                            $mdata=$this->Menu_model->get_bdrequest($bdid,$code);
                                         foreach($mdata as $dt){
                                             $tid = $dt->id;
                                             $logs=$this->Menu_model->get_bdrequestlog($tid);?>

@@ -617,11 +617,11 @@ $dataPoints2 = array(
                         Email <span class="badge badge-success"><?=$ttbyd[0]->b?></span>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <!-- <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-meeting-tab" data-toggle="pill" href="#custom-tabs-four-meeting" role="tab" aria-controls="custom-tabs-four-meeting" aria-selected="false">
                         Meeting <span class="badge badge-success"><?=$ttbyd[0]->c?></span>
                     </a>
-                  </li>
+                  </li> -->
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-whatsapp-tab" data-toggle="pill" href="#custom-tabs-four-whatsapp" role="tab" aria-controls="custom-tabs-whatsapp" aria-selected="false">
                         WA<span class="badge badge-success"><?=$ttbyd[0]->e?></span>
@@ -650,7 +650,7 @@ $dataPoints2 = array(
                             $bm=0;
                             foreach($barg as $bgs){
                                 $bs = $bgs->status;
-                                if($bs=='Pending'){$bm++;}
+                                if($bs=='Pending' || $bs=='Initiated'){$bm++;}
                             }
                             ?>
                             <?=$bm?>
@@ -680,13 +680,14 @@ $dataPoints2 = array(
                                       $taid=$this->Menu_model->get_action($taid);
                                       $time = $tt->appointmentdatetime;
                                       $time = date('h:i a', strtotime($time));
+                                      $Company_CIN = $tt->cmpid_id;
                                   ?>
                                     <div class="list-group-item list-group-item-action">
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
                                        <span class="flex"><?=$taid[0]->name?> |
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong> | Comapny CIN :- <?=$Company_CIN?><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
                                         <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -704,6 +705,7 @@ $dataPoints2 = array(
                                 <div class="card-header bg-light" id="headingTwo" data-toggle="collapse" data-target="#collapse1113" aria-expanded="false" aria-controls="collapse1113">
                                       <?php $ttbytime = $this->Menu_model->get_ttbytime($uid,$tdate,'11:00:00','13:00:00');
                                       $ted = $this->Menu_model->get_ttbytimed($uid,$tdate,'11:00:00','13:00:00');
+                                      
                                       ?>
                                       <b>11:00 AM to 01:00 PM</b><br>
                                       Total Task <?=$ted[0]->ab?> | Call(<?=$ted[0]->a?>) | Email(<?=$ted[0]->b?>) | Whatsapp(<?=$ted[0]->e?>) | Meeting(<?=$ted[0]->c+$ted[0]->d?>) | MOM(<?=$ted[0]->f?>) | Proposal(<?=$ted[0]->g?>)
@@ -716,13 +718,14 @@ $dataPoints2 = array(
                                       $taid=$this->Menu_model->get_action($taid);
                                       $time = $tt->appointmentdatetime;
                                       $time = date('h:i a', strtotime($time));
+                                      $Company_CIN = $tt->cmpid_id;
                                   ?>
                                     <div class="list-group-item list-group-item-action">
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
                                        <span class="flex"><?=$taid[0]->name?> |
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong> | Comapny CIN :- <?=$Company_CIN?><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
                                         <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -752,13 +755,14 @@ $dataPoints2 = array(
                                       $time = $tt->appointmentdatetime;
                                       $reminder = $tt->reminder;
                                       $time = date('h:i a', strtotime($time));
+                                      $Company_CIN = $tt->cmpid_id;
                                   ?>
                                     <div class="list-group-item list-group-item-action">
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
                                        <span class="flex"><?=$taid[0]->name?> |
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong> | Comapny CIN :- <?=$Company_CIN?><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
                                         <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -789,13 +793,14 @@ $dataPoints2 = array(
                                       $time = $tt->appointmentdatetime;
                                       $reminder = $tt->reminder;
                                       $time = date('h:i a', strtotime($time));
+                                      $Company_CIN = $tt->cmpid_id;
                                   ?>
                                     <div class="list-group-item list-group-item-action">
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
                                        <span class="flex"><?=$taid[0]->name?> |
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong> | Comapny CIN :- <?= $Company_CIN?><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
                                         <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -825,13 +830,14 @@ $dataPoints2 = array(
                                       $time = $tt->appointmentdatetime;
                                       $reminder = $tt->reminder;
                                       $time = date('h:i a', strtotime($time));
+                                      $Company_CIN = $tt->cmpid_id;
                                   ?>
                                     <div class="list-group-item list-group-item-action">
                                        <span class="mr-3 align-items-center">
                                           <i class="fa-solid fa-circle"></i>
                                        </span>
                                        <span class="flex"><?=$taid[0]->name?> |
-                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                           <strong class="text-secondary mr-1"><?=$tt->compname?></strong> | Comapny CIN :- <?=$Company_CIN?><br>
                                            <small class="text-muted">Task Time:- <?=$time?></small>
                                         </span>
                                         <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -1024,16 +1030,18 @@ $dataPoints2 = array(
                   <div class="tab-pane fade" id="custom-tabs-four-call" role="tabpanel" aria-labelledby="custom-tabs-four-call-tab">
                       <?php $aai=0;
                      
-                      foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='1'){
-                          $taid = $tt->actiontype_id;
-                          $taid=$this->Menu_model->get_action($taid);
-                          $time = $tt->appointmentdatetime;
-                          $reminder = $tt->reminder;
-                          $rimby = $tt->reminderby;
-                          $rimat = $tt->reminderat;
-                          $rimbyname = $this->Menu_model->get_userbyid($rimby);
+                        foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='1'){
+                            $taid = $tt->actiontype_id;
+                            $taid=$this->Menu_model->get_action($taid);
+                            $time = $tt->appointmentdatetime;
+                            $reminder = $tt->reminder;
+                            $rimby = $tt->reminderby;
+                            $rimat = $tt->reminderat;
+                            $rimbyname = $this->Menu_model->get_userbyid($rimby);
 
-                          $time = date('h:i a', strtotime($time));
+                            $time = date('h:i a', strtotime($time));
+
+                            $Company_CIN = $tt->cmpid_id;
                       ?>
                         <div class="list-group-item list-group-item-action">
                           <span class="text-danger"><b><?php if($reminder>0){echo 'Reminder for This Task by '.$rimbyname[0]->name." at ".$rimat;}?></b></span><br>
@@ -1043,7 +1051,7 @@ $dataPoints2 = array(
                               <i class="fa-solid fa-circle"></i>
                            </span>
                            <span class="flex"><?=$taid[0]->name?> |
-                               <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                               <strong class="text-secondary mr-1"><?=$tt->compname?></strong>| Comapny CIN :- <?=$Company_CIN?><br>
                                <small class="text-muted">Task Time:- <?=$time?></small>
                             </span>
                             <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -1064,6 +1072,7 @@ $dataPoints2 = array(
                           $taid=$this->Menu_model->get_actionbyid($taid);
                           $time = $tt->appointmentdatetime;
                           $time = date('h:i a', strtotime($time));
+                          $Company_CIN = $tt->cmpid_id;
                       ?>
 
                         <div class="list-group-item list-group-item-action">
@@ -1073,7 +1082,7 @@ $dataPoints2 = array(
                               <i class="fa-solid fa-circle"></i>
                            </span>
                            <span class="flex"><?=$taid[0]->name?> |
-                               <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                               <strong class="text-secondary mr-1"><?=$tt->compname?></strong>| Comapny CIN :- <?=$Company_CIN?><br>
                                <small class="text-muted">Task Time:- <?=$time?></small>
                             </span>
                             <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -1091,6 +1100,7 @@ $dataPoints2 = array(
                           $taid=$this->Menu_model->get_action($taid);
                           $time = $tt->appointmentdatetime;
                           $time = date('h:i a', strtotime($time));
+                          $Company_CIN = $tt->cmpid_id;
                       ?>
 
                         <div class="list-group-item list-group-item-action">
@@ -1100,7 +1110,7 @@ $dataPoints2 = array(
                               <i class="fa-solid fa-circle"></i>
                            </span>
                            <span class="flex"><?=$taid[0]->name?> |
-                               <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                               <strong class="text-secondary mr-1"><?=$tt->compname?></strong>| Comapny CIN :- <?=$Company_CIN?><br>
                                <small class="text-muted">Task Time:- <?=$time?></small>
                             </span>
                             <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -1118,6 +1128,7 @@ $dataPoints2 = array(
                             $taid=$this->Menu_model->get_action($taid);
                             $time = $tt->appointmentdatetime;
                             $time = date('h:i a', strtotime($time));
+                            $Company_CIN = $tt->cmpid_id;
                         ?>
 
                             <div class="list-group-item list-group-item-action">
@@ -1127,7 +1138,7 @@ $dataPoints2 = array(
                                 <i class="fa-solid fa-circle"></i>
                             </span>
                             <span class="flex"><?=$taid[0]->name?> |
-                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong>| Comapny CIN :- <?=$Company_CIN?><br>
                                 <small class="text-muted">Task Time:- <?=$time?></small>
                                 </span>
                                 <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -1141,6 +1152,7 @@ $dataPoints2 = array(
 
                     <div class="tab-pane fade" id="custom-tabs-four-email" role="tabpanel" aria-labelledby="custom-tabs-four-email-tab">
                         <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='2'){
+                            $Company_CIN = $tt->cmpid_id;
                             if($tt->autotask == 1){$style = 'background: antiquewhite;'; $titletask = 'Auto Task';}else{$style =''; $titletask='';}
                         ?>
                             <div class="list-group-item list-group-item-action" title="<?=$titletask ?>" style="<?= $style ?>" >
@@ -1150,7 +1162,7 @@ $dataPoints2 = array(
                                 <i class="fa-solid fa-circle"></i>
                             </span>
                             <span class="flex">
-                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong>| Comapny CIN :- <?=$Company_CIN?><br>
                                 <small class="text-muted">Next Task:- </small>
                                 </span>
                                 <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -1164,6 +1176,7 @@ $dataPoints2 = array(
                     </div>
                     <div class="tab-pane fade" id="custom-tabs-four-meeting" role="tabpanel" aria-labelledby="custom-tabs-four-meeting-tab">
                         <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='3'){
+                            $Company_CIN = $tt->cmpid_id;
                         ?>
                             <div class="list-group-item list-group-item-action">
                             <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
@@ -1172,7 +1185,7 @@ $dataPoints2 = array(
                                 <i class="fa-solid fa-circle"></i>
                             </span>
                             <span class="flex">
-                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong>| Comapny CIN :- <?=$Company_CIN?><br>
                                 <small class="text-muted">Next Task:- </small>
                                 </span>
                                 <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -1185,6 +1198,7 @@ $dataPoints2 = array(
                     </div>
                     <div class="tab-pane fade" id="custom-tabs-four-whatsapp" role="tabpanel" aria-labelledby="custom-tabs-four-whatsapp-tab">
                         <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='5'){
+                            $Company_CIN = $tt->cmpid_id;
                         ?>
                             <div class="list-group-item list-group-item-action">
                             <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
@@ -1192,7 +1206,7 @@ $dataPoints2 = array(
                                 <i class="fa-solid fa-circle"></i>
                             </span>
                             <span class="flex">
-                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong>| Comapny CIN :- <?=$Company_CIN?><br>
                                 <small class="text-muted">Next Task:- </small>
                                 </span>
                                 <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -1206,6 +1220,7 @@ $dataPoints2 = array(
 
                     <div class="tab-pane fade" id="custom-tabs-four-mom" role="tabpanel" aria-labelledby="custom-tabs-four-mom-tab">
                         <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='6'){
+                            $Company_CIN = $tt->cmpid_id;
                         ?>
                             <div class="list-group-item list-group-item-action">
                             <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
@@ -1213,7 +1228,7 @@ $dataPoints2 = array(
                                 <i class="fa-solid fa-circle"></i>
                             </span>
                             <span class="flex">
-                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong>| Comapny CIN :- <?=$Company_CIN?><br>
                                 <small class="text-muted">Next Task:- </small>
                                 </span>
                                 <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -1227,7 +1242,7 @@ $dataPoints2 = array(
 
                     <div class="tab-pane fade" id="custom-tabs-four-proposal" role="tabpanel" aria-labelledby="custom-tabs-four-proposal-tab">
                         <?php foreach($totalt as $tt){
-                        
+                            $Company_CIN = $tt->cmpid_id;
                             
                             if($tt->plan==1){if($tt->actiontype_id=='7'){
                         
@@ -1238,7 +1253,7 @@ $dataPoints2 = array(
                                 <i class="fa-solid fa-circle"></i>
                             </span>
                             <span class="flex">
-                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                                <strong class="text-secondary mr-1"><?=$tt->compname?></strong>| Comapny CIN :- <?=$Company_CIN?><br>
                                 <small class="text-muted">Next Task:- </small>
                                 </span>
                                 <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -1252,8 +1267,7 @@ $dataPoints2 = array(
                     
                     <div class="tab-pane fade" id="custom-tabs-four-reviews" role="tabpanel" aria-labelledby="custom-tabs-four-reviews-tab">
                         <?php 
-                        
-                        
+
                         // var_dump($reviewid);
                         foreach($reviewid as $tt){
 
@@ -1303,8 +1317,9 @@ $dataPoints2 = array(
                                 }
 
                                 $cd = $this->Menu_model->get_cdbyid($cid);
+                                // $checkInitiatedMeeting = checkInitiatedMeeting($brg_id);
                                 ?>
-                                <?php if($bs=='Pending'){?>
+                                <?php if($bs=='Initiated'){?>
                                     <button style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;" value="<?=$brg->id?>" id="startm<?=$bl?>">
                                         <div class="list-group-item list-group-item-action">
                                         <?=$cd[0]->compname?> |
@@ -1312,6 +1327,16 @@ $dataPoints2 = array(
                                         <?=$cd[0]->state?> |
                                         <?=$brg->storedt?> |
                                         <b class="text-success">Start Meeting (<?=$meet_name; ?>)</b>
+                                    </div></button>
+                                <?php } ?>
+                                <?php if($bs=='Pending'){?>
+                                    <button style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;" value="<?=$brg->id?>" id="initm<?=$bl?>">
+                                        <div class="list-group-item list-group-item-action">
+                                        <?=$cd[0]->compname?> |
+                                        <?=$cd[0]->city?> |
+                                        <?=$cd[0]->state?> |
+                                        <?=$brg->storedt?> |
+                                        <b class="text-success">Initiate Meeting (<?=$meet_name; ?>)</b>
                                     </div></button>
                                 <?php }if($bs=='Start'){?>
                                     <button style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;" id="closem<?=$bl?>" value="<?=$brg->id?>">
@@ -1367,11 +1392,11 @@ $dataPoints2 = array(
                         Email <span class="badge badge-success"><?=$ttbydc[0]->b?></span>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <!-- <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-meeting-tab" data-toggle="pill" href="#custom-tabs-four-meeting" role="tab" aria-controls="custom-tabs-four-meeting" aria-selected="false">
                         Meeting <span class="badge badge-success"><?=$ttbydc[0]->c?></span>
                     </a>
-                  </li>
+                  </li> -->
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-whatsapp-tab" data-toggle="pill" href="#custom-tabs-four-whatsapp" role="tab" aria-controls="custom-tabs-whatsapp" aria-selected="false">
                         WA<span class="badge badge-success"><?=$ttbydc[0]->e?></span>

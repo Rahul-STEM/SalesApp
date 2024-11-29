@@ -2103,7 +2103,7 @@ class Graph_Model extends CI_Model
             $this->db->where_in('aadmin', $uid);
         }elseif ($userTypeid == 15) {
 
-            $this->db->or_where_in('sales_co', $SelectedUsers);
+            $this->db->or_where_in('sales_co', $uid);
         } else {
 
             $this->db->where('user_id', $uid);
@@ -2204,7 +2204,7 @@ class Graph_Model extends CI_Model
             $this->db->where_in('aadmin', $uid);
         }elseif ($userTypeid == 15) {
 
-            $this->db->or_where_in('sales_co', $SelectedUsers);
+            $this->db->or_where_in('sales_co', $uid);
         } else {
             $this->db->where('user_id', $uid);
         }

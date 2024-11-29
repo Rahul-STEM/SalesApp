@@ -4863,7 +4863,7 @@ public function Dashboard(){
         else{
             $tdate = date('Y-m-d');
         }
-     
+        // $tdate = '2024-11-21';
         $this->load->library('session');;
     	$this->load->model('Menu_model');
         
@@ -4882,6 +4882,7 @@ public function Dashboard(){
         if($uid=='100103'){$uid=45;}
         if($uid=='100149'){$uid=45;}
         if($uid=='100142'){$uid=2;}
+        // $uid = 100182;
         $dt=$this->Menu_model->get_utype($uyid);
         $dep_name = $dt[0]->name;
         $fr=$this->Menu_model->get_freport($uid);
@@ -6581,6 +6582,23 @@ public function Dashboard(){
         $cbmid = $this->Menu_model->create_bmeeting($uid,$bcytpe,$bcid,$bmdate,$bstate,$bcity);
         redirect('Menu/Dashboard');
     }
+
+    public function rpminitiate(){
+        $uid = $_POST['uid'];
+        $smid = $_POST['smid'];
+        $startm = $_POST['startm'];
+        $company_name = $_POST['company_name'];
+
+        $lat = $_POST['lat'];
+        $lng = $_POST['lng'];
+        $bscid = $_POST['bscid'];
+        // $cphoto = $flink;
+        // var_dump($_POST);die;
+        $cbmid = $this->Menu_model->initiate_rpm($uid,$startm,$company_name,$lat,$lng,$smid,$bscid);
+        $this->session->set_flashdata('success_message','Meeting Initiated SuccessFully !');
+        redirect('Menu/Dashboard');
+    }
+
     public function rpmstart(){
         $uid = $_POST['uid'];
         $smid = $_POST['smid'];

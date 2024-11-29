@@ -1327,6 +1327,7 @@ $sca = $this->Menu_model->final_scon1($uid,$tdate,$tdate,0);
                     $taid=$this->Menu_model->get_action($taid);
                     $time = $tt->appointmentdatetime;
                     $time = date('h:i a', strtotime($time));
+                    $Company_CIN = $tt->cmpid_id;
                     ?>
                     
                     <div class="list-group-item list-group-item-action">
@@ -1336,7 +1337,7 @@ $sca = $this->Menu_model->final_scon1($uid,$tdate,$tdate,0);
                             <i class="fa-solid fa-circle"></i>
                         </span>
                         <span class="flex"><?=$taid[0]->name?> |
-                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong> | Comapny CIN :- <?=$Company_CIN?><br>
                             <small class="text-muted">Task Time:- <?=$time?></small>
                         </span>
                         <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -1349,6 +1350,7 @@ $sca = $this->Menu_model->final_scon1($uid,$tdate,$tdate,0);
                 </div></button>
                 <div class="tab-pane fade" id="custom-tabs-four-email" role="tabpanel" aria-labelledby="custom-tabs-four-email-tab">
                     <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='2'){
+                        $Company_CIN = $tt->cmpid_id;
                     ?>
                     <div class="list-group-item list-group-item-action">
                         <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
@@ -1357,7 +1359,7 @@ $sca = $this->Menu_model->final_scon1($uid,$tdate,$tdate,0);
                             <i class="fa-solid fa-circle"></i>
                         </span>
                         <span class="flex">
-                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong> | Comapny CIN :- <?=$Company_CIN?><br>
                             <small class="text-muted">Next Task:- </small>
                         </span>
                         <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -1370,6 +1372,7 @@ $sca = $this->Menu_model->final_scon1($uid,$tdate,$tdate,0);
                 </div>
                 <div class="tab-pane fade" id="custom-tabs-four-meeting" role="tabpanel" aria-labelledby="custom-tabs-four-meeting-tab">
                     <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='3'){
+                        $Company_CIN = $tt->cmpid_id;
                     ?>
                     <div class="list-group-item list-group-item-action">
                         <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
@@ -1378,7 +1381,7 @@ $sca = $this->Menu_model->final_scon1($uid,$tdate,$tdate,0);
                             <i class="fa-solid fa-circle"></i>
                         </span>
                         <span class="flex">
-                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong> | Comapny CIN :- <?=$Company_CIN?><br>
                             <small class="text-muted">Next Task:- </small>
                         </span>
                         <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -1391,6 +1394,7 @@ $sca = $this->Menu_model->final_scon1($uid,$tdate,$tdate,0);
                 </div>
                 <div class="tab-pane fade" id="custom-tabs-four-whatsapp" role="tabpanel" aria-labelledby="custom-tabs-four-whatsapp-tab">
                     <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='5'){
+                        $Company_CIN = $tt->cmpid_id;
                     ?>
                     <div class="list-group-item list-group-item-action">
                         <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
@@ -1398,7 +1402,7 @@ $sca = $this->Menu_model->final_scon1($uid,$tdate,$tdate,0);
                             <i class="fa-solid fa-circle"></i>
                         </span>
                         <span class="flex">
-                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong> | Comapny CIN :- <?=$Company_CIN?><br>
                             <small class="text-muted">Next Task:- </small>
                         </span>
                         <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>
@@ -1412,6 +1416,7 @@ $sca = $this->Menu_model->final_scon1($uid,$tdate,$tdate,0);
                 
                 <div class="tab-pane fade" id="custom-tabs-four-proposal" role="tabpanel" aria-labelledby="custom-tabs-four-proposal-tab">
                     <?php foreach($totalt as $tt){if($tt->plan==1){if($tt->actiontype_id=='7'){
+                        $Company_CIN = $tt->cmpid_id;
                     ?>
                     <div class="list-group-item list-group-item-action">
                         <button id="add_act<?=$aai?>" value="<?=$tt->id?>" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
@@ -1419,7 +1424,7 @@ $sca = $this->Menu_model->final_scon1($uid,$tdate,$tdate,0);
                             <i class="fa-solid fa-circle"></i>
                         </span>
                         <span class="flex">
-                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong><br>
+                            <strong class="text-secondary mr-1"><?=$tt->compname?></strong> | Comapny CIN :- <?=$Company_CIN?><br>
                             <small class="text-muted">Next Task:- </small>
                         </span>
                         <span class="p-3" style="color:<?=$tt->color?>;"><?=$tt->name?>

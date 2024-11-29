@@ -148,10 +148,9 @@
                                     <div class="table-responsive">
                                         <div class="table-responsive">
                                             <div class="pdf-viwer">
-                                            <?php
-                                             
-if (!empty($getReportbyUser) && is_array($getReportbyUser)) {
-    $i = 1;
+                                            <?php                                             
+                                                if (!empty($getReportbyUser) && is_array($getReportbyUser)) {
+                                                    $i = 1;
                                                 foreach ($getReportbyUser as $date => $periods):
                                                 ?>
                                                     <center><h2>Date: <?php echo htmlspecialchars($date); ?></h2></center>
@@ -269,24 +268,24 @@ if (!empty($getReportbyUser) && is_array($getReportbyUser)) {
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-<!-- <script>
+<script>
 $(document).ready(function() {
     // Initialize DataTables with Export Buttons for each table
     $('table[id^="example_"]').each(function() {
         $(this).DataTable({
             dom: 'Bfrtip',
             buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
+                'excel', 'pdf'
             ],
             // Add your other DataTables options here if needed
         });
     });
 });
-</script> -->
-<script>
+</script>
+<!-- <script>
     $(document).ready(function() {
-        // const userName = "<?php // echo htmlspecialchars($getReportbyUser[0]->userName); ?>";
-        const userName = "test";
+        const userName = "<?php  echo htmlspecialchars($getReportbyUser[0]->userName); ?>";
+        // const userName = "test";
 
         // Initialize DataTables with export buttons for all tables with class 'data-table'
         $('.data-table').each(function() {
@@ -379,6 +378,6 @@ $(document).ready(function() {
             doc.save(`${userName}_.pdf`);
         }
     });
-</script>
+</script> -->
   </body>
 </html>

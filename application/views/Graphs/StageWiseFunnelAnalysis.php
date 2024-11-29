@@ -332,6 +332,9 @@
             
             <?php //$stage = $this->Menu_model->get_fannals($uid,'1');
                 foreach($FunnelData as $SingleData){
+                    if (($SingleData) == null) {
+                        # code...
+                   
             ?>
                 { value: <?=$SingleData->stage1?>, category: "Qualification Stage (<?=$SingleData->stage1?>)" },
                 // { value: 0, category: "<?=round(($SingleData->stage2/$SingleData->stage1)*100)?>%" },
@@ -340,7 +343,7 @@
                 { value: <?=$SingleData->stage3?>, category: "Proposal (<?=$SingleData->stage3?>)" },
                 // { value: 0, category: "<?=round(($SingleData->stage4/$SingleData->stage3)*100)?>%" },
                 { value: <?=$SingleData->stage4?>, category: "Closure (<?=$SingleData->stage4?>)" },
-        	<?php } ?>
+        	<?php }  }?>
         ]);
         
         series.appear();

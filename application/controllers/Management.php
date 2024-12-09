@@ -654,11 +654,23 @@ public function getAllActiveUserInDepartment(){
         $sdate = new DateTime($cdate);
         $sdate->modify('-1 day');
         $previousDate = $sdate->format('Y-m-d');
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+        $uyid =  $user['type_id'];
+        $this->load->model('Menu_model');
+        $dt=$this->Menu_model->get_utype($uyid);
+    // echo "hii2";die;
+    // $tdate='2024-07-18';
+
+        $userList = $this->Menu_model->get_userForTask($uid,$uyid);
+        // var_dump($userList);die;
         $cdate = '2024-10-08';
-        $dayData = $this->Management_model->CheckingDayManage_New($this->uid,$cdate);
+        // $dayData = $this->Management_model->CheckingDayManage_New($this->uid,$cdate,$user='');
         // echo $this->db->last_query();die;
-        $yesterdayData = $this->Management_model->CheckingYesterdyDayManage_New($this->uid,$previousDate);
-        
+        // $yesterdayData = $this->Management_model->CheckingYesterdyDayManage_New($this->uid,$previousDate);
+        $dayData  =  $yesterdayData = [];
         // var_dump($yesterdayData);die;
         $RequestApprovals = $this->Management_model->RequestApprovals($this->uid,$cdate);
         $ApprovedRequests = $this->Management_model->ApprovedRequests($this->uid,$cdate);
@@ -673,17 +685,143 @@ public function getAllActiveUserInDepartment(){
             if($currentHour >= 11 && $typeID != 2) {
                 if (sizeof($ApprovedRequests) > 0) {
                     
-                    $this->load->view($this->dep_name.'/CheckingDayManagement_New',['uid'=>$this->uid,'user'=>$this->user,'typeID'=>$typeID,'dayData'=>$dayData,'cdate'=>$cdate,'previousDate'=>$previousDate]);
+                    $this->load->view($this->dep_name.'/CheckingDayManagement_New1',['uid'=>$this->uid,'user'=>$this->user,'typeID'=>$typeID,'dayData'=>$dayData,'cdate'=>$cdate,'previousDate'=>$previousDate,'userList'=>$userList]);
                 }else{
                     $this->load->view($this->dep_name.'/RequestForDayCheckApproval',['uid'=>$this->uid,'user'=>$this->user,'cdate'=>$cdate,'RequestApprovals'=>$RequestApprovals]);
                 }
             }else{
-                $this->load->view($this->dep_name.'/CheckingDayManagement_New',['uid'=>$this->uid,'user'=>$this->user,'dayData'=>$dayData,'yesterdayData'=>$yesterdayData,'cdate'=>$cdate,'previousDate'=>$previousDate]);
+                $this->load->view($this->dep_name.'/CheckingDayManagement_New1',['uid'=>$this->uid,'user'=>$this->user,'dayData'=>$dayData,'yesterdayData'=>$yesterdayData,'cdate'=>$cdate,'previousDate'=>$previousDate,'userList'=>$userList]);
             }
         }else{
             redirect('Menu/main');
         }
     }
+
+
+    public function CheckingDayManagement_New1(){
+
+        $cdate = $this->input->post('date');
+        $userid = $this->input->post('user_id');
+        $period = $this->input->post('period');
+        // var_dump($period);die;
+        if($period == 'today'){
+
+            // var_dump($period);die;
+            // $cdate = '2024-10-08';
+            $dayData = $this->Management_model->CheckingDayManage_New($this->uid,$cdate,$userid);
+            echo json_encode($dayData);
+
+        }elseif ($period == 'yesterday') {
+            
+            // var_dump($period);die;
+            $cdate = date("Y-m-d");
+            // $cdate = '2024-10-08';
+            $sdate = new DateTime($cdate);
+            $sdate->modify('-1 day');
+            $previousDate = $sdate->format('Y-m-d');
+
+            $dayData = $this->Management_model->CheckingYesterdyDayManage_New($this->uid,$previousDate,$userid);
+            // var_dump($dayData);die;
+            echo json_encode($dayData);
+        }
+
+        
+    }
+
+    public function submitDayCheck(){//
+        // var_dump($_POST);die;
+        $data = array(
+            'record_date' => date('Y-m-d'),  // e.g., '2024-10-08'
+            'userID' => $this->input->post('userID'),            // e.g., '123'
+            'planned_day_start' => $this->input->post('planned_day_start'), // e.g., 'Work From Field'
+            'actual_day_start' => $this->input->post('actual_day_start'),   // e.g., 'Work From Office'
+            // 'Did_the_day_started_as_planned' => $this->input->post('Did_the_day_started_as_planned'),
+            'day_start_time' => $this->input->post('day_start_time'),  // e.g., '2024-10-08 10:32:12'
+            // 'Did_the_day_started_on_right_time' => $this->input->post('Did_the_day_started_on_right_time'),
+            // 'Did_the_task_started_on_right_time' => $this->input->post('Did_the_task_started_on_right_time'),
+            // 'Is_Day_start_image_good' => $this->input->post('Is_Day_start_image_good'),
+            // 'Day_Start_Location_as_per_Plan' => $this->input->post('Day_Start_Location_as_per_Plan'),
+            'autoTaskStartTime' => $this->input->post('autoTaskStartTime'), // e.g., '17:00:00'
+            'autoTaskEndTime' => $this->input->post('autoTaskEndTime'),   // e.g., '18:00:00'
+            // 'Auto_task_time_entered_correctly' => $this->input->post('Auto_task_time_entered_correctly'),
+            'planner_created_at' => $this->input->post('planner_created_at'), // e.g., '2024-10-08 14:42:51'
+            'planner_request_remarks' => $this->input->post('planner_request_remarks'),
+            'planner_approvel_status' => $this->input->post('planner_approvel_status'),
+            'planner_approvel_time' => $this->input->post('planner_approvel_time'), // e.g., '2024-10-08 11:42:51'
+            'approver_Name' => $this->input->post('approver_Name'),
+            // 'Planner_requested_correctly' => $this->input->post('Planner_requested_correctly'),
+            'end_time' => $this->input->post('end_time'), // e.g., '2024-10-07 10:31:45'
+            // 'The_Day_Ended_at_a_good_time' => $this->input->post('The_Day_Ended_at_a_good_time'),
+            // 'Did_the_yesterday_day_close_image_was_right' => $this->input->post('Did_the_yesterday_day_close_image_was_right'),
+            'yesterday_autotaskstartTime' => $this->input->post('yesterday_autotaskstartTime'), // e.g., '17:00:00'
+            'yesterday_autotaskendTime' => $this->input->post('yesterday_autotaskendTime'),   // e.g., '18:00:00'
+            // 'Autotask_added_on_correct_time' => $this->input->post('Autotask_added_on_correct_time'),
+            'total_timeTakeFor_planner' => $this->input->post('total_timeTakeFor_planner'), // e.g., '07:40:10'
+            // 'Time_taken_to_plan_the_planner' => $this->input->post('Time_taken_to_plan_the_planner'),
+            'dayCloseRemark' => $this->input->post('dayCloseRemark'),
+            'dayCloseApproveStatus' => $this->input->post('dayCloseApproveStatus'),
+            'dayCloseApproveRemark' => $this->input->post('dayCloseApproveRemark'),
+            // 'Was_day_ended_on_good_time' => $this->input->post('Was_day_ended_on_good_time'),
+            // 'Day_Start_Location_as_per_Plan_yesterday' => $this->input->post('Day_Start_Location_as_per_Plan_yesterday'),
+            'specialRequest_created_at' => $this->input->post('specialRequest_created_at'),
+            'specialRequest_end_at' => $this->input->post('specialRequest_end_at'),
+            'specialRequest_request_remarks' => $this->input->post('specialRequest_request_remarks'),
+            'specialRequest_approvel_status' => $this->input->post('specialRequest_approvel_status'),
+            // 'Planner_requested_correctly_yesterday' => $this->input->post('Planner_requested_correctly_yesterday')
+        );
+
+
+        $this->db->insert('daily_planner', $data);
+
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+
+        $fields_to_insert = [
+            'Planner_requested_correctly',
+            'Auto_task_time_entered_correctly',
+            'Day_Start_Location_as_per_Plan',
+            'Is_Day_start_image_good',
+            'Did_the_task_started_on_right_time',
+            'Did_the_day_started_on_right_time',
+            'Did_the_day_started_as_planned',
+            'Did_the_yesterday_day_close_image_was_right',
+            'Autotask_added_on_correct_time',
+            'Time_taken_to_plan_the_planner',
+            'Was_day_ended_on_good_time',
+            'Day_Start_Location_as_per_Plan_yesterday',
+            'Planner_requested_correctly_yesterday'
+        ];
+
+        $this->db->trans_start();
+
+    // Loop through the fields and insert the question name and rating
+        foreach ($fields_to_insert as $field) {
+            // Check if the field exists in the POST request
+            if (!empty($_POST[$field])) {
+                // Prepare data for insertion
+                $data = array(
+                    'question' => $field,
+                    'user_id' => $_POST['userID'],
+                    'date' => date('Y-m-d'),
+                    'feedback_by' => $uid,
+                    'star' => $_POST[$field],  // Field value from POST request
+                );
+                // Insert into the 'ratings' table
+                $this->db->insert('star_rating', $data);
+            }
+            // echo $this->db->last_query(); die;
+            // echo ";";
+        }
+
+        // Complete the transaction
+        $this->db->trans_complete();
+
+
+// die;
+        redirect('management/CheckingDayManagement_New');
+    }
+
     public function checkdayswithStarNew(){
         
         // var_dump($_POST);die;
@@ -775,7 +913,7 @@ public function getAllActiveUserInDepartment(){
 
     public function DayManagementReport()
     {
-
+        // phpinfo();die;
         if (isset($_POST['startDate']) && isset($_POST['endDate'])) {
 
             $sdate = $_POST['startDate'];
@@ -796,6 +934,8 @@ public function getAllActiveUserInDepartment(){
             $selected_user = [];
         }
 
+        
+        // $selected_user = $_POST['user'];
         // var_dump($_POST);die;
         // $selected_user = [];
 
@@ -808,9 +948,11 @@ public function getAllActiveUserInDepartment(){
         $dep_name = $dt[0]->name;
 
         $getUsers = $this->Management_model->getUsers($uid,$userTypeid);
-
+//         echo "start date:====".$sdate;
+//         echo "end date:====".$edate; die;
         $getReportbyUser = $this->Management_model->getReportbyUser($selected_user,$sdate,$edate);
         
+        // echo $this->db->last_query();die;
         // var_dump($getReportbyUser);die;
 
         $groupedByDate = [];
@@ -834,6 +976,7 @@ public function getAllActiveUserInDepartment(){
             $groupedByDate[$date][$period][] = $record;
         }
         
+        // var_dump($getReportbyUser);die;
         if (!empty($user)) {
             // $this->load->view('include/header');
             // $this->load->view($dep_name . '/nav', ['uid' => $uid, 'user' => $user]);

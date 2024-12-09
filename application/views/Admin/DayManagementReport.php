@@ -114,7 +114,8 @@
                                                 <option value="select_all">Select All</option>
                                                 <?php foreach ($users as $users) { ?>
                                                     <option value="<?= $users->user_id ?>" <?= in_array($users->user_id, $selected_user) ? 'selected' : '' ?>>
-                                                        <?= htmlspecialchars($users->name) ?></option>
+                                                        <?= htmlspecialchars($users->name) ?>
+                                                    </option>
                                                 <?php } ?>
                                             </select>
                                         </div>

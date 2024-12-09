@@ -3744,11 +3744,11 @@ class Menu extends CI_Controller {
         $user_id = $_POST['user_id'];
         $lat = $_POST['lat'];
         $lng = $_POST['lng'];
-      
         $user = $this->session->userdata('user');
         $data['user'] = $user;
         $uid = $user['user_id'];
         $uyid =  $user['type_id'];
+        // echo "do=".$do;echo "<br>do=".$uyid;die;
       
         $filname = $_FILES['filname']['name'];
         $uploadPath = 'uploads/day/';
@@ -3756,39 +3756,46 @@ class Menu extends CI_Controller {
      
         if($do == 1){
             if($uyid == 3 || $uyid == 4 || $uyid == 13){
-            $pendingtaskcmp = $this->Menu_model->get_PendingTaskForToday($user_id);
-            $pendingautotaskcmpcnt = sizeof($pendingtaskcmp);  
-           if($pendingautotaskcmpcnt > 0){
-               $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask Before Going Task Planner Page');
-               redirect('Menu/Dashboard');
-           }else{
-            $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
-            $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
-           } 
-        }else{
-            $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
-            $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
-        }
+                $pendingtaskcmp = $this->Menu_model->get_PendingTaskForToday($user_id);
+                $pendingautotaskcmpcnt = sizeof($pendingtaskcmp);  
+                // echo "do=".$do;echo "<br>do=".$uyid;echo "<br>pendingautotaskcmpcnt=".$pendingautotaskcmpcnt;die;
+                if($pendingautotaskcmpcnt > 0){
+                    $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask Before Going Task Planner Page');
+                    redirect('Menu/DayManagement');
+                }else{
+                    $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
+                    $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
+                    $this->session->set_flashdata('error_message','Day Closed Successfully..!!');
+                    // redirect('Menu/Dashboard');
+                } 
+            }else{
+                $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
+                $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
+                $this->session->set_flashdata('error_message','Day Closed Successfully..!!');
+                // redirect('Menu/Dashboard');
+            }
         }
       
         if($do == 0){
            $pendingtaskcmp = $this->Menu_model->get_PendingTaskForToday($user_id);
            $pendingautotaskcmpcnt = sizeof($pendingtaskcmp);  
-           if($pendingautotaskcmpcnt > 0){
+            if($pendingautotaskcmpcnt > 0){
                 $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
                 $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
-               $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask Before Going Task Planner Page');
-               redirect('Menu/Dashboard');
-           }else{
-            if($uyid == 3 || $uyid == 4 || $uyid == 13){
-                $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
-                $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
-                $this->session->set_flashdata('error_message','Please Set Todays Planner First');
-                redirect('Menu/Dashboard');
+                $this->session->set_flashdata('error_message','Total '. $pendingautotaskcmpcnt . ' Pending Auto Task, First Complete Your Pending Autotask Before Going Task Planner Page');
+                redirect('Menu/DayManagement');
             }else{
-                $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
-                $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
-            }
+                if($uyid == 3 || $uyid == 4 || $uyid == 13){
+                    $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
+                    $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
+                    $this->session->set_flashdata('error_message','Please Set Todays Planner First');
+                    redirect('Menu/DayManagement');
+                }else{
+                    $flink = $this->Menu_model->uploadfile($filname, $uploadPath);
+                    $this->Menu_model->submit_day($wffo,$flink,$user_id,$lat,$lng,$do);
+                    $this->session->set_flashdata('error_message','Day Closed Successfully..!!');
+                    // redirect('Menu/Dashboard');
+                }
            }
         }
        

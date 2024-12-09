@@ -1629,7 +1629,7 @@ WHERE cid = '$cid'");
         if($utype==13){$text = "user_details.user_id='$uid'";}
       
         $query=$this->db->query("SELECT Count(DISTINCT tblcallevents.user_id)bdcount,COUNT(*) a,count(CASE WHEN nextCFID=0 THEN nextCFID end) b,count(CASE WHEN nextCFID!=0 THEN nextCFID end) c, count(CASE WHEN actiontype_id=1 THEN actiontype_id end) d,count(CASE WHEN actiontype_id=1 and nextCFID=0 THEN actiontype_id end) e,count(CASE WHEN actiontype_id=2 THEN actiontype_id end) f,count(CASE WHEN actiontype_id=2 and nextCFID=0 THEN actiontype_id end) g,count(CASE WHEN actiontype_id=3 THEN actiontype_id end) h,count(CASE WHEN actiontype_id=3 and nextCFID=0 THEN actiontype_id end) i,count(CASE WHEN actiontype_id=4 THEN actiontype_id end) j,count(CASE WHEN actiontype_id=4 and nextCFID=0 THEN actiontype_id end) k,count(CASE WHEN actiontype_id=5 THEN actiontype_id end) l,count(CASE WHEN actiontype_id=5 and nextCFID=0 THEN actiontype_id end) m,count(CASE WHEN actiontype_id=6 THEN actiontype_id end) n,count(CASE WHEN actiontype_id=6 and nextCFID=0 THEN actiontype_id end) o,count(CASE WHEN actiontype_id=7 THEN actiontype_id end) p,count(CASE WHEN actiontype_id=7 and nextCFID=0 THEN actiontype_id end) q,count(CASE WHEN actontaken='yes' and nextCFID!=0 THEN actiontype_id end) r,count(CASE WHEN actontaken='no' and nextCFID!=0 THEN actiontype_id end) s,count(CASE WHEN purpose_achieved='yes' and nextCFID!=0 THEN actiontype_id end) t,count(CASE WHEN purpose_achieved='no' and nextCFID!=0 THEN actiontype_id end) u,count(CASE WHEN autotask=1 THEN autotask end) autotask FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id WHERE $text and plan=1 and cast(appointmentdatetime as DATE) BETWEEN '$sd' and '$ed'");
-        // echo $str = $this->db->last_query();
+        echo $str = $this->db->last_query();die;
         return $query->result();
     }
     public function get_bwdtotaltdpst($uid,$sd,$ed){
@@ -1748,6 +1748,7 @@ WHERE cid = '$cid'");
         if($utype==9){$text = "user_details.aadmin='$uid' and user_details.type_id='3' and user_details.status='active'";}
         if($utype==13){$text = "user_details.aadmin='$uid' and user_details.type_id='3' and user_details.status='active'";}
         if($utype==15){$text = "user_details.sales_co='$uid' and (user_details.type_id='3' or user_details.type_id='4' or user_details.type_id='13') and user_details.status='active'";}
+        $text = "user_details.user_id='$uid' and user_details.status='active'";
         if($code==4){
             $query=$this->db->query("SELECT *,tblcallevents.id id, tblcallevents.cid_id cid, (SELECT max(t1.id) FROM tblcallevents t1 WHERE t1.cid_id=cid and t1.nextCFID!='0') ltid FROM tblcallevents LEFT JOIN user_details ON user_details.user_id=tblcallevents.user_id LEFT JOIN init_call on init_call.id=tblcallevents.cid_id LEFT JOIN company_master ON company_master.id=init_call.cmpid_id WHERE $text and cast(appointmentdatetime  as DATE) BETWEEN '$sd' and '$ed' and plan=1");
         
@@ -4250,7 +4251,7 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         }else{
             $apr_status = "";
         }
-          $query=$this->db->query("SELECT COUNT(CASE WHEN actiontype_id=1 THEN actiontype_id END) a, COUNT(CASE WHEN actiontype_id=2 THEN actiontype_id END) b, COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) c, COUNT(CASE WHEN actiontype_id=4 THEN actiontype_id END) d, COUNT(CASE WHEN actiontype_id=5 THEN actiontype_id END) e, COUNT(CASE WHEN actiontype_id=6 THEN actiontype_id END) f, COUNT(CASE WHEN actiontype_id=7 THEN actiontype_id END) g, COUNT(CASE WHEN actiontype_id=8 THEN actiontype_id END) h, COUNT(CASE WHEN actiontype_id=9 THEN actiontype_id END) i, COUNT(CASE WHEN actiontype_id=10 THEN actiontype_id END) j, COUNT(CASE WHEN actiontype_id=11 THEN actiontype_id END) k, COUNT(CASE WHEN actiontype_id=12 THEN actiontype_id END) l,COUNT(CASE WHEN actiontype_id=13 THEN actiontype_id END) m, ( COUNT(CASE WHEN actiontype_id=1 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=2 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=4 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=5 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=6 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=7 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=8 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=9 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=10 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=11 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=12 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=13 THEN actiontype_id END) ) as ab FROM tblcallevents WHERE assignedto_id='$uid' $apr_status AND CAST(appointmentdatetime AS DATE)='$tdate' AND nextCFID=0 AND plan=1");
+            $query=$this->db->query("SELECT COUNT(CASE WHEN actiontype_id=1 THEN actiontype_id END) a, COUNT(CASE WHEN actiontype_id=2 THEN actiontype_id END) b, COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) c, COUNT(CASE WHEN actiontype_id=4 THEN actiontype_id END) d, COUNT(CASE WHEN actiontype_id=5 THEN actiontype_id END) e, COUNT(CASE WHEN actiontype_id=6 THEN actiontype_id END) f, COUNT(CASE WHEN actiontype_id=7 THEN actiontype_id END) g, COUNT(CASE WHEN actiontype_id=8 THEN actiontype_id END) h, COUNT(CASE WHEN actiontype_id=9 THEN actiontype_id END) i, COUNT(CASE WHEN actiontype_id=10 THEN actiontype_id END) j, COUNT(CASE WHEN actiontype_id=11 THEN actiontype_id END) k, COUNT(CASE WHEN actiontype_id=12 THEN actiontype_id END) l,COUNT(CASE WHEN actiontype_id=13 THEN actiontype_id END) m, ( COUNT(CASE WHEN actiontype_id=1 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=2 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=3 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=4 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=5 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=6 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=7 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=8 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=9 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=10 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=11 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=12 THEN actiontype_id END) + COUNT(CASE WHEN actiontype_id=13 THEN actiontype_id END) ) as ab FROM tblcallevents WHERE assignedto_id='$uid' $apr_status AND CAST(appointmentdatetime AS DATE)='$tdate' AND nextCFID=0 AND plan=1");
         return $query->result();
     }
     public function get_ttbydone($uid,$tdate){
@@ -6317,6 +6318,7 @@ public function submit_task1($tid,$uid,$cmpid,$actontaken,$action_id,$status,$re
     public function read_notify($id){
         $query=$this->db->query("update notify set view=1 where id='$id'");
     }
+
     public function get_bdrequest($uid,$code){
         $db3 = $this->load->database('db3', TRUE);
         
@@ -6354,6 +6356,9 @@ public function submit_task1($tid,$uid,$cmpid,$actontaken,$action_id,$status,$re
         }
         if($code=='6'){
             $query=$db3->query("select * from bdrequest where $text and status='1'");
+        }
+ 	if($code=='7'){
+            $query=$db3->query("select * from bdrequest where $text and status='0'");
         }
         return $query->result();
     }
@@ -14698,6 +14703,34 @@ public function getUserByType($utype,$uid){
 
         $query=$this->db->query("SELECT * FROM barginmeeting  WHERE initiateTime = null and `status`='Pending' and id='$id'");
         echo $this->db->last_query();
+        return $query->result();
+    }
+
+
+    public function get_userForDayCheck($uid,$uyid){
+        $this->db->select('user_id');
+        $this->db->select('name');
+        $this->db->from('user_details');
+        $this->db->join('user_day','user_day.user_id = user_details.user_id', 'left');
+        if($uyid == 2){
+            $this->db->where('admin_id',$uid);
+        }elseif ($uyid == 15 ) {
+            
+            $this->db->where('sales_co',$uid);
+        }elseif ($uyid == 4) {
+            
+            $this->db->where('pst_co',$uid);
+        }elseif ($uyid == 9) {
+            
+            $this->db->where('aadmin',$uid);
+        }
+        $this->db->where('user_day.ustart !=',null);
+        // $this->db->where('user_day.sdatet !=',null);
+        // $this->db->where('CAST(user_day.sdatet AS DATE) >', date('Y-m-d'));
+        $this->db->where('status','active');
+        $this->db->order_by('name','ASC');
+        $query = $this->db->get();
+            //  echo  $this->db->last_query(); die;
         return $query->result();
     }
 }

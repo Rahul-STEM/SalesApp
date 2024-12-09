@@ -28,7 +28,7 @@ class Management_model  extends Menu_model {
        
     }
     
-    public function CheckingYesterdyDayManage_New($uid,$cdate){
+    public function CheckingYesterdyDayManage_New($uid,$cdate,$userid){
     // $cdate = '2024-07-01';
     $utype = $this->Menu_model->get_userbyid($uid);
     $utype = $utype[0]->type_id;
@@ -60,7 +60,10 @@ class Management_model  extends Menu_model {
             uwf1.TYPE AS userWorkFromActual,
             srfl.prupose AS reasonFor_Request,
             srfl.stime AS leave_StartTime,
-            srfl.etime AS leave_EndTime ');
+            srfl.etime AS leave_EndTime ,
+            at1.stime AS autoTask_startTime,
+            at1.etime AS autoTask_endTime,
+            ');
 
         $this->db->from('user_day');
         $this->db->join('user_details', 'user_details.user_id = user_day.user_id', 'left');
@@ -73,6 +76,7 @@ class Management_model  extends Menu_model {
         $this->db->join('special_request_for_leave srfl', 'user_details.user_id = srfl.user_id AND DATE(srfl.date) = "'.$cdate.'"', 'left');
         $this->db->join('task_plan_for_today', 'task_plan_for_today.user_id = user_day.user_id AND DATE(task_plan_for_today.date) = DATE(sdatet)', 'left');
         $this->db->join('user_details ud1', 'ud1.user_id = task_plan_for_today.admin_id', 'left');
+        $this->db->where('user_day.user_id', $userid);
 
         if ($utype == 15){
 
@@ -1196,29 +1200,111 @@ public function RequestForDayManagementApproval_Model($uid,$request){
     
     public function getReportbyUser($selected_user,$sdate,$edate){
 
-        $this->db->select('star_rating.*');
-        $this->db->select('ud1.name as userName');
-        $this->db->select('ud2.name as feedbackBy');
-        $this->db->select('`star_rating`.`date`');
+        // $this->db->select('star_rating.*');
+
+        // // $this->db->select('star_rating.*');
+        // $this->db->select('ud1.name as userName');
+        // $this->db->select('ud2.name as feedbackBy');
+        // $this->db->select('`star_rating`.`date`');
         
 
+        // $this->db->from('star_rating');
+        // $this->db->join('user_details ud1', 'ud1.user_id = star_rating.user_id', 'left');
+        // $this->db->join('user_details ud2', 'ud2.user_id = star_rating.feedback_by', 'left');
+
+        // if(!empty($selected_user)){
+
+        //     $this->db->where_in('star_rating.user_id',$selected_user);
+        // }
+        // $this->db->where('CAST(date AS DATE) >=', "'$sdate'", FALSE);
+        // $this->db->where('CAST(date AS DATE) <=', "'$edate'", FALSE);
+
+        // $this->db->order_by('star_rating.date', 'ASC');
+        // // $this->db->group_by('star_rating.periods, star_rating.id, ud1.name, ud2.name');
+
+        // $query = $this->db->get();
+        // // echo $this->db->last_query();exit;
+        // return $query->result();
+        $user = $this->session->userdata('user');
+        $data['user'] = $user;
+        $uid = $user['user_id'];
+
+        $this->db->select('
+            star_rating.*, 
+            ud1.name AS userName, 
+            ud2.name AS feedbackBy, 
+            star_rating.date, 
+            user_details.user_id, 
+            user_details.name, 
+            user_details.type_id, 
+            user_day.ustart AS user_start_time, 
+            user_day.usimg AS user_start_image, 
+            user_day.scomment AS user_start_comment, 
+            user_day.slatitude AS user_start_lat, 
+            user_day.slongitude AS user_start_long, 
+            user_day.uclose AS user_close_time, 
+            user_day.ucimg AS user_close_image, 
+            user_day.ccomment AS user_end_comment, 
+            user_day.clatitude AS user_end_lat, 
+            user_day.clongitude AS user_end_long, 
+            task_plan_for_today.date AS planner_date, 
+            task_plan_for_today.request_remarks AS planner_request_remarks, 
+            task_plan_for_today.created_at AS planner_created_at, 
+            task_plan_for_today.updated_at AS planner_request_approval_date, 
+            task_plan_for_today.approvel_status AS planner_approvel_status, 
+            task_plan_for_today.updated_at AS planner_approvel_time, 
+            spt.psdatetime AS user_planner_start_time, 
+            ud3.name AS approver_Name, 
+            cydr.why_did_you AS close_day_request_Remark, 
+            cydr.req_remarks AS close_day_req_remarks, 
+            cydr.approved_status AS close_day_approved_status, 
+            cydr.approved_remarks AS close_day_approved_remarks, 
+            tce.appointmentdatetime AS task_start_time, 
+            uwf.TYPE AS userWorkFrom, 
+            uwf1.TYPE AS userWorkFromActual, 
+            srfl.prupose AS reasonFor_Request, 
+            srfl.stime AS leave_StartTime, 
+            srfl.etime AS leave_EndTime, 
+            at1.stime AS autoTask_startTime, 
+            at1.etime AS autoTask_endTime
+        ');
+
+        // From `star_rating`
         $this->db->from('star_rating');
         $this->db->join('user_details ud1', 'ud1.user_id = star_rating.user_id', 'left');
+        $this->db->join('user_day user_day', 'user_day.user_id = star_rating.user_id', 'left');
         $this->db->join('user_details ud2', 'ud2.user_id = star_rating.feedback_by', 'left');
+        $this->db->join('user_details user_details', 'user_details.user_id = user_day.user_id', 'left');
 
+        // From `session_plan_time`, `autotask_time`, etc.
+        $this->db->join('session_plan_time spt', 'spt.user_id = user_day.user_id ', 'left');
+        $this->db->join('autotask_time at1', 'at1.user_id = user_day.user_id ', 'left');
+        $this->db->join('userworkfrom uwf', 'uwf.ID = at1.userworkfrom', 'left');
+        $this->db->join('userworkfrom uwf1', 'uwf1.ID = user_day.wffo', 'left');
+        $this->db->join('tblcallevents tce', 'tce.user_id = user_day.user_id', 'left');
+        $this->db->join('close_your_day_request cydr', 'user_details.user_id = cydr.user_id', 'left');
+        $this->db->join('special_request_for_leave srfl', 'user_details.user_id = srfl.user_id ', 'left');
+
+        // From `task_plan_for_today`
+        $this->db->join('task_plan_for_today', 'task_plan_for_today.user_id = user_day.user_id AND DATE(task_plan_for_today.date) = DATE(sdatet)', 'left');
+        $this->db->join('user_details ud3', 'ud3.user_id = task_plan_for_today.admin_id', 'left');
+
+        // Adding conditions
+        // $this->db->where_in('star_rating.user_id', $selected_user);
         if(!empty($selected_user)){
 
             $this->db->where_in('star_rating.user_id',$selected_user);
         }
-        $this->db->where('CAST(date AS DATE) >=', "'$sdate'", FALSE);
-        $this->db->where('CAST(date AS DATE) <=', "'$edate'", FALSE);
-
-        $this->db->order_by('star_rating.date', 'ASC');
-        // $this->db->group_by('star_rating.periods, star_rating.id, ud1.name, ud2.name');
-
+        $this->db->where('CAST(star_rating.date AS DATE) >=', $sdate);
+        $this->db->where('CAST(star_rating.date AS DATE) <=', $edate);
+        $this->db->where('user_details.admin_id', $uid);
+        // $this->db->limit(10);
+        // Query execution
         $query = $this->db->get();
-        // echo $this->db->last_query();exit;
+
+        // echo $this->db->last_query();die;
         return $query->result();
+
     }
     public function get_AvgTime($actionType){
 
@@ -1321,7 +1407,7 @@ public function StoreReminder($rtype,$rmessage,$user_id){
     $this->db->insert('reminder', $data);
 }
 
-public function CheckingDayManage_New($uid,$cdate){
+public function CheckingDayManage_New($uid,$cdate,$userid){
     // $cdate = '2024-07-01';
     $utype = $this->Menu_model->get_userbyid($uid);
     $utype = $utype[0]->type_id;
@@ -1374,7 +1460,7 @@ public function CheckingDayManage_New($uid,$cdate){
         $this->db->join('special_request_for_leave srfl', 'user_details.user_id = srfl.user_id AND DATE(srfl.date) = "'.$cdate.'"', 'left');
         $this->db->join('task_plan_for_today', 'task_plan_for_today.user_id = user_day.user_id AND DATE(task_plan_for_today.date) = DATE(sdatet)', 'left');
         $this->db->join('user_details ud1', 'ud1.user_id = task_plan_for_today.admin_id', 'left');
-
+        $this->db->where('user_day.user_id', $userid);
         if ($utype == 15){
 
             $this->db->where('user_details.sales_co', $uid);

@@ -5350,8 +5350,8 @@ COUNT(CASE WHEN status_id='7' THEN 1 END) h FROM tblcallevents WHERE user_id='$u
         return  $smid;
     }
 
-    public function initiate_rpm($uid,$startm,$company_name,$lat,$lng,$smid,$bscid){
-        $query=$this->db->query("update barginmeeting set company_name='$company_name',initiateTime='$startm',initiateLat='$lat',initiateLongi='$lng',status='Initiated' WHERE id='$smid'");
+    public function initiate_rpm($uid,$startm,$cphoto,$company_name,$lat,$lng,$smid,$bscid){
+        $query=$this->db->query("update barginmeeting set company_name='$company_name',initphoto='$cphoto',initiateTime='$startm',initiateLat='$lat',initiateLongi='$lng',status='Initiated' WHERE id='$smid'");
         // echo $this->db->last_query();die;
         $query=$this->db->query("update company_master set compname='$company_name' WHERE id='$bscid'");
         $this->db->query("INSERT INTO notify(uid,type,sms) VALUES ('$uid','1','Bargin Meeting Initiated $company_name')");
@@ -12288,20 +12288,34 @@ public function get_clmTaskDetailOnBDFunnel($code,$atid,$uid,$sd,$ed,$ab){
     public function getReportbyUser($selected_user,$sdate,$edate){
         // var_dump($sdate);die;
         $this->db->select('tcsr.*');
+        // $this->db->select('tcsr.*');
         $this->db->select('ud1.name as userName');
         $this->db->select('ud2.name as feedbackBy');
         $this->db->select('ud3.name as commentBy');
         $this->db->select('action.name as actionName');
+        $this->db->select('company_master.compname as compname');
         $this->db->select('tblcallevents.appointmentdatetime as taskDate');
+        $this->db->select('tblcallevents.actontaken as actontaken');
+        $this->db->select('tblcallevents.purpose_achieved as purpose_achieved');
+        $this->db->select('tblcallevents.late_remarks_message as late_remarks_message');
+        $this->db->select('tblcallevents.initiateddt as initiateddt');
+        $this->db->select('tblcallevents.initiateddt as updateddate');
+        $this->db->select('st_new.name as newStatus');
+        $this->db->select('st_old.name as oldStatus');
         $this->db->select('tblcallevents.comments as comments');
         $this->db->select('tblcallevents.thnkscomments as thnkscomments');
         $this->db->from('taskcheck_star_rating tcsr');
         $this->db->join('user_details ud1', 'ud1.user_id = tcsr.user_id', 'left');
         $this->db->join('user_details ud2', 'ud2.user_id = tcsr.feedback_by', 'left');
         $this->db->join('tblcallevents', 'tcsr.task_id = tblcallevents.id', 'left');
+        $this->db->join('status st_old', 'st_old.id = tblcallevents.status_id', 'left');
+        $this->db->join('status st_new', 'st_new.id = tblcallevents.nstatus_id', 'left');
         $this->db->join('user_details ud3', 'ud3.user_id = tblcallevents.comment_by', 'left');
         $this->db->join('action', 'tblcallevents.actiontype_id = action.id', 'left');
-    
+        $this->db->join('init_call', 'init_call.id = tblcallevents.cid_id', 'left');
+        $this->db->join('company_master', 'company_master.id = init_call.cmpid_id', 'left');
+
+
         if(!empty($selected_user)){
     
             $this->db->where_in('tcsr.user_id',$selected_user);

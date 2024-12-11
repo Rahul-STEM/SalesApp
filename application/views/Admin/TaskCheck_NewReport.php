@@ -73,44 +73,43 @@
                       <center><b>Task Check Management Report</b></center>
                     </h3>
                     <div class="card-body FilterSection">
-                            <form method="POST"
-                                action="<?= base_url(); ?>Menu/TaskCheck_NewReport">
-                                <div class="row">
-                                    <div class="col-lg-3 col-sm-6">
-                                        <label for="startDate">Start Date</label>
-                                        <input id="startDate" name="startDate" class="form-control" type="date"
-                                            value="<?= $sdate ?>" />
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6">
-                                        <label for="endDate">End Date</label>
-                                        <input id="endDate" class="form-control" name="endDate" type="date"
-                                            value="<?= $edate ?>" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Select User</label>
-                                            <select class="custom-select rounded-0" name="user[]" id="user" required>
-                                                <option value="select_all">Select All</option>
-                                                <?php foreach ($users as $users) { ?>
-                                                    <option value="<?= $users->user_id ?>" <?= in_array($users->user_id, $selected_user) ? 'selected' : '' ?>>
-                                                        <?= htmlspecialchars($users->name) ?></option>
-                                                    <!-- <option value="<?= $users->user_id ?>"><?= $users->name ?></option> -->
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <!-- Partner Type -->                                    
-                                    <!-- Cluster -->
-                                    
-                                    <!--Cluster Users -->
-                                    
-                                    <div class="col-lg-3 col-sm-6">
-                                        <br>
-                                        <button type="submit" name="submit" class="btn btn-primary"> Filter</button>
+                        <form method="POST" action="<?= base_url(); ?>Menu/TaskCheck_NewReport">
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-6">
+                                    <label for="startDate">Start Date</label>
+                                    <input id="startDate" name="startDate" class="form-control" type="date"
+                                        value="<?= $sdate ?>" />
+                                </div>
+                                <div class="col-lg-3 col-sm-6">
+                                    <label for="endDate">End Date</label>
+                                    <input id="endDate" class="form-control" name="endDate" type="date"
+                                        value="<?= $edate ?>" />
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Select User</label>
+                                        <select class="custom-select rounded-0" name="user[]" id="user" required>
+                                            <option value="select_all">Select All</option>
+                                            <?php foreach ($users as $users) { ?>
+                                                <option value="<?= $users->user_id ?>" <?= in_array($users->user_id, $selected_user) ? 'selected' : '' ?>>
+                                                    <?= htmlspecialchars($users->name) ?></option>
+                                                <!-- <option value="<?= $users->user_id ?>"><?= $users->name ?></option> -->
+                                            <?php } ?>
+                                        </select>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
+                                <!-- Partner Type -->                                    
+                                <!-- Cluster -->
+                                
+                                <!--Cluster Users -->
+                                
+                                <div class="col-lg-3 col-sm-6">
+                                    <br>
+                                    <button type="submit" name="submit" class="btn btn-primary"> Filter</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                   </div>
                   <!-- /.card-header -->
                   <div class="card-body">
@@ -126,6 +125,12 @@
                                             <th>S.No.</th>
                                             <th>Name</th>
                                             <th>Date</th>
+                                            <th>Action</th>
+                                            <th>Company Name</th>
+                                            <th>Action & Purpose</th>
+                                            <th>Initiate Time</th>
+                                            <th>Updated Time</th>
+                                            <th>Status Change</th>
                                             <!-- <th>Period</th> -->
                                             <th>Question</th>
                                             <th>Rating</th>
@@ -142,7 +147,23 @@
                                             <td><?=$i?></td>
                                             <td><?=$singleReport->userName?></td>
                                             <td><?=$singleReport->date?></td>
-                                            <td><?=$singleReport->question?></td>
+                                            <td><?=$singleReport->actionName?></td>
+                                            <td><?=$singleReport->compname?></td>
+                                            <td>
+                                                <b>Action :</b> <?=$singleReport->actontaken?>
+                                                <b>Purpose :</b> <?=$singleReport->purpose_achieved?>
+                                            </td>
+                                            <td><?=$singleReport->initiateddt?></td>
+                                            <!-- <td><?=$singleReport->initiateddt?></td> -->
+                                            <td><?=$singleReport->updateddate?></td>
+                                            <td>
+                                                <b><?=$singleReport->newStatus?></b> To <b><?=$singleReport->oldStatus?></b>
+                                            </td>
+                                            <td>
+                                                <?=$singleReport->question?>
+                                            </td>
+                                            <!-- <td><?=$singleReport->updateddate?></td> -->
+
                                             <td>
                                             <?=$singleReport->star?>
                                             <?php   

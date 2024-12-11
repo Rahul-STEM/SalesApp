@@ -6594,14 +6594,19 @@ public function Dashboard(){
         $uid = $_POST['uid'];
         $smid = $_POST['smid'];
         $startm = $_POST['startm'];
-        $company_name = $_POST['company_name'];
+       // $company_name = $_POST['company_name'];
+       $cphoto = $_FILES['cphoto']['name'];
+       $uploadPath = 'uploads/day/';
+       $this->load->model('Menu_model');
+       $this->load->library('session');
+       $flink = $this->Menu_model->cphotofile($cphoto, $uploadPath);
 
         $lat = $_POST['lat'];
         $lng = $_POST['lng'];
         $bscid = $_POST['bscid'];
         // $cphoto = $flink;
         // var_dump($_POST);die;
-        $cbmid = $this->Menu_model->initiate_rpm($uid,$startm,$company_name,$lat,$lng,$smid,$bscid);
+        $cbmid = $this->Menu_model->initiate_rpm($uid,$startm,$cphoto,$lat,$lng,$smid,$bscid);
         $this->session->set_flashdata('success_message','Meeting Initiated SuccessFully !');
         redirect('Menu/Dashboard');
     }
@@ -18337,7 +18342,7 @@ public function TaskCheck_NewReport()
         } else {
             $selected_user = [];
         }
-//  var_dump($sdate);die;
+        //  var_dump($sdate);die;
         // $selected_user = [];
         $user = $this->session->userdata('user');
         $data['user'] = $user;
@@ -18347,11 +18352,11 @@ public function TaskCheck_NewReport()
         $this->load->model('Menu_model');   
         $dt = $this->Menu_model->get_utype($userTypeid);
         $dep_name = $dt[0]->name;
-//echo "=="; print_r($dep_name);exit;
+        //echo "=="; print_r($dep_name);exit;
         $getUsers = $this->Management_model->getUsers($uid,$userTypeid);
         // $sdate
-       // var_dump($sdate);die;
         $getReportbyUser = $this->Menu_model->getReportbyUser($selected_user,$sdate,$edate);
+        // var_dump($getReportbyUser);die;
         // $getReportbyUser = '';
         if (!empty($user)) {
             // $this->load->view('include/header');

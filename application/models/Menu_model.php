@@ -12333,6 +12333,7 @@ public function getMoMData($id) {
     // $this->db->select('md.*');
     $this->db->select('bm.cphoto');
     $this->db->select('bm.startm start_time');
+    $this->db->select('bm.initiateTime initiateTime');
     $this->db->select('bm.slatitude start_lat');
     $this->db->select('bm.slongitude start_long');
     $this->db->select('bm.closem end_time');
@@ -12340,6 +12341,8 @@ public function getMoMData($id) {
     $this->db->select('bm.clongitude end_long');
     // $this->db->select('bm.mtype end_long');
     $this->db->select('tce.mtype momType');
+    $this->db->select('tce.appointmentdatetime plannedTime');
+    $this->db->select('bm.initiateTime initiateTime');
     // $this->db->select('md.partner mompartner');
     // $this->db->select('md.rpmmom momremark');
     $this->db->select('action.name actionName');
@@ -12356,7 +12359,7 @@ public function getMoMData($id) {
     $this->db->join('tblcallevents tce', 'bm.tid = tce.id', 'left');
     // $this->db->join('mom_data md', 'bm.tid = tce.lastCFID', 'left');
     $this->db->join('tblcallevents tce2', 'tce.lastCFID = tce2.id', 'left');
-    $this->db->join('action', 'action.id = tce2.actiontype_id', 'left');
+    $this->db->join('action', 'action.id = tce.actiontype_id', 'left');
     $this->db->join('init_call ic', 'ic.id = tce2.cid_id', 'left');
     $this->db->join('status', 'ic.lstatus = status.id', 'left');
     $query = $this->db->get();
@@ -14746,5 +14749,49 @@ public function getUserByType($utype,$uid){
         $query = $this->db->get();
             //  echo  $this->db->last_query(); die;
         return $query->result();
+    }
+
+    public function getRejectedMoM($uid,$date){
+
+        $this->db->select('id');
+        $this->db->from('mom_data');
+        $this->db->where('user_id',$uid);
+        $this->db->where('CAST(cdate AS DATE) >=', $date);
+        $this->db->where('approved_status','Reject');
+
+        $query = $this->db->get();
+            //  echo  $this->db->last_query(); die;
+        return $query->result();
+
+    }
+
+
+    public function get_checkDayCheck($uid,$date){
+
+        $this->db->select('id');
+        $this->db->from('star_rating');
+        $this->db->where('feedback_by',$uid);
+        $this->db->where('CAST(created_at AS DATE) >=', $date);
+        // $this->db->where('approved_status','Reject');
+
+        $query = $this->db->get();
+            //  echo  $this->db->last_query(); die;
+        return $query->result();
+
+    }
+
+
+    public function get_checkTaskCheck($uid,$date){
+
+        $this->db->select('id');
+        $this->db->from('taskcheck_star_rating');
+        $this->db->where('feedback_by',$uid);
+        $this->db->where('CAST(created_at AS DATE) >=', $date);
+        // $this->db->where('approved_status','Reject');
+
+        $query = $this->db->get();
+            //  echo  $this->db->last_query(); die;
+        return $query->result();
+
     }
 }

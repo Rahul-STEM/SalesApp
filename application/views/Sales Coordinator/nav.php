@@ -461,20 +461,68 @@
     <!-- /.sidebar -->
   </aside>
     <?php 
-      if(!isset($daycheck)){
-        // echo "hii";die;
-        $current_uid    = $user['user_id'];
-        // var_dump(($current_uid));die;
-        // echo $current_uid;die;
-        $user_type = $user['type_id'];
-        $user_day = $this->Menu_model->get_daydetail($current_uid,date("Y-m-d"));
-        // var_dump(sizeof($user_day));die;
-        // echo sizeof($user_day);die;
-        if(sizeof($user_day) == 0){
-            $this->session->set_flashdata('error_message','* Please start your day first');
-            redirect('Menu/DayManagement');
-        }  
-      }    
+        if(!isset($daycheck)){
+            // echo "hii";die;
+            $current_uid    = $user['user_id'];
+            // var_dump(($current_uid));die;
+            // echo $current_uid;die;
+            $user_type = $user['type_id'];
+            $user_day = $this->Menu_model->get_daydetail($current_uid,date("Y-m-d"));
+            // var_dump(sizeof($user_day));die;
+            // echo sizeof($user_day);die;
+            if(sizeof($user_day) == 0){
+                $this->session->set_flashdata('error_message','* Please start your day first');
+                redirect('Menu/DayManagement');
+            }  
+        }    
+
+        // $current_uid    = $user['user_id'];
+
+        // $checkDayCheck = $this->Menu_model->get_checkDayCheck($current_uid,date("Y-m-d"));
+        // // var_dump(sizeof($checkDayCheck) );die;
+        // $checkTaskCheck = $this->Menu_model->get_checkTaskCheck($current_uid,date("Y-m-d"));
+
+        // if(sizeof($checkDayCheck) == 0){
+    
+        //     $this->session->set_flashdata('error_message','* Please Complete Day Check first');
+        //     if ($this->uri->uri_string() !== 'Management/CheckingDayManagement_New') {
+        //         redirect('Management/CheckingDayManagement_New');
+        //     }
+        //     // redirect('Management/CheckingDayManagement_New');
+        // }
+        // if(sizeof($checkTaskCheck) == 0){
+
+        //     $this->session->set_flashdata('error_message','* Please Complete Task Check first');
+        //     if ($this->uri->uri_string() !== 'Menu/TaskCheck_New') {
+        //         redirect('Menu/TaskCheck_New');
+        //     }
+        //     // redirect('Menu/TaskCheck_New');
+        // }  
+
+
+        // if(isset($daycheck)){
+        //     // echo "die";die;
+        //     // var_dump($daycheck);die;
+        //     $current_uid    = $user['user_id'];
+
+        //     $user_type = $user['type_id'];
+
+        //     $checkDayCheck = $this->Menu_model->get_checkDayCheck($current_uid,date("Y-m-d"));
+    
+        //     $checkTaskCheck = $this->Menu_model->get_checkTaskCheck($current_uid,date("Y-m-d"));
+    
+        //     if(sizeof($checkDayCheck) == 0){
+    
+        //         $this->session->set_flashdata('error_message','* Please Complete Day Check first');
+        //         // redirect('Management/CheckingDayManagement_New');
+        //     }
+        //     if(sizeof($checkTaskCheck) == 0){
+    
+        //         $this->session->set_flashdata('error_message','* Please Complete Task Check first');
+        //         // redirect('Menu/TaskCheck_New');
+        //     }  
+        // }
+
     ?>
   
   <script src="<?=base_url();?>assets/js/jquery.min.js"></script>

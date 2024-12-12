@@ -5793,7 +5793,7 @@ if($type_id == 3){
             // Function to show/hide the form based on timer status
             function toggleFormVisibility() {
                 if (startTime) {
-                  $('#planningStart1').show();
+                    $('#planningStart1').show();
                     $('#planningStart2').show();
                     $('#plantimerBox').show();
                     $('#planningStartbtn').hide();
@@ -5803,19 +5803,19 @@ if($type_id == 3){
                       e.preventDefault();
                       alert('You must click "Stop Planning" before moving to another Page.');
                   });
-                  window.oncontextmenu = function () {
-                    return false;
+                    window.oncontextmenu = function () {
+                        return false;
                     }
                     $(document).keydown(function (event) {
-                    if (event.keyCode == 123) {
-                    return false;
-                    }
-                    else if (event.ctrlKey && event.shiftKey && event.keyCode == 73) {
-                    return false;
-                    }
-                    else if (event.ctrlKey && event.keyCode == 85) {
-                    return false;
-                    }
+                        if (event.keyCode == 123) {
+                            return false;
+                        }
+                        else if (event.ctrlKey && event.shiftKey && event.keyCode == 73) {
+                            return false;
+                        }
+                        else if (event.ctrlKey && event.keyCode == 85) {
+                            return false;
+                        }
                     })
                     function onKeyDown() {
                     var pressedKey = String.fromCharCode(event.keyCode).toLowerCase();
@@ -6056,13 +6056,13 @@ if($type_id == 3){
                   });
           });
           
-          var slctplanddate = '<?= $adate; ?>';
-          const getcurrentDate = new Date();
-          const year = getcurrentDate.getFullYear();
-          const month = String(getcurrentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-          const day = String(getcurrentDate.getDate()).padStart(2, '0');
-          const formattedDate = `${year}-${month}-${day}`;
-          if(slctplanddate == formattedDate){
+            var slctplanddate = '<?= $adate; ?>';
+            const getcurrentDate = new Date();
+            const year = getcurrentDate.getFullYear();
+            const month = String(getcurrentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const day = String(getcurrentDate.getDate()).padStart(2, '0');
+            const formattedDate = `${year}-${month}-${day}`;
+            if(slctplanddate == formattedDate){
             $('#meeting-time').on('change', function() {
             const meetingTime = $(this).val();
             const now = new Date();

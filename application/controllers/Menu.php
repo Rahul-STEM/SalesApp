@@ -4954,6 +4954,20 @@ public function Dashboard(){
            redirect('Menu/Dashboard2');
        } 
         if(!empty($user)){
+
+            $checkDayCheck = $this->Menu_model->get_checkDayCheck($myid, date("Y-m-d"));
+            $checkTaskCheck = $this->Menu_model->get_checkTaskCheck($myid, date("Y-m-d"));
+
+            if (sizeof($checkDayCheck) == 0) {
+                $this->session->set_flashdata('error_message', '* Please Complete Day Check first');
+                redirect('Management/CheckingDayManagement_New');
+            }
+
+            if (sizeof($checkTaskCheck) == 0) {
+                $this->session->set_flashdata('error_message', '* Please Complete Task Check first');
+                redirect('Menu/TaskCheck_New');
+            }
+
             $this->load->view($dep_name.'/index',['myid'=>$myid,'cmtd'=>$cmtd,'clusterFunnel'=> $clusterFunnel ,'ttdone'=>$ttdone,'upt'=>$upt,'user'=>$user,'fr'=>$fr,'callr'=>$callr,'emailr'=>$emailr,'meetingr'=>$meetingr,'pendingt'=>$pendingt,'totalt'=>$totalt,'patc'=>$patc,'tatc'=>$tatc,'pate'=>$pate,'tate'=>$tate,'patm'=>$patm,'tatm'=>$tatm,'sc'=>$sc,'tptask'=>$tptask,'ttd'=>$ttd,'barg'=>$barg,'uid'=>$uid,'pstc'=>$pstc,'poc'=>$poc,'vpoc'=>$vpoc,'tnos'=>$tnos,'revenue'=>$revenue,'tsww'=>$tsww,'bdc'=>$bdc,'tdate'=>$tdate,'autotasktimenew'=>$autotasktimenew,'mbdc'=>$mbdc]);
         }else{
             redirect('Menu/main');
@@ -8165,9 +8179,18 @@ public function Dashboard(){
         $gecurAutoTaskTime = $query1->result();
     //    dd($getAutoTaskTime);
 
+    
+        $getRejectedMoM = $this->Menu_model->getRejectedMoM($uid,date('Y-m-d'));
+        // var_dump($getRejectedMoM);die;
+        // if(sizeof($getRejectedMoM) > 0){
+            
+        //     $this->session->set_flashdata('error_message', 'Your MOM has been rejected..!! Please Complete that task by entering correct details..!!');
+        // }
+
         $getShiftStartData = $this->Menu_model->getShiftStartData($uid,$tdate);
+
         if(!empty($user)){
-            $this->load->view($dep_name.'/DayManagement',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'tdate'=>$tdate,'uid'=>$uid,'do'=>$do,'yestdata'=>$yestdata,'gettoAutoTaskTime'=>$gettoAutoTaskTime,'uyid'=>$uyid,'gecurAutoTaskTime'=>$gecurAutoTaskTime,'getShiftStartData'=>$getShiftStartData,'daycheck'=>'start']);
+            $this->load->view($dep_name.'/DayManagement',['uid'=>$uid,'user'=>$user,'mdata'=>$mdata,'tdate'=>$tdate,'uid'=>$uid,'do'=>$do,'yestdata'=>$yestdata,'gettoAutoTaskTime'=>$gettoAutoTaskTime,'uyid'=>$uyid,'gecurAutoTaskTime'=>$gecurAutoTaskTime,'getShiftStartData'=>$getShiftStartData,'daycheck'=>'start','getRejectedMoM'=>$getRejectedMoM]);
         }else{
             redirect('Menu/main');
         }
@@ -18408,7 +18431,8 @@ public function dayscRequest(){
     $start_tttpft       = $_POST['start_tttpft'];
     $end_tttpft         = $_POST['end_tttpft'];
     $autotasktimeisset  = (isset($_POST['autotasktimeisset']))?($_POST['autotasktimeisset']):'0';
-   
+
+
     if($uyid ==15){
         $autotasktimeisset = 1;
     }

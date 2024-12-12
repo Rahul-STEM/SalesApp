@@ -132,6 +132,35 @@
         <?php endif; ?>
 
         <?php  
+                // var_dump(sizeof($getRejectedMoM));die;
+            // if (sizeof($getRejectedMoM) > 0) {  
+            //     // echo "hii";die;
+                
+            //     ?>
+                
+                <!-- <div class="modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Modal body text goes here.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                        </div>
+                    </div>
+                </div> -->
+
+
+            <?php   //} 
+            
             $date = date('Y-m-d');
             $checkLeaveForDay = checkLeaveForDay($uid,$date);
             
@@ -868,6 +897,19 @@ if ($currentHour >= 12) {
     </div>     
     </section>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            var getRejectedMoM = <?php echo (int)sizeof($getRejectedMoM); ?>;
+
+            // alert(getRejectedMoM);
+            // return false;
+            if (getRejectedMoM >= 1) {
+                
+                alert('Your MOM has been rejected..!! Please Complete that task by entering correct details..!!');
+            }
+        });
+    </script>
     <script type='text/javascript'>
       document.getElementById("location").style.display = "none";
       imgInp.onchange = evt => {

@@ -218,7 +218,7 @@
                                         <th>Same Status Since</th>
                                         <th>Number of tasks on same status</th>
                                         <!-- <th>Auto task Details</th> -->
-                                        <!-- <th>MoM Details</th> -->
+                                        <th>Task Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -301,7 +301,9 @@
                                                     <button type="button" class="btn btn-primary" onclick="OpenReviewModal(<?=$task->tid?>,<?=$task->user_id?>)">View Review Details</button>
                                             <?php   }  ?>
                                         </td> 
+
                                         <td><?= $task->compname; ?></td>
+
                                         <td><?= $SinglefilterUsedFinal; ?>
                                             <br><hr>
                                             <p class="question">Was Correct filters used..??</p>
@@ -380,6 +382,7 @@
                                             
                                             <?php ?>
                                         </td>
+
                                         <td ><?= $task->start_time; ?>
                                         <br><br>
                                             Time taken from planning to initiate : <b> <?= $task->time_diff_updateVsInitiat; ?></b>
@@ -424,6 +427,7 @@
                                             echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
                                         }  ?>
                                         </td>
+
                                         <td ><?= $task->end_time; ?>
                                         <br><br>
                                             <?php $avgTimeTaken = get_AvgTime( $task->actiontype_id);
@@ -470,6 +474,7 @@
                                             }  ?>
 
                                         </td>
+
                                         <td >
                                             Action Taken - <b><?= $task->actontaken; ?></b>  <br> <hr> Purpose Achieved - <b> <?= $task->purpose_achieved; ?></b> 
                                             
@@ -585,6 +590,7 @@
                                                     }  ?>
 
                                         </td>
+
                                         <td ><?=$task->old_status?> to <?=$task->new_status?>
                                             <br><hr>
 
@@ -621,10 +627,13 @@
                                                         echo "</div><br><span class='text-dark font-weight-normal'><b>Remark</b> :".$starRemark."</span>";
                                                     }  ?>
                                         </td>
-                                        
-                                        <td><?=$SameStatusSince_1 .' Days';?></td>
-                                        <td><?=$NoOfTaskSinceStatusChange ;?></td>
-                                        <!-- <td></td> -->
+
+                                        <td ><?=$SameStatusSince_1 .' Days';?></td>
+
+                                        <td ><?=$NoOfTaskSinceStatusChange ;?></td>
+
+                                        <td><span data-taskID="<?=$task->id?>" id="Tasksubmit" class="bg-success p-2" onclick="">Submit this task</span></td>
+
                                     </tr>
                                 <?php $i++; } ?>
                                     
@@ -1376,8 +1385,10 @@
                     const differenceInMinutes = Math.floor(timeDifference / (1000 * 60)) + ' mins';
                     // const differenceInSeconds = Math.floor(timeDifference / 1000);
                     // alert(differenceInMinutes);
+                    var Meetingimage = "https://stemapp.in/" +  data.cphoto;
+                    console.log(Meetingimage);
 
-                    document.getElementById('modalPhoto').src = data.cphoto; 
+                    document.getElementById('modalPhoto').src = Meetingimage; 
                     document.getElementById('modalStartTime').textContent = data.start_time;
                     document.getElementById('modalEndTime').textContent = data.end_time;
                     document.getElementById('modalDuration').textContent = differenceInMinutes;
@@ -1395,11 +1406,11 @@
                     var endLat = data.end_lat;
                     var endLong = data.end_long;
 
-                    document.getElementById('startMap').src = 'https://maps.google.com/?q=${startLat},${startLong}&t=k&z=13&ie=UTF8&iwloc=&output=embed';
+                    document.getElementById('startMap').src = `https://maps.google.com/?q=${startLat},${startLong}&t=k&z=13&ie=UTF8&iwloc=&output=embed`;
                     
                     // Update the end location map and link
 
-                    document.getElementById('endMap').src = 'https://maps.google.com/?q=${endLat},${endLong}&t=k&z=13&ie=UTF8&iwloc=&output=embed';
+                    document.getElementById('endMap').src = `https://maps.google.com/?q=${endLat},${endLong}&t=k&z=13&ie=UTF8&iwloc=&output=embed`;
 
                     $('#MoMModal').modal('show');
                 },
@@ -1498,6 +1509,7 @@
 </script>
 
 <script>
+    
     function submitReview(){
 
         var remark = document.getElementById("remark").value;

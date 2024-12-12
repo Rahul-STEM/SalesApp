@@ -442,15 +442,15 @@
       
       
       
-      <hr>
-        <a href="AlertsPage"><button type="button" class="btn btn-danger">
-            Alerts! <span class="badge badge-light">100</span>
-        </button></a>
-      <hr>
-        <a href="NotificationPage"><button type="button" class="btn btn-success">
-            Notification! <span class="badge badge-light">52</span>
-        </button></a>
-      <hr>
+        <hr>
+            <a href="AlertsPage"><button type="button" class="btn btn-danger">
+                Alerts! <span class="badge badge-light">100</span>
+            </button></a>
+        <hr>
+            <a href="NotificationPage"><button type="button" class="btn btn-success">
+                Notification! <span class="badge badge-light">52</span>
+            </button></a>
+        <hr>
       
     </div>
     <!-- /.sidebar -->
@@ -515,34 +515,34 @@ function goBack() { window.history.back(); }
 function goForward() { window.history.forward(); }
     var ur_id = document.getElementById("ur_id").value;
     $.ajax({
-    url:'<?=base_url();?>Menu/bdpopup',
-     method: 'post',
-     data: {ur_id: ur_id},
-     success: function(result){
-        var res = result;
-        $("#alsmss").html(result);
-    }
+        url:'<?=base_url();?>Menu/bdpopup',
+        method: 'post',
+        data: {ur_id: ur_id},
+        success: function(result){
+            var res = result;
+            $("#alsmss").html(result);
+        }
     });
     
     
     $.ajax({
-    url:'<?=base_url();?>Menu/opalsms',
-     method: 'post',
-     data: {ur_id: ur_id},
-     success: function(result){
-        var res = result;
-        $("#opalsms").html(result);
-    }
+        url:'<?=base_url();?>Menu/opalsms',
+        method: 'post',
+        data: {ur_id: ur_id},
+        success: function(result){
+            var res = result;
+            $("#opalsms").html(result);
+        }
     });
     
     
     $.ajax({
-    url:'<?=base_url();?>Menu/nitisms',
-     method: 'post',
-     data: {ur_id: ur_id},
-     success: function(result){
-        var res = result;
-        $("#nitisms").html(result);
-    }
+        url:'<?=base_url();?>Menu/nitisms',
+        method: 'post',
+        data: {ur_id: ur_id},
+        success: function(result){
+            var res = result;
+            $("#nitisms").html(result);
+        }
     });
 </script>
